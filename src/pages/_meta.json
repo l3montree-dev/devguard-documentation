@@ -1,0 +1,17 @@
+{
+  "index": "Introduction",
+  "basics": "Basics",
+  "concepts": "Concepts",
+  "contributing": "Contributing",
+  "about": {
+    "title": "About L3montree ↗",
+    "type": "page",
+    "href": "https://l3montree.com/",
+    "newWindow": true
+  },
+  "contact": {
+    "title": "Contact ↗",
+    "type": "page",
+    "href": "mailto:community@devguard.org"
+  }
+}
