@@ -1,12 +1,38 @@
 import React from 'react'
-import { DocsThemeConfig } from 'nextra-theme-docs'
+import { DocsThemeConfig, useConfig } from 'nextra-theme-docs'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 
-import InverseLogo from './public/logo_inverse_horizontal.png'
-
 const config: DocsThemeConfig = {
-  logo: <Image src={InverseLogo} alt="DevGuard Logo" className="h-12 w-auto" />,
+  head() {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const { asPath, defaultLocale, locale } = useRouter()
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const { frontMatter } = useConfig()
+    const url =
+      'https://devguard.org' +
+      (defaultLocale === locale ? asPath : `/${locale}${asPath}`)
+
+    return (
+      <>
+        <meta property="og:url" content={url} />
+        <meta
+          property="og:title"
+          content={frontMatter.title + ' | DevGuard' || 'DevGuard'}
+        />
+        <title>{frontMatter.title + ' | DevGuard' || 'DevGuard'}</title>
+      </>
+    )
+  },
+  logo: (
+    <Image
+      src="/logo_inverse_horizontal.svg"
+      alt="DevGuard Logo"
+      width={220}
+      height={80}
+      className="h-12 w-auto"
+    />
+  ),
   sidebar: {
     defaultMenuCollapseLevel: 1,
   },
@@ -14,17 +40,26 @@ const config: DocsThemeConfig = {
     link: 'https://github.com/l3montree-dev/devguard',
   },
   docsRepositoryBase: 'https://github.com/l3montree-dev/devguard-docs',
-  useNextSeoProps() {
-    const { asPath } = useRouter()
-    return {
-      titleTemplate: '%s – DevGuard',
-    }
+  backgroundColor: {
+    dark: '12,17,23',
+    light: '240,242,245',
   },
-  main: ({ children }) => {
-    return <div className="text-base">{children}</div>
+  color: {
+    hue: {
+      dark: 43,
+      light: 229,
+    },
+    saturation: {
+      dark: 96,
+      light: 100,
+    },
+    lightness: {
+      dark: 56,
+      light: 47,
+    },
   },
   footer: {
-    text: (
+    content: (
       <div className="flex w-full flex-col items-center text-sm sm:items-start">
         <div className="grid grid-cols-2 gap-4">
           <a
@@ -65,7 +100,7 @@ const config: DocsThemeConfig = {
           >
             Heroicons
           </a>
-          . The &apos;DevGuard&apos; name and logo are trademarks of L3montree
+          . The &apos;l3montree&apos; name and logo are trademarks of L3montree
           UG (haftungsbeschränkt).
         </p>
         <p className="mt-4">
