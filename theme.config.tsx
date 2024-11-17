@@ -24,6 +24,20 @@ const config: DocsThemeConfig = {
       </>
     )
   },
+  banner: {
+    key: 'development',
+    content: (
+      <a
+        href="https://github.com/l3montree-dev/devguard"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        🚧 This Documentation is under active development. Visit the DevGuard
+        Repo →
+      </a>
+    ),
+    dismissible: false,
+  },
   logo: (
     <Image
       src="/logo_inverse_horizontal.svg"
@@ -58,12 +72,17 @@ const config: DocsThemeConfig = {
       light: 47,
     },
   },
+  darkMode: false,
+  nextThemes: {
+    defaultTheme: 'dark',
+    forcedTheme: 'dark',
+  },
   footer: {
     content: (
       <div className="flex w-full flex-col items-center text-sm sm:items-start">
         <div className="grid grid-cols-2 gap-4">
           <a
-            className="text-blue-500 hover:text-blue-400"
+            className="text-amber-500 hover:text-amber-400"
             title="Impressum"
             href="https://l3montree.com/impressum"
             target="_blank"
@@ -72,7 +91,7 @@ const config: DocsThemeConfig = {
             <span>Impressum</span>
           </a>
           <a
-            className="text-blue-500 hover:text-blue-400"
+            className="text-amber-500 hover:text-amber-400"
             title="Datenschutz"
             href="https://l3montree.com/datenschutz"
             target="_blank"
@@ -85,7 +104,7 @@ const config: DocsThemeConfig = {
           Except where otherwise noted, content on this site is licensed under a{' '}
           <a
             target="_blank"
-            className="text-blue-500 hover:text-blue-400"
+            className="text-amber-500 hover:text-amber-400"
             rel="noopener noreferrer"
             href="https://github.com/l3montree-dev/devguard-docs/blob/main/LICENSE-docs.md"
           >
@@ -94,7 +113,7 @@ const config: DocsThemeConfig = {
           license. Icons by{' '}
           <a
             target="_blank"
-            className="text-blue-500 hover:text-blue-400"
+            className="text-amber-500 hover:text-amber-400"
             rel="noopener noreferrer"
             href="https://heroicons.com"
           >

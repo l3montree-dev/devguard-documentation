@@ -3,4 +3,37 @@ sidebar_position: 1
 title: Guides
 ---
 
+import { Cards } from 'nextra/components'
+import {
+  LinkIcon,
+  CubeIcon,
+  EyeSlashIcon
+} from '@heroicons/react/24/outline'
+
+
 # Guides
+
+DevGuard unites several security tools to provide a comprehensive 
+and usable security solution. If you encounter findings during one 
+of the integrated checks and DevGuard reports a Flaw, you can find 
+guides and descriptions here how to solve. Additional background 
+information is provided.
+
+## Available Guides
+<Cards>
+  <Cards.Card
+    icon={<EyeSlashIcon />}
+    title="Secret Scanning"
+    href="/guides"
+  />
+  <Cards.Card
+    icon={<LinkIcon />}
+    title="SCA"
+    href="/guides"
+  />
+  <Cards.Card
+    icon={<CubeIcon />}
+    title="Container Scanning"
+    href="/guides/container-scanning"
+  />
+</Cards>
