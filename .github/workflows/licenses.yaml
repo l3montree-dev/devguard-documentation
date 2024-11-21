@@ -21,4 +21,4 @@ jobs:
     - uses: ralexander-phi/license_approval@master
       with:
         working_directory: ${{ github.workspace }}
-        extra_flags: --decisions_file ./docs/dependency_decisions.yml
+        extra_flags: --decisions_file ./doc/dependency_decisions.yml

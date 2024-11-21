@@ -1,0 +1,85 @@
+---
+- - :permit
+  - Apache-2.0
+  - :who: Sebastian Kawelke
+    :why: OSI-approved OSS license, https://dwheeler.com/essays/floss-license-slide.html
+    :when: 2024-05-13 13:45:20.797550000 Z
+- - :permit
+  - New BSD
+  - :who: Sebastian Kawelke
+    :why: OSI-approved OSS license, https://dwheeler.com/essays/floss-license-slide.html
+    :when: 2024-05-13 13:45:20.797550000 Z
+- - :permit
+  - Mozilla Public License 2.0
+  - :who: Sebastian Kawelke
+    :why: OSI-approved OSS license, https://dwheeler.com/essays/floss-license-slide.html
+    :when: 2024-05-13 13:45:20.797550000 Z
+- - :permit
+  - MIT
+  - :who: Sebastian Kawelke
+    :why: OSI-approved OSS license, https://dwheeler.com/essays/floss-license-slide.html
+    :when: 2024-05-13 13:45:20.797550000 Z
+- - :permit
+  - Simplified BSD
+  - :who: Sebastian Kawelke
+    :why: OSI-approved OSS license, The 2-Clause BSD License, permissive, https://dwheeler.com/essays/floss-license-slide.html
+    :when: 2024-05-13 13:45:20.797550000 Z
+- - :permit
+  - ISC
+  - :who: Sebastian Kawelke
+    :why: OSI-approved OSS license
+    :when: 2024-06-10 13:45:20.797550000 Z
+- - :approve
+  - "@img/sharp-libvips-darwin-arm64"
+  - :who:
+    :why:
+    :versions: []
+    :when: 2024-11-21 14:49:10.171932000 Z
+- - :approve
+  - argparse
+  - :who:
+    :why:
+    :versions: []
+    :when: 2024-11-21 14:49:19.432343000 Z
+- - :approve
+  - caniuse-lite
+  - :who:
+    :why:
+    :versions: []
+    :when: 2024-11-21 14:49:26.105488000 Z
+- - :approve
+  - jackspeak
+  - :who:
+    :why:
+    :versions: []
+    :when: 2024-11-21 14:49:31.978283000 Z
+- - :approve
+  - language-subtag-registry
+  - :who:
+    :why:
+    :versions: []
+    :when: 2024-11-21 14:49:41.253727000 Z
+- - :approve
+  - path-scurry
+  - :who:
+    :why:
+    :versions: []
+    :when: 2024-11-21 14:49:52.832818000 Z
+- - :approve
+  - robust-predicates
+  - :who:
+    :why:
+    :versions: []
+    :when: 2024-11-21 14:49:58.159887000 Z
+- - :approve
+  - tslib
+  - :who:
+    :why:
+    :versions: []
+    :when: 2024-11-21 14:50:05.281379000 Z
+- - :approve
+  - xmldom-sre
+  - :who:
+    :why:
+    :versions: []
+    :when: 2024-11-21 14:50:09.920121000 Z

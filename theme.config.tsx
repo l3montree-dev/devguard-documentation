@@ -53,7 +53,7 @@ const config: DocsThemeConfig = {
   project: {
     link: 'https://github.com/l3montree-dev/devguard',
   },
-  docsRepositoryBase: 'https://github.com/l3montree-dev/devguard-docs',
+  docsRepositoryBase: 'https://github.com/l3montree-dev/devguard-documentation',
   backgroundColor: {
     dark: '12,17,23',
     light: '240,242,245',
