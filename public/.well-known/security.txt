@@ -1,0 +1,25 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+Contact: mailto:developer@l3montree.com
+Expires: 2026-12-31T23:00:00.000Z
+Encryption: https://l3montree.com/developer@l3montree.com-0xA71508222B6168D5-pub.asc
+Preferred-Languages: en, de
+Canonical: https://devguard.org/.well-known/security.txt
+-----BEGIN PGP SIGNATURE-----
+
+iQJMBAEBCAA2FiEEg2Cvc8K1bPr9yFM3pxUIIithaNUFAmc/TK4YHGRldmVsb3Bl
+ckBsM21vbnRyZWUuY29tAAoJEKcVCCIrYWjVDpQP/Ro0P9FKoZaFmxMu7ymqdxOX
+WiqY3vaKtyeNncUjKLOBYmrRZeTE0+oGRBwsDoLvW5V2fqJECcOmbE+rte/1Nsui
+EPiI39atcYrwwnBMO+yv0lYf+MPTJn/zs4MyxJhUZj2PfjlOZXmJp/nEOMbLgjdh
+pCxCG94B/X+KOtSRjk6sk1igdlgSszoL2PGPDdjh9dj9oP+IY/7ugKc2YiuEgTa0
+H/XCbMHLAUBYonjXJNjwYPzZZswAuOlc5xYWgI6DI8PX/LQYmubffy1X1WfykhcF
+2LTfdtnNBJKProgljZSXY+Mg14ChwRzApwJ1tx9BTYNMNFW77Wm+LYFpHPXY4jx/
+Vc4DnKH79WaftU7HKSaTfg/mS3BA/rpFSVyZmlw9hIdwop/NhWLPG9Vp+zkjBNWO
+3aPTso1tCfe+kntsLYxYvWjbUyh6iAOG7SbqXlDWYUAUPCrC7a+++DhkFYGw451i
+wPO1nM+Nz7zoXMkXnnr01CKh52qGAs5JU1uAZnJp3OA13nfpQoxy3w7Ppq2Cut0N
+9Fhho6v3/DKw7/gqMu+OhsJDLB3P7/NupkMzylIkYN+7lyf94OqMOBaEuU6rw7JC
+bCGsu/8GhLcimJaTcZT3mbGUIuXVoGfWjhR7keaAeBVHJGTS++SFvQpv7Gyo8KGZ
+NI2wnEqzgAu7YHMYIP6K
+=xWF/
+-----END PGP SIGNATURE-----
