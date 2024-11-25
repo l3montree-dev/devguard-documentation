@@ -1,16 +1,20 @@
 ---
-sidebar_position: 2
+sidebar_position: 3
 title: Container Scanning
 ---
-import { Steps } from 'nextra/components'
-import { Tabs } from 'nextra/components'
+import { Steps, Tabs, Callout } from 'nextra/components'
 
 # Container Scanning
 
+<Callout type="info" emoji="ℹ️">
+  DevGuard performs continous container scanning to identify vulnerabilities in your project's container images after your first scan (based on SBOM).
+</Callout>
+
+
 ## Handling Found Flaws: Practical Steps for Mitigation
 
-When DevGuard's container scanning detects vulnerabilities, such as the example provided below, it’s essential to address them 
-promptly to maintain security and compliance. Here’s a step-by-step guide to managing identified flaws.
+When DevGuard's **container scanning** detects vulnerabilities, such as the example provided below, it’s essential to address them 
+promptly to maintain security and compliance. Here’s a step-by-step guide to manage identified flaws.
 
 ```md filename="Example Flaw"
 # CVE-2022-41903
