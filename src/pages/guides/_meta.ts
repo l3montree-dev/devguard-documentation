@@ -5,4 +5,5 @@ export default {
     'software-composition-analysis': {
         title: 'Software Composition Analysis(SCA)',
     },
+    iso: { title: 'ISO 27001' },
 }
