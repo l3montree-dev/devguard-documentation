@@ -1,0 +1,107 @@
+---
+sidebar_position: 1
+---
+import { Steps } from 'nextra/components'
+
+
+# DevGuard Setup Guide
+
+## DevGuard Overview
+
+DevGuard is divided into two projects:  
+- **Frontend**: [DevGuard Web](https://github.com/l3montree-dev/devguard-web), built with Next.js and React.js.
+- **Backend**: [DevGuard Backend](https://github.com/l3montree-dev/devguard), built with Go.
+
+---
+
+## Required Services and Tools
+
+To set up and run DevGuard, ensure the following services are installed on your machine:
+
+- **[Git](https://git-scm.com/downloads)**: For cloning and managing repositories.  
+- **[Docker](https://docs.docker.com/desktop/)**: To run services in containers.  
+- **[Docker Compose](https://docs.docker.com/compose/install/)**: For orchestrating multi-container Docker applications.  
+- **[(DataGrip)](https://www.jetbrains.com/help/datagrip/installation-guide.html)**: For managing the database (or use any other database management tool of your choice).  
+- **[Go](https://go.dev/doc/install)**: Required to run the backend.  
+- **[Node.js](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)**: Required to run the frontend.  
+- **[Make](https://www.gnu.org/software/make/)**: To execute commands in the Makefile.  
+- **[(Visual Studio Code (VS Code))](https://code.visualstudio.com/download)**: For managing and editing the codebase (or use any other code editor of your choice).
+
+---
+
+## Setting Up DevGuard Backend Locally
+
+<Steps>
+
+<h3>Step 1: Clone the repository</h3>
+
+The repository is located on [GitHub](https://github.com/l3montree-dev/devguard).
+
+```bash copy
+git clone git@github.com:l3montree-dev/devguard.git && cd devguard
+```
+
+<h3>Step 2: Copy the `.env.example` file to `.env`</h3>
+
+```bash copy
+cp .env.example .env
+```
+
+
+Adjust the values in the `.env` file according to your needs.
+
+
+<h3>Step 3: Start the necessary services</h3>
+
+Run the following command:
+
+```bash copy
+docker compose up -d
+```
+
+<h3>Step 4: Start the application</h3>
+
+Run this command to start the backend:
+
+```bash copy
+make
+```
+
+</Steps>
+
+---
+
+## Setting Up DevGuard Frontend Locally
+
+<Steps>
+
+<h3>Step 1: Clone the repository</h3>
+
+The repository is located on [GitHub](https://github.com/l3montree-dev/devguard-web).
+
+```bash copy
+git clone https://github.com/l3montree-dev/devguard-web.git
+```
+
+<h3>Step 2: Copy the `.env.example` file to `.env`</h3>
+
+Adjust the values in the `.env` file according to your needs.
+
+<h3>Step 3: Install NPM packages</h3>
+
+Run the following command to install the necessary dependencies:
+
+```bash copy
+npm install
+```
+
+<h3>Step 4: Start the application</h3>
+
+Run this command to start the frontend:
+
+```bash copy
+npm run dev
+```
+
+</Steps>
+
