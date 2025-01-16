@@ -3,4 +3,6 @@ export default {
     'in-toto': {
         title: 'Whitepaper: Integrating In-Toto in DevGuard for Secure Software Supply Chains',
     },
+
+    arch: { title: 'Architecture' },
 }
