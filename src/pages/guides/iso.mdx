@@ -1,44 +1,68 @@
 ---
 sidebar_position: 1
 ---
+# ISO 27001 Controls - Annex A
 
-### Table of Contents
+## A.8 Technological measures
+
+| Symbol | Meaning |
+| :----- | :---- |
+| ✅ | DevGuard covers this control for the monitored applications, so you could use DevGuard to prove your compliance |
+| 🔵 | Devguard partially covers this control |
+| 🍋 | DevGuard in itself covers this control |
+| ❌ | DevGuard doesn't cover this control |
+
 | Control | DevGuard | Description | 
 | :----- | :---- | :---- | 
-| [A.8.1 User end point devices](#a81-user-end-point-devices)        | ❌ | Devices that store, process, or access information must be protected.   |   
-| [A.8.2 Privileged access rights](#a82-privileged-access-rights)    | 🍋|The assignment and use of privileged access rights must be restricted and carefully managed.|  
-| [A.8.3 Information access restriction](#a83-information-access-restriction) |🍋 | Access to information and other related assets (such as documents, databases, and applications) must be controlled and restricted according to the established access policies.|  
-| [A.8.4 Access to source code](#a84-access-to-source-code)          | 🍋 |Read and write access to source code, development tools, and software libraries must be appropriately managed.|  
-| [A.8.5 Secure authentication](#a85-secure-authentication)          |❌| Secure authentication technologies and procedures must be implemented based on established access control policies and information access restrictions.|  
-| [A.8.6 Capacity management ](#a86-capacity-management)             |🍋 |The use of resources must be monitored and adjusted to meet current and anticipated capacity requirements.|  
+| [A.8.1 User end point devices](#a81-user-end-point-devices)        | ❌ | The requirement calls for the protection of information stored, processed or accessible on users' endpoint devices in order to protect them from the risks of using these devices.   |   
+| [A.8.2 Privileged access rights](#a82-privileged-access-rights)    | 🍋 | The measure requires the restriction and management of privileged access rights to ensure that only authorized users, software components and services are granted these rights.|  
+| [A.8.3 Information access restriction](#a83-information-access-restriction) | 🍋 | The measure requires that access to information and related assets be restricted in accordance with the established access control policy to prevent unauthorized access and to grant access only to authorized users.|  
+| [A.8.4 Access to source code](#a84-access-to-source-code)          | 🍋 |The measure requires appropriate management of read and write access to source code, development tools and software libraries to prevent unauthorized functions, unintended or malicious changes and to protect the confidentiality of intellectual property.|  
+| [A.8.5 Secure authentication](#a85-secure-authentication)          |❌| Secure authentication procedures should be implemented in accordance with access policies to ensure that only authorized users or entities have access to systems, applications and services.|  
+| [A.8.6 Capacity management ](#a86-capacity-management)             | 🍋 |The measure aims to monitor and adjust resources according to current and future capacity requirements to ensure that information processing facilities, staff, offices and other facilities are sufficiently available.|  
 | [A.8.7 Protection against malware](a87-protection-against-malware) | ❌| Protective measures against malware must be implemented and supported by appropriate user education.|  
-| [A.8.8 Management of technical vulnerabilities](#a88-management-of-technical-vulnerabilities) | ✔️ | Information regarding technical vulnerabilities in the used information systems must be gathered, the organization's exposure to these vulnerabilities must be assessed, and appropriate actions must be taken.|
-| [A.8.9 Configuration management](#a89-configuration-management)    | ✔️ | Configurations, including security configurations, for hardware, software, services, and networks must be created, documented, implemented, monitored, and reviewed.|  
-| [A.8.10 Information deletion](#a810-information-deletion)          |  ❌ | Data stored in information systems or on other storage media must be completely deleted when no longer required. This rule ensures that information is not kept longer than necessary, maintaining data security and confidentiality while avoiding risks.|
-| [A.8.11 Data masking](#a811-data-masking)                          |  ❌ | Data masking must be implemented in accordance with the organization's specific access control policy and other related policies, as well as business requirements, considering applicable legal regulations.|
-| [A.8.12 Data leakage prevention](#a812-data-leakage-prevention)    | ❌  | Measures to prevent data leaks must be applied to systems, networks, and all other devices that process, store, or transmit sensitive information.|
-| [A.8.13 Information backup](#a813-information-backup)              | ❌  | Backup copies of information, software, and systems must be created and regularly tested, according to the organization’s specific backup policy.|
-| [A.8.14 Redundancy of information processing facilities](#a814-redundancy-of-information-processing-facilities) |  🍋 |  Information processing facilities must be implemented with sufficient redundancy to meet availability requirements.|
-| [A.8.15 Logging](#a815-logging)                                    | ❌  | Logs that record activities, exceptions, errors, and other relevant events must be created, stored, protected, and analyzed.|
-| [A.8.16 Monitoring activities"](#a816-monitoring-activities)       | ❌  | Networks, systems, and applications must be monitored for anomalous behavior, and appropriate actions must be taken to evaluate potential security incidents.|
-| [A.8.17 Clock synchronization](#a817-clock-synchronization)        | ❌  | The clocks of information processing systems used by the organization must be synchronized with approved time sources.|
-| [A.8.18 Use of privileged utility programs](#a818-use-of-privileged-utility-programs) | ❌  | The use of utility programs capable of overriding system and application controls must be restricted and strictly controlled.|
-| [A.8.19 Installation of software on operational systems ](#a819-installation-of-software-on-operational-systems) | ❌  | Procedures and measures must be implemented to securely manage the installation of software on operating systems used in operational environments.|
-| [A.8.20 Network security ](#a820-network-security)                 |  ❌ | Networks and network devices must be secured, managed, and controlled to protect information in systems and applications.|
-| [A.8.21 Security of network services](#a821-security-of-network-services) | ❌  | Security mechanisms, service levels, and service requirements for network services must be identified, implemented, and monitored.|
-| [A.8.22 Segregation in networks ](#a822-segregation-in-networks)   |  ❌ | Groups of information services, users, and information systems must be separated within the organization's networks.|
-| [A.8.23 Web filtering](#a823-web-filtering)                        | ❌  | Access to external websites must be controlled to reduce exposure to harmful content.|
-| [A.8.24 Use of cryptography ](#a824-use-of-cryptography)           |  ❌ | Policies and rules should be defined and implemented for the effective use of cryptography, including the management of cryptographic keys.|
-| [A.8.25 Secure development life cycle](#a825-secure-development-life-cycle) |  ✔️ | Guidelines and rules should be established and applied for the secure development of software and systems to ensure security throughout the entire development life cycle.|
-| [A.8.26 Application security requirements ](#a826-application-security-requirements) | ✔️  | Information security requirements must be defined, specified, and approved when developing or procuring applications.|
-| [A.8.27 Secure System Architecture and Engineering Principles](#a827-secure-system-architecture-and-engineering-principles) | 🍋  | Principles for the secure development of information systems must be established, documented, and maintained. These principles should be applied to all development activities to ensure the security of information systems.|
-| [A.8.28 Secure Coding ](#a828-secure-coding)                       | ✔️  | Secure coding principles must be applied to software development to ensure that the software is protected against potential vulnerabilities from the very beginning.|
-| [A.8.29 Security Testing in Development and Acceptance](#a829-security-testing-in-development-and-acceptance) | ✔️  | Security testing processes must be defined and implemented in the development cycle to ensure that potential security gaps are identified and addressed early.|
-| [A.8.30 Outsourced Development](#a830-outsourced-development)      |  ❌ | The organization must lead, monitor, and review activities related to outsourced system development to ensure that the outsourced development meets the internal security and quality requirements.|
-| [A.8.31 Separation of development, test, and production environments](#a831-separation-of-development-test-and-production-environments) | 🍋 | Development, testing, and production systems should operate in separate environments, each properly secured to ensure that unauthorized changes are not made to the production systems and the integrity of the entire system is maintained.|
-| [A.8.32 Change management](#a832-change-management)                |  ❌ | Changes to information processing facilities and information systems must undergo a structured change management process. This process ensures that changes are implemented in a controlled and transparent manner to avoid errors and security risks.|
-| [A.8.33 Test information](#a833-test-information)                  |  ❌ | Test data used for development, testing, or qualification processes must be treated with the same care as actual production data. It should be appropriately selected, protected, and managed to ensure the security and confidentiality of information and minimize the risk of data loss or misuse.|
-| [A.8.34 Protection of information systems during audit testing](#a834-protection-of-information-systems-during-audit-testing) | ❌  | During audit tests and other security reviews of operating systems, the tests must be carefully planned and aligned with the appropriate management level. The goal of this rule is to ensure that audits do not create security gaps or disturbances in the operation of systems, and that the protection of the tested information is guaranteed at all times.|
+| [A.8.8 Management of technical vulnerabilities](#a88-management-of-technical-vulnerabilities) | ✅ | The measure includes identifying technical vulnerabilities, assessing their risks for the organization and implementing suitable countermeasures to prevent their exploitation.|
+| [A.8.9 Configuration management](#a89-configuration-management)    | ✅ | The measure includes the definition, documentation, implementation, monitoring and verification of configurations, including security configurations, to ensure correct functioning and protection against unauthorized or incorrect changes.|  
+| [A.8.10 Information deletion](#a810-information-deletion)          |  ❌ | The measure provides for the deletion of information that is no longer required in order to prevent the unwanted disclosure of sensitive data and to fulfill legal and contractual requirements.|
+| [A.8.11 Data masking](#a811-data-masking)                          |  ❌ | The measure requires the use of data masking in accordance with organization-specific policies and legal requirements to limit the disclosure of sensitive data and to comply with legal and contractual requirements.|
+| [A.8.12 Data leakage prevention](#a812-data-leakage-prevention)    | ❌  | The measure includes the protection of systems, networks and devices that process sensitive data through data leakage prevention measures to prevent unauthorized disclosure or extraction of information.|
+| [A.8.13 Information backup](#a813-information-backup)              | ❌  | The measure provides for the retention and regular review of backup copies in accordance with the data backup policy to ensure recovery after data or system loss.|
+| [A.8.14 Redundancy of information processing facilities](#a814-redundancy-of-information-processing-facilities) |  🍋 |  The measure requires the use of sufficient redundancy in information processing facilities to ensure their continuous operation and compliance with availability requirements.|
+| [A.8.15 Logging](#a815-logging)                                    | ❌  | The measure provides for the creation, storage, protection and analysis of logs to document events, preserve evidence, ensure the integrity of log data, detect security incidents and support investigations.|
+| [A.8.16 Monitoring activities"](#a816-monitoring-activities)       | ❌  | The measure is used to monitor networks, systems and applications for abnormal behavior in order to identify and assess potential information security incidents at an early stage.|
+| [A.8.17 Clock synchronization](#a817-clock-synchronization)        | ❌  | The measure provides that the clocks of the organization's information processing systems are synchronized with approved time sources to enable the correlation and analysis of security-related events and to support the investigation of security incidents.|
+| [A.8.18 Use of privileged utility programs](#a818-use-of-privileged-utility-programs) | ❌  | The measure restricts and monitors the use of auxiliary programs that could circumvent system and application protection measures in order to ensure the integrity of information security.|
+| [A.8.19 Installation of software on operational systems ](#a819-installation-of-software-on-operational-systems) | 🔵 | The measure includes the implementation of procedures and measures for the secure management of software installation on systems in operation in order to ensure system integrity and prevent the exploitation of technical vulnerabilities.|
+| [A.8.20 Network security ](#a820-network-security)                 |  ❌ | The measure requires securing, managing and controlling networks and network devices to protect information in systems and applications from being compromised over the network.|
+| [A.8.21 Security of network services](#a821-security-of-network-services) | ❌  | The measure provides for the identification, implementation and monitoring of security mechanisms, service assets and service requirements for network services in order to ensure the security of their use.|
+| [A.8.22 Segregation in networks ](#a822-segregation-in-networks)   |  ❌ | The measure calls for separating information services, users and information systems in the organization's networks into groups in order to divide the network into security boundaries and to control data traffic between these boundaries in accordance with business requirements.|
+| [A.8.23 Web filtering](#a823-web-filtering)                        | ❌  | The measure includes managing access to external websites to reduce the risk of malicious content, protect systems from malware and prevent access to unauthorized web resources.|
+| [A.8.24 Use of cryptography ](#a824-use-of-cryptography)           |  ❌ | The measure requires the definition and implementation of rules for the effective use of cryptography, including the management of cryptographic keys, to ensure the confidentiality, authenticity and integrity of information in accordance with business, security and legal requirements.|
+| [A.8.25 Secure development life cycle](#a825-secure-development-life-cycle) |  ✅ | The measure requires the definition and application of rules for the secure development of software and systems to ensure that information security is considered and implemented throughout the development cycle.|
+| [A.8.26 Application security requirements ](#a826-application-security-requirements) | ✅ | The measure requires that information security requirements are identified, specified and approved during the development or procurement of applications to ensure their consideration throughout the process.|
+| [A.8.27 Secure System Architecture and Engineering Principles](#a827-secure-system-architecture-and-engineering-principles) | 🍋  | The measure requires the definition, documentation and maintenance of principles for the development of secure systems that are applied in all phases of development to ensure secure design, implementation and operation throughout the life cycle.|
+| [A.8.28 Secure Coding ](#a828-secure-coding)                       | ✅  | The measure requires the application of the principles of secure coding in software development to ensure the security of the software and minimize potential security vulnerabilities.|
+| [A.8.29 Security Testing in Development and Acceptance](#a829-security-testing-in-development-and-acceptance) | ✅  | The measure requires the definition and integration of security testing procedures into the development lifecycle to ensure that information security requirements are met when applications or code are deployed in the production environment.|
+| [A.8.30 Outsourced Development](#a830-outsourced-development)      |  🔵  | The measure requires the organization to manage, monitor and review the activities of outsourced system development to ensure that the required information security measures are implemented.|
+| [A.8.31 Separation of development, test, and production environments](#a831-separation-of-development-test-and-production-environments) | 🍋 | The measure requires the separation and securing of development, test and production environments in order to protect the production environment and data from being affected by development and test activities.|
+| [A.8.32 Change management](#a832-change-management)                |  ❌ | The measure requires that changes to information processing facilities and information systems are made through change management procedures to ensure information security during the changes.|
+| [A.8.33 Test information](#a833-test-information)                  |  ❌ |The measure requires that test data is carefully selected, protected and managed to ensure the relevance of the test and the security of the operational information used for the test.|
+| [A.8.34 Protection of information systems during audit testing](#a834-protection-of-information-systems-during-audit-testing) | ❌  | The measure requires that tests as part of audits and other security activities affecting systems in operation are planned and agreed between the auditor and the responsible management in order to minimize the impact on systems and business processes.|
+
+
+
+## How DevGuard helps you with the ISO 27001 compliance
+
+### ✅ How DevGuard covers your controls
+
+
+### 🔵 Which parts of the control is covered by DevGuard and how
+
+
+### 🍋 How DevGuard covers the control for itself
+
+
+
 
 
 
