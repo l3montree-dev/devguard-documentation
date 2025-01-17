@@ -1,6 +1,6 @@
 export default {
     index: { title: 'Introduction' },
-    basics: { title: 'Basics' },
+    gettingStarted: { title: 'Getting Started' },
     concepts: { title: 'Concepts' },
     guides: { title: 'Guides' },
     contributing: { title: 'Contributing' },

@@ -1,4 +1,5 @@
 export default {
-    'code-of-conduct': { title: 'Code of Conduct' },
+    'getting-started': { title: 'Getting Started' },
     roadmap: { title: 'Roadmap' },
+    'code-of-conduct': { title: 'Code of Conduct' },
 }

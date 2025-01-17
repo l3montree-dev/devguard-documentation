@@ -38,8 +38,8 @@
         "dotenv": "^16.4.5",
         "eslint-config-prettier": "^9.1.0",
         "next": "^14.2.18",
-        "nextra": "3.2.3",
-        "nextra-theme-docs": "3.2.3",
+        "nextra": "3.3.1",
+        "nextra-theme-docs": "3.3.1",
         "p-limit": "^6.1.0",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
@@ -47,6 +47,7 @@
         "react-markdown": "^9.0.1",
         "remark-gemoji": "^8.0.0",
         "remark-gfm": "^4.0.0",
+        "remark-mdx-disable-explicit-jsx": "^0.1.0",
         "sass": "^1.81.0",
         "sharp": "^0.33.5",
         "winston": "^3.17.0"

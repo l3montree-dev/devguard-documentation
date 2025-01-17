@@ -7,9 +7,13 @@
 }
 
 .dark\:_bg-\[linear-gradient\(1deg\,\#383838\,\#212121\)\]:is(html[class~=dark] *) {
-    background-image: none;
+  background-image: none;
 }
 
 .dark\:_bg-neutral-900:is(html[class~=dark] *) {
-    background-color: #161B23;
+  background-color: #161B23;
+}
+
+summary h3 {
+  margin-top: 0px !important;
 }
