@@ -1,3 +1,8 @@
+
+
+
+
+
 ```mermaid
 flowchart TB 
 
@@ -6,7 +11,7 @@ flowchart TB
         ciCd[CI/CD]
     end
 
-    dev[DevGuard]
+    dev["DevGuard"]
 
     subgraph kube[Kubernetes]
         direction LR
@@ -35,7 +40,26 @@ flowchart TB
 
 
 
+classDef node fill:#161B23,color:yellow,stroke:#e5e7eb;
+classDef subgraphOut fill:#111835;
+classDef subgraphIn fill:#111827,stroke:#e5e7eb;
+
+classDef dev stroke-width:2px;
+
+
+class repo subgraphOut;
+class ciCd subgraphIn;
+class kube subgraphIn;
+
+class dev dev;
+
+linkStyle 0,1,2  stroke:#e5e7eb,stroke-width:2px;
+
+
+
+
 ```
+
 
 
 
