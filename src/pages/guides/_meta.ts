@@ -6,4 +6,5 @@ export default {
         title: 'Software Composition Analysis(SCA)',
     },
     iso: { title: 'ISO 27001' },
+    cra: { title: 'Cyber Resiliance Act' },
 }
