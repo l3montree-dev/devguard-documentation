@@ -1,68 +1,37 @@
-
-
 ```mermaid
 flowchart TB 
 
-    subgraph user[User]
-        direction LR
-        repo[Repository]
-        kube[Kubernetes]
-    end
-
-    subgraph git[CI/CD]
-        direction LR
-        GH[GitHub Action]
-        GL[GitLab Component]
-    end
-
-
-    subgraph dev[DevGuard]
+    subgraph repo[Repository]
         direction TB
-        devWeb[DevGuard Web] 
-        devCli[DevGuard CLI]      
+        ciCd[CI/CD]
+    end
+
+    dev[DevGuard]
+
+    subgraph kube[Kubernetes]
+        direction LR
+        operator[Operator]
     end
 
 
-
-    subgraph elSec[Security]
+    subgraph ciCd[CI/CD]
         direction LR
+
         SC[Secret Scanning]
+        SCA[SCA]
+        CS[Container Scanning]
         SAST[SAST]
         DAST[DAST]
         IaC[IaC]   
-    end
-
-
-    subgraph devCli[DevGuard ]
-        direction LR
-
-        subgraph vuln[Vulnerability check]
-            SCA[SCA]
-            CS[Container Scanning]
-        end    
-
-        subgraph sec[Security]
-            toto[in-toto]  
-            A@{ shape: braces, label: "coming soon : Secret Scanning , SAST , DAST , IaC" }
-       
-        end
-
+        toto[in-toto]  
 
     end
 
+    ciCd -- sarif results/sbom --> dev
+    dev -- results --> ciCd
 
-    repo <--> git
+    kube <-- verfication --> dev
 
-    git --> elSec
-    elSec --> git
-
-    git -- sbom --> vuln
-    git -- links --> toto
-
-    devCli -- vuln results --> git
-
-    devCli -- results --> devWeb
-    toto -- verification (coming soon) --> kube
 
 
 
@@ -72,10 +41,3 @@ flowchart TB
 
 
 
-        subgraph secCS[coming soon]
-            devSC[Secret Scanning]
-            devSAST[SAST]
-            devDAST[DAST]
-            devIaC[IaC]   
-        end
-         
