@@ -14,7 +14,7 @@ sidebar_position: 1
 | Control | DevGuard | Description | 
 | :----- | :---- | :---- | 
 | [A.8.4 Access to source code](#a84-access-to-source-code)          | 🔵 |The measure requires appropriate management of read and write access to source code, development tools and software libraries to prevent unauthorized functions, unintended or malicious changes and to protect the confidentiality of intellectual property.|  
-| [A.8.7 Protection against malware](a87-protection-against-malware) | 🔵| Protective measures against malware must be implemented and supported by appropriate user education.|  
+| [A.8.7 Protection against malware](#a87-protection-against-malware) | 🔵| Protective measures against malware must be implemented and supported by appropriate user education.|  
 | [A.8.8 Management of technical vulnerabilities](#a88-management-of-technical-vulnerabilities) | ✅ | The measure includes identifying technical vulnerabilities, assessing their risks for the organization and implementing suitable countermeasures to prevent their exploitation.|
 | [A.8.19 Installation of software on operational systems ](#a819-installation-of-software-on-operational-systems) | 🔵 | The measure includes the implementation of procedures and measures for the secure management of software installation on systems in operation in order to ensure system integrity and prevent the exploitation of technical vulnerabilities.|
 | [A.8.25 Secure development life cycle](#a825-secure-development-life-cycle) | ✅ | The measure requires the definition and application of rules for the secure development of software and systems to ensure that information security is considered and implemented throughout the development cycle.|
@@ -29,38 +29,40 @@ sidebar_position: 1
 
 
 
-### ✅ DevGuard covers your controls through the following features:
+### ✅ DevGuard covers your controls through the following features
 
 <details>
 <summary>
 
-#### A.8.8 Management of Technical Vulnerabilities
+<h4> A.8.8 Management of Technical Vulnerabilities </h4>
 
 </summary>
 
-
-- Identification and documentation of vulnerabilities in your codebase through static code analysis and dynamic code analysis.  
-- Identification and documentation of software components and libraries in your codebase through SBOM (Software Bill of Materials) generation, listing all software components with their versions.  
-- Automatic generation and documentation of an SBOM with versions for each new change in the codebase.  
-- Identification and documentation of vulnerabilities in the dependencies of your codebase through dependency scanning. This includes detecting known vulnerabilities in databases such as NVD (National Vulnerability Database) and GitHub repositories.  
+- Identification and documentation of vulnerabilities in your codebase through [static code analysis](./devsecops/sast.mdx) and [dynamic code analysis](./devsecops/dast.mdx).  
+- Identification and documentation of software components and libraries in your codebase through [SBOM](./sbom-analysis.mdx) (Software Bill of Materials) generation, listing all software components with their versions.  
+- Automatic generation and documentation of an [SBOM](./sbom-analysis.mdx) (Software Bill of Materials) with versions for each new change in the codebase.  
+- Identification and documentation of vulnerabilities in the dependencies of your codebase through dependency scanning with [software composition analysis](./devsecops/software-composition-analysis.mdx) (SCA) and [container images](./devsecops/container-scanning.mdx).  
 - Verification of available patches for the vulnerabilities in dependencies, along with guidance on how to apply them.  
+- Calculation and documentation of the risk of vulnerabilities in your codebase and dependencies through [risk analysis](./mangeRisks.mdx).  
 - Prioritization of vulnerabilities in your codebase and dependencies, enabling you to address the most critical issues first.  
-- Continuous monitoring of vulnerabilities in your codebase and dependencies to track whether they have been resolved.
-- Documentation of the vulnerabilities in your codebase and dependencies, and the fixes applied to address them.
+- Continuous monitoring of vulnerabilities in your codebase and dependencies to track whether they have been resolved.  
+- Documentation of the vulnerabilities in your codebase and dependencies, along with the fixes applied to address them.  
+
 </details>
 
 
 
 
+
 <details>
 <summary>
 
-#### A.8.25 Secure Development Life Cycle
+<h4> A.8.25 Secure Development Life Cycle </h4>
 
 </summary>
 
-- The pipeline is designed to be secure by default, adhering to best practices outlined by OWASP.  
-- Monitoring the software development lifecycle by displaying which threats are mitigated and which are not, based on SLSA (Supply Chain Levels for Software Artifacts) Model.
+- The pipeline is designed to be secure by default, adhering to best practices outlined by [OWASP](https://owasp.org/www-project-devsecops-guideline/) DevSecOps Guideline.
+- Monitoring the software development lifecycle by displaying which threats are mitigated and which are not, based on [SLSA](https://slsa.dev/spec/v1.0/threats)(Supply Chain Levels for Software Artifacts) Model.
 - Ensuring the integrity of the codebase and protecting it from unauthorized changes through in-toto.  
 
 </details>
@@ -73,15 +75,15 @@ sidebar_position: 1
 <details>
 <summary>
 
-#### A.8.28 Secure Coding
+<h4> A.8.28 Secure Coding </h4>
 
 </summary>
 
-- Identification and documentation of secrets and credentials in your codebase through secret scanning.  
-- Identification and documentation of software components and libraries in your codebase through SBOM (Software Bill of Materials) generation, listing all software components with their versions.  
+- Identification and documentation of secrets and credentials in your codebase through [secret scanning](./devsecops/secret-scanning.mdx).  
+- Identification and documentation of software components and libraries in your codebase through [SBOM](./sbom-analysis.mdx) (Software Bill of Materials) generation, listing all software components with their versions.  
 - Automatic generation and documentation of an SBOM with versions for each new change in the codebase.  
-- Identification and documentation of vulnerabilities in the dependencies of your codebase through dependency scanning. This includes detecting known vulnerabilities in databases such as NVD (National Vulnerability Database) and GitHub repositories.  
-- Calculation and documentation of the risk of vulnerabilities in your codebase and dependencies through risk analysis.  
+- Identification and documentation of vulnerabilities in the dependencies of your codebase through dependency scanning with [software composition analysis](./devsecops/software-composition-analysis.mdx) (SCA) and [container images](./devsecops/container-scanning.mdx).   
+- Calculation and documentation of the risk of vulnerabilities in your codebase and dependencies through [risk analysis](./mangeRisks.mdx).    
 - Ensuring the integrity of the codebase and protection from unauthorized changes through in-toto.  
 - Prioritization of vulnerabilities in your codebase and dependencies, enabling you to address the most critical issues first.  
 - Identification and documentation of licenses in your codebase through license scanning.  
@@ -96,7 +98,7 @@ sidebar_position: 1
 <details>
 <summary>
 
-#### A.8.29 Security Testing in Development and Acceptance
+<h4> A.8.29 Security Testing in Development and Acceptance </h4>
 
 </summary>
 
@@ -108,12 +110,12 @@ sidebar_position: 1
 
 
 
-### 🔵 Which parts of the control is covered by DevGuard and how
+### 🔵 DevGuard covers parts of the control through the following features
 
 <details>
 <summary>
 
-#### A.8.4 Access to source code
+<h4> A.8.4 Access to source code </h4>
 
 </summary>
 
@@ -126,7 +128,7 @@ sidebar_position: 1
 
 <summary>
 
-#### A.8.7 Protection against malware 
+<h4> A.8.7 Protection against malware </h4>
 
 </summary>
 
@@ -141,11 +143,11 @@ sidebar_position: 1
 
 <summary>
 
-### 8.19 Software installation 
+<h4> A.8.19 Software installation </h4> 
 
 </summary>
 
-- Automatic generation and documentation of an SBOM with versions for each new change in the codebase. so can check all updating the liberaries 
+- Automatic generation and documentation of an [SBOM](./sbom-analysis.mdx) (Software Bill of Materials) with versions for each new change in the codebase. so can check all updating the liberaries 
 
 </details>
 
@@ -156,7 +158,7 @@ sidebar_position: 1
 <details>
 <summary>
 
-#### A.8.26 Application security requirements
+<h4> A.8.26 Application security requirements </h4>
 
 </summary>
 
@@ -175,12 +177,12 @@ sidebar_position: 1
 <details>
 <summary>
 
-#### A.8.30 Outsourced Development
+<h4> A.8.30 Outsourced Development </h4>
 
 </summary>
 
 If DevGuard is integrated into the outsourced development process:  
-- Identification and documentation of vulnerabilities in the dependencies of the outsourced codebase can be performed.  
+- Identification and documentation of vulnerabilities in the dependencies of the outsourced codebase can be performed. see [A.8.8 Management of Technical Vulnerabilities](#a88-management-of-technical-vulnerabilities).  
 - Ensuring the integrity of the codebase and protection from unauthorized changes through in-toto.  
 
 </details>
