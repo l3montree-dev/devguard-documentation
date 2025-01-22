@@ -1,9 +1,7 @@
 export default {
     index: { title: 'Guides' },
     mangeRisks: { title: 'Manage Risks' },
-    'container-scanning': { title: 'Container Scanning' },
-    'software-composition-analysis': {
-        title: 'Software Composition Analysis(SCA)',
-    },
+    devsecops: { title: 'DevSecOps' },
     iso: { title: 'ISO 27001' },
+    cra: { title: 'Cyber Resiliance Act' },
 }
