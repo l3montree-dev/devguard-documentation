@@ -1,6 +1,7 @@
 export default {
     index: { title: 'Introduction' },
-    gettingStarted: { title: 'Getting Started' },
+    'getting-started': { title: 'Getting Started' },
+    'self-hosting-devguard': { title: 'Self Hosting DevGuard' },
     concepts: { title: 'Concepts' },
     guides: { title: 'Guides' },
     contributing: { title: 'Contributing' },

@@ -213,3 +213,25 @@ GET /api/v1/verify-supply-chain?supplyChainId=XYZ&supplyChainOutputDigest=ab23cd
 The call to this endpoint results either in a `200 OK` or a `400 Bad Request` response. 
 Besides that, the verification can be done manually by downloading the links and verifying them against the root.layout. All those artifacts are stored and free to download by the developer.
 
+
+
+#### Generating Provenance using GitHub SLSA Generator (signed by default)
+
+
+> tools for building a SLSA builder on GitHub using the Build-Your-Own-Builder framework. With this framework, you can "wrap" an existing GitHub Action into a SLSA builder. The SLSA builder will generate non-forgeable provenance meeting the provenance generation and isolation requirements for SLSA Build level 3 and above. See some builders created using the BYOB framework.
+
+
+#### Generating SLSA Provenance using GitLab (not signed)
+
+Ref: https://about.gitlab.com/blog/2022/11/30/achieve-slsa-level-2-compliance-with-gitlab/
+
+[Example Generated File](./example-attestations/gitlab-artifacts-metadata.json)
+
+
+#### Roadmap
+
+Ref: https://slsa.dev/spec/v1.0/distributing-provenance
+
+> Publish attestations elsewhere, record their existence in a transparency log: Once an attestation has been generated and published for a build, a hash of the attestation and a pointer to where it is indexed SHOULD be published to a third-party transparency log that exists outside the source repository and package registry. Not only are transparency logs such as Rekor from Sigstore guaranteed to be immutable, but they typically also make monitoring easier. Requiring the presence of the attestation in a monitored transparency log during verification helps ensure the attestation is trustworthy.
+
+- Compatibility to the slsa verifier: https://github.com/slsa-framework/slsa-verifier

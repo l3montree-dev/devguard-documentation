@@ -1,0 +1,155 @@
+{
+    "_type": "https://in-toto.io/Statement/v0.1",
+    "predicateType": "https://slsa.dev/provenance/v1",
+    "subject": [
+        {
+            "name": "image.tar",
+            "digest": {
+                "sha256": "ef66c79e57ca5c831e53b29165b49d28332bed652a2987f93a2e525a0500a19f"
+            }
+        },
+        {
+            "name": "image-tag.txt",
+            "digest": {
+                "sha256": "175d28e187da14618a2b83b3e975c8f8cdf435dc94c6723a3719f7f27d1a59ff"
+            }
+        },
+        {
+            "name": "image-digest.txt",
+            "digest": {
+                "sha256": "5a725b4f13fbd50ee8302a821feb73e2408c72c17a561e289122f6daae464082"
+            }
+        }
+    ],
+    "predicate": {
+        "buildDefinition": {
+            "buildType": "https://gitlab.com/gitlab-org/gitlab-runner/-/blob/a1fca00e/PROVENANCE.md",
+            "externalParameters": {
+                "CI": "",
+                "CI_API_GRAPHQL_URL": "",
+                "CI_API_V4_URL": "",
+                "CI_COMMIT_AUTHOR": "",
+                "CI_COMMIT_BEFORE_SHA": "",
+                "CI_COMMIT_BRANCH": "",
+                "CI_COMMIT_DESCRIPTION": "",
+                "CI_COMMIT_MESSAGE": "",
+                "CI_COMMIT_REF_NAME": "",
+                "CI_COMMIT_REF_PROTECTED": "",
+                "CI_COMMIT_REF_SLUG": "",
+                "CI_COMMIT_SHA": "",
+                "CI_COMMIT_SHORT_SHA": "",
+                "CI_COMMIT_TIMESTAMP": "",
+                "CI_COMMIT_TITLE": "",
+                "CI_CONFIG_PATH": "",
+                "CI_DEFAULT_BRANCH": "",
+                "CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX": "",
+                "CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX": "",
+                "CI_DEPENDENCY_PROXY_PASSWORD": "",
+                "CI_DEPENDENCY_PROXY_SERVER": "",
+                "CI_DEPENDENCY_PROXY_USER": "",
+                "CI_JOB_ID": "",
+                "CI_JOB_NAME": "",
+                "CI_JOB_NAME_SLUG": "",
+                "CI_JOB_STAGE": "",
+                "CI_JOB_STARTED_AT": "",
+                "CI_JOB_TOKEN": "",
+                "CI_JOB_URL": "",
+                "CI_NODE_TOTAL": "",
+                "CI_PAGES_DOMAIN": "",
+                "CI_PAGES_URL": "",
+                "CI_PIPELINE_CREATED_AT": "",
+                "CI_PIPELINE_ID": "",
+                "CI_PIPELINE_IID": "",
+                "CI_PIPELINE_NAME": "",
+                "CI_PIPELINE_SOURCE": "",
+                "CI_PIPELINE_URL": "",
+                "CI_PROJECT_CLASSIFICATION_LABEL": "",
+                "CI_PROJECT_DESCRIPTION": "",
+                "CI_PROJECT_ID": "",
+                "CI_PROJECT_NAME": "",
+                "CI_PROJECT_NAMESPACE": "",
+                "CI_PROJECT_NAMESPACE_ID": "",
+                "CI_PROJECT_PATH": "",
+                "CI_PROJECT_PATH_SLUG": "",
+                "CI_PROJECT_REPOSITORY_LANGUAGES": "",
+                "CI_PROJECT_ROOT_NAMESPACE": "",
+                "CI_PROJECT_TITLE": "",
+                "CI_PROJECT_URL": "",
+                "CI_PROJECT_VISIBILITY": "",
+                "CI_REGISTRY": "",
+                "CI_REGISTRY_IMAGE": "",
+                "CI_REGISTRY_PASSWORD": "",
+                "CI_REGISTRY_USER": "",
+                "CI_REPOSITORY_URL": "",
+                "CI_RUNNER_DESCRIPTION": "",
+                "CI_RUNNER_ID": "",
+                "CI_RUNNER_TAGS": "",
+                "CI_SERVER_FQDN": "",
+                "CI_SERVER_HOST": "",
+                "CI_SERVER_NAME": "",
+                "CI_SERVER_PORT": "",
+                "CI_SERVER_PROTOCOL": "",
+                "CI_SERVER_REVISION": "",
+                "CI_SERVER_SHELL_SSH_HOST": "",
+                "CI_SERVER_SHELL_SSH_PORT": "",
+                "CI_SERVER_URL": "",
+                "CI_SERVER_VERSION": "",
+                "CI_SERVER_VERSION_MAJOR": "",
+                "CI_SERVER_VERSION_MINOR": "",
+                "CI_SERVER_VERSION_PATCH": "",
+                "CI_TEMPLATE_REGISTRY_HOST": "",
+                "CONTAINER_IMAGE_REGISTRY_PASSWORD": "",
+                "CONTAINER_IMAGE_REGISTRY_USER": "",
+                "COSIGN_PASSWORD": "",
+                "COSIGN_PRIVATE_KEY": "",
+                "DEVGUARD_ASSET_NAME": "",
+                "DEVGUARD_TOKEN": "",
+                "GITGUARDIAN_API_KEY": "",
+                "GITLAB_CI": "",
+                "GITLAB_FEATURES": "",
+                "GITLAB_USER_EMAIL": "",
+                "GITLAB_USER_ID": "",
+                "GITLAB_USER_LOGIN": "",
+                "GITLAB_USER_NAME": "",
+                "K8S_API_URL": "",
+                "K8S_CERTIFICATE": "",
+                "K8S_DEVELOPMENT_API_URL": "",
+                "K8S_DEVELOPMENT_CERTIFICATE": "",
+                "K8S_DEVELOPMENT_TOKEN": "",
+                "K8S_TOKEN": "",
+                "RUNNER_GENERATE_ARTIFACTS_METADATA": "",
+                "SENTRY_AUTH_TOKEN": "",
+                "STORYBLOK_ACCESS_TOKEN": "",
+                "entryPoint": "devguard:build-image",
+                "source": "https://gitlab.com/l3montree/website-neu"
+            },
+            "internalParameters": {
+                "architecture": "amd64",
+                "executor": "kubernetes",
+                "job": "8891298387",
+                "name": "gitlab-runner-99699bc5-nqwkt"
+            },
+            "resolvedDependencies": [
+                {
+                    "uri": "https://gitlab.com/l3montree/website-neu",
+                    "digest": {
+                        "sha256": "e18b6e322ca603eae97868b77756ca4783d2d514"
+                    }
+                }
+            ]
+        },
+        "runDetails": {
+            "builder": {
+                "id": "https://gitlab.com/l3montree/website-neu/-/runners/43199238",
+                "version": {
+                    "gitlab-runner": "a1fca00e"
+                }
+            },
+            "metadata": {
+                "invocationID": "8891298387",
+                "startedOn": "2025-01-19T10:35:34Z",
+                "finishedOn": "2025-01-19T10:37:49Z"
+            }
+        }
+    }
+}

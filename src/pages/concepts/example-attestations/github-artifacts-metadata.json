@@ -1,0 +1,323 @@
+{
+    "_type": "https://in-toto.io/Statement/v0.1",
+    "predicateType": "https://slsa.dev/provenance/v0.2",
+    "subject": [
+        {
+            "name": "go-containerregistry_Linux_i386.tar.gz",
+            "digest": {
+                "sha256": "0ccc82da7941f738da7d06c0e38027864c545659cf8a33ffbe5bbe894f4337db"
+            }
+        },
+        {
+            "name": "go-containerregistry_Darwin_arm64.tar.gz",
+            "digest": {
+                "sha256": "19b95d9e5354131a2e5a8cfeefdf915123a2ee2b8e2f9c9070c8fa8c062f8c1d"
+            }
+        },
+        {
+            "name": "go-containerregistry_Linux_x86_64.tar.gz",
+            "digest": {
+                "sha256": "5f2b43c32a901adaaabaa78755d56cea71183954de7547cb4c4bc64b9ac6b2ff"
+            }
+        },
+        {
+            "name": "go-containerregistry_Windows_arm64.tar.gz",
+            "digest": {
+                "sha256": "60be72c614df5583e8a29af005dc5be4fcdbacb240a45d155747de536a9f6156"
+            }
+        },
+        {
+            "name": "go-containerregistry_Linux_s390x.tar.gz",
+            "digest": {
+                "sha256": "667cf9abea23b35914b59982a18d7df467edffb6285c390b244e265c2c64846a"
+            }
+        },
+        {
+            "name": "go-containerregistry_Linux_ppc64le.tar.gz",
+            "digest": {
+                "sha256": "6a1fd2cedb86bf6f04b1cbfb45270a34530c9a4739f4f8b32920142dffa85b87"
+            }
+        },
+        {
+            "name": "go-containerregistry_Linux_armv6.tar.gz",
+            "digest": {
+                "sha256": "6e7b705f5fce42ec96ff25fd10a7bf35a3e101f560c38c9972cc44ba5192e7ad"
+            }
+        },
+        {
+            "name": "go-containerregistry_Windows_x86_64.tar.gz",
+            "digest": {
+                "sha256": "860498f57ea014ff7f5e2e4971d6fbfb4a13ef91784d8d5bd34ed004db5f4c64"
+            }
+        },
+        {
+            "name": "go-containerregistry_Linux_arm64.tar.gz",
+            "digest": {
+                "sha256": "9118c29cdf2197441c4a934cf517df76c021ba12a70edc14ee9dc4dc08226680"
+            }
+        },
+        {
+            "name": "go-containerregistry_Windows_armv6.tar.gz",
+            "digest": {
+                "sha256": "98a56c97b8cdc8e3683a290705209eec001b96d9cb0c1fc6c0a02914c8e3cdef"
+            }
+        },
+        {
+            "name": "go-containerregistry-0.19.1.tar.gz",
+            "digest": {
+                "sha256": "ecfd76b8dda3d25551b08f484dfe42c6e78497854d48f92a3702097b6953cde6"
+            }
+        },
+        {
+            "name": "go-containerregistry_Darwin_x86_64.tar.gz",
+            "digest": {
+                "sha256": "f163d9ee3bd856ce851dec82305bb608826bd6fbb47e92ee4d4749436850ad69"
+            }
+        }
+    ],
+    "predicate": {
+        "builder": {
+            "id": "https://github.com/slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@refs/tags/v1.5.0"
+        },
+        "buildType": "https://github.com/slsa-framework/slsa-github-generator/generic@v1",
+        "invocation": {
+            "configSource": {
+                "uri": "git+https://github.com/google/go-containerregistry@refs/tags/v0.19.1",
+                "digest": {
+                    "sha1": "8b3c3036d612bcb3c1147fe11c2d1818dc432329"
+                },
+                "entryPoint": ".github/workflows/release.yml"
+            },
+            "parameters": {},
+            "environment": {
+                "github_actor": "jonjohnsonjr",
+                "github_actor_id": "17863526",
+                "github_base_ref": "",
+                "github_event_name": "push",
+                "github_event_payload": {
+                    "after": "8b3c3036d612bcb3c1147fe11c2d1818dc432329",
+                    "base_ref": "refs/heads/main",
+                    "before": "0000000000000000000000000000000000000000",
+                    "commits": [],
+                    "compare": "https://github.com/google/go-containerregistry/compare/v0.19.1",
+                    "created": true,
+                    "deleted": false,
+                    "enterprise": {
+                        "avatar_url": "https://avatars.githubusercontent.com/b/1732?v=4",
+                        "created_at": "2019-12-19T00:30:52Z",
+                        "description": "",
+                        "html_url": "https://github.com/enterprises/alphabet",
+                        "id": 1732,
+                        "name": "Alphabet",
+                        "node_id": "MDEwOkVudGVycHJpc2UxNzMy",
+                        "slug": "alphabet",
+                        "updated_at": "2023-01-20T00:41:48Z",
+                        "website_url": "https://abc.xyz/"
+                    },
+                    "forced": false,
+                    "head_commit": {
+                        "author": {
+                            "email": "jon.johnson@chainguard.dev",
+                            "name": "Jon Johnson",
+                            "username": "jonjohnsonjr"
+                        },
+                        "committer": {
+                            "email": "noreply@github.com",
+                            "name": "GitHub",
+                            "username": "web-flow"
+                        },
+                        "distinct": true,
+                        "id": "8b3c3036d612bcb3c1147fe11c2d1818dc432329",
+                        "message": "Bump golang.org/x/ packages (#1892)",
+                        "timestamp": "2024-03-13T14:30:35-07:00",
+                        "tree_id": "22bae59dd11a221079324fd34bd242dbed2a7628",
+                        "url": "https://github.com/google/go-containerregistry/commit/8b3c3036d612bcb3c1147fe11c2d1818dc432329"
+                    },
+                    "organization": {
+                        "avatar_url": "https://avatars.githubusercontent.com/u/1342004?v=4",
+                        "description": "Google ❤️ Open Source",
+                        "events_url": "https://api.github.com/orgs/google/events",
+                        "hooks_url": "https://api.github.com/orgs/google/hooks",
+                        "id": 1342004,
+                        "issues_url": "https://api.github.com/orgs/google/issues",
+                        "login": "google",
+                        "members_url": "https://api.github.com/orgs/google/members{/member}",
+                        "node_id": "MDEyOk9yZ2FuaXphdGlvbjEzNDIwMDQ=",
+                        "public_members_url": "https://api.github.com/orgs/google/public_members{/member}",
+                        "repos_url": "https://api.github.com/orgs/google/repos",
+                        "url": "https://api.github.com/orgs/google"
+                    },
+                    "pusher": {
+                        "email": "jonjohnsonjr@gmail.com",
+                        "name": "jonjohnsonjr"
+                    },
+                    "ref": "refs/tags/v0.19.1",
+                    "repository": {
+                        "allow_forking": true,
+                        "archive_url": "https://api.github.com/repos/google/go-containerregistry/{archive_format}{/ref}",
+                        "archived": false,
+                        "assignees_url": "https://api.github.com/repos/google/go-containerregistry/assignees{/user}",
+                        "blobs_url": "https://api.github.com/repos/google/go-containerregistry/git/blobs{/sha}",
+                        "branches_url": "https://api.github.com/repos/google/go-containerregistry/branches{/branch}",
+                        "clone_url": "https://github.com/google/go-containerregistry.git",
+                        "collaborators_url": "https://api.github.com/repos/google/go-containerregistry/collaborators{/collaborator}",
+                        "comments_url": "https://api.github.com/repos/google/go-containerregistry/comments{/number}",
+                        "commits_url": "https://api.github.com/repos/google/go-containerregistry/commits{/sha}",
+                        "compare_url": "https://api.github.com/repos/google/go-containerregistry/compare/{base}...{head}",
+                        "contents_url": "https://api.github.com/repos/google/go-containerregistry/contents/{+path}",
+                        "contributors_url": "https://api.github.com/repos/google/go-containerregistry/contributors",
+                        "created_at": 1521050569,
+                        "custom_properties": {},
+                        "default_branch": "main",
+                        "deployments_url": "https://api.github.com/repos/google/go-containerregistry/deployments",
+                        "description": "Go library and CLIs for working with container registries",
+                        "disabled": false,
+                        "downloads_url": "https://api.github.com/repos/google/go-containerregistry/downloads",
+                        "events_url": "https://api.github.com/repos/google/go-containerregistry/events",
+                        "fork": false,
+                        "forks": 489,
+                        "forks_count": 489,
+                        "forks_url": "https://api.github.com/repos/google/go-containerregistry/forks",
+                        "full_name": "google/go-containerregistry",
+                        "git_commits_url": "https://api.github.com/repos/google/go-containerregistry/git/commits{/sha}",
+                        "git_refs_url": "https://api.github.com/repos/google/go-containerregistry/git/refs{/sha}",
+                        "git_tags_url": "https://api.github.com/repos/google/go-containerregistry/git/tags{/sha}",
+                        "git_url": "git://github.com/google/go-containerregistry.git",
+                        "has_discussions": false,
+                        "has_downloads": true,
+                        "has_issues": true,
+                        "has_pages": false,
+                        "has_projects": true,
+                        "has_wiki": false,
+                        "homepage": "",
+                        "hooks_url": "https://api.github.com/repos/google/go-containerregistry/hooks",
+                        "html_url": "https://github.com/google/go-containerregistry",
+                        "id": 125253663,
+                        "is_template": false,
+                        "issue_comment_url": "https://api.github.com/repos/google/go-containerregistry/issues/comments{/number}",
+                        "issue_events_url": "https://api.github.com/repos/google/go-containerregistry/issues/events{/number}",
+                        "issues_url": "https://api.github.com/repos/google/go-containerregistry/issues{/number}",
+                        "keys_url": "https://api.github.com/repos/google/go-containerregistry/keys{/key_id}",
+                        "labels_url": "https://api.github.com/repos/google/go-containerregistry/labels{/name}",
+                        "language": "Go",
+                        "languages_url": "https://api.github.com/repos/google/go-containerregistry/languages",
+                        "license": {
+                            "key": "apache-2.0",
+                            "name": "Apache License 2.0",
+                            "node_id": "MDc6TGljZW5zZTI=",
+                            "spdx_id": "Apache-2.0",
+                            "url": "https://api.github.com/licenses/apache-2.0"
+                        },
+                        "master_branch": "main",
+                        "merges_url": "https://api.github.com/repos/google/go-containerregistry/merges",
+                        "milestones_url": "https://api.github.com/repos/google/go-containerregistry/milestones{/number}",
+                        "mirror_url": null,
+                        "name": "go-containerregistry",
+                        "node_id": "MDEwOlJlcG9zaXRvcnkxMjUyNTM2NjM=",
+                        "notifications_url": "https://api.github.com/repos/google/go-containerregistry/notifications{?since,all,participating}",
+                        "open_issues": 118,
+                        "open_issues_count": 118,
+                        "organization": "google",
+                        "owner": {
+                            "avatar_url": "https://avatars.githubusercontent.com/u/1342004?v=4",
+                            "email": "opensource@google.com",
+                            "events_url": "https://api.github.com/users/google/events{/privacy}",
+                            "followers_url": "https://api.github.com/users/google/followers",
+                            "following_url": "https://api.github.com/users/google/following{/other_user}",
+                            "gists_url": "https://api.github.com/users/google/gists{/gist_id}",
+                            "gravatar_id": "",
+                            "html_url": "https://github.com/google",
+                            "id": 1342004,
+                            "login": "google",
+                            "name": "google",
+                            "node_id": "MDEyOk9yZ2FuaXphdGlvbjEzNDIwMDQ=",
+                            "organizations_url": "https://api.github.com/users/google/orgs",
+                            "received_events_url": "https://api.github.com/users/google/received_events",
+                            "repos_url": "https://api.github.com/users/google/repos",
+                            "site_admin": false,
+                            "starred_url": "https://api.github.com/users/google/starred{/owner}{/repo}",
+                            "subscriptions_url": "https://api.github.com/users/google/subscriptions",
+                            "type": "Organization",
+                            "url": "https://api.github.com/users/google"
+                        },
+                        "private": false,
+                        "pulls_url": "https://api.github.com/repos/google/go-containerregistry/pulls{/number}",
+                        "pushed_at": 1710434457,
+                        "releases_url": "https://api.github.com/repos/google/go-containerregistry/releases{/id}",
+                        "size": 28926,
+                        "ssh_url": "git@github.com:google/go-containerregistry.git",
+                        "stargazers": 2905,
+                        "stargazers_count": 2905,
+                        "stargazers_url": "https://api.github.com/repos/google/go-containerregistry/stargazers",
+                        "statuses_url": "https://api.github.com/repos/google/go-containerregistry/statuses/{sha}",
+                        "subscribers_url": "https://api.github.com/repos/google/go-containerregistry/subscribers",
+                        "subscription_url": "https://api.github.com/repos/google/go-containerregistry/subscription",
+                        "svn_url": "https://github.com/google/go-containerregistry",
+                        "tags_url": "https://api.github.com/repos/google/go-containerregistry/tags",
+                        "teams_url": "https://api.github.com/repos/google/go-containerregistry/teams",
+                        "topics": [
+                            "container",
+                            "container-registry",
+                            "docker",
+                            "registry"
+                        ],
+                        "trees_url": "https://api.github.com/repos/google/go-containerregistry/git/trees{/sha}",
+                        "updated_at": "2024-03-14T16:35:24Z",
+                        "url": "https://github.com/google/go-containerregistry",
+                        "visibility": "public",
+                        "watchers": 2905,
+                        "watchers_count": 2905,
+                        "web_commit_signoff_required": false
+                    },
+                    "sender": {
+                        "avatar_url": "https://avatars.githubusercontent.com/u/17863526?v=4",
+                        "events_url": "https://api.github.com/users/jonjohnsonjr/events{/privacy}",
+                        "followers_url": "https://api.github.com/users/jonjohnsonjr/followers",
+                        "following_url": "https://api.github.com/users/jonjohnsonjr/following{/other_user}",
+                        "gists_url": "https://api.github.com/users/jonjohnsonjr/gists{/gist_id}",
+                        "gravatar_id": "",
+                        "html_url": "https://github.com/jonjohnsonjr",
+                        "id": 17863526,
+                        "login": "jonjohnsonjr",
+                        "node_id": "MDQ6VXNlcjE3ODYzNTI2",
+                        "organizations_url": "https://api.github.com/users/jonjohnsonjr/orgs",
+                        "received_events_url": "https://api.github.com/users/jonjohnsonjr/received_events",
+                        "repos_url": "https://api.github.com/users/jonjohnsonjr/repos",
+                        "site_admin": false,
+                        "starred_url": "https://api.github.com/users/jonjohnsonjr/starred{/owner}{/repo}",
+                        "subscriptions_url": "https://api.github.com/users/jonjohnsonjr/subscriptions",
+                        "type": "User",
+                        "url": "https://api.github.com/users/jonjohnsonjr"
+                    }
+                },
+                "github_head_ref": "",
+                "github_ref": "refs/tags/v0.19.1",
+                "github_ref_type": "tag",
+                "github_repository_id": "125253663",
+                "github_repository_owner": "google",
+                "github_repository_owner_id": "1342004",
+                "github_run_attempt": "1",
+                "github_run_id": "8284408979",
+                "github_run_number": "33",
+                "github_sha1": "8b3c3036d612bcb3c1147fe11c2d1818dc432329"
+            }
+        },
+        "metadata": {
+            "buildInvocationID": "8284408979-1",
+            "completeness": {
+                "parameters": true,
+                "environment": false,
+                "materials": false
+            },
+            "reproducible": false
+        },
+        "materials": [
+            {
+                "uri": "git+https://github.com/google/go-containerregistry@refs/tags/v0.19.1",
+                "digest": {
+                    "sha1": "8b3c3036d612bcb3c1147fe11c2d1818dc432329"
+                }
+            }
+        ]
+    }
+}
