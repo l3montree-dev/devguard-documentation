@@ -5,4 +5,5 @@ export default {
     },
 
     arch: { title: 'Architecture' },
+    database: { title: 'Database' },
 }

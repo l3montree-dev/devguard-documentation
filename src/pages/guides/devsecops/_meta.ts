@@ -7,4 +7,5 @@ export default {
     'software-composition-analysis': {
         title: 'Software Composition Analysis(SCA)',
     },
+    iac: { title: 'Infrastructure as Code (IaC)' },
 }
