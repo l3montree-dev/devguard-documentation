@@ -1,14 +1,18 @@
+# DevGuard Architecture
 
+The DevGuard CI/CD components implement the OWASP DevSecOps pipeline in an optimal way, eliminating the need for extensive cybersecurity expertise. You can integrate the DevGuard CI/CD pipeline with your repository on GitHub or GitLab. For detailed setup instructions, refer to [Setup GitHub Integration](../gettingStarted/setup-github-integration) or [Setup GitLab Integration](../gettingStarted/setup-gitlab-integration).
 
+Once integrated, the DevGuard CI/CD pipeline will scan your codebase for vulnerabilities and provide a comprehensive report. For more details on data storage, see [Which Data from Your Codebase is Stored in DevGuard](./index).
 
+On DevGuard, you can manage, prioritize, and resolve vulnerabilities, achieve compliance, and access additional features. Learn more at [DevGuard Features](../).
 
 
 ```mermaid
-flowchart TB 
+flowchart BT 
 
     subgraph repo[Repository]
         direction TB
-        ciCd[CI/CD]
+        ciCd[CI/CD components]
     end
 
     dev["DevGuard"]
@@ -19,16 +23,15 @@ flowchart TB
     end
 
 
-    subgraph ciCd[CI/CD]
+    subgraph ciCd[CI/CD components]
         direction LR
 
         SC[Secret Scanning]
-        SCA[SCA]
+        SCA[SCA] 
         CS[Container Scanning]
         SAST[SAST]
         DAST[DAST]
         IaC[IaC]   
-        toto[in-toto]  
 
     end
 
@@ -54,6 +57,16 @@ class kube subgraphIn;
 class dev dev;
 
 linkStyle 0,1,2  stroke:#e5e7eb,stroke-width:2px;
+
+
+
+
+click SCA "./devsecops/software-composition-analysis";
+click SC "./devsecops/secret-scanning";
+click CS "./devsecops/container-scanning";
+click SAST "./devsecops/sast";
+click DAST "./devsecops/dast";
+click IaC "./devsecops/iac";
 
 
 
