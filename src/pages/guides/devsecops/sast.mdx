@@ -1,12 +1,44 @@
 ---
-sidebar_position: 1
-title: DevSecOps
+sidebar_position: 2
+title: Static Application Security Testing (SAST)
 ---
 
 import { Steps, Tabs, Callout } from 'nextra/components'
 
 # Static Application Security Testing (SAST)
 
-<Callout type="info" emoji="ℹ️">
+<Callout type="warning" emoji="ℹ️">
   For now, you can view the SAST results in the pipeline. Soon, we will provide a detailed report in DevGuard, allowing you to manage the identified flaws directly from there.
 </Callout>
+
+## What is Static Application Security Testing (SAST)
+
+Static Application Security Testing (SAST) is a method of analyzing an application's source code, binaries, or bytecode to identify security vulnerabilities. It is conducted early in the development lifecycle to allow developers to address issues before the application is deployed. SAST tools are effective at identifying well-known vulnerabilities, such as:
+
+- **Buffer overflows**: These occur when data exceeds the buffer's storage capacity, potentially allowing attackers to overwrite memory and execute malicious code.
+- **SQL injection flaws**: These arise when unvalidated user input is embedded in SQL queries, enabling attackers to manipulate database queries.
+
+
+## What SAST Cannot Do
+
+Static Application Security Testing (SAST) has limitations:
+
+- **Limited Detection**: SAST struggles to detect vulnerabilities that require context or dynamic analysis. like authentication, access control, and cryptography issues.  
+- **High False Positives**: Many flagged issues are not actual vulnerabilities.  
+- **Misses Configuration Flaws**: Cannot analyze external configurations.  
+
+
+
+## Why SAST Matters
+
+SAST is an essential component of a software development lifecycle for several reasons:
+
+1. **Early Detection of Vulnerabilities**: Identifying issues during development minimizes the risk of security breaches in production.
+2. **Cost Efficiency**: Fixing vulnerabilities earlier in the development process is far less costly than addressing them post-deployment.
+3. **Compliance and Standards**: Many regulatory frameworks and security standards require the use of static analysis tools to ensure secure coding practices.
+4. **Improved Code Quality**: Beyond security, SAST often uncovers bugs and coding inefficiencies, leading to cleaner and more maintainable code.
+5. **Developer Enablement**: SAST tools provide actionable feedback to developers, fostering a culture of security awareness and empowering teams to write more secure code.
+
+
+
+For more information about Static Application Security Testing (SAST), you can see [OWASP](https://owasp.org/www-community/Source_Code_Analysis_Tools).

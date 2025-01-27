@@ -1,7 +1,29 @@
+---
+sidebar_position: 3
+title: Dynamic Application Security Testing (DAST)
+---
+
+
 import { Steps, Tabs, Callout } from 'nextra/components'
 
 # Dynamic Application Security Testing (DAST)
 
-<Callout type="info" emoji="ℹ️">
+<Callout type="warning" emoji="ℹ️">
    For now, you can view the DAST results in the pipeline. Soon, we will provide a detailed report in DevGuard, allowing you to manage the identified flaws directly from there.
 </Callout>
+
+
+## What is Dynamic Application Security Testing (DAST)
+
+Dynamic Application Security Testing (DAST) is a method of analyzing an application while it is running to identify security vulnerabilities. DAST tools simulate real-world attacks on the application to uncover vulnerabilities that could be exploited by attackers. DAST tools are effective at identifying well-known vulnerabilities, such as:
+
+- **Input or output validation issues**: Problems where input or output data is not properly validated, potentially leading to attacks.
+- **Authentication issues**: Vulnerabilities in the authentication mechanisms, such as weak or bypassable login systems.
+- **Server configuration mistakes**: Misconfigurations in the server setup that can expose the application to security risks.
+
+## Why DAST Matters
+
+DAST plays a crucial role in a comprehensive application security strategy because it identifies vulnerabilities that are not visible through static code analysis. By testing the application in its running state, DAST helps uncover issues that only emerge during execution, ensuring better protection against real-world attacks.
+
+
+For more information about Dynamic Application Security Testing (DAST), you can see [OWASP](https://owasp.org/www-project-devsecops-guideline/latest/02b-Dynamic-Application-Security-Testing).

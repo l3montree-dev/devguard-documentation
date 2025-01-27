@@ -1,11 +1,10 @@
 export default {
-    intoto: { title: 'In-toto' },
+    'secret-scanning': { title: 'Secret Scanning' },
     sast: { title: 'Static Application Security Testing (SAST)' },
     dast: { title: 'Dynamic Application Security Testing (DAST)' },
-    'secret-scanning': { title: 'Secret Scanning' },
-    'container-scanning': { title: 'Container Scanning' },
+    iac: { title: 'Infrastructure as Code (IaC)' },
     'software-composition-analysis': {
         title: 'Software Composition Analysis(SCA)',
     },
-    iac: { title: 'Infrastructure as Code (IaC)' },
+    'container-scanning': { title: 'Container Scanning' },
 }
