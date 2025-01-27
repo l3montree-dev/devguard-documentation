@@ -105,25 +105,3 @@ If none of the above fixes are feasible:
 
 </Steps>
 
-## What is Software Composition Analysis?
-
-Software Composition Analysis (SCA) identifies and assesses open-source and third-party dependencies in your software. By analyzing dependency manifests and runtime libraries, SCA detects known vulnerabilities. This process is crucial for managing risks associated with using open-source software.
-
-## How DevGuard SCA Works
-
-1.	SBOM Generation: DevGuard uses [Trivy](https://github.com/aquasecurity/trivy) to scan the application’s dependencies and generate a Software Bill of Materials (SBOM). The SBOM contains all detected components and their metadata.
-2.	Vulnerability Matching:
-    The SBOM is cross-referenced with:
-    - Public vulnerability databases like CVE.
-    - DevGuard’s extended database for enhanced coverage.
-3.	Risk Reporting: Tickets are automatically created for detected flaws if integrations (e.g., GitLab Issues, GitHub Issues) are enabled. Otherwise, the risks are visible in:
-    - DevGuard UI: A dashboard showing the current risk posture.
-    - Command Output: Run `devguard-scanner sca` to view detected vulnerabilities.
-
-## Why SCA Matters
-
-- Security: Protect against exploits by addressing known vulnerabilities.
-- Compliance: Ensure alignment with compliance and security framework requirements.
-- Reliability: Minimize runtime failures due to outdated or insecure dependencies.
-
-By incorporating SCA into your development lifecycle, you can proactively manage risks and contribute to a secure software supply chain.
