@@ -1,20 +1,21 @@
 export default {
-    index: { title: 'Introduction' },
+    index: {
+        title: 'Introduction',
+        theme: {
+            layout: 'raw',
+        },
+        display: 'hidden',
+    },
+    introduction: { title: 'Introduction' },
     'getting-started': { title: 'Getting Started' },
     'self-hosting-devguard': { title: 'Self Hosting DevGuard' },
     concepts: { title: 'Concepts' },
     guides: { title: 'Guides' },
     contributing: { title: 'Contributing' },
     about: { title: 'About' },
-    'about-l3': {
-        title: 'About L3montree ↗',
+    'header-docs': {
+        title: 'Documentation',
         type: 'page',
-        href: 'https://l3montree.com/',
-        newWindow: true,
-    },
-    contact: {
-        title: 'Contact ↗',
-        type: 'page',
-        href: 'mailto:community@devguard.org',
+        href: '/introduction',
     },
 }
