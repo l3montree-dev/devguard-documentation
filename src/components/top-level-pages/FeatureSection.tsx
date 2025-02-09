@@ -11,7 +11,7 @@ export default function FeatureSection() {
                 </Heading>
                 <Screenshot
                     width={1216}
-                    height={768}
+                    height={702}
                     src="/screenshots/dashboard.png"
                     className="mt-16 h-[36rem] sm:h-auto sm:w-[76rem]"
                 />
