@@ -17,3 +17,38 @@
 summary h4 {
   margin-top: 0px !important;
 }
+
+@layer base {
+  :root {
+  --background: 213 31% 7%;
+  --foreground: 0 0% 98%;
+
+  --card: 215 22% 11%;
+  --card-foreground: 0 0% 98%;
+
+  --popover: 213 31% 7%;
+  --popover-foreground: 0 0% 98%;
+
+  --primary: 43 95% 56%;
+  --primary-foreground: 0 0% 2%;
+
+  --secondary: 215 27.9% 16.9%;
+  --secondary-foreground: 210 20% 98%;
+
+  --muted: 213 15% 15%;
+  --muted-foreground: 212 9% 59%;
+
+  --accent: 215 22% 15%;
+  --accent-foreground: 0 0% 98%;
+
+  --destructive: 350 100% 55%;
+  --destructive-foreground: 0 0% 98%;
+
+  --border: 215 22% 15%;
+  --input: 215 22% 15%;
+  --ring: 43 95% 40%;
+
+  --blue: 204 86% 53%;
+  --green: 168 100% 41%;
+  }
+}
