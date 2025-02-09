@@ -33,7 +33,7 @@ export function BentoCard({
             <div className="relative h-80 shrink-0">
                 {graphic}
                 {fade.includes('top') && (
-                    <div className="bg-linear-to-b absolute inset-0 from-gray-800 from-white from-[-25%] to-50%" />
+                    <div className="bg-linear-to-b absolute inset-0 from-gray-800 from-[-25%] to-50%" />
                 )}
                 {fade.includes('bottom') && (
                     <div className="bg-linear-to-t absolute inset-0 from-white from-[-25%] to-50%" />
@@ -43,10 +43,10 @@ export function BentoCard({
                 <Subheading as="h3" className="text-l3-400">
                     {eyebrow}
                 </Subheading>
-                <p className="mt-1 text-2xl/8 font-medium tracking-tight text-gray-950 text-white">
+                <p className="mt-1 text-2xl/8 font-medium tracking-tight text-white">
                     {title}
                 </p>
-                <p className="mt-2 max-w-[600px] text-sm/6 text-gray-400 text-gray-600">
+                <p className="mt-2 max-w-[600px] text-sm/6 text-gray-400">
                     {description}
                 </p>
             </div>
