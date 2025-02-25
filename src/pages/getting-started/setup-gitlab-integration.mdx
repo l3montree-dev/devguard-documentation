@@ -10,23 +10,72 @@ DevGuard integrates with GitLab to provide a seamless experience for developers.
 ## Steps
 
 <Steps>
-### Go to organization settings & click integrate with GitLab
+
+### Generate a new access token on GitLab
+ 
+    Go to Project you want to integrate it with Devguard on GitLab. 
+    Choose Access tokens under Settings then click on Add new token.
+
+    ![Go to Gitlab Project Settings](../../assets/gitlab-setup/gitlab-token-settings.png)
+
+    ### Configure your GitLab access token 
+    Input a name and a description for the token.
+    Under Select a role choose `Reporter`, you don't need to select any scope,
+    then click on Create project access token.
+    ![Go to Gitlab Project Settings](../../assets/gitlab-setup/gitlab-token-var.png)
+
+    ### Copy the generated token
+
+    ![Go to Organization Settings](../../assets/gitlab-setup/gitlab-token-copy.png)
+
+
+### Go to organization settings on Devguard & click integrate with GitLab
 
 ![Go to Organization Settings](../../assets/gitlab-setup/gitlab-1.png)
 
+
 ### Configure your GitLab instance settings 
 
-To use Auto-Setup and benefit from ticket creation etc. your token will need `api` access.
+Add a name for the instance, the URL of your GitLab instance, and the access token you generated in the previous step.
 
 ![Configure your GitLab Instance Settings](../../assets/gitlab-setup/gitlab-2.png)
 
-### Navigate to an asset within one of your projects and select your corresponding GitLab project
+### Navigate to an asset within one of your projects and select your corresponding GitLab project.
 
 ![Navigate to an asset within one of your projects and select your corresponding GitLab project](../../assets/gitlab-setup/gitlab-3.png)
 
-### Go to the security control center of the asset and click on auto setup to create a pipeline
+    ### Add a webhook to your GitLab project
+    Go to your GitLab project settings
+    select Webhooks under Settings, then click on Add new webhook.
 
-![Go to the security control center of the asset and click on auto setup to create a pipeline](../../assets/gitlab-setup/gitlab-4.png)
+    ![Go to Gitlab Project Settings](../../assets/gitlab-setup/gitlab-webhooks-settings.png)
+
+    ### Configure your GitLab webhook
+
+    Paste following URL in the URL field: 
+
+    if you are using devguard under stage.devguard.org
+    ```sh copy 
+    https://api.stage.devguard.org/api/v1/webhook/
+    ```
+
+    if you are using devguard under main.devguard.org
+    ```sh copy
+    https://api.main.devguard.org/api/v1/webhook/
+    ```
+    then select the events you want to trigger the webhook, it is recommended to select following events:
+
+    - Comments
+    - Issues events
+
+    then click on Save changes
+
+
+
+{/* ### Go to the security control center of the asset and click on auto setup to create a pipeline
+
+![Go to the security control center of the asset and click on auto setup to create a pipeline](../../assets/gitlab-setup/gitlab-4.png) */}
 
 </Steps>
 
+Now you have successfully integrated your GitLab project with DevGuard. You can integrate the CI/CD pipeline with DevGuard from the security control center of the asset on DevGuard. 
