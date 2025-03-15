@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oh-my-honeypot
+  namespace: secure-namespace
+  labels:
+    app: honeypot
+spec:
+  replicas: 3  # Adjust the number of replicas as needed
+  selector:
+    matchLabels:
+      app: honeypot
+  template:
+    metadata:
+      labels:
+        app: honeypot
+    spec:
+      containers:
+        - name: oh-my-honeypot
+          image: ghcr.io/l3montree-dev/oh-my-honeypot:main-c8c45b74-1741875691
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80  # Adjust if your app runs on a different port

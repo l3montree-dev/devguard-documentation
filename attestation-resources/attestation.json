@@ -1,0 +1,31 @@
+{
+    "_type": "https://in-toto.io/Statement/v0.1",
+    "predicateType": "https://cosign.sigstore.dev/attestation/v1",
+    "subject": [
+        {
+            "name": "ghcr.io/l3montree-dev/oh-my-honeypot",
+            "digest": {
+                "sha256": "c9e346b092e64ae667b3448f9a39a04d3d5ee1f17991fdd4e7249debc80c258d"
+            }
+        }
+    ],
+    "predicate": {
+        "Data": "{\n    \"key\": \"test-attestation-2\"\n}",
+        "Timestamp": "2025-03-15T09:51:09Z"
+    }
+}{
+    "_type": "https://in-toto.io/Statement/v0.1",
+    "predicateType": "https://cosign.sigstore.dev/attestation/v1",
+    "subject": [
+        {
+            "name": "ghcr.io/l3montree-dev/oh-my-honeypot",
+            "digest": {
+                "sha256": "c9e346b092e64ae667b3448f9a39a04d3d5ee1f17991fdd4e7249debc80c258d"
+            }
+        }
+    ],
+    "predicate": {
+        "Data": "{\n    \"key\": \"test-attestation-1\"\n}",
+        "Timestamp": "2025-03-15T10:54:30Z"
+    }
+}
