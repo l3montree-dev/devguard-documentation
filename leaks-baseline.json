@@ -1,0 +1,22 @@
+[
+ {
+  "Description": "Identified a Private Key, which may compromise cryptographic security and sensitive data encryption.",
+  "StartLine": 1,
+  "EndLine": 11,
+  "StartColumn": 1,
+  "EndColumn": 45,
+  "Match": "-----BEGIN ENCRYPTED SIGSTORE PRIVATE KEY-----\neyJrZGYiOnsibmFtZSI6InNjcnlwdCIsInBhcmFtcyI6eyJOIjo2NTUzNiwiciI6\nOCwicCI6MX0sInNhbHQiOiI5eW5mcXlHOWlrSGFDUFFvdlpVb2lLWUZrenhzZXdu\ndDQydnNJdVlyd1JFPSJ9LCJjaXBoZXIiOnsibmFtZSI6Im5hY2wvc2VjcmV0Ym94\nIiwibm9uY2UiOiJwL210QzdkdVlKb08zS0FPd1JwVzBOOE5XOHNBUTJuOSJ9LCJj\naXBoZXJ0ZXh0IjoiUGduVkZEODBEN1ZhWE90ZUpCVjV0akk5L1ZnbG5INVFYOTZr\nWTZWbGFTY21LVWdNbTFrMytxaXYvazZQK3NHYnV2Qk9teFZqVy9iSmgySFg5UnJx\nWFBOUkg4YlhKNk9wVnkrc2I5aWtuRkYvdzM4UUd0ODlvdDhiUU10RHQrT05KTTEx\ncWEzQjhEL25MTHpTb3BDVlFJbEJlZjViYjd6YUhDUHM0cnRWNmlnVVB0TlM2ZC9h\neEo3NUlxcGwwMVZzQ3owenB6QWhmc2J5dlE9PSJ9\n-----END ENCRYPTED SIGSTORE PRIVATE KEY-----",
+  "Secret": "-----BEGIN ENCRYPTED SIGSTORE PRIVATE KEY-----\neyJrZGYiOnsibmFtZSI6InNjcnlwdCIsInBhcmFtcyI6eyJOIjo2NTUzNiwiciI6\nOCwicCI6MX0sInNhbHQiOiI5eW5mcXlHOWlrSGFDUFFvdlpVb2lLWUZrenhzZXdu\ndDQydnNJdVlyd1JFPSJ9LCJjaXBoZXIiOnsibmFtZSI6Im5hY2wvc2VjcmV0Ym94\nIiwibm9uY2UiOiJwL210QzdkdVlKb08zS0FPd1JwVzBOOE5XOHNBUTJuOSJ9LCJj\naXBoZXJ0ZXh0IjoiUGduVkZEODBEN1ZhWE90ZUpCVjV0akk5L1ZnbG5INVFYOTZr\nWTZWbGFTY21LVWdNbTFrMytxaXYvazZQK3NHYnV2Qk9teFZqVy9iSmgySFg5UnJx\nWFBOUkg4YlhKNk9wVnkrc2I5aWtuRkYvdzM4UUd0ODlvdDhiUU10RHQrT05KTTEx\ncWEzQjhEL25MTHpTb3BDVlFJbEJlZjViYjd6YUhDUHM0cnRWNmlnVVB0TlM2ZC9h\neEo3NUlxcGwwMVZzQ3owenB6QWhmc2J5dlE9PSJ9\n-----END ENCRYPTED SIGSTORE PRIVATE KEY-----",
+  "File": "attestation-resources/cosign.key",
+  "SymlinkFile": "",
+  "Commit": "87f606c188edc371acfc2ba587663b958da9a768",
+  "Entropy": 5.776395,
+  "Author": "Tim Bastin",
+  "Email": "bastin.tim@gmail.com",
+  "Date": "2025-03-15T12:01:37Z",
+  "Message": "adds compliance as code",
+  "Tags": [],
+  "RuleID": "private-key",
+  "Fingerprint": "87f606c188edc371acfc2ba587663b958da9a768:attestation-resources/cosign.key:private-key:1"
+ }
+]
