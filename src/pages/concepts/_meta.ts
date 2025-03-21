@@ -7,4 +7,5 @@ export default {
     arch: { title: 'Architecture' },
     database: { title: 'Database' },
     devsecops: { title: 'DevSecOps' },
+    'slsa-level-3': { title: 'Achieving SLSA Level 3 (GitLab only)' },
 }

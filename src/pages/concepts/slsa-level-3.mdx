@@ -1,0 +1,35 @@
+import { Callout } from 'nextra/components'
+
+# Achieving SLSA Level 3 on GitLab: Creating Tamper-Resistant Attestations
+
+<Callout type="warning" emoji="⚠️">
+  This is an upcoming feature. We are currently working on it and will update the documentation soon. We would love to hear your feedback on this feature. Please feel free to reach out to us at [Matrix Chat](https://matrix.to/#/#devguard:matrix.org)
+</Callout>
+
+In the realm of software development, [the concept of attestations](/concepts/compliance-as-code) is gaining prominence. Attestations can be conceptualized as metadata that is signed and subsequently attached to a piece of software. This metadata serves various purposes, such as verifying the software's provenance.
+
+For instance, attestations can be utilized to confirm that the software was built from a specific commit in a designated repository. Furthermore, they can be employed to validate the identity of the individual or CI/CD pipeline responsible for the software's construction. Beyond these verifications, attestations can also contain additional statements regarding the software, such as details about any vulnerabilities discovered or the licenses under which the software is distributed.
+
+It is noteworthy that anything that can be digitally signed may be incorporated into an attestation, as attestations are fundamentally structured as JSON files. Within this context, DevGuard can be seamlessly employed to create comprehensive attestations that encompass various aspects, including build provenance, licensing information, the detection of leaked secrets, known vulnerabilities, and the outcomes of SAST scans. Furthermore, the potential exists to extend these capabilities in the future to include aspects such as repository configurations (e.g., protected branches, code approval rules, and issue reaction times).
+
+The generation of these JSON files occurs within a CI/CD pipeline, specifically after the corresponding checks pass. Subsequently, these files are uploaded to the container registry as well as to DevGuard. However, a critical issue arises concerning the security of the signing key used by DevGuard. It has been observed that this key can be compromised by the maintainer, as the signing material is accessible to them at any time.
+
+To elevate the SLSA levels to a higher standard, the implementation of tamper-proof mechanisms is imperative. In the GitLab environment, this objective can be achieved through the use of multi-project pipelines. The invocation of DevGuard can be facilitated without relying on the CI/CD component by triggering a multi-project pipeline with the following configuration:
+
+```yaml
+trusted-builder:
+  stage: build
+  variables:
+    DEPLOY_TOKEN: "$DEPLOY_TOKEN"
+    DEPLOY_USER: "$DEPLOY_USER"
+    PROJECT_PATH_SLUG: $CI_PROJECT_PATH
+  trigger:
+    project: l3montree/devguard
+    branch: slsa-level-3
+```
+
+Prior to implementing this configuration, it is essential to create a `DEPLOY_TOKEN`. This token ensures that DevGuard possesses the necessary permissions to clone the repository, execute tests, publish to the container registry, and upload all corresponding attestations.
+
+Crucially, DevGuard will utilize its own key for signing the attestations, a key that remains unknown to the maintainer. This measure effectively eliminates the possibility for the maintainer to tamper with the attestations, thereby enhancing the integrity and authenticity of the software supply chain.
+
+In conclusion, the adoption of these practices within GitLab can significantly contribute to achieving SLSA Level 3, establishing a more secure and trustworthy software development environment.
