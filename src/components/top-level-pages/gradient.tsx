@@ -20,8 +20,9 @@ export function GradientBackground() {
         <div className="relative mx-auto max-w-7xl">
             <div
                 className={clsx(
+                    'opacity-15',
                     'absolute -right-60 -top-44 h-60 w-[36rem] transform-gpu md:right-0',
-                    'from-28% bg-[linear-gradient(115deg,var(--tw-gradient-stops))] from-[#FFFFFF] to-[#FCBE25]',
+                    'from-12% bg-[linear-gradient(115deg,var(--tw-gradient-stops))] from-[#FFFFFF] to-[#FCBE25]',
                     'rotate-[-10deg] rounded-full blur-3xl',
                 )}
             />

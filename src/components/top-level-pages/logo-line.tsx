@@ -1,7 +1,7 @@
-import { clsx } from 'clsx'
 import Image from 'next/image'
+import { cn } from '../../lib/utils'
 
-export function LogoCloud() {
+export function LogoLine({ inverted = false }: { inverted?: boolean }) {
     return (
         <div
             className={
@@ -11,35 +11,50 @@ export function LogoCloud() {
             <Image
                 alt="OWASP Logo"
                 src="/sponsors/sp-owasp.svg"
-                className="h-9 w-auto max-sm:mx-auto sm:h-8 lg:h-12"
+                className={cn(
+                    inverted && 'invert',
+                    'h-9 w-auto max-sm:mx-auto sm:h-8 lg:h-11',
+                )}
                 width={300}
                 height={100}
             />
             <Image
                 alt="GitLab Logo"
                 src="/sponsors/sp-gitlab.svg"
-                className="h-9 w-auto max-sm:mx-auto sm:h-8 lg:h-11"
+                className={cn(
+                    inverted && 'invert',
+                    'h-9 w-auto max-sm:mx-auto sm:h-8 lg:h-11',
+                )}
                 width={300}
                 height={100}
             />
             <Image
                 alt="Bonn-Rhein-Sieg University of Applied Sciences Logo"
                 src="/sponsors/sp-hbrs.svg"
-                className="h-9 w-auto max-sm:mx-auto sm:h-8 lg:h-11"
+                className={cn(
+                    inverted && 'invert',
+                    'h-9 w-auto max-sm:mx-auto sm:h-8 lg:h-11',
+                )}
                 width={300}
                 height={100}
             />
             <Image
                 alt="University of Giessen Logo"
                 src="/sponsors/sp-jlu.svg"
-                className="h-9 w-auto max-sm:mx-auto sm:h-8 lg:h-11"
+                className={cn(
+                    inverted && 'invert',
+                    'h-9 w-auto max-sm:mx-auto sm:h-8 lg:h-11',
+                )}
                 width={300}
                 height={100}
             />
             <Image
                 alt="Ikor part of X1 Logo"
                 src="/sponsors/sp-ikor.svg"
-                className="h-9 w-auto max-sm:mx-auto sm:h-8 lg:h-12"
+                className={cn(
+                    inverted && 'invert',
+                    'h-9 w-auto max-sm:mx-auto sm:h-8 lg:h-11',
+                )}
                 width={300}
                 height={100}
             />
