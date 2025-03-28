@@ -5,6 +5,12 @@ export default {
         },
         display: 'hidden',
     },
+    enterprise: {
+        theme: {
+            layout: 'raw',
+        },
+        display: 'hidden',
+    },
     introduction: { title: 'Introduction' },
     'getting-started': { title: 'Getting Started' },
     'self-hosting-devguard': { title: 'Self Hosting DevGuard' },

@@ -19,8 +19,8 @@ export function LogoLine({ inverted = false }: { inverted?: boolean }) {
                 height={100}
             />
             <Image
-                alt="GitLab Logo"
-                src="/sponsors/sp-gitlab.svg"
+                alt="Ikor part of X1 Logo"
+                src="/sponsors/sp-ikor.svg"
                 className={cn(
                     inverted && 'invert',
                     'h-9 w-auto max-sm:mx-auto sm:h-8 lg:h-11',
@@ -49,8 +49,8 @@ export function LogoLine({ inverted = false }: { inverted?: boolean }) {
                 height={100}
             />
             <Image
-                alt="Ikor part of X1 Logo"
-                src="/sponsors/sp-ikor.svg"
+                alt="Wheregroup Logo"
+                src="/sponsors/sp-wheregroup.svg"
                 className={cn(
                     inverted && 'invert',
                     'h-9 w-auto max-sm:mx-auto sm:h-8 lg:h-11',

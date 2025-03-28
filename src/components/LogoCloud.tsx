@@ -52,13 +52,13 @@ export default function LogoCloud() {
                     </div>
                     <div className="bg-dg-300 p-6 sm:p-10">
                         <a
-                            href="https://gitlab.com"
+                            href="https://www.bonnconsulting.group/"
                             target="_blank"
                             rel="noopener noreferrer"
                         >
                             <Image
-                                alt="GitLab"
-                                src="/sponsors/sp-gitlab.svg"
+                                alt="Bonn Consulting Group"
+                                src="/sponsors/sp-bcg.png"
                                 width={158}
                                 height={48}
                                 className="max-h-12 w-full object-contain"
@@ -127,13 +127,13 @@ export default function LogoCloud() {
                     </div>
                     <div className="bg-dg-300 p-6 sm:p-10">
                         <a
-                            href="https://l3montree.com/"
+                            href="https://www.saltrock.de/"
                             target="_blank"
                             rel="noopener noreferrer"
                         >
                             <Image
-                                alt="L3montree"
-                                src="/sponsors/sp-l3montree.svg"
+                                alt="SaltRock GmbH"
+                                src="/sponsors/sp-saltrock.png"
                                 width={158}
                                 height={48}
                                 className="max-h-12 w-full object-contain"
