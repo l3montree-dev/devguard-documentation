@@ -26,7 +26,10 @@ export function CallToAction() {
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            <Button variant={'secondary'}>
+                            <Button
+                                variant={'secondary'}
+                                data-umami-event="cta-join-alpha"
+                            >
                                 Schedule a meeting
                             </Button>
                         </Link>

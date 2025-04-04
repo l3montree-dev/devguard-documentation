@@ -19,14 +19,22 @@ export default function Hero() {
                     </p>
                     <div className="mt-12 flex flex-col gap-x-6 gap-y-4 sm:flex-row">
                         <Link href="/introduction">
-                            <Button variant="secondary">Read the docs</Button>
+                            <Button
+                                variant="secondary"
+                                data-umami-event="hero-to-docs"
+                            >
+                                Read the docs
+                            </Button>
                         </Link>
                         <Link
                             href="https://cal.com/frederic-noppe/15min"
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            <Button variant="outline">
+                            <Button
+                                variant="outline"
+                                data-umami-event="hero-join-alpha"
+                            >
                                 Join the alpha program
                             </Button>
                         </Link>

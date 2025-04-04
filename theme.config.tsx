@@ -4,6 +4,9 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import Footer from './src/components/Footer'
 
+const websiteId = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID
+const umamiUrl = process.env.NEXT_PUBLIC_UMAMI_URL
+
 const config: DocsThemeConfig = {
     head() {
         // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -28,6 +31,13 @@ const config: DocsThemeConfig = {
                     {(frontMatter.title ?? rest.title) + ' | DevGuard' ||
                         'DevGuard'}
                 </title>
+                {Boolean(websiteId) && Boolean(umamiUrl) && (
+                    <script
+                        defer
+                        src={umamiUrl}
+                        data-website-id={websiteId}
+                    ></script>
+                )}
             </>
         )
     },
