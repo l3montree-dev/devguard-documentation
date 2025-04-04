@@ -1,4 +1,7 @@
 export default {
+    'understanding-owasp-devsecops-pipeline': {
+        title: 'Understanding OWASP DevSecOps Pipeline',
+    },
     'secret-scanning': { title: 'Secret Scanning' },
     sast: { title: 'Static Application Security Testing (SAST)' },
     dast: { title: 'Dynamic Application Security Testing (DAST)' },

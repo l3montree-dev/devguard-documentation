@@ -10,6 +10,7 @@ export default {
     'self-hosting-devguard': { title: 'Self Hosting DevGuard' },
     concepts: { title: 'Concepts' },
     guides: { title: 'Guides' },
+    faq: { title: 'FAQ' },
     contributing: { title: 'Contributing' },
     about: { title: 'About' },
     'header-docs': {

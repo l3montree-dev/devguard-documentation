@@ -1,11 +1,10 @@
 export default {
     index: { title: 'Overview' },
-    'in-toto': {
-        title: 'Whitepaper: Integrating In-Toto in DevGuard for Secure Software Supply Chains',
-    },
-
+    devsecops: { title: 'DevSecOps' },
     arch: { title: 'Architecture' },
     database: { title: 'Database' },
-    devsecops: { title: 'DevSecOps' },
+    'in-toto': {
+        title: 'In-Toto & DevGuard',
+    },
     'slsa-level-3': { title: 'Achieving SLSA Level 3 (GitLab only)' },
 }
