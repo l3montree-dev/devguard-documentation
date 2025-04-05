@@ -1,8 +1,8 @@
 export default {
     index: { title: 'Overview' },
-    devsecops: { title: 'DevSecOps' },
     arch: { title: 'Architecture' },
-    database: { title: 'Database' },
+    devsecops: { title: 'DevSecOps' },
+    database: { title: 'Vulnerability Database' },
     'in-toto': {
         title: 'In-Toto & DevGuard',
     },
