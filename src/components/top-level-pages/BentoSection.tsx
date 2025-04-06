@@ -27,11 +27,11 @@ export default function BentoSection() {
                     className="max-lg:rounded-t-4xl lg:rounded-tl-4xl lg:col-span-3"
                 />
                 <BentoCard
-                    eyebrow="Compliance"
+                    eyebrow="Attestation based Compliance Controls"
                     title="Automated Tracking, Documentation & Reporting"
-                    description="As a developer you love to code - probably not to write documentation. DevGuard automatically tracks, documents and reports for you - so your auditor will love you."
+                    description="As a developer you love to code - probably not hasseling with compliance. DevGuard provides a pre-release checklist, prioritized todos, and a full audit trail."
                     graphic={
-                        <div className="absolute inset-0 bg-[url(/screenshots/compliance.png)] bg-[size:1100px_650px] bg-[left_-0px_top_-125px] bg-no-repeat" />
+                        <div className="absolute inset-0 bg-[url(/screenshots/compliance.png)] bg-[size:1100px_650px] bg-[left_-10px_top_-100px] bg-no-repeat" />
                     }
                     fade={['bottom']}
                     className="lg:rounded-tr-4xl lg:col-span-3"

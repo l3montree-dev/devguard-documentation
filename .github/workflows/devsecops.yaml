@@ -12,4 +12,4 @@ jobs:
         asset-name: "l3montree-cybersecurity/projects/devguard/assets/devguard-documentation"
     secrets:
         devguard-token: ${{ secrets.DEVGUARD_TOKEN }}
-        build-args: --build-arg=NEXT_PUBLIC_UMAMI_WEBSITE_ID=${{ secrets.NEXT_PUBLIC_UMAMI_WEBSITE_ID }} --build-arg=NEXT_PUBLIC_UMAMI_URL=${{ secrets.NEXT_PUBLIC_UMAMI_URL }} --context=. --dockerfile=Dockerfile
+        build-args: --build-arg=NEXT_PUBLIC_SITE_URL=${{ vars.NEXT_PUBLIC_SITE_URL }} --build-arg=NEXT_PUBLIC_UMAMI_WEBSITE_ID=${{ secrets.NEXT_PUBLIC_UMAMI_WEBSITE_ID }} --build-arg=NEXT_PUBLIC_UMAMI_URL=${{ secrets.NEXT_PUBLIC_UMAMI_URL }} --context=. --dockerfile=Dockerfile

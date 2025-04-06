@@ -4,7 +4,7 @@ import { Heading, Subheading } from './text'
 
 export default function DarkBentoSection() {
     return (
-        <div className="bg-bgSecondary mx-12 mt-2 rounded-2xl py-32 max-sm:mx-4 max-sm:py-16">
+        <div className="mx-12 mt-2 rounded-2xl bg-bgSecondary py-32 max-sm:mx-4 max-sm:py-16">
             <Container>
                 <Subheading className="text-l3-400">SBOM & VEX</Subheading>
                 <Heading as="h3" dark className="mt-2 max-w-3xl text-white">
