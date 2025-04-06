@@ -15,9 +15,9 @@ export default {
     'getting-started': { title: 'Getting Started' },
     concepts: { title: 'Concepts' },
     guides: { title: 'Guides' },
-    faq: { title: 'FAQ' },
     contributing: { title: 'Contributing' },
     about: { title: 'About' },
+    faq: { title: 'FAQ' },
     acknowledgements: { title: 'Acknowledgements' },
     'uninstalling-devguard': {
         title: 'Uninstalling DevGuard',

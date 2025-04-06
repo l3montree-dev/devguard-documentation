@@ -4,7 +4,10 @@ const navigation = {
     product: [
         { name: 'Getting started', href: '/getting-started' },
         { name: 'Concepts', href: '/concepts' },
-        { name: 'Self Hosting', href: '/self-hosting-devguard/kubernetes' },
+        {
+            name: 'Self Hosting',
+            href: '/getting-started/self-hosting-devguard/kubernetes',
+        },
         { name: 'Guides', href: '/guides' },
         { name: 'Contributing', href: '/contributing/getting-started' },
     ],

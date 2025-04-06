@@ -1,10 +1,13 @@
 export default {
     index: { title: 'Overview' },
-    arch: { title: 'Architecture' },
     devsecops: { title: 'DevSecOps' },
-    database: { title: 'Vulnerability Database' },
-    'in-toto': {
-        title: 'In-Toto & DevGuard',
+    'aggregated-vulnerability-database': {
+        title: 'Aggregated Vulnerability Database',
     },
-    'slsa-level-3': { title: 'Achieving SLSA Level 3 (GitLab only)' },
+    'flaw-management': {
+        title: 'Flaw Management',
+    },
+    'attestations-provenance': {
+        title: 'Attestations & Provenance',
+    },
 }

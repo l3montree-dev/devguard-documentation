@@ -1,7 +1,6 @@
 export default {
     index: { title: 'Guides' },
-    risksMtigation: { title: 'Risks Mitigation' },
+    'risk-mitigation-guides': { title: 'Risk Mitigation Guides' },
     iso: { title: 'ISO 27001' },
     cra: { title: 'Cyber Resiliance Act' },
-    mangeRisks: { title: 'Manage Risks' },
 }

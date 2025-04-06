@@ -3,11 +3,11 @@ export default {
         title: 'Understanding OWASP DevSecOps Pipeline',
     },
     'secret-scanning': { title: 'Secret Scanning' },
-    sast: { title: 'Static Application Security Testing (SAST)' },
-    dast: { title: 'Dynamic Application Security Testing (DAST)' },
-    iac: { title: 'Infrastructure as Code (IaC)' },
     'software-composition-analysis': {
         title: 'Software Composition Analysis(SCA)',
     },
+    sast: { title: 'Static Application Security Testing (SAST)' },
+    iac: { title: 'Infrastructure as Code (IaC)' },
     'container-scanning': { title: 'Container Scanning' },
+    dast: { title: 'Dynamic Application Security Testing (DAST)' },
 }

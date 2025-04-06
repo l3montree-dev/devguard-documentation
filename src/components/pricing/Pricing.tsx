@@ -30,7 +30,7 @@ const tiers = [
             { description: 'Unlimited users' },
             { description: 'Initial 4 hours setup workshop' },
             { description: '8x5 E-Mail Support Hours' },
-            { description: 'Custom domains' },
+            { description: 'Option for custom domains' },
         ],
     },
     {
