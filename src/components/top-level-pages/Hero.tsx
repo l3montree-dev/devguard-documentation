@@ -47,7 +47,7 @@ export default function Hero() {
                                 variant="secondary"
                                 data-umami-event="look-at-devguard"
                             >
-                                See DevGuard live
+                                See DevGuard in action
                             </Button>
                         </Link>
                     </div>
