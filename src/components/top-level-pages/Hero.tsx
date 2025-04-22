@@ -38,6 +38,18 @@ export default function Hero() {
                                 Join the alpha program
                             </Button>
                         </Link>
+                        <Link
+                            href="https://main.devguard.org/l3montree-cybersecurity/projects/devguard/assets/devguard/refs/main"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <Button
+                                variant="secondary"
+                                data-umami-event="look-at-devguard"
+                            >
+                                See DevGuard live
+                            </Button>
+                        </Link>
                     </div>
                 </div>
             </Container>
