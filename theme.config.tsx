@@ -65,7 +65,7 @@ const config: DocsThemeConfig = {
         />
     ),
     sidebar: {
-        defaultMenuCollapseLevel: 2,
+        defaultMenuCollapseLevel: 1,
     },
     project: {
         link: 'https://github.com/l3montree-dev/devguard',
