@@ -13,14 +13,14 @@ export default {
     },
     introduction: { title: 'Introduction' },
     'getting-started': { title: 'Getting Started' },
-    concepts: { title: 'Concepts' },
-    guides: { title: 'Guides' },
+    comparison: { title: 'Tool Comparison' },
+    'compliance-frameworks': {
+        title: 'DevGuard & Compliance Frameworks',
+    },
+    'risk-mitigation-guides': { title: 'Risk Mitigation Guides' },
     contributing: { title: 'Contributing' },
-    about: { title: 'About' },
-    faq: { title: 'FAQ' },
-    acknowledgements: { title: 'Acknowledgements' },
-    'uninstalling-devguard': {
-        title: 'Uninstalling DevGuard',
+    other: {
+        title: 'Other',
     },
     'header-pricing': {
         title: 'Pricing',

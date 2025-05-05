@@ -154,7 +154,7 @@ jobs:
         directory: .
 
   # Static application security testing: Utilizes Semgrep to perform static analysis, enhancing code security by 
-  # identifying vulnerabilities and potential security flaws within the application's source code.
+  # identifying vulnerabilities and potential security vulnerabilities within the application's source code.
   static-application-security-testing:
     runs-on: ubuntu-latest
     permissions:
@@ -426,7 +426,7 @@ secret-scanning:
   script: gitleaks -s . detect
 
 # Static application security testing: Utilizes Semgrep to perform static analysis, enhancing code security by 
-# identifying vulnerabilities and potential security flaws within the application's source code.
+# identifying vulnerabilities and potential security vulnerabilities within the application's source code.
 static-application-security-testing:
   image: returntocorp/semgrep@sha256:7843a979bf88d9d16c476e9f7f547b573187f395532b1f74825fd58c6463c5b0
   stage: test

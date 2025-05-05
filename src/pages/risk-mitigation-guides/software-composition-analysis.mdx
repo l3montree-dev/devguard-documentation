@@ -10,12 +10,12 @@ import { Steps, Tabs, Callout } from 'nextra/components'
   DevGuard performs continous sca to identify vulnerabilities in your project's dependencies after your first scan (based on SBOM).
 </Callout>
 
-## Handling Found Flaws: Practical Steps for Mitigation
+## Handling Found Vulnerabilitys: Practical Steps for Mitigation
 
 When DevGuard's **software composition analysis** detects vulnerabilities, such as the example provided below, it’s essential to address them 
-promptly to maintain security and compliance. Here’s a step-by-step guide to manage identified flaws.
+promptly to maintain security and compliance. Here’s a step-by-step guide to manage identified vulnerabilities.
 
-```md filename="Example Flaw"
+```md filename="Example Vulnerability"
 # CVE-2024-45812
 
 Vite a frontend build tooling framework for javascript. Affected versions of vite..
@@ -79,7 +79,7 @@ When addressing vulnerabilities found in the Software Composition Analysis (SCA)
 
 ### Handling Transitive Dependencies
 
-![](../../../assets/sca-dep-vuln.png)
+![](../../assets/sca-dep-vuln.png)
 
 Dealing with transitive dependencies is a complex and often resource-intensive process, especially when the vulnerable code is buried deep within your dependency tree.
 

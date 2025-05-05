@@ -8,7 +8,7 @@ import { Steps, Tabs, Callout } from 'nextra/components'
 # Static Application Security Testing (SAST)
 
 <Callout type="warning" emoji="ℹ️">
-  For now, you can view the SAST results in the pipeline. Soon, we will provide a detailed report in DevGuard, allowing you to manage the identified flaws directly from there.
+  For now, you can view the SAST results in the pipeline. Soon, we will provide a detailed report in DevGuard, allowing you to manage the identified vulnerabilities directly from there.
 </Callout>
 
 ## What is Static Application Security Testing (SAST)
@@ -16,7 +16,7 @@ import { Steps, Tabs, Callout } from 'nextra/components'
 Static Application Security Testing (SAST) is a method of analyzing an application's source code, binaries, or bytecode to identify security vulnerabilities. It is conducted early in the development lifecycle to allow developers to address issues before the application is deployed. SAST tools are effective at identifying well-known vulnerabilities, such as:
 
 - **Buffer overflows**: These occur when data exceeds the buffer's storage capacity, potentially allowing attackers to overwrite memory and execute malicious code.
-- **SQL injection flaws**: These arise when unvalidated user input is embedded in SQL queries, enabling attackers to manipulate database queries.
+- **SQL injection vulnerabilities**: These arise when unvalidated user input is embedded in SQL queries, enabling attackers to manipulate database queries.
 
 
 ## What SAST Cannot Do
@@ -25,7 +25,7 @@ Static Application Security Testing (SAST) has limitations:
 
 - **Limited Detection**: SAST struggles to detect vulnerabilities that require context or dynamic analysis. like authentication, access control, and cryptography issues.  
 - **High False Positives**: Many flagged issues are not actual vulnerabilities.  
-- **Misses Configuration Flaws**: Cannot analyze external configurations.  
+- **Misses Configuration Vulnerabilitys**: Cannot analyze external configurations.  
 
 
 
