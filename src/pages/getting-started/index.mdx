@@ -46,8 +46,7 @@ docker run --rm \
   -v $(pwd):/repo \
   ghcr.io/l3montree-dev/devguard-scanner:main-latest \
   devguard-scanner sca --assetName=<your-asset-name> --apiUrl=<your-api-url> \
-  --token=<your-personal-access-token> --path=/repo \
-  --riskManagement=true
+  --token=<your-personal-access-token> --path=/repo
 ```
 
 or upload a SARIF report to DevGuard.
