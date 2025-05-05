@@ -17,12 +17,12 @@ Before proceeding, ensure the following prerequisites are met:
     kubectl create namespace devguard
     ```
 2. **Create necessary existing secrets**
-    - DevGuard requires it's own private key to sign In-Toto Root-Layouts (Refer to the [In-Toto Whitepaper](/concepts/in-toto)).
+    - DevGuard requires it's own private key to sign In-Toto Root-Layouts (Refer to the [In-Toto Whitepaper](/other/concepts/attestations-provenance/in-toto)).
        ```bash
        openssl ecparam -name prime256v1 -genkey -noout -out private.ec.key # generate an EC-Private key
        kubectl create secret generic ec-private-key --from-file=privateKey=private.ec.key -n devguard # create a secret with the private key
        ```
-    - If you would like to make be able to create tickets straight out of DevGuard in GitHub you will need to create a GitHub App. Please refer to the [Create GitHub App](/self-hosting-devguard/create-github-app) Documentation for it. **This is not necessary, if you only want to scan your applications without creating tickets.**
+    - If you would like to make be able to create tickets straight out of DevGuard in GitHub you will need to create a GitHub App. Please refer to the [Create GitHub App](/getting-started/self-hosting-devguard/create-github-app) Documentation for it. **This is not necessary, if you only want to scan your applications without creating tickets.**
 
 3. **Add the DevGuard Helm repository to your local Helm installation**
     ```bash

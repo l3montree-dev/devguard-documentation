@@ -3,12 +3,16 @@ import Image from 'next/image'
 const navigation = {
     product: [
         { name: 'Getting started', href: '/getting-started' },
-        { name: 'Concepts', href: '/concepts' },
+        { name: 'Tool Comparison', href: '/comparison' },
         {
             name: 'Self Hosting',
             href: '/getting-started/self-hosting-devguard/kubernetes',
         },
-        { name: 'Guides', href: '/guides' },
+        {
+            name: 'DevGuard & Compliance Frameworks',
+            href: '/compliance-frameworks/iso',
+        },
+
         { name: 'Contributing', href: '/contributing/getting-started' },
     ],
     support: [
@@ -17,7 +21,10 @@ const navigation = {
             href: 'https://github.com/l3montree-dev/devguard/issues',
         },
         { name: 'Documentation', href: '/introduction' },
-        { name: 'Guides', href: '/guides' },
+        {
+            name: 'Risk Mitigation Guides',
+            href: '/risk-mitigation-guides/secret-scanning',
+        },
     ],
     company: [
         {
