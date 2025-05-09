@@ -18,26 +18,6 @@ export default function Hero() {
                         of expertise.
                     </p>
                     <div className="mt-12 flex flex-col gap-x-6 gap-y-4 sm:flex-row">
-                        <Link href="/introduction">
-                            <Button
-                                variant="secondary"
-                                data-umami-event="hero-to-docs"
-                            >
-                                Read the docs
-                            </Button>
-                        </Link>
-                        <Link
-                            href="https://cal.com/frederic-noppe/15min"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            <Button
-                                variant="outline"
-                                data-umami-event="hero-join-alpha"
-                            >
-                                Join the alpha program
-                            </Button>
-                        </Link>
                         <Link
                             href="https://main.devguard.org/l3montree-cybersecurity/projects/devguard/assets/devguard/refs/main"
                             target="_blank"
@@ -48,6 +28,26 @@ export default function Hero() {
                                 data-umami-event="look-at-devguard"
                             >
                                 See DevGuard in action
+                            </Button>
+                        </Link>
+                        <Link href="/introduction">
+                            <Button
+                                variant="secondary"
+                                data-umami-event="hero-to-docs"
+                            >
+                                Read the docs
+                            </Button>
+                        </Link>
+                        <Link
+                            href="mailto:info@l3montree.com?cc=frederic.noppe@l3montree.com&subject=DevGuard%20Testing-Programm%20"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <Button
+                                variant="outline"
+                                data-umami-event="hero-join-alpha"
+                            >
+                                Join the alpha program
                             </Button>
                         </Link>
                     </div>

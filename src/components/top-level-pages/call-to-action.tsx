@@ -20,7 +20,7 @@ export function CallToAction() {
                         testing program. Be the first to experience DevGuard,
                         shape it with your feedback, and help us make it better.
                     </p>
-                    <div className="mt-6">
+                    <div className="mt-6 flex justify-center gap-x-4">
                         <Link
                             href="https://cal.com/frederic-noppe/15min"
                             target="_blank"
@@ -31,6 +31,18 @@ export function CallToAction() {
                                 data-umami-event="cta-join-alpha"
                             >
                                 Schedule a meeting
+                            </Button>
+                        </Link>
+                        <Link
+                            href="mailto:info@l3montree.com?cc=frederic.noppe@l3montree.com&subject=DevGuard%20Testing-Programm%20"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <Button
+                                variant={'secondary'}
+                                data-umami-event="cta-join-alpha-mail"
+                            >
+                                Write an E-Mail
                             </Button>
                         </Link>
                     </div>
