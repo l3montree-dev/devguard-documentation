@@ -1,0 +1,30 @@
+## Sign Workflow
+
+The `sign` component is used to sign your code and artifacts. This ensures that the code you are deploying is the same code that was built and tested, providing an additional layer of security and trust in your deployment process.
+
+The `sign` accepts the following inputs:
+| Name                   | Description                                                                   | Required    | Default Value                                    | 
+|------------------------|--------------------------|-----|----------------------------------|
+| `api-url`               | URL of the DevGuard API                                                       | No          | `https://api.main.devguard.org`                 |  
+| `asset-name`            | Name of the asset to be scanned                                               | Yes         |                                                 |           
+| `path`              | Path to the source code to be scanned                                         | No          | `.`                                              |                                    | 
+| `artifact-suffix`                 |   This is only needed if you are using this job multiple times in the same workflow. For example if you are scanning multiple images build from the same source with different configuration.                  | No          |                 `''`                                | 
+                                    | 
+
+Usage Example:
+Here’s an example of how to call this reusable workflow from another workflow file:
+```yaml copy
+name: DevGuard Workflow
+
+on:
+    push
+
+jobs:
+    devguard-sign:
+        uses: l3montree-dev/devguard-action/.github/workflows/sign.yml@main
+        with:
+          api-url: https://api.main.devguard.org
+          asset-name: 'myOrgnaization/projects/myProject/assets/myAsset'
+        secrets:
+          devguard-token: ${{ secrets.DEVGUARD_TOKEN }}
+```

@@ -1,0 +1,28 @@
+### software composition analysis Workflow
+
+The `software-composition-analysis (SCA)` workflow performs Software Composition Analysis (SCA) to detect vulnerabilities in your project’s dependencies. It scans your software for outdated or vulnerable third-party libraries, helping you manage risks early in the development process.
+
+The `sca` accepts the following inputs:
+| Name                   | Description                                                                   | Required    | Default Value                                    | 
+|------------------------|--------------------------|-----|----------------------------------|
+| `api-url`               | URL of the DevGuard API                                                       | No          | `https://api.main.devguard.org`                 |  
+| `asset-name`            | Name of the asset to be scanned                                               | Yes         |                                                 |           
+| `path`              | Path to the source code to be scanned                                         | No          | `.`                                              | 
+
+Usage Example:
+Here’s an example of how to call this reusable workflow from another workflow file:
+```yaml copy
+name: DevGuard Workflow
+
+on:
+    push
+
+jobs:
+    devguard-sca:
+        uses: l3montree-dev/devguard-action/.github/workflows/sca.yml@main
+        with:
+          api-url: https://api.main.devguard.org
+          asset-name: 'myOrgnaization/projects/myProject/assets/myAsset'
+        secrets:
+          devguard-token: ${{ secrets.DEVGUARD_TOKEN }}
+```

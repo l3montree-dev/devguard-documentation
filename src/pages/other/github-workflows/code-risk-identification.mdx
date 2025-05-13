@@ -1,0 +1,73 @@
+## Code Risk Identification
+
+This workflow identifies potential security vulnerabilities in your codebase.
+It requires a **sarif file** as input to analyze and ensure that all code is secure and up to date.
+
+The `code-risk-identification` accepts the following inputs:
+
+| Name                   | Description                                                                   | Required    | Default Value                                    | 
+|------------------------|--------------------------|-----|----------------------------------|
+| `api-url`               | URL of the DevGuard API                                           | No          | `https://api.main.devguard.org`                 |  
+| `asset-name`            | Name of the asset to be scanned                                               | Yes         |                                                 |           
+| `sarif-file`              | Path to the sarif file to be scanned | Yes         |         `sbom.json`                               |
+| `sarif-artifact-name`              | Name of the SBOM artifact to be downloaded | No         |         `''`                               |
+
+Usage Examples:
+
+if you have the sarif in the repository:
+
+```yaml copy
+on:
+    push
+
+jobs:
+    devguard-code-risk-identification:
+        uses: l3montree-dev/devguard-action/.github/workflows/code-risk-identification.yml@main
+        with:
+          api-url: https://api.main.devguard.org
+          asset-name: 'myOrgnaization/projects/myProject/assets/myAsset'
+          sbom-file: "./sbom.json" 
+        secrets:
+          devguard-token: ${{ secrets.DEVGUARD_TOKEN }}    
+```    
+
+if you have the sarif in an artifact from a previous job, you need to upload the artifact first:
+
+```yaml copy
+name: DevGuard Workflow
+
+on:
+    push
+jobs:
+    secret-scanning:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+          with:
+            submodules: recursive
+            fetch-depth: 0
+            persist-credentials: false
+        - name: Run Gitleaks Scan
+          run: |
+            docker run --rm -v $(pwd):/code zricethezav/gitleaks:v8.22.0 git /code  --report-path /code/gitleaks.sarif.json --report-format sarif
+          continue-on-error: true  
+
+        - name: Upload Gitleaks Report
+          uses: actions/upload-artifact@v4
+          with:
+            name: gitleaks-report
+            path: gitleaks.sarif.json
+
+    code-risk-identification:
+        needs: secret-scanning
+        uses: l3montree-dev/devguard-action/.github/workflows/code-risk-identification.yml@feautre/sarif-sbom-upload-actions
+        with:
+          api-url: https://api.main.devguard.org
+          asset-name: 'myOrgnaization/projects/myProject/assets/myAsset'
+          sarif-artifact-name: gitleaks-report
+          sarif-file: gitleaks.sarif.json
+        secrets:
+          devguard-token: ${{ secrets.DEVGUARD_TOKEN }}
+
+```

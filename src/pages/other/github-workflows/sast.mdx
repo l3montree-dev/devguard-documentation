@@ -1,0 +1,29 @@
+## Static Application Security Testing Workflow
+The `Static Application Security Testing (sast)` component focuses on Static Application Security Testing (SAST) to analyze your source code for vulnerabilities without executing it. This component helps in identifying security flaws early in the development cycle, ensuring that code quality and security are prioritized before deployment.
+
+ The `sast` accept a following inputs:
+| Name                   | Description                                                                   | Required    | Default Value                                    | 
+|------------------------|--------------------------|-----|----------------------------------|
+| `api-url`               | URL of the DevGuard API                                                       | No          | `https://api.main.devguard.org`                 |  
+| `asset-name`            | Name of the asset to be scanned                                               | Yes         |                                                 |           
+| `path`              | Path to the source code to be scanned                                         | No          | `.`                                              | 
+
+
+Usage Example:
+Here’s an example of how to call this reusable workflow from another workflow file:
+```yaml copy
+name: DevGuard Workflow
+
+on:
+    push
+
+jobs:
+    devguard-sast:
+        uses: l3montree-dev/devguard-action/.github/workflows/sast.yml@main
+        with:
+          api-url: https://api.main.devguard.org
+          asset-name: 'myOrgnaization/projects/myProject/assets/myAsset'
+        secrets:
+          devguard-token: ${{ secrets.DEVGUARD_TOKEN }}
+```
+

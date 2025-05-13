@@ -1,0 +1,30 @@
+## Container Scanning
+The `container-scanning` component scans your container images for vulnerabilities. This ensures that your Docker images do not contain known vulnerabilities before they are deployed. 
+
+The `container-scanning` accepts the following inputs:
+| Name                   | Description                                                                   | Required    | Default Value                                    | 
+|------------------------|--------------------------|-----|----------------------------------|
+| `api-url`               | URL of the DevGuard API                                                       | No          | `https://api.main.devguard.org`                 |  
+| `asset-name`            | Name of the asset to be scanned                                               | Yes         |                                                 |           
+| `path`              | Path to the source code to be scanned                                         | No          | `.`                                              | 
+| `image-path`| Path to the OCI image to be scanned. Only necessary if the reusable workflow is not used for further processing of the built image.tar | No          | `image.tar`                                      | 
+| `artifact-suffix`                 |   This is only needed if you are using this job multiple times in the same workflow. For example if you are scanning multiple images build from the same source with different configuration.                  | No          |                 `''`                                | 
+| `fetch-image-from-registry`               |      If set to true, the image will be pulled from the registry instead of using the artifact.   | No          | `false`                                              | 
+
+Usage Example:
+Here’s an example of how to call this reusable workflow from another workflow file:
+```yaml copy
+name: DevGuard Workflow
+
+on:
+    push
+
+jobs:
+    devguard-container-scanning:
+        uses: l3montree-dev/devguard-action/.github/workflows/container-scanning.yml@main
+        with:
+          api-url: https://api.main.devguard.org
+          asset-name: 'myOrgnaization/projects/myProject/assets/myAsset'
+        secrets:
+          devguard-token: ${{ secrets.DEVGUARD_TOKEN }}
+```
