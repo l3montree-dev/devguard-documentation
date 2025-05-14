@@ -1,0 +1,29 @@
+import {Build} from '../../../components/texts/CICDJobs'
+
+<Build />
+
+The `build-image` workflow accepts the following inputs:
+| Name        | Description                     | Required     | Default Value        |
+|-------------|---------------------------------|-------------|----------------------|
+| `api_url`   | The DevGuard API URL             | No           |       `https://api.main.devguard.org`     |
+| `asset_name`| Name of the asset to scan                    |      Yes  |      |
+| `token`     | API token for authenticating with DevGuard   |      Yes   |      |
+| `scan_stage`| The stage where the scan is run       | No       |     `test`     |
+| `runner_tags` | The runner tags used to select appropriate CI runners.   | No  | `""` |
+| `build_stage`| The stage where the image is built and tagged       | No     |     `build`     |
+| `build_args`| The build arguments to pass to the Kaniko build command' | No     |     `--context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile`     |
+| `push_image`| Pushes the image directly to the registry instead of uploading as an artifact | No | `false` |
+
+
+Usage Example:
+Here’s an example of how to call this component:
+
+```yaml copy
+include:
+- remote: "https://gitlab.com/l3montree/devguard/-/raw/main/templates/build-image.yml@main
+  inputs:
+    asset_name: "myOrgnaization/projects/myProject/assets/myAsset"
+    token: "$DEVGUARD_TOKEN"
+```
+
+

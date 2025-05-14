@@ -1,16 +1,7 @@
-## Full DevGuard Scan 
+import {Full} from '../../../components/texts/CICDJobs'
 
-This reusable workflow performs a comprehensive security scan of your codebase using **DevGuard**.  
-It includes:
+<Full />
 
-- Container scanning  
-- Secret scanning  
-- Static Application Security Testing (SAST)  
-- Software Composition Analysis (SCA)  
-- Infrastructure as Code (IaC) scanning
-- Image building  
-- Image signing  
-- Image deployment  
 
 The `deploy` step runs only if the following jobs complete successfully:  
 `build-image`, `container-scanning`, `software-composition-analysis`, `sast`, and `secret-scanning`.

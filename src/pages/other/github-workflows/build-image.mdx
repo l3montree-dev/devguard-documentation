@@ -1,5 +1,6 @@
-## Build Image Workflow
-This workflow uses Kaniko to build and archive a Docker image. The image tag is created based on user inputs, Git tags, or commit information. The image is built, saved as a `.tar` file, and the digest is retrieved using crane. Finally, the image, tag, and digest are uploaded as artifacts. To use this component, you need to have a `Dockerfile` in your repository's root directory.
+import {Build} from '../../../components/texts/CICDJobs'
+
+<Build />
 
 The `build-image` workflow accepts the following inputs:
 | Name                   | Description                                                                   | Required    | Default Value                                    | 

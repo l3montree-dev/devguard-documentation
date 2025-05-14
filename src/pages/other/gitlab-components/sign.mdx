@@ -1,0 +1,22 @@
+import {Sign} from '../../../components/texts/CICDJobs'
+
+<Sign />
+
+The `sign` accepts the following inputs:
+| Name        | Description                     | Required     | Default Value        |
+|-------------|---------------------------------|-------------|----------------------|
+| `api_url`   | The DevGuard API URL             | No           |       `https://api.main.devguard.org`     |
+| `asset_name`| Name of the asset to scan                    |      Yes  |      |
+| `token`     | API token for authenticating with DevGuard   |      Yes   |      |
+| `sign_stage`| The stage where the scan is run      | No       |     `deploy`     |
+| `runner_tags` | The runner tags used to select appropriate CI runners.   | No  | `""` |
+
+Usage Example:
+Here’s an example of how to call this component:
+```yaml copy
+include:
+- remote: "https://gitlab.com/l3montree/devguard/-/raw/main/templates/sign.yml"
+  inputs:
+    asset_name: "myOrgnaization/projects/myProject/assets/myAsset"
+    token: "$DEVGUARD_TOKEN"
+```

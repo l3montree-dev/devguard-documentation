@@ -1,0 +1,54 @@
+import {DependencyRiskIdentification} from '../../../components/texts/CICDJobs'
+
+<DependencyRiskIdentification />
+
+
+The `dependency-risk-identification` accepts the following inputs:
+| Name        | Description                     | Required     | Default Value        |
+|-------------|---------------------------------|-------------|----------------------|
+| `api_url`   | The DevGuard API URL             | No           |       `https://api.main.devguard.org`     |
+| `asset_name`| Name of the asset to scan                    |      Yes  |      |
+| `token`     | API token for authenticating with DevGuard   |      Yes   |      |
+| `scan_stage`| The stage where the scan is run       | No       |     `test`     |
+| `runner_tags` | The runner tags used to select appropriate CI runners.   | No  | `""` |   `''`                               |
+| `sbom_file`| The SBOM file to use for the scan      | No       |     `test`     |
+| `needs`| The jobs that this job depends on      | No       |     `""`     |
+| `dependencies`| Specifies the jobs whose artifacts this job relies on | No | `""` |
+
+Usage Examples:
+
+if you have the sbom in the repository:
+
+```yaml copy
+include:
+  - remote: "https://gitlab.com/l3montree/devguard/-/raw/main/templates/dependency-risk-identification@main"
+      asset_name: "myOrgnaization/projects/myProject/assets/myAsset"
+      token: "$DEVGUARD_TOKEN_TEST"
+      sbom_file: "./sbom.json"
+
+```    
+
+if you have the sbom in an artifact from a previous job:
+```yaml copy
+trivy-sbom:
+  stage: build
+  image:
+    name: aquasec/trivy:0.50.1
+    entrypoint: [""]
+  dependencies: []
+  needs: []
+  script: trivy sbom --format cyclonedx --output sbom.json $CI_PROJECT_DIR
+  artifacts:
+    paths:
+      - sbom.json
+
+include:
+  - component: $CI_SERVER_FQDN/$CI_PROJECT_PATH/code-risk-identification@$CI_COMMIT_SHA
+    inputs:
+      asset_name: "myOrgnaization/projects/myProject/assets/myAsset"
+      token: "$DEVGUARD_TOKEN_TEST"
+      sbom_file: "./sbom.json"
+      needs: "trivy-sbom:"
+      dependencies: "trivy-sbom:"
+
+```
