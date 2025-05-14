@@ -1,0 +1,55 @@
+import {CodeRiskIdentification} from '../../../components/texts/CICDJobs'
+
+<CodeRiskIdentification />
+
+
+The `code-risk-identification` accepts the following inputs:
+
+| Name        | Description                     | Required     | Default Value        |
+|-------------|---------------------------------|-------------|----------------------|
+| `api_url`   | The DevGuard API URL             | No           |       `https://api.main.devguard.org`     |
+| `asset_name`| Name of the asset to scan                    |      Yes  |      |
+| `token`     | API token for authenticating with DevGuard   |      Yes   |      |
+| `scan_stage`| The stage where the scan is run       | No       |     `test`     |
+| `runner_tags` | The runner tags used to select appropriate CI runners.   | No  | `""` |   `''`                               |
+| `sarif_file`| The SBOM file to use for the scan      | No       |     `test`     |
+| `needs`| The jobs that this job depends on      | No       |     `""`     |
+| `dependencies`| Specifies the jobs whose artifacts this job relies on | No | `""` |
+
+Usage Examples:
+
+if you have the sarif in the repository:
+
+```yaml copy
+include:
+  - remote: "https://gitlab.com/l3montree/devguard/-/raw/main/templates/code-risk-identification@main"
+      asset_name: "myOrgnaization/projects/myProject/assets/myAsset"
+      token: "$DEVGUARD_TOKEN"
+      sarif-file: "./result.sarif"
+
+```        
+
+if you have the sarif in an artifact from a previous job:
+
+```yaml copy
+gitleaks-secret-scanning:
+  stage: build
+  image:
+    name: ghcr.io/gitleaks/gitleaks:v8.23.2@sha256:d09cbc6b5faa03d81ef4bf430f1a9b6468d992cd30f30ad213b0c53e057fc817
+    entrypoint: [""]
+  dependencies: []
+  needs: []
+  script: gitleaks detect -b --path=$CI_PROJECT_DIR  --report-format sarif --report-path result.sarif
+  artifacts:
+    paths:
+      - result.sarif
+
+include:
+  - component: $CI_SERVER_FQDN/$CI_PROJECT_PATH/code-risk-identification@$CI_COMMIT_SHA
+    inputs:
+      asset_name: "myOrgnaization/projects/myProject/assets/myAsset"
+      token: "$DEVGUARD_TOKEN"
+      sarif_file: "./result.sarif"
+      needs: "gitleaks-secret-scanning"
+      dependencies: "gitleaks-secret-scanning"
+```

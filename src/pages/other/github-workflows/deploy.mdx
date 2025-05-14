@@ -1,0 +1,33 @@
+import {Deploy} from '../../../components/texts/CICDJobs'
+
+<Deploy />
+
+The `deploy` accepts the following inputs:
+| Name                   | Description                                                                   | Required    | Default Value                                    | 
+|------------------------|--------------------------|-----|----------------------------------|
+| `api-url`               | URL of the DevGuard API                                                       | No          | `https://api.main.devguard.org`                 |  
+| `asset-name`            | Name of the asset to be scanned                                               | Yes         |                                                 |           
+| `path`              | Path to the source code to be scanned                                         | No          | `.`                                              | 
+| `should-deploy`|Should the deploy job run | No          | `true`                                      | 
+| `image`| OCI image name, includes the tag name | No          |                                     | 
+| `artifact-suffix`                 |   This is only needed if you are using this job multiple times in the same workflow. For example if you are scanning multiple images build from the same source with different configuration.                  | No          |                 `''`                                | 
+| `image-suffix`                 |   Suffix for the image name. You probably need this if you are building multiple images. For example building a -scanner image and a -web image.                  | No          |                 `''`                                | 
+| `image-already-in-registry`               |    If set to true, the image wont be pushed again   | No          | `false`                                              | 
+
+Usage Example:
+Here’s an example of how to call this reusable workflow from another workflow file:
+```yaml copy
+name: DevGuard Workflow
+
+on:
+    push
+
+jobs:
+    devguard-deploy:
+        uses: l3montree-dev/devguard-action/.github/workflows/deploy.yml@main
+        with:
+          api-url: https://api.main.devguard.org
+          asset-name: 'myOrgnaization/projects/myProject/assets/myAsset'
+        secrets:
+          devguard-token: ${{ secrets.DEVGUARD_TOKEN }}
+```

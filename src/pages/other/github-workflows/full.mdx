@@ -1,0 +1,38 @@
+import {Full} from '../../../components/texts/CICDJobs'
+
+<Full />
+
+
+The `deploy` step runs only if the following jobs complete successfully:  
+`build-image`, `container-scanning`, `software-composition-analysis`, `sast`, and `secret-scanning`.
+
+
+The `full-scan` workflow accepts the following inputs:
+| Name                   | Description                                                                   | Required    | Default Value                                    | 
+|------------------------|--------------------------|-----|----------------------------------|
+| `api-url`               | URL of the DevGuard API                                                       | No          | `https://api.main.devguard.org`                 |  
+| `asset-name`            | Name of the asset to be scanned                                               | Yes         |                                                 |           
+| `path`              | Path to the source code to be scanned                                         | No          | `.`                                              | 
+| `image-destination-path`| Destination of the image.tar file. Only necessary if deploy reusable workflow is not used and you would like to do further processing of the builded image.tar' | No          | `image.tar`                                      | 
+| `image`| OCI image name, includes the tag name | No          |                                     | 
+| `image-suffix`                 |   Suffix for the image name. You probably need this if you are building multiple images. For example building a -scanner image and a -web image.                  | No          |                 `''`                                | 
+| `disable-artifact-registry-as-image-store`               |    If the artifact size is too big for your github usage quota, set this to true. This will push the image directly to the registry instead of uploading it as artifact.   | No          | `false`                                              | 
+| `should-deploy`|Should the deploy job run | No          | `true`                                      | 
+
+Usage Example:
+Here’s an example of how to call this reusable workflow from another workflow file:
+```yaml copy
+name: DevGuard Workflow
+
+on:
+    push
+
+jobs:
+    devguard-full-scan:
+        uses: l3montree-dev/devguard-action/.github/workflows/full.yml@main
+        with:
+          api-url: https://api.main.devguard.org
+          asset-name: 'myOrgnaization/projects/myProject/assets/myAsset'
+        secrets:
+          devguard-token: ${{ secrets.DEVGUARD_TOKEN }}
+```
