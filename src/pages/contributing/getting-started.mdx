@@ -39,12 +39,15 @@ The repository is located on [GitHub](https://github.com/l3montree-dev/devguard)
 
 ```bash copy
 git clone git@github.com:l3montree-dev/devguard.git && cd devguard
+# setup git submodules
+git submodule update --init --recursive
 ```
 
 <h3>Step 2: Copy the `.env.example` file to `.env`</h3>
 
 ```bash copy
 cp .env.example .env
+cp .kratos/kratos.example.yml .kratos/kratos.yml
 ```
 
 

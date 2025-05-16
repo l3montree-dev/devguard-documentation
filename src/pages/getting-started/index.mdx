@@ -1,1 +1,47 @@
-# Quickstart
+# 🚀 Quickstart with DevGuard
+
+Follow these steps to get up and running with DevGuard:
+
+1. **Create a DevGuard Account**  
+   Sign up at [app.devguard.org](https://app.devguard.org) and verify your email.
+
+2. **Create a New Organization**  
+    You should already be prompted to create an organization. Fill out the details and click **Create**.
+
+3. **Create a New Project**  
+   Inside your organization, click **New Project**, then fill in the project details.
+
+4. **Create an Asset for the Project**  
+   Add an asset (e.g., a software repository or container image) by selecting your project and clicking **Add Asset**.
+
+5. **Create a Personal Access Token**  
+   Go to your profile settings and generate a **Personal Access Token (PAT)**.
+   Save this token securely — you'll need it to authenticate CLI or CI/CD actions.
+
+6. **Send Reports to DevGuard**  
+   Choose one of the following options:
+
+   - 🖥 **Local CLI**  
+     Install the DevGuard CLI:  
+     ```sh
+     curl -s https://cli.devguard.io/install.sh | sh
+     devguard auth --token YOUR_PAT
+     devguard scan --asset my-project/repo
+     ```
+
+   - ⚙️ **CI/CD Pipeline Integration**  
+     Use the DevGuard-provided GitHub Actions or GitLab CI templates for auto-scanning:
+     ```yaml
+     # .github/workflows/devguard.yml
+     name: DevGuard Scan
+     on: [push, pull_request]
+     jobs:
+       scan:
+         uses: devguard/actions/scan@v1
+         with:
+           token: ${{ secrets.DEVGUARD_TOKEN }}
+           asset: my-project/repo
+     ```
+
+7. **Review Risks in the DevGuard UI**  
+   Log into the DevGuard dashboard, open your project, and explore the **Risks** section for detailed findings and remediation guidance.
