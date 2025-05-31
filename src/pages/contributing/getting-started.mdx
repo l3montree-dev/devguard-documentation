@@ -2,6 +2,8 @@
 sidebar_position: 1
 ---
 import { Steps } from 'nextra/components'
+import { Badge } from "src/components/ui/badge"
+
 
 
 # DevGuard Setup Guide
@@ -111,4 +113,22 @@ npm run dev
 ```
 
 </Steps>
+
+## Where to start
+
+Every Ticket, regardless of it being web or documentation is posted Devguard https://github.com/l3montree-dev/devguard/issues with its designated tag.
+We assign <Badge variant="goodFirstIssueBadge">good first issue </Badge> to beginner friendly issues that do not require a deep fundamental understandment of our architecture.
+The Devguard Team is also open to help anyone who needs help, consider joining our matrix Community Server to get directly in touch with us!
+
+
+
+  <Badge className="bg-[#26264a] text-[#c2b8ff] ring-1 ring-[#565280] text-sm h-5 "> 
+  {/* hover:bg-[#26264a] hover:text-[#c2b8ff]  */}
+    good first issue
+  </Badge>
+
+    <Badge variant="goodFirstIssueBadge">
+    good first issue
+  </Badge>
+  <Badge variant="devguardWebBadge">component/devguard-web</Badge>
 
