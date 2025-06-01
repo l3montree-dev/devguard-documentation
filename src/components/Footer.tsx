@@ -41,6 +41,10 @@ const navigation = {
             name: 'License',
             href: 'https://github.com/l3montree-dev/devguard/blob/main/LICENSE.txt',
         },
+        {
+            name: 'Terms of Use (SaaS)',
+            href: '/terms-of-use',
+        },
     ],
     social: [
         {

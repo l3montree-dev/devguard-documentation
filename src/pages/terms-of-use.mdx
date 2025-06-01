@@ -1,0 +1,256 @@
+import { Callout } from 'nextra/components'
+
+# Nutzungsbedingungen
+
+<Callout type="info">
+    L3montree is based in Germany and is subject to German and European law. These Terms of Use are therefore written in German
+    and only the German version is legally binding - any translations are provided for support and ease of understanding but
+    are not binding. Sorry for any inconvenience this may cause.
+</Callout>
+
+## 1. Definitionen
+
+**DevGuard** bezeichnet die durch die L3montree GmbH angebotene Softwarelösung zur sicheren Softwareentwicklung
+einschließlich aller Komponenten, Dienste und Inhalte, die im Rahmen der Open-Source-Veröffentlichung unter AGPL
+sowie über ein SaaS-Angebot bereitgestellt werden.
+
+**Plattform** bezeichnet die SaaS-Variante von DevGuard, betrieben durch die L3montree GmbH.
+
+**L3montree** bezeichnet die L3montree GmbH, mit Sitz in Bonn, als Betreiberin der Plattform.
+
+**Open-Source-Software** bezieht sich auf Inhalte, die unter Lizenzen veröffentlicht wurden, welche der Open
+Source Definition der Open Source Initiative (OSI) entsprechen. Für DevGuard gilt die GNU Affero General
+Public License (AGPL).
+
+**Nutzende** sind alle natürlichen oder juristischen Personen, die die Plattform besuchen oder dort registriert sind.
+
+**Registrierte Nutzende** sind Nutzende, die über einen registrierten Account auf der Plattform verfügen.
+
+**Kommandozeilenwerkzeug** bezeichnet ein von DevGuard bereitgestelltes CLI-Tool zur Interaktion mit den angebotenen Funktionen der Software.
+
+**CI-Komponenten** bezeichnen die zur Integration in Continuous Integration/Deployment-Pipelines vorgesehenen Module der DevGuard Software.
+
+## 2. Allgemeines und Zweck
+
+1. Für die Nutzung der durch L3montree betriebenen Softwarelösung DevGuard (nachfolgend „Plattform“ genannt) gelten diese Nutzungsbedingungen.
+   Die Nutzung der Plattform ist ausschließlich zulässig, wenn Sie als Nutzende diese Bedingungen akzeptieren. Diese Nutzungsbedingungen bilden
+   die vertragliche Grundlage zwischen Ihnen, der Betreiberin und anderen Nutzenden.
+
+2. Die Plattform dient der sicheren Softwareentwicklung durch Bereitstellung quelloffener Werkzeuge, Dokumentationen und Integrationen,
+   die Sicherheit, Transparenz und Nachvollziehbarkeit in Softwareprojekten ermöglichen.
+
+3. Die Plattform besteht aus mehreren Einzeldiensten:
+    - Der Kernsoftware (bestehend aus Backend und Frontend)
+    - CI/CD-Integrationen (z. B. GitHub Actions, GitLab CI-Components)
+    - Einem Kommandozeilenwerkzeug (CLI)
+    - Dokumentation
+
+4. Die Plattform kann sowohl durch registrierte als auch nicht-registrierte Nutzende verwendet werden. Der jeweilige Funktionsumfang variiert und
+   wird in Abschnitt 3 näher beschrieben.
+
+5. L3montree sichert nicht zu, dass Fehler oder Mängel in der Plattform behoben oder korrigiert werden. Eine solche Verpflichtung bedarf gesonderter
+   vertraglicher Vereinbarung zwischen L3montree und den Nutzenden.
+
+## 3. Status der Nutzenden und Rollen
+
+1. Die Plattform DevGuard kann sowohl von nicht-registrierten als auch von registrierten Nutzenden verwendet werden. Der Funktionsumfang
+   richtet sich nach dem jeweiligen Nutzendenstatus.
+
+2. Es werden folgende Nutzendenstatuse unterschieden:
+
+   **a. Gäste:**
+    Gäste sind Nutzende, die die Plattform ohne Registrierung oder Anmeldung besuchen. Sie haben ausschließlich lesenden Zugriff auf
+    öffentliche Inhalte, darunter:
+   - Öffentliche Organisationen, Projekte und Repositories
+   - Dokumentationen und öffentlich freigegebene Inhalte
+
+   Der Zugriff auf nicht öffentliche Inhalte ist Gästen nicht gestattet.
+
+   **b. Registrierte Nutzende:**
+    Registrierte Nutzende verfügen über ein DevGuard-Benutzerkonto, das durch:
+
+   - Registrierung via E-Mail und Passwort oder Passkey,
+   - Anmeldung über einen bestehenden GitHub- oder GitLab-Account oder
+   - Anmeldung via openCode-Account
+
+    eingerichtet wurde.
+
+   Sie erhalten erweiterte Funktionalitäten, u. a.:
+
+   - Zugriff auf non-public Inhalte, auf die sie explizit berechtigt wurden
+   - Interaktion mit der Plattform (z. B. SBOM-Upload)
+
+   Bei Verwendung eines openCode-Accounts oder anderer föderierter Identitäten (GitHub/GitLab) kann eine Rechteübernahme hinsichtlich Rollen in
+   Projekten oder Repositories erfolgen, sofern diese durch die Plattform unterstützt wird.
+
+3. Innerhalb von DevGuard existieren die folgenden hierarchischen Strukturelemente:
+
+   - **Organisationen** repräsentieren eine übergeordnete Einheit, z. B. eine Firma oder Behörde.
+   - **Projekte** fassen thematisch zusammengehörige Repositories und Metadaten zusammen.
+   - **Repositories** sind die kleinste Einheit und enthalten Ergebnisse von Scans der Software, SBOMs, Sicherheitsberichte, Managementinformationen
+     und andere relevante Inhalte.
+
+   Alle drei Elemente (Organisation, Projekt, Repository) können als **öffentlich** oder **nicht öffentlich** markiert werden. Der Zugriff auf nicht
+   öffentliche Inhalte erfordert entsprechende Rechte.
+
+4. Registrierte Nutzende können auf der Plattform unterschiedliche Rollen wahrnehmen. Die Rollen sind kontextabhängig und gelten je nach
+   Organisations-, Projekt- oder Repository-Zugehörigkeit:
+
+   - **Viewer:** Lesender Zugriff auf non-public Inhalte, z. B. internes SBOM oder Sicherheitsberichte.
+   - **Contributor:** Schreibrechte auf spezifische Repositories oder Projekte, etwa zur aktiven Entwicklung oder zum Issue-Management.
+   - **Maintainer:** Erweiterte Verwaltungsrechte innerhalb eines Projekts oder Repositories (Merge, Review, CI-Konfiguration).
+   - **Owner:** Vollzugriff auf eine Organisation oder ein Projekt inkl. Rollenmanagement, Lizenzkonfiguration und Policy Enforcement.
+
+5. Die Zuweisung von Rollen erfolgt durch berechtigte Maintainer oder Owner. Im Falle einer Synchronisation mit einer föderierten Identität
+   (z. B. openCode) können Rollen automatisch übernommen werden, wenn eine entsprechende Zuordnung technisch und organisatorisch möglich ist.
+
+## 4. Registrierung und Account
+
+1. Die Registrierung ist allen voll geschäftsfähigen natürlichen Personen gestattet. Zur Nutzung der erweiterten Funktionen der Plattform ist ein
+   Benutzerkonto erforderlich.
+2. Im Rahmen der Registrierung ist eine gültige und aktive E-Mail-Adresse anzugeben. Alternativ kann ein bestehender Account bei GitHub, GitLab
+   oder openCode zur Anmeldung genutzt werden.
+3. Nutzende sind selbst verantwortlich für:
+   - alle Aktivitäten, die unter ihrem Benutzerkonto stattfinden,
+   - die Sicherheit Ihres Accounts und Ihrer Zugangsdaten (Passwort oder Passkey),
+   - die Vertraulichkeit der genutzten Zugangsmethoden.
+4. Wird ein DevGuard-Account im Namen eines Unternehmens oder einer juristischen Person verwendet (z. B. zur Verwaltung einer Organisation),
+   so bestätigt die registrierende Person, dass eine entsprechende Vertretungsberechtigung vorliegt. In diesem Fall kommt ein Vertrag zwischen der
+   L3montree GmbH und der juristischen Person zustande. Die Erstellung einer Organisation für eine juristische Person (z. B. Behörde, Firma)
+   erfordert die Zustimmung durch eine vertretungsberechtigte Person, z. B. eine Geschäftsführung. L3montree behält sich vor, diese Zustimmung
+   zu überprüfen oder die Einrichtung abzulehnen, sofern Zweifel bestehen.
+6. Bei Hinweisen auf unautorisierte Nutzung oder Sicherheitsvorfälle im Kontext eines Benutzerkontos sind die Betreibenden der Plattform
+   unverzüglich unter security@devguard.org zu informieren.
+
+## 5. Verhaltenspflichten der Nutzenden
+
+1. Die Veröffentlichung oder Bereitstellung von Inhalten auf der Plattform ist unzulässig, wenn diese:
+
+   - die Rechte Dritter, insbesondere Urheber- oder Persönlichkeitsrechte, verletzen,
+   - beleidigend, rassistisch, diskriminierend, rechtswidrig oder gegen die freiheitlich-demokratische Grundordnung gerichtet sind oder sonst
+     als sittenwidrig anzusehen sind,
+   - unsachlich oder vorsätzlich unwahr sind,
+   - Viren, Schadsoftware oder andere Programme enthalten, welche Soft- oder Hardware beschädigen oder beeinträchtigen können,
+   - Werbung, Umfragen, Kettenbriefe, getarnte Werbung oder Spam darstellen.
+
+2. Die Kommunikation auf der Plattform sowie alle durch Nutzende bereitgestellten Inhalte müssen mit dem jeweils aktuellen
+   [**Code of Conduct**](/contributing/code-of-conduct) der Plattform übereinstimmen.
+
+3. Bewertungs- oder Rückmeldemechanismen auf der Plattform dienen ausschließlich dem internen fachlichen Austausch und der Meinungsbildung. Eine
+   Nutzung zu werblichen Zwecken – innerhalb oder außerhalb der Plattform – ist untersagt.
+
+4. Die Plattform DevGuard ermöglicht die Verarbeitung sicherheitsrelevanter Entwicklungsartefakte, insbesondere:
+
+   - **Software Bill of Materials (SBOMs)**,
+   - **SARIF-Reports** und andere Ausgabeformate von Sicherheitsscannern.
+
+   Diese Dateien können Quellcodefragmente oder Metadaten enthalten, die geistiges Eigentum der Nutzenden darstellen. Nutzende verpflichten sich, ausschließlich Inhalte hochzuladen oder zur Analyse bereitzustellen, für die sie:
+
+   - die erforderlichen Rechte besitzen,
+   - keine Rechte Dritter verletzen und
+   - die rechtmäßige Verarbeitung durch die Plattform (einschließlich automatisierter Analyse und Speicherung) gemäß diesen Nutzungsbedingungen gestatten dürfen.
+
+## 6. Rechtsverletzungen von Projekten und Verstoß gegen die Nutzungsbedingungen
+
+Wenn Nutzende der Ansicht sind, dass Inhalte auf der Plattform ihre Urheberrechte, Patentrechte, Markenrechte oder sonstige Rechte verletzen, können
+sie sich unter legal@devguard.org an die Betreibenden wenden.
+
+Bei Geltendmachung einer Rechtsverletzung ist die Rechteinhaberschaft nachvollziehbar zu belegen, z. B. durch geeignete Nachweise oder Dokumente.
+
+Eingehende Meldungen über potenzielle Rechtsverletzungen werden an die verantwortlichen Projekte zur Prüfung und Stellungnahme weitergeleitet.
+In dringenden Fällen behalten sich die Betreibenden vor, betroffene Inhalte auch ohne vorherige Anhörung vorübergehend oder dauerhaft zu entfernen.
+
+Die Betreibenden der Plattform sind berechtigt, auch bei ungeklärter Rechtslage oder bei begründetem Verdacht Inhalte vorsorglich zu sperren oder
+den öffentlichen Zugriff zu entziehen.
+
+Verstöße gegen diese Nutzungsbedingungen – insbesondere gegen Sicherheits-, Lizenz- oder Inhaltsvorgaben – können folgende Maßnahmen nach sich ziehen:
+
+- Entfernen von Inhalten,
+- temporäre Sperrung des Accounts,
+- dauerhafte Sperrung oder Löschung des Accounts.
+
+Soweit keine besonderen Dringlichkeitsgründe vorliegen, werden betroffene Nutzende mindestens 14 Tage vor einer Sperrung oder Inhaltsentfernung
+informiert und erhalten Gelegenheit zur Stellungnahme.
+
+## 7. Exzessive Nutzung
+
+1. Die missbräuchliche oder exzessive Nutzung der Plattform – insbesondere eine Nutzung, die dem Zweck der sicheren Softwareentwicklung
+   widerspricht – stellt einen Verstoß gegen diese Nutzungsbedingungen dar. Hierzu zählt unter anderem:
+   - das Verwenden der Plattform als Massendatenspeicher ohne technischen Bezug zur Softwareentwicklung,
+   - automatisiertes Hoch- oder Herunterladen großer Datenmengen ohne legitimen Projekthintergrund.
+2. Die Betreibenden der Plattform behalten sich vor, nach eigenem Ermessen zu bewerten, ob ein Fall von Missbrauch oder exzessiver Nutzung
+   vorliegt, und entsprechende Maßnahmen zu ergreifen (z. B. Einschränkung von Zugriffen, Sperrung des Accounts).
+3. Es ist untersagt, Inhalte oder Daten der Plattform zu nutzen, um:
+   - Werbung zu betreiben oder Spam zu verbreiten,
+   - persönliche Daten von Nutzenden zu extrahieren oder zu verkaufen (z. B. an Dritte wie Recruiter, Headhunter o. Ä.),
+   - Nutzende unaufgefordert zu kontaktieren oder zu belästigen.
+
+## 8. Verfügbarkeit der Plattform und Datensicherung
+
+1. Die Betreiberin garantiert keine andauernde oder unterbrechungsfreie Verfügbarkeit der Dienste oder der Inhalte der DevGuard-Plattform.
+   Geplante Wartungsarbeiten erfolgen nach eigenem Ermessen und werden, sofern möglich, vorab angekündigt.
+2. Die auf der Plattform gespeicherten Inhalte werden regelmäßig im monatlichen Rhythmus gesichert. Die Backups werden für einen Zeitraum
+   von einem Monat aufbewahrt.
+3. Die Verantwortung für die regelmäßige Sicherung von eigenen Inhalten liegt bei den Nutzenden.
+
+## 9. Accountlöschung und Schließung
+
+1. Nutzende haben das Recht, ihren eigenen Account jederzeit selbstständig zu löschen.
+2. Personenbezogene Daten der Nutzenden werden gemäß der [Datenschutzerklärung](#) gelöscht.
+3. Die Betreiberin hat bei Verstößen gegen diese Nutzungsbedingungen oder gegen den [Code of Conduct](/contributing/code-of-conduct) das Recht, Accounts temporär oder dauerhaft
+   ohne vorherige Ankündigung zu sperren oder zu löschen.
+
+## 10. Datenschutz
+
+Informationen zur Erhebung, Speicherung und Nutzung personenbezogener Daten finden sich in der [Datenschutzerklärung](#) der Plattform.
+
+## 11. Gewährleistung und Haftung
+
+1. Die Verantwortung für Inhalte, die auf DevGuard veröffentlicht werden, liegt bei den jeweiligen, erstellenden Nutzenden. Sofern keine gesonderten
+   Vereinbarungen bestehen, gelten die gesetzlichen Regelungen.
+2. Die Betreiberin haftet nur für vorsätzlich oder grob fahrlässig verursachte Schäden sowie bei schuldhafter Verletzung wesentlicher
+   Vertragspflichten. Bei der Verletzung wesentlicher Vertragspflichten ist die Haftung auf typische, vorhersehbare Schäden begrenzt.
+3. Eine Haftung für mittelbare Schäden, insbesondere für Datenverluste, ist ausgeschlossen, sofern diese durch zumutbare Sicherungsmaßnahmen durch
+   die Nutzenden hätten verhindert werden können.
+4. Eine Haftung für Schäden aus der Verletzung von Leben, Körper oder Gesundheit sowie aus dem Produkthaftungsgesetz bleibt unberührt.
+
+## 12. Anwendbares Recht und Gerichtsstand
+
+1. Es gilt ausschließlich deutsches Recht unter Ausschluss des internationalen Privatrechts und des UN-Kaufrechts.
+2. Sofern die Nutzenden Kaufleute, juristische Personen des öffentlichen Rechts oder öffentlich-rechtliche Sondervermögen sind, ist Gerichtsstand
+   für alle Streitigkeiten aus dem Vertragsverhältnis Bonn.
+3. Im Übrigen gelten für Verbrauchende die zwingenden Verbraucherschutzvorschriften des Staates, in dem sie ihren gewöhnlichen Aufenthalt haben,
+   sofern diese weitergehenden Schutz bieten.
+
+## 13. Änderungen der Nutzungsbedingungen
+
+1. Die Betreiberin behält sich das Recht vor, diese Nutzungsbedingungen zu ändern. Änderungen werden mindestens vier Wochen vor Inkrafttreten
+   per E-Mail an die registrierten Nutzenden mitgeteilt.
+2. Erfolgt innerhalb von zwei Wochen ab Zugang der Änderungsmitteilung kein Widerspruch in Textform (z. B. per E-Mail), gelten die Änderungen
+   als angenommen.
+3. In der Änderungsmitteilung wird auf das Widerspruchsrecht, die Frist sowie die Rechtsfolgen eines unterlassenen Widerspruchs ausdrücklich hingewiesen.
+4. Widersprechen Nutzende form- und fristgerecht, bleibt das Vertragsverhältnis zunächst zu den bisherigen Bedingungen bestehen. Die Betreiberin
+   behält sich jedoch das Recht vor, das Vertragsverhältnis in diesem Fall mit einer Frist von zwei Wochen zu kündigen.
+
+## 14. Lizenzierung und Open-Source-Nutzung
+
+DevGuard ermöglicht die Veröffentlichung, Verwaltung und Analyse von (Open-Source-)Softwareprojekten. Die Lizenzierung dieser Projekte liegt in der
+Verantwortung der jeweiligen Projektverantwortlichen. Die Betreiberin der Plattform übernimmt keine Gewähr für die rechtliche Zulässigkeit oder
+Kompatibilität der verwendeten Lizenzen.
+
+Nutzende, die Quellcode, Softwarekomponenten, SBOMs, SARIF-Reports oder sonstige Inhalte auf der Plattform hochladen oder veröffentlichen, sichern zu,
+dass sie zur Veröffentlichung berechtigt sind, keine Rechte Dritter verletzen und zur Einräumung der für die Nutzung auf der Plattform erforderlichen
+Rechte befugt sind. Dies gilt insbesondere auch dann, wenn im Rahmen von SBOMs oder Analyseberichten Quelltextbestandteile enthalten sind.
+
+## 15. Support
+
+Ohne gesonderte Vereinbarung besteht kein Anspruch auf Support durch die Betreibenden der Plattform. Die L3montree GmbH stellt jedoch
+grundsätzlich die E-Mail-Adresse community@devguard.org für allgemeine Anfragen zur Verfügung.
+
+Supportanfragen können außerdem über die öffentlichen GitHub-Repositories der DevGuard-Projekte als Issues eingebracht werden. L3montree
+bemüht sich, diese im Rahmen der regulären Projektwartung zu prüfen und zu bearbeiten, übernimmt jedoch keine Verpflichtung zur Reaktion oder Behebung.
+
+Ferner besteht die Möglichkeit zum informellen Austausch und Community-Support über einen von der Plattform bereitgestellten Matrix-Raum.
+
+Ein vertraglich zugesicherter und verbindlicher Support kann nur auf Grundlage einer gesonderten, schriftlichen Vereinbarung erfolgen.
+

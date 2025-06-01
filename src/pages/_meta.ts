@@ -11,6 +11,9 @@ export default {
         },
         display: 'hidden',
     },
+    'terms-of-use': {
+        display: 'hidden',
+    },
     introduction: { title: 'Introduction' },
     'getting-started': { title: 'Getting Started' },
     comparison: { title: 'Tool Comparison' },
