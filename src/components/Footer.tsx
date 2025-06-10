@@ -187,8 +187,8 @@ export default function Footer() {
                 </div>
                 <div className="mt-16 border-t border-white/10 pt-8 sm:mt-20 lg:mt-24">
                     <p className="text-sm/6 text-gray-400">
-                        © {new Date().getFullYear()} L3montree UG
-                        (haftungsbeschränkt) and the DevGuard Contributors
+                        © {new Date().getFullYear()} L3montree GmbH and the
+                        DevGuard Contributors
                     </p>
                 </div>
             </div>
