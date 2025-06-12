@@ -1,47 +1,63 @@
-# 🚀 Quickstart with DevGuard
+import { Tabs } from 'nextra/components'
+import { Callout } from 'nextra/components'
 
-Follow these steps to get up and running with DevGuard:
+# Getting Started with DevGuard 🚀
 
-1. **Create a DevGuard Account**  
-   Sign up at [app.devguard.org](https://app.devguard.org) and verify your email.
+<Callout type="warning" emoji="⚠️">
+  We are currently working on the set-up flows for DevGuard - some steps might currently not work as expected.
+  We would love to hear your feedback on the set-up guides. Please don't hesitate to
+  Please feel free to reach out to us using our [Matrix Chat](https://matrix.to/#/#devguard:matrix.org)
+</Callout>
 
-2. **Create a New Organization**  
-    You should already be prompted to create an organization. Fill out the details and click **Create**.
+If you're new to DevGuard, this guide will help you get started quickly. We'll walk you
+through the installation process, basic usage, and how to integrate DevGuard into your
+development workflow.
 
-3. **Create a New Project**  
-   Inside your organization, click **New Project**, then fill in the project details.
+## Installation
 
-4. **Create an Asset for the Project**  
-   Add an asset (e.g., a software repository or container image) by selecting your project and clicking **Add Asset**.
 
-5. **Create a Personal Access Token**  
-   Go to your profile settings and generate a **Personal Access Token (PAT)**.
-   Save this token securely — you'll need it to authenticate CLI or CI/CD actions.
+<Tabs items={['Docker Compose 🐳', 'Kubernetes with Helm ⎈']}>
+  <Tabs.Tab>
+    To try DevGuard with a local container setup, we provide a docker-compose-try-it.yaml:
 
-6. **Send Reports to DevGuard**  
-   Choose one of the following options:
+    ```bash copy
+    curl -LO https://raw.githubusercontent.com/l3montree-dev/devguard/refs/heads/main/docker-compose-try-it.yaml \
+    && docker-compose -f docker-compose-try-it.yaml up
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    For deploying DevGuard to a Kubernetes cluster, we provide a Helm Chart -
+    please follow the [deployment guide](/getting-started/self-hosting-devguard/kubernetes).
+  </Tabs.Tab>
+</Tabs>
 
-   - 🖥 **Local CLI**  
-     Install the DevGuard CLI:  
-     ```sh
-     curl -s https://cli.devguard.io/install.sh | sh
-     devguard auth --token YOUR_PAT
-     devguard scan --asset my-project/repo
-     ```
+## Sent your first Scan-Report to DevGuard
 
-   - ⚙️ **CI/CD Pipeline Integration**  
-     Use the DevGuard-provided GitHub Actions or GitLab CI templates for auto-scanning:
-     ```yaml
-     # .github/workflows/devguard.yml
-     name: DevGuard Scan
-     on: [push, pull_request]
-     jobs:
-       scan:
-         uses: devguard/actions/scan@v1
-         with:
-           token: ${{ secrets.DEVGUARD_TOKEN }}
-           asset: my-project/repo
-     ```
+To send your first scan-report, e.g. of a SCA of a sample project of your choice to DevGuard,
+follow the steps below:
 
-7. **Review Risks in the DevGuard UI**  
-   Log into the DevGuard dashboard, open your project, and explore the **Risks** section for detailed findings and remediation guidance.
+1. Create a new project and asset via the DevGuard UI, note the asset name.
+2. Create a new personal access token via the DevGuard UI.
+3. Run the following command inside your local repo to send a SCA report to DevGuard:
+
+```bash copy
+docker run --rm \
+  -v $(pwd):/repo \
+  ghcr.io/l3montree-dev/devguard-scanner:main-latest \
+  devguard-scanner sca --assetName=<your-asset-name> --apiUrl=<your-api-url> \
+  --token=<your-personal-access-token> --path=/repo
+```
+
+or upload a SARIF report to DevGuard.
+
+### Available Scanners
+
+✅ not yet implemented in the scanner, but you **can** provide a SARIF-report to DevGuard of any scanner<br/>
+✅ implemented in the scanner, or you can provide a SARIF-report to DevGuard of any scanner
+
+- ✅ Secret Scanning (SARIF)
+- ✅ SCA (Software Composition Analysis) `devguard-scanner sca` (SBOM)
+- ✅ Static application security testing (SAST) (SARIF)
+- ✅ Infrastructure as Code (IaC) Scanning (SARIF)
+- ✅ Container Scanning `devguard-scanner container-scanning` (SBOM)
+- ☑️ Dynamic application security testing (DAST) (SARIF)
