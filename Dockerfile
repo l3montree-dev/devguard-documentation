@@ -1,4 +1,4 @@
-FROM node:22.14.0@sha256:c7fd844945a76eeaa83cb372e4d289b4a30b478a1c80e16c685b62c54156285b as builder
+FROM node:24.2.0@sha256:d1db2ecd11f417ab2ff4fef891b4d27194c367d101f9b9cd546a26e424e93d31 as builder
 LABEL maintainer="Sebastian Kawelke <sebatian.kawelke@l3montree.com"
 
 # Disable telemetry
@@ -35,7 +35,7 @@ RUN npm run build
 
 RUN mkdir -p /usr/app/.next/cache/images && chown -R 53111:53111 /usr/app/.next/cache/images
 
-FROM gcr.io/distroless/nodejs22-debian12:nonroot@sha256:28a71222ea7ab7d16a2abb888484cf40d43d86e053069a624ddb371cc9efdec2
+FROM gcr.io/distroless/nodejs24-debian12:nonroot@sha256:79465ad7671f8f8b318860e8c152baf34748cf819297401eff65accf923c2ca5
 
 USER 53111
 
