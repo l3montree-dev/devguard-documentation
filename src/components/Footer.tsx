@@ -25,6 +25,10 @@ const navigation = {
             name: 'Risk Mitigation Guides',
             href: '/risk-mitigation-guides/secret-scanning',
         },
+        {
+            name: 'Status Page',
+            href: 'https://status.devguard.org',
+        },
     ],
     company: [
         {
