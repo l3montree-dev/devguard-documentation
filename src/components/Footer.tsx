@@ -32,10 +32,13 @@ const navigation = {
     ],
     company: [
         {
-            name: 'About (DE)',
-            href: 'https://l3montree.com/ueber-uns/cybersecurity-bonn',
+            name: 'Homepage (DE)',
+            href: 'https://l3montree.com/',
         },
-        { name: 'Blog (DE)', href: 'https://l3montree.com/publikationen' },
+        {
+            name: 'Publications (DE)',
+            href: 'https://l3montree.com/publikationen',
+        },
         { name: 'Jobs', href: 'https://join.com/companies/l3montree' },
     ],
     legal: [
