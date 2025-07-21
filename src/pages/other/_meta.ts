@@ -8,7 +8,5 @@ export default {
     'gitlab-components': {
         title: 'GitLab Components',
     },
-
-    concepts: { title: 'Concepts' },
     faq: { title: 'FAQ' },
 }

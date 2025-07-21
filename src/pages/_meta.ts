@@ -21,6 +21,7 @@ export default {
         title: 'DevGuard & Compliance Frameworks',
     },
     'risk-mitigation-guides': { title: 'Risk Mitigation Guides' },
+    concepts: { title: 'Concepts' },
     contributing: { title: 'Contributing' },
     other: {
         title: 'Other',

@@ -4,6 +4,7 @@ title: Introduction
 ---
 
 import LogoCloud from "../components/LogoCloud"
+import Image from "next/image"
 
 # DevGuard
 
@@ -29,24 +30,38 @@ into the development process has never been greater. We aim to fill this gap wit
 DevGuard, offering a seamless integration of vulnerability management into
 development workflows.
 
-## Key Features
+## Is DevGuard for you?
 
-1. **Developer-Centric Integration:** DevGuard fits naturally into your 
-    existing CI/CD workflows, reducing friction and enhancing productivity.
-    It supports the OWASP DevSecOps pipeline, offering tools (we just
-    reuse open source tools but provide a simplified wrapper cli) for secret
-    scanning (coming soon), SAST (coming soon), SCA, container scanning,
-    IaC scanning (coming soon) and DAST (coming soon).
-2. **Automated Security Monitoring:** Continuous monitoring using Software
-    Bill of Materials (SBOMs) to keep your projects secure.
-3. **Risk Assessment:** Automatically assesses and prioritizes risks to
-    help you address the most critical vulnerabilities first — no really, we do
-    this pragmatically and automate where possible! (Our base: CVSS, exploitdb, EPSS)
-4. **Compliance:** Ensures your projects meet security standards like ISO/IEC 27001 and PCI-DSS.
-5. **Security and confidentiality:** We prioritize the security of this
-    software! In an expansion stage and in cooperation with research institutions,
-    we want to make confidential data processing usable for the secure handling
-    of sensitive information (confidential computing).
+<div className="flex flex-row items-center justify-center gap-4 pt-4">
+    <Image src="/question-gopher.png" alt="Question Gopher" width={200} height={200} className="w-24 h-auto" />
+    <span className="font-semibold text-lg">
+    If you're a developer, DevOps engineer, or security-conscious team looking to
+    make software security practical, easy, and integrated — DevGuard is built for you.
+    </span>
+</div>
+Here's how DevGuard makes that possible:
+
+- **Risk Management for Developers:** DevGuard provides a comprehensive risk management system that allows developers to assess, prioritize, and manage vulnerabilities effectively. It integrates with your existing workflows, making it easy to track and resolve security issues.
+
+- **Auto Setup for Projects:** One-click default setup for CI pipelines and workflows that:
+  - Scan your code for secrets
+  - Scan your dependencies (SCA)
+  - Build and scan your container images
+  - Perform static code analysis (SAST)
+  - Check infrastructure-as-code files for misconfigurations (IaC scanning)
+  - Check for open source license issues
+
+- **Developer-Centric Integration:** DevGuard fits naturally into your existing CI/CD workflows, reducing friction and enhancing productivity. It supports the OWASP DevSecOps pipeline with simplified CLI wrappers around widely-used open source tools.
+
+- **Integration with Issue Trackers:** Automatically create issues in your preferred issue tracker (like GitHub, GitLab, or Jira) for identified vulnerabilities, making it easy to track and manage security tasks (with slash commands).
+
+- **Bring Your Own Scanner:** Already have SBOMs or use SARIF-format tools? No problem—DevGuard can ingest your data for unified risk visibility.
+
+- **Automated Security Monitoring:** Continuously monitor your projects using SBOMs to ensure you're aware of known vulnerabilities.
+
+- **Risk Assessment That Works:** DevGuard pragmatically assesses and prioritizes vulnerabilities using CVSS, ExploitDB, EPSS, and other sources—automating what can be automated so you can focus on fixing the highest risks first.
+
+- **Compliance-Ready:** Helps you meet requirements for software development of standards like ISO/IEC 27001 and PCI-DSS with minimal effort.
 
 ## Demo
 
