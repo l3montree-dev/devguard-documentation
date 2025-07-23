@@ -45,24 +45,37 @@ development workflow.
   </Tabs.Tab>
 </Tabs>
 
-## Sent your first Scan-Report to DevGuard
+## Scan a local project and report to DevGuard
+
+Prerequisite: You have started DevGuard locally with the `docker-compose-try-it.yaml` file.
 
 To send your first scan-report, e.g. of a SCA of a sample project of your choice to DevGuard,
-follow the steps below:
+follow the steps below: 
 
-1. Create a new project and asset via the DevGuard UI, note the asset name.
-2. Create a new personal access token via the DevGuard UI.
-3. Run the following command inside your local repo to send a SCA report to DevGuard:
+1. Navigate to your user settings (user icon in the top right corner) and create a new personal access token with the `scan` scope.
+2. Create a new group and repository via the DevGuard UI.
+3. Open a terminal in the root directory of your project.
+4. Run the following command to scan your project and report the results to DevGuard,
+   note that you need to replace the placeholders `<your-org/projects/your-group/assets/your-repo>` (just copy the slug from the URL in your browser when you are at the repo in the UI)
+   and `<your-personal-access-token>` with your actual values.
 
 ```bash copy
-docker run --rm \
-  -v $(pwd):/repo \
-  ghcr.io/l3montree-dev/devguard-scanner:main-latest \
-  devguard-scanner sca --assetName=<your-asset-name> --apiUrl=<your-api-url> \
-  --token=<your-personal-access-token> --path=/repo
+docker run --network devguard-local -v "$(PWD):/app" ghcr.io/l3montree-dev/devguard-scanner:main-latest \
+devguard-scanner sca \
+    --assetName="<your-org/projects/your-group/assets/your-repo>" \
+    --apiUrl="http://devguard-api:8080" \
+    --token="<your-personal-access-token>"
 ```
+## Upload a Test SBOM or SARIF Report
 
-or upload a SARIF report to DevGuard.
+Alternatively, you can upload a SBOM (details about the used software dependencies in a software project) or SARIF (Static Analysis Results Interchange Format) report to DevGuard. This is useful if you have already scanned your
+project with another tool and want to import the results into DevGuard.
+
+You can use e.g. the [example SBOM](/example-sbom-devguard-docu.json) of this documentation (not latest) or [example SARIF Report](/example-sarif.json) to test the upload functionality.
+
+1. Navigate to your new repo in the DevGuard UI.
+2. For SBOM: Click on "Identify Dependency-Risks" > "I bring my own Scanner" > "Upload SBOM"
+3. For SARIF: Click on "Identify Security-Risks" > "I bring my own Scanner" > "Upload SARIF Report"
 
 ### Available Scanners
 
