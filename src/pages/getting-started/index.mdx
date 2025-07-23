@@ -38,6 +38,11 @@ development workflow.
     **will not recieve any emails for account verification** or password reset. During registration you can simply skip the email verification step
     by clicking on the "Back" button.
 
+    Another general note is that the DevGuard API service will download the
+    [latest vulnerabilities database](https://github.com/l3montree-dev/devguard/pkgs/container/devguard%2Fvulndb) from our GitHub Repo and will
+    periodically update it. This might take a while after the first start of the API service. So please do not wonder if not
+    all vulnerabilities are available immediately after starting the containers and not all info for your dependencies are shown at first.
+
   </Tabs.Tab>
   <Tabs.Tab>
     For deploying DevGuard to a Kubernetes cluster, we provide a Helm Chart -
