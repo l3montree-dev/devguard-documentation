@@ -18,12 +18,21 @@ development workflow.
 
 <Tabs items={['Docker Compose 🐳', 'Kubernetes with Helm ⎈']}>
   <Tabs.Tab>
-    To try DevGuard with a local container setup, we provide a docker-compose-try-it.yaml:
+    To try DevGuard with a local container setup, we provide a docker-compose-try-it.yaml. Note that it can take 
+    a few moments to start up the containers, so please be patient.
 
     ```bash copy
     curl -LO https://raw.githubusercontent.com/l3montree-dev/devguard/refs/heads/main/docker-compose-try-it.yaml \
+    && curl -LO https://raw.githubusercontent.com/l3montree-dev/devguard/refs/heads/main/initdb.sql \
+    && curl -LO https://raw.githubusercontent.com/l3montree-dev/devguard/refs/heads/main/.kratos/identity.schema.json \
+    && curl -L -o kratos.yml https://raw.githubusercontent.com/l3montree-dev/devguard/refs/heads/main/.kratos/kratos.example.yml \
+    && mkdir -p kratos \
+    && mv kratos.yml kratos/kratos.yml \
+    && mv identity.schema.json kratos/identity.schema.json \
     && docker-compose -f docker-compose-try-it.yaml up
     ```
+
+    After the containers are up, you can access DevGuard at [http://localhost:3000](http://localhost:3000).
   </Tabs.Tab>
   <Tabs.Tab>
     For deploying DevGuard to a Kubernetes cluster, we provide a Helm Chart -
