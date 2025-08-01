@@ -17,13 +17,11 @@ export default {
     introduction: { title: 'Introduction' },
     'getting-started': { title: 'Getting Started' },
     guides: { title: 'Guides' },
-    comparison: { title: 'Tool Comparison' },
-    'compliance-frameworks': {
-        title: 'DevGuard & Compliance Frameworks',
-    },
     'risk-mitigation-guides': { title: 'Risk Mitigation Guides' },
     concepts: { title: 'Concepts' },
     contributing: { title: 'Contributing' },
+    comparison: { title: 'Tool Comparison' },
+    faq: { title: 'FAQ' },
     other: {
         title: 'Other',
     },
@@ -36,5 +34,11 @@ export default {
         title: 'Documentation',
         type: 'page',
         href: '/introduction',
+    },
+    '404': {
+        theme: {
+            layout: 'raw',
+        },
+        display: 'hidden',
     },
 }

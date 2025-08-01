@@ -9,8 +9,8 @@ const navigation = {
             href: '/getting-started/self-hosting-devguard/kubernetes',
         },
         {
-            name: 'DevGuard & Compliance Frameworks',
-            href: '/compliance-frameworks/iso',
+            name: 'Concepts',
+            href: '/concepts',
         },
 
         { name: 'Contributing', href: '/contributing/getting-started' },
