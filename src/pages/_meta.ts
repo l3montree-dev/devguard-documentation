@@ -16,6 +16,7 @@ export default {
     },
     introduction: { title: 'Introduction' },
     'getting-started': { title: 'Getting Started' },
+    guides: { title: 'Guides' },
     comparison: { title: 'Tool Comparison' },
     'compliance-frameworks': {
         title: 'DevGuard & Compliance Frameworks',
