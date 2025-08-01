@@ -14,6 +14,9 @@ export default {
     'terms-of-use': {
         display: 'hidden',
     },
+    'privacy-policy': {
+        display: 'hidden',
+    },
     introduction: { title: 'Introduction' },
     'getting-started': { title: 'Getting Started' },
     guides: { title: 'Guides' },

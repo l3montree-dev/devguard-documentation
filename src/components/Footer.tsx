@@ -43,7 +43,7 @@ const navigation = {
     ],
     legal: [
         { name: 'Imprint', href: 'https://l3montree.com/impressum' },
-        { name: 'Privacy policy', href: 'https://l3montree.com/datenschutz' },
+        { name: 'Privacy policy', href: '/privacy-policy' },
         {
             name: 'License',
             href: 'https://github.com/l3montree-dev/devguard/blob/main/LICENSE.txt',
