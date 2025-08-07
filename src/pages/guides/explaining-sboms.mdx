@@ -1,0 +1,99 @@
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+
+ 
+
+ 
+
+
+
+# Explaining SBOMs 
+
+An SBOM is a machine-readable list of every component in a piece of software, letting teams find vulnerabilities or license issues quickly and improving supply-chain security.
+
+## What is an SBOM?
+A Software Bill of Materials (SBOM) is a structured inventory of all components that make up your software. It typically lists each component’s name, version, origin, license, and dependency relationships. SBOMs improve transparency, speed up vulnerability/license audits, and are a key building block of software supply-chain security.
+
+
+
+## 📌 How to create a SBOM 
+
+
+<div className='mt-8'>
+<Tabs defaultValue="devguard" className="w-full">
+  <TabsList>
+    <TabsTrigger value="devguard">Devguard</TabsTrigger>
+    <TabsTrigger  value="trivy">Trivy</TabsTrigger>
+  </TabsList>
+  <TabsContent  value="trivy"> 
+
+```bash
+trivy fs /path/to/your/project --format cyclonedx --output trivy-results.json
+```
+</TabsContent>
+  <TabsContent value="devguard">
+  
+```bash
+devguard-scanner sbom --output-format json --output-file sbom.json /path/to/your/project
+```
+  </TabsContent>
+</Tabs>
+</div>
+
+ ## 📌 How to upload a SBOM to Devguard
+
+```bash
+devguard-scanner sbom --token YOUR_TOKEN --assetName your-asset-name --path /path/to/sbom.json
+```
+## 📌 SBOM Example
+
+```json
+
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "<1.x>",
+  "version": 1,
+  "serialNumber": "urn:uuid:<UUID>",
+  "metadata": {
+    "timestamp": "<ISO-8601>",
+    "component": {
+      "type": "application",
+      "name": "<PRODUCT>",
+      "version": "<VERSION>",
+      "bom-ref": "<COMPONENT-ID>"
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "name": "<DEP-NAME>",
+      "version": "<DEP-VERSION>",
+      "bom-ref": "<DEP-ID>"
+      /* optional: "licenses", "purl", "hashes", "supplier" … */
+    }   
+  ],
+  "dependencies": [
+    {
+      "ref": "<COMPONENT-ID>",
+      "dependsOn": ["<DEP-ID>", "<DEP2-ID>"]
+    }
+  ]
+}
+
+```
+      
+      ## 🇪🇺 In the Future
+      
+      The Cyber Resilience Act (CRA)—published as Regulation (EU) 2024/2847—will reshape how any “product with digital elements” (hardware or software that can connect to a network) is developed, shipped, and maintained:
+      
+      
+      | Milestone       | What happens                                                                                                                                                       | Why it matters                                                         |
+      | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------- |
+      | **10 Dec 2024** | CRA *entered into force* (was published in the Official Journal).                                                                                                  | The clock started on the transition period. ([Digital Strategy][1])    |
+      | **11 Sep 2026** | First tranche of duties (e.g., vulnerability reporting) apply.                                                                                                     | Manufacturers must already have processes in place. ([openssf.org][2]) |
+      | **11 Dec 2027** | **Full application**—every product placed on the EU market must ship with a **machine-readable SBOM** and comply with all Annex I & II cybersecurity requirements. | No SBOM ⇢ no market access. ([Digital Strategy][1], [EUR-Lex][3])      |
+      | **Penalties**   | Up to **€15 million** or **2.5 % of worldwide turnover** for serious non-compliance.                                                                               | Similar bite to GDPR fines. ([Strobes Security][4])                    |
+      
+      [1]: https://digital-strategy.ec.europa.eu/en/policies/cyber-resilience-act "Cyber Resilience Act | Shaping Europe's digital future"
+      [2]: https://openssf.org/public-policy/eu-cyber-resilience-act "EU Cyber Resilience Act (CRA)"
+      [3]: https://eur-lex.europa.eu/eli/reg/2024/2847/oj/eng "Regulation - 2024/2847 - EN - EUR-Lex"
+      [4]: https://strobes.co/blog/eu-cyber-resilience-act-what-you-must-do "EU Cyber Resilience Act: What You Must Do Before 2027"
