@@ -9,6 +9,7 @@ jobs:
   devguard-scanner:
     uses: l3montree-dev/devguard-action/.github/workflows/full.yml@main
     with:
+        api-url: https://api.main.devguard.org
         asset-name: "l3montree-cybersecurity/projects/devguard/assets/devguard-documentation"
     secrets:
         devguard-token: ${{ secrets.DEVGUARD_TOKEN }}
