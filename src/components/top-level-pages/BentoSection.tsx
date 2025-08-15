@@ -12,26 +12,26 @@ export default function BentoSection() {
                 Security & Compliance
             </Subheading>
             <Heading as="h3" className="mt-2 max-w-3xl text-white">
-                Get Software Security and Compliance Done. With ease.
+                Bridging Software Security and Compliance. With ease.
             </Heading>
 
             <div className="mt-10 grid grid-cols-1 gap-4 sm:mt-16 lg:grid-cols-6 lg:grid-rows-2">
                 <BentoCard
-                    eyebrow="DevSecOps"
+                    eyebrow="OWASP DevSecOps"
                     title="Get AppSec done with ease"
                     description="No need for hours of configuration or research. DevGuard provides you with a full OWASP DevSecOps pipeline, advanced supply chain security, and more."
                     graphic={
-                        <div className="h-80 bg-[url(/screenshots/sec-control-center.png)] bg-[size:1000px_560px] bg-no-repeat" />
+                        <div className="h-80 bg-[url(/screenshots/team.png)] bg-[size:1000px_560px] bg-no-repeat" />
                     }
                     fade={['bottom']}
                     className="max-lg:rounded-t-4xl lg:rounded-tl-4xl lg:col-span-3"
                 />
                 <BentoCard
-                    eyebrow="Attestation based Compliance Controls"
+                    eyebrow="Compliance & Audit"
                     title="Automated Tracking, Documentation & Reporting"
                     description="As a developer you love to code - probably not hasseling with compliance. DevGuard provides a pre-release checklist, prioritized todos, and a full audit trail."
                     graphic={
-                        <div className="absolute inset-0 bg-[url(/screenshots/compliance.png)] bg-[size:1100px_650px] bg-[left_-10px_top_-100px] bg-no-repeat" />
+                        <div className="absolute inset-0 bg-[url(/screenshots/compliance-symbol.png)] bg-[size:1100px_650px] bg-[left_-40px_top_-100px] bg-no-repeat" />
                     }
                     fade={['bottom']}
                     className="lg:rounded-tr-4xl lg:col-span-3"
