@@ -7,7 +7,7 @@ export default function Hero() {
         <div className="relative">
             <div className="from-28% absolute inset-2 bottom-0 rounded-xl bg-[linear-gradient(115deg,var(--tw-gradient-stops))] from-[#FFFFFF] to-[#FCBE25] ring-1 ring-inset ring-black/5 sm:bg-[linear-gradient(145deg,var(--tw-gradient-stops))] md:inset-12" />
             <Container className="relative">
-                <div className="pb-20 pt-16 sm:pt-24 md:pb-32 md:pt-32">
+                <div className="pb-20 pt-16 max-md:pl-6 sm:pt-24 md:pb-32 md:pt-32">
                     <h1 className="text-balance text-6xl/[0.9] font-semibold tracking-tight text-background sm:text-8xl/[0.8] md:text-9xl/[0.8]">
                         Develop Secure Software.
                     </h1>

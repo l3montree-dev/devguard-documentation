@@ -11,7 +11,7 @@ export default function ThreeColumnBentoSection() {
             <Heading as="h2" className="mt-2 max-w-3xl text-white">
                 Advanced Security Features
             </Heading>
-            <div className="mx-auto max-w-2xl lg:max-w-7xl">
+            <div className="mx-auto mt-8 max-w-2xl lg:max-w-7xl">
                 <div className="grid gap-4 sm:mt-16 lg:grid-cols-3 lg:grid-rows-2">
                     <div className="relative lg:row-span-2">
                         <div className="absolute inset-px rounded-lg bg-bgSecondary lg:rounded-l-[1rem]" />
