@@ -57,7 +57,7 @@ When addressing vulnerabilities found in the Software Composition Analysis (SCA)
 
 2.	**Upgrade the Dependency:** Update the vulnerable package to the recommended version. For npm-based projects:
 
-<Tabs items={['npm', 'npm audit', 'go']}>
+<Tabs items={['npm', 'npm audit', 'go', 'python']}>
     <Tabs.Tab>
         ```bash filename="Terminal" copy
         npm install webpack@5.94.0
@@ -71,6 +71,11 @@ When addressing vulnerabilities found in the Software Composition Analysis (SCA)
     <Tabs.Tab>
         ```bash filename="Terminal" copy
         go get -u && go mod tidy
+        ```
+    </Tabs.Tab>
+    <Tabs.Tab>
+        ```bash filename="Terminal" copy
+        pip install --upgrade <package-name>
         ```
     </Tabs.Tab>
 </Tabs>
