@@ -11,38 +11,39 @@ const features = [
     {
         name: 'Shape DevGuard',
         description:
-            'Membership in the DevGuard Alpha program allows you to help shape DevGuard from the early days. Your feedback and comments carry weight, and we work together to create an open-source solution for secure software development. ',
+            'Membership in the DevGuard Beta program allows you to help shape DevGuard from the early days. Your feedback and comments carry weight, and we work together to create an open-source solution for secure software development. ',
         href: '#',
         icon: AdjustmentsHorizontalIcon,
     },
     {
         name: 'Priority support & direct collaboration',
         description:
-            'In the DevGuard Alpha program, we are working hand in hand on the future of secure software development. We rely on feedback and discussions from real users. If you experience any problems or need help, our development team is directly available for you. We meet regularly to discuss how we can best support each other.',
+            'In the DevGuard Beta program, we are working hand in hand on the future of secure software development. We rely on feedback and discussions from real users. If you experience any problems or need help, our development team is directly available for you. We meet regularly to discuss how we can best support each other.',
         href: '#',
         icon: UsersIcon,
     },
     {
-        name: 'Free & discounts on future plans',
+        name: 'Discounts on future plans',
         description:
-            'The Alpha program is open to companies and free of charge. No costs are incurred during the development period of the alpha stage. There is a 70% discount for the beta phase. There is a 30% discount for GA version plans.',
+            'The Beta program is open to companies and larger teams. As a thank you for your participation, we offer discounts on future plans. This way, you can benefit from the full potential of DevGuard at a reduced price.',
         href: '#',
         icon: TicketIcon,
     },
 ]
 
-export default function AlphaTesting() {
+export default function BetaTesting() {
     return (
         <div className="pb-20 pt-24 sm:pt-32">
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
                 <div className="mx-auto max-w-3xl lg:mx-0">
                     <h2 className="text-pretty text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-                        DevGuard Alpha Testing Programm 🇪🇺🚀
+                        DevGuard Beta Testing Programm 🇪🇺🚀
                     </h2>
                     <p className="mt-6 text-lg/8 text-gray-300">
-                        We are currently accepting applications for our alpha
-                        testing program. Be the first to experience DevGuard,
-                        shape it with your feedback, and help us make it better.
+                        We are currently accepting applications for our public
+                        Beta testing program. Be the first to experience
+                        DevGuard, shape it with your feedback, and help us make
+                        it better.
                     </p>
                 </div>
                 <div className="mt-12">

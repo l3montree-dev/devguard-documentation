@@ -1,4 +1,5 @@
 import { clsx } from 'clsx'
+import Image from 'next/image'
 
 export function Screenshot({
     width,
@@ -22,7 +23,9 @@ export function Screenshot({
             )}
         >
             <div className="shadow-xs absolute -inset-3 rounded-lg shadow-red-500 ring-1 ring-white/5" />
-            <img
+            <Image
+                width={width}
+                height={height}
                 alt=""
                 src={src}
                 className="h-full rounded-lg shadow-2xl shadow-l3-500/10 ring-1 ring-white/10"

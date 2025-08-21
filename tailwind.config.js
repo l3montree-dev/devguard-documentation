@@ -8,6 +8,10 @@ module.exports = {
         './theme.config.tsx'
     ],
     theme: {
+		fontFamily: {
+			sans: ['var(--font-inter)', 'Inter', 'sans-serif'],
+			lexend: ['var(--font-lexend)', 'Lexend', 'sans-serif'],
+		},
     	extend: {
     		colors: {
     			l3: {

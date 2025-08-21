@@ -100,3 +100,10 @@ summary h4 {
     @apply bg-background text-foreground;
   }
 }
+
+/* Headings should be in Lexend font */
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-lexend), Lexend, sans-serif;
+  }
+}

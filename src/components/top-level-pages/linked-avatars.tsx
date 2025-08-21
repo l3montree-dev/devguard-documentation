@@ -3,6 +3,7 @@
 import { CheckIcon } from '@heroicons/react/16/solid'
 import { clsx } from 'clsx'
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 
 const transition = {
     duration: 0.75,
@@ -67,13 +68,17 @@ function Targets() {
     return (
         <div className="z-10 col-start-1 row-start-1">
             <div className="mx-auto flex size-full max-w-md items-center justify-around">
-                <img
-                    alt=""
+                <Image
+                    width={100}
+                    height={100}
+                    alt="GitLab Logo"
                     src="/logo-cluster/gitlab-logo.svg"
                     className="size-20 rounded-full bg-background ring-4 ring-white/10"
                 />
-                <img
-                    alt=""
+                <Image
+                    width={100}
+                    height={100}
+                    alt="GitHub Logo"
                     src="/logo-cluster/github.svg"
                     className="size-20 rounded-full bg-background ring-4 ring-white/10"
                 />

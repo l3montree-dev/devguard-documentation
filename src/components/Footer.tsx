@@ -78,10 +78,12 @@ export default function Footer() {
             <div className="mx-auto max-w-7xl px-6 pb-8 pt-16 sm:pt-24 lg:px-8 lg:pt-32">
                 <div className="xl:grid xl:grid-cols-3 xl:gap-8">
                     <div className="space-y-8">
-                        <img
+                        <Image
+                            width={200}
+                            height={50}
                             alt="DevGuard Logo"
                             src="/logo_inverse_horizontal.svg"
-                            className="h-11"
+                            className="h-12 w-auto"
                         />
                         <p className="text-balance text-sm/6 text-gray-300">
                             The bond between the most important building blocks
