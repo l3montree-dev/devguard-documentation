@@ -10,7 +10,7 @@ The following Flow-Chart demonstrates the thought and action process, you need t
 ```mermaid
 flowchart TD
     A[1. Container Image] -->|DevGuard Scan| B(2. Container Image vulnerable)
-    B --> C{3. Image update available?}
+    B --> C{3. Base-Image update available?}
     C -->|Yes| D[4. Update image]
     C -->|No| E{6. Does the image need to run a shell / be interactive?}
     D --> |DevGuard Scan| F{5. Vulnerability fixed?}
@@ -61,4 +61,3 @@ flowchart TD
 - Remove **unnecessary packages, tools, and shells** to reduce the attack surface.  
 - Run containers as a **non-root user**.  
 - Use **read-only file systems** and restrict Linux capabilities to the minimum required.  
-- Apply **Seccomp or AppArmor profiles** to limit runtime attacks.  
