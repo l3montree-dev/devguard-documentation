@@ -2,6 +2,10 @@ import React from 'react'
 import { DocsThemeConfig, useConfig } from 'nextra-theme-docs'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
+import Footer from './src/components/Footer'
+
+const websiteId = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID
+const umamiUrl = process.env.NEXT_PUBLIC_UMAMI_URL
 
 const config: DocsThemeConfig = {
     head() {
@@ -27,6 +31,13 @@ const config: DocsThemeConfig = {
                     {(frontMatter.title ?? rest.title) + ' | DevGuard' ||
                         'DevGuard'}
                 </title>
+                {Boolean(websiteId) && Boolean(umamiUrl) && (
+                    <script
+                        defer
+                        src={umamiUrl}
+                        data-website-id={websiteId}
+                    ></script>
+                )}
             </>
         )
     },
@@ -85,57 +96,7 @@ const config: DocsThemeConfig = {
         forcedTheme: 'dark',
     },
     footer: {
-        content: (
-            <div className="flex w-full flex-col items-center text-sm sm:items-start">
-                <div className="grid grid-cols-2 gap-4">
-                    <a
-                        className="text-l3-400 hover:text-l3-500"
-                        title="Impressum"
-                        href="https://l3montree.com/impressum"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <span>Imprint</span>
-                    </a>
-                    <a
-                        className="text-l3-400 hover:text-l3-500"
-                        title="Datenschutz"
-                        href="https://l3montree.com/datenschutz"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <span>Privacy Statement</span>
-                    </a>
-                </div>
-                <p className="mt-6 max-w-xl">
-                    Except where otherwise noted, content on this site is
-                    licensed under a{' '}
-                    <a
-                        target="_blank"
-                        className="text-l3-400 hover:text-l3-500"
-                        rel="noopener noreferrer"
-                        href="https://github.com/l3montree-dev/devguard-docs/blob/main/LICENSE-docs.md"
-                    >
-                        Creative Commons Attribution 4.0 International
-                    </a>{' '}
-                    license. Icons by{' '}
-                    <a
-                        target="_blank"
-                        className="text-l3-400 hover:text-l3-500"
-                        rel="noopener noreferrer"
-                        href="https://heroicons.com"
-                    >
-                        Heroicons
-                    </a>
-                    . The &apos;l3montree&apos; name and logo are trademarks of
-                    L3montree UG (haftungsbeschränkt).
-                </p>
-                <p className="mt-4">
-                    © {new Date().getFullYear()} L3montree UG
-                    (haftungsbeschränkt) and the DevGuard Contributors
-                </p>
-            </div>
-        ),
+        component: <Footer />,
     },
 }
 

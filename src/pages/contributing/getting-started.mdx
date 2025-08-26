@@ -2,6 +2,10 @@
 sidebar_position: 1
 ---
 import { Steps } from 'nextra/components'
+import { Badge } from "src/components/ui/badge"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { LucideInfo } from "lucide-react";
+
 
 
 # DevGuard Setup Guide
@@ -39,12 +43,15 @@ The repository is located on [GitHub](https://github.com/l3montree-dev/devguard)
 
 ```bash copy
 git clone git@github.com:l3montree-dev/devguard.git && cd devguard
+# setup git submodules
+git submodule update --init --recursive
 ```
 
 <h3>Step 2: Copy the `.env.example` file to `.env`</h3>
 
 ```bash copy
 cp .env.example .env
+cp .kratos/kratos.example.yml .kratos/kratos.yml
 ```
 
 
@@ -59,6 +66,13 @@ Run the following command:
 docker compose up -d
 ```
 
+<Alert className="mt-4 grid w-full max-w-xl items-start gap-4" variant="default | destructive">
+  <LucideInfo className="h-4 w-4" />
+  <AlertDescription>
+    Keep this running in a seperate terminal.
+  </AlertDescription>
+</Alert>
+
 <h3>Step 4: Start the application</h3>
 
 Run this command to start the backend:
@@ -66,6 +80,13 @@ Run this command to start the backend:
 ```bash 
 make
 ```
+
+<Alert className="mt-4 grid w-full max-w-xl items-start gap-4" variant="default | destructive">
+  <LucideInfo className="h-4 w-4" />
+  <AlertDescription>
+    ```make``` will only work sequentially after ```docker compose up -d```.
+  </AlertDescription>
+</Alert>
 
 </Steps>
 
@@ -108,4 +129,13 @@ npm run dev
 ```
 
 </Steps>
+
+## Where to start
+
+  All issues—whether related to the web platform, documentation, or other components—are tracked on [Devguard](https://github.com/l3montree-dev/devguard/issues). Each issue is tagged accordingly to help contributors identify relevant tasks.
+
+  We mark beginner-friendly issues with the  <a href="https://github.com/l3montree-dev/devguard/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22good%20first%20issue%22" ><Badge variant="goodFirstIssueBadge"> good first issue</Badge></a>label. 
+  These tasks are suitable for newcomers and do not require deep knowledge of our architecture.
+
+  If you need assistance or want to connect with the team, feel free to join our [Matrix Community Server](https://matrix.to/#/#devguard:matrix.org) and reach out directly. The Devguard team is happy to support new contributors.
 

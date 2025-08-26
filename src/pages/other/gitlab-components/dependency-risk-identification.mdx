@@ -1,0 +1,62 @@
+import { DependencyRiskIdentification } from '../../../components/texts/CICDJobs'
+
+<DependencyRiskIdentification />
+
+
+The `dependency-risk-identification` accepts the following inputs:
+| Name        | Description                     | Required     | Default Value        |
+|-------------|---------------------------------|-------------|----------------------|
+| `api_url`   | The DevGuard API URL             | No           |       `https://api.main.devguard.org`     |
+| `asset_name`| Name of the asset to scan                    |      Yes  |      |
+| `token`     | API token for authenticating with DevGuard   |      Yes   |      |
+| `scan_stage`| The stage where the scan is run       | No       |     `test`     |
+| `runner_tags` | The runner tags used to select appropriate CI runners.   | No  | `""` |   `''`                               |
+| `sbom_file`| The SBOM file to use for the scan      | No       |     `test`     |
+| `needs`| The jobs that this job depends on      | No       |     `""`     |
+| `dependencies`| Specifies the jobs whose artifacts this job relies on | No | `""` |
+| `scanner_id`| The ID of the scanner used to generate the SBOM | No | `"sbom-upload"` |
+
+Usage Examples:
+
+if you have the sbom in the repository:
+
+```yaml copy
+include:
+  - remote: "https://gitlab.com/l3montree/devguard/-/raw/main/templates/dependency-risk-identification@main"
+    asset_name: "myOrgnaization/projects/myProject/assets/myAsset"
+    token: "$DEVGUARD_TOKEN_TEST"
+    sbom_file: "./sbom.json"
+
+```    
+
+if you have the sbom in an artifact from a previous job:
+```yaml copy
+variables:
+  GIT_STRATEGY: clone
+
+# generate an SBOM using trivy?
+# use whatever scanner you like, this is just an example
+generate-sbom:
+  stage: build
+  image: 
+    name: docker.io/aquasec/trivy:latest
+    entrypoint: [""]
+  script:
+    - trivy fs . --format cyclonedx --output sbom.json
+  artifacts:
+    paths:
+      - sbom.json
+    expire_in: 1 week
+
+# upload the SBOM to DevGuard
+include:
+  - component: $CI_SERVER_FQDN/$CI_PROJECT_PATH/dependency-risk-identification@$CI_COMMIT_SHA
+    inputs:
+      sbom_file: "sbom.json"
+      asset_name: "$DEVGUARD_ASSET_NAME"
+      token: "$DEVGUARD_TOKEN"
+      needs: generate-sbom
+      dependencies: generate-sbom
+      scanner_id: "trivy-generate-sbom" # change to whatever scanner you are using
+
+```

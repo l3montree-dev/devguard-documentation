@@ -1,5 +1,83 @@
----
-sidebar_position: 1
----
+import { Tabs } from 'nextra/components'
+import { Callout } from 'nextra/components'
 
-# Introduction
+# Getting Started with DevGuard 🚀
+
+<Callout type="warning" emoji="⚠️">
+  We are currently working on the set-up flows for DevGuard - some steps might currently not work as expected.
+  We would love to hear your feedback on the set-up guides. Please don't hesitate to
+  Please feel free to reach out to us using our [Matrix Chat](https://matrix.to/#/#devguard:matrix.org)
+</Callout>
+
+If you're new to DevGuard, this guide will help you get started quickly. We'll walk you
+through the installation process, basic usage, and how to integrate DevGuard into your
+development workflow.
+
+## Installation
+
+
+<Tabs items={['Docker Compose 🐳', 'Kubernetes with Helm ⎈']}>
+  <Tabs.Tab>
+    To try DevGuard with a local container setup, we provide a docker-compose-try-it.yaml. Note that it can take 
+    a few moments to start up the containers, so please be patient.
+
+    ```bash copy
+    curl -LO https://raw.githubusercontent.com/l3montree-dev/devguard/refs/heads/main/docker-compose-try-it.yaml \
+    && curl -LO https://raw.githubusercontent.com/l3montree-dev/devguard/refs/heads/main/initdb.sql \
+    && curl -LO https://raw.githubusercontent.com/l3montree-dev/devguard/refs/heads/main/.kratos/identity.schema.json \
+    && curl -L -o kratos.yml https://raw.githubusercontent.com/l3montree-dev/devguard/refs/heads/main/.kratos/kratos.example.yml \
+    && mkdir -p kratos \
+    && mv kratos.yml kratos/kratos.yml \
+    && mv identity.schema.json kratos/identity.schema.json \
+    && docker-compose -f docker-compose-try-it.yaml up
+    ```
+
+    After the containers are up, you can access DevGuard at [http://localhost:3000](http://localhost:3000).
+
+    Please note that in the example files no SMTP server is configured for the kratos authentication service - so you
+    **will not recieve any emails for account verification** or password reset. During registration you can simply skip the email verification step
+    by clicking on the "Back" button.
+
+    Another general note is that the DevGuard API service will download the
+    [latest vulnerabilities database](https://github.com/l3montree-dev/devguard/pkgs/container/devguard%2Fvulndb) from our GitHub Repo and will
+    periodically update it. This might take a while after the first start of the API service. So please do not wonder if not
+    all vulnerabilities are available immediately after starting the containers and not all info for your dependencies are shown at first.
+
+    ## Scan a local project and report to DevGuard
+
+    Prerequisite: You have started DevGuard locally with the `docker-compose-try-it.yaml` file.
+
+    To send your first scan-report, e.g. of a SCA of a sample project of your choice to DevGuard,
+    follow the steps below: 
+
+    1. Navigate to your user settings (user icon in the top right corner) and create a new personal access token with the `scan` scope.
+    2. Create a new group and repository via the DevGuard UI.
+    3. Open a terminal in the root directory of your project.
+    4. Run the following command to scan your project and report the results to DevGuard,
+      note that you need to replace the placeholders `<your-org/projects/your-group/assets/your-repo>` (just copy the slug from the URL in your browser when you are at the repo in the UI)
+      and `<your-personal-access-token>` with your actual values.
+
+    ```bash copy
+    docker run --network devguard-local -v "$(PWD):/app" ghcr.io/l3montree-dev/devguard-scanner:main-latest \
+    devguard-scanner sca \
+        --assetName="<your-org/projects/your-group/assets/your-repo>" \
+        --apiUrl="http://devguard-api:8080" \
+        --token="<your-personal-access-token>"
+    ```
+    ## Upload a Test SBOM or SARIF Report
+
+    Alternatively, you can upload a SBOM (details about the used software dependencies in a software project) or SARIF (Static Analysis Results Interchange Format) report to DevGuard. This is useful if you have already scanned your
+    project with another tool and want to import the results into DevGuard.
+
+    You can use e.g. the [example SBOM](/example-sbom-devguard-docu.json) of this documentation (not latest) or [example SARIF Report](/example-sarif.json) to test the upload functionality.
+
+    1. Navigate to your new repo in the DevGuard UI.
+    2. For SBOM: Click on "Identify Dependency-Risks" > "I bring my own Scanner" > "Upload SBOM"
+    3. For SARIF: Click on "Identify Security-Risks" > "I bring my own Scanner" > "Upload SARIF Report"
+
+  </Tabs.Tab>
+  <Tabs.Tab>
+    For deploying DevGuard to a Kubernetes cluster, we provide a Helm Chart -
+    please follow the [deployment guide](/getting-started/self-hosting-devguard/kubernetes).
+  </Tabs.Tab>
+</Tabs>

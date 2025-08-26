@@ -1,0 +1,51 @@
+apiVersion: policy.sigstore.dev/v1beta1
+kind: ClusterImagePolicy
+metadata:
+  name: image-policy
+spec:
+  images:
+  - glob: "ghcr.io/l3montree-dev/oh-my-honeypot*"
+  authorities:
+  - key:
+      data: |
+        -----BEGIN PUBLIC KEY-----
+        MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE7DUvqDMa8TQPQ5D/ZHgKzKS/NtrL
+        YzGPJikq94fCBAgnyyCQAbh3qmPqSoT1BY7vVNJlb1f2Dih4XExg/wnu7A==
+        -----END PUBLIC KEY-----
+    attestations:
+    - name: custom-match-predicate
+      predicateType: https://cosign.sigstore.dev/attestation/v1
+      policy:
+        type: rego
+        data: |
+          package sigstore
+
+          import future.keywords.if
+
+          default isCompliant = false
+
+          # Ensure the attestation has the correct type
+          validStatement if {
+            input._type == "https://in-toto.io/Statement/v0.1"
+            input.predicateType == "https://cosign.sigstore.dev/attestation/v1"
+          }
+
+          # Ensure the subject references the correct image
+          valid_subject if {
+            some i
+            input.subject[i].name == "ghcr.io/l3montree-dev/oh-my-honeypot"
+            input.subject[i].digest.sha256
+          }
+
+          # Parse Data from stringified JSON
+          validData if {
+            parsedData := json.unmarshal(input.predicate.Data)
+            parsedData.key == "test-attestation-1"
+          }
+
+          # The attestation is valid only if all conditions pass
+          isCompliant if {
+            validStatement
+            valid_subject
+            validData
+          }

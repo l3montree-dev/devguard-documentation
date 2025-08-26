@@ -1,7 +1,6 @@
 export default {
-    index: { title: 'Guides' },
-    risksMtigation: { title: 'Risks Mitigation' },
-    iso: { title: 'ISO 27001' },
-    cra: { title: 'Cyber Resiliance Act' },
-    mangeRisks: { title: 'Manage Risks' },
+    index: { title: 'Overview' },
+    'several-assets-and-artifacts-to-devguard-monorepos': {
+        title: 'Mapping Several Assets and Artifacts to DevGuard (e.g., Monorepos)',
+    },
 }

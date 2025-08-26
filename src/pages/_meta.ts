@@ -5,16 +5,43 @@ export default {
         },
         display: 'hidden',
     },
+    pricing: {
+        theme: {
+            layout: 'raw',
+        },
+        display: 'hidden',
+    },
+    'terms-of-use': {
+        display: 'hidden',
+    },
+    'privacy-policy': {
+        display: 'hidden',
+    },
     introduction: { title: 'Introduction' },
     'getting-started': { title: 'Getting Started' },
-    'self-hosting-devguard': { title: 'Self Hosting DevGuard' },
-    concepts: { title: 'Concepts' },
     guides: { title: 'Guides' },
+    'risk-mitigation-guides': { title: 'Risk Mitigation Guides' },
+    concepts: { title: 'Concepts' },
     contributing: { title: 'Contributing' },
-    about: { title: 'About' },
+    comparison: { title: 'Tool Comparison' },
+    faq: { title: 'FAQ' },
+    other: {
+        title: 'Other',
+    },
+    'header-pricing': {
+        title: 'Pricing',
+        type: 'page',
+        href: '/pricing',
+    },
     'header-docs': {
         title: 'Documentation',
         type: 'page',
         href: '/introduction',
+    },
+    '404': {
+        theme: {
+            layout: 'raw',
+        },
+        display: 'hidden',
     },
 }

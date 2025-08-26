@@ -71,11 +71,22 @@ Add a name for the Integration (like Tom's Personal Access Token, or Project Acc
     then click on Save changes
 
 
+### Add a pipeline configuration
+If you don’t have a .gitab-ci.yml file, create one by adding a new file in the root directory of your repository. The file should be located in the `.gitlab-ci.yml` directory and have a `.yml` extension. 
+
+You can now add devguard components to your pipeline configuration file.
+You can find more information about the pipeline configuration file [here](/other/gitlab-components/full.mdx).
+
+
+Finally, push the changes to your repository.
+
 
 {/* ### Go to the security control center of the asset and click on auto setup to create a pipeline
 
 ![Go to the security control center of the asset and click on auto setup to create a pipeline](../../assets/gitlab-setup/gitlab-4.png) */}
 
 </Steps>
+
+
 
 Now you have successfully integrated your GitLab repository with DevGuard. You can integrate the CI/CD pipeline with DevGuard from the security control center of the asset in DevGuard. 

@@ -4,7 +4,7 @@ Excluded is any representation (pictorial as well as textual including the logo)
 
 MIT License
 
-Copyright (c) l3montree UG (haftungsbeschränkt) and its affiliates.
+Copyright (c) l3montree GmbH and its affiliates.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

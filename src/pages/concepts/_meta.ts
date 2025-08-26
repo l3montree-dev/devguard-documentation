@@ -1,10 +1,16 @@
 export default {
     index: { title: 'Overview' },
-    'in-toto': {
-        title: 'Whitepaper: Integrating In-Toto in DevGuard for Secure Software Supply Chains',
-    },
-
-    arch: { title: 'Architecture' },
-    database: { title: 'Database' },
     devsecops: { title: 'DevSecOps' },
+    'compliance-frameworks': {
+        title: 'DevGuard & Compliance Frameworks',
+    },
+    'aggregated-vulnerability-database': {
+        title: 'Aggregated Vulnerability Database',
+    },
+    'vulnerability-management': {
+        title: 'Vulnerability Management',
+    },
+    'attestations-provenance': {
+        title: 'Attestations & Provenance',
+    },
 }

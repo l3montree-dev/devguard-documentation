@@ -1,0 +1,607 @@
+import { Steps, Tabs, Callout } from 'nextra/components'
+
+# Uninstalling DevGuard
+
+Digital sovereignty is crucial in today's world where control over your own data and software is essential. By maintaining digital sovereignty, you ensure that you have full control over your digital assets and can protect your privacy and security. Thus it is mandatory to have a clear understanding of how to uninstall DevGuard from your system and software development environment that you do not depend on DevGuard as well.
+
+This guide provides step-by-step instructions on how to uninstall DevGuard from your system and gives an overview of alternative tools which are somewhat comparable to DevGuard.
+
+## How to Uninstall
+
+DevGuard consists of multiple components. Precisely, it includes:
+
+- **DevGuard Server Infrastructure**: The api, web frontend, authorization server and database. This component gets either used as Software as a Server, it gets manually installed or deployed in the organization infrastructure using a Helm-Chart.
+- **DevGuard CLI**: A Command Line Interface (CLI) tool that is used inside the CI/CD Pipeline to scan the project and verify integrity as well as installed on the developer's machine to scan the project before pushing it to the repository.
+- **DevGuard CI/CD Component** or **DevGuard Reusable Workflow**: A reusable workflow (for GitHub users) or a CI/CD component (for GitLab users) that can be used in the CI/CD pipeline. This component utilizes the DevGuard CLI to scan the project and verify integrity.
+
+
+
+
+### Uninstalling the DevGuard Server Infrastructure
+
+Before uninstalling the server infrastructure, make sure to backup the data if you want to keep it for future use. DevGuard stores its data in a PostgreSQL database. You can backup the database using the following command:
+
+```bash
+# exec into the pod to dump the database
+kubectl exec --namespace <NAMESPACE> -it <POSTGRES POD NAME> -- bash -c "pg_dump -U <POSTGRES USER> <POSTGRES DATABASE> > /tmp/backup.sql"
+# copy the backup to your local machine
+kubectl cp --namespace <NAMESPACE> <POSTGRES POD NAME>:/tmp/backup.sql /tmp/backup.sql
+```
+
+Usually your deployment infrastructure already provides a backup mechanism for the database. Thus you do not need to backup the database manually.
+
+
+Uninstalling the DevGuard Server Infrastructure is as simple as deleting the Helm-Chart or the manually installed components. If you have deployed the DevGuard Server Infrastructure using a Helm-Chart, you can delete the Helm-Chart using the following command:
+
+```bash
+helm delete <RELEASE NAME> --namespace <NAMESPACE>
+```
+
+
+### Uninstalling the DevGuard CLI
+
+The DevGuard CLI is a standalone binary that can be installed on the developer's machine. To uninstall the DevGuard CLI, you can simply delete the binary from your machine. The binary is usually located in the `/usr/local/bin` directory. You can find the path to the binary by running the following command:
+
+```bash
+which devguard-scanner
+```
+
+Once you have found the path to the binary, you can delete it using the following command:
+
+```bash
+rm /usr/local/bin/devguard-scanner
+```
+
+
+### Uninstalling the DevGuard CI/CD Component
+
+The DevGuard CI/CD Component is a reusable workflow (for GitHub users) or a CI/CD component (for GitLab users) that can be used in the CI/CD pipeline. To uninstall the DevGuard CI/CD Component, you can simply delete the workflow or the CI/CD component from your repository.
+
+
+## Alternatives
+
+### CI/CD Security Scanning Tools
+
+Here is an example reusable workflow which can be used as an alternative to the DevGuard CI/CD Component. The definition makes use of the following tools (which devguard does as well)
+
+|Tool|Purpose|
+|---|---|
+|[Gitleaks](https://github.com/gitleaks/gitleaks)|Secret scanning|
+|[Trivy](https://github.com/aquasecurity/trivy)|Software composition analysis and container scanning|
+|[Checkov](https://github.com/bridgecrewio/checkov)|Infrastructure as code scanning|
+|[Semgrep](https://github.com/semgrep/semgrep)|Static application security testing|
+|[Kaniko](https://github.com/GoogleContainerTools/kaniko)|OCI Build without root privileges|
+|[Crane](https://github.com/google/go-containerregistry/blob/main/cmd/crane/README.md)|OCI Image Push|
+|[Cosign](https://github.com/sigstore/cosign)|Image Signing|
+
+<Tabs items={['GitHub', 'GitLab']}>
+<Tabs.Tab>
+```yaml
+# DevSecOps Workflow Definition
+name: DevSecOps Workflow
+
+on:
+  push:
+    branches:
+    - '*'
+    tags:
+    - '*'
+
+permissions:
+  contents: read
+
+jobs:
+  # Gitleaks secret scanning: Identifies potential security risks by detecting unintentionally
+  # exposed sensitive information within the Git repository
+  # like passwords, API keys, or other secrets.
+  secret-scanning:
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Run Gitleaks Scan
+      run: |
+        docker run --rm -v $(pwd):/code -u $(id -u):$(id -g) zricethezav/gitleaks:v8.18.1@sha256:6945c62ca019ead32bc337ab0c9fd055e98d82961765d38b7ccccc84dae95d0f -s /code detect -f sarif -r /code/gitleaks.sarif.json
+    - name: Upload sarif file
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: gitleaks.sarif.json
+        category: secret-scanning
+
+  # Software composition analysis: Conducts dependency scanning using npm's built-in audit tool. 
+  # Note: Language-specific software-composition-analysis tools are typically preferred; consider replacing npm audit with Trivy, if the language does not provide
+  # a built-in software-composition-analysis tool.
+  software-composition-analysis:
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Run Trivy vulnerability scanner in fs mode
+      # Running Trivy to scan the filesystem for vulnerabilities
+      uses: aquasecurity/trivy-action@v0.19.0
+      with:
+        scan-type: "fs"
+        scan-ref: "."
+        severity: "CRITICAL,HIGH"
+        format: "sarif"
+        output: "trivy-results.sarif"
+    - name: Upload Trivy scan results to GitHub Security tab
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: "trivy-results.sarif"
+        category: "software-composition-analysis"
+
+  # Scan infrastructure-as-code (infrastructure-as-code-scanning) files for security and compliance issues.
+  # This stage runs the Checkov tool provided by Bridgecrew to analyze infrastructure-as-code-scanning files
+  # (YAML, JSON, Terraform, CloudFormation, etc.) for misconfigurations and best
+  # practices violations.
+  infrastructure-as-code-scanning:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.8
+    - name: Test with Checkov
+      id: checkov
+      uses: bridgecrewio/checkov-action@v12.2731.0
+      with:
+        directory: .
+
+  # Static application security testing: Utilizes Semgrep to perform static analysis, enhancing code security by 
+  # identifying vulnerabilities and potential security vulnerabilities within the application's source code.
+  static-application-security-testing:
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Run Semgrep
+      # Running Semgrep for static code analysis to identify security issues
+      uses: docker://returntocorp/semgrep@sha256:7843a979bf88d9d16c476e9f7f547b573187f395532b1f74825fd58c6463c5b0
+      with:
+        args: semgrep scan /github/workspace --sarif -o /github/workspace/semgrep.sarif.json
+    - name: Upload sarif file
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: semgrep.sarif.json
+        category: static-application-security-testing
+
+  # OCI Build: Uses Kaniko to build Docker images securely without requiring privileged access (docker in docker needs privileged access). The artifacts are not pushed to the registry until they have undergone security scanning to ensure vulnerabilities are addressed before deployment - therefore they are stored as artifacts rather than pushed to the registry.
+  oci-build:
+    permissions:
+      packages: write
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set IMAGE_TAG if tagged
+      # Setting the image tag if the push is a tag push
+      run: |
+        echo "ghcr.io/${{ github.repository }}:${GITHUB_REF#refs/tags/}" > image-tag.txt
+        export IMAGE_TAG=$(cat image-tag.txt)
+        echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
+      if: startsWith(github.ref, 'refs/tags/')
+    - name: Set IMAGE_TAG if not tagged
+      run: |
+        branch=${GITHUB_REF##*/}
+        sha=${GITHUB_SHA::8}
+        ts=$(date +%s)
+        echo "ghcr.io/${{ github.repository }}:${branch}-${sha}-${ts}" > image-tag.txt
+        export IMAGE_TAG=$(cat image-tag.txt)
+        echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
+      if: github.ref == 'refs/heads/main'
+    - name: Build Docker image with Kaniko
+      # Building the Docker image using Kaniko
+      id: build_image
+      uses: docker://gcr.io/kaniko-project/executor:v1.9.2@sha256:034f15e6fe235490e64a4173d02d0a41f61382450c314fffed9b8ca96dff66b2
+      with:
+        args: --destination=${{ env.IMAGE_TAG }} --context=/github/workspace --dockerfile=/github/workspace/Dockerfile --no-push --tarPath /github/workspace/image.tar
+    - name: Setup crane
+      uses: imjasonh/setup-crane@v0.1
+    - name: Use crane to get the digest
+      run: crane digest --tarball=image.tar > digest.txt
+    - name: Upload artifact
+      # Uploading the built Docker image as an artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: docker-image
+        path: image.tar
+    - name: Upload digest
+      # Uploading the built Docker image digest as an artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: digest
+        path: digest.txt
+    - name: Upload image tag
+      uses: actions/upload-artifact@v4
+      with:
+        name: image-tag
+        path: image-tag.txt
+
+  # Container scanning: Utilizes Trivy to perform vulnerability scanning on the built container image
+  container-scanning:
+    needs: oci-build
+    permissions:
+      security-events: write
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
+      with:
+        name: docker-image
+        path: .
+    - name: Run Trivy vulnerability scanner in tarball mode
+      # Running Trivy to scan the Docker image for vulnerabilities
+      uses: aquasecurity/trivy-action@master
+      with:
+        input: /github/workspace/image.tar
+        severity: "CRITICAL,HIGH"
+        format: "sarif"
+        output: "trivy-results.sarif"
+    - name: Upload Trivy scan results to GitHub Security tab
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: "trivy-results.sarif"
+        category: "container-scanning"
+
+  # OCI Image Push: Publishes the built container image to the container registry, ensuring it is available for deployment. 
+  # Dependencies include successful completion of the 'oci:build', 'container-scanning', 'secret-scanning', 'static-application-security-testing', 'software-composition-analysis', and 'tag' stages, ensuring that the image is built securely and meets quality standards before publication.
+  publish:
+    needs: [oci-build, container-scanning, secret-scanning, software-composition-analysis, static-application-security-testing, infrastructure-as-code-scanning]
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
+    steps:
+    - uses: actions/download-artifact@v4
+      with:
+        name: docker-image
+        path: .
+    - uses: actions/download-artifact@v4
+      with:
+        name: image-tag
+        path: .
+    - name: set IMAGE_TAG env
+      run: |
+        export IMAGE_TAG=$(cat image-tag.txt)
+        echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
+    - uses: imjasonh/setup-crane@v0.1
+    - name: Push Docker image to GitHub image Registry
+      # Pushing the Docker image to GitHub Container Registry
+      run: crane push image.tar ${{ env.IMAGE_TAG }}
+
+  # SBOM (Software Bill of Materials) generation: Utilizes Syft to create a Software Bill of Materials in CycloneDX JSON format from the built container image, providing a comprehensive inventory of software components and their dependencies for improved transparency and vulnerability management.
+  sbom:
+    runs-on: ubuntu-latest # Specify the runner
+    needs: [oci-build]
+    container:
+      image: alpine:3.19.1@sha256:c5b1261d6d3e43071626931fc004f70149baeba2c8ec672bd4f27761f8e1ad6b
+    steps:
+    - name: Install curl
+      run: apk add --update curl
+    - name: Install Syft
+      run: curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+    - name: Download artifact from previous build
+      uses: actions/download-artifact@v4
+      with:
+        name: docker-image
+    - name: Generate SBOM with Syft
+      run: syft ./image.tar -o cyclonedx-json=sbom.json
+    - name: Upload SBOM as an artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: sbom
+        path: sbom.json
+
+  # Image Signing: Signs the container image using Cosign to provide cryptographic verification of its integrity and authenticity. The signing process involves authentication, followed by the application of a digital signature using the provided private key.
+  sign-image:
+    permissions:
+      packages: write
+    runs-on: ubuntu-latest
+    needs: publish
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
+    steps:
+    - name: cosign-installer
+      uses: sigstore/cosign-installer@v3.3.0
+      with:
+        cosign-release: 'v2.2.3' # optional
+    - name: Download digest
+      uses: actions/download-artifact@v4
+      with:
+        name: digest
+        path: .
+    - name: Download image tag
+      uses: actions/download-artifact@v4
+      with:
+        name: image-tag
+        path: .
+    - name: Read digest and image tag from file
+      run: |
+        export IMAGE_DIGEST=$(cat digest.txt)
+        echo "IMAGE_DIGEST=$IMAGE_DIGEST" >> $GITHUB_ENV
+        export IMAGE_TAG=$(cat image-tag.txt)
+        echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v2.1.0
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    - name: Write signing key to disk (only needed for `cosign sign --key`)
+      run: echo "${{ secrets.COSIGN_PRIVATE_KEY }}" > cosign.key
+    - name: Sign the published Docker image
+      env:
+        COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
+      run: cosign sign --yes --key cosign.key "$(cat image-tag.txt)@${{ env.IMAGE_DIGEST }}"
+
+  # SBOM Signing: Signs the Software Bill of Materials (SBOM) using Cosign to provide cryptographic verification of its integrity and authenticity.
+  sign-sbom:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    needs: publish
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
+    steps:
+    - name: cosign-installer
+      uses: sigstore/cosign-installer@v3.3.0
+      with:
+        cosign-release: 'v2.2.3' # optional
+    - name: Download digest
+      uses: actions/download-artifact@v4
+      with:
+        name: digest
+        path: .
+    - name: Download image tag
+      uses: actions/download-artifact@v4
+      with:
+        name: image-tag
+        path: .
+    - name: Download sbom tag
+      uses: actions/download-artifact@v4
+      with:
+        name: sbom
+        path: .
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v2.1.0
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    - name: Write signing key to disk (only needed for `cosign sign --key`)
+      run: echo "${{ secrets.COSIGN_PRIVATE_KEY }}" > cosign.key
+    - name: Sign SBOM
+      run: cosign attest --yes --predicate ./sbom.json --key cosign.key "$(cat image-tag.txt)@$(cat digest.txt)"
+      env:
+        COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
+
+```
+</Tabs.Tab>
+ <Tabs.Tab>
+```yaml
+stages:
+- test
+- tag
+- build
+- container-scanning
+- publish
+- sign
+
+# script to login into a container registry using the gitlab ci job token
+# it downloads the oras binary, verifies the checksum, and logs into the container registry
+.oci:login:
+  stage: test
+  script:
+  - &oci_login |
+    # Download the archive
+    curl -LO "https://github.com/oras-project/oras/releases/download/v${VERSION}/oras_${VERSION}_linux_amd64.tar.gz"
+    # Calculate checksum of the downloaded file
+    downloaded_checksum=$(sha256sum oras_${VERSION}_linux_amd64.tar.gz | awk '{print $1}')
+    # Expected checksum
+    expected_checksum="e09e85323b24ccc8209a1506f142e3d481e6e809018537c6b3db979c891e6ad7"
+    # Compare the calculated checksum with the expected checksum
+    if [ "$downloaded_checksum" != "$expected_checksum" ]; then
+      echo "Checksum verification failed! Aborting."
+      exit 1
+    fi
+    mkdir -p oras-install/
+    tar -zxf oras_${VERSION}_*.tar.gz -C oras-install/
+    mv oras-install/oras /usr/local/bin/
+    rm -rf oras_${VERSION}_*.tar.gz oras-install/
+    echo "$CI_JOB_TOKEN" | oras login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
+
+# Gitleaks secret scanning: Identifies potential security risks by detecting unintentionally
+# exposed sensitive information within the Git repository
+# like passwords, API keys, or other secrets.
+secret-scanning:
+  image: zricethezav/gitleaks:v8.18.1@sha256:6945c62ca019ead32bc337ab0c9fd055e98d82961765d38b7ccccc84dae95d0f
+  stage: test
+  script: gitleaks -s . detect
+
+# Static application security testing: Utilizes Semgrep to perform static analysis, enhancing code security by 
+# identifying vulnerabilities and potential security vulnerabilities within the application's source code.
+static-application-security-testing:
+  image: returntocorp/semgrep@sha256:7843a979bf88d9d16c476e9f7f547b573187f395532b1f74825fd58c6463c5b0
+  stage: test
+  script:
+  - semgrep scan --config=p/ci .
+
+# Software composition analysis: Conducts dependency scanning using npm's built-in audit tool. 
+# Note: Language-specific SCA tools are typically preferred; consider replacing npm audit with Trivy, if the language does not provide
+# a built-in SCA tool.
+software-composition-analysis:
+  image: node:20@sha256:3864be2201676a715cf240cfc17aec1d62459f92a7cbe7d32d1675e226e736c9
+  stage: test
+  script:
+  # fail on critical
+  - npm audit --audit-level=critical
+
+# Scan infrastructure-as-code (IaC) files for security and compliance issues.
+# This stage runs the Checkov tool provided by Bridgecrew to analyze IaC files
+# (YAML, JSON, Terraform, CloudFormation, etc.) for misconfigurations and best
+# practices violations.
+infrastructure-as-code-scanning:
+  stage: test
+  image:
+    name: bridgecrew/checkov@sha256:1cfbbb8ed04f12980d687d7317449f8eb44771bce69223ec27d38b7ecc7ad4ba
+    entrypoint:
+    - '/usr/bin/env'
+    - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+  rules:
+  - if: $CI_COMMIT_BRANCH
+    exists:
+    - '**/*.yml'
+    - '**/*.yaml'
+    - '**/*.json'
+    - '**/*.template'
+    - '**/*.tf'
+    - '**/serverless.yml'
+    - '**/serverless.yaml'
+  script:
+  - checkov -d . --quiet
+
+# Tag: Creates sortable tags on the main branch for GitOps workflows like FluxCD, ensuring versioned images for deployments.
+tag:
+  stage: tag
+  needs: []
+  dependencies: []
+  script:
+  - |
+    if [ -n "$CI_COMMIT_TAG" ]; then
+      # Set IMAGE_TAG if the pipeline was triggered by a tag
+      echo "$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG" > image-tag.txt
+    else
+      # Set IMAGE_TAG if the pipeline was triggered by a push to main
+      branch=$(echo $CI_COMMIT_REF_NAME | sed 's/\//-/g')
+      sha=${CI_COMMIT_SHORT_SHA}
+      ts=$(date +%s)
+      echo "$CI_REGISTRY_IMAGE:${branch}-${sha}-${ts}" > image-tag.txt
+    fi
+  artifacts:
+    paths:
+    - image-tag.txt
+  only:
+  - main
+  - tags
+
+# OCI Build: Uses Kaniko to build Docker images securely without requiring privileged access (docker in docker needs privileged access). The artifacts are not pushed to the registry until they have undergone security scanning to ensure vulnerabilities are addressed before deployment - therefore they are stored as artifacts rather than pushed to the registry.
+oci:build:
+  stage: build
+  needs: ["tag"]
+  dependencies: ["tag"]
+  image:
+    name: gcr.io/kaniko-project/executor:v1.9.2-debug@sha256:964426c9205d644e2964869d1d311a05dc9f301594300d3732ea26b5733e94fc # gitlab ci always needs a shell in the container it executes... i would have preferred the non-debug version
+    entrypoint: [""]
+  script:
+  - /kaniko/executor --cleanup --no-push --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $(cat image-tag.txt) --tarPath image.tar
+  artifacts:
+    paths:
+    - image.tar
+    when: on_success
+  only:
+  - main
+  - tags
+
+# Container scanning: Utilizes Trivy to perform vulnerability scanning on the built container image
+container-scanning:
+  stage: container-scanning
+  image: aquasec/trivy
+  script:
+  - trivy image --exit-code 1 --severity CRITICAL --no-progress --input image.tar
+
+# SBOM (Software Bill of Materials) generation: Utilizes Syft to create a Software Bill of Materials in CycloneDX JSON format from the built container image, providing a comprehensive inventory of software components and their dependencies for improved transparency and vulnerability management.
+sbom:
+  image: alpine:3.19.1@sha256:c5b1261d6d3e43071626931fc004f70149baeba2c8ec672bd4f27761f8e1ad6b
+  before_script:
+  - apk add --update curl
+  - curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+  stage: publish
+  needs: ["oci:build"]
+  dependencies:
+  - oci:build
+  script:
+  - syft image.tar -o cyclonedx-json=sbom.json
+  artifacts:
+    paths:
+    - sbom.json
+
+# Digest calculation: Utilizes Crane to calculate the digest of the built container image, providing a unique identifier for version tracking and integrity verification purposes. This information is stored in the 'digest.txt' artifact.
+digest:
+  stage: publish
+  needs: ['oci:build']
+  image:
+    name: gcr.io/go-containerregistry/crane:debug@sha256:ff0e08eeae8097d28b2381c7f7123bf542757abc68d11bff58fb882b72843785
+    entrypoint: [""]
+  script:
+  - crane digest --tarball image.tar > digest.txt
+  artifacts:
+    paths:
+    - digest.txt
+
+# OCI Image Push: Publishes the built container image to the container registry, ensuring it is available for deployment. 
+# Dependencies include successful completion of the 'oci:build', 'container-scanning', 'secret-scanning', 'static-application-security-testing', 'software-composition-analysis', and 'tag' stages, ensuring that the image is built securely and meets quality standards before publication.
+oci:push:
+  stage: publish
+  needs: ['oci:build', 'container-scanning', secret-scanning, static-application-security-testing, software-composition-analysis, 'tag']
+  dependencies:
+  - tag
+  - oci:build
+  - container-scanning
+  - secret-scanning
+  - static-application-security-testing
+  - software-composition-analysis
+  image:
+    name: gcr.io/go-containerregistry/crane:debug@sha256:ff0e08eeae8097d28b2381c7f7123bf542757abc68d11bff58fb882b72843785
+    entrypoint: [""]
+  script:
+  - crane auth login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  - crane push image.tar $(cat image-tag.txt)
+
+# Image Signing: Signs the container image using Cosign to provide cryptographic verification of its integrity and authenticity. The signing process involves authentication, followed by the application of a digital signature using the provided private key.
+sign-image:
+  stage: sign
+  needs: ['digest', 'tag']
+  dependencies:
+  - digest
+  - tag
+  image: alpine:3.19.1@sha256:c5b1261d6d3e43071626931fc004f70149baeba2c8ec672bd4f27761f8e1ad6b
+  before_script:
+  - apk add curl
+  - *oci_login
+  - apk add --update cosign
+  script:
+  - cosign sign --yes --key $COSIGN_PRIVATE_KEY "$(cat image-tag.txt)@$(cat digest.txt)"
+
+# SBOM Signing: Signs the Software Bill of Materials (SBOM) using Cosign to provide cryptographic verification of its integrity and authenticity.
+sign-sbom:
+  stage: sign
+  needs: ['digest', 'tag', 'sbom']
+  dependencies:
+  - digest
+  - tag
+  - sbom
+  image: alpine:3.19.1@sha256:c5b1261d6d3e43071626931fc004f70149baeba2c8ec672bd4f27761f8e1ad6b
+  before_script:
+  - apk add curl
+  - *oci_login
+  - apk add --update cosign
+  script:
+  - cosign attest --predicate ./sbom.json --key $COSIGN_PRIVATE_KEY "$(cat image-tag.txt)@$(cat digest.txt)"
+```
+</Tabs.Tab>
+</Tabs>
+
+### Alternative open source Risk management tools
+
+- [DependencyTrack](https://dependencytrack.org/)
+
+### Alternative open source risk management tools
+
+- [DefectDojo](https://owasp.org/www-project-defectdojo/)

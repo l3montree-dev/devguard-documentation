@@ -4,29 +4,35 @@ title: Home
 
 import { Container } from '../components/top-level-pages/container'
 import { CallToAction } from '../components/top-level-pages/call-to-action'
-import { LogoCloud } from '../components/top-level-pages/logo-cloud'
+import { LogoLine } from '../components/top-level-pages/logo-line'
 import Hero from '../components/top-level-pages/Hero'
 import FeatureSection from '../components/top-level-pages/FeatureSection'
 import BentoSection from '../components/top-level-pages/BentoSection'
 import MissionSection from '../components/top-level-pages/MissionSection'
 import DarkBentoSection from '../components/top-level-pages/DarkBentoSection'
+import ThreeColumnBentoSection from '../components/top-level-pages/ThreeColumnBentoSection'
+import FrosconTalkBanner from '../components/top-level-pages/FrosconTalk'
 
 export default function Home() {
     return (
-        <div className="overflow-hidden">
-            <Hero />
-            <main>
-                <Container className="mt-10">
-                    <LogoCloud />
-                </Container>
-                <div className="bg-linear-to-b from-white from-50% to-gray-100 py-32">
-                    <BentoSection />
-                    <FeatureSection />
-                </div>
-                <DarkBentoSection />
-                <MissionSection />
-            </main>
-            <CallToAction />
-        </div>
+        <>
+            <FrosconTalkBanner />
+            <div className="overflow-hidden">
+                <Hero />
+                <main>
+                    <Container className="mt-10">
+                        <LogoLine />
+                    </Container>
+                    <div className="bg-linear-to-b from-white from-50% to-gray-100 pt-32">
+                        <BentoSection />
+                        <FeatureSection />
+                    </div>
+                    <ThreeColumnBentoSection />
+                    <DarkBentoSection />
+                    <MissionSection />
+                </main>
+                <CallToAction />
+            </div>
+        </>
     )
 }

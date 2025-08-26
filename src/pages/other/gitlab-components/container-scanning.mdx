@@ -1,0 +1,27 @@
+import {ContainerScanning} from '../../../components/texts/CICDJobs'
+
+<ContainerScanning />
+
+
+The `container-scanning` accepts the following inputs:
+| Name        | Description                     | Required     | Default Value        |
+|-------------|---------------------------------|-------------|----------------------|
+| `api_url`   | The DevGuard API URL             | No           |       `https://api.main.devguard.org`     |
+| `asset_name`| Name of the asset to scan                    |      Yes  |      |
+| `token`     | API token for authenticating with DevGuard   |      Yes   |      |
+| `scan_stage`| The stage where the scan is run       | No       |     `test`     |
+| `runner_tags` | The runner tags used to select appropriate CI runners.   | No  | `""` |
+| `fetch-image-from-registry` |If set to true, the image will be pulled from the registry instead of using the artifact.   | No          | `false`                                              | 
+
+
+
+Usage Example:
+Here’s an example of how to call this component:
+```yaml copy
+include:
+- remote: "https://gitlab.com/l3montree/devguard/-/raw/main/templates/container-scanning.yml@main
+  inputs:
+    asset_name: "myOrgnaization/projects/myProject/assets/myAsset"
+    token: "$DEVGUARD_TOKEN"
+```
+

@@ -1,0 +1,189 @@
+import { Callout } from 'nextra/components'
+
+# Compliance as Code
+
+<Callout type="warning" emoji="⚠️">
+  This is an upcoming feature. We are currently working on it and will update the documentation soon. We would love to hear your feedback on this feature. Please feel free to reach out to us at [Matrix Chat](https://matrix.to/#/#devguard:matrix.org)
+</Callout>
+
+In modern software development, ensuring security and compliance is not just a best practice—it’s a necessity. **Compliance as Code** automates security and compliance checks by embedding them directly into the CI/CD pipeline. This approach ensures that every container image meets predefined security and policy requirements before deployment.
+
+## Introduction
+
+With Compliance as Code, key security assertions are **attested** and stored in a container registry. These attestations serve as verifiable proof that specific compliance checks have been performed and can be enforced in the deployment environment. Attestations are simple json documents, attached to container images via special tag names. Attached basically means, that they follow the naming convention: If the container image has SHA256 hash `abc`, the attestation is uploaded as `abc.att`. An image can have an infinite amount of attestations. Each attestation (json document) is stored as a layer in the `abc.att` image. Obviously, since they are just json documents, they can be signed and verified cryptographically to ensure integrity. This makes them a valuable tool for ensuring the security and compliance of containerized applications. For example, one could "attest", that:
+
+- A Software Bill of Materials (**SBOM**) was generated for the image.
+- The image was scanned for vulnerabilities.
+- No critical vulnerabilities were detected (**yet**).
+- The image was built using a specific set of trusted tools.
+- The image was signed with a designated cryptographic key.
+- The image was developed and approved by a specific team.
+- Additional security or compliance policies tailored to organizational needs.
+
+## Creating an Attestation
+
+To create and upload an attestation, cosign can be used. The produced attestation is signed using a public private key-pair (or keyless signing). To create an attestation, follow these steps:
+
+1. **Generate a key pair using ****\`cosign\`****:**
+
+   ```sh
+   cosign generate-key-pair
+   ```
+
+   This creates `cosign.key` (private key) and `cosign.pub` (public key).
+
+2. **Create an example JSON file:**
+
+   ```json
+   {
+       "key": "test-attestation-1"
+   }
+   ```
+
+   Save this file as `some-json-file.json`.
+
+3. **Sign and upload the attestation:**
+
+   ```sh
+   cosign attest --predicate some-json-file.json --key cosign.key IMAGE_NAME --tlog-upload=false
+   ```
+
+   - The attestation file will be stored as `digest(IMAGE_NAME).att`.
+   - You can attach multiple attestations (stored as image layers of `digest(IMAGE_NAME).att`), allowing different security assertions (e.g., SBOMs, vulnerability reports).
+
+## Inspecting an Attestation
+
+Attestations can be inspected using Docker. For example:
+
+```sh
+docker pull ghcr.io/l3montree-dev/oh-my-honeypot:sha256-c9e346b092e64ae667b3448f9a39a04d3d5ee1f17991fdd4e7249debc80c258d.att
+```
+
+This command may exit with an error (e.g., "mismatched image rootfs and manifest layers"), but the attestation is still stored in the local Docker cache.
+
+```sh
+docker save ghcr.io/l3montree-dev/oh-my-honeypot:sha256-c9e346b092e64ae667b3448f9a39a04d3d5ee1f17991fdd4e7249debc80c258d.att -o att.tar
+tar -xvf att.tar
+```
+
+Example extracted output:
+
+```
+x blobs/
+x blobs/sha256/
+x blobs/sha256/675d4bebaae4e7d866c2e52dcb5fb24f03603a394aba4af1f6e78b8bc04d14f5
+x index.json
+x manifest.json
+x oci-layout
+```
+
+One can inspect the different layers and attestations in the blobs directory.
+
+## Verifying an Attestation
+
+To download an attestation using `cosign`, run the following command. The verify does check the signatures, but it does not inspect any of the contents of the json files we uploaded:
+
+```sh
+cosign verify-attestation --key cosign.pub ghcr.io/l3montree-dev/oh-my-honeypot:main-c8c45b74-1741875691 --insecure-ignore-tlog=true | jq -r .payload | base64 -D > attestation.json
+```
+
+For multiple attestations, this may produce an **invalid** JSON output in the `attestation.json` file:
+
+```json
+{
+    "_type": "https://in-toto.io/Statement/v0.1",
+    "predicateType": "https://cosign.sigstore.dev/attestation/v1",
+    "predicate": { "Data": "{\n    \"key\": \"test-attestation-2\"\n}" }
+}{
+    "_type": "https://in-toto.io/Statement/v0.1",
+    "predicateType": "https://cosign.sigstore.dev/attestation/v1",
+    "predicate": { "Data": "{\n    \"key\": \"test-attestation-1\"\n}" }
+}
+```
+
+This happens because multiple attestations are stored as separate JSON objects rather than an array.
+
+To verify the contents of the attestation, rego policies can be used. Rego is a declarative policy language used with Open Policy Agent (OPA). Below is an example of a policy that ensures an attestation contains a specific key-value pair:
+
+```rego
+package sigstore
+import future.keywords.if
+
+default isCompliant = false
+
+validStatement if {
+    input._type == "https://in-toto.io/Statement/v0.1"
+    input.predicateType == "https://cosign.sigstore.dev/attestation/v1"
+}
+
+validData if {
+    parsedData := json.unmarshal(input.predicate.Data)
+    parsedData.key == "test-attestation-2" # Key validation
+}
+
+isCompliant if {
+    validStatement
+    validData
+}
+```
+
+This policy makes sure, that the attestation contains a key-value pair with the key `test-attestation-2`. This is just a simple example. The policy can be extended to check for more complex conditions.
+
+### Enforcing Attestations with Sigstore Policy Controller
+
+To automate verification, use Sigstore’s policy controller.
+
+1. Install the Policy Controller using Helm:
+
+    ```sh
+    helm repo add sigstore https://sigstore.github.io/helm-charts
+    helm repo update
+    kubectl create namespace cosign-system
+    helm install policy-controller -n cosign-system sigstore/policy-controller --devel
+    ```
+
+
+
+2. Apply Policy to Kubernetes. Define a `ClusterImagePolicy` in `cluster-policy.yaml` and apply it to the cluster:
+
+    ```yaml
+    apiVersion: policy.sigstore.dev/v1beta1
+    kind: ClusterImagePolicy
+    metadata:
+    name: image-policy
+    spec:
+    images:
+    - glob: "ghcr.io/l3montree-dev/oh-my-honeypot*"
+    authorities:
+    - key:
+        data: |
+            -----BEGIN PUBLIC KEY-----
+            MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE7DUvqDMa8TQPQ5D/ZHgKzKS/NtrL
+            YzGPJikq94fCBAgnyyCQAbh3qmPqSoT1BY7vVNJlb1f2Dih4XExg/wnu7A==
+            -----END PUBLIC KEY-----
+        attestations:
+        - name: custom-match-predicate
+        predicateType: https://cosign.sigstore.dev/attestation/v1
+        policy:
+            type: rego
+            data: |
+            package sigstore
+            import future.keywords.if
+
+            default isCompliant = false
+            ...
+    ```
+
+3. Enforce Policy on a Namespace
+
+    ```sh
+    kubectl label namespace secure-namespace policy.sigstore.dev/include=true 
+    ```
+
+    Now, the policy controller will enforce compliance. If an attestation does not match the policy, the corresponding pod will not be scheduled.
+
+###  Conclusion
+
+By integrating attestations, Cosign, and Sigstore’s policy controller, we can significantly strengthen the security of containerized environments. Automating attestation verification ensures that only authorized and compliant images are deployed, mitigating risks in the software supply chain.
+
+With DevGuard, you can take this process a step further. DevGuard automates the creation and management of attestations throughout the entire DevSecOps lifecycle, seamlessly uploading them to your container registry. Additionally, it empowers you to define and enforce policies that ensure compliance with both international standards and your company’s specific regulatory requirements, offering peace of mind and enhanced security across your development pipelines.

@@ -120,8 +120,8 @@ export default function MissionSection() {
                         <div className="flex flex-col gap-y-2 max-sm:border-b max-sm:border-dotted max-sm:border-gray-200 max-sm:pb-4">
                             <dt className="text-sm/6 text-gray-400">
                                 Factor of possible cost savings when fixing
-                                flaws early in dev compared to fixing in
-                                production
+                                vulnerabilities early in dev compared to fixing
+                                in production
                             </dt>
                             <dd className="order-first text-6xl font-medium tracking-tight">
                                 x<AnimatedNumber start={10} end={28} />

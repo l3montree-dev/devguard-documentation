@@ -1,4 +1,4 @@
-FROM node:22.13.1@sha256:5145c882f9e32f07dd7593962045d97f221d57a1b609f5bf7a807eb89deff9d6 as builder
+FROM node:24.4.1@sha256:601f205b7565b569d3b909a873cc9aa9c6f79b5052a9fe09d73e885760237c4c as builder
 LABEL maintainer="Sebastian Kawelke <sebatian.kawelke@l3montree.com"
 
 # Disable telemetry
@@ -21,12 +21,21 @@ COPY . .
 
 ENV NEXT_SHARP_PATH=/usr/app/node_modules/sharp
 
+ARG NEXT_PUBLIC_UMAMI_WEBSITE_ID
+ENV NEXT_PUBLIC_UMAMI_WEBSITE_ID=$NEXT_PUBLIC_UMAMI_WEBSITE_ID
+
+ARG NEXT_PUBLIC_UMAMI_URL
+ENV NEXT_PUBLIC_UMAMI_URL=$NEXT_PUBLIC_UMAMI_URL
+
+ARG NEXT_PUBLIC_SITE_URL
+ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
+
 # Build
 RUN npm run build
 
 RUN mkdir -p /usr/app/.next/cache/images && chown -R 53111:53111 /usr/app/.next/cache/images
 
-FROM gcr.io/distroless/nodejs22-debian12:nonroot@sha256:5e248b97ff487071c55d9a9a99e838a103c085c591aa42ba09a7807685ce8f6f
+FROM gcr.io/distroless/nodejs24-debian12:nonroot@sha256:0b5e17788348e91a52ca63a6935e2ae6744b6018387e3f2c8bfe3f2fb04f9d51
 
 USER 53111
 

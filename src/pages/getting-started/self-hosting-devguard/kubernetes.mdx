@@ -1,0 +1,70 @@
+import { Callout } from 'nextra/components'
+ 
+
+# Self Hosting Devguard on a Kubernetes Infrastructure
+
+This guide provides step-by-step instructions to self-host DevGuard on a Kubernetes cluster using [Helm](https://helm.sh/).
+
+## Prerequisites
+Before proceeding, ensure the following prerequisites are met:
+
+- Kubernetes Cluster: A running Kubernetes cluster.
+- Helm: Helm installed and configured on your local machine.
+
+## Installation Steps
+1. **Create devguard namespace**
+    ```bash
+    kubectl create namespace devguard
+    ```
+2. **Create necessary existing secrets**
+    - DevGuard requires it's own private key to sign In-Toto Root-Layouts (Refer to the [In-Toto Whitepaper](/other/concepts/attestations-provenance/in-toto)).
+       ```bash
+       openssl ecparam -name prime256v1 -genkey -noout -out private.ec.key # generate an EC-Private key
+       kubectl create secret generic ec-private-key --from-file=privateKey=private.ec.key -n devguard # create a secret with the private key
+       ```
+    - If you would like to make be able to create tickets straight out of DevGuard in GitHub you will need to create a GitHub App. Please refer to the [Create GitHub App](/getting-started/self-hosting-devguard/create-github-app) Documentation for it. **This is not necessary, if you only want to scan your applications without creating tickets.**
+
+3. **Add the DevGuard Helm repository to your local Helm installation**
+    ```bash
+    helm repo add devguard https://l3montree-dev.github.io/devguard/ \
+    && helm repo update
+    ```
+4. **Install the DevGuard Chart**
+    ```bash
+    helm install devguard devguard/devguard --namespace devguard
+    ```
+
+    This command deploys DevGuard with default settings.
+
+## Configuration
+
+The DevGuard Helm chart offers various configurable parameters. To customize the installation, create a `values.yaml` file and specify your desired values.
+
+<Callout emoji="💡">
+Please checkout the [official values file](https://github.com/l3montree-dev/devguard/blob/main/charts/devguard/values.yaml) for the configurable parameters and their requirements and default values.
+</Callout>
+
+
+
+```bash
+helm install devguard devguard/devguard -f values.yaml
+```
+
+## Accessing DevGuard
+
+After installation, if Ingress is enabled and configured, access DevGuard via the specified host. Otherwise, use the service's ClusterIP and port to reach the application.
+
+## Uninstallation
+
+To uninstall DevGuard:
+
+```bash
+helm uninstall devguard
+```
+
+
+## Additional Resources
+
+- [DevGuard GitHub Repository](https://github.com/l3montree-dev/devguard)
+- [Helm Documentation:](https://helm.sh/docs/)
+- [Kubernetes Documentation:](https://kubernetes.io/docs/)
