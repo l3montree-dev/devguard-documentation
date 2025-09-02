@@ -21,7 +21,7 @@ export default function Hero() {
                     </p>
                     <div className="mt-12 flex flex-col gap-x-6 gap-y-4 sm:flex-row">
                         <Link
-                            href="https://main.devguard.org/l3montree-cybersecurity/projects/devguard/assets/devguard/refs/main"
+                            href="https://app.devguard.org/login"
                             target="_blank"
                             rel="noopener noreferrer"
                         >
@@ -29,7 +29,7 @@ export default function Hero() {
                                 variant="secondary"
                                 data-umami-event="look-at-devguard"
                             >
-                                See DevGuard in action
+                                Try DevGuard
                             </Button>
                         </Link>
                         <Link href="/introduction">

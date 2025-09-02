@@ -58,6 +58,16 @@ export function LogoLine({ inverted = false }: { inverted?: boolean }) {
                 width={300}
                 height={100}
             />
+            <Image
+                alt="BusinessCode Logo"
+                src="/sponsors/bc-logo-white.png"
+                className={cn(
+                    inverted && 'invert',
+                    'h-9 w-auto max-sm:mx-auto sm:h-8',
+                )}
+                width={300}
+                height={100}
+            />
         </div>
     )
 }
