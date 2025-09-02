@@ -5,8 +5,24 @@ You should harden container images to reduce the attack surface and minimize sec
 
 This Guide shows you a possible Workflow for your container hardening in DevGuard.
 
-## The General Process
-The following Flow-Chart demonstrates the thought and action process, you need to follow for the succesfull hardening of your container image.
+## General Best Practices for Image Hardening
+
+> We recommend using [distroless images](https://github.com/GoogleContainerTools/distroless) whenever possible. If you need a shell or interactive capabilities, use minimal base images like Alpine or Debian Slim.
+
+- Always use **minimal base images** and prefer **distroless** if possible.  
+- Remove **unnecessary packages, tools, and shells** to reduce the attack surface.  
+- Run containers as a **non-root user**.  
+- Use **read-only file systems** and restrict Linux capabilities to the minimum required.  
+
+We provide a small [Container Hardening Workbench Project](https://gitlab.opencode.de/l3montree/container-hardening-work-bench) 
+that you can use to experiment with different hardening techniques and see their effects on vulnerability count.
+
+Another nice resource are the US Department of Defense's [Iron Bank Container Images](https://repo1.dso.mil/dsop) as well 
+as the [Slim-Toolkit project](https://github.com/slimtoolkit/slim).
+
+## A General Process
+The following Flow-Chart can help you to decide how to harden your container images.
+
 ```mermaid
 flowchart TD
     A[1. Container Image] -->|DevGuard Scan| B(2. Container Image vulnerable)
@@ -53,11 +69,3 @@ flowchart TD
    - If the risk can be accepted, document it in DevGuard (include justification, compensating controls, and expiry date).  
    - If not, the image must not be used.   
 
----
-
-## General Best Practices for Image Hardening
-
-- Always use **minimal base images** and prefer distroless if possible.  
-- Remove **unnecessary packages, tools, and shells** to reduce the attack surface.  
-- Run containers as a **non-root user**.  
-- Use **read-only file systems** and restrict Linux capabilities to the minimum required.  
