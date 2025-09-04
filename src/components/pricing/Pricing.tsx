@@ -1,13 +1,14 @@
 import { PlusIcon } from '@heroicons/react/16/solid'
 import { Button } from '../top-level-pages/button'
+import { cn } from '@/lib/utils'
 
 const tiers = [
     {
         name: 'Open Source',
         description:
-            'Fully-fledged solution with community support. Free of charge for every FLOSS project.',
+            'Fully-fledged self-hosting solution with community support. Free of charge for every FLOSS project.',
         priceMonthly: 'Free',
-        href: 'mailto:community@devguard.org?subject=DevGuard%20Inquiry%20-%20Open%20Source%20Project',
+        href: '/getting-started',
         highlights: [
             {
                 description:
@@ -15,6 +16,8 @@ const tiers = [
             },
             { description: 'All features included' },
             { description: 'Community Support' },
+            { description: 'Self Hosted' },
+            { description: 'Request for hosted solution' },
         ],
     },
     {
@@ -25,12 +28,10 @@ const tiers = [
         href: 'mailto:community@devguard.org?subject=DevGuard%20Inquiry%20-%20Business%20Saas',
         highlights: [
             { description: 'Fully managed DevGuard hosted in Germany 🇩🇪' },
-            { description: 'Sovereign open source software' },
-            { description: 'Core team from Europe 🇪🇺' },
+            { description: 'Sovereign open source software from Europe 🇪🇺' },
             { description: 'Unlimited users' },
             { description: 'Initial 4 hours setup workshop' },
             { description: '8x5 E-Mail Support Hours' },
-            { description: 'Option for custom domains' },
         ],
     },
     {
@@ -38,11 +39,10 @@ const tiers = [
         description:
             'With SLA and support options for operation in your infrastructure. Ideal for large organizations or the security domain.',
         priceMonthly: 'Custom',
-        href: 'mailto:community@devguard.org?subject=DevGuard%20Inquiry%20-%20Enterprise%20Maintenance%20%26%20Support',
+        href: 'https://cal.com/frederic-noppe/15min',
         highlights: [
             { description: 'DevGuard in your data center or cloud' },
-            { description: 'Sovereign open source software' },
-            { description: 'Core team from Europe 🇪🇺' },
+            { description: 'Sovereign open source software from Europe 🇪🇺' },
             { description: 'Unlimited users, projects & assets' },
             { description: 'Custom maintenance contract' },
             { description: 'Custom support & training' },
@@ -60,7 +60,7 @@ const tiers = [
 
 export default function Pricing() {
     return (
-        <div className="pt-24 sm:pt-32">
+        <div className="bg-[#0D1017] pt-24 sm:pt-32">
             <div className="mx-auto max-w-4xl px-6 max-lg:text-center lg:max-w-7xl lg:px-8">
                 <h1 className="text-balance text-5xl font-semibold tracking-tight text-white sm:text-6xl lg:text-pretty">
                     Secure Software Development & Pricing made easy
@@ -108,11 +108,26 @@ export default function Pricing() {
                                         <div className="mt-10">
                                             <a href={tier.href}>
                                                 <Button
-                                                    variant={'ghost'}
+                                                    variant={
+                                                        tier.name ===
+                                                        'Enterprise Maintenance & Support'
+                                                            ? 'default'
+                                                            : 'ghost'
+                                                    }
                                                     aria-label={`Start a free trial on the ${tier.name} plan`}
-                                                    className="ring-1 ring-l3-600"
+                                                    className={cn(
+                                                        'ring-1 ring-l3-600',
+                                                        tier.name ===
+                                                            'Enterprise Maintenance & Support' &&
+                                                            'bg-l3-600 hover:bg-l3-500',
+                                                    )}
                                                 >
-                                                    Coming soon - contact us
+                                                    {tier.name === 'Open Source'
+                                                        ? 'Get Started'
+                                                        : tier.name ===
+                                                            'Enterprise Maintenance & Support'
+                                                          ? 'Schedule a introduction call'
+                                                          : 'Contact Us'}
                                                 </Button>
                                             </a>
                                         </div>

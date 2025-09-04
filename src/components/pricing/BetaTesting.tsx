@@ -33,7 +33,7 @@ const features = [
 
 export default function BetaTesting() {
     return (
-        <div className="pb-20 pt-24 sm:pt-32">
+        <div className="bg-[#0D1017] pb-20 pt-24 sm:pt-32">
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
                 <div className="mx-auto max-w-3xl lg:mx-0">
                     <h2 className="text-pretty text-3xl font-semibold tracking-tight text-white sm:text-4xl">
@@ -55,6 +55,7 @@ export default function BetaTesting() {
                         <Button
                             variant={'default'}
                             data-umami-event="cta-join-alpha"
+                            className="bg-l3-600 hover:bg-l3-500"
                         >
                             Schedule a meeting
                         </Button>
