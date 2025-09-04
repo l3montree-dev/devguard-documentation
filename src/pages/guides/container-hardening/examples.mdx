@@ -1,0 +1,17 @@
+# Examples
+
+We started a small [Container Hardening Workbench Project](https://gitlab.opencode.de/l3montree/container-hardening-work-bench)
+where you can find some examples and templates to get started with container hardening. The project also contains
+a simple go command to speed up the scan loop during local development.
+
+You can currently find a simple example for the Redis image in the project. It contains three Containerfiles showing different
+stages of hardening:
+
+- [Containerfile.plain](https://gitlab.opencode.de/l3montree/container-hardening-work-bench/-/blob/main/Containerfile.plain) - the
+   plain Redis image.
+- [Containerfile.updating](https://gitlab.opencode.de/l3montree/container-hardening-work-bench/-/blob/main/Containerfile.updating) - the
+   Redis image with the approach to update components.
+- [Containerfile](https://gitlab.opencode.de/l3montree/container-hardening-work-bench/-/blob/main/Containerfile) - the
+   Redis image with the approach to switch to a distroless image.
+
+We plan on adding more examples and templates over time.

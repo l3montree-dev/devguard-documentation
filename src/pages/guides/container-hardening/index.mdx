@@ -1,0 +1,59 @@
+import Image from 'next/image';
+
+# Container Hardening Guide
+
+<div className="flex flex-row items-center justify-center gap-4 pt-4">
+    <Image src="/assets/knight-gopher.png" alt="Question Gopher" width={200} height={200} className="w-36 h-auto" />
+    <span className="text-base">
+    This guide shows you a possible workflow for your container hardening. We assume
+    that you are using [DevGuard](https://devguard.org) for vulnerability scanning and management,
+    but the general principles can be applied with other tools as well.
+    </span>
+</div>
+
+## Definition of Container Hardening
+
+**Container Hardening** is the process of securing a Open Container Initiative (OCI) container image by reducing its attack surface,
+removing unnecessary components, and applying security best practices. The goal is to minimize
+vulnerabilities and enhance the overall security posture of containerized applications.
+
+A **hardened container image** is an OCI-compliant image that has been optimized for security and made
+compliant with the following requirements (specified in detail in the guide): 
+
+- **Minimalism**: The image contains only the essential components required for the application to run,
+  reducing the potential attack surface.
+- **CVE-Transparency**: All components in the image are regularly scanned for known vulnerabilities (CVEs)
+  using tools like DevGuard, and the current status is made available transparently (via attestations).
+- **CVE-Handling**: Vulnerabilities are addressed and assessed according to a defined process, which may include
+  removing components, updating components, applying patches, or accepting risks.
+- **Least-privilege**: The image is configured to run with the least privileges necessary, avoiding running as root
+  and using read-only file systems where possible.
+
+A **hardened container runtime environment** is a runtime environment that enforces security policies
+and best practices for running containerized applications, such as:
+
+- Running containers with least privilege (non-root user).
+- Using read-only file systems.
+- Restricting Linux capabilities to the minimum required.
+- Implementing network segmentation and traffic rules.
+- Verifying container images before deployment.
+
+## Scope
+
+This guide focuses on a generally applicable container hardening process for OCI-compliant container images. Next to the
+optimized image it is crucial to run the container in a hardened runtime environment. Aspects of the runtime environment
+are covered in case of infrastructure-as-code (IaC) approach and respective scanning, but are not the main focus of this guide.
+
+
+## References
+
+Please note the following references that were used to create this guide and which can be used for further reading:
+
+- [Container Hardening Process Guide (Iron Bank)](https://dl.dod.cyber.mil/wp-content/uploads/devsecops/pdf/Final_DevSecOps_Enterprise_Container_Hardening_Guide_1.2.pdf),
+   Defense Information Systems Agency (DISA) for Department of Defense (DoD), 2022, accessed 04.09.25
+- [BSI IT-Grundschutzbaustein SYS.1.6 Containerisierung](https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Grundschutz/IT-GS-Kompendium_Einzel_PDFs_2022/07_SYS_IT_Systeme/SYS_1_6_Containerisierung_Edition_2022.pdf?__blob=publicationFile&v=3),
+   Bundesamt für Sicherheit in der Informationstechnik (BSI), 2022, accessed 04.09.25
+- [NIST SP 800-190 Application Container Security Guide](https://nvlpubs.nist.gov/nistpubs/specialpublications/nist.sp.800-190.pdf),
+   National Institute of Standards and Technology (NIST), 2017, accessed 04.09.25
+- [NSA & CISA Kubernetes Hardening Guide](https://media.defense.gov/2022/Aug/29/2003066362/-1/-1/0/CTR_KUBERNETES_HARDENING_GUIDANCE_1.2_20220829.PDF),
+   National Security Agency (NSA) & Cybersecurity and Infrastructure Security Agency (CISA), 2022, accessed 04.09.25
