@@ -86,7 +86,7 @@ vulnerability scanner. If vulnerabilities are found, follow the process describe
 Ensure your solution can perform continuous vulnerability monitoring and you become aware of new vulnerabilities
 even when the image is already in use (DevGuard can do that for you).
 
-#### Document and attest your image
+#### Document, sign and attest your image
 
 Ensure to attest your images SBOM and vulnerability status (VeX) to the final image and make it available
 transparently.
@@ -94,6 +94,8 @@ transparently.
 Ensure to add a release attestation to your image to state which application version is contained in the image,
 to be able to identify known vulnerabilities for that application version
 (you can find details why in the [SBOM Problem Statement](/concepts/sbom-problem-statement)).
+
+Ensure to sign your image (e.g., using [cosign](https://github.com/sigstore/cosign)) to ensure its integrity and authenticity.
 
 </Steps>
 
@@ -121,7 +123,7 @@ If the image does not meet your security requirements, consider modifying it by 
 that uses the supplied image as a base and applies necessary hardening steps (e.g., removing unnecessary components,
 adding security configurations, setting a non-root user, etc.). Then build and scan the modified image.
 
-#### Document and attest your image
+#### Document, sign and attest your image
 
 Ensure to attest your images SBOM and vulnerability status (VeX) to the final image and make it available
 transparently.
@@ -129,5 +131,7 @@ transparently.
 Ensure to add a release attestation to your image to state which application version is contained in the image,
 to be able to identify known vulnerabilities for that application version
 (you can find details why in the [SBOM Problem Statement](/concepts/sbom-problem-statement)).
+
+Ensure to sign your image (e.g., using [cosign](https://github.com/sigstore/cosign)) to ensure its integrity and authenticity.
 
 </Steps>
