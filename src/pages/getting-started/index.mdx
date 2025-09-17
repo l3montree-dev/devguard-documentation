@@ -21,6 +21,12 @@ development workflow.
     To try DevGuard with a local container setup, we provide a docker-compose-try-it.yaml. Note that it can take 
     a few moments to start up the containers, so please be patient.
 
+    <Callout type="warning" emoji="⚠️">
+      This setup is intended for testing and evaluation purposes. Before using the compose setup in a production environment,
+      ensure to review the configuration files and adjust them according to your security and operational requirements.
+      Especially change default passwords!
+    </Callout>
+
     ```bash copy
     curl -LO https://raw.githubusercontent.com/l3montree-dev/devguard/refs/heads/main/docker-compose-try-it.yaml \
     && curl -LO https://raw.githubusercontent.com/l3montree-dev/devguard/refs/heads/main/initdb.sql \
