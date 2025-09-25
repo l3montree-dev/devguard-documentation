@@ -3,7 +3,75 @@ import { cn } from '../../lib/utils'
 
 export function LogoLine({ inverted = false }: { inverted?: boolean }) {
     return (
-        <div className="flex flex-wrap justify-center gap-x-[100px] gap-y-[100px] max-sm:gap-x-4 max-sm:gap-y-4">
+        <div className="flex flex-wrap justify-center gap-x-[100px] gap-y-[100px] max-sm:gap-x-4 max-sm:gap-y-2">
+            <a
+                href="https://www.opendesk.eu/de"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                <Image
+                    alt="openDesk Logo"
+                    src="/sponsors/opendesk-logo-rgb-white.png"
+                    className={cn(inverted && 'invert')}
+                    width={300}
+                    height={100}
+                    style={{
+                        flex: '0 0 auto',
+                        width: '200px',
+                        height: '50px',
+                    }}
+                />
+            </a>
+            <a
+                href="https://opencode.de/de"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                <Image
+                    alt="openCode Logo"
+                    src="/sponsors/opencode-logo-rgb-white.png"
+                    className={cn(inverted && 'invert')}
+                    width={300}
+                    height={100}
+                    style={{
+                        flex: '0 0 auto',
+                        width: '200px',
+                        height: '50px',
+                    }}
+                />
+            </a>
+            <a
+                href="https://businesscode.de"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                <Image
+                    alt="BusinessCode Logo"
+                    src="/sponsors/bc-logo-white.png"
+                    className={cn(inverted && 'invert')}
+                    width={300}
+                    height={100}
+                    style={{ flex: '0 0 auto', width: '200px', height: '40px' }}
+                />
+            </a>
+            <a
+                href="https://www.heylogin.com/de"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                <Image
+                    alt="heylogin Logo"
+                    src="/sponsors/heylogin_logo_white.png"
+                    className={cn(inverted && 'invert')}
+                    width={300}
+                    height={100}
+                    style={{
+                        flex: '0 0 auto',
+                        width: '200px',
+                        height: '50px',
+                    }}
+                />
+            </a>
             <a
                 href="https://owasp.org"
                 target="_blank"
@@ -22,7 +90,6 @@ export function LogoLine({ inverted = false }: { inverted?: boolean }) {
                     }}
                 />
             </a>
-
             <a
                 href="https://ikor.one"
                 target="_blank"
@@ -99,38 +166,6 @@ export function LogoLine({ inverted = false }: { inverted?: boolean }) {
                 />
             </a>
 
-            <a
-                href="https://businesscode.de"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-                <Image
-                    alt="BusinessCode Logo"
-                    src="/sponsors/bc-logo-white.png"
-                    className={cn(inverted && 'invert')}
-                    width={300}
-                    height={100}
-                    style={{ flex: '0 0 auto', width: '200px', height: '40px' }}
-                />
-            </a>
-            <a
-                href="https://www.heylogin.com/de"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-                <Image
-                    alt="heylogin Logo"
-                    src="/sponsors/heylogin_logo_white.png"
-                    className={cn(inverted && 'invert')}
-                    width={300}
-                    height={100}
-                    style={{
-                        flex: '0 0 auto',
-                        width: '200px',
-                        height: '50px',
-                    }}
-                />
-            </a>
             <a
                 href="https://www.cps-it.de/"
                 target="_blank"
