@@ -113,7 +113,24 @@ export function LogoLine({ inverted = false }: { inverted?: boolean }) {
                     style={{ flex: '0 0 auto', width: '200px', height: '40px' }}
                 />
             </a>
-
+            <a
+                href="https://www.heylogin.com/de"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                <Image
+                    alt="heylogin Logo"
+                    src="/sponsors/heylogin_logo_white.png"
+                    className={cn(inverted && 'invert')}
+                    width={300}
+                    height={100}
+                    style={{
+                        flex: '0 0 auto',
+                        width: '200px',
+                        height: '50px',
+                    }}
+                />
+            </a>
             <a
                 href="https://www.cps-it.de/"
                 target="_blank"
