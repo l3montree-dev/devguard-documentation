@@ -41,15 +41,15 @@ export default function Hero() {
                             </Button>
                         </Link>
                         <Link
-                            href="mailto:info@l3montree.com?cc=frederic.noppe@l3montree.com&subject=DevGuard%20Testing-Programm%20"
+                            href="https://matrix.to/#/#devguard:matrix.org"
                             target="_blank"
                             rel="noopener noreferrer"
                         >
                             <Button
                                 variant="outline"
-                                data-umami-event="hero-join-alpha"
+                                data-umami-event="Support"
                             >
-                                Join the beta program
+                                Support (Element Chat)
                             </Button>
                         </Link>
                     </div>
