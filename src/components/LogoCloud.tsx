@@ -5,7 +5,7 @@ export default function LogoCloud() {
         <div className="mt-12">
             <div className="mx-auto max-w-7xl">
                 <div className="-mx-6 grid grid-cols-2 gap-0.5 overflow-hidden sm:mx-0 sm:rounded-2xl md:grid-cols-3">
-                    <div className="bg-dg-300 p-8 sm:p-10">
+                    <div className="flex items-center bg-dg-300 p-8 sm:p-10">
                         <a
                             href="https://owasp.org/www-project-devguard/"
                             target="_blank"
@@ -20,15 +20,30 @@ export default function LogoCloud() {
                             />
                         </a>
                     </div>
-                    <div className="bg-dg-300 p-6 sm:p-10">
+                    <div className="flex items-center bg-dg-300 p-8 sm:p-10">
                         <a
-                            href="https://ikor.one/"
+                            href="https://opencode.de/"
                             target="_blank"
                             rel="noopener noreferrer"
                         >
                             <Image
-                                alt="Ikor One"
-                                src="/sponsors/sp-ikor.svg"
+                                alt="openCode"
+                                src="/sponsors/opencode-logo.svg"
+                                width={158}
+                                height={48}
+                                className="max-h-12 w-full object-contain"
+                            />
+                        </a>
+                    </div>
+                    <div className="flex items-center bg-dg-300 p-8 sm:p-10">
+                        <a
+                            href="https://opendesk.eu/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <Image
+                                alt="openDesk"
+                                src="/sponsors/opendesk-logo.svg"
                                 width={158}
                                 height={48}
                                 className="max-h-12 w-full object-contain"
@@ -52,6 +67,66 @@ export default function LogoCloud() {
                     </div>
                     <div className="bg-dg-300 p-6 sm:p-10">
                         <a
+                            href="https://www.uni-giessen.de/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <Image
+                                alt="Universität Gießen"
+                                src="/sponsors/sp-jlu.svg"
+                                width={158}
+                                height={48}
+                                className="max-h-12 w-full object-contain"
+                            />
+                        </a>
+                    </div>
+                    <div className="flex items-center bg-dg-300 p-8 sm:p-10">
+                        <a
+                            href="https://www.heylogin.com/en"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <Image
+                                alt="heylogin"
+                                src="/sponsors/heylogin-logo.svg"
+                                width={158}
+                                height={48}
+                                className="max-h-12 w-full object-contain"
+                            />
+                        </a>
+                    </div>
+                    <div className="bg-dg-300 p-8 sm:p-10">
+                        <a
+                            href="https://www.cps-it.de/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <Image
+                                alt="csp"
+                                src="/sponsors/cps-logo.svg"
+                                width={158}
+                                height={48}
+                                className="max-h-12 w-full object-contain"
+                            />
+                        </a>
+                    </div>
+                    <div className="bg-dg-300 p-6 sm:p-10">
+                        <a
+                            href="https://ikor.one/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <Image
+                                alt="Ikor One"
+                                src="/sponsors/sp-ikor.svg"
+                                width={158}
+                                height={48}
+                                className="max-h-12 w-full object-contain"
+                            />
+                        </a>
+                    </div>
+                    <div className="flex items-center bg-dg-300 p-6 sm:p-10">
+                        <a
                             href="https://www.bonnconsulting.group/"
                             target="_blank"
                             rel="noopener noreferrer"
@@ -65,7 +140,7 @@ export default function LogoCloud() {
                             />
                         </a>
                     </div>
-                    <div className="bg-dg-300 p-6 sm:p-10">
+                    <div className="flex items-center bg-dg-300 p-6 sm:p-10">
                         <a
                             href="https://wheregroup.com/"
                             target="_blank"
@@ -112,13 +187,13 @@ export default function LogoCloud() {
                     </div>
                     <div className="bg-dg-300 p-6 sm:p-10">
                         <a
-                            href="https://www.uni-giessen.de/"
+                            href="https://www.saltrock.de/"
                             target="_blank"
                             rel="noopener noreferrer"
                         >
                             <Image
-                                alt="Universität Gießen"
-                                src="/sponsors/sp-jlu.svg"
+                                alt="SaltRock GmbH"
+                                src="/sponsors/sp-saltrock.png"
                                 width={158}
                                 height={48}
                                 className="max-h-12 w-full object-contain"
@@ -133,7 +208,7 @@ export default function LogoCloud() {
                         >
                             <Image
                                 alt="SaltRock GmbH"
-                                src="/sponsors/sp-saltrock.png"
+                                src="/sponsors/bc-logo-white.png"
                                 width={158}
                                 height={48}
                                 className="max-h-12 w-full object-contain"

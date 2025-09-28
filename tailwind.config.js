@@ -78,7 +78,16 @@ module.exports = {
     			lg: 'var(--radius)',
     			md: 'calc(var(--radius) - 2px)',
     			sm: 'calc(var(--radius) - 4px)'
-    		}
+    		},
+			keyframes: {
+				'logo-cloud': {
+					from: { transform: 'translateX(0)' },
+					to: { transform: 'translateX(calc(-100% - 4rem))' },
+				},
+			}, 
+			animation: {
+				'logo-cloud': 'logo-cloud 85s linear infinite', // Adjust duration and timing as needed for your design.
+			}
     	}
     },
     plugins: [require("tailwindcss-animate")]
