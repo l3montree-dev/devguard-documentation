@@ -17,7 +17,7 @@ Before proceeding, ensure the following prerequisites are met:
     kubectl create namespace devguard
     ```
 2. **Create necessary existing secrets**
-    - DevGuard requires it's own private key to sign In-Toto Root-Layouts (Refer to the [In-Toto Whitepaper](/other/concepts/attestations-provenance/in-toto)).
+    - DevGuard requires it's own private key to sign In-Toto Root-Layouts (Refer to the [In-Toto Whitepaper](/concepts/attestations-provenance/in-toto)).
        ```bash
        openssl ecparam -name prime256v1 -genkey -noout -out private.ec.key # generate an EC-Private key
        kubectl create secret generic ec-private-key --from-file=privateKey=private.ec.key -n devguard # create a secret with the private key
