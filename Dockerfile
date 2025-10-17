@@ -35,7 +35,7 @@ RUN npm run build
 
 RUN mkdir -p /usr/app/.next/cache/images && chown -R 53111:53111 /usr/app/.next/cache/images
 
-FROM registry.opencode.de/open-code/oci/nodejs:20
+FROM registry.opencode.de/open-code/oci/nodejs:20@sha256:6154de8e12e7a4ed710c8d5d728b81acbdc734af532ead71e169c65d8cc38488
 
 USER 53111
 
