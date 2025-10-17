@@ -35,7 +35,7 @@ RUN npm run build
 
 RUN mkdir -p /usr/app/.next/cache/images && chown -R 53111:53111 /usr/app/.next/cache/images
 
-FROM gcr.io/distroless/nodejs24-debian12:nonroot@sha256:0b5e17788348e91a52ca63a6935e2ae6744b6018387e3f2c8bfe3f2fb04f9d51
+FROM registry.opencode.de/open-code/oci/nodejs:20
 
 USER 53111
 
@@ -45,8 +45,8 @@ ENV NODE_ENV production
 ENV NEXT_TELEMETRY_DISABLED 1
 
 COPY --from=builder --chown=53111:53111 /usr/app/.next /usr/app/.next
-COPY --from=builder /usr/app/node_modules /usr/app/node_modules
-COPY --from=builder /usr/app/package.json /usr/app/package.json
+COPY --from=builder --chown=53111:53111 /usr/app/node_modules /usr/app/node_modules
+COPY --from=builder --chown=53111:53111 /usr/app/package.json /usr/app/package.json
 COPY --from=builder --chown=53111:53111 /usr/app/public /usr/app/public
 
 CMD [ "./node_modules/next/dist/bin/next", "start" ]
