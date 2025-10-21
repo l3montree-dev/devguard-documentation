@@ -64,7 +64,7 @@ development workflow.
       and `<your-personal-access-token>` with your actual values.
 
     ```bash copy
-    docker run --network devguard-local -v "$(PWD):/app" ghcr.io/l3montree-dev/devguard-scanner:main-latest \
+    docker run --network devguard-local -v "$(PWD):/app" ghcr.io/l3montree-dev/devguard/scanner:main-latest \
     devguard-scanner sca \
         --assetName="<your-org/projects/your-group/assets/your-repo>" \
         --apiUrl="http://devguard-api:8080" \
