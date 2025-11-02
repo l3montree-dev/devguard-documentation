@@ -15,9 +15,9 @@
     },
     "externalReferences": [
         {
-            "url": "http://localhost:4040/vex-accepted.json",
+            "url": "https://api.main.devguard.org/api/v1/public/58002609-af9f-4836-b6c2-961fdf612d57/vex.json",
             "type": "exploitability-statement",
-            "comment": "VEX data for this BOM"
+            "comment": "Example VEX document hosted externally"
         }
     ]
 }

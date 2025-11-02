@@ -15,7 +15,7 @@
 }
 
 .nextra-sidebar-footer {
-  background-color: #0A0A0A;
+  background-color: #050505;
   box-shadow: none;
 }
 
@@ -63,7 +63,7 @@ summary h4 {
   --radius: 0.5rem;
   }
   .dark {
-    --background: 0 0% 3.9%;
+    --background: 0 0% 2%;
     --foreground: 0 0% 98%;
     --card: 0 0% 3.9%;
     --card-foreground: 0 0% 98%;
@@ -106,4 +106,11 @@ summary h4 {
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-lexend), Lexend, sans-serif;
   }
+}
+
+nav > div > p {
+  box-shadow: none !important;
+}
+nav > div > div {
+  box-shadow: none !important;
 }

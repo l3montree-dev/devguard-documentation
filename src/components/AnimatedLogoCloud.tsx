@@ -79,7 +79,7 @@ const AnimatedLogoCloud = () => {
                         .map((index) => (
                             <div
                                 key={index + Math.random()}
-                                className="animate-logo-cloud flex shrink-0 flex-row justify-around gap-10"
+                                className="flex shrink-0 animate-logo-cloud flex-row justify-around gap-10"
                             >
                                 {logos.map((logo, key) => (
                                     // eslint-disable-next-line @next/next/no-img-element
