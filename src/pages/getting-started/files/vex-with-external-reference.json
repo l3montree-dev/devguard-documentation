@@ -1,0 +1,23 @@
+{
+    "bomFormat": "CycloneDX",
+    "specVersion": "1.6",
+    "version": 1,
+    "metadata": {
+        "timestamp": "2025-10-25T18:27:06Z",
+        "component": {
+            "bom-ref": "pkg:devguard/neu@main",
+            "type": "application",
+            "author": "Test Org",
+            "publisher": "github.com/l3montree-dev/devguard",
+            "name": "",
+            "version": "main"
+        }
+    },
+    "externalReferences": [
+        {
+            "url": "http://localhost:4040/vex-accepted.json",
+            "type": "exploitability-statement",
+            "comment": "VEX data for this BOM"
+        }
+    ]
+}
