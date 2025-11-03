@@ -32,7 +32,6 @@ Navigate to the **Identify Risk** dialog (available during dependency risk ident
 **Customizing the Origin:**
 - The **origin** represents the information source (e.g., specific scan tools or suppliers)
 - Click **"More Options"** beneath the dropzone
-- Access origin settings directly beneath the dropzone
 
 **External Information Source:**
 If your supplier provides a publicly accessible CycloneDX VEX or SBOM file:
@@ -42,7 +41,7 @@ If your supplier provides a publicly accessible CycloneDX VEX or SBOM file:
 
 #### CLI Upload 🤖
 
-Use the DevGuard scanner CLI to upload VEX documents or SBOMs:
+Use the DevGuard scanner CLI to upload VEX documents or SBOMs. Like the other commands the CLI can be parameterized with the `artifactName` and the `origin` flag to specify the target asset and information source:
 
 <div className="mt-8">
     <Tabs defaultValue="vex" className="w-full">
@@ -82,14 +81,14 @@ assessment as authoritative, regardless of whether the SBOM lists that vulnerabi
 
 This design reflects the VEX standard's purpose: to provide explicit, curated vulnerability assessments that override automated SBOM findings.
 
-#### Vulnerability Lifecycle Management
+#### Information-Source Lifecycle Management
 
-**Adding Vulnerabilities:**
+**Adding Information:**
 - When you upload a VEX or SBOM document, DevGuard extracts the information and associates it with the relevant components - SBOMs components are
   scanned for vulnerabilities
 - Each information source (identified by its origin) is tracked independently
 
-**Removing Vulnerabilities:**
+**Removing Information sources:**
 
 When you delete an information source that references a vulnerability, DevGuard removes that vulnerability from the affected component—**unless** another
 active source also reports the same vulnerability.
@@ -99,7 +98,7 @@ active source also reports the same vulnerability.
 Suppose you upload a VEX document from source "Scanner A" stating that component `lodash@4.17.0` has vulnerability `CVE-2021-23337`:
 
 - **Deleting the VEX document:** If no other sources report this vulnerability, DevGuard will remove `CVE-2021-23337` from `lodash@4.17.0`
-- **Multiple sources:** If you also uploaded an SBOM from "Scanner B" reporting the same component (and therefore vulnerability), deleting the VEX
+- **Multiple sources:** If you also uploaded an SBOM (which finds this vulnerability) from "Scanner B" reporting the same component (and therefore vulnerability), deleting the VEX
   document will not remove the vulnerability — it remains associated with the component via Scanner B
 
 #### External References
@@ -117,21 +116,6 @@ DevGuard automatically resolves and processes `externalReference` statements in 
 
 **Use Case:** This feature enables supply chain transparency by allowing documents to reference upstream vulnerability information, creating a linked
 chain of security attestations.
-
-#### Conflict Resolution
-
-**VEX vs. SBOM Conflicts:**
-
-When a VEX document and an SBOM provide conflicting information about the same vulnerability-component pair, DevGuard always prioritizes the VEX document.
-This aligns with the VEX standard's role as an authoritative source for vulnerability analysis.
-
-**VEX vs. VEX Conflicts:**
-
-When multiple VEX documents provide conflicting information about the same vulnerability:
-- The behavior is **non-deterministic**
-- Typically, the most recently processed document takes precedence
-- Processing order is not guaranteed due to background rescanning operations
-- **Best practice:** Avoid conflicting VEX documents by using consistent origins
 
 #### VEX Event Identity
 
@@ -155,12 +139,6 @@ Navigate to **Repository Settings** and enable **Paranoid Mode**. Once activated
 - Until approved, vulnerabilities remain in their current state
 - This prevents automatic acceptance of potentially incorrect assessments
 
-### Approval Workflow
-
-**Temporal Constraints:**
-- You can only approve an upstream event if no state-changing action has occurred after the event was received
-- **Example:** If you manually marked a vulnerability as "accepted" in DevGuard, you cannot subsequently approve an upstream VEX event that conflicts with this action
-- This "last action wins" approach prevents conflicting states and maintains audit trail integrity
 
 **Use Case:** Paranoid Mode is ideal for organizations with strict compliance requirements or those operating in highly regulated environments where vulnerability assessments must undergo internal review.
 
