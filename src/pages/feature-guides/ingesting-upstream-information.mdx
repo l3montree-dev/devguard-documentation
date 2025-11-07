@@ -1,0 +1,181 @@
+import YoutubeVideo from '../../components/YoutubeVideo';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+
+# Ingesting/ Sharing Upstream Information
+
+DevGuard can **produce and consume** upstream information about dependencies and vulnerabilities in the form of SBOMs and VeX documents.
+
+<div className="">
+    <YoutubeVideo
+    className=""
+    iFrame='<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/5g14dxFaPgg?si=-7ntxC59-YQOfIkB" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>'
+    />
+</div>
+
+## How to Ingest Upstream Information 📩
+
+DevGuard supports ingesting VEX documents and SBOMs through both the web UI and CLI. This enables you to integrate vulnerability and
+dependency information from external scanners, suppliers, or other sources into your repository risk assessment.
+
+### Upload Methods
+
+#### Web UI Upload 👩‍💻
+
+Navigate to the **Identify Risk** dialog (available during dependency risk identification or repository onboarding):
+
+**Manual File Upload:**
+1. Select **"Costum Setup"** →  **"Use your own scanner"** → **"Upload manually"**
+2. Choose the appropriate tab: **VEX** or **SBOM**
+3. Upload your file through the dropzone
+4. DevGuard will process the file and navigate you to the overview page where identified risks are displayed
+
+**Customizing the Origin:**
+- The **origin** represents the information source (e.g., specific scan tools or suppliers)
+- Click **"More Options"** beneath the dropzone
+
+**External Information Source:**
+If your supplier provides a publicly accessible CycloneDX VEX or SBOM file:
+1. Select **"Setup by external information source"**
+2. Enter the public URL to the CycloneDX VEX or SBOM file
+3. DevGuard will automatically fetch and ingest the information periodically
+
+#### CLI Upload 🤖
+
+Use the DevGuard scanner CLI to upload VEX documents or SBOMs. Like the other commands the CLI can be parameterized with the `artifactName` and the `origin` flag to specify the target asset and information source:
+
+<div className="mt-8">
+    <Tabs defaultValue="vex" className="w-full">
+        <TabsList>
+            <TabsTrigger value="vex">VEX Document</TabsTrigger>
+            <TabsTrigger value="sbom">SBOM</TabsTrigger>
+        </TabsList>
+        <TabsContent value="vex">
+            ```bash
+            devguard-scanner vex --token xyz --apiUrl https://api.main.devguard.org/ --assetName my-org/projects/a-group/assets/my-repo vex.json
+            ```
+        </TabsContent>
+        <TabsContent value="sbom">
+            ```bash 
+            devguard-scanner sbom --token xyz --apiUrl https://api.main.devguard.org/ --assetName my-org/projects/a-group/assets/my-repo sbom.json
+            ```
+        </TabsContent>
+    </Tabs>
+</div>
+
+#### Example files
+
+- [Example VEX document with false positive marked risk](/example-files/ingesting/vex-false-positive.json)
+- [Example VEX document with accepted risk](/example-files/ingesting/vex-accepted.json)
+- [Example VEX document with external reference](/example-files/ingesting/vex-with-external-reference.json)
+- [Example SBOM document](/example-files/ingesting/sbom.json)
+
+
+### Processing Rules and Behavior
+
+#### Precedence Hierarchy
+
+DevGuard follows a clear precedence model when processing vulnerability information:
+
+**VEX documents take precedence over SBOM information:** When a VEX document states that component Y contains vulnerability X, DevGuard treats this
+assessment as authoritative, regardless of whether the SBOM lists that vulnerability or even the component.
+
+This design reflects the VEX standard's purpose: to provide explicit, curated vulnerability assessments that override automated SBOM findings.
+
+#### Information-Source Lifecycle Management
+
+**Adding Information:**
+- When you upload a VEX or SBOM document, DevGuard extracts the information and associates it with the relevant components - SBOMs components are
+  scanned for vulnerabilities
+- Each information source (identified by its origin) is tracked independently
+
+**Removing Information sources:**
+
+When you delete an information source that references a vulnerability, DevGuard removes that vulnerability from the affected component—**unless** another
+active source also reports the same vulnerability.
+
+**Example Scenario:**
+
+Suppose you upload a VEX document from source "Scanner A" stating that component `lodash@4.17.0` has vulnerability `CVE-2021-23337`:
+
+- **Deleting the VEX document:** If no other sources report this vulnerability, DevGuard will remove `CVE-2021-23337` from `lodash@4.17.0`
+- **Multiple sources:** If you also uploaded an SBOM (which finds this vulnerability) from "Scanner B" reporting the same component (and therefore vulnerability), deleting the VEX
+  document will not remove the vulnerability — it remains associated with the component via Scanner B
+
+#### External References
+
+DevGuard automatically resolves and processes `externalReference` statements in VEX or SBOM documents- [example VEX document with external reference](/example-files/ingesting/vex-with-external-reference.json)
+
+**Supported Reference Types:**
+- `exploitability-statement` — References to external vulnerability analysis
+- `bom` — References to external SBOM documents
+
+**Processing Behavior:**
+- When DevGuard encounters these references, it adds them as upstream URLs to the default artifact
+- The system periodically fetches and ingests information from these referenced sources
+- External reference resolution is **non-recursive** (only one level deep)
+
+**Use Case:** This feature enables supply chain transparency by allowing documents to reference upstream vulnerability information, creating a linked
+chain of security attestations.
+
+#### VEX Event Identity
+
+DevGuard determines whether two VEX events are identical based on:
+1. **State** — The vulnerability status (e.g., `not_affected`, `affected`, `fixed`)
+2. **Justification** — The reason for the state (when provided)
+
+Events with matching state and justification are treated as duplicates, preventing redundant vulnerability entries.
+
+## Paranoid Mode 🚨
+
+Paranoid Mode provides an additional layer of security review for vulnerability assessments from upstream sources. When enabled, it requires explicit
+approval before accepting vulnerability status changes from VEX documents.
+
+### Enabling Paranoid Mode
+
+Navigate to **Repository Settings** and enable **Paranoid Mode**. Once activated:
+
+**Approvals:**
+- All markings from VEX documents require explicit approval
+- Until approved, vulnerabilities remain in their current state
+- This prevents automatic acceptance of potentially incorrect assessments
+
+
+**Use Case:** Paranoid Mode is ideal for organizations with strict compliance requirements or those operating in highly regulated environments where vulnerability assessments must undergo internal review.
+
+## Public VEX and SBOM Endpoints 🔗
+
+DevGuard can expose vulnerability and dependency information through public API endpoints, enabling downstream consumers to access your security assessment.
+
+### Enabling Public Access
+
+In the **Repository Settings**, enable **"Public access to vulnerability data"**. This activates two public endpoints:
+
+**Available Endpoints:**
+- `/api/v1/public/{assetId}/vex.json` — Public VEX document with vulnerability assessments
+- `/api/v1/public/{assetId}/sbom.json` — Public SBOM with component inventory
+
+### External References in Public Documents
+
+When public access is enabled, DevGuard automatically includes `externalReference` statements in the published documents:
+
+**Reference Types Included:**
+- `exploitability-statement` — Links to vulnerability analysis documents
+- `bom` — Links to upstream SBOM documents
+
+**Self-Referential Links:**
+Both endpoints include references pointing back to themselves - great to always have the latest information!
+
+**Legacy URL Compatibility:**
+Existing asset URLs continue to function and will also include external reference information when public access is enabled.
+
+### Use Cases
+
+**Supply Chain Transparency:**
+- Share your vulnerability assessments with downstream consumers
+- Enable automated ingestion by customers and partners
+- Provide machine-readable security attestations
+
+**Ecosystem Integration:**
+- Support VEX/SBOM-aware tools in your supply chain
+- Enable automated vulnerability tracking across organizational boundaries
+- Facilitate compliance with software transparency regulations
