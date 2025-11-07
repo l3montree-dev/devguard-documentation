@@ -13,16 +13,11 @@ export default function Hero() {
                         <br />
                         Software.
                     </h1>
-                    <h2 className="mt-6 break-words text-2xl font-semibold leading-tight tracking-tight text-background sm:text-3xl md:text-4xl md:leading-tight">
+                    <h2 className="font-regular mt-6 break-words text-2xl leading-tight tracking-tight text-background sm:text-3xl md:text-4xl md:leading-tight">
                         Get full transparency of your <br /> software supply
                         chain.
                     </h2>
-                    <p className="mt-8 max-w-lg text-xl/7 font-medium text-background/75 sm:text-2xl/8">
-                        DevGuard seamlessly integrates security into your
-                        software development lifecycle, making security
-                        practices accessible and efficient for all, regardless
-                        of expertise.
-                    </p>
+
                     <div className="mt-12 flex flex-col gap-x-6 gap-y-4 sm:flex-row">
                         <Link
                             href="https://app.devguard.org/login"

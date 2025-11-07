@@ -14,7 +14,11 @@ export default function BentoSection() {
             <Heading as="h3" className="mt-2 max-w-3xl text-white">
                 Bridging Software Security and Compliance. With ease.
             </Heading>
-
+            <p className="max-full mt-8 text-xl/7 font-medium text-white sm:text-2xl/8">
+                DevGuard seamlessly integrates security into your
+                software-development lifecycle, making security practices
+                accessible and efficient for all, regardless of expertise.
+            </p>
             <div className="mt-10 grid grid-cols-1 gap-4 sm:mt-16 lg:grid-cols-6 lg:grid-rows-2">
                 <BentoCard
                     eyebrow="OWASP DevSecOps"
