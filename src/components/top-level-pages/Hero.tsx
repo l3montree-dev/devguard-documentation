@@ -14,8 +14,8 @@ export default function Hero() {
                         Software.
                     </h1>
                     <h2 className="font-regular mt-6 break-words text-2xl leading-tight tracking-tight text-background sm:text-3xl md:text-4xl md:leading-tight">
-                        Get full transparency of your <br /> software supply
-                        chain.
+                        Get full transparency of your <br />{' '}
+                        Software-Supply-Chain.
                     </h2>
 
                     <div className="mt-12 flex flex-col gap-x-6 gap-y-4 sm:flex-row">
