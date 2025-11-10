@@ -1,4 +1,5 @@
 export default {
+    index: { title: 'Overview' },
     'secret-scanning': { title: 'Secret Scanning' },
     'software-composition-analysis': {
         title: 'Software Composition Analysis (SCA)',

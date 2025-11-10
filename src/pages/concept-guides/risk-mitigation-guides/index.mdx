@@ -1,0 +1,49 @@
+---
+title: Risk Mitigation Guides Overview
+---
+
+# Risk Mitigation Guides Overview
+
+DevGuard helps you identify and manage various types of security risks throughout your software development lifecycle.
+Understanding these risk categories is essential for maintaining a secure and compliant application.
+
+## Available Mitigation Guides
+
+These docs provide mitigation guides for some types of security risks you can handle with DevGuard:
+
+- 🔐 **[Secret Scanning](/concept-guides/risk-mitigation-guides/secret-scanning)** - Learn how to handle exposed secrets, API keys, and credentials found in your codebase
+- 🔍 **[Static Application Security Testing (SAST)](/concept-guides/risk-mitigation-guides/sast)** - Address code quality and security issues identified through static analysis
+- 📦 **[Software Composition Analysis (SCA)](/concept-guides/risk-mitigation-guides/software-composition-analysis)** - Manage vulnerabilities in your project's dependencies and third-party libraries
+- ☁️ **[Infrastructure as Code (IaC)](/concept-guides/risk-mitigation-guides/iac)** - Secure your infrastructure configurations and prevent misconfigurations
+- 🐳 **[Container Scanning](/concept-guides/risk-mitigation-guides/container-scanning)** - Identify and remediate vulnerabilities in your container images
+
+## Types of Risks in DevGuard
+
+DevGuard categorizes security risks into several key areas:
+
+### Code Risks
+
+Code risks originate from your own codebase and represent vulnerabilities or security issues introduced during development. These include:
+
+- **Secrets and Credentials** - Accidentally committed API keys, passwords, tokens, and other sensitive information
+- **Code Quality Issues** - Security vulnerabilities identified through static analysis, such as SQL injection, XSS, insecure cryptography,
+  and other common weaknesses
+
+### Dependency Risks
+
+Dependency risks stem from third-party libraries and packages used in your project:
+
+- **Known Vulnerabilities** - Published CVEs (Common Vulnerabilities and Exposures) in your dependencies
+- **Transitive Dependencies** - Vulnerabilities in dependencies of your dependencies
+- **Container Image Vulnerabilities** - Security issues in base images and packages within your containers
+
+### License Risks
+
+License risks relate to the legal compliance of your project's dependencies:
+
+- **License Classification** - Ensuring all dependency licenses are known and OSI approved
+
+### Compliance Risks (WIP)
+
+Future versions of DevGuard will help you manage compliance as code based on Rego policies.
+You will be able to define and enforce organizational policies to ensure adherence to security standards and best practices.
