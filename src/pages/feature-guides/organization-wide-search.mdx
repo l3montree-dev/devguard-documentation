@@ -8,9 +8,8 @@
 
 # How it works
 
--   It recursively looks for the specific Package name with an ILIKE statement, in each Repository in your Organization,
+-   It recursively looks for the specific Package name with an LIKE statement, in each Repository in your Organization,
      it will only find direct Dependencies (First Party Dependencies).
-    -   The search feature is case insensitive.
 
 -   one new endpoint will be available:
     - `api/v1/organizations/{organizationName}/dependency-components?search={packageName}`
