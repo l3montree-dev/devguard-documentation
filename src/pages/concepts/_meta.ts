@@ -7,9 +7,6 @@ export default {
     'aggregated-vulnerability-database': {
         title: 'Aggregated Vulnerability Database',
     },
-    'vulnerability-management': {
-        title: 'Vulnerability Management',
-    },
     'attestations-provenance': {
         title: 'Attestations & Provenance',
     },
