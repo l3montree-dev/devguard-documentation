@@ -1,17 +1,18 @@
-﻿# CSAF in DevGuard
+# CSAF in DevGuard
 
 ## Table of Contents
-	1. What is CSAF?
+	1. [What is CSAF?]
 	2. How to setup CSAF in DevGuard?
 	3. Where to find CSAF-Reports for my Asset?
 	4. What to find in DevGuards CSAF Reports?
 	
+*Make Table of Contents clickable* 
 
 ## What is CSAF 
 
 The **CSAF (Common Security Advisory Framework)** standard is an open format for providing security advisories in a structured, machine-readable way. Instead of publishing vulnerability information as free-form text, vendors can use CSAF to deliver clearly defined JSON documents. The goal is to make security information easier to process automatically—for example in vulnerability management tools or security dashboards. This helps reduce manual effort when interpreting advisories and enables organizations to respond more quickly and reliably to potential security risks.
 
-In DevGuard we decided to use CSAF to provide information about the current vulnerability state of your assets. In particular each CVE in your asset has its own report, showing the history of the CVE over its lifetime, as well as additional information about the vulnerability like VEX states, what packages are affected as well as a description about the CVE.
+In DevGuard we decided to use CSAF to provide information about the current state of your dependency-vulnerabilities in your assets. In particular each CVE in your asset has its own report, showing the history of the CVE over its lifetime, as well as additional information about the vulnerability like VEX states, what packages are affected as well as a description about the CVE. This means once you scanned your repository you can start publishing CSAF reports as a **CSAF trusted provider**.
 
 ## How to setup CSAF in DevGuard
 
@@ -20,7 +21,7 @@ In DevGuard we decided to use CSAF to provide information about the current vuln
 		- *Need images to display feature in DevGuard*
 ##  Where to find CSAF-Reports for my Asset
 
-- After you successfully enabled CSAF reports for your organization you can find your reports in the **Asset** section
+- After you successfully enabled CSAF reports for your organization you can find your reports in the **Asset** section. These reports are automatically generated and adjusted when the vulnerability state of your asset changes.
 -  *Need images to display feature in DevGuard*
 
 ## What to find in DevGuards CSAF Reports?
@@ -110,7 +111,6 @@ In **Vulnerabilities** object you can find a set of vulnerabilities associated w
 	}
 ]
 ```
-
 
 
 
