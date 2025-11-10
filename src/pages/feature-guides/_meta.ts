@@ -9,4 +9,7 @@ export default {
     'several-assets-and-artifacts-to-devguard-monorepos': {
         title: 'Mapping Several Assets and Artifacts (e.g., Monorepos)',
     },
+        'organization-wide-search': {
+        title: 'Searching specific Packages in Organization',
+    },
 }

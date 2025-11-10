@@ -1,0 +1,32 @@
+# Searching for specific Package in Organization
+
+- It is now possible to search for a specific Package in each Repository in an Organization.
+    -   Only Admin & Owner Roles can search for this Package.
+    -   This Feature is useful, when you want to quickly check weither a certain Package is used in any Repository (e.g xz-util) and what version it is on.
+    -   Additionally it is shown in which artifacts the Package is.
+    -   It is found on the organization Page, in the Tabs Area, next to the Settings.
+    -   The search feature is case insensitive.
+
+# How it works
+
+-   It recursively looks for the specific Package name with a like statement, it will only find direct Dependencies.
+-   There is a new
+-   one new endpoint will be available:
+    - `api/v1/organizations/{organizationName}/dependency-components?search={packageName}`
+    - These endpoints will provide certain information:
+        - componentDependencyId
+        - dependencyPurl
+        - organizationId
+        - organizationName
+        - projectId
+        - projectName
+        - projectSlug
+        - assetId
+        - assetName
+        - assetSlug
+        - assetVersionName
+        - componentPurl
+        - componentVersion
+        - artifactName
+        - artifactAssetVersion
+
