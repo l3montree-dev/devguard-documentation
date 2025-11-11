@@ -3,11 +3,11 @@
 - In Asset Settings go to "Enable public access to vulnerability data"
 - Now the global lister available under /.well-known/csaf-aggregator/aggregator.json should list your org as provider
 - The next file like https://api.main.devguard.org/api/v1/organizations/l3montree-cybersecurity/csaf/provider-metadata.json/ should list the asset inside the distributions array
-- It should point to something like this: https://api.main.devguard.org/api/v1/organizations/l3montree-cybersecurity/projects/devguard/assets/devguard/csaf/white/2025/
+- It should point to a "directory_url" like this: https://api.main.devguard.org/api/v1/organizations/l3montree-cybersecurity/projects/devguard/assets/devguard/csaf/white/2025/
 - There should be a report for each and every vulnerability ever happened in that asset
 
 - Consuming those can be done in the artifact form when creating an artifact  or updating an artifact
-- To use csaf as upstream, you need to add the org provider-metadata.json url and the correct purl of the asset. Like this: https://api.main.devguard.org/api/v1/organizations/l3montree-cybersecurity/csaf/provider-metadata.json/ and this pkg:oci/devguard@v0.19.0?repository_url=ghcr.io/l3montree-dev/devguard
+- To use csaf as upstream, you need to add the org provider-metadata.json url and the correct purl of the asset. Like this e. g. "canonical_url": https://api.main.devguard.org/api/v1/organizations/l3montree-cybersecurity/csaf/provider-metadata.json/ and this pkg:oci/devguard@v0.19.0?repository_url=ghcr.io/l3montree-dev/devguard
 - Same upstream event handling
 
 ## Table of Contents
