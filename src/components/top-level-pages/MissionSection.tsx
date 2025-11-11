@@ -129,7 +129,7 @@ export default function MissionSection() {
                         </div>
                         <div className="flex flex-col gap-y-2">
                             <dt className="text-sm/6 text-gray-400">
-                                Enterprises currently in alpha programme
+                                Enterprises currently in beta programme
                             </dt>
                             <dd className="order-first text-6xl font-medium tracking-tight">
                                 <AnimatedNumber start={1} end={10} />
