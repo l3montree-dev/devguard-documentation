@@ -115,9 +115,9 @@ DevGuard leverages CSAF to provide comprehensive information about dependency vu
 
 ## What to Find in DevGuard's CSAF Reports?
 
-Each CSAF report in DevGuard covers a single vulnerability affecting your asset. Reports follow the CSAF VEX (Vulnerability Exploitability eXchange) format and consist of two main components: the **Document** object and the **Vulnerabilities** object.
+Each CSAF report in DevGuard covers a single vulnerability affecting your asset. Reports follow the CSAF VEX (Vulnerability Exploitability eXchange) profile and consist of two main components: the **Document** object and the **Vulnerabilities** object.
 
-## A key difference between CSAF VEX & CyclonDX VEX
+## A key difference between CSAF VEX & CycloneDX VEX
 
 CSAF VEX has a product-centric view: You have a single product and communicate vulnerabilies of used
 dependencies affecting that product without detailing the dependency graph. So the reciepient of the CSAF
@@ -142,10 +142,10 @@ of product A are affected.
 }
 ```
 
-In contrast, CyclonDX VEX takes a component-centric approach, detailing vulnerabilities at the component level.
+In contrast, CycloneDX VEX takes a component-centric approach, detailing vulnerabilities at the component level.
 It provides the precise location of the affected dependency using the PURL of the affected package inside the product.
 
-```json filename="CyclonDX VEX Extract"
+```json filename="CycloneDX VEX Extract"
 {
   ...
   "vulnerabilities": [
