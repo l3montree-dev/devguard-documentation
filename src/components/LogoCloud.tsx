@@ -125,6 +125,21 @@ export default function LogoCloud() {
                             />
                         </a>
                     </div>
+                    <div className="bg-dg-300 p-6 sm:p-10">
+                        <a
+                            href="https://www.cronn.de/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <Image
+                                alt="Cronn GmbH"
+                                src="/sponsors/cronn-logo.svg"
+                                width={158}
+                                height={48}
+                                className="max-h-12 w-full object-contain"
+                            />
+                        </a>
+                    </div>
                     <div className="flex items-center bg-dg-300 p-6 sm:p-10">
                         <a
                             href="https://www.bonnconsulting.group/"

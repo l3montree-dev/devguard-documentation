@@ -42,6 +42,10 @@ const logos = [
         url: '/sponsors/opendesk-logo.svg',
     },
     {
+        name: 'Cronn',
+        url: '/sponsors/cronn-logo.svg',
+    },
+    {
         name: 'CPS',
         url: '/sponsors/cps-logo.svg',
     },
