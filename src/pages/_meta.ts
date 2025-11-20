@@ -24,7 +24,6 @@ export default {
     'concept-guides': { title: 'Concept Guides' },
     contributing: { title: 'Contributing' },
     comparison: { title: 'Tool Comparison' },
-    faq: { title: 'FAQ' },
     other: {
         title: 'Other',
     },
