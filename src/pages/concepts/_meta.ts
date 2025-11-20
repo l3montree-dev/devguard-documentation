@@ -7,6 +7,7 @@ export default {
     'aggregated-vulnerability-database': {
         title: 'Aggregated Vulnerability Database',
     },
+    'risk-calculation': { title: 'Risk Calculation' },
     'attestations-provenance': {
         title: 'Attestations & Provenance',
     },
