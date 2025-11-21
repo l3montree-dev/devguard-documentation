@@ -2,6 +2,7 @@
 sidebar_position: 2
 ---
 import { Steps, ImageZoom } from 'nextra/components'
+import { Callout } from 'nextra/components'
 
 # Set-up GitLab Integration
 
@@ -79,13 +80,57 @@ You can find more information about the pipeline configuration file [here](/othe
 
 
 Finally, push the changes to your repository.
+</Steps>
+
+## GitLab Access Tokens: Workaround for Limited Permissions
+
+<Callout emoji="💡">
+**Context:**
+GitLab restricts group and project access tokens to paid plans. Additionally, group webhooks are not universally available. To simplify setup and grant access to only specific repositories (e.g., for DevGuard), you can use a **robot user** as a workaround.
+</Callout>
+
+---
+
+#### Why Use a Robot User?
+- **Granular Access:** Add the robot user only to the repositories you want to share.
+- **No Paid Features Required:** Avoids the need for group/project access tokens.
+- **Simplified Automation:** Works seamlessly with autosetup functionalities.
+
+---
+
+#### How to Set Up a Robot User
+
+1. **Create a New GitLab Account**
+   Register a new account (e.g., `devguard-robot@example.com`).
+   Use a clear naming convention to distinguish it as a service account.
+
+2. **Generate a Personal Access Token**
+   Log in to the robot account.
+   Navigate to **Settings > Access Tokens**.
+   Create a token with the required permissions (e.g., `read_repository`, `write_repository`).
+
+3. **Add the Robot User to Target Repositories**
+   Go to the repository’s **Settings > Members**.
+   Invite the robot user with the appropriate role (e.g., **Developer** or **Maintainer**).
+
+4. **Use the Token in Your Automation**
+   Configure your autosetup tool (e.g., DevGuard) to use the robot user’s token for authentication.
+
+---
+
+#### Best Practices
+- **Security:** Restrict the robot user’s permissions to the minimum required.
+- **Auditability:** Document the robot user’s purpose and access scope for your team.
+- **Token Management:** Rotate tokens periodically and revoke access if the repository scope changes.
+
+---
 
 
 {/* ### Go to the security control center of the asset and click on auto setup to create a pipeline
 
 ![Go to the security control center of the asset and click on auto setup to create a pipeline](../../assets/gitlab-setup/gitlab-4.png) */}
 
-</Steps>
+
 
 
 
