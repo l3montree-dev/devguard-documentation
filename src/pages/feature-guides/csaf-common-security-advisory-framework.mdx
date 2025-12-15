@@ -119,13 +119,48 @@ Each CSAF report in DevGuard covers a single vulnerability affecting your asset.
 
 ## A key difference between CSAF VEX & CycloneDX VEX
 
-CSAF VEX has a product-centric view: You have a single product and communicate vulnerabilies of used
-dependencies affecting that product without detailing the dependency graph. So the reciepient of the CSAF
-report "just" sees product A is affected by vulnerability CVE-2025-1234, without details about which dependencies
-of product A are affected.
+CSAF VEX has a product-centric view: You can have multiple products and communicate vulnerabilies of used
+dependencies affecting that products with CSAFs relationships. So the recipient of the CSAF report sees the product and it's depedency graph, possibly including exact versions, operating systems, platforms etc.
 
 ```json filename="CSAF VEX Extract"
 {
+  "product_tree": {
+    "branches": [
+      {
+        "category": "product_name", // <- you should have a proper product tree structure (at least vendor, product_name, version/version_range) here, this is only for abbrevation
+        "name": "L3montree devguard-web 1.1",
+        "product": {
+          "name": "L3montree devguard-web 1.1",
+          "product_id": "CSAFPID-0001",
+          "product_identification_helper": {
+            "purl": "pkg:oci/devguard-web@main"
+          }
+        }
+      },
+      {
+        "category": "product_name", // <- you should have a proper product tree structure here, this is only for abbrevation
+        "name": "PrismJS Prism 1.27.0",
+        "product": {
+          "name": "PrismJS Prism 1.27.0",
+          "product_id": "CSAFPID-0002",
+          "product_identification_helper": {
+            "purl": "pkg:npm/prismjs@1.27.0"
+          }
+        }
+      }
+    ],
+    "relationships": [
+      {
+        "category": "default_component_of",
+        "full_product_name": {
+          "name": "Prism prismjs 1.27.0 default component of L3montree devguard-web 1.1",
+          "product_id": "CSAFPID-0003"
+        },
+        "product_reference": "CSAFPID-0002",
+        "relates_to_product_reference": "CSAFPID-0001"
+      }
+    ]
+  },
   "vulnerabilities": [
     {
       "cve": "CVE-2024-53382",
@@ -133,17 +168,17 @@ of product A are affected.
       "notes": [...],
       "product_status": {
         "under_investigation": [
-          "pkg:oci/devguard-web@main" // <- product PURL without details on affected dependency
+          "CSAFPID-0003" // <- this references the relationship
         ]
       },
-      "title": "CVE-2024-53382"
+      "title": "DOM Clobbering vulnerability within the Prism library's prism-autoloader plugin"
     }
   ]
 }
 ```
 
 In contrast, CycloneDX VEX takes a component-centric approach, detailing vulnerabilities at the component level.
-It provides the precise location of the affected dependency using the PURL of the affected package inside the product.
+It provides "only" the location of the affected dependency using the PURL of the affected package inside the product.
 
 ```json filename="CycloneDX VEX Extract"
 {
@@ -169,6 +204,5 @@ It provides the precise location of the affected dependency using the PURL of th
 }
 ```
 
-Both are obviously correct in terms of content, but in case you get a SBOM next to the vulnerability reports, DevGuard has to try to match via the
-CVE-ID instead of a direct mapping via PURL.
-
+Both are obviously correct in terms of content, and both can match PURLs directly with an SBOM. 
+CSAF-Vex has a more granular product and component structure, which helps to narrow down the affected systems.
