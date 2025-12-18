@@ -1,32 +1,84 @@
-# Searching for specific Package in Organization
+# Searching for Specific Packages in Your Organization
 
-- It is now possible to search for a specific Package in each Repository in an Organization.
-    -   Only Admin & Owner Roles can search for this Package.
-    -   This Feature is useful, when you want to quickly check whether a certain Package is used in any Repository (e.g xz-util) and what version it is on.
-    -   Additionally it is shown in which artifacts the Package is.
-    -   It is found on the organization Page, in the Tabs Area, next to the Settings (you need the correct Permission to see the tab).
+## Overview
 
-# How it works
+DevGuard now allows **Admin and Owner roles** to search for specific packages across all repositories within an organization. This feature is designed to help you quickly identify where a particular package (e.g., `xz-util`) is used, including its version and the artifacts it appears in. This is especially useful for security audits, compliance checks, or dependency management.
 
--   It recursively looks for the specific Package name with an LIKE statement, in each Repository in your Organization,
-     it will only find direct Dependencies (First Party Dependencies).
+**Location:** The feature is accessible from the **Organization Page**, in the **Tabs Area**, next to Settings. Only users with the correct permissions will see this tab.
 
--   one new endpoint will be available:
-    - `api/v1/organizations/{organizationName}/dependency-components?search={packageName}`
-    - These endpoints will provide certain information:
-        - componentDependencyId
-        - dependencyPurl
-        - organizationId
-        - organizationName
-        - projectId
-        - projectName
-        - projectSlug
-        - assetId
-        - assetName
-        - assetSlug
-        - assetVersionName
-        - componentPurl
-        - componentVersion
-        - artifactName
-        - artifactAssetVersion
+---
 
+## How It Works
+
+### Search Process
+- The search recursively scans each repository in your organization using a **LIKE statement** to match the package name.
+- Only **direct (first-party) dependencies** are returned in the results.
+
+### API Endpoint
+A new API endpoint is available for programmatic access:
+
+```
+GET /api/v1/organizations/{organizationName}/dependency-components?search={packageName}
+```
+
+#### Response Fields
+   Field                  | Description                          |
+ |------------------------|--------------------------------------|
+ | `componentDependencyId`| Unique identifier for the dependency |
+ | `dependencyPurl`       | Package URL (purl) of the dependency |
+ | `organizationId`       | ID of the organization               |
+ | `organizationName`     | Name of the organization             |
+ | `projectId`            | ID of the project                    |
+ | `projectName`          | Name of the project                  |
+ | `projectSlug`          | Slug of the project                  |
+ | `assetId`              | ID of the asset                      |
+ | `assetName`            | Name of the asset                    |
+ | `assetSlug`            | Slug of the asset                    |
+ | `assetVersionName`     | Version name of the asset            |
+ | `componentPurl`        | Package URL (purl) of the component  |
+ | `componentVersion`     | Version of the component             |
+ | `artifactName`         | Name of the artifact                 |
+ | `artifactAssetVersion` | Version of the artifact              |
+
+---
+
+## Use Cases
+
+- **Security Audits:** Quickly check if a vulnerable package is used anywhere in your organization.
+- **Compliance:** Verify that only approved package versions are in use.
+- **Dependency Management:** Identify and update outdated or risky dependencies across multiple projects.
+
+---
+
+## Permissions
+
+- Only users with **Admin** or **Owner** roles can access this feature and the associated API endpoint.
+
+---
+
+## Example Workflow
+
+1. Navigate to your **Organization Page** in DevGuard.
+2. Click on the new **Package Search** tab.
+3. Enter the package name (e.g., `xz-util`) in the search bar.
+4. View the results, which include:
+   - Repositories where the package is found
+   - Version of the package in each repository
+   - Artifacts containing the package
+
+---
+
+## Integration
+
+This feature integrates seamlessly with DevGuard’s existing SBOM and dependency management tools, providing a unified view of your organization’s software supply chain.
+
+---
+
+## Notes
+
+- The search is case-insensitive and supports partial matches.
+- Only direct dependencies are included in the results.
+
+---
+
+**Need help or have feedback?** [Contact us](mailto:support@devguard.org) or visit our [GitHub repository](https://github.com/l3montree-dev/devguard)
