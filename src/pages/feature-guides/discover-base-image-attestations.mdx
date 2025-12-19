@@ -89,5 +89,5 @@ devguard-scanner discover-baseimage-attestations Dockerfile
 jq '.predicate' vex > vex-document.json
 
 # Upload the extracted VEX document
-devguard-scanner vex --token xyz --apiUrl https://api.main.devguard.org/ --assetName my-org/projects/my-group/assets/my-repo vex-document.json
+devguard-scanner vex --token xyz --apiUrl https://api.devguard.org/ --assetName my-org/projects/my-group/assets/my-repo vex-document.json
 ```

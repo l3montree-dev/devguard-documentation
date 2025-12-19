@@ -25,7 +25,7 @@ After enabling CSAF reports, your organization's vulnerability data becomes acce
 ### Instance Lister
 
 On the instance level all organizations providing CSAF reports are listed:
-- Primary endpoint: `https://api.main.devguard.org/api/v1/.well-known/csaf-aggregator/aggregator.json`
+- Primary endpoint: `https://api.devguard.org/api/v1/.well-known/csaf-aggregator/aggregator.json`
 - Alternative endpoint: `https://main.devguard.org/.well-known/csaf-aggregator/aggregator.json`
 
 Your organization will be **listed publicly** as a provider in this list once you enable public access to vulnerability data.
@@ -35,7 +35,7 @@ Your organization will be **listed publicly** as a provider in this list once yo
 Each organization has a provider metadata file that lists all repositories (assets) with CSAF reports available:
 
 ```
-https://api.main.devguard.org/api/v1/organizations/{org-name}/csaf/provider-metadata.json
+https://api.devguard.org/api/v1/organizations/{org-name}/csaf/provider-metadata.json
 ```
 
 This file contains a `distributions` array listing `directory_url` your repositories (assets) that have CSAF reports enabled.
@@ -45,12 +45,12 @@ This file contains a `distributions` array listing `directory_url` your reposito
 Individual vulnerability reports for each asset are organized by year and TLP (Traffic Light Protocol) (DevGuard currently only supports TLP:WHITE) level:
 
 ```
-https://api.main.devguard.org/api/v1/organizations/{org-name}/projects/{project-name}/assets/{asset-name}/csaf/white/{year}/
+https://api.devguard.org/api/v1/organizations/{org-name}/projects/{project-name}/assets/{asset-name}/csaf/white/{year}/
 ```
 
 Each asset will have a separate CSAF report for every vulnerability that has been detected throughout its lifetime.
 
-[Example Index](https://api.main.devguard.org/api/v1/organizations/l3montree-cybersecurity/projects/devguard/assets/devguard-web/csaf/white/)
+[Example Index](https://api.devguard.org/api/v1/organizations/l3montree-cybersecurity/projects/devguard/assets/devguard-web/csaf/white/)
 of the DevGuard backend repository.
 
 ## Consuming CSAF Reports as Upstream Data
@@ -66,7 +66,7 @@ upstreams CSAF URL and PURL to one of your assets:
 
 1. **Provider Metadata URL**: The organization's CSAF provider metadata endpoint
    ```
-   https://api.main.devguard.org/api/v1/organizations/{org-name}/csaf/provider-metadata.json
+   https://api.devguard.org/api/v1/organizations/{org-name}/csaf/provider-metadata.json
    ```
 
 2. **Package URL (PURL)**: The identifier for the specific asset you want to track. You usally get that PURL from your upstream.

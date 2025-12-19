@@ -7,7 +7,7 @@ The `code-risk-identification` accepts the following inputs:
 
 | Name                   | Description                                                                   | Required    | Default Value                                    | 
 |------------------------|--------------------------|-----|----------------------------------|
-| `api-url`               | URL of the DevGuard API                                           | No          | `https://api.main.devguard.org`                 |  
+| `api-url`               | URL of the DevGuard API                                           | No          | `https://api.devguard.org`                 |  
 | `asset-name`            | Name of the asset to be scanned                                               | Yes         |                                                 |           
 | `sarif-file`              | Path to the sarif file to be scanned | Yes         |         `sbom.json`                               |
 | `sarif-artifact-name`              | Name of the SBOM artifact to be downloaded | No         |         `''`                               |
@@ -24,7 +24,7 @@ jobs:
     devguard-code-risk-identification:
         uses: l3montree-dev/devguard-action/.github/workflows/code-risk-identification.yml@main
         with:
-          api-url: https://api.main.devguard.org
+          api-url: https://api.devguard.org
           asset-name: 'myOrgnaization/projects/myProject/assets/myAsset'
           sbom-file: "./sbom.json" 
         secrets:
@@ -63,7 +63,7 @@ jobs:
         needs: secret-scanning
         uses: l3montree-dev/devguard-action/.github/workflows/code-risk-identification.yml@feautre/sarif-sbom-upload-actions
         with:
-          api-url: https://api.main.devguard.org
+          api-url: https://api.devguard.org
           asset-name: 'myOrgnaization/projects/myProject/assets/myAsset'
           sarif-artifact-name: gitleaks-report
           sarif-file: gitleaks.sarif.json
