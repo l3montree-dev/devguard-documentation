@@ -63,12 +63,12 @@ jobs:
 
     dependency-risk-identification:
         needs: software-composition-analysis
-        uses: l3montree-dev/devguard-action/.github/workflows/code-risk-identification.yml@feautre/sarif-sbom-upload-actions
+        uses: l3montree-dev/devguard-action/.github/workflows/dependency-risk-identification.yml@main
         with:
           api-url: https://api.main.devguard.org
           asset-name: 'myOrgnaization/projects/myProject/assets/myAsset'
-          sarif-artifact-name: sbom-report
-          sarif-file: sbom.json
+          sbom-artifact-name: sbom-report
+          sbom-file: sbom.json
         secrets:
           devguard-token: ${{ secrets.DEVGUARD_TOKEN }}
 
