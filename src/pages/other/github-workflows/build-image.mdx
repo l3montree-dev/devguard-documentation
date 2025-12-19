@@ -5,7 +5,7 @@ import {Build} from '../../../components/texts/CICDJobs'
 The `build-image` workflow accepts the following inputs:
 | Name                   | Description                                                                   | Required    | Default Value                                    | 
 |------------------------|--------------------------|-----|----------------------------------|
-| `api-url`               | URL of the DevGuard API                                                       | No          | `https://api.main.devguard.org`                 |  
+| `api-url`               | URL of the DevGuard API                                                       | No          | `https://api.devguard.org`                 |  
 | `asset-name`            | Name of the asset to be scanned                                               | Yes         |                                                 |           
 | `path`              | Path to the source code to be scanned                                         | No          | `.`                                              | 
 | `image-destination-path`| Destination of the image.tar file | No          | `image.tar`                                      | 
@@ -26,7 +26,7 @@ jobs:
     devguard-build-image:
         uses: l3montree-dev/devguard-action/.github/workflows/build-image.yml@main
         with:
-          api-url: https://api.main.devguard.org
+          api-url: https://api.devguard.org
           asset-name: 'myOrgnaization/projects/myProject/assets/myAsset'
         secrets:
           devguard-token: ${{ secrets.DEVGUARD_TOKEN }}
