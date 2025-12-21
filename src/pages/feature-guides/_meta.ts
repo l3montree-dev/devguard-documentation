@@ -9,4 +9,7 @@ export default {
     'several-assets-and-artifacts-to-devguard-monorepos': {
         title: 'Mapping Several Assets and Artifacts (e.g., Monorepos)',
     },
+    'dependency-proxy': {
+        title: 'Dependency Proxy with Malicious Package Firewall',
+    },
 }
