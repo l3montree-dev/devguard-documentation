@@ -5,7 +5,7 @@ import {Sign} from '../../../components/texts/CICDJobs'
 The `sign` accepts the following inputs:
 | Name                   | Description                                                                   | Required    | Default Value                                    | 
 |------------------------|--------------------------|-----|----------------------------------|
-| `api-url`               | URL of the DevGuard API                                                       | No          | `https://api.main.devguard.org`                 |  
+| `api-url`               | URL of the DevGuard API                                                       | No          | `https://api.devguard.org`                 |  
 | `asset-name`            | Name of the asset to be scanned                                               | Yes         |                                                 |           
 | `path`              | Path to the source code to be scanned                                         | No          | `.`                                              |                                    | 
 | `artifact-suffix`                 |   This is only needed if you are using this job multiple times in the same workflow. For example if you are scanning multiple images build from the same source with different configuration.                  | No          |                 `''`                                | 
@@ -23,7 +23,7 @@ jobs:
     devguard-sign:
         uses: l3montree-dev/devguard-action/.github/workflows/sign.yml@main
         with:
-          api-url: https://api.main.devguard.org
+          api-url: https://api.devguard.org
           asset-name: 'myOrgnaization/projects/myProject/assets/myAsset'
         secrets:
           devguard-token: ${{ secrets.DEVGUARD_TOKEN }}

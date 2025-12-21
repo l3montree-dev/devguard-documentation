@@ -44,11 +44,24 @@ The DevGuard Helm chart offers various configurable parameters. To customize the
 Please checkout the [official values file](https://github.com/l3montree-dev/devguard-helm-chart/blob/main/values.yaml) for the configurable parameters and their requirements and default values.
 </Callout>
 
-
-
 ```bash
 helm install devguard devguard/devguard -f values.yaml
 ```
+
+### CSAF Integration
+
+For the [CSAF Support in DevGuard](/feature-guides/csaf-common-security-advisory-framework) it requires a secret containing your PGP key pair.
+```bash
+gpg --full-generate-key
+gpg --list-secret-keys --keyid-format LONG
+gpg --armor --export "$KEY_ID" > public.asc
+gpg --armor --export-secret-keys "$KEY_ID" > private.asc
+gpg --fingerprint "$KEY_ID"
+kubectl create secret generic csaf-key-pair --from-file=privateKey=private.asc --from-file=publicKey=public.asc --from-literal=passphrase="..." --from-literal=fingerprint="1C10 446..." -n devguard
+```
+
+Then set the secret name via `api.existingCsafSecretName` in your `values.yaml` file.
+
 
 ## Accessing DevGuard
 

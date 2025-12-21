@@ -3,6 +3,9 @@ export default {
     'ingesting-upstream-information': {
         title: 'Ingesting Upstream Information',
     },
+    'csaf-common-security-advisory-framework': {
+        title: 'CSAF (Common Security Advisory Framework)',
+    },
     'discover-base-image-attestations': {
         title: 'Discovering Base Image Attestations',
     },

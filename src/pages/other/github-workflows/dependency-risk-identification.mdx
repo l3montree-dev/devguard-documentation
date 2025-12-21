@@ -6,7 +6,7 @@ import {DependencyRiskIdentification} from '../../../components/texts/CICDJobs'
 The `dependency-risk-identification` accepts the following inputs:
 | Name                   | Description                                                                   | Required    | Default Value                                    | 
 |------------------------|--------------------------|-----|----------------------------------|
-| `api-url`               | URL of the DevGuard API                                           | No          | `https://api.main.devguard.org`                 |  
+| `api-url`               | URL of the DevGuard API                                           | No          | `https://api.devguard.org`                 |  
 | `asset-name`            | Name of the asset to be scanned                                               | Yes         |                                                 |           
 | `sbom-file`              | Path to the SBOM file to be scanned | Yes         |         `sbom.json`                               |
 | `sbom-artifact-name`              | Name of the SBOM artifact to be downloaded | No         |         `''`                               |
@@ -25,7 +25,7 @@ jobs:
     devguard-dependency-risk-identification:
         uses: l3montree-dev/devguard-action/.github/workflows/dependency-risk-identification.yml@main
         with:
-          api-url: https://api.main.devguard.org
+          api-url: https://api.devguard.org
           asset-name: 'myOrgnaization/projects/myProject/assets/myAsset'
           sbom-file: "./sbom.json" 
         secrets:
@@ -63,12 +63,12 @@ jobs:
 
     dependency-risk-identification:
         needs: software-composition-analysis
-        uses: l3montree-dev/devguard-action/.github/workflows/code-risk-identification.yml@feautre/sarif-sbom-upload-actions
+        uses: l3montree-dev/devguard-action/.github/workflows/dependency-risk-identification.yml@main
         with:
-          api-url: https://api.main.devguard.org
+          api-url: https://api.devguard.org
           asset-name: 'myOrgnaization/projects/myProject/assets/myAsset'
-          sarif-artifact-name: sbom-report
-          sarif-file: sbom.json
+          sbom-artifact-name: sbom-report
+          sbom-file: sbom.json
         secrets:
           devguard-token: ${{ secrets.DEVGUARD_TOKEN }}
 

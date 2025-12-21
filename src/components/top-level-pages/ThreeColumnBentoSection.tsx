@@ -4,7 +4,7 @@ import { Subheading, Heading } from './text'
 
 export default function ThreeColumnBentoSection() {
     return (
-        <Container className="pb-36">
+        <Container className="pb-4">
             <Subheading className="text-l3-400">
                 Insights & Innovation
             </Subheading>
