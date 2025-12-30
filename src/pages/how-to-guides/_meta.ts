@@ -15,4 +15,9 @@ export default {
     'dependency-proxy': {
         title: 'Dependency Proxy with Malicious Package Firewall',
     },
+    'container-hardening': {
+        title: 'Container Hardening Guide',
+    },
+    'risk-mitigation-guides': { title: 'Risk Mitigation Guides' },
+    'explaining-sboms': { title: 'Explaining SBOMs' },
 }

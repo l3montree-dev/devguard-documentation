@@ -1,0 +1,438 @@
+---
+title: "Troubleshooting: [Problem Description]"
+description: "How to diagnose and fix [specific problem]"
+difficulty: intermediate # beginner | intermediate | advanced
+lastUpdated: 2025-12-21
+relatedPages:
+  - "[Related Troubleshooting Guide]"
+  - "[How-to Guide]"
+  - "[Configuration Reference]"
+tags:
+  - troubleshooting
+  - [problem-area]
+---
+
+import { Callout } from 'nextra/components'
+import { Steps } from 'nextra/components'
+
+# Troubleshooting: [Problem Description]
+
+Quick guide to diagnose and resolve [specific problem or error].
+
+## Problem Summary
+
+**Symptoms:**
+- Symptom 1
+- Symptom 2
+- Symptom 3
+
+**Affected versions:** [Version range if applicable]
+
+**Environment:** [Where this typically occurs]
+
+---
+
+## Quick Checks
+
+Before diving deep, try these quick fixes:
+
+<Steps>
+
+### 1. Check [Most Common Cause]
+
+```bash
+# Quick verification command
+command-to-check-status
+```
+
+✅ **If this shows [expected result]:** Problem is likely [cause]
+
+### 2. Verify [Second Common Cause]
+
+```bash
+# Another quick check
+```
+
+### 3. Review [Logs/Configuration]
+
+```bash
+# How to check logs
+tail -f /path/to/logs
+```
+
+</Steps>
+
+---
+
+## Common Causes
+
+### Cause 1: [Most Frequent Cause]
+
+**Likelihood:** ⭐⭐⭐⭐⭐ (Very Common)
+
+**How to identify:**
+```bash
+# Diagnostic command
+```
+
+**Expected output if this is the issue:**
+```
+Error message or status indicating this cause
+```
+
+**Solution:**
+
+<Steps>
+
+### Fix Step 1
+
+```bash
+# Command to fix
+```
+
+### Fix Step 2
+
+```bash
+# Follow-up command
+```
+
+### Verify
+
+```bash
+# Verification command
+```
+
+Expected output:
+```
+Success message
+```
+
+</Steps>
+
+<Callout type="success">
+  **Fixed?** If this resolved your issue, you're done! If not, continue below.
+</Callout>
+
+---
+
+### Cause 2: [Second Common Cause]
+
+**Likelihood:** ⭐⭐⭐⭐ (Common)
+
+**How to identify:**
+```bash
+# Diagnostic command
+```
+
+**Indicators:**
+- Indicator 1
+- Indicator 2
+
+**Solution:**
+
+```bash
+# Fix command
+```
+
+**Why this works:**
+Brief explanation of why this solution resolves the issue.
+
+---
+
+### Cause 3: [Less Common Cause]
+
+**Likelihood:** ⭐⭐⭐ (Occasional)
+
+**How to identify:**
+Description of how to detect this cause.
+
+**Solution:**
+Step-by-step fix instructions.
+
+---
+
+## Diagnostic Process
+
+If the quick fixes didn't work, follow this systematic diagnostic:
+
+<Steps>
+
+### Step 1: Gather Information
+
+Collect diagnostic data:
+
+```bash
+# System information
+command-to-get-system-info
+
+# Configuration
+command-to-show-config
+
+# Recent logs
+command-to-get-logs
+```
+
+### Step 2: Check Dependencies
+
+Verify all dependencies are working:
+
+```bash
+# Check dependency 1
+check-command-1
+
+# Check dependency 2
+check-command-2
+```
+
+### Step 3: Isolate the Problem
+
+Narrow down where the issue occurs:
+
+```bash
+# Test in isolation
+test-command
+```
+
+### Step 4: Apply Appropriate Fix
+
+Based on findings above, apply the relevant solution from the Causes section.
+
+</Steps>
+
+---
+
+## Detailed Solutions
+
+### Solution A: [For Cause 1]
+
+**When to use:** When you've identified [specific situation]
+
+**Prerequisites:**
+- Requirement 1
+- Requirement 2
+
+**Steps:**
+
+1. **Backup current state** (if applicable)
+   ```bash
+   # Backup command
+   ```
+
+2. **Make the fix**
+   ```bash
+   # Fix commands with explanations
+   command1 --flag  # Why this flag
+   command2         # What this does
+   ```
+
+3. **Restart services** (if needed)
+   ```bash
+   # Restart commands
+   ```
+
+4. **Verify the fix**
+   ```bash
+   # Verification commands
+   ```
+
+**Expected result:**
+```
+What you should see after successful fix
+```
+
+<Callout type="warning">
+  **Caution:** Important warning about this solution
+</Callout>
+
+---
+
+### Solution B: [For Cause 2]
+
+Detailed solution for another cause...
+
+---
+
+## Prevention
+
+To avoid this issue in the future:
+
+✅ **Best Practices:**
+- Practice 1 with explanation
+- Practice 2 with explanation
+- Practice 3 with explanation
+
+✅ **Monitoring:**
+```bash
+# Set up monitoring/alerts
+monitoring-command
+```
+
+✅ **Configuration Recommendations:**
+```yaml
+# Recommended configuration
+recommended:
+  setting: value
+```
+
+---
+
+## Error Messages Reference
+
+### Error: "[Exact Error Message 1]"
+
+**Meaning:** What this error indicates
+
+**Common causes:**
+- Cause A
+- Cause B
+
+**Solution:** Link to Solution A above or quick fix
+
+---
+
+### Error: "[Exact Error Message 2]"
+
+**Meaning:** Explanation
+
+**Quick fix:**
+```bash
+# One-liner fix
+```
+
+---
+
+### Error: "[Exact Error Message 3]"
+
+**Meaning:** Explanation
+
+**See:** [Link to relevant section above]
+
+---
+
+## Advanced Debugging
+
+For persistent issues that don't match common causes:
+
+### Enable Debug Logging
+
+```bash
+# Enable verbose/debug mode
+export DEBUG=true
+command-with-debug-output
+```
+
+### Check System Resources
+
+```bash
+# Memory usage
+free -h
+
+# Disk space
+df -h
+
+# CPU usage
+top
+```
+
+### Network Diagnostics
+
+```bash
+# Test connectivity
+curl -v https://api.devguard.org/health
+
+# Check DNS
+nslookup api.devguard.org
+
+# Test ports
+telnet api.devguard.org 443
+```
+
+### Database Issues
+
+```bash
+# Check database connection
+psql -h localhost -U user -d devguard -c "SELECT 1"
+
+# Check database logs
+tail -f /var/log/postgresql/postgresql.log
+```
+
+---
+
+## Known Issues
+
+### Issue: [Known Bug/Limitation]
+
+**Status:** 🔴 Open | 🟡 In Progress | 🟢 Fixed in v.X.Y.Z
+
+**Description:** Brief description of the known issue
+
+**Workaround:**
+```bash
+# Temporary workaround
+```
+
+**Tracking:** [Link to GitHub issue #123]
+
+---
+
+### Issue: [Another Known Issue]
+
+Details...
+
+---
+
+## When to Get Help
+
+If none of these solutions work:
+
+1. **Check these resources:**
+   - [FAQ] - Link
+   - [Community Forum] - Link
+   - [GitHub Issues] - Link
+
+2. **Gather this information before asking for help:**
+   ```bash
+   # Version information
+   devguard-scanner --version
+   
+   # Environment details
+   uname -a
+   
+   # Relevant logs (last 100 lines)
+   tail -100 /path/to/logs
+   
+   # Configuration (sanitized)
+   cat config.yml | grep -v password
+   ```
+
+3. **Create a support ticket:**
+   - [Support Portal] - Link
+   - Include: Symptoms, error messages, steps taken, system information
+
+<Callout type="info">
+  **Pro tip:** Include the diagnostic information above to get faster help
+</Callout>
+
+---
+
+## Related Issues
+
+- [Related Problem 1] - Link to other troubleshooting guide
+- [Related Problem 2] - Link to other troubleshooting guide
+- [Configuration Guide] - Link to prevent similar issues
+
+---
+
+## Additional Resources
+
+- [Configuration Reference] - Link
+- [API Documentation] - Link
+- [System Requirements] - Link
+- [Community Discussions] - Link
+
+---
+
+<Callout type="default">
+  **Did this solve your problem?** [Yes](#) | [No](#) | [Edit this page](link-to-github)
+</Callout>
