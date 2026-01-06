@@ -1,10 +1,235 @@
 ---
 title: Scan Dependencies
-description: Analyze project dependencies for vulnerabilities
+description: Analyze project dependencies for vulnerabilities using Software Composition Analysis (SCA)
 ---
 
 import { Callout, Tabs } from 'nextra/components'
 
 # Scan Dependencies
 
-Docs are coming soon!
+Analyze your project dependencies for known vulnerabilities and licensing issues. DevGuard performs Software Composition Analysis (SCA) to identify vulnerable packages, generate Software Bill of Materials (SBOM), and track open-source licenses.
+
+## Prerequisites
+
+Before you begin, ensure you have:
+
+- Docker installed on your system
+- A personal access token from DevGuard (create one in user settings)
+- A repository created in DevGuard
+- Source code with a supported package manifest (e.g., `package.json`, `requirements.txt`, `go.mod`, `Cargo.toml`, `pom.xml`)
+
+## Scan Project Dependencies
+
+<Tabs items={['npm/Node.js', 'Python', 'Go', 'Rust', 'Java/Maven']}>
+  <Tabs.Tab>
+    Scan a Node.js project with `package.json`:
+
+    ```bash copy
+    docker run -v "$(PWD):/app" ghcr.io/l3montree-dev/devguard/scanner:main-latest \
+      devguard-scanner sca \
+        --path=/app \
+        --assetName="myorg/projects/myproject/assets/myrepo" \
+        --apiUrl="https://api.devguard.org" \
+        --token="YOUR_TOKEN"
+    ```
+
+    <Callout type="info">
+      The scanner automatically detects and analyzes `package.json` and `package-lock.json` files in your project.
+    </Callout>
+  </Tabs.Tab>
+
+  <Tabs.Tab>
+    Scan a Python project with `requirements.txt` or `pyproject.toml`:
+
+    ```bash copy
+    docker run -v "$(PWD):/app" ghcr.io/l3montree-dev/devguard/scanner:main-latest \
+      devguard-scanner sca \
+        --path=/app \
+        --assetName="myorg/projects/myproject/assets/myrepo" \
+        --apiUrl="https://api.devguard.org" \
+        --token="YOUR_TOKEN"
+    ```
+
+    <Callout type="info">
+      Supports both `requirements.txt`, `requirements-*.txt`, `setup.py`, and `pyproject.toml` for dependency resolution.
+    </Callout>
+  </Tabs.Tab>
+
+  <Tabs.Tab>
+    Scan a Go project with `go.mod`:
+
+    ```bash copy
+    docker run -v "$(PWD):/app" ghcr.io/l3montree-dev/devguard/scanner:main-latest \
+      devguard-scanner sca \
+        --path=/app \
+        --assetName="myorg/projects/myproject/assets/myrepo" \
+        --apiUrl="https://api.devguard.org" \
+        --token="YOUR_TOKEN"
+    ```
+
+    <Callout type="info">
+      The scanner reads `go.mod` and `go.sum` to identify all Go module dependencies.
+    </Callout>
+  </Tabs.Tab>
+
+  <Tabs.Tab>
+    Scan a Rust project with `Cargo.toml`:
+
+    ```bash copy
+    docker run -v "$(PWD):/app" ghcr.io/l3montree-dev/devguard/scanner:main-latest \
+      devguard-scanner sca \
+        --path=/app \
+        --assetName="myorg/projects/myproject/assets/myrepo" \
+        --apiUrl="https://api.devguard.org" \
+        --token="YOUR_TOKEN"
+    ```
+
+    <Callout type="info">
+      The scanner processes `Cargo.toml` and `Cargo.lock` for Rust crate dependencies.
+    </Callout>
+  </Tabs.Tab>
+
+  <Tabs.Tab>
+    Scan a Java project with `pom.xml`:
+
+    ```bash copy
+    docker run -v "$(PWD):/app" ghcr.io/l3montree-dev/devguard/scanner:main-latest \
+      devguard-scanner sca \
+        --path=/app \
+        --assetName="myorg/projects/myproject/assets/myrepo" \
+        --apiUrl="https://api.devguard.org" \
+        --token="YOUR_TOKEN"
+    ```
+
+    <Callout type="info">
+      The scanner analyzes Maven `pom.xml` files to identify Java library dependencies.
+    </Callout>
+  </Tabs.Tab>
+</Tabs>
+
+<Callout type="info">
+  Replace `myorg/projects/myproject/assets/myrepo` with your repository's slug. You can copy this from the URL when viewing your repository in the DevGuard UI.
+</Callout>
+
+## What the Scanner Does
+
+1. **Detects Dependencies**: Analyzes package manifest files to identify all direct and transitive dependencies
+2. **Generates SBOM**: Creates a Software Bill of Materials (SBOM) in CycloneDX format listing all components
+3. **Vulnerability Analysis**: Checks each dependency against DevGuard's vulnerability database
+4. **License Detection**: Identifies licenses for all dependencies and flags compliance issues
+5. **Uploads Results**: Sends SBOM and vulnerability data to DevGuard for analysis
+
+**Verify it worked:** Navigate to your repository in DevGuard. You'll see:
+- Detected vulnerabilities with severity scores and CVSS ratings
+- License information for all dependencies
+- Dependency tree visualization
+- Remediation recommendations
+
+## CI/CD Integration
+
+For automated dependency scanning in CI/CD pipelines:
+- **GitHub Actions**: Use the [devguard-action](https://github.com/l3montree-dev/devguard-action) with the `sca` job
+- **GitLab CI**: Use the [sca-scan.yml](https://gitlab.com/l3montree/devguard/-/blob/main/templates/sca-scan.yml) GitLab CI Component
+- **Jenkins**: Integrate the DevGuard scanner using the DevGuard CLI
+
+## Advanced Options
+
+### Vulnerability Handling
+
+Fail the scan if vulnerabilities above a certain severity are found:
+
+```bash copy
+--failOnRisk=critical  # Options: low, medium, high, critical (default: critical)
+--failOnCVSS=critical  # Options: low, medium, high, critical (default: critical)
+```
+
+### Dependency Filtering
+
+Scan only specific paths in your project:
+
+```bash copy
+--path=/app/src           # Only scan source directory
+--excludePath=/app/node_modules  # Exclude node_modules (already excluded by default)
+```
+
+### Tracking & Origin
+
+Set a custom origin to identify the scan source:
+
+```bash copy
+--origin="npm-security-audit"  # Default is "sca"
+```
+
+Specify Git reference information:
+
+```bash copy
+--ref="feature-branch"         # Git reference (branch, tag, or commit). Default is "main"
+--defaultRef="main"            # Default Git reference. Default is "main"
+--isTag=true                   # Indicates if the reference is a tag. Default is false
+```
+
+<Callout type="info">
+  These flags help DevGuard track which branch or tag the scan is associated with. DevGuard will attempt to auto-detect Git information from the current directory if these flags are not specified.
+</Callout>
+
+### Multiple Artifacts
+
+If your project contains multiple independent artifacts (e.g., a monorepo with multiple packages):
+
+```bash copy
+--artifactName="frontend"    # Distinguishes between artifacts in same repository
+```
+
+### Ignoring External References
+
+If scanning container images with attestations, ignore external references:
+
+```bash copy
+--ignoreExternalReferences  # Ignore external links in VEX documents
+```
+
+<Callout type="info">
+  VEX documents can include external references to additional SBOM or VEX sources. Use this flag to skip fetching these external links.
+</Callout>
+
+## Supported Package Managers
+
+| Language | Package Managers | Manifest Files |
+|----------|-----------------|----------------|
+| **JavaScript** | npm, yarn, pnpm | `package.json`, `package-lock.json`, `yarn.lock`, `pnpm-lock.yaml` |
+| **Python** | pip, poetry, pipenv | `requirements.txt`, `pyproject.toml`, `setup.py`, `Pipfile` |
+| **Go** | go modules | `go.mod`, `go.sum` |
+| **Rust** | cargo | `Cargo.toml`, `Cargo.lock` |
+| **Java** | Maven, Gradle | `pom.xml`, `build.gradle` |
+| **C#** | NuGet | `packages.config`, `.csproj` |
+| **Ruby** | Bundler | `Gemfile`, `Gemfile.lock` |
+| **PHP** | Compo^ser | `composer.json`, `composer.lock` |
+
+## Troubleshooting
+
+### Dependencies Not Detected
+
+- Ensure manifest files are in the scanned path
+- Check that the path specified with `--path` includes the package manifest
+- For monorepos, scan the specific subdirectory containing the manifest
+
+### License Information Missing
+
+- Some packages may not have license information in public registries
+- Use `--includeLicenses` flag to ensure license data is collected
+- Check DevGuard UI for manually added or overridden license information
+
+### Authentication Issues
+
+For private package registries, authenticate before scanning:
+
+```bash copy
+# npm example
+docker run ghcr.io/l3montree-dev/devguard/scanner:main-latest \
+  sh -c "npm login --registry https://private-registry.example.com && \
+  devguard-scanner sca --path=/app ..."
+```
+
+<Callout type="warning">
+  Never hardcode credentials in scripts. Use environment variables or CI/CD secrets to pass sensitive authentication data.
+</Callout>

@@ -111,7 +111,7 @@
 │   ├── upload-vex.mdx                    # Upload VEX documents
 │   └── scheduled-scans.mdx               # Automated scanning
 │
-├── vulnerability-management/
+├── vulnerability-management/ lars
 │   ├── mark-as-false-positive.mdx        # False positive handling
 │   ├── accept-risk.mdx                   # Risk acceptance
 │   ├── track-fix-progress.mdx            # Remediation tracking
