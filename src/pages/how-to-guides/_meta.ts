@@ -8,4 +8,5 @@ export default {
         title: 'Container Hardening Guide',
     },
     'risk-mitigation-guides': { title: 'Risk Mitigation Guides' },
+    'vulnerability-management': { title: 'Vulnerability Management' },
 }
