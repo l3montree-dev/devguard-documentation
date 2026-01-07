@@ -114,7 +114,7 @@
 ├── vulnerability-management/ lars
 │   ├── mark-as-false-positive.mdx        # False positive handling
 │   ├── accept-risk.mdx                   # Risk acceptance
-│   ├── track-fix-progress.mdx            # Remediation tracking
+│   ├── track-fix-progress.mdx            # Remediation tracking 
 │   ├── create-vuln-events.mdx            # Event management
 │   ├── sync-external-data.mdx            # External vuln sync
 │   └── customize-risk-scores.mdx         # Risk scoring (CIA)

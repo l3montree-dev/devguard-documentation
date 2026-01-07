@@ -8,6 +8,15 @@
 		},
 		{
 			"path": "."
+		},
+		{
+			"path": "../devguard-action"
+		},
+		{
+			"path": "../compliance-as-code-attestors"
+		},
+		{
+			"path": "../attestation-compliance-policies"
 		}
 	],
 	"settings": {
