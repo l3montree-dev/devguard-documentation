@@ -343,7 +343,7 @@
 │   ├── transitive-dependencies.mdx       # Direct vs transitive
 │   ├── version-matching.mdx              # Semver matching
 │   └── package-ecosystems.mdx            # npm, PyPI, Go, Maven, etc.
-│ 
+│  
 ├── license-management/
 │   ├── license-detection.mdx             # How licenses are detected
 │   ├── license-compatibility.mdx         # OSI licenses
