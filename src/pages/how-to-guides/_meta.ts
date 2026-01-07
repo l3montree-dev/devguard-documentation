@@ -9,4 +9,8 @@ export default {
     },
     'risk-mitigation-guides': { title: 'Risk Mitigation Guides' },
     'vulnerability-management': { title: 'Vulnerability Management' },
+    'dependency-management': { title: 'Dependency Management' },
+    'compliance': { title: 'Compliance Management' },
+
+
 }

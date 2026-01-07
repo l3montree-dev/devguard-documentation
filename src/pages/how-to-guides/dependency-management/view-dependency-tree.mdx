@@ -20,7 +20,7 @@ Before you begin, ensure you have:
 
 ## Access the Dependency Graph
 
-1. Navigate to **Organization** → **Project** → **Asset**
+1. Navigate to **Organization** → **Project** → **Repository**
 2. Select an **Asset Version** (branch or tag)
 3. Click **Dependencies** → **Graph** in the left navigation
 
@@ -35,7 +35,7 @@ The interactive dependency graph displays:
 If your asset has multiple build artifacts (different container images, JARs, etc.):
 
 1. In the **Artifact Selector** at the top, choose a specific artifact
-2. The graph updates to show dependencies for only that artifact
+ 2. The graph updates to show dependencies for only that artifact
 3. Leave empty to view across all artifacts
 
 This helps identify which artifacts use risky dependencies.
@@ -44,6 +44,12 @@ This helps identify which artifacts use risky dependencies.
 
 By default, the graph shows only vulnerable dependencies:
 
+
+Click on Organization → Project → Repository → Dependencies → Graph
+
+
+![Dependency Tree](../../../assets/open-dependency-graph.png)
+
 1. Toggle **Display all dependencies** switch in the top-right
 2. The graph expands to show every dependency, including safe ones
 3. This is useful for:
@@ -51,49 +57,13 @@ By default, the graph shows only vulnerable dependencies:
    - Identifying transitive dependency chains
    - Finding dependency conflicts or redundancies
 
+![Dependency Tree](../../../assets/dependency-tree-all-dep.png)
+
 <Callout type="info">
   Displaying all dependencies can create large graphs. For projects with hundreds of dependencies, consider filtering by artifact first.
 </Callout>
 
-## Interact with the Graph
 
-- **Zoom**: Scroll to zoom in/out
-- **Pan**: Click and drag to move around
-- **Fullscreen**: Click the fullscreen icon (top-right) for a larger view
-- **Mini Map**: Bottom-left corner shows overview of the entire graph
-- **Click Components**: Click on a component node to see details about that dependency
-
-## View Component Details
-
-When you click on a component node:
-
-1. A details panel opens showing:
-   - Component name and version
-   - Vulnerabilities affecting it (if any)
-   - Package homepage and documentation links
-   - OpenSSF Scorecard rating
-   - License information
-
-2. You can also:
-   - View vulnerabilities for this component
-   - Check the path to the component
-   - View dependency details dialog
-
-## Trace Paths to Components
-
-To understand how a vulnerable component is included:
-
-1. Click on a vulnerable node in the graph
-2. Click **Path to component** in the details dialog
-3. A highlighted path shows:
-   - Your application at the top
-   - Each dependency level down to the vulnerable component
-   - The dependency chain responsible for including it
-
-This is essential for understanding:
-- Whether you can exclude the vulnerable component
-- What you'd need to update to fix it
-- If it's a critical path dependency
 
 <Callout type="info">
   Transitive dependencies (dependencies of dependencies) are shown with dotted lines in some views. They're often harder to remediate because they're pulled in by other libraries.
@@ -108,19 +78,6 @@ Use the graph to find:
 3. **Outdated Packages**: Check the version numbers against latest releases
 4. **Duplicates**: The same component at different versions (version conflicts)
 
-## Switch Between Versions
-
-To compare dependencies across versions:
-
-1. Use the **Branch/Tag Selector** at the top
-2. Select a different version
-3. The graph updates to show that version's dependencies
-
-This helps identify:
-- Which versions have more vulnerabilities
-- When dependencies were added or removed
-- How dependency risk evolves over time
-
 ## Understand Node Colors
 
 Dependency graph node colors represent vulnerability risk:
@@ -133,53 +90,3 @@ Dependency graph node colors represent vulnerability risk:
 
 The color is calculated from the highest severity vulnerability in that component and inherited risk from its dependencies.
 
-## Best Practices
-
-### Regular Review
-- Review your dependency graph monthly
-- Monitor for new vulnerabilities in existing components
-- Track when high-risk dependencies are added
-
-### Understand Your Supply Chain
-- Know what direct dependencies you have
-- Be aware of significant transitive dependencies
-- Identify bottleneck packages that many things depend on
-
-### Risk Assessment
-- Prioritize fixing vulnerabilities in heavily-used components
-- Transitive dependencies are harder to fix—update parents instead
-- Consider dependency alternatives if risks are too high
-
-### Version Management
-- Keep dependencies updated regularly
-- Avoid version conflicts (same package at different versions)
-- Pin versions to ensure reproducible builds
-
-## Troubleshooting
-
-### Graph is Very Large
-
-- Filter to a specific artifact
-- Turn off "Display all dependencies"
-- Search for specific components instead
-
-### Can't See Vulnerable Components
-
-1. Ensure "Display all dependencies" is off
-2. Check if the artifact filter is too restrictive
-3. Run a new scan if data is outdated
-4. Verify vulnerabilities are detected (check Vulnerabilities section)
-
-### Missing Dependencies
-
-1. Ensure the artifact selector matches your build
-2. Verify SBOM was generated correctly
-3. Check if you need to upload a manual SBOM for missing artifacts
-4. Some package managers may not have complete dependency information
-
-### Performance Issues
-
-- Use artifact filtering to reduce graph size
-- Switch to smaller versions
-- Close the fullscreen view
-- Refresh the page if it feels sluggish
