@@ -7,7 +7,7 @@ export default {
     'aggregated-vulnerability-database': {
         title: 'Aggregated Vulnerability Database',
     },
-    'risk-assessment-methodology': { title: 'Risk Assessment Methodology' },
+    'vulnerability-management': { title: 'Vulnerability Management' },
     'attestations-provenance': {
         title: 'Attestations & Provenance',
     },
