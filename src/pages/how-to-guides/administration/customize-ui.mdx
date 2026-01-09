@@ -2,4 +2,62 @@ import { Callout } from 'nextra/components'
 
 # Customize the UI
 
-Docs coming soon...
+DevGuard allows you to customize the web interface with custom CSS and JavaScript, as well as configure legal and contact information.
+
+## Requirements
+
+- A self hosted DevGuard installation (Kubernetes or Docker Compose)
+- Access to modify the Helm chart `values.yaml` or Docker Compose environment variables
+
+## Custom Styling and Behavior
+
+You can inject custom CSS and JavaScript into the DevGuard web interface by providing URLs to your theme files. These files are loaded in the root layout and applied globally.
+
+### Helm Chart Configuration
+
+Add the following to your `values.yaml`:
+
+```yaml
+web:
+  # Custom theme URLs (leave empty to use default theme)
+  themeCssUrl: "https://your-storage.example.com/custom-theme.css"
+  themeJsUrl: "https://your-storage.example.com/custom-theme.js"
+```
+
+### Docker Compose / Environment Variables
+
+When running with Docker Compose or directly with environment variables, configure for web service:
+
+```yaml
+environment:
+  - THEME_CSS_URL=https://your-storage.example.com/custom-theme.css
+  - THEME_JS_URL=https://your-storage.example.com/custom-theme.js
+```
+
+<Callout type="info">
+The CSS file is loaded as a stylesheet link, and the JavaScript file is loaded as a deferred script in the HTML document.
+</Callout>
+
+## Legal and Contact Information
+
+Configure links to your privacy policy, terms of use, imprint, and account deletion contact email.
+
+### Helm Chart Configuration
+
+```yaml
+web:
+  privacyPolicyLink: "https://example.com/privacy-policy"
+  termsOfUseLink: "https://example.com/terms-of-use"
+  imprintLink: "https://example.com/imprint"
+  accountDeletionMail: "privacy@example.com"
+```
+
+### Docker Compose / Environment Variables
+
+```yaml
+environment:
+  - PRIVACY_POLICY_LINK=https://example.com/privacy-policy
+  - TERMS_OF_USE_LINK=https://example.com/terms-of-use
+  - IMPRINT_LINK=https://example.com/imprint
+  - ACCOUNT_DELETION_MAIL=privacy@example.com
+```
