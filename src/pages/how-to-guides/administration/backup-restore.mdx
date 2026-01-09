@@ -1,0 +1,63 @@
+import { Callout, Tabs } from 'nextra/components'
+
+# Backup & Restore
+
+DevGuard stores all data in PostgreSQL. Use `pg_dump` to back up your databases.
+
+## Databases
+
+| Database | Content |
+|----------|---------|
+| `devguard` | Application data |
+| `kratos` | User authentication |
+
+## Backup
+
+We recommend using a tool like `pg_dump` to back up the databases. You may want to schedule regular backups using
+cron jobs or other scheduling tools. 
+
+```bash
+pg_dump --dbname=devguard --file="/{data_source}-{timestamp}-dump.sql"
+```
+
+## Restore
+
+<Callout type="warning">
+Restoring overwrites all existing data. Stop DevGuard services before restoring.
+</Callout>
+
+<Tabs items={['Kubernetes', 'Docker Compose']}>
+<Tabs.Tab>
+
+```bash
+# Stop services
+kubectl scale deployment devguard-api-deployment devguard-web-deployment kratos \
+  -n devguard --replicas=0
+
+# Restore
+kubectl cp devguard-backup.sql postgresql-0:/tmp/ -n devguard
+kubectl exec -n devguard postgresql-0 -- \
+  psql -U devguard -f /tmp/devguard-backup.sql
+
+# Start services
+kubectl scale deployment devguard-api-deployment devguard-web-deployment kratos \
+  -n devguard --replicas=1
+```
+
+</Tabs.Tab>
+<Tabs.Tab>
+
+```bash
+# Stop services
+docker-compose -f docker-compose-try-it.yaml stop devguard-api devguard-web kratos
+
+# Restore
+docker cp devguard-backup.sql devguard-postgres:/tmp/
+docker exec devguard-postgres psql -U postgres -f /tmp/devguard-backup.sql
+
+# Start services
+docker-compose -f docker-compose-try-it.yaml start
+```
+
+</Tabs.Tab>
+</Tabs>

@@ -1,0 +1,139 @@
+import { Callout, Steps } from 'nextra/components'
+
+# Deploy DevGuard with Helm
+
+Deploy DevGuard to a Kubernetes cluster using the [official Helm chart](https://github.com/l3montree-dev/devguard-helm-chart). This is the recommended method for production deployments.
+
+## Prerequisites
+
+- Kubernetes cluster (1.24+)
+- Helm 3.x installed
+- `kubectl` configured for your cluster
+
+<Steps>
+
+### Create namespace
+
+```bash
+kubectl create namespace devguard
+```
+
+### Create required secrets
+
+DevGuard requires an EC private key for signing In-Toto attestations:
+
+```bash
+openssl ecparam -name prime256v1 -genkey -noout -out private.ec.key
+kubectl create secret generic ec-private-key \
+  --from-file=privateKey=private.ec.key \
+  -n devguard
+```
+
+### Create your values file
+
+Create a `values.yaml` with your configuration:
+
+```yaml
+api:
+  ingress:
+    enabled: true
+    hosts:
+      - host: api.devguard.example.com
+        paths:
+          - path: /
+            pathType: Prefix
+
+web:
+  ingress:
+    enabled: true
+    hosts:
+      - host: devguard.example.com
+        paths:
+          - path: /
+            pathType: Prefix
+
+# Authentication settings
+password:
+  enabled: true
+passkey:
+  enabled: true
+
+# Mail configuration (required for account verification)
+mail:
+  existingSMTPConnectionUriSecret: "smtp-secret"
+  fromAddress: "noreply@example.com"
+  fromName: "DevGuard"
+```
+
+<Callout type="info">
+See the full [values.yaml](https://github.com/l3montree-dev/devguard-helm-chart/blob/main/values.yaml) for all configuration options. To inspect the chart locally:
+```bash
+helm pull oci://ghcr.io/l3montree-dev/devguard-helm-chart/devguard --version <version>
+tar -xzf devguard-<version>.tgz
+cd devguard
+```
+</Callout>
+
+### Install the chart
+
+```bash
+helm install devguard oci://ghcr.io/l3montree-dev/devguard-helm-chart/devguard \
+  --version <version> \
+  --namespace devguard \
+  -f values.yaml
+```
+
+### Verify deployment
+
+```bash
+kubectl get pods -n devguard
+```
+
+All pods should reach `Running` status within a few minutes. You will find the postgres pod, kratos pod, API deployment, and web deployment.
+
+</Steps>
+
+## Optional: CSAF Support
+
+For CSAF advisory generation, create a PGP key pair:
+
+```bash
+gpg --full-generate-key
+KEY_ID=$(gpg --list-secret-keys --keyid-format LONG | grep sec | head -1 | awk '{print $2}' | cut -d'/' -f2)
+gpg --armor --export "$KEY_ID" > public.asc
+gpg --armor --export-secret-keys "$KEY_ID" > private.asc
+FINGERPRINT=$(gpg --fingerprint "$KEY_ID" | grep -A1 "pub " | tail -1 | tr -d ' ')
+
+kubectl create secret generic csaf-key-pair \
+  --from-file=privateKey=private.asc \
+  --from-file=publicKey=public.asc \
+  --from-literal=passphrase="your-passphrase" \
+  --from-literal=fingerprint="$FINGERPRINT" \
+  -n devguard
+```
+
+Then add the CSAF section to your `values.yaml` (under the existing `api:` block):
+
+```yaml
+api:
+  csaf:
+    existingCsafSecretName: "csaf-key-pair"
+    aggregatorNamespace: "example.com"
+    aggregatorName: "Example GmbH"
+    aggregatorContactDetails: "csaf@example.com"
+```
+
+Then upgrade the release:
+
+```bash
+helm upgrade devguard oci://ghcr.io/l3montree-dev/devguard-helm-chart/devguard \
+  --version {version} \
+  --namespace devguard \
+  -f values.yaml
+```
+
+## Next Steps
+
+- [Configure monitoring](/how-to-guides/administration/monitoring-metrics)
+- [Set up backups](/how-to-guides/administration/backup-restore)
+- [Customize the UI](/how-to-guides/administration/customize-ui)

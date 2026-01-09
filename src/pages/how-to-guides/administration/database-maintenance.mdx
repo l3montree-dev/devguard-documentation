@@ -1,0 +1,98 @@
+import { Callout } from 'nextra/components'
+
+# Database Maintenance
+
+DevGuard automatically maintains its vulnerability database. This page covers the update process and troubleshooting.
+
+## Vulnerability Database Updates
+
+DevGuard downloads and updates the vulnerability database automatically:
+
+- **On startup**: Full database sync from latest snapshot
+- **Periodically**: Incremental differential updates
+
+### Data Source
+
+Vulnerability data is fetched from the [vulndb-diff](https://github.com/l3montree-dev/devguard/pkgs/container/devguard%2Fvulndb-diff) OCI registry. Each data package is **cryptographically signed** and verified before import using the bundled `cosign.pub` public key.
+
+Data sources aggregated in the vulndb include:
+- [OSV](https://osv.dev) (Open Source Vulnerabilities)
+- NVD (National Vulnerability Database)
+- [OSSF Malicious Packages](https://github.com/ossf/malicious-packages) database
+- EPSS (Exploit Prediction Scoring System)
+
+<Callout type="info">
+Initial database sync may take **10-30 minutes**. Vulnerability data won't be complete until this finishes.
+</Callout>
+
+## Monitoring Updates
+
+Check the `devguard_daemon_vulndb_update_duration_minutes` Prometheus metric to monitor update performance.
+
+View update progress in the API logs:
+
+```bash
+# Kubernetes
+kubectl logs -f deployment/devguard-api-deployment -n devguard | grep -i vulndb
+
+# Docker
+docker logs -f devguard-api | grep -i vulndb
+```
+
+Note that if you have several API instances, only one instance will perform the update to avoid conflicts (leader election based).
+
+## Storage Requirements
+
+The vulnerability database is temporarily stored on disk during updates. Ensure sufficient disk space:
+
+| Component | Approximate Size |
+|-----------|-----------------|
+| VulnDB | ~2-4 GB |
+| Malicious packages DB | ~100 MB |
+
+The Helm chart allocates an 8GB emptyDir for this purpose.
+
+The data is imported into the postgres database `devguard`. 
+
+## Manual Update
+
+Trigger a manual vulnerability database update by executing the CLI inside the container:
+
+**DevGuard CLI:**
+```bash
+devguard-cli vulndb import
+```
+
+**Kubernetes:**
+```bash
+kubectl exec -it deployment/devguard-api-deployment -n devguard -- devguard-cli vulndb import
+```
+
+This fetches the latest differential updates from the vulndb-diff registry and applies them to the database.
+
+## Malicious Package Database
+
+The malicious package database powers the [dependency proxy firewall](/how-to-guides/dependency-proxy). It updates alongside the vulnerability database.
+
+## Troubleshooting
+
+### Database not updating
+
+1. Check API logs for errors
+2. Verify network connectivity to GitHub (vulndb source)
+3. Ensure sufficient temporary disk space in `/tmp`
+
+### Slow updates
+
+- Initial sync can be slow
+- Check network bandwidth
+- Monitor with `devguard_daemon_vulndb_update_duration_minutes` metric
+
+### Missing vulnerabilities
+
+After initial sync, vulnerabilities should appear within minutes. If missing:
+
+1. Verify the database sync completed
+2. Check if the vulnerability exists e.g. in [OSV.dev](https://osv.dev)
+3. Re-scan the affected asset
+
