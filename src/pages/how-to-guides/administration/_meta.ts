@@ -6,6 +6,6 @@ export default {
     'monitoring-metrics': { title: 'Monitoring & Metrics' },
     'upgrade-devguard': { title: 'Upgrade DevGuard' },
     'database-maintenance': { title: 'Database Maintenance' },
-    'restricting-access': { title: 'OIDC & Restricting Access' },
+    'restricting-access': { title: 'OIDC/ SSO & Restricting Access' },
     'customize-ui': { title: 'Customize the UI' },
 }
