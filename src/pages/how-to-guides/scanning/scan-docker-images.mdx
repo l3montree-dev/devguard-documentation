@@ -112,16 +112,17 @@ Ignore external references in attestations:
 Specify an artifact name (useful for tracking multiple artifacts like a oci image with a CLI and one with the App per repository):
 
 ```bash copy
---artifactName="scanner-cli" # Default is "" (empty string)
+--artifactName="pkg:oci/orgSlug/projectSlug/repoSlug"  # Default is "pkg:oci/{orgSlug}/{projectSlug}/{repoSlug}"
 ```
 
 Set a custom origin to track scan source:
 
 ```bash copy
---origin="my-custom-origin"  # Default is "container-scanning"
+--origin="my-custom-origin"  # Default is "DEFAULT"
 ```
 
 Specify Git reference information:
+
 
 ```bash copy
 --ref="feature-branch"         # Git reference (branch, tag, or commit). Default is "main"

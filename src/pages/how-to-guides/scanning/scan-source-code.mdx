@@ -1,10 +1,120 @@
 ---
 title: Scan Source Code
-description: Run SAST, IaC and secret scanning on your source code
+description: Run SAST, IaC and secret scanning on your source code to identify first-party vulnerabilities
 ---
 
-import { Callout } from 'nextra/components'
+import { Callout, Tabs } from 'nextra/components'
 
 # Scan Source Code
 
-Docs are coming soon!
+Scan your source code for security issues, bad practices, and leaked secrets. DevGuard detects first-party vulnerabilities in your own code using multiple analysis techniques.
+
+## Prerequisites
+
+Before you begin, ensure you have:
+
+- Docker installed on your system
+- A personal access token from DevGuard (create one in user settings)
+- A repository created in DevGuard
+
+## Scan Source Code
+
+<Tabs items={['SAST (Static Analysis)', 'Secret Scanning', 'Infrastructure as Code']}>
+  <Tabs.Tab>
+    Run Static Application Security Testing (SAST) to identify security vulnerabilities and bad practices in your source code:
+
+    ```bash copy
+    docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main-latest \
+      devguard-scanner sast \
+        --path . \
+        --assetName="myorg/projects/myproject/assets/myrepo" \
+        --apiUrl="https://api.devguard.org" \
+        --token="YOUR_TOKEN"
+    ```
+
+    <Callout type="info">
+      SAST uses Semgrep to analyze your code for potential security issues without executing it.
+    </Callout>
+  </Tabs.Tab>
+
+  <Tabs.Tab>
+    Scan your repository for accidentally committed secrets like API keys, passwords, and tokens:
+
+    ```bash copy
+    docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main-latest \
+      devguard-scanner secret-scanning \
+        --path . \
+        --assetName="myorg/projects/myproject/assets/myrepo" \
+        --apiUrl="https://api.devguard.org" \
+        --token="YOUR_TOKEN"
+    ```
+
+    <Callout type="warning">
+      Secret scanning should be run regularly to detect accidental secrets before they are exposed publicly.
+    </Callout>
+  </Tabs.Tab>
+
+  <Tabs.Tab>
+    Scan Infrastructure as Code (IaC) files for misconfigurations and security issues:
+
+    ```bash copy
+    docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main-latest \
+      devguard-scanner iac \
+        --path . \
+        --assetName="myorg/projects/myproject/assets/myrepo" \
+        --apiUrl="https://api.devguard.org" \
+        --token="YOUR_TOKEN"
+    ```
+
+    <Callout type="info">
+      IaC scanning detects misconfigurations in your Terraform, Kubernetes, and other infrastructure definitions.
+    </Callout>
+  </Tabs.Tab>
+</Tabs>
+
+<Callout type="info">
+  Replace `myorg/projects/myproject/assets/myrepo` with your repository's slug. You can copy this from the URL when viewing your repository in the DevGuard UI.
+</Callout>
+
+## What the Scanner Does
+
+1. **Analyzes Source Code**: Scans your repository for security vulnerabilities, bad practices, and secrets
+2. **Generates SARIF Report**: Creates a structured Security Analysis Results Format (SARIF) report with findings
+3. **Uploads Results**: Sends the SARIF report to DevGuard
+4. **Server-Side Processing**: DevGuard processes and normalizes the findings for consistent tracking
+
+**Verify it worked:** Navigate to your repository in DevGuard. You'll see detected vulnerabilities listed with severity levels, locations in your code, and remediation guidance.
+
+## CI/CD Integration
+
+For automated source code scanning in CI/CD pipelines, DevGuard provides ready-to-use integrations:
+- **GitHub Actions**: [devguard-action](https://github.com/l3montree-dev/devguard-action) with reusable workflows
+- **GitLab CI**: [GitLab CI Components](https://gitlab.com/l3montree/devguard/-/tree/main/templates) including [static-application-security-testing.yml](https://gitlab.com/l3montree/devguard/-/blob/main/templates/sast.yml), [secret-scanning.yml](https://gitlab.com/l3montree/devguard/-/blob/main/templates/secret-scanning.yml), and [iac.yml](https://gitlab.com/l3montree/devguard/-/blob/main/templates/iac.yml)
+
+## Advanced Options
+
+Fail the command based on risk level:
+
+```bash copy
+--failOnRisk=critical  # Options: low, medium, high, critical (default: critical)
+--failOnCVSS=critical  # Options: low, medium, high, critical (default: critical)
+```
+
+Set a custom origin to track scan source:
+
+```bash copy
+--origin="my-custom-origin"  # Default is "DEFAULT"
+```
+
+Specify Git reference information:
+
+```bash copy
+--ref="feature-branch"         # Git reference (branch, tag, or commit). Default is "main"
+--defaultRef="main"            # Default Git reference to use. Default is "main"
+--isTag=true                   # Indicates if the reference is a tag. Default is false
+```
+
+<Callout type="info">
+  These flags help DevGuard track which branch or tag the scan is associated with. DevGuard will attempt to auto-detect Git information from the current directory if these flags are not specified.
+</Callout>
+
