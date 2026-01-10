@@ -182,7 +182,7 @@
 │   ├── authenticate-with-api.mdx         # API authentication
 │   ├── upload-scan-results.mdx           # API scanning
 │   ├── query-vulnerabilities.mdx         # API queries
-│   ├── manage-assets-via-api.mdx         # Asset management
+│   ├── readme-badge.mdx                  # Get readme badge with vuln count for repo
 │   └── webhooks-api.mdx                  # Webhook management
 │
 └── administration/

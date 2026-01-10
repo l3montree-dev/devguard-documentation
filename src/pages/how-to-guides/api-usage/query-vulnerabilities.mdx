@@ -1,0 +1,142 @@
+import { Callout } from 'nextra/components'
+
+# Query Vulnerabilities (NEEDS REVIEW)
+
+Retrieve vulnerability data from DevGuard via API.
+
+## Prerequisites
+
+- A [Personal Access Token](/how-to-guides/api-usage/authenticate-with-api) with `scan` or `manage` scope
+- An existing asset with scan results
+
+## List Dependency Vulnerabilities
+
+**Endpoint:** `GET /{org}/projects/{project}/assets/{asset}/refs/{ref}/dependency-vulns/`
+
+```bash copy
+devguard-scanner curl \
+  --token="<your-private-key>" \
+  --apiUrl="https://api.devguard.org" \
+  -- -X GET "/<org>/projects/<project>/assets/<asset>/refs/main/dependency-vulns/"
+```
+
+### Query Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `page` | int | Page number (default: 1) |
+| `pageSize` | int | Items per page (default: 25) |
+| `search` | string | Search by CVE ID or package name |
+| `flat` | bool | Return flat list instead of grouped by package |
+| `filterQuery` | string | Filter expression |
+| `sortQuery` | string | Sort expression |
+
+### Response
+
+```json
+{
+  "data": [
+    {
+      "packageName": "lodash",
+      "avgRisk": 7.5,
+      "maxRisk": 9.8,
+      "maxCvss": 9.8,
+      "vulnCount": 3,
+      "vulns": [
+        {
+          "id": "...",
+          "cveId": "CVE-2021-23337",
+          "cvss": 7.2,
+          "risk": 7.2,
+          "state": "open",
+          "componentPurl": "pkg:npm/lodash@4.17.20"
+        }
+      ]
+    }
+  ],
+  "total": 42,
+  "page": 1,
+  "pageSize": 25
+}
+```
+
+## List Vulnerabilities by Organization
+
+**Endpoint:** `GET /{org}/dependency-vulns/`
+
+Returns all vulnerabilities across projects you have access to:
+
+```bash copy
+devguard-scanner curl \
+  --token="<your-private-key>" \
+  --apiUrl="https://api.devguard.org" \
+  -- -X GET "/<org>/dependency-vulns/?pageSize=50"
+```
+
+## List Vulnerabilities by Project
+
+**Endpoint:** `GET /{org}/projects/{project}/dependency-vulns/`
+
+```bash copy
+devguard-scanner curl \
+  --token="<your-private-key>" \
+  --apiUrl="https://api.devguard.org" \
+  -- -X GET "/<org>/projects/<project>/dependency-vulns/"
+```
+
+## Get Vulnerability Details
+
+**Endpoint:** `GET /{org}/projects/{project}/assets/{asset}/refs/{ref}/dependency-vulns/{vulnId}/`
+
+```bash copy
+devguard-scanner curl \
+  --token="<your-private-key>" \
+  --apiUrl="https://api.devguard.org" \
+  -- -X GET "/<org>/projects/<project>/assets/<asset>/refs/main/dependency-vulns/<vuln-id>/"
+```
+
+## Export SBOM
+
+**Endpoint:** `GET /{org}/projects/{project}/assets/{asset}/refs/{ref}/sbom.json/`
+
+```bash copy
+devguard-scanner curl \
+  --token="<your-private-key>" \
+  --apiUrl="https://api.devguard.org" \
+  -- -X GET "/<org>/projects/<project>/assets/<asset>/refs/main/sbom.json/" \
+  -o sbom.json
+```
+
+Also available as XML: `/sbom.xml/`
+
+## Export VEX
+
+**Endpoint:** `GET /{org}/projects/{project}/assets/{asset}/refs/{ref}/vex.json/`
+
+```bash copy
+devguard-scanner curl \
+  --token="<your-private-key>" \
+  --apiUrl="https://api.devguard.org" \
+  -- -X GET "/<org>/projects/<project>/assets/<asset>/refs/main/vex.json/" \
+  -o vex.json
+```
+
+Available formats:
+- `/vex.json/` — CycloneDX VEX
+- `/vex.xml/` — CycloneDX VEX (XML)
+- `/openvex.json/` — OpenVEX format
+
+## Get Risk Statistics
+
+**Endpoint:** `GET /{org}/projects/{project}/assets/{asset}/refs/{ref}/stats/risk-history/`
+
+```bash copy
+devguard-scanner curl \
+  --token="<your-private-key>" \
+  --apiUrl="https://api.devguard.org" \
+  -- -X GET "/<org>/projects/<project>/assets/<asset>/refs/main/stats/risk-history/"
+```
+
+<Callout type="info">
+  All list endpoints support pagination, filtering, and sorting. Use `filterQuery` for complex filters like `state:open,cvss:>=7.0`.
+</Callout>

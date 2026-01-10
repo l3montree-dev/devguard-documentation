@@ -1,0 +1,182 @@
+import { Callout } from 'nextra/components'
+
+# Webhooks (NEEDS REVIEW)
+
+Configure outgoing webhooks to receive notifications when scan results change.
+
+## Prerequisites
+
+- A [Personal Access Token](/how-to-guides/api-usage/authenticate-with-api) with `manage` scope
+- A publicly accessible webhook endpoint
+
+## Webhook Events
+
+DevGuard can send webhooks for:
+
+| Event | Description |
+|-------|-------------|
+| SBOM Update | New SBOM uploaded or components changed |
+| Dependency Vulnerabilities | New vulnerabilities detected or status changed |
+| First-Party Vulnerabilities | SAST findings detected or status changed |
+
+## Create a Webhook
+
+**Endpoint:** `POST /{org}/projects/{project}/integrations/webhook/test-and-save/`
+
+```bash copy
+devguard-scanner curl \
+  --token="<your-private-key>" \
+  --apiUrl="https://api.devguard.org" \
+  -- -X POST "/<org>/projects/<project>/integrations/webhook/test-and-save/" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "My Webhook",
+    "description": "Notify on new vulnerabilities",
+    "url": "https://example.com/webhook",
+    "secret": "my-webhook-secret",
+    "sbomEnabled": true,
+    "vulnEnabled": true
+  }'
+```
+
+### Request Body
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `name` | string | No | Display name |
+| `description` | string | No | Description |
+| `url` | string | **Yes** | Webhook endpoint URL |
+| `secret` | string | No | HMAC secret for signature verification |
+| `sbomEnabled` | bool | No | Send SBOM update events |
+| `vulnEnabled` | bool | No | Send vulnerability events |
+
+### Response
+
+```json
+{
+  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "name": "My Webhook",
+  "description": "Notify on new vulnerabilities",
+  "url": "https://example.com/webhook",
+  "sbomEnabled": true,
+  "vulnEnabled": true
+}
+```
+
+## Test a Webhook
+
+**Endpoint:** `POST /{org}/projects/{project}/integrations/webhook/test/`
+
+Send a test payload without saving:
+
+```bash copy
+devguard-scanner curl \
+  --token="<your-private-key>" \
+  --apiUrl="https://api.devguard.org" \
+  -- -X POST "/<org>/projects/<project>/integrations/webhook/test/" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://example.com/webhook",
+    "secret": "my-webhook-secret",
+    "payloadType": "sampleDependencyVulns"
+  }'
+```
+
+### Payload Types
+
+| Type | Description |
+|------|-------------|
+| `empty` | Empty test payload |
+| `sampleSbom` | Sample SBOM data |
+| `sampleDependencyVulns` | Sample dependency vulnerabilities |
+| `sampleFirstPartyVulns` | Sample first-party vulnerabilities |
+
+## Update a Webhook
+
+**Endpoint:** `PUT /{org}/projects/{project}/integrations/webhook/{id}/`
+
+```bash copy
+devguard-scanner curl \
+  --token="<your-private-key>" \
+  --apiUrl="https://api.devguard.org" \
+  -- -X PUT "/<org>/projects/<project>/integrations/webhook/<webhook-id>/" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "id": "<webhook-id>",
+    "name": "Updated Webhook",
+    "url": "https://example.com/new-webhook",
+    "secret": "new-secret",
+    "sbomEnabled": false,
+    "vulnEnabled": true
+  }'
+```
+
+## Delete a Webhook
+
+**Endpoint:** `DELETE /{org}/projects/{project}/integrations/webhook/{id}/`
+
+```bash copy
+devguard-scanner curl \
+  --token="<your-private-key>" \
+  --apiUrl="https://api.devguard.org" \
+  -- -X DELETE "/<org>/projects/<project>/integrations/webhook/<webhook-id>/"
+```
+
+## Webhook Payload Format
+
+Webhooks are sent as `POST` requests with JSON body:
+
+```json
+{
+  "event": "dependency_vulns",
+  "timestamp": "2026-01-10T12:00:00Z",
+  "organization": {
+    "id": "...",
+    "name": "My Org",
+    "slug": "my-org"
+  },
+  "project": {
+    "id": "...",
+    "name": "My Project",
+    "slug": "my-project"
+  },
+  "asset": {
+    "id": "...",
+    "name": "My Asset",
+    "slug": "my-asset"
+  },
+  "assetVersion": {
+    "name": "main"
+  },
+  "data": {
+    // Event-specific payload
+  }
+}
+```
+
+## Verify Webhook Signatures
+
+If you configured a `secret`, webhooks include an HMAC signature header:
+
+```
+X-Webhook-Signature: sha256=<hmac-hex>
+```
+
+Verify in your handler:
+
+```python copy
+import hmac
+import hashlib
+
+def verify_signature(payload: bytes, signature: str, secret: str) -> bool:
+    expected = 'sha256=' + hmac.new(
+        secret.encode(),
+        payload,
+        hashlib.sha256
+    ).hexdigest()
+    return hmac.compare_digest(expected, signature)
+```
+
+<Callout type="info">
+  Webhooks are project-scoped. Create separate webhooks for each project that needs notifications.
+</Callout>

@@ -1,0 +1,18 @@
+# API Usage
+
+DevGuard provides a REST API for programmatic access. All authenticated endpoints use **HTTP Message Signatures** (RFC 9421) with ECDSA P-256 keys.
+
+## Available Guides
+
+- [Authenticate with API](/how-to-guides/api-usage/authenticate-with-api) — Create tokens and sign requests
+- [Upload Scan Results](/how-to-guides/api-usage/upload-scan-results) — Submit SBOM and SARIF reports
+- [Query Vulnerabilities](/how-to-guides/api-usage/query-vulnerabilities) — Retrieve vulnerability data
+- [README Badge](/how-to-guides/api-usage/readme-badge) — Embed CVSS badges in your README
+- [Webhooks](/how-to-guides/api-usage/webhooks-api) — Configure outgoing webhooks
+
+## Base URL
+
+| Environment | URL |
+|-------------|-----|
+| Cloud | `https://api.devguard.org` |
+| Self-hosted | Your configured API URL |
