@@ -1,16 +1,11 @@
 export default {
     index: { title: 'Overview' },
     devsecops: { title: 'DevSecOps' },
-    'compliance-frameworks': {
-        title: 'DevGuard & Compliance Frameworks',
-    },
-    'aggregated-vulnerability-database': {
-        title: 'Aggregated Vulnerability Database',
-    },
+    'compliance-frameworks': { title: 'DevGuard & Compliance Frameworks'},
+    'aggregated-vulnerability-database': { title: 'Aggregated Vulnerability Database'},
     'risk-calculation': { title: 'Risk Calculation' },
-    'attestations-provenance': {
-        title: 'Attestations & Provenance',
-    },
+    'attestations-provenance': { title: 'Attestations & Provenance'},
     'personal-access-token': { title: 'Personal Access Tokens' },
     'sbom-problem-statement': { title: 'SBOM Problem Statement' },
+    'license-management' : { title: 'License Management'},
 }
