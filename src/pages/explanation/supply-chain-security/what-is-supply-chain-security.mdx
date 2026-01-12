@@ -1,11 +1,38 @@
 
 # What is Supply Chain Security?
 
-In modern software development, you rarely write 100% of your own code. Instead, you assemble products using a vast ecosystem of third-party libraries, build tools, container images, and CI/CD pipelines. **Supply Chain Security** is the practice of ensuring that every component, process, and actor involved in the creation and delivery of your software is verified, untampered, and trustworthy.
+In modern software development, you rarely write 100% of your own code. Instead, you assemble products using a vast ecosystem of third-party libraries, build tools, container images, and CI/CD pipelines.
+**Supply Chain Security** is the practice of ensuring that every component, process, and actor involved in the creation and delivery of your software is verified, untampered, and trustworthy.
 
-At its core, DevGuard views the software supply chain not just as a list of dependencies, but as a **directed graph of custody**—from the first line of code written by a developer to the final artifact running in production.
+## What is the Software Supply Chain?
 
----
+A software supply chain consists of all the steps and components involved in creating, building, and deploying software in the [Software Development Life Cycle](https://en.wikipedia.org/wiki/Systems_development_life_cycle). 
+It includes the tools, processes, and people responsible for transforming source code into a deployable application.
+
+The software supply chain for a typical project could involve for example (not exhaustive):
+
+- A developer writing source code
+- Version control systems (Git, SVN, etc.)
+- Third-party software libraries
+- Build tools (Maven, make, etc.)
+- CI/CD software (Jenkins, GitHub Actions, etc.)
+- Deployment system packaging the executable into a Docker image
+- Container registry storing the Docker image for deployment
+- Production environment running the Docker image
+- Package management software and ecosystems (npm, pip, etc.)
+- ...
+
+Every one of these components has to be secured. A single vulnerability can put the entire software supply chain at risk.
+
+## The Threat Landscape
+
+Understanding the potential threats to the software supply chain is crucial for ensuring its security.
+By mapping the software supply chain, we can pinpoint vulnerabilities throughout the development lifecycle. These risks are categorized into four strategic domains: Source, Build, Dependency, and Deployment/Runtime threats.
+
+
+
+
+
 
 ## The Concept of the "Chain"
 
@@ -104,8 +131,6 @@ Even if a developer bypasses a local check, the CI/CD pipeline and the final pro
 
 Implementing these concepts changes the organizational culture from "reactive patching" to "proactive integrity."
 
-| Stakeholder | Benefit |
-| :--- | :--- |
 | **Developers** | Gain confidence that their dependencies are safe and curated. |
 | **DevOps** | Automates the verification of build pipelines, reducing manual audit toil. |
 | **Security Teams** | Get a real-time view of every component running in the enterprise. |
