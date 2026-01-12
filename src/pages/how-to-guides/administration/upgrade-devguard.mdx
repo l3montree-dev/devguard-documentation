@@ -1,0 +1,115 @@
+import { Callout, Steps, Tabs } from 'nextra/components'
+
+# Upgrade DevGuard
+
+Upgrade DevGuard to the latest version to receive security patches, new features, and vulnerability database improvements.
+
+## Releases
+
+Check the [GitHub releases](https://github.com/l3montree-dev/devguard/releases) for available versions.
+
+<Callout type="info">
+The DevGuard API and Web images share the same version tags. The Helm chart version and CI components/actions may have different version numbers.
+</Callout>
+
+## Before Upgrading
+
+1. **Check the [changelog](https://github.com/l3montree-dev/devguard/blob/main/CHANGELOG.md)** for breaking changes
+2. **Create a backup** — see [Backup & Restore](/how-to-guides/administration/backup-restore)
+3. **Test in staging** if possible
+
+<Tabs items={['Kubernetes (Helm)', 'Docker Compose']}>
+<Tabs.Tab>
+
+<Steps>
+
+### Upgrade
+
+```bash
+helm upgrade devguard oci://ghcr.io/l3montree-dev/devguard-helm-chart/devguard \
+  --version <version> \
+  --namespace devguard \
+  -f values.yaml
+```
+
+### Verify deployment
+
+```bash
+kubectl rollout status deployment/devguard-api-deployment -n devguard
+kubectl rollout status deployment/devguard-web-deployment -n devguard
+```
+
+</Steps>
+
+### Rollback
+
+If issues occur:
+
+```bash
+helm rollback devguard -n devguard
+```
+
+### Override image versions
+
+If the Helm chart version differs from the application version, override the image tags in your `values.yaml`:
+
+```yaml
+api:
+  image:
+    tag: "<version-tag>"
+
+web:
+  image:
+    tag: "<version-tag>"
+```
+
+</Tabs.Tab>
+<Tabs.Tab>
+
+<Steps>
+
+### Update image tags
+
+Edit `docker-compose-try-it.yaml` to use the new version:
+
+```yaml
+services:
+  devguard-api:
+    image: ghcr.io/l3montree-dev/devguard:<version-tag>
+    
+  devguard-web:
+    image: ghcr.io/l3montree-dev/devguard-web:<version-tag>
+```
+
+### Pull new images
+
+```bash
+docker-compose -f docker-compose-try-it.yaml pull
+```
+
+### Restart containers
+
+```bash
+docker-compose -f docker-compose-try-it.yaml up -d
+```
+
+### Verify
+
+```bash
+docker-compose -f docker-compose-try-it.yaml ps
+```
+
+</Steps>
+
+</Tabs.Tab>
+</Tabs>
+
+## Database Migrations
+
+DevGuard runs database migrations automatically on startup. No manual intervention required.
+
+If a migration fails:
+1. Check the API logs for error details
+2. Restore from backup
+3. Report the issue on [GitHub](https://github.com/l3montree-dev/devguard/issues)
+

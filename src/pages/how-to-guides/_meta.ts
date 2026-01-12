@@ -1,5 +1,6 @@
 export default {
     index: { title: 'Overview' },
+    administration: { title: 'Administration' },
     scanning: { title: 'Scanning' },
     'dependency-proxy': {
         title: 'Dependency Proxy with Malicious Package Firewall',

@@ -1,0 +1,207 @@
+import { Callout } from 'nextra/components'
+
+# OIDC & Restricting Access
+
+DevGuard supports multiple authentication methods and OpenID Connect (OIDC) providers. You can configure which authentication methods are enabled and restrict access by disabling user registration.
+
+## Requirements
+
+- A self hosted DevGuard installation (Kubernetes or Docker Compose)
+- Access to modify the Helm chart `values.yaml` or Docker Compose environment variables
+
+## Authentication Methods
+
+Control which authentication methods are available to users. All methods are configured in the Helm chart `values.yaml`:
+
+```yaml
+webauthn:
+  enabled: false
+passkey:
+  enabled: true
+password:
+  enabled: true
+totp:
+  enabled: false
+verificationAfterSignUp:
+  enabled: true
+```
+
+<Callout type="info">
+Set all authentication methods to `false` and enable only OIDC to enforce single sign-on (SSO) authentication.
+</Callout>
+
+## OpenID Connect (OIDC) Configuration
+
+### Enable OIDC
+
+Configure OIDC providers in your `values.yaml`:
+
+```yaml
+oidc:
+  enabled: true
+  providers: []
+```
+
+### GitHub Provider
+
+Configure GitHub as an OIDC provider:
+
+```yaml
+oidc:
+  enabled: true
+  providers:
+    - id: github
+      provider: github
+      clientId: "xyz"
+      existingClientSecretName: github-client-secret # key "secret"
+```
+
+Create the required secret:
+
+```bash
+kubectl create secret generic github-client-secret \
+  --from-literal=secret="your-github-oauth-app-secret" \
+  -n devguard
+```
+
+### GitLab Provider
+
+Configure GitLab as an OIDC provider with optional integrations:
+
+```yaml
+oidc:
+  enabled: true
+  providers:
+    - id: my-gitlab
+      provider: gitlab
+      issuerUrl: https://gitlab.example.com
+      clientId: "xyz"
+      scope:
+        - read_user
+        - openid
+        - profile
+        - email
+        - read_api
+      existingClientSecretName: my-gitlab-client-secret
+      existingBotUserSecretName: my-gitlab-bot-user-access-token
+      existingAdminTokenSecretName: my-gitlab-admin-token
+      botUserId: 9457
+      disableTicketSync: false
+```
+
+#### GitLab Secrets
+
+Create the required secrets:
+
+```bash
+# OAuth client secret (required)
+kubectl create secret generic my-gitlab-client-secret \
+  --from-literal=secret="your-gitlab-oauth-secret" \
+  -n devguard
+
+# Admin token (optional)
+kubectl create secret generic my-gitlab-admin-token \
+  --from-literal=token="your-gitlab-admin-token" \
+  -n devguard
+
+# Bot user access token (optional, for ticket sync)
+kubectl create secret generic my-gitlab-bot-user-access-token \
+  --from-literal=accessToken="your-bot-user-token" \
+  -n devguard
+```
+
+#### GitLab Auto-Setup Application
+
+Configure an OAuth application for automatic repository setup feature:
+
+```yaml
+oidc:
+  enabled: true
+  providers:
+    - id: my-gitlab
+      provider: gitlab
+      ...
+      # Add this
+      autosetupApplication:
+        clientId: "..."
+        existingClientSecretName: opencodeautosetup-appsecret
+        scope:
+          - api
+```
+
+Create the auto-setup secret:
+
+```bash
+kubectl create secret generic opencodeautosetup-appsecret \
+  --from-literal=secret="your-autosetup-oauth-secret" \
+  -n devguard
+```
+
+## Restricting User Registration
+
+To disable new user registration and restrict access to existing users or OIDC-authenticated users only, modify the Kratos configuration after deployment.
+
+### Disable Registration
+
+Edit the `kratos-config` ConfigMap:
+
+```bash
+kubectl edit configmap kratos-config -n devguard
+```
+
+Locate the `registration` section under `selfservice.flows` and set `enabled: false`:
+
+```yaml
+selfservice:
+  flows:
+    registration:
+      enabled: false
+      lifespan: 10m
+      ui_url: https://your-domain.com/registration
+```
+
+Restart the Kratos deployment for changes to take effect:
+
+```bash
+kubectl rollout restart deployment kratos -n devguard
+```
+
+## OIDC-Only Mode
+
+To enforce OIDC authentication exclusively:
+
+1. Disable all other authentication methods:
+
+```yaml
+webauthn:
+  enabled: false
+passkey:
+  enabled: false
+password:
+  enabled: false
+totp:
+  enabled: false
+verificationAfterSignUp:
+  enabled: false
+
+```
+
+2. Enable OIDC with at least one provider:
+
+```yaml
+oidc:
+  enabled: true
+  providers:
+    - id: github
+      provider: github
+      clientId: "your-client-id"
+      existingClientSecretName: github-client-secret
+```
+
+<Callout type="info">
+When all authentication methods except OIDC are disabled, DevGuard automatically enters OIDC-only mode and hides alternative login options.
+</Callout>
+
+## Advanced Configuration
+
+DevGuard uses Ory Kratos for identity and authentication management. For advanced configuration options and detailed guides on self-hosted deployments, refer to the [Ory Kratos self-hosted documentation](https://www.ory.sh/docs/kratos/self-hosted).
