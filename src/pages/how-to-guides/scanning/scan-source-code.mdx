@@ -26,7 +26,7 @@ Before you begin, ensure you have:
     ```bash copy
     docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main-latest \
       devguard-scanner sast \
-        --path . \
+        --path /dev/app/ \
         --assetName="myorg/projects/myproject/assets/myrepo" \
         --apiUrl="https://api.devguard.org" \
         --token="YOUR_TOKEN"
@@ -43,7 +43,7 @@ Before you begin, ensure you have:
     ```bash copy
     docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main-latest \
       devguard-scanner secret-scanning \
-        --path . \
+        --path /dev/app/ \
         --assetName="myorg/projects/myproject/assets/myrepo" \
         --apiUrl="https://api.devguard.org" \
         --token="YOUR_TOKEN"
@@ -60,7 +60,7 @@ Before you begin, ensure you have:
     ```bash copy
     docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main-latest \
       devguard-scanner iac \
-        --path . \
+        --path /dev/app/ \
         --assetName="myorg/projects/myproject/assets/myrepo" \
         --apiUrl="https://api.devguard.org" \
         --token="YOUR_TOKEN"
@@ -88,8 +88,8 @@ Before you begin, ensure you have:
 ## CI/CD Integration
 
 For automated source code scanning in CI/CD pipelines, DevGuard provides ready-to-use integrations:
-- **GitHub Actions**: [devguard-action](https://github.com/l3montree-dev/devguard-action) with reusable workflows
-- **GitLab CI**: [GitLab CI Components](https://gitlab.com/l3montree/devguard/-/tree/main/templates) including [static-application-security-testing.yml](https://gitlab.com/l3montree/devguard/-/blob/main/templates/sast.yml), [secret-scanning.yml](https://gitlab.com/l3montree/devguard/-/blob/main/templates/secret-scanning.yml), and [iac.yml](https://gitlab.com/l3montree/devguard/-/blob/main/templates/iac.yml)
+- **GitHub Actions**: See [Scan with GitHub Actions](./scan-with-github-actions) for setup instructions
+- **GitLab CI**: See [Scan with GitLab CI](./scan-with-gitlab-ci) for setup instructions
 
 ## Advanced Options
 

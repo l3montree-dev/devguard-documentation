@@ -24,7 +24,7 @@ Before you begin, ensure you have:
     ```bash copy
     docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main-latest \
       devguard-scanner sca \
-        --path . \
+        --path /dev/app/ \
         --assetName="myorg/projects/myproject/assets/myrepo" \
         --apiUrl="https://api.devguard.org" \
         --token="YOUR_TOKEN"
@@ -50,8 +50,8 @@ Before you begin, ensure you have:
 ## CI/CD Integration
 
 For automated dependency scanning in CI/CD pipelines, DevGuard provides ready-to-use integrations:
-- **GitHub Actions**: [devguard-action](https://github.com/l3montree-dev/devguard-action/blob/main/.github/workflows/software-composition-analysis.yml) with reusable workflows for SCA scanning
-- **GitLab CI**: [software-composition-analysis.yml](https://gitlab.com/l3montree/devguard/-/tree/main/templates) 
+- **GitHub Actions**: See [Scan with GitHub Actions](./scan-with-github-actions) for setup instructions
+- **GitLab CI**: See [Scan with GitLab CI](./scan-with-gitlab-ci) for setup instructions
 
 ## Advanced Options
 

@@ -49,14 +49,10 @@ docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main-late
 
 **Verify it worked:** Navigate to your repository in DevGuard. You'll see detected vulnerabilities listed with affected components and fix recommendations.
 
-## SBOM Generation
-
-If you don't have an existing SBOM, you can generate one using tools like:
-
-- **Syft**: For generating SBOMs from container images and filesystems
-- **CycloneDX tools**: Official CycloneDX Maven, Gradle, and npm plugins
-- **SPDX tools**: Convert SPDX SBOMs to CycloneDX format
-- **DevGuard SCA**: Use DevGuard's own SCA scanning to generate SBOMs
+## CI/CD Integration
+For automated SBOM uploads in CI/CD pipelines, DevGuard provides ready-to-use integrations:
+- **GitHub Actions**: See [Scan with GitHub Actions](./scan-with-github-actions) for setup instructions
+- **GitLab CI**: See [Scan with GitLab CI](./scan-with-gitlab-ci) for setup instructions
 
 ## Advanced Options
 
@@ -67,18 +63,31 @@ Fail the command based on risk level:
 --failOnCVSS=critical  # Options: low, medium, high, critical (default: critical)
 ```
 
-Set a custom origin to track where the SBOM came from:
-
-```bash copy
---origin="my-sbom-tool"  # Default is "DEFAULT"
-```
-
 Specify which artifact this SBOM represents:
 
 ```bash copy
 --artifactName="pkg:devguard/orgSlug/projectSlug/repoSlug"  # Default is based on your asset
 ```
 
+Set a custom origin to track where the SBOM came from:
+
+```bash copy
+--origin="sbom-file-upload"  # Default is "sbom-file-upload"
+```
+
 <Callout type="info">
   The origin flag helps you track which tools or systems generated your SBOMs. This is useful when you have multiple SBOMs from different sources for the same project.
+</Callout>
+
+
+Specify Git reference information:
+
+```bash copy
+--ref="v1.2.3"                 # Git reference (branch, tag, or commit)
+--defaultRef="main"            # Default Git reference to use
+--isTag=true                   # Indicates if the reference is a tag
+```
+
+<Callout type="info">
+  These flags help DevGuard track which branch or tag the scan is associated with. DevGuard will attempt to auto-detect Git information from the current directory if these flags are not specified.
 </Callout>

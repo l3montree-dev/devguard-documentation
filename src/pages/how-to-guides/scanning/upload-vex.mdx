@@ -49,39 +49,34 @@ docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main-late
 
 **Verify it worked:** Navigate to your repository in DevGuard. You'll see vulnerability statuses updated based on the VEX document, with audit events showing the upload.
 
-## Understanding VEX Status
 
-A VEX document communicates vulnerability status using these states:
-
-- **affected**: The vulnerability impacts this component (requires mitigation)
-- **not affected**: The component is not affected by this vulnerability
-- **fixed**: The vulnerability has been fixed in a newer version
-- **under investigation**: The impact is being assessed
-
-You can optionally provide justifications for "not affected" findings to document why the vulnerability doesn't impact your component.
-
-## VEX Generation
-
-VEX documents can be generated using:
-
-- **CycloneDX BOM tools**: Native VEX support in CycloneDX v1.4+
-- **CISA OpenVEX**: Official format for VEX documents
-- **Supplier tools**: Many vendors provide VEX documents for their components
-- **Manual creation**: Create VEX documents to communicate your own vulnerability assessments
+## CI/CD Integration
+For automated VEX uploads in CI/CD pipelines, DevGuard provides ready-to-use integrations:
+- **GitHub Actions**: See [Scan with GitHub Actions](./scan-with-github-actions) for setup instructions
+- **GitLab CI**: See [Scan with GitLab CI](./scan-with-gitlab-ci) for setup instructions
 
 ## Advanced Options
 
-Set a custom origin to track where the VEX came from:
+Fail the command based on risk level:
 
 ```bash copy
---origin="vendor-supplied-vex"  # Default is "vex-upload"
+--failOnRisk=critical  # Options: low, medium, high, critical (default: critical)
+--failOnCVSS=critical  # Options: low, medium, high, critical (default: critical)
 ```
 
 Specify which artifact this VEX applies to:
 
 ```bash copy
---artifactName="pkg:devguard/orgSlug/projectSlug/repoSlug"  # Default is based on your asset
+--artifactName="pkg:devguard/orgSlug/projectSlug/repoSlug"  # Default is "pkg:oci/{orgSlug}/{projectSlug}/{repoSlug}"
 ```
+
+
+Set a custom origin to track where the VEX came from:
+
+```bash copy
+--origin="vex-upload"  # Default is "vex-upload"
+```
+
 
 Specify Git reference information:
 
@@ -92,7 +87,7 @@ Specify Git reference information:
 ```
 
 <Callout type="info">
-  VEX documents are powerful for communicating vulnerability assessments from suppliers or third-party tools. When you upload a VEX, DevGuard will sync the vulnerability status information to update your dependency vulnerability records.
+  These flags help DevGuard track which branch or tag the scan is associated with. DevGuard will attempt to auto-detect Git information from the current directory if these flags are not specified.
 </Callout>
 
 <Callout type="info">
