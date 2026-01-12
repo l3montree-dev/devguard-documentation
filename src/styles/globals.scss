@@ -1,6 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import 'swagger-ui-react/swagger-ui.css';
+@import "./swagger-ui-custom.scss";
 
 ._bg-neutral-900 {
   background-color: #1F2937;
@@ -34,7 +36,7 @@ summary h4 {
   --popover: 0 0% 100%;
   --popover-foreground: 0 0% 3.9%;
 
-  --primary: 0 0% 9%;
+  --primary: 43 96% 56%;
   --primary-foreground: 0 0% 98%;
 
   --secondary: 0 0% 96.1%;
@@ -51,7 +53,7 @@ summary h4 {
 
   --border: 0 0% 89.8%;
   --input: 0 0% 89.8%;
-  --ring: 0 0% 3.9%;
+  --ring: 43, 96%, 56%;
 
   --blue: 204 86% 53%;
   --green: 168 100% 41%;
@@ -69,7 +71,7 @@ summary h4 {
     --card-foreground: 0 0% 98%;
     --popover: 0 0% 3.9%;
     --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
+    --primary: 43 96% 56%;
     --primary-foreground: 0 0% 9%;
     --secondary: 0 0% 14.9%;
     --secondary-foreground: 0 0% 98%;
@@ -77,11 +79,11 @@ summary h4 {
     --muted-foreground: 0 0% 63.9%;
     --accent: 0 0% 14.9%;
     --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
+    --destructive:  0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
     --border: 0 0% 14.9%;
     --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
+    --ring: 43, 96%, 56%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
@@ -113,4 +115,8 @@ nav > div > p {
 }
 nav > div > div {
   box-shadow: none !important;
+}
+
+._mx-auto._flex._max-w-\[90rem\] {
+  position: relative;
 }
