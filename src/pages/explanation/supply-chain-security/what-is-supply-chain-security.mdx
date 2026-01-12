@@ -1,0 +1,132 @@
+
+# What is Supply Chain Security?
+
+In modern software development, you rarely write 100% of your own code. Instead, you assemble products using a vast ecosystem of third-party libraries, build tools, container images, and CI/CD pipelines. **Supply Chain Security** is the practice of ensuring that every component, process, and actor involved in the creation and delivery of your software is verified, untampered, and trustworthy.
+
+At its core, DevGuard views the software supply chain not just as a list of dependencies, but as a **directed graph of custody**—from the first line of code written by a developer to the final artifact running in production.
+
+---
+
+## The Concept of the "Chain"
+
+A software supply chain is composed of everything that touches your code during the Software Development Life Cycle (SDLC). To secure it, DevGuard analyzes three primary dimensions:
+
+### 1. Source Integrity
+This involves ensuring the code you think you are building is actually the code written by your authorized developers. Threats here include:
+* **Credential Theft**: An attacker gaining access to a developer's GitHub/GitLab account.
+* **History Rewriting**: Force-pushing malicious changes to a branch that bypass code reviews.
+* **Identity Spoofing**: Committing code using a colleague's email address without GPG/SSH signing.
+
+### 2. Build Integrity
+Ensuring the build process hasn't been compromised to inject malicious logic. This is the "SolarWinds" threat model. Even if the source code is perfect, the build environment (the CI runner) could be compromised.
+* **Build Tool Poisoning**: Using a malicious compiler or wrapper.
+* **Ephemeral Environment Tampering**: Injecting environment variables during the build that change the binary's behavior.
+* **Bypassing Steps**: Forcing a build to skip security scans but still produce a "valid" artifact.
+
+### 3. Dependency Integrity
+Verifying that third-party packages (npm, PyPI, Maven, Go modules) are free of known vulnerabilities and haven't been hijacked.
+* **Typosquatting**: Uploading `requestts` instead of `requests`.
+* **Dependency Confusion**: Tricking a build system into pulling a malicious "private" package from a public registry.
+* **Protestware/Malware**: Maintainers intentionally adding destructive code to widely used libraries.
+
+
+
+---
+
+## The Threat Landscape: The SLSA Model
+
+To understand why DevGuard implements specific verification features, it is helpful to categorize the threats we are defending against. The industry-standard **SLSA (Supply-chain Levels for Software Artifacts)** framework identifies several critical points of failure, which we categorize into three "Vulnerability Zones":
+
+### Zone A: The Producer & Source
+The threat starts at the keyboard. Attackers target the version control system (VCS) or the developer's environment.
+* **Threat (A)**: Submitting malicious code to the VCS.
+* **Threat (B)**: Compromising the VCS platform itself.
+
+### Zone B: The Build & Distribution
+This is where code is transformed into a functional artifact. This is often the most vulnerable link because build servers are "high-privilege" environments.
+* **Threat (C)**: Building from a modified source that isn't in the VCS.
+* **Threat (D)**: Compromising the Build Process (the runner).
+* **Threat (E)**: Using a compromised dependency.
+* **Threat (F)**: Uploading a modified artifact to the registry after the build finishes.
+
+### Zone C: The Consumer
+The threat moves to the user who pulls the artifact.
+* **Threat (G)**: Compromising the Package Registry.
+* **Threat (H)**: Tricking the user into using the wrong artifact.
+
+
+
+---
+
+## Why Traditional Security is Insufficient
+
+Traditional security often focuses on the **final product** (e.g., scanning a finished Docker image for CVEs). However, this is a reactive approach that has several blind spots:
+
+1.  **The Metadata Gap**: A scan tells you what vulnerabilities are inside *now*, but it doesn't tell you *how* the image was made. If the image was built on an unauthenticated laptop instead of a secured CI runner, the scan might pass, but the provenance is untrusted.
+2.  **Point-in-Time Limitations**: Vulnerabilities are discovered daily. An artifact that was "clean" at 9:00 AM might be "critical" at 2:00 PM.
+3.  **Process Blindness**: Traditional scanners cannot detect if an attacker injected a backdoor into the binary that doesn't match a known CVE signature. Only **Supply Chain Verification** (comparing source to build output) can mitigate this.
+
+---
+
+## The Building Blocks of Trust in DevGuard
+
+DevGuard uses a **"Verify, then Trust"** model. This relies on three conceptual pillars that are explored in depth throughout this chapter:
+
+### Transparency via SBOMs
+A **Software Bill of Materials (SBOM)** is the ingredient list of your software. Without a comprehensive SBOM, you cannot defend against what you don't know you have. DevGuard uses SBOMs to map your "attack surface" across the entire organization.
+* *Detailed in: [SBOM Standards](./compliance/sbom-standards.mdx)*
+
+### Evidence via Attestations
+Attestations are digital statements about a software artifact or process. Think of them as "notarized" documents. For example, a build platform might attest: *"I built Artifact X from Source Y using Build Script Z."* DevGuard stores and evaluates these to ensure no steps were skipped.
+* *Detailed in: [Attestations](./supply-chain-security/attestations.mdx)*
+
+### Proof of Process via In-toto
+While an SBOM tells you *what* is inside, the **In-toto framework** tells you *how* it got there. It defines a layout of expected steps and verifies that the people or machines performing those steps are authorized via cryptographic keys.
+* *Detailed in: [In-toto Framework](./supply-chain-security/in-toto-framework.mdx)*
+
+---
+
+## Strategic Implementation: Shift Left and Guard Right
+
+Supply chain security is often associated with "shifting left" (testing earlier). DevGuard expands this by also "guarding right."
+
+### The "Shift Left" (Prevention)
+We provide developers with immediate feedback. By integrating with the developer's IDE or the first pull request scan, DevGuard identifies malicious dependencies before they are ever merged into the main branch. This prevents the "poisoning" of the source.
+
+### The "Guard Right" (Enforcement)
+Even if a developer bypasses a local check, the CI/CD pipeline and the final production deployment are gated by **Attestation Policies**. If an artifact arrives at the production environment without a valid signature from the build runner or a passing security scan attestation, DevGuard can trigger an alert or block the deployment.
+
+
+
+---
+
+## Organizational Impact of Supply Chain Security
+
+Implementing these concepts changes the organizational culture from "reactive patching" to "proactive integrity."
+
+| Stakeholder | Benefit |
+| :--- | :--- |
+| **Developers** | Gain confidence that their dependencies are safe and curated. |
+| **DevOps** | Automates the verification of build pipelines, reducing manual audit toil. |
+| **Security Teams** | Get a real-time view of every component running in the enterprise. |
+| **Compliance** | Provides the "paper trail" required by regulations like the EU Cyber Resilience Act. |
+
+By treating the supply chain as a first-class security citizen, organizations move away from the "black box" model of software delivery and into a transparent, verifiable ecosystem.
+
+---
+
+## Conclusion
+
+Supply Chain Security is no longer optional in an era of automated, multi-layered software delivery. It requires moving beyond simple vulnerability scanning and into the realm of **provenance and integrity**. By understanding the flow of code from source to production, and by demanding cryptographic proof of every transformation, organizations can significantly reduce the risk of sophisticated supply chain attacks.
+
+In the following sections, we will explore the specific frameworks DevGuard uses to implement these concepts, including In-toto, SLSA, and the relationship between Attestations and VEX.
+
+---
+
+## References
+
+* [OWASP Software Supply Chain Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Software_Supply_Chain_Security_Cheat_Sheet.html)
+* [SLSA Threats Overview (v1.0)](https://slsa.dev/spec/v1.0/threats-overview)
+* [CNCF Software Supply Chain Best Practices Whitepaper](https://github.com/cncf/tag-security/blob/main/supply-chain-security/supply-chain-security-paper/v1/software-supply-chain-security-paper-v1.md)
+
+---

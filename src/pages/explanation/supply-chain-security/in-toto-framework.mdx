@@ -1,0 +1,112 @@
+
+# The In-Toto Framework
+
+Securing individual steps in a software supply chain is necessary, but it is not sufficient. You might secure your git server with MFA and your build server with strict firewalls, but if an attacker can intercept the code *between* those two steps, or inject a malicious artifact during the handoff, the system is compromised.
+
+**In-toto** (Latin for "in total" or "overall") is an open framework designed to solve this specific problem. It does not just look at the steps; it secures the *entire chain* of custody from the moment a developer commits code to the moment an end-user installs the software.
+
+While DevGuard handles much of the complexity of in-toto automatically, understanding its underlying mechanics is crucial for grasping how we guarantee the integrity of your software.
+
+## The "Weakest Link" Problem
+
+In a complex supply chain, trust is often fragmented.
+* The developer trusts the IDE.
+* The build server trusts the version control system.
+* The package registry trusts the build server.
+
+In-toto assumes that **any** step in this chain could be compromised. Instead of implicitly trusting that "Step B followed Step A," in-toto requires cryptographic proof that:
+1.  Step A was performed by an authorized entity.
+2.  Step B was performed by an authorized entity.
+3.  The output of Step A matches exactly the input of Step B.
+
+This effectively closes the gaps between the silos of your development lifecycle.
+
+
+
+## Core Architecture
+
+In-toto operates on a model of "trust, but verify." It separates the definition of what *should* happen from the evidence of what *actually* happened.
+
+### 1. The Layout (The "Map")
+The Layout is the heart of in-toto. It is a signed policy file, usually created by the project owner or security lead. Think of it as the "floor plan" or the "recipe" for the software.
+
+The Layout defines:
+* **Steps**: The discrete actions that must occur (e.g., "clone-code", "build-binary", "package-docker").
+* **Functionaries**: The specific public keys authorized to perform each step. (e.g., "Only Alice's key can sign the 'clone-code' step," "Only the Build Server's key can sign the 'build-binary' step").
+* **Inspections**: Rules to ensure the handoff between steps is correct (e.g., "The files consumed by the 'build' step must match the files produced by the 'clone' step").
+
+Because the Layout is signed by the "Project Owner" (the root of trust), an attacker cannot simply modify the pipeline definition to insert a malicious step without invalidating the signature.
+
+### 2. The Links (The Evidence)
+As the software moves through the pipeline, each Functionary (person or machine) performs their assigned Step. When they finish, they generate a piece of metadata called a **Link**.
+
+A Link contains:
+* **Materials**: The hashes of all files used as input (e.g., source code).
+* **Products**: The hashes of all files produced as output (e.g., the compiled binary).
+* **Command**: The exact command that was executed (e.g., `go build -o app main.go`).
+* **Environment**: Information about the machine running the step.
+* **Signature**: The Functionary's cryptographic signature.
+
+If the Build Server is compromised and tries to swap the source code for a malicious version before building, the "Materials" hash in the Build Link will not match the "Products" hash from the previous Checkout Link. The chain is broken.
+
+## The Verification Workflow
+
+The true power of in-toto comes during the verification phase. This happens before the software is deployed or installed. The verifier (which could be an Admission Controller in Kubernetes or the DevGuard platform itself) takes the **Layout**, the collection of **Links**, and the final **Artifact**.
+
+The verification process follows this logic:
+
+1.  **Verify the Layout**: Is the Layout signed by a trusted Project Owner key? If no, stop.
+2.  **Iterate through Steps**: For every step defined in the Layout:
+    * Find the corresponding Link metadata.
+    * Check if the Link is signed by the authorized Functionary defined in the Layout.
+    * If a step is missing or signed by the wrong key (e.g., "Bob" signed the build, but only "Jenkins" is allowed), the verification fails.
+3.  **Match Artifacts (Artifact Rules)**:
+    * The verifier checks that the **Products** of Step 1 match the **Materials** of Step 2.
+    * This ensures that what came out of the first machine is exactly what went into the second machine, byte-for-byte.
+4.  **Run Inspections**: Any custom shell scripts or logic defined in the Layout are executed to perform deeper checks.
+
+If all checks pass, the software is deemed trusted "in-toto."
+
+## ITE-6: The Evolution to Attestations
+
+The original in-toto specification focused heavily on the specific format of Links and Layouts. However, as the ecosystem evolved (with the rise of containers and cloud-native builds), the community introduced **In-Toto Enhancements (ITEs)**.
+
+**ITE-6** is the most significant of these for modern users. It generalizes the "Link" concept into a broader **Attestation** model.
+* Instead of just recording files and commands, ITE-6 allows the encapsulation of *any* type of metadata (like a vulnerability scan report, a test result summary, or a generic provenance statement) inside an in-toto envelope.
+* This is the underlying format used by **Cosign**, **SLSA**, and **DevGuard**.
+
+When DevGuard generates a "Statement of Provenance," it is creating an in-toto ITE-6 attestation. This ensures that the data is interoperable with the wider ecosystem of supply chain tools.
+
+## How DevGuard Uses In-Toto
+
+Implementing in-toto manually can be complex. It involves managing keys for every developer, configuring link generation for every script, and writing complex layout files. DevGuard abstracts this complexity while retaining the security benefits.
+
+### Automated Link Generation
+DevGuard integrates with your CI/CD (via our GitHub Action or GitLab Component) to act as a Functionary.
+* When a pipeline job starts, DevGuard captures the state of the workspace (Materials).
+* When the job ends, DevGuard captures the state of the artifacts (Products).
+* DevGuard signs this data with an ephemeral key (linked to the CI identity) to create a valid in-toto Link/Attestation.
+
+### Implicit Layouts vs. Explicit Policies
+In many DevGuard configurations, we use an "Implicit Layout" model. Instead of writing a JSON Layout file manually, you define your policy in the DevGuard dashboard (e.g., "All artifacts must be scanned"). DevGuard translates this high-level policy into the verification logic that checks the underlying in-toto attestations.
+
+## Why This Matters: Defense in Depth
+
+The in-toto framework provides resilience against sophisticated attacks that other tools miss.
+
+* **Compromise Resilience**: If an attacker steals a developer's GPG key, they can sign commits. But they cannot sign the *Build Step* because that requires the Build Server's key. In-toto catches this discrepancy.
+* **Tamper Evidence**: If an attacker modifies the binary on the download mirror, the verification fails because the binary's hash won't match the "Product" hash recorded by the Build Server.
+* **Granular Authorization**: You can enforce strict separation of duties. The team that writes the code (Developers) is cryptographically distinct from the entity that compiles it (Build Server), which is distinct from the entity that publishes it (Release Manager).
+
+## Conclusion
+
+In-toto is the glue that binds the disparate parts of a software supply chain into a single, verifiable whole. By mathematically linking steps together—ensuring inputs match outputs and authorized actors perform every action—it eliminates the blind spots where attackers hide. While DevGuard manages the heavy lifting of generating and storing these links, understanding the in-toto framework helps clarify *why* we place such emphasis on provenance and signed metadata. It is not just about record-keeping; it is about proving the negative: proving that nothing happened to your software that you didn't authorize.
+
+## References
+
+1.  **In-Toto Specification**
+    * https://github.com/in-toto/docs/blob/master/in-toto-spec.md
+2.  **ITE-6: Generalized Attestation Format**
+    * https://github.com/in-toto/attestation/blob/main/spec/README.md
+3.  **In-Toto Website & Architecutre**
+    * https://in-toto.io/docs/getting-started/
