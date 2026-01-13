@@ -1,0 +1,105 @@
+import Image from 'next/image';
+import { Callout } from 'nextra/components';
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+
+# Audit Logging & Compliance Trail
+
+Compliance frameworks like ISO 27001 and CRA require demonstrable evidence of security processes. Audit logging automatically documents every decision, action, and state change throughout the vulnerability lifecycle—transforming security activities into auditable records.
+
+## Why Audit Trails Matter
+
+**Compliance Evidence**: Frameworks require documented proof of vulnerability handling, risk management decisions, and remediation tracking.
+
+**Accountability**: Demonstrate who made decisions, when, and why for vulnerability assessments and risk acceptance.
+
+**Process Verification**: Prove established security processes are followed consistently, not just documented in policies.
+
+**Incident Investigation**: Reconstruct what was known, when decisions were made, and which actions were taken during security incidents.
+
+<Callout type="info" emoji="📋">
+  Audit logging answers: "How did you handle this vulnerability? Who approved risk acceptance? When was it fixed?" Without trails, these become manual reconstruction exercises consuming audit time.
+</Callout>
+
+## What Gets Logged
+
+### Vulnerability Discovery & Tracking
+
+**Initial Detection**: When scanners identify a <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">CVE</span></TooltipTrigger><TooltipContent><p>Common Vulnerabilities and Exposures - Standardized vulnerability identifier</p></TooltipContent></Tooltip>, DevGuard logs discovery timestamp, affected component, initial risk score, and detection method.
+
+**Component Lifecycle**: Every library addition, update, and removal is tracked. When vulnerable components are removed, DevGuard automatically updates vulnerability status and logs the removal—providing evidence the vulnerability no longer exists.
+
+### State Changes
+
+All vulnerability state transitions logged with complete context:
+- **Not Affected**: Justification, analyst, timestamp
+- **Under Investigation**: Start time, assigned personnel
+- **Fixed**: Patch version, deployment timestamp
+- **Accept Risk**: Business justification, approval authority, compensating controls
+
+### Risk Score Evolution
+
+DevGuard recalculates risk scores multiple times daily. Every change is logged with reasoning: new <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">EPSS</span></TooltipTrigger><TooltipContent><p>Exploit Prediction Scoring System - Exploitation probability</p></TooltipContent></Tooltip> data, exploit publication, patch availability, component depth changes.
+
+### Response Actions
+
+Every event system action is logged: issue tracker tickets, comments, false positive markings, risk acceptance decisions—all with author attribution and timestamps.
+
+<Callout type="info" emoji="🔄">
+  Component removal provides automatic remediation evidence—delete a vulnerable library, audit logs prove the vulnerability no longer affects your application without manual documentation.
+</Callout>
+
+## Event History Timeline
+
+DevGuard maintains chronological timelines for every vulnerability:
+- Discovery and initial assessment
+- Risk score evolution with justifications
+- State transitions with decision rationale
+- Comments and analysis notes
+- Component updates or removals
+- Final resolution
+
+**Immutability**: Append-only history—past entries cannot be modified, ensuring integrity.
+
+**Attribution**: Every event includes user identity, timestamp, and action context.
+
+## Compliance Framework Support
+
+### ISO 27001
+
+**A.12.6.1 - Technical Vulnerability Management**: Complete tracking from discovery through remediation.
+
+**A.16.1.3 - Security Event Reporting**: Automated logging with timestamps and responsible parties.
+
+**A.12.1.2 - Change Management**: Documented component changes affecting security posture.
+
+### EU Cyber Resilience Act
+
+**Vulnerability Documentation**: Evidence of identification, assessment, and remediation per CRA Article 11.
+
+**Remediation Tracking**: Proof vulnerabilities are addressed without delay.
+
+**Public Disclosure**: Timeline evidence for fixed vulnerabilities required by CRA.
+
+### Other Standards
+
+**NIST SP 800-53**: SI-2 (Flaw Remediation), RA-5 (Vulnerability Monitoring), AU-2 (Event Logging).
+
+**SOC 2**: CC6.1 (Access Controls), CC7.2 (System Monitoring).
+
+## Report Generation
+
+Generate compliance reports from audit logs:
+- Vulnerability summary reports by timeframe
+- Remediation timeline reports demonstrating SLA compliance
+- Risk acceptance documentation with approval chains
+- Component inventory with historical tracking
+
+Export formats: PDF (human review), JSON/CSV (automated tools), <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">VEX</span></TooltipTrigger><TooltipContent><p>Vulnerability Exploitability eXchange - Machine-readable assessments</p></TooltipContent></Tooltip> (supply chain partners).
+
+---
+
+## Related Documentation
+
+- [Vulnerability Event System](vulnerability-event-system) - Actions generating audit events
+- [Vulnerability Lifecycle](vulnerability-lifecycle) - Complete management process
+- [Why Compliance Matters](why-compliance-matters) - Business case for audit trails
