@@ -1,7 +1,7 @@
 export default {
     index: { title: 'Overview' },
     devsecops: { title: 'DevSecOps' },
-    'compliance-frameworks': {
+    'compliance': {
         title: 'DevGuard & Compliance Frameworks',
     },
     'vulnerability-management': { title: 'Vulnerability Management' },

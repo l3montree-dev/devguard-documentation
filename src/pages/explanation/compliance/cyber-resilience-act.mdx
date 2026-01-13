@@ -1,20 +1,58 @@
 ---
 sidebar_position: 1
-title: Cyber Resiliance Act
+title: Cyber Resilience Act
 ---
 
-# Cyber Resiliance Act
+# Cyber Resilience Act
 
-## Requirements from Annex 1 - Basic Cybersecurity requirements
+## What is the EU Cyber Resilience Act?
 
-### Security requirements in relation to the properties of products with digital elements
+The EU Cyber Resilience Act (CRA) is a European regulation that entered into force in December 2024 and will be fully applicable from December 2027. The regulation establishes mandatory cybersecurity requirements for all hardware and software products with digital elements that are made available on the EU market.
+
+The CRA addresses a critical challenge: many digital products are developed and brought to market with inadequate security. Security updates are often provided too late or not at all, and users have limited ability to assess a product's cybersecurity. The estimated annual cost of cybercrime amounts to approximately €5.5 trillion globally.
+
+With the CRA, the EU creates a legal framework that obligates manufacturers to ensure cybersecurity throughout the entire product lifecycle—from conception through development to maintenance and support.
+
+## Who is affected?
+
+The CRA applies to so-called "Products with Digital Elements" (PDEs)—products that have or could have a direct or indirect data connection to a device or network. This includes:
+
+- Hardware products (IoT devices, smart home devices, etc.)
+- Software products (apps, programs, operating systems)
+- Remote data processing solutions (SaaS applications)
+
+Excluded are products already covered by other EU regulations, such as medical devices or motor vehicles.
+
+## Core Concepts of the CRA
+
+### Secure by Default
+
+Products must be delivered with a secure default configuration. This means: security features are activated from the start, not optional.
+
+### Vulnerability Handling
+
+Manufacturers must identify, document, and remediate vulnerabilities throughout the entire product lifecycle. This includes the obligation to report actively exploited vulnerabilities to ENISA (EU Cybersecurity Agency) within 24 hours.
+
+### Software Bill of Materials (SBOM)
+
+For each product, a machine-readable SBOM must be created that documents at least the top-level dependencies. This enables better traceability of the software supply chain.
+
+## DevGuard and the CRA
+
+DevGuard was developed to support development teams in implementing CRA requirements. The platform covers many of the technical and organizational requirements mandated by the CRA—from vulnerability management to SBOM generation to documentation of security updates.
+
+The following tables indicate for each CRA requirement the extent to which DevGuard helps with implementation:
 
 | Symbol | Meaning |
 | :----- | :---- |
-| ✅ | DevGuard covers this control for the monitored applications, so you could use DevGuard to prove your compliance |
-| 🔵 | Devguard partially covers this control |
-| 🍋 | DevGuard in itself covers this control |
-| ❌ | DevGuard doesn't cover this control |np
+| ✅ | DevGuard covers this requirement for the monitored applications |
+| 🔵 | DevGuard partially covers this requirement |
+| 🍋 | DevGuard supports the implementation of this requirement |
+| ❌ | DevGuard does not cover this requirement |
+
+## Requirements from Annex 1 - Basic Cybersecurity Requirements
+
+### Security requirements in relation to the properties of products with digital elements
 
 | ID  |       | Requirement                                                                                                                                                                                |
 |-----|-------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -24,7 +62,7 @@ title: Cyber Resiliance Act
 | 2 b  |       | Products with digital elements shall ensure protection from unauthorised access by appropriate control mechanisms, including but not limited to authentication, identity or access management systems. |
 | 2 c  |       | Products with digital elements shall protect the confidentiality of stored, transmitted or otherwise processed data, personal or other, such as by encrypting relevant data at rest or in transit by state-of-the-art mechanisms. |
 | 2 d  |       | Products with digital elements shall protect the integrity of stored, transmitted or otherwise processed data, personal or other, commands, programs and configuration against any manipulation or modification not authorised by the user, as well as report on corruptions. |
-| 2 e  |       | Products with digital elements shall process only data, personal or other, that are adequate, relevant and limited to what is necessary in relation to the intended use of the product (‘minimisation of data’). |
+| 2 e  |       | Products with digital elements shall process only data, personal or other, that are adequate, relevant and limited to what is necessary in relation to the intended use of the product ('minimisation of data'). |
 | 2 f  |       | Products with digital elements shall protect the availability of essential functions, including the resilience against and mitigation of denial of service attacks.                       |
 | 2 g  |       | Products with digital elements shall minimise their own negative impact on the availability of services provided by other devices or networks.                                             |
 | 2 h  |       | Products with digital elements shall be designed, developed and produced to limit attack surfaces, including external interfaces.                                                           |

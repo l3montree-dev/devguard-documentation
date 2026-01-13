@@ -1,0 +1,252 @@
+---
+sidebar_position: 1
+title: Why Compliance Matters
+---
+
+# Why Compliance Matters
+
+## The Business Case for Compliance
+
+Compliance is more than just a regulatory obligation—it's a strategic factor that builds trust, minimizes risks, and generates competitive advantages. In an increasingly connected and digitalized world, customers, partners, and regulatory authorities expect software products to be developed and operated securely.
+
+### Risks of Non-Compliance
+
+The costs of non-compliance typically far exceed investments in compliance measures:
+
+**Financial Risks**
+- Fines and penalties (e.g., up to €15 million or 2.5% of global annual turnover under the CRA)
+- Audit costs and remediation expenses
+- Lost business opportunities due to missing certifications
+- Increased insurance premiums
+
+**Operational Risks**
+- Delays in product launches
+- Supply chain disruptions
+- Resource allocation to reactive compliance measures
+- Technical debt from retrofitted security implementations
+
+**Reputational Risks**
+- Loss of trust among customers and partners
+- Negative media coverage following security incidents
+- Difficulties in acquiring new customers
+- Competitive disadvantages versus compliant providers
+
+### Benefits of Proactive Compliance
+
+Organizations that approach compliance strategically benefit in multiple ways:
+
+**Market Access and Competitive Advantages**
+- Access to regulated markets (EU, USA, government agencies)
+- Differentiation in competition through certifications
+- Meeting customer requirements in procurement processes
+- Accelerated contract negotiations through demonstrable compliance
+
+**Risk Management**
+- Early detection of vulnerabilities
+- Systematic handling of security gaps
+- Better transparency across the software supply chain
+- Reduction of attack surfaces
+
+**Efficiency and Quality**
+- Structured development processes
+- Automation of security testing
+- Continuous improvement of software quality
+- Better documentation and traceability
+
+## What Does Compliance Mean in Software Development?
+
+Compliance in software development encompasses adherence to various requirements from laws, standards, and frameworks. The main areas are:
+
+### Regulatory Compliance
+
+**EU Cyber Resilience Act (CRA)**
+- Mandatory cybersecurity requirements for products with digital elements
+- Vulnerability handling throughout the entire product lifecycle
+- SBOM obligation and transparency regarding components
+- Reporting obligation for actively exploited vulnerabilities
+
+**Other Regulatory Requirements**
+- NIS2 Directive for critical infrastructures
+- GDPR for data protection
+- Industry-specific regulations (MedTech, Automotive, Finance)
+
+### Standards-Based Compliance
+
+**ISO 27001**
+- Information Security Management System (ISMS)
+- Risk management and controls
+- Continuous improvement
+- Certification by accredited bodies
+
+**Other Relevant Standards**
+- BSI IT-Grundschutz (Germany)
+- SOC 2 (USA)
+- NIST Cybersecurity Framework
+
+### Technical Compliance Requirements
+
+**Software Bill of Materials (SBOM)**
+- Complete inventory of all software components
+- Machine-readable formats (SPDX, CycloneDX)
+- Version information and dependencies
+- Foundation for vulnerability management
+
+**Vulnerability Exploitability eXchange (VEX)**
+- Dynamic information about exploitability of vulnerabilities
+- Reduction of false positives
+- Prioritization based on actual risk
+- Formats: CSAF, OpenVEX, CycloneDX VEX
+
+**Common Security Advisory Framework (CSAF)**
+- Standardized format for security advisories
+- Machine-readable vulnerability information
+- Integration into automated processes
+- Real-time status of vulnerabilities
+
+## The Challenges
+
+Implementing compliance is complex and resource-intensive:
+
+**Complexity of Requirements**
+- Overlapping and complementary frameworks
+- Different interpretations and implementations
+- Continuous changes and updates
+- Lack of harmonized standards
+
+**Resource Requirements**
+- Skills shortage in cybersecurity and compliance
+- Time investment for documentation and evidence
+- Costs for tools, audits, and certifications
+- Balance between compliance and feature development
+
+**Technical Integration**
+- Integration into existing CI/CD pipelines
+- Automation of compliance checks
+- Tool diversity and integration
+- Data quality and consistency
+
+**Organizational Hurdles**
+- Coordination between teams (Dev, Sec, Ops, Legal)
+- Cultural shift toward "Security by Default"
+- Training and awareness
+- Continuous process improvement
+
+## Approaches for Effective Compliance
+
+**1. Shift-Left: Integration into the Development Process**
+
+Compliance should not be addressed only at the end of the development cycle but integrated from the beginning:
+- Security requirements in the planning phase
+- Automated tests in CI/CD pipelines
+- Continuous monitoring during development
+- Early detection and remediation of issues
+
+**2. Automation**
+
+Manual compliance processes are error-prone and not scalable:
+- Automatic SBOM generation with every build
+- Continuous vulnerability scanning
+- Automated risk assessment
+- Policy-as-Code for compliance checks
+
+**3. Tooling and Platforms**
+
+Specialized tools reduce manual effort:
+- Central platforms for vulnerability management
+- Integration of various scanners (SAST, DAST, SCA, Container)
+- Reporting and documentation
+- Audit trail and traceability
+
+**4. Prioritization Based on Actual Risk**
+
+Not all vulnerabilities are equally critical:
+- Context-based risk assessment
+- Consideration of exploitability
+- VEX to reduce false positives
+- Focus on the most important risks
+
+## DevGuard: Compliance in Development
+
+DevGuard is an open-source platform for vulnerability management and compliance, developed to address the challenges mentioned above. The tool is an OWASP Incubating Project and focuses on seamless integration of security and compliance into the Software Development Lifecycle.
+
+### Core Functionalities
+
+**Vulnerability Management**
+- Integration of various scanners (Trivy, Grype, Semgrep, etc.)
+- Central management of all discovered vulnerabilities
+- Risk-based prioritization with enhanced CVSS scores
+- Tracking of remediation status and trends
+
+**SBOM Management**
+- Automatic generation of SBOMs in CycloneDX format
+- Versioning and history of all components
+- Transparency across the entire software supply chain
+- Machine-readable formats for automation
+
+**VEX Support**
+- Dynamic VEX documents available as JSON
+- Linking instead of static files (VEX changes continuously)
+- Exploitation status for each vulnerability
+- Reduction of alarm fatigue
+
+**Compliance Documentation**
+- Mapping to ISO 27001, CRA, and other frameworks
+- Automatic generation of compliance reports
+- Evidence for audits and certifications
+- Audit trail of all changes
+
+**Supply Chain Security**
+- Attestation-based compliance (in-toto)
+- SLSA compliance monitoring
+- Integrity checks of the codebase
+- Protection against supply chain attacks
+
+### Integration into Existing Workflows
+
+DevGuard was built by developers for developers and integrates seamlessly:
+
+**CI/CD Integration**
+- GitHub Actions, GitLab CI, Jenkins
+- Automatic scanning with every build
+- Policy enforcement before deployment
+- Fail-fast on critical findings
+
+**Developer Experience**
+- CLI tool for local scanning
+- Web UI for overview and management
+- APIs for custom integrations
+- Minimally invasive to existing processes
+
+**Team Collaboration**
+- Multi-project and multi-organization support
+- Role-based access control
+- Shared vulnerability database
+- Communication and tracking
+
+### Compliance as Code
+
+DevGuard follows the "Compliance as Code" approach with Rego policies:
+- Define compliance requirements as code
+- Automatic validation before deployment
+- Versioned and testable policies
+- Community-driven policy repository
+
+### Open Source and Transparency
+
+As an open-source project under AGPL-3.0:
+- Full transparency about functionality
+- Community-driven and extensible
+- No vendor lock-ins
+- Self-hostable (on-premise or cloud)
+
+## Conclusion
+
+Compliance is a necessary investment in the future of a software product. The challenge lies in implementing compliance efficiently and in a developer-friendly manner. Tools like DevGuard help understand compliance not as a burden but as an integrated part of the development process.
+
+The key takeaways:
+- **Compliance builds trust** and enables market access
+- **Automation is the key** to scalable compliance
+- **Early integration** reduces costs and risks
+- **The right tools** make compliance manageable
+
+The next step: Evaluate your current processes and identify where automation and better tooling can have the greatest impact.
