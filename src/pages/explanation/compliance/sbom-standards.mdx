@@ -1,0 +1,89 @@
+import Image from 'next/image';
+import { Callout } from 'nextra/components';
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+import { Badge } from "@/components/ui/badge";
+
+# SBOM Standards: CycloneDX & SPDX
+
+A Software Bill of Materials (<Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">SBOM</span></TooltipTrigger><TooltipContent><p>Software Bill of Materials - Comprehensive inventory of software components</p></TooltipContent></Tooltip>) is a comprehensive inventory of all components in software. Two standards dominate: CycloneDX and SPDX. Both serve the same purpose but differ in approach and use cases.
+
+## Why SBOMs Matter
+
+**Supply Chain Visibility**: Know exactly what's in your software—every dependency, version, and license.
+
+**Vulnerability Management**: When new <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">CVEs</span></TooltipTrigger><TooltipContent><p>Common Vulnerabilities and Exposures - Standardized vulnerability identifiers</p></TooltipContent></Tooltip> are disclosed, SBOMs enable instant identification of affected applications.
+
+**Compliance**: Regulations like the EU Cyber Resilience Act require machine-readable SBOMs demonstrating supply chain transparency.
+
+<Callout type="info" emoji="📦">
+  SBOMs answer: "What's actually in my software?" Without this inventory, vulnerability management becomes guesswork.
+</Callout>
+
+## CycloneDX
+
+CycloneDX is a lightweight standard designed specifically for application security and supply chain component analysis[^1].
+
+**Key Features**:
+- Security-first design for vulnerability management
+- Native <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">VEX</span></TooltipTrigger><TooltipContent><p>Vulnerability Exploitability eXchange - Vulnerability impact assessments</p></TooltipContent></Tooltip> integration within SBOM documents
+- Rich metadata: licenses, <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">PURL</span></TooltipTrigger><TooltipContent><p>Package URL - Standardized package identifier</p></TooltipContent></Tooltip> identifiers, component hashes
+- Service/API documentation support
+- Lightweight: smaller files, faster processing
+
+**Format**: JSON or XML
+
+**Best For**: Security teams, vulnerability management, DevSecOps workflows, regulatory compliance requiring vulnerability tracking.
+
+## SPDX <Badge variant="upcoming">Coming Soon 🎉</Badge>
+
+SPDX (Software Package Data Exchange) is a mature standard maintained by the Linux Foundation, originally designed for license compliance[^2].
+
+**Key Features**:
+- License-focused with extensive tracking capabilities
+- Comprehensive file and package metadata
+- Broad adoption in embedded systems and automotive
+- ISO/IEC 5962:2021 standard recognition
+- Standardized license identifiers
+
+**Format**: JSON, YAML, RDF, tag-value
+
+**Best For**: License compliance, legal teams, open source governance, automotive industry, embedded systems.
+
+## CycloneDX vs SPDX
+
+| Feature | CycloneDX | SPDX |
+|---------|-----------|------|
+| **Primary Focus** | Security & vulnerabilities | License compliance |
+| **VEX Support** | Native integration | Limited |
+| **File Size** | Smaller, optimized | Larger, comprehensive |
+| **Maturity** | Newer (2017) | Mature (2010, ISO) |
+| **Adoption** | Growing DevSecOps | Automotive/embedded |
+
+<Callout type="info" emoji="🔄">
+  Both standards are valid—choice depends on use case. Security teams prefer CycloneDX; legal/compliance teams prefer SPDX. Some organizations generate both.
+</Callout>
+
+## DevGuard Support
+
+**CycloneDX**: DevGuard generates and consumes CycloneDX SBOMs with native VEX integration. Configure in repository settings.
+
+**Generation**: Automatically create SBOMs during scanning with vulnerability assessments included.
+
+**Consumption**: Import SBOMs from suppliers. DevGuard normalizes data into unified vulnerability management.
+
+**Public Endpoints**: Expose SBOMs for downstream consumers: `/api/v1/public/{assetId}/sbom.json`
+
+**SPDX Support**: <Badge variant="upcoming">Coming Soon</Badge> - SPDX generation and consumption planned for future release.
+
+---
+
+## Related Documentation
+
+- [CSAF & VEX Standards](csaf-vex-standards) - Vulnerability communication formats
+- [External Vulnerability Sync](external-vulnerability-sync) - Importing/exporting SBOMs
+- [Why Compliance Matters](why-compliance-matters) - Business case for SBOMs
+
+## References
+
+[^1]: CycloneDX, *CycloneDX Specification*, OWASP Foundation, https://cyclonedx.org/specification/overview/
+[^2]: Linux Foundation, *SPDX Specification*, https://spdx.dev/specifications/
