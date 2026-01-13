@@ -1,5 +1,8 @@
 export default {
     index: { title: 'Overview' },
+    'core-concepts': {
+        title: 'Core-Concepts',
+    },
     devsecops: { title: 'DevSecOps' },
     'compliance': {
         title: 'DevGuard & Compliance Frameworks',

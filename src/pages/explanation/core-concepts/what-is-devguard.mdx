@@ -1,0 +1,75 @@
+import Image from 'next/image';
+import { Callout } from 'nextra/components';
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+
+# What is DevGuard?
+
+DevGuard is an open-source vulnerability management platform built by developers, for developers. As an OWASP Incubating Project, DevGuard simplifies the complex world of vulnerability management by integrating security seamlessly into the software development lifecycle—making security practices accessible and efficient regardless of security expertise.
+
+## Core Mission
+
+**Developer-Centric Security**: Security tools shouldn't disrupt development workflows. DevGuard fits naturally into existing CI/CD pipelines, providing vulnerability intelligence where developers already work.
+
+**Transparency Over Obscurity**: Modern software development demands full visibility into dependencies and vulnerabilities. DevGuard provides complete transparency through automated <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">SBOM</span></TooltipTrigger><TooltipContent><p>Software Bill of Materials - Comprehensive inventory of software components</p></TooltipContent></Tooltip> generation and dependency graphs.
+
+**Risk-Based Prioritization**: Not all vulnerabilities are equally critical. DevGuard enhances <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">CVSS</span></TooltipTrigger><TooltipContent><p>Common Vulnerability Scoring System - Technical severity rating</p></TooltipContent></Tooltip> scores with exploitability data, organizational context, and attack surface analysis—ensuring the most important issues come first.
+
+**Compliance Made Manageable**: Technical compliance with security frameworks (ISO 27001, CRA, BSI IT-Grundschutz) shouldn't be a burden. DevGuard automates compliance documentation, audit trails, and evidence generation.
+
+<Callout type="info" emoji="🎯">
+  DevGuard practices what it preaches—the platform scans and manages its own vulnerabilities, publicly sharing SBOM and <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">VEX</span></TooltipTrigger><TooltipContent><p>Vulnerability Exploitability eXchange - Vulnerability impact assessments</p></TooltipContent></Tooltip> documents as examples of transparent security practices.
+</Callout>
+
+## The Challenge
+
+In 2023 alone, cyberattacks caused approximately €206 billion in damage in Germany, with many exploiting software vulnerabilities. Developers face security issues without proper training or tools fitting their workflows. Meanwhile, vulnerability scanners generate overwhelming findings—often 50-80% false positives—creating alert fatigue and obscuring genuine threats.
+
+Traditional security tools treat vulnerability management as separate from development, creating friction. Developers need security integrated into their existing workflows, not parallel processes demanding context switching.
+
+## The Solution
+
+DevGuard bridges this gap through:
+
+**Seamless Integration**: One-click setup for CI/CD pipelines (GitHub Actions, GitLab CI, Jenkins). Scanner CLI integrates into existing workflows without disrupting development velocity.
+
+**Intelligent Risk Assessment**: Multi-dimensional risk scoring combining CVSS technical severity, <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">EPSS</span></TooltipTrigger><TooltipContent><p>Exploit Prediction Scoring System - Exploitation probability estimate</p></TooltipContent></Tooltip> exploitation probability, organizational security requirements, and component depth analysis.
+
+**Supply Chain Transparency**: Automated SBOM and VEX generation providing complete dependency visibility. Dependency graphs visualize complex relationships, enabling informed decisions about component risks.
+
+**Bring Your Own Scanner**: Already using Trivy, Grype, Semgrep, or other tools? DevGuard ingests SBOM and SARIF format data for unified risk visibility across scanners.
+
+**Issue Tracker Integration**: Automatically create tickets in GitHub Issues, GitLab Issues, or Jira for identified vulnerabilities. Bidirectional synchronization keeps security work visible in normal development workflows.
+
+**Automated Compliance**: Generate audit trails, compliance reports, and documentation automatically. Map vulnerability handling to ISO 27001, CRA, and other framework requirements without manual documentation overhead.
+
+## Open Source & Community
+
+**AGPL-3.0 License**: Full transparency and no vendor lock-in. Self-host on-premise or use cloud deployments.
+
+**OWASP Incubating Project**: Community-driven development following OWASP principles and standards.
+
+**Made in Germany**: Developed by L3montree with focus on data sovereignty, privacy, and European compliance requirements.
+
+**Active Development**: Continuously evolving with community contributions. Public roadmap and transparent issue tracking on GitHub.
+
+<Callout type="info" emoji="🌍">
+  DevGuard supports the OWASP DevSecOps pipeline with simplified CLI wrappers around widely-used open source tools, enabling security at scale without reinventing ecosystems.
+</Callout>
+
+## Key Differentiators
+
+**Dynamic VEX**: VEX information shared via links rather than static files—what's risk-free today may be affected by CVEs tomorrow. Live VEX endpoints ensure assessments stay current.
+
+**Attestation-Based Compliance**: Support for in-toto attestations and SLSA compliance monitoring, securing supply chain integrity.
+
+**Developer Experience**: Built by developers understanding actual workflows. Minimally invasive integration preserving development velocity while improving security posture.
+
+**Pragmatic Automation**: Automate what can be automated (scanning, SBOM generation, risk scoring) while preserving human judgment for strategic decisions (risk acceptance, mitigation approaches).
+
+---
+
+## Related Documentation
+
+- [Vulnerability Lifecycle](vulnerability-lifecycle) - Understanding vulnerability management process
+- [Vulnerability Risk Assessment](risk-assessment-methodology) - How DevGuard calculates risk scores
+- [Why Compliance Matters](why-compliance-matters) - Business case for integrated security
