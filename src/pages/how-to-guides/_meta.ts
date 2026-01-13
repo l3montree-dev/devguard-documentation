@@ -2,6 +2,7 @@ export default {
     index: { title: 'Overview' },
     administration: { title: 'Administration' },
     scanning: { title: 'Scanning' },
+    'api-usage': { title: 'API Usage' },
     'dependency-proxy': {
         title: 'Dependency Proxy with Malicious Package Firewall',
     },

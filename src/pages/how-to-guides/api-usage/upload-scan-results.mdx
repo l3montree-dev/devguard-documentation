@@ -1,0 +1,157 @@
+import { Callout } from 'nextra/components'
+import { Tabs } from 'nextra/components'
+
+# Upload Scan Results (NEEDS REVIEW)
+
+Upload SBOM (Software Bill of Materials) or SARIF (Static Analysis) reports to DevGuard via API.
+
+## Prerequisites
+
+- A [Personal Access Token](/how-to-guides/api-usage/authenticate-with-api) with `scan` scope
+- An existing asset in DevGuard
+
+## Upload SBOM (Dependency Scan)
+
+<Tabs items={['devguard-scanner CLI', 'API']}>
+  <Tabs.Tab>
+    Scan and upload in one command:
+
+    ```bash copy
+    devguard-scanner sca \
+      --assetName="<org>/projects/<project>/assets/<asset>" \
+      --apiUrl="https://api.devguard.org" \
+      --token="<your-private-key>"
+    ```
+
+    Or upload an existing CycloneDX SBOM:
+
+    ```bash copy
+    devguard-scanner curl \
+      --token="<your-private-key>" \
+      --apiUrl="https://api.devguard.org" \
+      -- -X POST "/<org>/projects/<project>/assets/<asset>/scan/" \
+      -H "Content-Type: application/json" \
+      -H "X-Asset-Ref: main" \
+      -d @sbom.json
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    **Endpoint:** `POST /{org}/projects/{project}/assets/{asset}/scan/`
+
+    **Headers:**
+    | Header | Required | Description |
+    |--------|----------|-------------|
+    | `X-Asset-Ref` | No | Branch/tag name (default: `main`) |
+    | `X-Asset-Default-Branch` | No | Mark as default branch |
+    | `X-Artifact-Name` | No | Artifact identifier (e.g., container image) |
+    | `X-Scanner` | No | Scanner identifier |
+    | `X-Tag` | No | Set to `1` to mark as release tag |
+    | `X-Origin` | No | Scan origin identifier |
+
+    **Body:** CycloneDX JSON SBOM
+
+    **Response:**
+    ```json
+    {
+      "amountOpened": 5,
+      "amountClosed": 2,
+      "dependencyVulns": [...]
+    }
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+## Upload SARIF (Code Analysis)
+
+<Tabs items={['devguard-scanner CLI', 'API']}>
+  <Tabs.Tab>
+    Run a SAST scan and upload:
+
+    ```bash copy
+    devguard-scanner sast \
+      --assetName="<org>/projects/<project>/assets/<asset>" \
+      --apiUrl="https://api.devguard.org" \
+      --token="<your-private-key>"
+    ```
+
+    Or upload an existing SARIF report:
+
+    ```bash copy
+    devguard-scanner curl \
+      --token="<your-private-key>" \
+      --apiUrl="https://api.devguard.org" \
+      -- -X POST "/<org>/projects/<project>/assets/<asset>/sarif-scan/" \
+      -H "Content-Type: application/json" \
+      -H "X-Asset-Ref: main" \
+      -H "X-Scanner: semgrep" \
+      -d @report.sarif
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    **Endpoint:** `POST /{org}/projects/{project}/assets/{asset}/sarif-scan/`
+
+    **Headers:**
+    | Header | Required | Description |
+    |--------|----------|-------------|
+    | `X-Asset-Ref` | No | Branch/tag name (default: `main`) |
+    | `X-Scanner` | **Yes** | Scanner ID (e.g., `semgrep`, `gitleaks`) |
+    | `X-Asset-Default-Branch` | No | Mark as default branch |
+    | `X-Tag` | No | Set to `1` to mark as release tag |
+
+    **Body:** SARIF 2.1.0 JSON
+
+    **Response:**
+    ```json
+    {
+      "amountOpened": 3,
+      "amountClosed": 1,
+      "firstPartyVulns": [...]
+    }
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+## Upload VEX (Vulnerability Exploitability)
+
+**Endpoint:** `POST /{org}/projects/{project}/assets/{asset}/vex/`
+
+Upload CycloneDX VEX to update vulnerability status:
+
+```bash copy
+devguard-scanner curl \
+  --token="<your-private-key>" \
+  --apiUrl="https://api.devguard.org" \
+  -- -X POST "/<org>/projects/<project>/assets/<asset>/vex/" \
+  -H "Content-Type: application/json" \
+  -H "X-Asset-Ref: main" \
+  -d @vex.json
+```
+
+<Callout type="info">
+  VEX documents can reference external exploitability statements via `externalReferences` with type `exploitability-statement`.
+</Callout>
+
+## CI/CD Examples
+
+### GitHub Actions
+
+```yaml copy
+- name: Scan with DevGuard
+  run: |
+    devguard-scanner sca \
+      --assetName="${{ github.repository_owner }}/projects/${{ github.event.repository.name }}/assets/${{ github.event.repository.name }}" \
+      --apiUrl="https://api.devguard.org" \
+      --token="${{ secrets.DEVGUARD_TOKEN }}"
+```
+
+### GitLab CI
+
+```yaml copy
+devguard-scan:
+  image: ghcr.io/l3montree-dev/devguard/scanner:latest
+  script:
+    - devguard-scanner sca
+        --assetName="$CI_PROJECT_NAMESPACE/projects/$CI_PROJECT_NAME/assets/$CI_PROJECT_NAME"
+        --apiUrl="https://api.devguard.org"
+        --token="$DEVGUARD_TOKEN"
+```

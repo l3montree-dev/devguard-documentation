@@ -1,0 +1,137 @@
+import { Callout } from 'nextra/components'
+import { Tabs } from 'nextra/components'
+
+# Authenticate with the DevGuard API
+
+DevGuard uses **HTTP Message Signatures** (RFC 9421) with ECDSA P-256 keys for API authentication. This guide shows how to create a Personal Access Token (PAT) and sign requests.
+
+## Prerequisites
+
+- A DevGuard account
+- Access to your organization
+
+## Step 1: Create a Personal Access Token
+
+1. Navigate to **User Settings** (user icon → Settings)
+2. Scroll to **Manage Personal Access Tokens**
+3. Click **Create Token**
+4. Select scopes:
+   - `scan` — Upload scan results
+   - `manage` — Full API access
+5. **Save the private key** — it is shown only once
+
+The token is an ECDSA P-256 private key in hexadecimal format.
+
+## Step 2: Sign API Requests
+
+<Tabs items={['devguard-scanner CLI', 'Go', 'curl (via devguard-scanner)']}>
+  <Tabs.Tab>
+    The `devguard-scanner` CLI handles signing automatically:
+
+    ```bash copy
+    devguard-scanner sca \
+      --assetName="my-org/projects/my-project/assets/my-asset" \
+      --apiUrl="https://api.devguard.org" \
+      --token="<your-private-key>"
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    Use the DevGuard Go client:
+
+    ```go filename="main.go" copy
+    // export DEVGUARD_API_URL="https://api.devguard.org"
+    // export DEVGUARD_TOKEN="<your-private-key>"
+    package main
+
+    import (
+        "fmt"
+        "io"
+        "log"
+        "net/http"
+        "os"
+
+        "github.com/l3montree-dev/devguard/pkg/devguard"
+    )
+
+    func main() {
+        // Read token from environment variable for security
+        token := os.Getenv("DEVGUARD_TOKEN")
+        if token == "" {
+            log.Fatal("DEVGUARD_TOKEN environment variable is required")
+        }
+
+        apiURL := os.Getenv("DEVGUARD_API_URL")
+        if apiURL == "" {
+            apiURL = "https://api.devguard.org"
+        }
+
+        // Create the authenticated client
+        client := devguard.NewHTTPClient(token, apiURL)
+
+        // Create the request
+        req, err := http.NewRequest("GET", apiURL+"/api/v1/whoami/", nil)
+        if err != nil {
+            log.Fatalf("Failed to create request: %v", err)
+        }
+
+        // Execute the request (automatically signed)
+        resp, err := client.Do(req)
+        if err != nil {
+            log.Fatalf("Request failed: %v", err)
+        }
+        defer resp.Body.Close()
+
+        body, err := io.ReadAll(resp.Body)
+        if err != nil {
+            log.Fatalf("Failed to read response: %v", err)
+        }
+
+        fmt.Printf("Status: %s\n", resp.Status)
+        fmt.Printf("Response: %s\n", body)
+    }
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    For `curl`, use `devguard-scanner` as a signing proxy:
+
+    ```bash copy
+    devguard-scanner curl \
+    --token="<your-token>" \
+    -X GET "https://api.devguard.org/api/v1/whoami/"
+    ```
+
+    This signs the request with proper headers.
+  </Tabs.Tab>
+</Tabs>
+
+## How Signing Works
+
+DevGuard verifies requests by:
+
+1. Extracting the `X-Fingerprint` header
+2. Looking up the associated public key
+3. Verifying the signature covers `@method` and `content-digest`
+
+## Revoke a Token
+
+<Tabs items={['Web UI', 'API']}>
+  <Tabs.Tab>
+    1. Go to **User Settings** → **Manage Personal Access Tokens**
+    2. Click **Delete** next to the token
+  </Tabs.Tab>
+<Tabs.Tab>
+    Revoke using the private key:
+
+    ```bash copy
+    devguard-scanner curl \
+    --token="<your-private-key>" \
+    -X POST "https://api.devguard.org/api/v1/pats/revoke-by-private-key/" \
+    -H "Content-Type: application/json" \
+    -d '{"privkey": "<your-private-key>"}'
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+<Callout type="warning">
+  Store your private key securely. If compromised, revoke it immediately.
+</Callout>
