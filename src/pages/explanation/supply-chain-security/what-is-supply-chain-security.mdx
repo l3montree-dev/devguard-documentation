@@ -29,58 +29,77 @@ Every one of these components has to be secured. A single vulnerability can put 
 Understanding the potential threats to the software supply chain is crucial for ensuring its security.
 By mapping the software supply chain, we can pinpoint vulnerabilities throughout the development lifecycle. These risks are categorized into four strategic domains: Source, Build, Dependency, and Deployment/Runtime threats.
 
+![Software Supply Chain Threat Model](/threat-landscape.png)
 
+### 1. Source Threats
+These risks target the earliest stage of development—the code itself and the systems that manage it. Attackers aim to compromise source code repositories to inject malicious code or steal intellectual property before the build process even begins.
 
+#### Examples of Source Threats
 
+  * **Unauthorized Code Changes:** An attacker gains access to a developer's account or maintainer rights for a public repository and silently commits a backdoor into the codebase.
+  * **Repo Configuration Weaknesses:** A public GitHub repository is accidentally configured to allow anyone to push code, or branch protection rules are bypassed.
+  * **Insufficient Code Review:** Malicious or vulnerable code is merged into the main branch because peer review processes were skipped or automated scanners were ignored.
 
+![XZ_utils_logo_contributed_by_Jia_Tan](/XZ_logo_contributed_by_Jia_Tan.png)
+<a href="https://commons.wikimedia.org/wiki/File:XZ_logo_contributed_by_Jia_Tan.png">Jia Tan</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>, via Wikimedia Commons
 
-## The Concept of the "Chain"
+**Real-World Example: [The 2024 XZ Utils Backdoor](https://en.wikipedia.org/wiki/XZ_Utils_backdoor)**
+In this sophisticated social engineering attack, a malicious actor known as "Jia Tan" spent years building trust to gain maintainer rights over **XZ Utils**, a widely used compression library. Once in control, they injected a backdoor designed to allow unauthorized **remote code execution** on Linux servers.
 
-A software supply chain is composed of everything that touches your code during the Software Development Life Cycle (SDLC). To secure it, DevGuard analyzes three primary dimensions:
-
-### 1. Source Integrity
-This involves ensuring the code you think you are building is actually the code written by your authorized developers. Threats here include:
-* **Credential Theft**: An attacker gaining access to a developer's GitHub/GitLab account.
-* **History Rewriting**: Force-pushing malicious changes to a branch that bypass code reviews.
-* **Identity Spoofing**: Committing code using a colleague's email address without GPG/SSH signing.
-
-### 2. Build Integrity
-Ensuring the build process hasn't been compromised to inject malicious logic. This is the "SolarWinds" threat model. Even if the source code is perfect, the build environment (the CI runner) could be compromised.
-* **Build Tool Poisoning**: Using a malicious compiler or wrapper.
-* **Ephemeral Environment Tampering**: Injecting environment variables during the build that change the binary's behavior.
-* **Bypassing Steps**: Forcing a build to skip security scans but still produce a "valid" artifact.
-
-### 3. Dependency Integrity
-Verifying that third-party packages (npm, PyPI, Maven, Go modules) are free of known vulnerabilities and haven't been hijacked.
-* **Typosquatting**: Uploading `requestts` instead of `requests`.
-* **Dependency Confusion**: Tricking a build system into pulling a malicious "private" package from a public registry.
-* **Protestware/Malware**: Maintainers intentionally adding destructive code to widely used libraries.
+**Impact:** The attack was discovered by chance just weeks before it would have merged into stable Linux distributions. While this miracle discovery prevented the infection of **hundreds of millions of servers** globally, the compromised versions (5.6.0 and 5.6.1) still reached users of rolling-release distributions like Fedora Rawhide, Kali Linux, and openSUSE Tumbleweed.
 
 
 
 ---
 
-## The Threat Landscape: The SLSA Model
+### 2. Build Threats
+Build threats focus on the "factory" where code is turned into executable software. If the build environment or the process is compromised, the resulting artifact will be malicious, even if the original source code was clean.
 
-To understand why DevGuard implements specific verification features, it is helpful to categorize the threats we are defending against. The industry-standard **SLSA (Supply-chain Levels for Software Artifacts)** framework identifies several critical points of failure, which we categorize into three "Vulnerability Zones":
+#### Examples of Build Threats
 
-### Zone A: The Producer & Source
-The threat starts at the keyboard. Attackers target the version control system (VCS) or the developer's environment.
-* **Threat (A)**: Submitting malicious code to the VCS.
-* **Threat (B)**: Compromising the VCS platform itself.
+  * **Compromised Build Server:** An attacker infects the CI/CD pipeline (e.g., Jenkins or GitHub Actions), causing it to inject malware during the compilation process.
+  * **Environmental Drift:** The build environment uses outdated or unpatched tools that have known vulnerabilities, which attackers exploit to alter the build output.
+  * **Artifact Tampering:** A legitimate binary is replaced with a malicious version immediately after the build is completed but before it is signed or stored.
 
-### Zone B: The Build & Distribution
-This is where code is transformed into a functional artifact. This is often the most vulnerable link because build servers are "high-privilege" environments.
-* **Threat (C)**: Building from a modified source that isn't in the VCS.
-* **Threat (D)**: Compromising the Build Process (the runner).
-* **Threat (E)**: Using a compromised dependency.
-* **Threat (F)**: Uploading a modified artifact to the registry after the build finishes.
+**Real-World Example: [SolarWinds Incident (2020)](https://en.wikipedia.org/wiki/2020_United_States_federal_government_data_breach#Methodology)**
+This incident illustrates a critical failure in build security. Attackers compromised the **build environment and continuous integration server**, allowing them to modify and infect software updates for the **Orion** network monitoring tool.
 
-### Zone C: The Consumer
-The threat moves to the user who pulls the artifact.
-* **Threat (G)**: Compromising the Package Registry.
-* **Threat (H)**: Tricking the user into using the wrong artifact.
+**Impact:** The fallout was severe, reaching over a dozen U.S. government departments—including the **military, executive branch, and intelligence services**—who unknowingly installed the compromised updates.
 
+---
+
+### 3. Dependency Threats
+Modern software relies heavily on third-party libraries and open-source packages. Dependency threats exploit this trust by introducing vulnerabilities through the external components your software consumes.
+
+#### Examples of Dependency Threats
+
+  * **Typosquatting:** An attacker publishes a malicious package with a name very similar to a popular library (e.g., `react-dom` vs. `reac-dom`), hoping developers install the wrong one by mistake.
+  * **Dependency Confusion:** An attacker uploads a malicious package to a public registry with the same name as an internal, private package, tricking the build system into pulling the public (malicious) version.
+  * **Vulnerable Transitive Dependencies:** A library you use depends on *another* library that has a critical vulnerability (like Log4j), compromising your application indirectly.
+
+**Real-World Example: [Log4Shell (2021)](https://en.wikipedia.org/wiki/Log4Shell)**
+The **Log4Shell** vulnerability in the ubiquitous Java logging library **Log4j** demonstrates the massive reach of dependency threats. A critical flaw in how the library processed log messages allowed attackers to execute arbitrary code remotely (RCE) simply by sending a specific text string to a vulnerable server.
+
+**Impact:** Because Log4j was embedded as a dependency in **millions of applications**—from iCloud and Steam to enterprise software—the vulnerability left a vast portion of the internet exposed. It forced organizations globally to pause development and scramble to patch deep chains of transitive dependencies.
+
+
+---
+
+### 4. Deployment and Runtime Threats
+These threats occur after the software has been built and is running in its destination environment. Attackers target the deployment infrastructure or the application while it is active to manipulate its behavior or steal data.
+
+#### Examples of Deployment Threats
+
+  * **Insecure Infrastructure-as-Code (IaC):** Deployment scripts (e.g., Terraform or Kubernetes manifests) are misconfigured, leaving cloud buckets or API endpoints exposed to the public.
+  * **Runtime Injection:** An application running in production is exploited via a vulnerability (like SQL Injection or Remote Code Execution) to execute malicious commands.
+  * **Unverified Artifact Deployment:** The production environment accepts and runs a container image that hasn't been signed or verified, allowing an attacker to deploy a rogue version of the application.
+
+**Real-World Example: [The Equifax Data Breach (2017)](https://en.wikipedia.org/wiki/2017_Equifax_data_breach)**
+While often cited as a failure to patch, this incident fundamentally illustrates a **Runtime Injection** attack via a supply chain dependency. Equifax was running a version of the **Apache Struts** framework with a known flaw (CVE-2017-5638) in how it parsed HTTP headers.
+
+Attackers exploited this by sending web requests with malicious commands injected into the `Content-Type` header. The running application parsed the header and immediately executed the code within it, allowing attackers to bypass authentication entirely.
+
+**Impact:** The breach resulted in the theft of **147.9 million American consumer records**. It also exposed data for 15.2 million UK citizens and compromised approximately 10–11 million drivers' licenses, highlighting how a single runtime vulnerability can lead to catastrophic data loss.
 
 
 ---
@@ -124,19 +143,6 @@ We provide developers with immediate feedback. By integrating with the developer
 Even if a developer bypasses a local check, the CI/CD pipeline and the final production deployment are gated by **Attestation Policies**. If an artifact arrives at the production environment without a valid signature from the build runner or a passing security scan attestation, DevGuard can trigger an alert or block the deployment.
 
 
-
----
-
-## Organizational Impact of Supply Chain Security
-
-Implementing these concepts changes the organizational culture from "reactive patching" to "proactive integrity."
-
-| **Developers** | Gain confidence that their dependencies are safe and curated. |
-| **DevOps** | Automates the verification of build pipelines, reducing manual audit toil. |
-| **Security Teams** | Get a real-time view of every component running in the enterprise. |
-| **Compliance** | Provides the "paper trail" required by regulations like the EU Cyber Resilience Act. |
-
-By treating the supply chain as a first-class security citizen, organizations move away from the "black box" model of software delivery and into a transparent, verifiable ecosystem.
 
 ---
 
