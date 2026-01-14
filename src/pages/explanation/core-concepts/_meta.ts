@@ -4,4 +4,5 @@ export default {
     },
     'organization-groups-repos': { title: 'Hierarchy of DevGuard' },
     'repository-versions': { title: 'Branching Models '},
+    'artifacts': { title: 'Artifacts '},
 }
