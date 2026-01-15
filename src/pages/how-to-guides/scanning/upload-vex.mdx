@@ -1,10 +1,95 @@
 ---
 title: Upload VEX
-description: Upload Vulnerability Exploitability eXchange documents
+description: Upload Vulnerability Exploitability eXchange documents to DevGuard
 ---
 
 import { Callout } from 'nextra/components'
 
 # Upload VEX
 
-Docs are coming soon!
+Upload a Vulnerability Exploitability eXchange (VEX) document to DevGuard. VEX documents allow you to communicate the status of vulnerabilities in your software components to DevGuard, enabling more accurate vulnerability tracking and compliance reporting.
+
+## Prerequisites
+
+Before you begin, ensure you have:
+
+- Docker installed on your system
+- A personal access token from DevGuard (create one in user settings)
+- A repository created in DevGuard
+- An existing VEX document in CycloneDX format (JSON or XML)
+
+## Upload VEX Document
+
+Upload a VEX document to update vulnerability statuses:
+
+```bash copy
+docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main-latest \
+  devguard-scanner vex \
+    /dev/app/vex.json \
+    --assetName="myorg/projects/myproject/assets/myrepo" \
+    --apiUrl="https://api.devguard.org" \
+    --token="YOUR_TOKEN"
+```
+
+<Callout type="info">
+  Replace `vex.json` with the path to your VEX document. Only CycloneDX-formatted VEX documents (JSON or XML) are supported.
+</Callout>
+
+<Callout type="info">
+  Replace `myorg/projects/myproject/assets/myrepo` with your repository's slug. You can copy this from the URL when viewing your repository in the DevGuard UI.
+</Callout>
+
+## What DevGuard Does with VEX
+
+1. **Parses VEX Document**: Reads and validates your CycloneDX VEX file
+2. **Extracts Vulnerability Status**: Identifies the status (affected, not affected, fixed, under investigation) for each vulnerability
+3. **Updates Vulnerability Records**: Syncs the VEX status information with matching vulnerabilities in DevGuard
+4. **Creates Audit Trail**: Records VEX uploads as events for compliance tracking
+5. **Processes External References**: Handles external VEX references if the document includes them
+
+**Verify it worked:** Navigate to your repository in DevGuard. You'll see vulnerability statuses updated based on the VEX document, with audit events showing the upload.
+
+
+## CI/CD Integration
+For automated VEX uploads in CI/CD pipelines, DevGuard provides ready-to-use integrations:
+- **GitHub Actions**: See [Scan with GitHub Actions](./scan-with-github-actions) for setup instructions
+- **GitLab CI**: See [Scan with GitLab CI](./scan-with-gitlab-ci) for setup instructions
+
+## Advanced Options
+
+Fail the command based on risk level:
+
+```bash copy
+--failOnRisk=critical  # Options: low, medium, high, critical (default: critical)
+--failOnCVSS=critical  # Options: low, medium, high, critical (default: critical)
+```
+
+Specify which artifact this VEX applies to:
+
+```bash copy
+--artifactName="pkg:devguard/orgSlug/projectSlug/repoSlug"  # Default is "pkg:oci/{orgSlug}/{projectSlug}/{repoSlug}"
+```
+
+
+Set a custom origin to track where the VEX came from:
+
+```bash copy
+--origin="vex-upload"  # Default is "vex-upload"
+```
+
+
+Specify Git reference information:
+
+```bash copy
+--ref="v1.2.3"                 # Git reference (branch, tag, or commit)
+--defaultRef="main"            # Default Git reference to use
+--isTag=true                   # Indicates if the reference is a tag
+```
+
+<Callout type="info">
+  These flags help DevGuard track which branch or tag the scan is associated with. DevGuard will attempt to auto-detect Git information from the current directory if these flags are not specified.
+</Callout>
+
+<Callout type="info">
+  External references in VEX documents are automatically fetched and processed. This allows for modular VEX documents where components reference other SBOM or VEX sources.
+</Callout>
