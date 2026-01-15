@@ -3,6 +3,49 @@ sidebar_position: 1
 ---
 # ISO 27001 Controls - Annex A
 
+## What is ISO 27001?
+
+ISO 27001 is an international standard for Information Security Management Systems (ISMS). It provides organizations with a systematic approach to protect sensitive information and ensure the confidentiality, integrity, and availability of data.
+
+The current version ISO 27001:2022 was published in October 2022 and replaces the 2013 version. The standard consists of two main parts:
+
+- **Clauses 4-10**: Define the requirements for the ISMS itself—the "what" (context, leadership, planning, operations, etc.)
+- **Annex A**: Lists 93 specific security controls—the "how"
+
+## What is Annex A?
+
+Annex A is a catalog of security controls from which organizations can select the measures relevant to them. Unlike Clauses 4-10, which are mandatory for all, the Annex A controls are selected based on a risk assessment.
+
+The 93 controls in ISO 27001:2022 are divided into four categories:
+
+1. **Organizational Controls (A.5)**: 37 controls for policies, roles, risk management
+2. **People Controls (A.6)**: 8 controls for employees, training, responsibilities
+3. **Physical Controls (A.7)**: 14 controls for physical security, access controls
+4. **Technological Controls (A.8)**: 34 controls for technical security measures
+
+### Statement of Applicability (SoA)
+
+The Statement of Applicability is a central document in every ISMS. It documents:
+
+- Which Annex A controls the organization implements
+- Why these controls were selected
+- Which controls are deliberately excluded and the justification for this
+- The current implementation status
+
+The SoA is reviewed by auditors and must be updated when changes occur. It is the connection between the risk assessment and the concrete security measures.
+
+## Focus: A.8 Technological Controls
+
+DevGuard focuses on the technological controls from Annex A.8, as these directly affect software development and the operation of applications. These controls address topics such as:
+
+- Access control to source code
+- Management of technical vulnerabilities
+- Secure software development (Secure Development Lifecycle)
+- Security testing during development
+- Protection against malware
+
+For development teams, these controls are particularly relevant as they impact daily work with code, dependencies, and deployment processes.
+
 ## A.8 Technological measures
 
 | Symbol | Meaning |
@@ -179,4 +222,3 @@ If DevGuard is integrated into the outsourced development process:
 - Ensuring the integrity of the codebase and protection from unauthorized changes through in-toto.  
 
 </details>
-

@@ -1,13 +1,13 @@
 export default {
     index: { title: 'Overview' },
+    'core-concepts': {
+        title: 'Core-Concepts',
+    },
     devsecops: { title: 'DevSecOps' },
-    'compliance-frameworks': {
+    'compliance': {
         title: 'DevGuard & Compliance Frameworks',
     },
-    'aggregated-vulnerability-database': {
-        title: 'Aggregated Vulnerability Database',
-    },
-    'risk-calculation': { title: 'Risk Calculation' },
+    'vulnerability-management': { title: 'Vulnerability Management' },
     'attestations-provenance': {
         title: 'Attestations & Provenance',
     },

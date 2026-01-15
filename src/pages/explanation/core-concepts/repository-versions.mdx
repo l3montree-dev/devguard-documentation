@@ -1,0 +1,94 @@
+import Image from 'next/image';
+import { Callout } from 'nextra/components';
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+
+# Repository Versions (Branches)
+
+DevGuard tracks vulnerabilities across multiple branches within each repository, mirroring your Git workflow. Like GitLab's branch management, DevGuard scans and manages security findings independently per branch—enabling separate vulnerability tracking for production, development, and feature branches.
+```mermaid
+graph TD
+    A[Repository] --> B[main]
+    A --> C[develop]
+    A --> D[feature branch]
+    
+    B --> E[CVE-2024-001<br/>CVE-2024-002]
+    C --> F[CVE-2024-001<br/>CVE-2024-003]
+    D --> G[CVE-2024-004]
+    
+    style A fill:#e3f2fd,stroke:#1976d2,stroke-width:3px,color:#000
+    style B fill:#e8f5e9,stroke:#388e3c,stroke-width:2px,color:#000
+    style C fill:#fff3e0,stroke:#f57c00,stroke-width:2px,color:#000
+    style D fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px,color:#000
+```
+
+## Independent Vulnerability Management
+
+Each branch maintains its own vulnerability findings, risk assessments, and remediation status. A vulnerability fixed in `main` doesn't automatically resolve in `develop`—branches are tracked independently.
+
+**Why**: Different branches contain different code and dependencies. A feature branch might introduce new dependencies with vulnerabilities not present in `main`. Production branches might use different versions than development.
+
+**Example**: `main` uses `express@4.18.2` (patched), while `develop` uses `express@4.17.1` (vulnerable). DevGuard tracks the vulnerability in `develop` while showing `main` as fixed.
+
+<Callout type="info" emoji="🌿">
+  Track only meaningful branches—typically `main`, `develop`, and active release branches. Tracking every feature branch creates noise.
+</Callout>
+
+## Branch Selection
+
+**Default**: `main` branch tracked automatically.
+
+**Additional branches**: Enable tracking for `develop`, `staging`, or release branches in repository settings.
+
+**Feature branches**: Scan on-demand during CI/CD without permanent tracking.
+
+## Vulnerability Handling Per Branch
+
+### State Management
+
+<Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">VEX</span></TooltipTrigger><TooltipContent><p>Vulnerability Exploitability eXchange - Impact assessments</p></TooltipContent></Tooltip> states managed per branch:
+
+- Mark "Not Affected" in `main` after analysis
+- Same vulnerability remains "Affected" in `develop` with different code paths
+- Independent justifications per branch
+
+### Risk Scores
+
+Calculated independently per branch based on:
+- Component versions (different dependencies = different scores)
+- Component depth (dependency tree structure varies)
+- Security requirements (production vs development CIA settings)
+
+### Remediation Workflow
+
+1. Patch in feature branch
+2. Merge to `develop` with testing
+3. Merge to `main` for production
+4. DevGuard tracks progression automatically
+
+<Callout type="info" emoji="🔄">
+  DevGuard detects when dependency updates flow through branches. Vulnerability status updates automatically as fixes merge.
+</Callout>
+
+## Use Cases
+
+**Production vs Development**: High security requirements in `main`, lower in `develop` for faster iteration without blocking development.
+
+**Release Branches**: Track `release/v2.0` separately—only critical patches allowed, different from active `main` development.
+
+**Feature Branch Scanning**: Scan on pull requests to catch issues before merge without permanent tracking overhead.
+
+**Branch Comparison**: Identify vulnerabilities fixed in `main` but still present in `develop` requiring backport.
+
+## Setup
+
+1. Repository settings → select branches for tracking
+2. Configure CIA requirements per branch if needed
+3. Add DevGuard scanning to CI/CD pipeline per branch
+4. Establish merge policies (which severities block merges)
+
+---
+
+## Related Documentation
+
+- [DevGuard Hierarchy](organization-groups-repos) - Organization, groups, repositories
+- [Vulnerability Lifecycle](/explanation/vulnerability-management/vulnerability-lifecycle) - Managing vulnerabilities

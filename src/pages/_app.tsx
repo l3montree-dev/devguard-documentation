@@ -1,11 +1,12 @@
 import { cn } from '@/lib/utils'
 import '../styles/globals.scss'
 import { inter, lexend } from '../fonts'
+import { TooltipProvider } from '@/components/ui/tooltip'
 
-// This default export is required in a new `pages/_app.js` file.
 export default function MyApp({ Component, pageProps }: any) {
     return (
-        <main
+        <TooltipProvider>
+             <main
             className={cn(
                 inter.variable,
                 lexend.variable,
@@ -14,5 +15,6 @@ export default function MyApp({ Component, pageProps }: any) {
         >
             <Component {...pageProps} />
         </main>
+        </TooltipProvider>
     )
 }
