@@ -1,10 +1,9 @@
 export default {
     index: { title: 'Overview' },
-    administration: { title: 'Administration' },
     scanning: { title: 'Scanning' },
-
     'risk-mitigation-guides': { title: 'Risk Mitigation Guides' },
     'vulnerability-management': { title: 'Vulnerability Management' },
+    administration: { title: 'Administration' },
     'dependency-proxy': {
         title: 'Dependency Proxy with Malicious Package Firewall',
     },
