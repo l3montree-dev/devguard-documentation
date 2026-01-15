@@ -1,5 +1,6 @@
 export default {
     index: { title: 'Overview' },
+    administration: { title: 'Administration' },
     scanning: { title: 'Scanning' },
     'risk-mitigation-guides': { title: 'Risk Mitigation Guides' },
     'vulnerability-management': { title: 'Vulnerability Management' },

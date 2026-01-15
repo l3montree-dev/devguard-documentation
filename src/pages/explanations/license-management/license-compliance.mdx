@@ -1,0 +1,136 @@
+import Image from 'next/image';
+import { Callout } from 'nextra/components';
+import { AttributedImage } from '@/components/AttributedImage'
+
+# License Compliance
+
+Software licenses define the legal terms under which code can be used, modified, and distributed. Understanding licenses is crucial not just for legal compliance, but for security—license violations expose organizations to legal risks, and certain license types create obligations affecting your entire software supply chain.
+
+## What Are Software Licenses?
+
+A software license is a legal instrument governing software use and distribution. When you incorporate open source libraries, you're accepting legal obligations defined by those libraries' licenses.
+
+**Copyright Protection**: All software is automatically copyrighted. Licenses grant permissions that would otherwise be violations.
+
+**Legal Obligations**: Some licenses require source code disclosure, copyright notice maintenance, or applying the same license to derivative works.
+
+<Callout type="warning" emoji="⚖️">
+  License compliance is a security issue—violations create legal liability resulting in injunctions, financial penalties, or forced open-sourcing of proprietary code.
+</Callout>
+
+## Why Licenses Matter for Security
+
+**Legal Risk**: Violations expose organizations to lawsuits and reputational damage.
+
+**Supply Chain Transparency**: Understanding licenses reveals hidden obligations conflicting with your business model.
+
+**Compliance Requirements**: Regulations increasingly require tracking and disclosing software licenses, particularly in critical infrastructure.
+
+**Business Model Protection**: Certain licenses (copyleft) can force you to open-source proprietary code if mishandled.
+
+## OSI-Approved Open Source Licenses
+
+The Open Source Initiative (OSI) maintains the authoritative list of licenses meeting the Open Source Definition[^1]. OSI-approved licenses guarantee freedoms while varying in obligations: free redistribution, source code access, derived works, no discrimination, and license portability.
+
+<Callout type="info" emoji="📜">
+  View the complete list at [opensource.org/licenses](https://opensource.org/licenses). OSI-approved licenses are legally vetted and widely understood, reducing legal ambiguity.
+</Callout>
+
+## License Categories
+
+### Permissive Licenses
+
+Minimal restrictions on use, modification, and distribution. Allow proprietary derivative works without source disclosure.
+
+**Examples**: MIT, Apache 2.0, BSD  
+**Obligations**: Maintain copyright notices, include license text, provide attribution  
+**Use Case**: Libraries for wide adoption including proprietary commercial products. Low compliance burden.
+
+### Copyleft (Strong) Licenses
+
+Require derivative works distributed under the same license, preventing proprietary use. Modifications must be open-sourced.
+
+**Examples**: GPL v2, GPL v3, AGPL v3  
+**Obligations**: Distribute source with binaries, apply same license to derivatives, disclose modifications  
+**Use Case**: Projects prioritizing open source ecosystem growth. Ensures improvements remain open source.
+
+### Weak Copyleft Licenses
+
+Require modifications to the library itself to be open-sourced, but allow linking with proprietary code without forcing disclosure.
+
+**Examples**: LGPL v2.1, LGPL v3, MPL 2.0  
+**Obligations**: Open-source library modifications, allow library replacement, maintain notices  
+**Use Case**: Libraries for proprietary products while ensuring library improvements remain open source.
+
+### Public Domain / CC0
+
+Waive all copyright and rights, placing software in public domain with no restrictions.
+
+**Examples**: Unlicense, CC0  
+**Obligations**: None  
+**Use Case**: Maximize adoption by eliminating legal encumbrances.
+
+## License Risk Assessment
+
+Different licenses carry different legal and business risks. ETH Zurich Technology Transfer provides a comprehensive risk assessment framework:
+
+<AttributedImage
+    src="/screenshots/license-risk-chart.png"
+    alt="License Risk Chart showing compliance complexity across different license types"
+    width="100%"
+    attribution={
+        <>
+            <a
+                href="https://transfer.ethz.ch/researchers/oss/license/license_riskchart.html"
+                target="_blank"
+                className="nx-text-primary-600 underline"
+            >
+                ETH Zurich Technology Transfer
+            </a>
+            , License Risk Chart
+        </>
+    }
+/>
+
+This chart categorizes licenses by compliance complexity and business impact. Permissive licenses (MIT, Apache) present minimal risk, while strong copyleft (GPL, AGPL) requires careful management.
+
+[View complete license risk analysis →](https://transfer.ethz.ch/researchers/oss/license/license_riskchart.html)
+
+<Callout type="warning" emoji="⚠️">
+  Risk depends on usage. Statically linking GPL libraries into proprietary products creates high risk, while using them as separate services may be acceptable. Legal review is essential for copyleft in commercial contexts.
+</Callout>
+
+## Choosing the Right License
+
+### For Your Projects
+
+**MIT / Apache 2.0**: Maximum adoption, minimal burden, allows proprietary derivatives  
+**GPL v3**: Ensure derivatives remain open source  
+**LGPL v3**: Allow proprietary apps while keeping library improvements open  
+**AGPL v3**: Strongest copyleft including network services
+
+### For Using Dependencies
+
+**Prefer Permissive**: For proprietary products, prefer MIT/Apache 2.0/BSD to minimize obligations.
+
+**Understand Copyleft**: LGPL allows dynamic linking with proprietary code; GPL typically doesn't.
+
+**Avoid Conflicts**: Some licenses are incompatible (GPL v2 + Apache 2.0). Track compatibility across dependency tree.
+
+**Document Obligations**: Maintain license records. DevGuard automates this through SBOM generation.
+
+---
+
+## Related Documentation
+
+- [SBOM Standards](/explanation/compliance/sbom-standards) - License information in SBOMs
+- [Why Compliance Matters](/explanation/compliance/why-compliance-matters) - Business case
+
+## References
+
+[^1]: Open Source Initiative, *The Open Source Definition*, https://opensource.org/osd
+
+Additional resources:
+- OSI Licenses: https://opensource.org/licenses
+- ETH License Risk Chart: https://transfer.ethz.ch/researchers/oss/license/license_riskchart.html
+- SPDX License List: https://spdx.org/licenses/

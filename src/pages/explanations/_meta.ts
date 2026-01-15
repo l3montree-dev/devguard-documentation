@@ -1,16 +1,18 @@
 export default {
     index: { title: 'Overview' },
     'core-concepts': {
-        title: 'Core-Concepts',
+        title: 'Core Concepts',
     },
     devsecops: { title: 'DevSecOps' },
     'vulnerability-management': { title: 'Vulnerability Management' },
     'compliance': {
         title: 'DevGuard & Compliance Frameworks',
     },
-    'personal-access-token': { title: 'Personal Access Tokens' },
-    'sbom-problem-statement': { title: 'SBOM Problem Statement' },
+    'license-management': { title: 'License Management' },
     'attestations-provenance': {
         title: 'Attestations & Provenance',
     },
+    'personal-access-token': { title: 'Personal Access Tokens' },
+    'sbom-problem-statement': { title: 'SBOM Problem Statement' },
+    'explaining-sboms': { title: 'Explaining SBOMs' },
 }
