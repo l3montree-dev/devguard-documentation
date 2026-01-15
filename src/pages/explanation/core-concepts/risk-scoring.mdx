@@ -1,0 +1,67 @@
+import Image from 'next/image';
+import { Callout } from 'nextra/components';
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+
+# Risk Scoring
+
+DevGuard calculates risk scores for every vulnerability using a multi-dimensional formula that goes beyond simple <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">CVSS</span></TooltipTrigger><TooltipContent><p>Common Vulnerability Scoring System - Technical severity rating</p></TooltipContent></Tooltip> severity ratings. This enables accurate prioritization based on actual threat to your applications, not just theoretical vulnerability severity.
+
+## Why Risk Scoring Matters
+
+Not all "High" severity vulnerabilities pose equal risk. A critical <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">CVE</span></TooltipTrigger><TooltipContent><p>Common Vulnerabilities and Exposures - Standardized vulnerability identifier</p></TooltipContent></Tooltip> in a deep transitive dependency with no known exploits presents far less danger than a moderate severity vulnerability in a direct dependency actively exploited in the wild. DevGuard's risk scoring combines multiple factors to answer: *Which vulnerabilities actually threaten your applications?*
+
+## The Risk Formula
+
+DevGuard uses a comprehensive formula balancing four critical dimensions:
+```
+Risk = ((CVSS-BE × (EPSS + 1)) / 2) / Component Depth
+```
+
+**CVSS-BE**: Technical severity adjusted for your organizational context (Confidentiality, Integrity, Availability requirements)
+
+**EPSS**: Exploit Prediction Scoring—probability the vulnerability will be exploited within 30 days based on threat intelligence
+
+**Component Depth**: Position in your dependency tree—deeper dependencies are less exploitable than direct ones
+
+<Callout type="info" emoji="📊">
+  This formula ensures high-risk scores reflect genuine threats combining technical severity, exploit probability, organizational impact, and attack surface—not just CVSS numbers.
+</Callout>
+
+## Example Comparison
+
+**Vulnerability A**:
+- CVSS: 9.8 (Critical)
+- EPSS: 0.5% (very low exploitation probability)
+- Depth: 5 (deep transitive dependency)
+- **DevGuard Risk**: 2.1 (Low-Medium)
+
+**Vulnerability B**:
+- CVSS: 7.5 (High)
+- EPSS: 78% (actively exploited)
+- Depth: 1 (direct dependency)
+- **DevGuard Risk**: 6.7 (High)
+
+Despite lower CVSS, Vulnerability B receives higher priority—it's actively exploited and directly reachable in your codebase.
+
+## Dynamic Risk Updates
+
+Risk scores recalculate multiple times daily as threat intelligence evolves:
+
+**New exploits published**: EPSS increases, risk score rises  
+**Patches released**: Risk urgency changes  
+**Dependency updates**: Component depth shifts  
+**Security requirements changed**: Environmental context adjusts scores
+
+DevGuard automatically notifies you when risk scores change significantly, ensuring priorities stay current with the threat landscape.
+
+<Callout type="info" emoji="🔄">
+  For complete details on the risk calculation methodology, vulnerability dimensions, and best practices, see the [Vulnerability Risk Assessment Methodology](risk-assessment-methodology) documentation.
+</Callout>
+
+---
+
+## Related Documentation
+
+- [Vulnerability Risk Assessment Methodology](risk-assessment-methodology) - Complete risk calculation details
+- [Vulnerability Lifecycle](vulnerability-lifecycle) - Managing vulnerabilities
+- [Dependency vs First-Party Risk](dependency-first-party-risk) - Understanding risk sources
