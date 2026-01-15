@@ -346,9 +346,7 @@
 │  
 ├── license-management/
 │   ├── license-detection.mdx             # How licenses are detected
-│   ├── license-compatibility.mdx         # OSI licenses
-│   ├── license-risk-scoring.mdx          # Risk assessment
-│   └── license-compliance.mdx            # Legal compliance
+│   ├── license-compliance.mdx         # OSI licenses, types of licenses, why sec relevant
 │
 ├── supply-chain-security/
 │   ├── what-is-supply-chain-security.mdx # Overview

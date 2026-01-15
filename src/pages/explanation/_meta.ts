@@ -3,7 +3,9 @@ export default {
     'core-concepts': {
         title: 'Core-Concepts',
     },
-    devsecops: { title: 'DevSecOps' },
+    architecture: {
+        title: 'Architecture',
+    },
     'compliance': {
         title: 'DevGuard & Compliance Frameworks',
     },
