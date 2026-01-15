@@ -318,7 +318,7 @@
 │   ├── artifacts.mdx                     # Artifact concept
 │   ├── vulnerability-types.mdx           # Dependency vs. first-party
 │   ├── risk-scoring.mdx                  # Risk calculation
-│   └── sbom-vex-relationship.mdx         # Open Standards
+│   └── open-standards.mdx	          # Open Standards
 │
 ├── architecture/
 │   ├── system-overview.mdx               # High-level architecture (DIAGRAM)
