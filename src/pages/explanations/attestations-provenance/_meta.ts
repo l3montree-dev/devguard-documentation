@@ -1,8 +1,5 @@
 export default {
     index: { title: 'Overview' },
-    'compliance-as-code': {
-        title: 'Compliance as Code',
-    },
     'in-toto': {
         title: 'In-Toto & DevGuard',
     },

@@ -14,12 +14,18 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 export default {
     index: {
-        title: 'OpenAPI 3.1',
+        title: 'API Reference',
         theme: {
             toc: false,
         },
     },
     scanner: {
         title: 'DevGuard Scanner CLI-Commands',
+    },
+    'gitlab-components': {
+        title: 'GitLab Components',
+    },
+    'github-workflows': {
+        title: 'GitHub Workflows',
     },
 }

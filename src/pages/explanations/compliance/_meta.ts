@@ -5,4 +5,7 @@ export default {
     'csaf-vex-explained': { title: 'CSAF and VEX' },
     'sbom-standards': { title: 'CycloneDX vs SPDX' },
     'audit-trails': { title: 'Audit Logging' },
+    'compliance-as-code': {
+        title: 'Compliance as Code',
+    },
 }
