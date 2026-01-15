@@ -8,6 +8,8 @@ export default {
         title: 'Aggregated Vulnerability Database',
     },
     'risk-calculation': { title: 'Risk Calculation' },
+    'license-management': { title: 'License Management' },
+    'supply-chain-security': { title: 'Supply Chain Security' },
     'attestations-provenance': {
         title: 'Attestations & Provenance',
     },
