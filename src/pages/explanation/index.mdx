@@ -1,118 +1,105 @@
+import Image from 'next/image';
+import { Callout } from 'nextra/components';
+
+# Explanation
+
+The Explanation section provides comprehensive understanding of DevGuard's concepts, architecture, and methodologies. Unlike tutorials (which teach you how) or how-to guides (which solve specific problems), explanations clarify *why* things work the way they do and the reasoning behind design decisions.
+
+## What You'll Find Here
+
+This section covers the fundamental concepts, architectural decisions, and theoretical foundations that make DevGuard work. Each topic explores underlying principles, trade-offs, and contextual understanding needed to use DevGuard effectively.
+
+<Callout type="info" emoji="📚">
+  Explanations are learning-oriented—they're designed to deepen your understanding of DevGuard's systems, not just teach you to use them. For practical usage instructions, see the [How-To Guides](/how-to) or [Tutorials](/tutorials).
+</Callout>
+
+## Core Concepts
+
+Understand DevGuard's foundational concepts and organizational structure:
+
+- **[What is DevGuard](/explanation/core-concepts/what-is-devguard)** - Core mission, philosophy, and differentiators
+- **[Hierarchy: Organizations, Groups, Repositories](/explanation/core-concepts/devguard-hierarchy)** - How DevGuard organizes your security management
+- **[Repository Versions (Branches)](/explanation/core-concepts/repository-versions)** - Branch-based vulnerability tracking
+- **[Artifact Concept](/explanation/core-concepts/artifact-concept)** - Managing multiple build artifacts per repository
+- **[Dependency vs First-Party Risk](/explanation/core-concepts/dependency-first-party-risk)** - Understanding different risk sources
+- **[Risk Scoring](/explanation/core-concepts/risk-scoring)** - How DevGuard prioritizes vulnerabilities
+- **[Open Standards First](/explanation/core-concepts/open-standards)** - Why DevGuard uses only SBOM, VEX, and SARIF
+
+## Vulnerability Management
+
+Deep dive into vulnerability detection, assessment, and remediation:
+
+- **[Vulnerability Lifecycle](/explanation/vulnerability-management/vulnerability-lifecycle)** - The four phases of vulnerability management
+- **[Risk Assessment Methodology](/explanation/vulnerability-management/risk-assessment-methodology)** - CVSS, EPSS, component depth, and CIA triad
+- **[Mitigation Strategies](/explanation/vulnerability-management/mitigation-strategies)** - The four VEX-based response strategies
+- **[False Positive Detection](/explanation/vulnerability-management/false-positive-detection)** - Why false positives occur and how to manage them
+- **[Vulnerability Event System](/explanation/vulnerability-management/vulnerability-event-system)** - Response actions and workflows
+- **[External Vulnerability Sync](/explanation/vulnerability-management/external-vulnerability-sync)** - Importing and exporting vulnerability data
+
+## Compliance & Standards
+
+Understand regulatory requirements and industry standards:
+
+- **[Why Compliance Matters](/explanation/compliance/why-compliance-matters)** - Business case for security compliance
+- **[Cyber Resilience Act (CRA)](/explanation/compliance/cyber-resilience-act)** - EU CRA requirements and DevGuard support
+- **[CSAF & VEX Standards](/explanation/compliance/csaf-vex-standards)** - Vulnerability communication formats
+- **[SBOM Standards](/explanation/compliance/sbom-standards)** - CycloneDX vs SPDX comparison
+- **[Audit Logging & Compliance Trail](/explanation/compliance/audit-logging-compliance)** - Automated compliance documentation
+
+## Architecture
+
+*Coming Soon* - Deep technical explanations of DevGuard's architecture:
+
+- System Overview - High-level architecture and component relationships
+- Data Flow - How vulnerability data flows through DevGuard
+- Security Model - Authentication, authorization, and security architecture
+- Database Schema - Data modeling and persistence layer
+- Scanner Architecture - How the DevGuard scanner works
+- Scalability - Horizontal scaling and performance considerations
+
+## Dependency Management
+
+*Coming Soon* - Understanding how DevGuard handles dependencies:
+
+- Dependency Resolution - How dependencies are identified and resolved
+- Dependency Graph - Visualization and analysis of dependency relationships
+- Transitive Dependencies - Direct vs indirect dependencies
+- Version Matching - Semantic versioning and version comparison
+- Package Ecosystems - Support for npm, PyPI, Go, Maven, and more
+
+## Supply Chain Security
+
+*Coming Soon* - Advanced supply chain security concepts:
+
+- What is Supply Chain Security - Threats and mitigation strategies
+- In-toto Framework - Attestation-based supply chain verification
+- Attestations - Types and usage of cryptographic attestations
+- SLSA Framework - Supply chain levels for software artifacts
+- Provenance Tracking - Build provenance and reproducibility
+
+## Additional Topics
+
+More specialized explanations covering advanced features and integrations will be added covering:
+
+- **License Management** - License detection, compatibility, and compliance
+- **Security** - Dependency proxy security, malicious package detection, RBAC
+- **Integrations** - GitHub, GitLab, Jira, and webhook architectures
+- **Advanced Topics** - Daemon pipelines, performance optimization, multi-tenancy
+
 ---
-sidebar_position: 1
----
 
-# Overview
+## How to Use This Section
 
-The DevGuard CI/CD components implement the OWASP DevSecOps pipeline in an optimal way,
-eliminating the need for extensive cybersecurity expertise. You can integrate the
-DevGuard CI/CD pipeline with your repository on GitHub or GitLab.
+**Learning Path**: Start with Core Concepts to understand DevGuard's structure, then explore Vulnerability Management and Compliance based on your role and needs.
 
-Once integrated, the DevGuard CI/CD pipeline will scan your codebase, identify vulnerabilities,
-and provide attestation and evidence for completed checks.
+**Reference Material**: Use explanations as reference when you need deeper understanding of why DevGuard works a certain way or makes specific design decisions.
 
-On DevGuard, you can manage, prioritize, and resolve vulnerabilities, achieve compliance, and
-access additional features.
+**Context for Guides**: Explanations provide context for How-To Guides and Tutorials. If a guide references concepts you're unfamiliar with, return here for deeper understanding.
 
-Let's get your release pre-flight checks done with DevGuard ✅ 🚀
+<Callout type="info" emoji="💡">
+  Explanations answer "why" and "what"—they build mental models. For "how" answers, see [How-To Guides](/how-to). For step-by-step learning, see [Tutorials](/tutorials).
+</Callout>
 
-## Architecture Overview
+## Contributing
 
-![](../../assets/architecture-overview.png)
-
-### DevGuard CI/CD Integration
-
-Learn more about the DevSecOps pipeline steps and how they work together
-in the [DevSecOps](/concepts/devsecops/understanding-owasp-devsecops-pipeline) section.
-
-The pipeline steps are based on the OWASP DevSecOps pipeline, mixed with the concept to
-gather evidence and attestation for actions performed in the pipeline.
-The checks will report via SBOM or SARIF-report vulnerabilities to DevGuard. DevGuard
-will help you manage, prioritize, and resolve found vulnerabilities.
-
-For detailed setup instructions, refer to [setup GitHub integration](/getting-started/setup-github-integration)
-or [setup GitLab integration](/getting-started/setup-gitlab-integration).
-
-### Aggregated Vulnerability Database
-
-DevGuard continuously monitors your project against known vulnerabilities.
-
-To provide you with the most accurate and up-to-date information, and 
-to help you prioritize your remediation efforts, we aggregate data from
-multiple vulnerability databases (e.g., NVD, EPSS, OSV, Exploit DB, GitHub PoCs, etc.).
-
-Learn more about the [aggregated vulnerability database](/concepts/aggregated-vulnerability-database)
-and how it works.
-
-### Vulnerability Management & Issue Synchronization
-
-DevGuard provides a centralized view of all vulnerabilities in your codebase, allowing you to
-prioritize and manage them effectively. Based on the aggregated vulnerability database,
-you can see the risk level of each vulnerability and prioritize them accordingly.
-
-You can also synchronize issues with external issue trackers, such as GitHub Issues
-or GitLab Issues (more like Jira in the future). From the issues there, you
-can also handle the vulnerability management process via slash commands.
-
-### Attestation-Based Compliance
-
-A core part of software supply chain security is the ability to securely
-link the steps in the software supply chain to the final product, provide
-evidence of the steps taken, and ensure that the final product is
-built and deployed securely.
-
-DevGuard records the evidence and provides attestation for each step in the
-DevSecOps pipeline. This allows you to prove that necessary security checks
-were performed and that the final product is secure. As an attestation is
-actually a signed statement and DevGuard collects more evidence than just
-the checks, you can use DevGuard to prove a lot of typical compliance
-requirements (e.g. from ISO27001, PCI-DSS, etc.).
-
-Learn more in the [Attestation & Provenance](/concepts/attestations-provenance)
-section. 
-
-For a detailed view into the policies written by the DevGuard community, check
-out the [Attestation Compliance Policies GitHub Repo](https://github.com/l3montree-dev/attestation-compliance-policies).
-
-## Which Data from Your Codebase is Stored?
-
-When DevGuard is integrated with a repository, it
-performs software composition analysis (SCA) and container scanning
-on the codebase. It uses Trivy to scan the application’s dependencies and container
-images in the repository. A Software Bill of Materials
-(SBOM) is then generated.
-
-The Trivy scan is executed via CLI commands, typically
-in a CI/CD pipeline where the repository is hosted, such
-as GitHub, GitLab, or a private GitLab instance.
-
-The results of the scan, including the SBOM, are sent to
-the DevGuard API using a personal access token
-generated by the user on DevGuard. This token is
-securely stored in the repository’s secrets, ensuring
-that only the repository with the correct token can
-transmit data to DevGuard. For more information about
-what and how DevGuard analyzes the SBOM, refer to the
-SBOM Analysis.
-
-The transfer of data from the repository to DevGuard is
-conducted through the HTTPS protocol, ensuring secure
-and encrypted communication.
-
-The transmitted SBOM is analyzed to find vulnerabilities
-in the codebase by comparing it with DevGuard's
-vulnerability databases, which are derived from public
-sources. DevGuard calculates a risk score based on the
-founded vulnerabilities and its optimized algorithms.
-
-Access to data stored in DevGuard is restricted to users
-with the appropriate permissions.
-
-## What is a Software Bill of Materials (SBOM)?
-           
-Software Bill of Materials (SBOM) is a detailed inventory of
-all components, dependencies, and libraries within a software application,
-including their versions, origins, and relationships. Think of it as an
-ingredient list for software, providing transparency into the third-party
-and open-source elements used during development. The SBOM doesn't contain
-the source code itself but rather metadata about the components.
+This section is continuously expanding. If you notice gaps in explanations or have questions about concepts not covered, please [open an issue](https://github.com/l3montree-dev/devguard/issues) or contribute to the documentation.
