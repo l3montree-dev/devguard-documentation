@@ -1,0 +1,85 @@
+import Image from 'next/image';
+import { Callout } from 'nextra/components';
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+
+# Open Standards First
+
+DevGuard exclusively uses open, vendor-neutral standards for data exchange and analysis. No proprietary protocols, no vendor lock-in—only industry-standard formats ensuring maximum compatibility across your security toolchain.
+
+## Why Open Standards
+
+**Vendor Independence**: Switch tools without data migration. Your vulnerability data remains accessible regardless of scanners or platforms.
+
+**Ecosystem Compatibility**: Integrate any tool supporting standard formats—no custom adapters required.
+
+**Future-Proof**: Standards evolve through community consensus, not vendor roadmaps.
+
+**Transparency**: Publicly documented and auditable specifications.
+
+<Callout type="info" emoji="🔓">
+  DevGuard's commitment to open standards means you're never locked in—export data, switch platforms, or integrate new tools without proprietary barriers.
+</Callout>
+
+## The Three Core Standards
+
+### SBOM (Software Bill of Materials)
+
+Comprehensive inventory of software components, dependencies, and versions.
+
+**Formats**: CycloneDX (JSON/XML), SPDX (JSON/YAML) <span className="text-sm text-gray-500">Coming Soon</span>
+
+**Use Cases**: Supply chain transparency, vulnerability tracking, license compliance, dependency analysis.
+
+**DevGuard**: Generate automatically, import from external tools, export for downstream consumers.
+
+[Learn more →](/explanation/compliance/sbom-standards)
+
+### VEX (Vulnerability Exploitability eXchange)
+
+Machine-readable assessments communicating which vulnerabilities affect your products and which don't, with justifications.
+
+**Formats**: CycloneDX VEX (JSON/XML), CSAF VEX (JSON)
+
+**Use Cases**: Reduce false positives, communicate actual exploitability, eliminate redundant analysis.
+
+**DevGuard**: Document Not Affected assessments, publish VEX endpoints, consume supplier VEX.
+
+[Learn more →](/explanation/compliance/csaf-vex-explained)
+
+### SARIF (Static Analysis Results Interchange Format)
+
+Standardized format for static analysis findings including <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">SAST</span></TooltipTrigger><TooltipContent><p>Static Application Security Testing - Code vulnerability analysis</p></TooltipContent></Tooltip>, secret scanning, and code quality issues.
+
+**Format**: JSON
+
+**Use Cases**: Integrate diverse analysis tools into unified workflow without tool-specific parsers.
+
+**DevGuard**: Ingest from any SARIF-compliant tool, combine with SBOM data for unified risk view.
+
+<Callout type="info" emoji="🔄">
+  All three standards supported by major vendors, mandated by regulations (CRA, NTIA), and endorsed by standards bodies (OWASP, CISA).
+</Callout>
+
+## No Proprietary Protocols
+
+**No Vendor Lock-In**: Export data in standard formats anytime. Switch platforms without migration projects.
+
+**No Format Conversion**: Tools output standards, DevGuard consumes standards. No custom converters.
+
+**No Closed Specifications**: Every format publicly documented with open specifications.
+
+## Practical Benefits
+
+**Tool Flexibility**: Use any scanner—Trivy, Grype, Semgrep, CodeQL—all output standards. Switch tools without DevGuard changes.
+
+**Supply Chain Integration**: Share data across organizations using formats everyone understands. Import supplier assessments, export yours.
+
+**Regulatory Compliance**: CRA requires SBOMs, NTIA specifies formats, executive orders reference standards. Using standards positions you for current and future requirements.
+
+---
+
+## Related Documentation
+
+- [SBOM Standards](/explanation/compliance/sbom-standards) - CycloneDX and SPDX details
+- [CSAF & VEX Standards](/explanation/compliance/csaf-vex-explained) - Vulnerability communication
+- [External Vulnerability Sync](/explanation/vulnerability-management/external-vuln-sync) - Importing/exporting data

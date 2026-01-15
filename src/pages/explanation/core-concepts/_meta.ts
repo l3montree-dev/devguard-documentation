@@ -7,4 +7,5 @@ export default {
     'artifacts': { title: 'Artifacts '},
     'vulnerability-types': { title: 'Dependency vs. First-Party'},
     'risk-scoring': { title: 'Risk Calculation'},   
+    'open-standards': { title: 'Open Standards'},
 }
