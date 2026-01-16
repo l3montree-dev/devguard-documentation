@@ -1,0 +1,299 @@
+---
+title: "[Endpoint Path]"
+description: "API endpoint description"
+lastUpdated: 2025-12-21
+tags:
+  - api
+  - reference
+  - [resource-type]
+---
+
+import { Callout } from 'nextra/components'
+import { Tabs } from 'nextra/components'
+
+# `[METHOD] [/api/v1/endpoint/path]`
+
+Brief description of what this endpoint does.
+
+## Request
+
+### HTTP Method
+```
+[GET | POST | PUT | PATCH | DELETE] /api/v1/endpoint/path
+```
+
+### Authentication
+
+Required authentication method:
+- 🔐 **PAT (Personal Access Token)** - Header: `Authorization: Bearer <token>`
+- 🔐 **Session Cookie** - Cookie-based authentication
+
+### Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `param1` | string | Yes | Description of parameter |
+| `param2` | uuid | Yes | Description of parameter |
+
+### Query Parameters
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `page` | number | No | 1 | Page number for pagination |
+| `limit` | number | No | 20 | Items per page |
+| `filter` | string | No | - | Filter criteria |
+
+### Request Headers
+
+| Header | Required | Description |
+|--------|----------|-------------|
+| `Content-Type` | Yes | Must be `application/json` |
+| `X-Asset-Ref` | No | Asset version reference |
+
+### Request Body
+
+```json
+{
+  "field1": "string",
+  "field2": 123,
+  "nested": {
+    "field3": true
+  }
+}
+```
+
+**Schema:**
+
+| Field | Type | Required | Description | Validation |
+|-------|------|----------|-------------|------------|
+| `field1` | string | Yes | Description | Max 255 chars |
+| `field2` | number | Yes | Description | Min: 0 |
+| `nested.field3` | boolean | No | Description | - |
+
+## Response
+
+### Success Response
+
+**Status Code:** `200 OK` (or `201 Created`, `204 No Content`)
+
+```json
+{
+  "id": "uuid",
+  "field1": "value",
+  "field2": 123,
+  "createdAt": "2025-12-21T10:00:00Z",
+  "updatedAt": "2025-12-21T10:00:00Z"
+}
+```
+
+**Response Schema:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | uuid | Unique identifier |
+| `field1` | string | Description |
+| `field2` | number | Description |
+| `createdAt` | timestamp | ISO 8601 timestamp |
+| `updatedAt` | timestamp | ISO 8601 timestamp |
+
+### Pagination Response
+
+For paginated endpoints:
+
+```json
+{
+  "data": [...],
+  "pagination": {
+    "total": 100,
+    "page": 1,
+    "limit": 20,
+    "totalPages": 5
+  }
+}
+```
+
+### Error Responses
+
+#### 400 Bad Request
+```json
+{
+  "error": "Validation failed",
+  "message": "field1 is required",
+  "code": "VALIDATION_ERROR"
+}
+```
+
+#### 401 Unauthorized
+```json
+{
+  "error": "Unauthorized",
+  "message": "Invalid or missing authentication token"
+}
+```
+
+#### 403 Forbidden
+```json
+{
+  "error": "Forbidden",
+  "message": "Insufficient permissions to access this resource"
+}
+```
+
+#### 404 Not Found
+```json
+{
+  "error": "Not Found",
+  "message": "Resource not found"
+}
+```
+
+#### 500 Internal Server Error
+```json
+{
+  "error": "Internal Server Error",
+  "message": "An unexpected error occurred"
+}
+```
+
+## Examples
+
+### Example 1: [Basic Use Case]
+
+<Tabs items={['cURL', 'JavaScript', 'Python', 'Go']}>
+  <Tabs.Tab>
+    ```bash
+    curl -X [METHOD] \
+      "https://api.devguard.org/api/v1/endpoint/path" \
+      -H "Authorization: Bearer YOUR_TOKEN" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "field1": "value"
+      }'
+    ```
+  </Tabs.Tab>
+  
+  <Tabs.Tab>
+    ```javascript
+    const response = await fetch('https://api.devguard.org/api/v1/endpoint/path', {
+      method: '[METHOD]',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        field1: 'value'
+      })
+    });
+    
+    const data = await response.json();
+    console.log(data);
+    ```
+  </Tabs.Tab>
+  
+  <Tabs.Tab>
+    ```python
+    import requests
+    
+    response = requests.[method](
+        'https://api.devguard.org/api/v1/endpoint/path',
+        headers={
+            'Authorization': f'Bearer {token}',
+            'Content-Type': 'application/json'
+        },
+        json={
+            'field1': 'value'
+        }
+    )
+    
+    data = response.json()
+    print(data)
+    ```
+  </Tabs.Tab>
+  
+  <Tabs.Tab>
+    ```go
+    package main
+    
+    import (
+        "bytes"
+        "encoding/json"
+        "net/http"
+    )
+    
+    func main() {
+        payload := map[string]interface{}{
+            "field1": "value",
+        }
+        jsonData, _ := json.Marshal(payload)
+        
+        req, _ := http.NewRequest("[METHOD]", 
+            "https://api.devguard.org/api/v1/endpoint/path",
+            bytes.NewBuffer(jsonData))
+        
+        req.Header.Set("Authorization", "Bearer "+token)
+        req.Header.Set("Content-Type", "application/json")
+        
+        client := &http.Client{}
+        resp, _ := client.Do(req)
+        defer resp.Body.Close()
+    }
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+### Example 2: [Advanced Use Case]
+
+Description of advanced scenario...
+
+```bash
+# Example with query parameters
+curl "https://api.devguard.org/api/v1/endpoint/path?page=2&limit=50"
+```
+
+## Rate Limiting
+
+- **Rate Limit:** 1000 requests per hour
+- **Headers:**
+  - `X-RateLimit-Limit`: Maximum requests per hour
+  - `X-RateLimit-Remaining`: Remaining requests
+  - `X-RateLimit-Reset`: Reset time (Unix timestamp)
+
+<Callout type="warning">
+  **Rate Limit Exceeded:** Returns `429 Too Many Requests`
+</Callout>
+
+## Permissions
+
+Required permissions to access this endpoint:
+
+- Organization: `read` or `admin`
+- Project: `read` or `admin`
+- Asset: `read` or `admin`
+
+See [RBAC Documentation] for more details.
+
+## Notes
+
+<Callout type="info">
+  **Note:** Important information about this endpoint
+</Callout>
+
+- Additional note 1
+- Additional note 2
+
+## Related Endpoints
+
+- [`GET /api/v1/related/endpoint`] - Description
+- [`POST /api/v1/another/endpoint`] - Description
+
+## See Also
+
+- [API Authentication Guide]
+- [Error Handling]
+- [Pagination]
+
+---
+
+<Callout type="default">
+  **Was this helpful?** [Yes](#) | [No](#) | [Edit this page](link-to-github)
+</Callout>

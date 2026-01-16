@@ -22,16 +22,13 @@ export default function FirewallSection() {
                 <div className="mx-auto max-w-7xl px-6 lg:px-16">
                     <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-3">
                         <div className="max-w-xl lg:max-w-lg">
-                            <Badge variant="upcoming">
-                                Upcoming Feature 🎉
-                            </Badge>
                             <h2 className="mt-4 text-4xl font-semibold tracking-tight text-white">
                                 Dependency Firewall
                             </h2>
                             <p className="mt-4 text-base text-gray-300">
-                                DevGuard will soon introduce a Dependency
+                                DevGuard offers you a Dependency
                                 Firewall, blocking the install of known
-                                malicious packages. It will support npm and GO.
+                                malicious packages. It supports npm, Golang and Python.
                             </p>
                         </div>
                         <div></div>

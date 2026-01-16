@@ -1,0 +1,111 @@
+import Image from 'next/image';
+import { Callout } from 'nextra/components';
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+
+# Why Compliance Matters
+
+Compliance is more than regulatory obligation—it's a strategic factor that builds trust, minimizes risks, and generates competitive advantages. In an increasingly connected world, customers, partners, and regulatory authorities expect software products to be developed and operated securely.
+
+## The Business Case
+
+### Risks of Non-Compliance
+
+The costs of non-compliance typically far exceed compliance investments:
+
+**Financial Risks**: Fines up to €15 million or 2.5% of global turnover under the <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">CRA</span></TooltipTrigger><TooltipContent><p>EU Cyber Resilience Act - Mandatory cybersecurity requirements for products with digital elements</p></TooltipContent></Tooltip>, lost business opportunities, increased insurance premiums, audit and remediation costs.
+
+**Operational Risks**: Product launch delays, supply chain disruptions, resource drain on reactive measures, technical debt from retrofitted security.
+
+**Reputational Risks**: Lost customer trust, negative media coverage following incidents, competitive disadvantage versus compliant competitors.
+
+### Benefits of Proactive Compliance
+
+**Market Access**: Entry to regulated markets (EU, USA, government), differentiation through certifications, meeting procurement requirements, accelerated contract negotiations.
+
+**Risk Management**: Early vulnerability detection, systematic security gap handling, supply chain transparency, reduced attack surfaces.
+
+**Efficiency**: Structured development processes, automated security testing, continuous quality improvement, better documentation.
+
+<Callout type="info" emoji="💡">
+  Organizations treating compliance as strategic investment rather than burden gain competitive advantages—faster market entry, higher customer trust, and lower long-term security costs.
+</Callout>
+
+## What Compliance Means
+
+### Regulatory Requirements
+
+**EU Cyber Resilience Act (CRA)**: Mandatory cybersecurity requirements, vulnerability handling throughout product lifecycle, <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">SBOM</span></TooltipTrigger><TooltipContent><p>Software Bill of Materials - Complete inventory of software components</p></TooltipContent></Tooltip> obligation, reporting of actively exploited vulnerabilities.
+
+**Other Regulations**: NIS2 Directive (critical infrastructure), GDPR (data protection), industry-specific requirements (MedTech, Automotive, Finance).
+
+### Standards-Based Compliance
+
+**ISO 27001**: Information Security Management System, risk management and controls, continuous improvement, certification by accredited bodies.
+
+**Other Standards**: BSI IT-Grundschutz (Germany), SOC 2 (USA), NIST Cybersecurity Framework.
+
+### Technical Requirements
+
+**SBOM**: Complete component inventory, machine-readable formats (SPDX, CycloneDX), version and dependency information, foundation for vulnerability management.
+
+**VEX**: Dynamic vulnerability exploitability information, false positive reduction, actual risk prioritization, standardized formats.
+
+**CSAF**: Standardized security advisories, machine-readable vulnerability information, automated process integration.
+
+## The Challenges
+
+**Complexity**: Overlapping frameworks, different interpretations, continuous changes, lack of harmonized standards.
+
+**Resources**: Cybersecurity skills shortage, time for documentation, tool and audit costs, balancing compliance with feature development.
+
+**Technical Integration**: CI/CD pipeline integration, automation of checks, tool diversity, data quality consistency.
+
+**Organization**: Cross-team coordination (Dev, Sec, Ops, Legal), cultural shift to "Security by Default", training requirements.
+
+## Effective Compliance Approaches
+
+### 1. Shift-Left Integration
+
+Integrate compliance from the beginning, not at the end:
+- Security requirements in planning phase
+- Automated tests in CI/CD pipelines
+- Continuous monitoring during development
+- Early issue detection and remediation
+
+### 2. Automation
+
+Manual processes don't scale:
+- Automatic SBOM generation per build
+- Continuous vulnerability scanning
+- Automated risk assessment
+- Policy-as-Code for compliance checks
+
+### 3. Prioritization by Actual Risk
+
+Not all vulnerabilities are equally critical:
+- Context-based risk assessment
+- Exploitability consideration
+- <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">VEX</span></TooltipTrigger><TooltipContent><p>Vulnerability Exploitability eXchange - Reduces false positives by documenting actual exploitability</p></TooltipContent></Tooltip> to reduce false positives
+- Focus on highest risks
+
+<Callout type="info" emoji="🔄">
+  DevGuard addresses these challenges through automated vulnerability management, SBOM/VEX support, risk-based prioritization, and seamless CI/CD integration—enabling compliance as an integrated part of development rather than a burden.
+</Callout>
+
+## Key Takeaways
+
+**Compliance builds trust** and enables market access—customers and partners increasingly require demonstrable security practices.
+
+**Automation is key** to scalable compliance—manual processes become unmanageable as codebases grow.
+
+**Early integration** reduces costs and risks—retrofitting security is exponentially more expensive than building it in.
+
+**Right tools matter**—specialized platforms transform compliance from obstacle to competitive advantage.
+
+---
+
+## Related Documentation
+
+- [Vulnerability Lifecycle](vulnerability-lifecycle) - Managing vulnerabilities throughout their lifecycle
+- [External Vulnerability Sync](external-vulnerability-sync) - SBOM/VEX generation and sharing
+- [Vulnerability Risk Assessment](risk-assessment-methodology) - Risk-based prioritization approach

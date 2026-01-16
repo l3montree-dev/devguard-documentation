@@ -1,0 +1,15 @@
+import SwaggerReference from "../../components/SwaggerReference"
+import { Callout } from 'nextra/components'
+
+
+# DevGuard API Reference
+
+The DevGuard API allows developers to integrate DevGuard's security features into their own applications and services. This reference provides detailed information about the available endpoints, request and response formats, authentication methods, and error handling.
+
+The OpenAPI 3.1 specification for the DevGuard API is available right here: [DevGuard API Specification](https://raw.githubusercontent.com/l3montree-dev/devguard/refs/heads/main/docs/swagger.json)
+
+<Callout type="warning" emoji="⚠️">
+  DevGuard uses Request-Signing for API authentication. This is implemented using HTTP Message Signatures ([RFC 9421](https://www.rfc-editor.org/rfc/rfc9421.pdf)). The DevGuard-Scanner provides a CLI Command based on the cURL DevUX for easy interaction with the DevGuard API. See here for more docs: [DevGuard-Scanner CLI Reference](/reference/scanner/curl)
+</Callout>
+
+<SwaggerReference />

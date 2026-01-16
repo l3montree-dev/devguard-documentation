@@ -1,0 +1,106 @@
+import Image from 'next/image';
+import { Callout } from 'nextra/components';
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+
+# CSAF & VEX Standards
+
+Modern software supply chains require standardized formats for communicating vulnerability information. <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">CSAF</span></TooltipTrigger><TooltipContent><p>Common Security Advisory Framework - Machine-readable security advisories</p></TooltipContent></Tooltip> (Common Security Advisory Framework) publishes security advisories while <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">VEX</span></TooltipTrigger><TooltipContent><p>Vulnerability Exploitability eXchange - Vulnerability impact assessments</p></TooltipContent></Tooltip> (Vulnerability Exploitability eXchange) communicates vulnerability impact assessments.
+
+## What is VEX?
+
+VEX[^1] enables organizations to explain whether specific vulnerabilities actually affect their products. A <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">CVE</span></TooltipTrigger><TooltipContent><p>Common Vulnerabilities and Exposures - Standardized vulnerability identifiers</p></TooltipContent></Tooltip> in your dependencies doesn't necessarily mean your application is exploitable—the vulnerability might exist in code never called, affect unused configurations, or be mitigated by compensating controls.
+
+**Without VEX**: Customers see scan results and assume you're vulnerable. You repeatedly explain why specific CVEs don't affect you.
+
+**With VEX**: Publish machine-readable assessments stating which vulnerabilities affect your product and which don't, with justifications. Customers' tools automatically consume this, eliminating redundant analysis.
+
+### VEX States
+
+**Not Affected**: Vulnerability exists but doesn't impact your application (requires justification: code not present, not in execute path, mitigations exist, or wrong configuration).
+
+**Affected**: Vulnerability impacts your application, requires remediation.
+
+**Fixed**: Vulnerability remediated through patching or other action.
+
+**Under Investigation**: Actively analyzing whether vulnerability affects your deployment.
+
+<Callout type="info" emoji="📋">
+  VEX transforms vulnerability management from "list all CVEs" to "explain actual impact"—reducing false positive fatigue.
+</Callout>
+
+## What is CSAF?
+
+CSAF provides standardized, machine-readable format for security advisories. Unlike free-form text advisories, CSAF uses well-defined JSON enabling automated processing.
+
+**Benefits**: Automated tool consumption, faster response times, supply chain transparency, regulatory compliance through auditable format.
+
+**Structure**: Document metadata (publisher, tracking) + Vulnerabilities (CVE identifiers, affected products, severity, remediation, VEX states).
+
+## CSAF VEX vs CycloneDX VEX
+
+Both support VEX but differ in approach:
+
+### CSAF VEX: Product-Centric
+
+Describes products and dependency relationships. Recipients see complete product structure with versions, platforms, OS.
+```json
+{
+  "product_tree": {
+    "relationships": [{
+      "product_reference": "pkg:npm/prismjs@1.27.0",
+      "relates_to_product_reference": "pkg:oci/devguard-web@main"
+    }]
+  },
+  "vulnerabilities": [{
+    "cve": "CVE-2024-53382",
+    "product_status": { "under_investigation": ["CSAFPID-0003"] }
+  }]
+}
+```
+
+### CycloneDX VEX: Component-Centric
+
+Details vulnerabilities at component level using <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">PURL</span></TooltipTrigger><TooltipContent><p>Package URL - Standardized package identifier</p></TooltipContent></Tooltip> (Package URL).
+```json
+{
+  "vulnerabilities": [{
+    "id": "CVE-2024-53382",
+    "analysis": { "state": "in_triage" },
+    "affects": [{ "ref": "pkg:npm/prismjs@1.27.0" }]
+  }]
+}
+```
+
+**CSAF VEX**: Complex supply chains needing detailed product structure. Ideal for regulated industries.
+
+**CycloneDX VEX**: Simpler component tracking. Better for ecosystems where component-level assessment suffices.
+
+## DevGuard Support
+
+**Publishing**: Enable in settings → DevGuard registers as CSAF provider with standardized endpoints for instance list, provider metadata, and asset reports.
+
+**Consuming**: Ingest upstream CSAF reports from suppliers. Configure supplier's CSAF URL and asset PURL to track.
+
+<Callout type="info" emoji="🔄">
+  CSAF upstream sources integrate with DevGuard's event handling. See [External Vulnerability Sync](external-vulnerability-sync) for details.
+</Callout>
+
+## Use Cases
+
+**Supply Chain Automation**: Suppliers publish → You consume → Customers consume yours → Eliminates redundant analysis.
+
+**Compliance**: Standardized, auditable format for vulnerability disclosure requirements.
+
+**Customer Communication**: Provide machine-readable VEX instead of manual CVE explanations.
+
+---
+
+## Related Documentation
+
+- [External Vulnerability Sync](external-vulnerability-sync) - Importing/exporting vulnerability data
+- [Vulnerability States](vulnerability-states) - VEX states and justifications
+- [Why Compliance Matters](why-compliance-matters) - Business case for standards
+
+## References
+
+[^1]: CISA, *Vulnerability Exploitability eXchange (VEX)*, https://www.cisa.gov/sbom

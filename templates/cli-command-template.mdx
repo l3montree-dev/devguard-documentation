@@ -1,0 +1,295 @@
+---
+title: "devguard-scanner [command]"
+description: "Description of what this command does"
+lastUpdated: 2025-12-21
+tags:
+  - cli
+  - reference
+  - scanner
+---
+
+import { Callout } from 'nextra/components'
+import { Tabs } from 'nextra/components'
+
+# `devguard-scanner [command]`
+
+Brief description of the command purpose.
+
+## Synopsis
+
+```bash
+devguard-scanner [command] [subcommand] [flags]
+```
+
+## Description
+
+Detailed description of what this command does:
+- Key functionality 1
+- Key functionality 2
+- Key functionality 3
+
+## Usage
+
+### Basic Usage
+
+```bash
+devguard-scanner [command] [required-args]
+```
+
+### Common Patterns
+
+```bash
+# Pattern 1: Most common use case
+devguard-scanner [command] --flag1 value1
+
+# Pattern 2: Alternative common use case
+devguard-scanner [command] --flag2 value2 --flag3
+```
+
+## Subcommands
+
+### `[subcommand1]`
+Brief description of subcommand.
+
+```bash
+devguard-scanner [command] [subcommand1] [flags]
+```
+
+### `[subcommand2]`
+Brief description of subcommand.
+
+```bash
+devguard-scanner [command] [subcommand2] [flags]
+```
+
+## Flags
+
+### Required Flags
+
+| Flag | Short | Type | Description |
+|------|-------|------|-------------|
+| `--required-flag` | `-r` | string | Description of required flag |
+
+### Optional Flags
+
+| Flag | Short | Type | Default | Description |
+|------|-------|------|---------|-------------|
+| `--optional-flag` | `-o` | string | `""` | Description |
+| `--flag2` | `-f` | number | `10` | Description |
+| `--verbose` | `-v` | bool | `false` | Enable verbose output |
+
+### Global Flags
+
+These flags are available for all commands:
+
+| Flag | Short | Type | Default | Description |
+|------|-------|------|---------|-------------|
+| `--api-url` | | string | `https://api.devguard.org` | DevGuard API URL |
+| `--token` | | string | `$DEVGUARD_TOKEN` | API authentication token |
+| `--help` | `-h` | bool | `false` | Display help |
+
+## Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `DEVGUARD_TOKEN` | API authentication token | - |
+| `DEVGUARD_API_URL` | DevGuard API endpoint | `https://api.devguard.org` |
+| `DEVGUARD_ASSET_NAME` | Asset name | - |
+
+<Callout type="info">
+  **Note:** Command-line flags take precedence over environment variables
+</Callout>
+
+## Examples
+
+### Example 1: [Basic Use Case]
+
+Description of what this example does.
+
+```bash
+devguard-scanner [command] --flag1 value1 --flag2 value2
+```
+
+**Output:**
+```
+Expected output here
+```
+
+### Example 2: [Advanced Use Case]
+
+Description of advanced scenario.
+
+<Tabs items={['Linux/macOS', 'Windows']}>
+  <Tabs.Tab>
+    ```bash
+    devguard-scanner [command] \
+      --flag1 value1 \
+      --flag2 value2 \
+      --verbose
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    ```powershell
+    devguard-scanner [command] `
+      --flag1 value1 `
+      --flag2 value2 `
+      --verbose
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+### Example 3: [With Pipeline]
+
+Using with other tools:
+
+```bash
+devguard-scanner [command] | jq '.vulnerabilities[] | select(.severity=="critical")'
+```
+
+### Example 4: [Configuration File]
+
+Using with configuration file:
+
+```bash
+devguard-scanner [command] --config ./devguard.yml
+```
+
+**Configuration file (`devguard.yml`):**
+```yaml
+api:
+  url: https://api.devguard.org
+  token: ${DEVGUARD_TOKEN}
+  
+scanner:
+  flag1: value1
+  flag2: value2
+```
+
+## Output
+
+### Standard Output
+
+The command outputs [format] to stdout:
+
+```json
+{
+  "field1": "value",
+  "field2": 123
+}
+```
+
+### Output Formats
+
+Available output formats:
+
+| Format | Flag | Description |
+|--------|------|-------------|
+| JSON | `--format json` | Machine-readable JSON |
+| YAML | `--format yaml` | Human-readable YAML |
+| Table | `--format table` | Formatted table |
+
+### Exit Codes
+
+| Code | Meaning |
+|------|---------|
+| `0` | Success |
+| `1` | General error |
+| `2` | Configuration error |
+| `3` | Authentication error |
+| `10` | Vulnerabilities found (if --fail-on configured) |
+
+## Configuration
+
+### Configuration File
+
+Default locations (checked in order):
+1. `./devguard.yml`
+2. `~/.devguard/config.yml`
+3. `/etc/devguard/config.yml`
+
+**Example configuration:**
+```yaml
+command:
+  flag1: default-value
+  flag2: 100
+```
+
+### Configuration Precedence
+
+Configuration is applied in this order (highest to lowest):
+1. Command-line flags
+2. Environment variables
+3. Configuration file
+4. Default values
+
+## Common Use Cases
+
+### Use Case 1: [Scenario]
+
+When you want to [specific goal]:
+
+```bash
+devguard-scanner [command] --specific-flags
+```
+
+### Use Case 2: [Another Scenario]
+
+For [different situation]:
+
+```bash
+devguard-scanner [command] --different-flags
+```
+
+## Troubleshooting
+
+### Issue: [Common Problem]
+
+**Symptoms:**
+- Error message or behavior
+
+**Solution:**
+```bash
+# Fix command
+```
+
+### Issue: [Authentication Error]
+
+**Symptoms:**
+```
+Error: unauthorized
+```
+
+**Solution:**
+Ensure your token is valid:
+```bash
+export DEVGUARD_TOKEN="your-token-here"
+devguard-scanner [command]
+```
+
+## Performance
+
+- **Typical execution time:** [time estimate]
+- **Memory usage:** [estimate]
+- **Disk space:** [requirements]
+
+<Callout type="tip">
+  **Performance tip:** Optimization suggestion
+</Callout>
+
+## See Also
+
+- [Related Command 1] - Link
+- [Related Command 2] - Link
+- [Configuration Guide] - Link
+
+## Related Documentation
+
+- [API Reference]
+- [Configuration Guide]
+- [Troubleshooting Guide]
+
+---
+
+<Callout type="default">
+  **Was this helpful?** [Yes](#) | [No](#) | [Edit this page](link-to-github)
+</Callout>

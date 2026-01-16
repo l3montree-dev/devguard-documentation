@@ -1,0 +1,93 @@
+# Discovering Base Image Attestations
+
+DevGuard can automatically discover and extract attestations from container base images referenced in your Dockerfile. This enables you to ingest upstream vulnerability information from your container supply chain.
+
+This feature is releated to the [Ingesting Upstream Information](/how-to-guides/vulnerability-management/sync-external-data) guide, which explains how DevGuard processes VEX documents and SBOMs.
+
+## Usage
+
+Use the DevGuard scanner to discover attestations from a Dockerfile:
+
+```sh
+devguard-scanner discover-baseimage-attestations Dockerfile
+```
+
+## How It Works
+
+The scanner analyzes your Dockerfile to identify base images and attempts to retrieve any associated attestations from the container registry. Attestations are saved to your local filesystem, with filenames derived from the predicate type.
+
+## Extracting and Uploading VEX Data
+
+To use the discovered attestations with DevGuard:
+
+1. **Extract the predicate:** The VEX document is nested within the `predicate` field of the in-toto statement
+2. **Save the predicate content:** Extract the JSON from the `predicate` field to a separate file
+3. **Upload to DevGuard:** Use the standard VEX upload process (UI or CLI) with the extracted predicate content
+
+### Example Dockerfile
+
+```Dockerfile
+FROM golang:1.25.2-trixie@sha256:b08c20ae3aa771d333b1e2ad77986b42b1ded17362bbfdd452977bfc2b107295 AS golang-builder
+RUN echo "Building something..." > /go/src/app/build-output
+
+# Base image with attestations
+FROM ghcr.io/l3montree-dev/devguard:main-bd6dbc88-1762074014
+
+USER 53111
+WORKDIR /app
+COPY --chown=53111:53111 /go/src/app/build-output /app/build-output
+```
+
+### Handling In-Toto Attestations
+
+**Important:** The discovered attestations are not raw VEX documents, but rather **in-toto statements** that contain VEX documents as predicates.
+
+**Structure:**
+```json
+{
+  "_type": "https://in-toto.io/Statement/v0.1",
+  "predicate": {
+    "bomFormat": "CycloneDX",
+    "components": [
+      ...
+    ],
+    "dependencies": [
+      ...
+    ],
+    "metadata": {
+      "component": {
+        "bom-ref": "pkg:oci/devguard?repository_url=ghcr.io/l3montree-dev/devguard@main",
+        "name": "pkg:oci/devguard?repository_url=ghcr.io/l3montree-dev/devguard@main",
+        "purl": "pkg:oci/devguard",
+        "type": ""
+      }
+    },
+    "specVersion": "1.6",
+    "version": 1,
+    "vulnerabilities": [
+      ...
+    ]
+  },
+  "predicateType": "https://cyclonedx.org/vex",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "dc22ed76a79be08694e518d0429a5a9e097c26f633b60d4e8bfb8eef2ecd086b"
+      },
+      "name": "ghcr.io/l3montree-dev/devguard"
+    }
+  ]
+}
+```
+
+**Example extraction workflow:**
+```bash
+# Discover attestations
+devguard-scanner discover-baseimage-attestations Dockerfile
+
+# Extract the predicate from the in-toto statement
+jq '.predicate' vex > vex-document.json
+
+# Upload the extracted VEX document
+devguard-scanner vex --token xyz --apiUrl https://api.devguard.org/ --assetName my-org/projects/my-group/assets/my-repo vex-document.json
+```

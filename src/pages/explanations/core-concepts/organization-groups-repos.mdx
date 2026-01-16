@@ -1,0 +1,105 @@
+import Image from 'next/image';
+import { Callout } from 'nextra/components';
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+
+# DevGuard Hierarchy
+
+DevGuard organizes security management through a three-level hierarchy inspired by GitLab: Organizations contain Groups, Groups contain Repositories. This structure enables organized vulnerability management across complex software portfolios with clear boundaries and access control.
+```mermaid
+graph TD
+    A[Organization] --> B[Group 1]
+    A --> C[Group 2]
+    
+    B --> E[Repository 1]
+    B --> F[Repository 2]
+    
+    C --> G[Repository 3]
+    C --> H[Repository 4]
+    
+    style A fill:#e3f2fd,stroke:#1976d2,stroke-width:3px,color:#000
+    style B fill:#fff3e0,stroke:#f57c00,stroke-width:2px,color:#000
+    style C fill:#fff3e0,stroke:#f57c00,stroke-width:2px,color:#000
+    style E fill:#e8f5e9,stroke:#388e3c,stroke-width:2px,color:#000
+    style F fill:#e8f5e9,stroke:#388e3c,stroke-width:2px,color:#000
+    style G fill:#e8f5e9,stroke:#388e3c,stroke-width:2px,color:#000
+    style H fill:#e8f5e9,stroke:#388e3c,stroke-width:2px,color:#000
+```
+
+## The Three Levels
+
+### Organization (Top Level)
+
+Your company or entity—the root containing all security management.
+
+**What it is**: Your company, business unit, or organizational entity managing software products.
+
+**Setup**: Created during initial DevGuard configuration.
+
+**Example**: "Acme Corporation" organization containing all Acme's groups and repositories.
+
+### Group (Middle Level)
+
+Logical groupings of related repositories representing application systems or product lines.
+
+**What it is**: Application systems where multiple repositories together deliver business functionality.
+
+**Why group**: Related repositories share vulnerability context—a vulnerability in shared dependencies impacts the entire application.
+
+**Examples**:
+- **E-Commerce Platform**: `frontend-web`, `backend-api`, `mobile-app`, `payment-service`
+- **Internal Tools**: `admin-dashboard`, `reporting-service`, `data-pipeline`
+- **Marketing Website**: `website`, `cms-backend`, `analytics-service`
+
+<Callout type="info" emoji="📦">
+  Groups organize repositories comprising complete applications—not arbitrary collections. Think "application system" not "team" or "technology."
+</Callout>
+
+### Repository (Bottom Level)
+
+Individual codebases—your actual Git repositories DevGuard scans for vulnerabilities.
+
+**What it is**: Git repositories, container images, or deployable artifacts containing source code and dependencies.
+
+**Scanning**: This is what DevGuard Scanner analyzes—identifying components, generating <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">SBOM</span></TooltipTrigger><TooltipContent><p>Software Bill of Materials - Component inventory</p></TooltipContent></Tooltip>, detecting vulnerabilities.
+
+**Naming**: Typically mirrors Git repository structure for easy identification.
+
+## Why This Structure?
+
+**Clear Organization**: Structure prevents chaos in portfolios with hundreds of repositories. Instantly understand which repositories comprise each application.
+
+**Contextual Security**: View vulnerability impact across entire application systems, not isolated repositories.
+
+**Access Control**: Different teams see only relevant groups without overwhelming unrelated findings.
+
+**Scalability**: Grows from small companies to enterprises with thousands of repositories without restructuring.
+
+## Practical Example
+
+**Organization**: `acme-corp`
+
+**Group**: E-Commerce Platform (`ecommerce`)
+- `frontend-web` - React website
+- `backend-api` - Node.js API
+- `mobile-app` - React Native app
+- `payment-service` - Go microservice
+
+**Group**: Internal Tools (`internal-tools`)
+- `admin-dashboard` - Vue.js admin
+- `reporting-service` - Python analytics
+- `data-pipeline` - ETL workflows
+
+## Setup Flow
+
+1. **Create Organization**: Define during initial setup (usually company name)
+2. **Create Groups**: One per major application system or product line
+3. **Add Repositories**: Connect Git repositories within groups
+4. **Configure Scanning**: Set up CI/CD integration for automatic scanning
+5. **Manage Vulnerabilities**: View findings organized by organization → group → repository
+
+---
+
+## Related Documentation
+
+- [What is DevGuard](what-is-devguard) - Core mission and capabilities
+- [Vulnerability Lifecycle](/explanations/vulnerability-management/vulnerability-lifecycle) - Managing vulnerabilities across hierarchy

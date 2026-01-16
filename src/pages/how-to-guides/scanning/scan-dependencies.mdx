@@ -1,0 +1,87 @@
+---
+title: Scan Dependencies
+description: Analyze project dependencies for vulnerabilities using Software Composition Analysis (SCA)
+---
+
+import { Callout, Tabs } from 'nextra/components'
+
+# Scan Dependencies
+
+Run Software Composition Analysis (SCA) to scan your project dependencies for known vulnerabilities and generate a Software Bill of Materials (SBOM).
+
+## Prerequisites
+
+Before you begin, ensure you have:
+
+- Docker installed on your system
+- A personal access token from DevGuard (create one in user settings)
+- A repository created in DevGuard
+
+## Scan Project Dependencies
+
+    Scan a local project directory for dependencies:
+
+    ```bash copy
+    docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main-latest \
+      devguard-scanner sca \
+        --path /dev/app/ \
+        --assetName="myorg/projects/myproject/assets/myrepo" \
+        --apiUrl="https://api.devguard.org" \
+        --token="YOUR_TOKEN"
+    ```
+
+
+<Callout type="info">
+  Replace `myorg/projects/myproject/assets/myrepo` with your repository's slug. You can copy this from the URL when viewing your repository in the DevGuard UI.
+</Callout>
+
+<Callout type="info">
+  Replace `/dev/app` with the appropriate path inside the container if you have mounted your project to a different location.
+</Callout>
+
+## What the Scanner Does
+
+1. **Generates SBOM**: Creates a complete inventory of all software components and dependencies in your project
+2. **Uploads Data**: Sends the SBOM to DevGuard
+3. **Server-Side Scanning**: DevGuard analyzes all components against its vulnerability database and returns results
+
+**Verify it worked:** Navigate to your repository in DevGuard. You'll see detected vulnerabilities listed with severity scores, affected components, and fix recommendations.
+
+## CI/CD Integration
+
+For automated dependency scanning in CI/CD pipelines, DevGuard provides ready-to-use integrations:
+- **GitHub Actions**: See [Scan with GitHub Actions](./scan-with-github-actions) for setup instructions
+- **GitLab CI**: See [Scan with GitLab CI](./scan-with-gitlab-ci) for setup instructions
+
+## Advanced Options
+
+Fail the command based on risk level:
+
+```bash copy
+--failOnRisk=critical  # Options: low, medium, high, critical (default: critical)
+--failOnCVSS=critical  # Options: low, medium, high, critical (default: critical)
+```
+
+Specify an artifact name (useful for tracking multiple artifacts per repository):
+
+```bash copy
+--artifactName="pkg:devguard/orgSlug/projectSlug/repoSlug" # Default is "pkg:devguard/{orgSlug}/{projectSlug}/{repoSlug}"
+```
+
+Set a custom origin to track scan source:
+
+```bash copy
+--origin="my-custom-origin"  # Default is "DEFAULT"
+```
+
+Specify Git reference information:
+
+```bash copy
+--ref="feature-branch"         # Git reference (branch, tag, or commit). Default is "main"
+--defaultRef="main"            # Default Git reference to use. Default is "main"
+--isTag=true                   # Indicates if the reference is a tag. Default is false
+```
+
+<Callout type="info">
+  These flags help DevGuard track which branch or tag the scan is associated with. DevGuard will attempt to auto-detect Git information from the current directory if these flags are not specified.
+</Callout>

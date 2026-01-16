@@ -1,0 +1,232 @@
+---
+title: Installation Guide
+description: Complete installation guide for DevGuard scanner and platform
+difficulty: beginner
+readingTime: 10
+lastUpdated: 2025-12-21
+tags:
+  - getting-started
+  - installation
+---
+
+import { Callout } from 'nextra/components'
+import { Steps } from 'nextra/components'
+import { Tabs } from 'nextra/components'
+
+# Installation Guide
+
+This guide covers installing all DevGuard components:
+- **[DevGuard Scanner](#devguard-scanner)** - CLI tool for security scanning
+- **[DevGuard CLI](#devguard-cli)** - Management tool for advanced operations
+- **[DevGuard Platform](#devguard-platform-self-hosted)** - Backend API and web UI (self-hosted)
+
+## DevGuard Scanner
+
+The scanner is the primary tool for running security scans. It's a standalone binary with no dependencies.
+
+### System Requirements
+
+- **OS**: Linux (x86_64, arm64), macOS (Intel, Apple Silicon), Windows (x86_64)
+- **Network**: Access to your used DevGuard Instance
+
+### Installation Methods
+
+<Tabs items={['Go Install', 'Docker', 'Binary Release', 'From Source']}>
+  <Tabs.Tab>
+    ### Go Install (Recommended)
+
+    Requires Go 1.21 or later.
+
+    ```bash
+    # Install latest version
+    go install github.com/l3montree-dev/devguard/cmd/devguard-scanner@latest
+    
+    # Install specific version
+    go install github.com/l3montree-dev/devguard/cmd/devguard-scanner@v1.0.0
+    
+    # Ensure Go bin is in PATH
+    export PATH="$PATH:$(go env GOPATH)/bin"
+    ```
+
+    **Verify installation:**
+    ```bash
+    devguard-scanner --version
+    ```
+
+    <Callout type="tip">
+      **Tip:** Add the PATH export to your `~/.bashrc` or `~/.zshrc` for permanent access
+    </Callout>
+  </Tabs.Tab>
+
+  <Tabs.Tab>
+    ### Docker
+
+    ```bash
+    # Pull latest image
+    docker pull ghcr.io/l3montree-dev/devguard-scanner:latest
+    
+    # Run scanner (mount current directory)
+    docker run --rm \
+      -v $(pwd):/app \
+      ghcr.io/l3montree-dev/devguard-scanner:latest \
+      sca
+    ```
+
+    **Create convenient alias:**
+    ```bash
+    # Add to ~/.bashrc or ~/.zshrc
+    alias devguard-scanner='docker run --rm -v $(pwd):/app ghcr.io/l3montree-dev/devguard-scanner:latest'
+    
+    # Now use like normal CLI
+    devguard-scanner sca
+    ```
+
+    **Docker Compose example:**
+    ```yaml
+    services:
+      scanner:
+        image: ghcr.io/l3montree-dev/devguard-scanner:latest
+        volumes:
+          - ./:/app
+        working_dir: /app
+        command: sca
+    ```
+  </Tabs.Tab>
+
+  <Tabs.Tab>
+    ### Binary Release
+
+    Download pre-built binaries from [GitHub Releases](https://github.com/l3montree-dev/devguard/releases).
+
+    **Linux (x86_64):**
+    ```bash
+    curl -L https://github.com/l3montree-dev/devguard/releases/latest/download/devguard-scanner_Linux_x86_64.tar.gz | tar xz
+    sudo mv devguard-scanner /usr/local/bin/
+    ```
+
+    **macOS (Intel):**
+    ```bash
+    curl -L https://github.com/l3montree-dev/devguard/releases/latest/download/devguard-scanner_Darwin_x86_64.tar.gz | tar xz
+    sudo mv devguard-scanner /usr/local/bin/
+    ```
+
+    **macOS (Apple Silicon):**
+    ```bash
+    curl -L https://github.com/l3montree-dev/devguard/releases/latest/download/devguard-scanner_Darwin_arm64.tar.gz | tar xz
+    sudo mv devguard-scanner /usr/local/bin/
+    ```
+
+    **Windows:**
+    ```powershell
+    # Download from https://github.com/l3montree-dev/devguard/releases
+    # Extract devguard-scanner.exe
+    # Move to C:\Program Files\DevGuard\
+    # Add to PATH
+    ```
+
+    **Verify installation:**
+    ```bash
+    devguard-scanner --version
+    ```
+  </Tabs.Tab>
+
+  <Tabs.Tab>
+    ### Build from Source
+
+    Requires Go 1.21 or later.
+
+    ```bash
+    # Clone repository
+    git clone https://github.com/l3montree-dev/devguard
+    cd devguard
+    
+    # Build scanner
+    make devguard-scanner
+    
+    # Install to system
+    sudo cp devguard-scanner /usr/local/bin/
+    
+    # Or add to PATH
+    export PATH="$PATH:$(pwd)"
+    ```
+
+    **Verify:**
+    ```bash
+    devguard-scanner --version
+    ```
+
+    **Run directly from source (development):**
+    ```bash
+    go run ./cmd/devguard-scanner/main.go --help
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+---
+
+## DevGuard CLI
+
+The CLI tool provides additional management capabilities for vulnerability databases, licenses, and advanced operations.
+
+<Tabs items={['Go Install', 'Docker', 'Binary Release']}>
+  <Tabs.Tab>
+    ```bash
+    # Install latest version
+    go install github.com/l3montree-dev/devguard/cmd/devguard-cli@latest
+    
+    # Verify
+    devguard-cli --version
+    ```
+  </Tabs.Tab>
+
+  <Tabs.Tab>
+    ```bash
+    # Pull image
+    docker pull ghcr.io/l3montree-dev/devguard-cli:latest
+    
+    # Create alias
+    alias devguard-cli='docker run --rm -v $(pwd):/work ghcr.io/l3montree-dev/devguard-cli:latest'
+    ```
+  </Tabs.Tab>
+
+  <Tabs.Tab>
+    Download pre-built binaries from [GitHub Releases](https://github.com/l3montree-dev/devguard/releases) and extract to your PATH.
+  </Tabs.Tab>
+</Tabs>
+
+---
+
+## DevGuard Platform (Self-Hosted)
+
+The platform provides centralized vulnerability management, web UI, and API.
+
+### Prerequisites
+
+- A Kuberntes Cluster or Docker and Docker Compose
+- About 2GB+ RAM
+- About 20GB+ disk space
+
+### Deployment Options
+
+<Tabs items={['Kubernetes', 'Docker Compose']}>
+<Tabs.Tab>
+See the [Helm Deployment Guide](/how-to-guides/administration/deploy-with-helm) for Kubernetes installation instructions.
+</Tabs.Tab>
+<Tabs.Tab>
+See the [Docker Compose Deployment Guide](/how-to-guides/administration/deploy-with-docker) for Docker installation instructions.
+</Tabs.Tab>
+</Tabs>
+
+
+---
+
+## Next Steps
+
+- [Quick Start Guide](/getting-started) - Run your first scan
+- [Core Concepts](/explanations/core-concepts/what-is-devguard) - Understand DevGuard architecture
+
+---
+
+<Callout type="default">
+  **Need help?** Join our [discussions](https://github.com/l3montree-dev/devguard/discussions) or check out the [matrix chat](https://matrix.to/#/#devguard:matrix.org).
+</Callout>

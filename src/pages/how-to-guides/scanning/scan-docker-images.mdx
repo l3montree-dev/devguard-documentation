@@ -1,0 +1,135 @@
+---
+title: Scan OCI Images
+description: Scan container images for known vulnerabilities (CVEs) and generate SBOMs
+---
+
+import { Callout, Tabs } from 'nextra/components'
+
+# Scan OCI Images
+
+Scan container images for known vulnerabilities and generate a Software Bill of Materials (SBOM).
+
+## Prerequisites
+
+Before you begin, ensure you have:
+
+- Docker installed on your system
+- A personal access token from DevGuard (create one in user settings)
+- A repository created in DevGuard
+
+## Scan Container Images
+
+<Tabs items={['Public Registry', 'Local Image File', 'Private Registry']}>
+  <Tabs.Tab>
+    Scan a container image directly from a public registry:
+
+    ```bash copy
+    docker run ghcr.io/l3montree-dev/devguard/scanner:main-latest \
+      devguard-scanner container-scanning \
+        --image ghcr.io/org/image:tag \
+        --assetName="myorg/projects/myproject/assets/myrepo" \
+        --apiUrl="https://api.devguard.org" \
+        --token="YOUR_TOKEN"
+    ```
+  </Tabs.Tab>
+  
+  <Tabs.Tab>
+    If you have saved your container image as a tar file:
+
+    ```bash copy
+    docker run -v "$(PWD):/app" ghcr.io/l3montree-dev/devguard/scanner:main-latest \
+      devguard-scanner container-scanning \
+        --path /app/image.tar \
+        --assetName="myorg/projects/myproject/assets/myrepo" \
+        --apiUrl="https://api.devguard.org" \
+        --token="YOUR_TOKEN"
+    ```
+  </Tabs.Tab>
+
+  <Tabs.Tab>
+    To scan images from a private registry, authenticate first using the `login` command:
+
+    ```bash copy
+    docker run ghcr.io/l3montree-dev/devguard/scanner:main-latest \
+      sh -c "devguard-scanner login -u USERNAME -p PASSWORD registry.example.com && \
+      devguard-scanner container-scanning \
+        --image registry.example.com/org/image:tag \
+        --assetName='myorg/projects/myproject/assets/myrepo' \
+        --apiUrl='https://api.devguard.org' \
+        --token='YOUR_TOKEN'"
+    ```
+
+    <Callout type="warning">
+      Never hardcode credentials in scripts. Use environment variables or CI/CD secrets to pass sensitive values.
+    </Callout>
+  </Tabs.Tab>
+</Tabs>
+
+<Callout type="info">
+  Replace `myorg/projects/myproject/assets/myrepo` with your repository's slug. You can copy this from the URL when viewing your repository in the DevGuard UI.
+</Callout>
+
+## What the Scanner Does
+
+1. **Generates SBOM**: Creates a complete inventory of all software components in your container
+2. **Discovers Attestations**: Automatically extracts relevant attestations (e.g., VEX documents) from base images
+3. **Uploads Data**: Sends the SBOM and discovered attestations to DevGuard
+4. **Server-Side Scanning**: DevGuard analyzes all components against its vulnerability database and returns results
+
+**Verify it worked:** Navigate to your repository in DevGuard. You'll see detected vulnerabilities listed with severity scores, affected components, and fix recommendations.
+
+## CI/CD Integration
+
+For automated container scanning in CI/CD pipelines, DevGuard provides ready-to-use integrations:
+- **GitHub Actions**: See [Scan with GitHub Actions](./scan-with-github-actions) for setup instructions
+- **GitLab CI**: See [Scan with GitLab CI](./scan-with-gitlab-ci) for setup instructions
+
+## Advanced Options
+
+Fail the command based on risk level:
+
+```bash copy
+--failOnRisk=critical  # Options: low, medium, high, critical (default: critical)
+--failOnCVSS=critical  # Options: low, medium, high, critical (default: critical)
+```
+
+Skip attestation discovery from the container image:
+
+```bash copy
+--ignoreUpstreamAttestations  # Ignores attestations from the scanned container image
+```
+
+Ignore external references in attestations:
+
+```bash copy
+--ignoreExternalReferences  # Ignores external links in VEX documents
+```
+
+<Callout type="info">
+  VEX documents can include external references to additional SBOM or VEX sources. Use `--ignoreExternalReferences` to skip fetching these external links.
+</Callout>
+
+Specify an artifact name (useful for tracking multiple artifacts like a oci image with a CLI and one with the App per repository):
+
+```bash copy
+--artifactName="pkg:oci/orgSlug/projectSlug/repoSlug"  # Default is "pkg:oci/{orgSlug}/{projectSlug}/{repoSlug}"
+```
+
+Set a custom origin to track scan source:
+
+```bash copy
+--origin="my-custom-origin"  # Default is "DEFAULT"
+```
+
+Specify Git reference information:
+
+
+```bash copy
+--ref="feature-branch"         # Git reference (branch, tag, or commit). Default is "main"
+--defaultRef="main"            # Default Git reference to use. Default is "main"
+--isTag=true                   # Indicates if the reference is a tag. Default is false
+```
+
+<Callout type="info">
+  These flags help DevGuard track which branch or tag the scan is associated with. DevGuard will attempt to auto-detect Git information from the current directory if these flags are not specified.
+</Callout>

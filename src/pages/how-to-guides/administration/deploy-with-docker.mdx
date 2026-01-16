@@ -1,0 +1,86 @@
+import { Callout, Steps } from 'nextra/components'
+
+# Deploy DevGuard with Docker Compose
+
+Run DevGuard locally using Docker Compose for testing and evaluation.
+
+<Callout type="warning" emoji="⚠️">
+This setup is for **testing and evaluation only**. For production deployments, use the [Helm chart](/how-to-guides/administration/deploy-with-helm).
+</Callout>
+
+## Prerequisites
+
+- Docker and Docker Compose installed
+
+## Deployment Steps
+
+<Steps>
+
+### Download required files
+
+```bash
+curl -LO https://raw.githubusercontent.com/l3montree-dev/devguard/refs/heads/main/docker-compose-try-it.yaml \
+&& curl -LO https://raw.githubusercontent.com/l3montree-dev/devguard/refs/heads/main/initdb.sql \
+&& curl -LO https://raw.githubusercontent.com/l3montree-dev/devguard/refs/heads/main/.kratos/identity.schema.json \
+&& curl -L -o kratos.yml https://raw.githubusercontent.com/l3montree-dev/devguard/refs/heads/main/.kratos/kratos.example.yml \
+&& mkdir -p kratos \
+&& mv kratos.yml kratos/kratos.yml \
+&& mv identity.schema.json kratos/identity.schema.json
+```
+
+### Start the containers
+
+```bash
+docker-compose -f docker-compose-try-it.yaml up
+```
+
+### Access DevGuard
+
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+</Steps>
+
+## Important Notes
+
+**Email verification**: No SMTP server is configured by default. During registration, skip email verification by clicking "Back".
+
+To enable email delivery, add `COURIER_SMTP_CONNECTION_URI` to the `kratos` service:
+
+```yaml
+services:
+  kratos:
+    environment:
+      - COURIER_SMTP_CONNECTION_URI=smtp://user:password@smtp.example.com:587/?skip_ssl_verify=false
+```
+
+**Vulnerability database**: The API downloads the latest vulnerability database on first start. This may take several minutes. Vulnerability data and scan results won't be complete until the download finishes.
+
+## Adapting for Production
+
+If you must use Docker Compose in production, **change all default passwords**:
+
+1. `POSTGRES_PASSWORD` in the `postgresql` service
+2. Database password in `initdb.sql`
+3. `DSN` in both `kratos` and `kratos-migrate` services
+4. Remove `--dev` flag from the kratos command
+
+```yaml
+# Example password locations in docker-compose-try-it.yaml
+services:
+  postgresql:
+    environment:
+      POSTGRES_PASSWORD: your-secure-password  # Change this
+
+  kratos:
+    environment:
+      DSN: postgres://kratos:your-secure-password@postgresql:5432/kratos?sslmode=disable
+    command: serve -c /etc/config/kratos/kratos.yml --watch-courier  # Remove --dev
+```
+
+<Callout type="error">
+Never run the default `docker-compose-try-it.yaml` in production. The default passwords are publicly known.
+</Callout>
+
+## Next Steps
+
+- Run your first scan: [Getting Started Guide](/getting-started/quickstart#log-into-devguard)
