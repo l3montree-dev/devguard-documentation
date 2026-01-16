@@ -26,9 +26,9 @@ export default function FirewallSection() {
                                 Dependency Firewall
                             </h2>
                             <p className="mt-4 text-base text-gray-300">
-                                DevGuard offers you a Dependency
-                                Firewall, blocking the install of known
-                                malicious packages. It supports npm, Golang and Python.
+                                DevGuard offers you a Dependency Firewall,
+                                blocking the install of known malicious
+                                packages. It supports npm, Golang, and Python.
                             </p>
                         </div>
                         <div></div>
