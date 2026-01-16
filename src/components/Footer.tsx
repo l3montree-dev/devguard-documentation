@@ -3,16 +3,15 @@ import Image from 'next/image'
 const navigation = {
     product: [
         { name: 'Getting started', href: '/getting-started' },
-        { name: 'Tool Comparison', href: '/comparison' },
-        {
-            name: 'Self Hosting',
-            href: '/getting-started/self-hosting-devguard/kubernetes',
+        { name: 'How to Guides', href: '/how-to-guides' },
+    {
+            name: 'Core Concepts',
+            href: '/explanations/core-concepts/what-is-devguard',
         },
         {
-            name: 'Concepts',
-            href: '/concepts',
+            name: 'Administration',
+            href: '/how-to-guides/administration',
         },
-
         { name: 'Contributing', href: '/contributing/getting-started' },
     ],
     support: [
@@ -23,7 +22,7 @@ const navigation = {
         { name: 'Documentation', href: '/introduction' },
         {
             name: 'Risk Mitigation Guides',
-            href: '/risk-mitigation-guides/secret-scanning',
+            href: '/how-to-guides/risk-mitigation-guides',
         },
         {
             name: 'Status Page',
