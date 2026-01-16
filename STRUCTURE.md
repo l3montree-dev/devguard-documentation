@@ -308,7 +308,7 @@
 **Goal**: Understand why and how things work
 
 ```
-/explanation/
+/explanations/
 ├── index.mdx                             # Explanation overview
 │
 ├── core-concepts/
