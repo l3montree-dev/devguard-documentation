@@ -1,0 +1,183 @@
+---
+title: Find Vulnerable Dependencies
+description: Search and filter dependencies with known security vulnerabilities
+---
+
+import { Callout, Tabs } from 'nextra/components'
+
+# Find Vulnerable Dependencies
+
+Locate and analyze dependencies with security vulnerabilities in your repository.
+
+## Prerequisites
+
+Before you begin, ensure you have:
+
+- Access to a DevGuard project and repository
+- A completed dependency scan (SCA scan) or uploaded SBOM
+- At least one known vulnerable dependency in your repository
+
+## Open the Dependency Risks View
+
+Navigate to the vulnerability search and filtering interface:
+
+1. Navigate to **Organization** → **Project** → **Repository** → **Risk Handling**
+2. You'll see a list of all packages with identified vulnerabilities
+3. Each row shows a package name and the vulnerabilities affecting it
+
+## Filter by Artifact
+
+If your repository contains multiple build artifacts or scanning sources, filter by specific artifacts:
+
+1. Use the **Artifact Selector** dropdown at the top of the page
+2. Select the artifact (e.g., specific container image, application build)
+3. The vulnerability list updates to show only vulnerabilities in the selected artifact
+
+<Callout type="info">
+  Artifacts are automatically detected from your SBOM. If you don't see expected artifacts, verify your scan included them.
+</Callout>
+
+## View Vulnerability Status
+
+Show vulnerabilities in different states:
+
+1. Use the **State Filter** tabs:
+   - **Open** - Unresolved vulnerabilities requiring action
+   - **Resolved** - Vulnerabilities you've handled (false positives, accepted risks, fixed)
+
+2. Click the tab to filter the list
+
+**Understanding states:**
+- **Open**: Detected vulnerability not yet addressed
+- **Resolved**: You've created an event (accepted, false positive, or fixed)
+
+## Search for Vulnerabilities
+
+Find specific vulnerabilities using multiple search methods:
+
+1. **By CVE ID**: Search for `CVE-2024-1234` to find exact vulnerability
+2. **By Component Name**: Search for `react`, `log4j`, etc. to find packages
+3. **By Description**: Search for keywords like `buffer overflow`, `SQL injection`
+
+The search is case-insensitive and matches partial text:
+
+```
+Search Examples:
+- "CVE-2024" → Finds all CVEs from 2024
+- "spring" → Finds all Spring framework vulnerabilities
+- "remote code" → Finds all RCE vulnerabilities
+```
+
+<Callout type="warning">
+  The search requires at least 3 characters to avoid too many results. Shorter searches are ignored.
+</Callout>
+
+## Analyze Package Vulnerabilities
+
+Click on any package row to see detailed vulnerability information:
+
+1. Click a package name (e.g., "react@18.2.0")
+2. View all CVEs affecting that package with:
+   - **CVE ID** - Official vulnerability identifier
+   - **Severity** - CVSS score and severity badge (Critical, High, Medium, Low)
+   - **Risk Score** - DevGuard's calculated risk considering CIA requirements
+   - **Description** - What the vulnerability affects
+   - **Exploits** - Known public exploits (if available)
+   - **Fixed in** - Recommended version to upgrade to
+
+### View Fix Recommendations
+
+For each vulnerability:
+
+1. Check the **"Fixed in Version"** column
+2. This shows the minimum version that fixes the issue
+3. Upgrade your dependency to at least this version
+
+**Example**: If react@18.2.0 has CVE-2024-1234 fixed in 18.3.0, upgrade to 18.3.0 or later.
+
+## Filter by Severity and Risk
+
+Use advanced filtering to focus on the most critical vulnerabilities:
+
+### By Severity Level
+- **Critical** - Highest priority, immediate action needed
+- **High** - Important security issues to address soon
+- **Medium** - Should be reviewed and prioritized
+- **Low** - Informational, lower priority
+
+### By Risk Score
+The DevGuard risk score considers:
+- **CVSS Score** - Industry vulnerability severity
+- **Exploitability** - Availability of known exploits
+- **CIA Requirements** - Your asset's confidentiality, integrity, availability needs
+- **Impact Context** - Whether the vulnerable code is actually used
+
+**Higher risk scores** mean the vulnerability is more likely to impact your application.
+
+## Identify High-Risk Components
+
+The vulnerability list is ordered by risk score by default. The most critical vulnerabilities appear first.
+
+**Quick wins:**
+1. Look for multiple vulnerabilities in the same package
+2. Focus on packages with critical or high severity scores
+3. Prioritize packages with available exploits
+4. Check if the vulnerable code path is actually used in your application
+
+## Create Events to Track Remediation
+
+Once you've reviewed a vulnerability, document your decision:
+
+1. Click on a vulnerability row
+2. Choose one of these actions:
+   - **Accept Risk** - You accept the security risk and won't fix immediately
+   - **Mark as False Positive** - The vulnerability doesn't apply to your situation
+   - **Mitigate** - You've implemented a workaround
+   - **Add Comment** - Document investigation or remediation progress
+
+<Callout type="info">
+  Creating events doesn't fix the vulnerability—it tracks your organization's response for compliance and audit purposes.
+</Callout>
+
+## Version Comparison and Upgrade Planning
+
+Plan your upgrades using DevGuard's risk reduction analysis:
+
+1. Hover over a package name to see available upgrade versions
+2. Each version shows:
+   - **Risk reduction** - How much total risk is eliminated by upgrading
+   - **Remaining vulnerabilities** - CVEs that still affect the new version
+3. Choose the version that balances risk reduction with compatibility
+
+**Example**: If upgrading from react@18.2.0 to 18.3.0 reduces risk by 42%, you can see the exact vulnerabilities that would be fixed.
+
+## Export Results
+
+Download vulnerability data for reports or external tools:
+
+1. Click **Download SBOM** to export your component inventory
+2. Click **Download VEX** to export vulnerability exceptions document
+3. Share with security teams, compliance, or incident response
+
+## Troubleshooting
+
+### No vulnerabilities found
+- Your dependencies may have no known vulnerabilities ✓
+- Verify your scan completed: Check **Scan History** tab
+- Ensure your SBOM includes all actual dependencies
+
+### Missing expected vulnerabilities
+- The vulnerability database may not include your ecosystem
+- Some ecosystems (like private registries) aren't covered
+- Check if the package was actually included in your scan
+
+### Cannot search for a specific CVE
+- The CVE may not be in the DevGuard vulnerability database yet
+- Search by component name instead
+- Check external sources like CVE Details or NVD for confirmation
+
+## Next Steps
+
+- [Track Fix Progress](../../../vulnerability-management/track-fix-progress.mdx) - Monitor remediation efforts
+- [View Dependency Tree](./view-dependency-tree.mdx) - Explore dependency relationships
+- [Generate VEX Documents](../../../compliance/generate-vex-documents.mdx) - Document vulnerability decisions

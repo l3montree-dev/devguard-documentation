@@ -420,7 +420,7 @@ When you receive this filled questionnaire, use it with the concept-explanation-
   - Advanced content doesn't interrupt basic flow
   - Easy to skip and come back later
 
-## Concept/Explanation Quality
+## Concept/explanations Quality
 
 ### Understanding First
 - [ ] **Do you explain the PROBLEM before the solution?** (Docker pattern)

@@ -7,7 +7,7 @@ import { Steps } from 'nextra/components'
 - **Automate the process** as much as possible (e.g., via CI/CD pipelines).
 - Document implicitly by using **infrastructure-as-code** (IaC).
 - Use **version control** for all your work products (Containerfiles, IaC definitions, scan reports, etc.).
-- Strive for **hardened build environments** (like defined in SLSA Level 3 - [SLSA Level 3 on GitLab](/concepts/attestations-provenance/slsa-level-3)).
+- Strive for **hardened build environments** (like defined in SLSA Level 3 - [SLSA Level 3 on GitLab](/explanations/attestations-provenance/slsa-level-3)).
 - Strive for **transparency** and make your assessment **results freely available** through standardized channels (VeX, container attestations, etc.)
 
 ## A General Process
@@ -26,7 +26,7 @@ When you are building your own container image (e.g., for your application), you
 
 Before building the container image, scan your application code and its dependencies for vulnerabilities, e.g. using DevGuard.
 You want to check for leaked secrets in your code, bad coding practices (SAST), and known vulnerabilities in your dependencies (SCA)
-(see the [OWASP DevSecOps Pipeline](/concepts/devsecops/understanding-owasp-devsecops-pipeline) for more details).
+(see the [OWASP DevSecOps Pipeline](/explanations/devsecops/understanding-owasp-devsecops-pipeline) for more details).
 
 Make sure to adhere to the [twelve factors](https://12factor.net/#the_twelve_factors) for building web applications. These
 apply pretty good to containerized applications as well. Ensure that you do not store any configs as parts of the
@@ -38,7 +38,7 @@ Result of this step should be your **code risk handled application code** and a 
 DevGuard can help you to identify and handle risks in your code and dependencies and can generate a SBOM for you.
 
 This SBOM should be used to scan for known vulnerabilities in your dependencies (DevGuard does that for you).
-Follow the process described in the [Container Hardening CVE Decision Guide](/concept-guides/container-hardening/cve-decision)
+Follow the process described in the [Container Hardening CVE Decision Guide](/tutorials/container-hardening/cve-decision)
 to handle any vulnerabilities found. Ensure your solution can perform continuous vulnerability monitoring and you become aware of new vulnerabilities
 even when the application is already in use (DevGuard can do that for you).
 
@@ -84,7 +84,7 @@ manage the findings, track their resolution, and fulfill compliance requirements
 
 After building your final container image, scan it for vulnerabilities using DevGuard or another
 vulnerability scanner. If vulnerabilities are found, follow the process described in the
-[Container Hardening CVE Decision Guide](/concept-guides/container-hardening/cve-decision) to handle them.
+[Container Hardening CVE Decision Guide](/tutorials/container-hardening/cve-decision) to handle them.
 
 Ensure your solution can perform continuous vulnerability monitoring and you become aware of new vulnerabilities
 even when the image is already in use (DevGuard can do that for you).
@@ -99,7 +99,7 @@ transparently.
 
 Ensure to add a release attestation to your image to state which application version is contained in the image,
 to be able to identify known vulnerabilities for that application version
-(you can find details why in the [SBOM Problem Statement](/concepts/sbom-problem-statement)).
+(you can find details why in the [SBOM Problem Statement](/explanations/sbom-problem-statement)).
 
 Ensure to sign your image (e.g., using [cosign](https://github.com/sigstore/cosign)) to ensure its integrity and authenticity.
 
@@ -118,7 +118,7 @@ Ensure to use images from a trusted source, and in best case, they are signed.
 #### Scan the image
 
 Scan the image for vulnerabilities using DevGuard or another vulnerability scanner. If vulnerabilities are found, follow the process described in the
-[Container Hardening CVE Decision Guide](/concept-guides/container-hardening/cve-decision) to handle them.
+[Container Hardening CVE Decision Guide](/tutorials/container-hardening/cve-decision) to handle them.
 
 Ensure your solution can perform continuous vulnerability monitoring and you become aware of new vulnerabilities
 even when the image is already in use (DevGuard can do that for you).
@@ -139,7 +139,7 @@ transparently.
 
 Ensure to add a release attestation to your image to state which application version is contained in the image,
 to be able to identify known vulnerabilities for that application version
-(you can find details why in the [SBOM Problem Statement](/concepts/sbom-problem-statement)).
+(you can find details why in the [SBOM Problem Statement](/explanations/sbom-problem-statement)).
 
 Ensure to sign your image (e.g., using [cosign](https://github.com/sigstore/cosign)) to ensure its integrity and authenticity.
 

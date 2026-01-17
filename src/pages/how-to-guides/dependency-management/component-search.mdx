@@ -1,0 +1,267 @@
+---
+title: Search for Components
+description: Find and analyze component usage across your repositories
+---
+
+import { Callout, Tabs } from 'nextra/components'
+
+# Search for Components
+
+Discover which repositories contain specific components and analyze their impact across your organization.
+
+## Prerequisites
+
+Before you begin, ensure you have:
+
+- Access to a DevGuard organization
+- At least one repository with completed dependency scans
+- Component information indexed (automatic after scans)
+
+## Find Components Across Organization
+
+Search for a component across all your repositories:
+
+1. Navigate to **Organization** → **Search**
+2. Enter component details in search box
+3. View results showing all repositories using this component
+
+**Search by:**
+- Component name (e.g., "react", "log4j")
+- Component version (e.g., "18.2.0")
+- Package ecosystem (e.g., "npm", "pip", "maven")
+- PURL format (e.g., "pkg:npm/react@18.2.0")
+
+## View Component Details
+
+Click on a component in search results to see:
+
+- **Component name and version**
+- **Repository using it** - Which repositories have this component
+- **Direct vs. transitive** - Is it directly required or a dependency of a dependency?
+- **Artifacts** - Which build outputs contain it
+- **License** - Declared license or "unknown"
+- **Security status** - Known vulnerabilities affecting this version
+- **Supply chain info** - Open-source project details if available
+
+## Filter by Component Ecosystem
+
+Narrow search results by package ecosystem:
+
+<Tabs items={['npm', 'PyPI', 'Maven', 'Go', 'Other']}>
+  <Tabs.Tab>
+    **npm** - JavaScript/Node.js packages
+    
+    Format: `pkg:npm/package-name@version`
+    
+    Example: Search for "react" to find all React versions
+  </Tabs.Tab>
+  
+  <Tabs.Tab>
+    **PyPI** - Python packages
+    
+    Format: `pkg:pypi/package-name@version`
+    
+    Example: Search for "django" for all Django installations
+  </Tabs.Tab>
+  
+  <Tabs.Tab>
+    **Maven** - Java packages
+    
+    Format: `pkg:maven/group/artifact@version`
+    
+    Example: Search for "log4j" for Java logging vulnerabilities
+  </Tabs.Tab>
+  
+  <Tabs.Tab>
+    **Go** - Go modules
+    
+    Format: `pkg:golang/module/name@version`
+    
+    Example: Search for "gorm" for Go ORM usage
+  </Tabs.Tab>
+  
+  <Tabs.Tab>
+    **Other ecosystems** - Conan, Nuget, Composer, etc.
+    
+    Use PURL format for precise searches
+  </Tabs.Tab>
+</Tabs>
+
+## Identify Component Vulnerabilities
+
+When searching for a component, also see:
+
+- **Vulnerabilities affecting any version** - Known CVEs
+- **Fixed in version** - Minimum version that patches issues
+- **Severity distribution** - Count of critical, high, medium, low issues
+- **Exploits available** - Public exploits if any exist
+
+**Risk assessment:**
+```
+If searching for "react" and version 18.2.0 has CVE-2024-1234:
+1. See which repositories use 18.2.0
+2. Check if any versions are patched
+3. Identify repositories needing updates
+```
+
+## Track Component Usage Across Repositories
+
+Understand component distribution:
+
+1. Search for a component
+2. View all repositories using it
+3. See version breakdown:
+   - How many repos use v1.0.0?
+   - How many use v2.0.0?
+   - How many use vulnerable versions?
+
+This helps identify standardization opportunities or risks.
+
+## Find Transitive Dependencies
+
+Components are not just direct dependencies:
+
+1. Search for a component
+2. See **Direct** dependencies (explicitly required)
+3. See **Transitive** dependencies (dependencies of dependencies)
+4. Identify if component appears as transitive in many repos
+
+<Callout type="info">
+  Transitive dependencies are harder to control. Finding them helps with supply chain security analysis.
+</Callout>
+
+## Analyze Component with Known Vulnerabilities
+
+When searching for components with CVEs:
+
+1. Enter the component name
+2. View **All versions** and their CVE status
+3. Identify affected versions across your repos
+4. Plan remediation:
+   - Which repos need updates?
+   - Which versions are safe?
+   - What's the upgrade path?
+
+**Example: Log4j2 vulnerability**
+```
+Search: "log4j"
+Results show:
+- v2.17.0 and earlier: Vulnerable to CVE-2021-44228 (Critical)
+- v2.17.1+: Patched
+- Your repos status:
+  - Production app: v2.16.0 (vulnerable!)
+  - Tools repo: v2.17.2 (safe)
+  - Legacy service: v2.14.0 (vulnerable!)
+```
+
+## View Component Project Information
+
+For open-source components, see:
+
+- **Project homepage** - Link to official repository
+- **License** - Declared license
+- **Open-source status** - Link to OpenSSF Project if available
+- **Download statistics** - Popularity in the ecosystem
+- **Last release date** - Activity level
+- **Maintainer info** - Who maintains it
+
+<Callout type="info">
+  Unmaintained or rarely-updated components may be riskier than actively maintained alternatives.
+</Callout>
+
+## Create Incidents from Component Search
+
+If you find a high-risk component:
+
+1. Search for it
+2. Click **Create Incident** or **Create Issue**
+3. DevGuard creates a tracking item for all affected repositories
+4. Team can collaborate on remediation plan
+5. Progress is tracked across organization
+
+## Export Component Report
+
+Generate reports on component usage:
+
+1. Perform component search
+2. Click **Export Results**
+3. Download data including:
+   - All repositories using component
+   - Versions in each repository
+   - Vulnerability status
+   - License information
+4. Share with security team or stakeholders
+
+## Monitor Component Lifecycle
+
+Track when components change:
+
+- **New occurrences** - Component added to new repository
+- **Version updates** - Repository upgraded component version
+- **Removal** - Repository no longer uses component
+- **Vulnerability discovery** - New CVE published for version
+
+Set up alerts to track important components.
+
+## Component Search Examples
+
+### Finding and replacing outdated dependencies
+```
+Search: "lodash@4.17.0"
+Result: 12 repos using this version
+Action: Creates upgrade plan to latest safe version
+```
+
+### Identifying supply chain risk
+```
+Search: "tiny-cookie@0.1.0"
+Result: Unknown project, no maintainer activity for 3 years
+Decision: Consider replacing with maintained alternative
+```
+
+### Tracking vulnerable components
+```
+Search: "react@16.x"
+Result: 5 repos still using vulnerable React 16
+Action: Plan upgrades to React 18+ LTS
+```
+
+### License compliance across org
+```
+Search: "gcc" (ecosystem: Go)
+Result: Found in 8 repos, all GPL-licensed
+Decision: Evaluate implications or replace
+```
+
+## Best Practices
+
+1. **Search regularly** - Monitor critical components monthly
+2. **Keep updated** - Upgrade to latest safe versions quickly
+3. **Standardize versions** - Use same versions across similar projects when possible
+4. **Review transitive deps** - Check indirect dependencies for risks
+5. **Document decisions** - Record why you chose specific versions
+6. **Automate where possible** - Use Dependabot or similar for updates
+
+## Troubleshooting
+
+### Component not found in search
+- Verify the exact name and spelling
+- Try PURL format: `pkg:ecosystem/name@version`
+- Check if repository has been scanned recently
+- Ensure you have access to repositories
+
+### Too many search results
+- Be more specific with version or ecosystem
+- Filter by repository if searching organization-wide
+- Use PURL format for precise matching
+
+### Version information seems outdated
+- Trigger a new scan: Go to repository → **Rescan Now**
+- Check when this repository was last scanned
+- Results update after new scan completes
+
+## Next Steps
+
+- [Find Vulnerable Dependencies](./find-vulnerable-deps.mdx) - Security-focused component analysis
+- [View Dependency Tree](./view-dependency-tree.mdx) - See how components relate
+- [License Compliance](./license-compliance.mdx) - Review component licenses

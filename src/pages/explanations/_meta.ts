@@ -5,7 +5,7 @@ export default {
     },
     devsecops: { title: 'DevSecOps' },
     'vulnerability-management': { title: 'Vulnerability Management' },
-    'compliance': {
+    compliance: {
         title: 'DevGuard & Compliance Frameworks',
     },
     'license-management': { title: 'License Management' },
