@@ -1,8 +1,64 @@
-# Feature Guides
+# How-To Guides
 
-Welcome to the DevGuard feature guides. Here you'll find detailed instructions and explanations on how to utilize various features of DevGuard to enhance your security posture:
+Welcome to the DevGuard how-to guides. These practical guides provide step-by-step instructions for common tasks and workflows to help you get the most out of DevGuard.
 
-- [Ingesting Upstream Information](/feature-guides/ingesting-upstream-information) — Learn how to ingest VEX documents and SBOMs from upstream sources to enhance your vulnerability management.
-- [Discovering Base Image Attestations](/feature-guides/discover-base-image-attestations) — Understand how to automatically discover and extract attestations from container base images referenced in your Dockerfiles.
-- [Mapping Several Assets and Artifacts (e.g., Monorepos)](/feature-guides/several-assets-and-artifacts-to-devguard-monorepos) — A guide on how to effectively map multiple assets and artifacts, such as monorepos, within DevGuard for comprehensive risk assessment.
-- [Dependency Proxy with Malicious Package Firewall](/feature-guides/dependency-proxy) — Protect your development environment from supply chain attacks with the built-in dependency proxy that blocks malicious packages.
+## Scanning
+
+Integrate security scanning into your development workflow:
+
+- [Scan Dependencies](/how-to-guides/scanning/scan-dependencies) — Scan your project dependencies for vulnerabilities.
+- [Scan Docker Images](/how-to-guides/scanning/scan-docker-images) — Scan container images for security issues.
+- [Scan Source Code](/how-to-guides/scanning/scan-source-code) — Perform static analysis on your source code.
+- [Scan with GitHub Actions](/how-to-guides/scanning/scan-with-github-actions) — Integrate DevGuard scanning into GitHub Actions workflows.
+- [Scan with GitLab CI](/how-to-guides/scanning/scan-with-gitlab-ci) — Integrate DevGuard scanning into GitLab CI/CD pipelines.
+- [Scheduled Scans](/how-to-guides/scanning/scheduled-scans) — Configure automated, scheduled security scans.
+- [Upload SBOM](/how-to-guides/scanning/upload-sbom) — Upload Software Bill of Materials (SBOM) files to DevGuard.
+- [Upload VEX](/how-to-guides/scanning/upload-vex) — Upload Vulnerability Exploitability eXchange (VEX) documents.
+
+## Risk Mitigation
+
+Address and mitigate security risks effectively:
+
+- [Container Scanning](/how-to-guides/risk-mitigation-guides/container-scanning) — Scan and secure container images.
+- [Infrastructure as Code (IaC)](/how-to-guides/risk-mitigation-guides/iac) — Scan IaC files for security misconfigurations.
+- [SAST (Static Application Security Testing)](/how-to-guides/risk-mitigation-guides/sast) — Perform static analysis to find security vulnerabilities.
+- [Secret Scanning](/how-to-guides/risk-mitigation-guides/secret-scanning) — Detect and manage exposed secrets in your code.
+- [Software Composition Analysis](/how-to-guides/risk-mitigation-guides/software-composition-analysis) — Analyze third-party dependencies and open source components.
+- [Risk Mitigation Strategies](/how-to-guides/risk-mitigation-guides/risk-mitigation-guides) — Learn effective strategies for mitigating security risks.
+
+## Vulnerability Management
+
+Manage and track vulnerabilities across your software supply chain:
+
+- [CSAF (Common Security Advisory Framework)](/how-to-guides/vulnerability-management/csaf-common-security-advisory-framework) — Work with CSAF security advisories.
+- [Sync External Data](/how-to-guides/vulnerability-management/sync-external-data) — Synchronize vulnerability data from external sources.
+
+## Supply Chain Security
+
+Protect your development environment from supply chain attacks:
+
+- [Dependency Proxy with Malicious Package Firewall](/how-to-guides/dependency-proxy) — Block malicious packages using the built-in dependency proxy for npm, PyPI, and Go modules.
+
+## Administration
+
+Learn how to deploy, configure, and maintain your DevGuard instance:
+
+- [Deploy with Docker](/how-to-guides/administration/deploy-with-docker) — Deploy DevGuard using Docker containers.
+- [Deploy with Helm](/how-to-guides/administration/deploy-with-helm) — Deploy DevGuard on Kubernetes using Helm charts.
+- [Upgrade DevGuard](/how-to-guides/administration/upgrade-devguard) — Upgrade your DevGuard instance to the latest version.
+- [Backup & Restore](/how-to-guides/administration/backup-restore) — Back up and restore your DevGuard data and configuration.
+- [Database Maintenance](/how-to-guides/administration/database-maintenance) — Maintain and optimize your DevGuard database.
+- [Monitoring & Metrics](/how-to-guides/administration/monitoring-metrics) — Monitor your DevGuard instance and track key metrics.
+- [Customize UI](/how-to-guides/administration/customize-ui) — Customize the DevGuard user interface for your organization.
+- [Restricting Access](/how-to-guides/administration/restricting-access) — Configure access control and permissions.
+
+## Integration Setup
+
+Connect DevGuard with your development platforms:
+
+- [Setup GitHub Integration](/how-to-guides/setup-github-integration) — Integrate DevGuard with GitHub for seamless security scanning.
+- [Setup GitLab Integration](/how-to-guides/setup-gitlab-integration) — Integrate DevGuard with GitLab for automated security workflows.
+
+## Maintenance
+
+- [Uninstalling DevGuard](/how-to-guides/uninstalling-devguard) — Remove DevGuard from your system and explore alternative tools.

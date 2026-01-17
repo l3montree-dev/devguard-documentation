@@ -1,10 +1,37 @@
 ---
 title: Scheduled Scans
-description: Automate continuous security scanning with CI/CD
+description: Automate continuous security scanning and vulnerability updates with scheduled daemon tasks
 ---
 
-import { Tabs, Callout } from 'nextra/components'
+import { Callout } from 'nextra/components'
 
 # Scheduled Scans
 
-Docs are coming soon!
+DevGuard provides automatic scheduled scanning even when no code changes occur. The platform continuously rescans your repositories and updates vulnerability information throughout the day to detect new findings.
+
+## What the Scheduled Scans Do
+
+DevGuard's daemon system ensures that all repositories and assets are automatically rescanned on a regular schedule to detect new vulnerabilities as they emerge.
+
+**The automated scanning pipeline processes each asset through the following steps:**
+
+1. **Fetch Asset Details**: Retrieves the latest repository information and metadata
+2. **Delete Old Asset Versions**: Removes outdated asset versions to maintain data integrity
+3. **Scan Assets**: Performs comprehensive security scans on all components and dependencies
+4. **Sync Upstream**: Downloads the latest vulnerability data from external security databases
+5. **Auto-Reopen Tickets**: Automatically reopens previously resolved tickets when new CVEs affect existing components
+6. **Recalculate Risk**: Updates risk scores and assessments based on the latest vulnerability data
+7. **Sync Tickets**: Synchronizes findings with your configured issue tracking systems
+8. **Collect Statistics**: Updates project metrics, dashboards, and compliance reports
+
+
+<Callout type="info">
+  **Fully Automated**: The entire asset scanning pipeline runs automatically. No manual intervention is required to keep your repositories secure.
+</Callout>
+
+<Callout type="info">
+  **Real-time Updates**: DevGuard updates its vulnerability database multiple times per day with the latest CVE and vulnerability information from upstream sources. This ensures that previously clean code can be flagged immediately when new vulnerabilities are discovered.
+</Callout>
+
+
+

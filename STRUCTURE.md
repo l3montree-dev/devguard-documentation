@@ -308,7 +308,7 @@
 **Goal**: Understand why and how things work
 
 ```
-/explanation/
+/explanations/
 ├── index.mdx                             # Explanation overview
 │
 ├── core-concepts/
@@ -318,7 +318,7 @@
 │   ├── artifacts.mdx                     # Artifact concept
 │   ├── vulnerability-types.mdx           # Dependency vs. first-party
 │   ├── risk-scoring.mdx                  # Risk calculation
-│   └── sbom-vex-relationship.mdx         # SBOM vs VEX
+│   └── open-standards.mdx	          # Open Standards
 │
 ├── architecture/
 │   ├── system-overview.mdx               # High-level architecture (DIAGRAM)
@@ -343,7 +343,7 @@
 │   ├── transitive-dependencies.mdx       # Direct vs transitive
 │   ├── version-matching.mdx              # Semver matching
 │   └── package-ecosystems.mdx            # npm, PyPI, Go, Maven, etc.
-│
+│  
 ├── license-management/
 │   ├── license-detection.mdx             # How licenses are detected
 │   ├── license-compatibility.mdx         # OSI licenses

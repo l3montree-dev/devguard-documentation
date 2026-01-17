@@ -1,0 +1,599 @@
+/* Swagger UI Custom Styles for devguard Documentation */
+
+/* Hide the built-in Authorize button - we use custom PAT dialog */
+.swagger-ui .auth-wrapper,
+.swagger-ui .authorization__btn {
+    display: none !important;
+}
+
+/* Hide padlock icons - authentication is handled by custom PAT dialog */
+.swagger-ui .opblock-summary .opblock-summary-control svg[aria-label] {
+    display: none !important;
+}
+
+.swagger-ui .opblock.opblock-get .tab-header .tab-item.active h4 span:after {
+    background: hsl(var(--primary)) !important;
+}
+
+
+/* Reset Swagger UI to work with dark theme */
+.swagger-ui {
+    h4 {
+        @apply text-foreground font-sans font-semibold;
+    }
+    @apply text-foreground;
+    font-family: var(--font-inter), Inter, sans-serif;
+
+    .json-schema-2020-12__title {
+        @apply text-foreground text-base font-semibold font-sans;
+    }
+
+    .model-box-control:focus,
+    .models-control:focus,
+    .opblock-summary-control:focus {
+        outline: none !important;
+    }
+
+    .opblock.opblock-post .tab-header .tab-item.active h4 span:after,
+    .opblock.opblock-delete .tab-header .tab-item.active h4 span:after,
+    .opblock.opblock-put .tab-header .tab-item.active h4 span:after,
+    .opblock.opblock-patch .tab-header .tab-item.active h4 span:after,
+    .opblock.opblock-get .tab-header .tab-item.active h4 span:after {
+        @apply bg-primary;
+    }
+
+    /* Fix wrapper background */
+    .wrapper {
+        @apply p-0;
+    }
+
+    .tab li {
+        @apply text-muted-foreground text-sm font-sans;
+    }
+
+    .tab {
+        @apply mb-2;
+    }
+
+    .opblock-description-wrapper p,
+    .opblock-external-docs-wrapper p,
+    .opblock-title_normal p {
+        @apply text-foreground text-sm font-sans;
+    }
+
+    .parameter__name.required:after {
+        @apply text-destructive text-base top-0;
+        content: ' *';
+    }
+
+    .json-schema-2020-12__attribute.json-schema-2020-12__attribute--primary {
+        @apply text-primary font-semibold font-sans;
+    }
+
+    .models .json-schema-2020-12 {
+        .json-schema-2020-12-expand-deep-button {
+            @apply text-muted-foreground font-semibold font-sans;
+        }
+
+
+        .json-schema-2020-12__title {
+            @apply text-foreground text-base font-semibold font-sans;
+        }
+    }
+
+    .opblock-control-arrow {
+        svg {
+            position: relative;
+            left: 4px;
+        }
+
+        path {
+            fill: hsl(var(--muted-foreground)) !important;
+            scale: 0.7;
+        }
+    }
+
+    .computed-url {
+        @apply text-foreground;
+
+        code {
+            @apply bg-input text-sm rounded-md;
+        }
+    }
+
+    /* Information section */
+    .info {
+        @apply my-5 hidden;
+    }
+
+    .info .title {
+        font-family: var(--font-lexend), Lexend, sans-serif !important;
+        @apply font-bold text-3xl text-foreground
+    }
+
+    .info .description p,
+    .info .description div {
+        @apply text-foreground text-base leading-7 font-sans
+    }
+
+    /* Operation blocks */
+    /* Shared card-like styling for opblocks, model boxes and scheme container */
+
+    .opblock,
+    .opblock.opblock-get,
+    .opblock.opblock-post,
+    .opblock.opblock-put,
+    .opblock.opblock-patch,
+    .opblock.opblock-delete,
+    .model-box,
+    .scheme-container,
+    .topbar {
+        background: hsl(var(--card)) !important;
+        border: 1px solid hsl(var(--border)) !important;
+        @apply rounded-md;
+        box-shadow: none !important;
+    }
+
+    table thead tr td,
+    table thead tr th {
+        background: hsl(var(--background)) !important;
+    }
+
+    .opblock .opblock-section-header h4 {
+        @apply text-foreground font-semibold;
+    }
+
+    .response-col_links {
+        @apply text-foreground;
+    }
+
+    .response-control-media-type__accept-message {
+        @apply text-foreground;
+    }
+
+    .opblock-description-wrapper p,
+    .opblock-external-docs-wrapper p,
+    .opblock-title_normal p {
+        @apply text-foreground text-sm;
+    }
+
+    .opblock-summary-path-description-wrapper {
+        @apply mt-0.5
+    }
+
+    .opblock .opblock-summary .opblock-summary-control {}
+
+    .authorization__btn path {
+        fill: hsl(var(--muted-foreground)) !important;
+    }
+
+    .opblock {
+        /* keep opblock-specific spacing */
+        @apply mb-4;
+    }
+
+    .opblock .opblock-summary {
+        border-color: hsl(var(--border)) !important;
+        background: transparent !important;
+    }
+
+    .opblock-tag {
+        @apply py-2.5 mt-5 mb-2.5;
+        color: hsl(var(--foreground)) !important;
+        font-family: var(--font-lexend), Lexend, sans-serif !important;
+        border-bottom: none !important;
+
+        a.nostyle {
+            color: white !important;
+            @apply text-2xl font-semibold text-foreground;
+        }
+    }
+
+    .opblock .opblock-summary-method {
+        @apply rounded-md font-semibold text-center w-20;
+    }
+
+    .opblock {
+        .opblock-section-header {
+            @apply bg-card text-foreground;
+
+            .opblock-title {
+                color: hsl(var(--foreground)) !important;
+            }
+        }
+    }
+
+    .json-schema-2020-12-accordion {
+        position: relative;
+        right: 4px;
+
+        .json-schema-2020-12-accordion__icon {
+            svg {
+
+                path {
+                    fill: hsl(var(--muted-foreground)) !important;
+                }
+            }
+        }
+    }
+    .json-schema-2020-12-keyword__name--primary,
+    .json-schema-2020-12-keyword--enum .json-schema-2020-12-json-viewer__name,
+    .json-schema-2020-12-keyword--enum .json-schema-2020-12-json-viewer__value,
+    .json-schema-2020-12-keyword--examples .json-schema-2020-12-json-viewer__name,
+    .json-schema-2020-12-keyword--examples .json-schema-2020-12-json-viewer__value {
+        @apply text-muted-foreground;
+
+    }
+
+    .json-schema-2020-12-keyword--enum .json-schema-2020-12-accordion__icon {
+        position: relative;
+        bottom: 0px !important;
+    }
+
+
+
+    .models {
+        .json-schema-2020-12-accordion {
+            .json-schema-2020-12-accordion__icon {
+                position: relative;
+                bottom: 4px;
+            }
+        }
+    }
+
+    /* GET method */
+    .opblock.opblock-get .opblock-summary-method {
+        background: hsl(168 100% 41%) !important;
+        color: hsl(var(--background)) !important;
+    }
+
+    /* POST method */
+    .opblock.opblock-post .opblock-summary-method {
+        background: hsl(204 86% 53%) !important;
+        color: hsl(var(--background)) !important;
+    }
+
+    /* PUT method */
+    .opblock.opblock-put .opblock-summary-method {
+        background: hsl(43 74% 66%) !important;
+        color: hsl(var(--background)) !important;
+    }
+
+    /* PATCH method */
+    .opblock.opblock-patch .opblock-summary-method {
+        background: hsl(27 87% 67%) !important;
+        color: hsl(var(--background)) !important;
+    }
+
+    /* DELETE method */
+    .opblock.opblock-delete .opblock-summary-method {
+        background: hsl(0 84.2% 60.2%) !important;
+    }
+
+    .opblock {
+
+        /* Summary text */
+        .opblock-summary-description,
+        .opblock-summary-path {
+            @apply text-sm text-muted-foreground font-sans;
+        }
+    }
+
+
+    .opblock-summary-path {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+    }
+
+    /* Expanded operation body */
+    .opblock-body {
+        background: transparent !important;
+    }
+
+    .opblock-description-wrapper,
+    .opblock-external-docs-wrapper,
+    .opblock-title_normal {
+        color: hsl(var(--foreground)) !important;
+    }
+
+    /* Parameters */
+    .parameters-col_description {
+        color: hsl(var(--foreground)) !important;
+        @apply text-sm;
+    }
+
+    .parameter__name,
+    .parameter__type {
+        @apply font-semibold
+    }
+
+    .parameter__name {
+        color: hsl(var(--foreground)) !important;
+    }
+
+
+
+    .json-schema-2020-12-expand-deep-button {
+        @apply text-muted-foreground font-semibold font-sans;
+    }
+
+    .json-schema-2020-12-property .json-schema-2020-12__title {
+        @apply text-foreground text-sm font-semibold font-sans;
+    }
+
+    .parameter__type {
+        color: hsl(var(--muted-foreground)) !important;
+    }
+
+    .parameter__in {
+        color: hsl(var(--muted-foreground)) !important;
+        font-style: italic !important;
+    }
+
+    table thead tr th,
+    table thead tr td {
+        color: hsl(var(--foreground)) !important;
+        border-bottom: 1px solid hsl(var(--border)) !important;
+        @apply text-sm;
+    }
+
+    .parameters thead {
+        background: transparent !important;
+    }
+
+    /* Response section */
+    .responses-inner {
+        background: transparent !important;
+    }
+
+    .responses-wrapper .btn {
+        background: hsl(var(--secondary)) !important;
+        color: hsl(var(--secondary-foreground)) !important;
+        border-color: hsl(var(--border)) !important;
+    }
+
+    .response-col_status {
+        color: hsl(var(--foreground)) !important;
+    }
+
+    .response-col_description {
+        color: hsl(var(--foreground)) !important;
+    }
+
+    /* Code blocks */
+    pre.microlight,
+    .highlight-code {
+        background: hsl(var(--muted)) !important;
+        border: 1px solid hsl(var(--border)) !important;
+        @apply rounded-md;
+        color: hsl(var(--foreground)) !important;
+    }
+
+    .response code,
+    .response pre {
+        color: hsl(var(--foreground)) !important;
+    }
+
+    /* Models section */
+    .model-container,
+    section.models {
+        background: transparent !important;
+    }
+
+    .model-box,
+    section.models .model-container {
+        @apply rounded-md;
+    }
+
+    .model-title,
+    section.models h4 {
+        color: hsl(var(--foreground)) !important;
+        border-bottom: 1px solid hsl(var(--border)) !important;
+        @apply pb-2;
+    }
+
+    .model .property {
+        color: hsl(var(--foreground)) !important;
+    }
+
+    .model .property.primitive {
+        color: hsl(var(--muted-foreground)) !important;
+    }
+
+    /* Authorization */
+    .btn.authorize {
+        background: hsl(var(--primary)) !important;
+        color: hsl(var(--primary-foreground)) !important;
+        border-color: hsl(var(--primary)) !important;
+    }
+
+    .btn.authorize svg {
+        fill: hsl(var(--primary-foreground)) !important;
+    }
+
+    .scheme-container {
+        box-shadow: none !important;
+        @apply rounded-md text-foreground p-4;
+
+        .servers-title {
+            @apply font-semibold text-base mb-1 block;
+        }
+
+        .servers table tbody tr td:nth-child(1) {
+            text-transform: capitalize;
+        }
+    }
+
+    /* Input fields */
+    input[type=text],
+    input[type=password],
+    input[type=email],
+    textarea,
+    select {
+        background: hsl(var(--input)) !important;
+        color: hsl(var(--foreground)) !important;
+        border: 1px solid hsl(var(--border)) !important;
+        @apply rounded-md;
+    }
+
+    input[type=text]:focus,
+    input[type=password]:focus,
+    input[type=email]:focus,
+    textarea:focus,
+    select:focus {
+        border-color: hsl(var(--ring)) !important;
+        outline: none !important;
+        box-shadow: 0 0 0 1px hsl(var(--ring)) !important;
+    }
+
+    /* Buttons */
+    .btn {
+        background: hsl(var(--primary)) !important;
+        color: hsl(var(--primary-foreground)) !important;
+        border-color: hsl(var(--primary)) !important;
+        box-shadow: none !important;
+        font-weight: 600 !important;
+        @apply rounded-md font-semibold;
+    }
+
+    .btn:hover {
+        opacity: 0.9 !important;
+    }
+
+    .btn-clear {
+        background: hsl(var(--secondary)) !important;
+        color: hsl(var(--secondary-foreground)) !important;
+        border-color: hsl(var(--border)) !important;
+    }
+
+    .btn.execute {
+        background: hsl(var(--primary)) !important;
+        color: hsl(var(--primary-foreground)) !important;
+    }
+
+    /* Try it out section */
+    .try-out__btn {
+        background: hsl(var(--secondary)) !important;
+        color: hsl(var(--secondary-foreground)) !important;
+        border: 1px solid hsl(var(--border)) !important;
+    }
+
+    /* Schema model */
+    .model {
+        color: hsl(var(--foreground)) !important;
+    }
+
+    .model-toggle {
+        color: hsl(var(--primary)) !important;
+    }
+
+    /* Links */
+    .info a,
+    a {
+        color: hsl(var(--nextra-primary-hue) var(--nextra-primary-saturation) calc(var(--nextra-primary-lightness) + 0%) / var(--tw-text-opacity, 1)) !important;
+        @apply text-base
+    }
+
+    .info hgroup.main a {
+        @apply text-sm
+    }
+
+    a.nostyle {
+        color: rgba(255, 255, 255, 1) !important;
+    }
+
+    a:hover {
+        @apply underline;
+        color: hsl(var(--nextra-primary-hue) var(--nextra-primary-saturation) calc(var(--nextra-primary-lightness) + 0%) / var(--tw-text-opacity, 1)) !important;
+    }
+
+    /* Tab navigation */
+    .tab li {
+        color: hsl(var(--muted-foreground)) !important;
+    }
+
+    .tab li.active {
+        color: hsl(var(--foreground)) !important;
+    }
+
+    /* Topbar (if shown) */
+    .topbar {
+        background: hsl(var(--card)) !important;
+        border-bottom: 1px solid hsl(var(--border)) !important;
+    }
+
+    /* Loading animation */
+    .loading-container .loading:before {
+        border-color: hsl(var(--muted-foreground)) !important;
+    }
+
+    .loading-container .loading:after {
+        border-top-color: hsl(var(--primary)) !important;
+    }
+
+    /* Server selection */
+    select {
+        background: hsl(var(--input)) !important;
+        color: hsl(var(--foreground)) !important;
+        border: 1px solid hsl(var(--border)) !important;
+    }
+
+    label {
+        color: hsl(var(--foreground)) !important;
+    }
+
+    /* Security definitions display */
+    .info .title small {
+        background: hsl(var(--muted)) !important;
+        color: hsl(var(--muted-foreground)) !important;
+        @apply rounded-md px-1.5 py-0;
+    }
+
+    /* JSON schema properties */
+    .prop-type {
+        color: hsl(var(--blue)) !important;
+    }
+
+    .prop-format {
+        color: hsl(var(--muted-foreground)) !important;
+    }
+
+    /* Markdown rendered content */
+    .markdown p,
+    .markdown pre,
+    .markdown code {
+        color: hsl(var(--foreground)) !important;
+    }
+
+    .markdown code {
+        background: hsl(var(--muted)) !important;
+        padding: 2px 6px !important;
+        @apply px-1.5 py-0.5;
+        border-radius: calc(var(--radius) - 2px) !important;
+    }
+
+    /* Error messages */
+    .errors-wrapper {
+        background: hsl(var(--destructive) / 0.1) !important;
+        border: 1px solid hsl(var(--destructive) / 0.3) !important;
+        color: hsl(var(--destructive)) !important;
+        @apply rounded-md;
+    }
+
+    /* Success messages */
+    .response.success {
+        border-color: hsl(168 100% 41% / 0.3) !important;
+        background: hsl(168 100% 41% / 0.05) !important;
+    }
+
+    /* Copy button */
+    .copy-to-clipboard {
+        background: hsl(var(--secondary)) !important;
+        color: hsl(var(--secondary-foreground)) !important;
+        border: 1px solid hsl(var(--border)) !important;
+    }
+
+    .copy-to-clipboard button {
+        background: transparent !important;
+        color: hsl(var(--secondary-foreground)) !important;
+    }
+}

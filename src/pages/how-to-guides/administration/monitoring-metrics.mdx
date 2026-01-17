@@ -1,0 +1,32 @@
+# Monitoring & Metrics
+
+DevGuard exposes Prometheus metrics and health endpoints for monitoring.
+
+## Health Endpoints
+
+| Endpoint | Service | Description |
+|----------|---------|-------------|
+| `/api/v1/health` | API | API health status |
+| `/api/health` | Web | Frontend health status |
+
+## Metrics Endpoint
+
+The DevGuard API exposes Prometheus metrics at `/api/v1/metrics` (port 8080).
+
+```bash
+curl http://devguard-api:8080/api/v1/metrics
+```
+
+## Example Metrics
+
+DevGuard exposes various metrics. Here are some examples:
+
+| Metric | Type | Description |
+|--------|------|-------------|
+| `devguard_dependency_vuln_scan_duration_minutes` | Histogram | Duration of SCA scans |
+| `devguard_first_party_scan_duration_minutes` | Histogram | Duration of SAST scans |
+| `devguard_daemon_vulndb_update_duration_minutes` | Histogram | VulnDB update duration |
+| `devguard_daemon_statistics_update_duration_minutes` | Histogram | Statistics calculation duration |
+| `devguard_upstream_sync_duration_minutes` | Histogram | Upstream repository sync duration |
+| `devguard_ticket_created_amount` | Counter | Total tickets created |
+| `devguard_ticket_closed_amount` | Counter | Total tickets closed |

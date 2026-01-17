@@ -1,16 +1,13 @@
 export default {
     index: { title: 'Overview' },
     scanning: { title: 'Scanning' },
+    'risk-mitigation-guides': { title: 'Risk Mitigation Guides' },
+    'vulnerability-management': { title: 'Vulnerability Management' },
+    administration: { title: 'Administration' },
     'dependency-proxy': {
         title: 'Dependency Proxy with Malicious Package Firewall',
     },
-    'container-hardening': {
-        title: 'Container Hardening Guide',
-    },
-    'risk-mitigation-guides': { title: 'Risk Mitigation Guides' },
-    'vulnerability-management': { title: 'Vulnerability Management' },
-    'dependency-management': { title: 'Dependency Management' },
-    'compliance': { title: 'Compliance Management' },
-
-
+    'setup-gitlab-integration': { title: 'Setup GitLab Integration' },
+    'setup-github-integration': { title: 'Setup GitHub Integration' },
+    'uninstalling-devguard': { title: 'Uninstalling DevGuard' },
 }

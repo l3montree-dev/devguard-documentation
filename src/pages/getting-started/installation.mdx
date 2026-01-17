@@ -16,9 +16,9 @@ import { Tabs } from 'nextra/components'
 # Installation Guide
 
 This guide covers installing all DevGuard components:
-- **DevGuard Scanner** - CLI tool for security scanning
-- **DevGuard CLI** - Management tool for advanced operations
-- **DevGuard Platform** - Backend API and web UI (self-hosted)
+- **[DevGuard Scanner](#devguard-scanner)** - CLI tool for security scanning
+- **[DevGuard CLI](#devguard-cli)** - Management tool for advanced operations
+- **[DevGuard Platform](#devguard-platform-self-hosted)** - Backend API and web UI (self-hosted)
 
 ## DevGuard Scanner
 
@@ -27,9 +27,7 @@ The scanner is the primary tool for running security scans. It's a standalone bi
 ### System Requirements
 
 - **OS**: Linux (x86_64, arm64), macOS (Intel, Apple Silicon), Windows (x86_64)
-- **Memory**: Minimum 512MB RAM, recommended 2GB+
-- **Disk**: 100MB for scanner, additional space for vulnerability databases
-- **Network**: Internet access for vulnerability lookups (or offline mode with local DB)
+- **Network**: Access to your used DevGuard Instance
 
 ### Installation Methods
 
@@ -204,419 +202,31 @@ The platform provides centralized vulnerability management, web UI, and API.
 
 ### Prerequisites
 
-- Docker & Docker Compose
-- PostgreSQL 14+ (or use provided Docker Compose)
-- 2GB+ RAM
-- 10GB+ disk space
-
-### Quick Start with Docker Compose
-
-<Steps>
-
-### Step 1: Download Configuration
-
-```bash
-# Download docker-compose.yaml
-curl -O https://raw.githubusercontent.com/l3montree-dev/devguard/main/docker-compose.yaml
-
-# Download environment template
-curl -O https://raw.githubusercontent.com/l3montree-dev/devguard/main/.env.example
-mv .env.example .env
-```
-
-### Step 2: Configure Environment
-
-Edit `.env` file:
-
-```bash
-# Database
-POSTGRES_PASSWORD=changeme_secure_password
-
-# DevGuard API
-DEVGUARD_SECRET_KEY=generate_random_32_chars_here
-DEVGUARD_ADMIN_EMAIL=admin@example.com
-DEVGUARD_ADMIN_PASSWORD=changeme_admin_password
-
-# Public URL (for production)
-DEVGUARD_PUBLIC_URL=https://devguard.example.com
-
-# OAuth (optional)
-GITHUB_CLIENT_ID=your_github_oauth_id
-GITHUB_CLIENT_SECRET=your_github_oauth_secret
-```
-
-<Callout type="warning">
-  **Security:** Change all default passwords and generate a secure secret key:
-  ```bash
-  # Generate secret key
-  openssl rand -hex 32
-  ```
-</Callout>
-
-### Step 3: Start Services
-
-```bash
-# Start all services
-docker-compose up -d
-
-# Check status
-docker-compose ps
-
-# View logs
-docker-compose logs -f devguard
-```
-
-### Step 4: Access Platform
-
-- **Web UI:** http://localhost:3000
-- **API:** http://localhost:8080
-- **Health:** http://localhost:8080/health
-
-**Default credentials:**
-- Email: From `DEVGUARD_ADMIN_EMAIL`
-- Password: From `DEVGUARD_ADMIN_PASSWORD`
-
-<Callout type="info">
-  **First login:** You'll be prompted to change your password.
-</Callout>
-
-### Step 5: Create Organization & Project
-
-```bash
-# Using the API
-curl -X POST http://localhost:8080/api/v1/organizations \
-  -H "Authorization: Bearer YOUR_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "My Organization",
-    "slug": "my-org"
-  }'
-
-# Create project
-curl -X POST http://localhost:8080/api/v1/organizations/my-org/projects \
-  -H "Authorization: Bearer YOUR_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "My Project",
-    "slug": "my-project"
-  }'
-```
-
-Or use the web UI to create organizations and projects interactively.
-
-</Steps>
-
-### Production Deployment
-
-For production, additional configuration is recommended:
-
-```yaml
-# docker-compose.prod.yaml
-services:
-  devguard:
-    image: ghcr.io/l3montree-dev/devguard:latest
-    restart: always
-    environment:
-      - DEVGUARD_PUBLIC_URL=https://devguard.example.com
-      - DEVGUARD_SECURE_COOKIES=true
-    labels:
-      # Traefik labels for HTTPS
-      - "traefik.enable=true"
-      - "traefik.http.routers.devguard.rule=Host(`devguard.example.com`)"
-      - "traefik.http.routers.devguard.tls.certresolver=letsencrypt"
-  
-  postgres:
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-  
-  # Add reverse proxy
-  traefik:
-    image: traefik:v2.10
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./traefik.yaml:/traefik.yaml
-      - ./acme.json:/acme.json
-
-volumes:
-  postgres_data:
-```
-
-See [Production Deployment Guide](/how-to/production-deployment) for complete configuration.
-
----
-
-## Kubernetes Deployment
-
-For Kubernetes environments, use Helm:
-
-```bash
-# Add Helm repository
-helm repo add devguard https://charts.devguard.org
-helm repo update
-
-# Install with default values
-helm install devguard devguard/devguard
-
-# Or with custom values
-helm install devguard devguard/devguard -f values.yaml
-```
-
-**Example values.yaml:**
-```yaml
-ingress:
-  enabled: true
-  hostname: devguard.example.com
-  tls: true
-
-postgresql:
-  enabled: true
-  auth:
-    password: changeme
-
-resources:
-  limits:
-    memory: 2Gi
-    cpu: 1000m
-  requests:
-    memory: 512Mi
-    cpu: 250m
-```
-
-[Full Kubernetes deployment guide →](/how-to/kubernetes-deployment)
-
----
-
-## Verify Installation
-
-### Scanner Verification
-
-```bash
-# Check version
-devguard-scanner --version
-
-# Run test scan
-devguard-scanner sca --help
-
-# Test with demo project
-git clone https://github.com/l3montree-dev/devguard-demo
-cd devguard-demo
-devguard-scanner sca
-```
-
-### Platform Verification
-
-```bash
-# Check health endpoint
-curl http://localhost:8080/health
-
-# Expected response
-{
-  "status": "healthy",
-  "version": "1.0.0",
-  "database": "connected"
-}
-
-# Test authentication
-curl -X POST http://localhost:8080/api/v1/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "admin@example.com",
-    "password": "your_password"
-  }'
-```
-
----
-
-## Configuration
-
-### Scanner Configuration
-
-Create `~/.devguard/config.yaml`:
-
-```yaml
-# API connection
-api:
-  url: https://api.devguard.org
-  token: ${DEVGUARD_TOKEN}
-
-# Default settings
-scanner:
-  upload: true
-  fail-on:
-    critical: true
-    high: false
-  
-# Exclusions
-exclude:
-  paths:
-    - node_modules
-    - vendor
-    - .git
-```
-
-### Environment Variables
-
-```bash
-# Scanner
-export DEVGUARD_TOKEN="your_api_token"
-export DEVGUARD_API_URL="https://api.devguard.org"
-export DEVGUARD_ASSET_NAME="my-project"
-
-# CLI
-export DEVGUARD_ORG="my-org"
-export DEVGUARD_PROJECT="my-project"
-```
-
----
-
-## Update & Upgrade
-
-### Scanner Updates
-
-<Tabs items={['Go Install', 'Docker', 'Binary']}>
-  <Tabs.Tab>
-    ```bash
-    # Update to latest version
-    go install github.com/l3montree-dev/devguard/cmd/devguard-scanner@latest
-    ```
-  </Tabs.Tab>
-
-  <Tabs.Tab>
-    ```bash
-    # Pull latest image
-    docker pull ghcr.io/l3montree-dev/devguard-scanner:latest
-    ```
-  </Tabs.Tab>
-
-  <Tabs.Tab>
-    ```bash
-    # Download and replace binary from releases
-    # https://github.com/l3montree-dev/devguard/releases/latest
-    ```
-  </Tabs.Tab>
+- A Kuberntes Cluster or Docker and Docker Compose
+- About 2GB+ RAM
+- About 20GB+ disk space
+
+### Deployment Options
+
+<Tabs items={['Kubernetes', 'Docker Compose']}>
+<Tabs.Tab>
+See the [Helm Deployment Guide](/how-to-guides/administration/deploy-with-helm) for Kubernetes installation instructions.
+</Tabs.Tab>
+<Tabs.Tab>
+See the [Docker Compose Deployment Guide](/how-to-guides/administration/deploy-with-docker) for Docker installation instructions.
+</Tabs.Tab>
 </Tabs>
 
-### Platform Updates
-
-```bash
-# Pull latest images
-docker-compose pull
-
-# Restart services
-docker-compose up -d
-
-# Check for migrations
-docker-compose logs devguard | grep migration
-```
-
----
-
-## Uninstall
-
-### Remove Scanner
-
-<Tabs items={['Go Install', 'Binary', 'Config Files']}>
-  <Tabs.Tab>
-    ```bash
-    # Remove from Go bin directory
-    rm $(go env GOPATH)/bin/devguard-scanner
-    ```
-  </Tabs.Tab>
-
-  <Tabs.Tab>
-    ```bash
-    # Remove binary (Linux/macOS)
-    sudo rm /usr/local/bin/devguard-scanner
-    
-    # Windows
-    # Delete devguard-scanner.exe from installation location
-    ```
-  </Tabs.Tab>
-
-  <Tabs.Tab>
-    ```bash
-    # Remove configuration files
-    rm -rf ~/.devguard
-    ```
-  </Tabs.Tab>
-</Tabs>
-
-### Remove Platform
-
-```bash
-# Stop and remove containers
-docker-compose down
-
-# Remove volumes (WARNING: deletes all data)
-docker-compose down -v
-
-# Remove configuration
-rm docker-compose.yaml .env
-```
-
----
-
-## Troubleshooting
-
-### Installation Issues
-
-**Problem: `go install` command not found**
-```bash
-# Install Go first
-# Visit https://go.dev/doc/install
-
-# Or on macOS
-brew install go
-
-# On Linux (example for Ubuntu)
-sudo apt install golang-go
-```
-
-**Problem: Binary not in PATH after go install**
-```bash
-# Add Go bin to PATH
-export PATH="$PATH:$(go env GOPATH)/bin"
-
-# Make permanent by adding to ~/.bashrc or ~/.zshrc
-echo 'export PATH="$PATH:$(go env GOPATH)/bin"' >> ~/.bashrc
-```
-
-**Problem: Docker permission denied**
-```bash
-# Add user to docker group (Linux)
-sudo usermod -aG docker $USER
-newgrp docker
-```
-
-**Problem: Platform won't start**
-```bash
-# Check logs
-docker-compose logs devguard
-
-# Common issues:
-# 1. Database not ready - wait 30 seconds and retry
-# 2. Port conflicts - change ports in docker-compose.yaml
-# 3. Missing environment variables - check .env file
-```
-
-[More troubleshooting →](/troubleshooting/installation)
 
 ---
 
 ## Next Steps
 
-- [Quick Start Guide](/getting-started/quickstart) - Run your first scan
-- [Core Concepts](/getting-started/concepts) - Understand DevGuard architecture
-- [CI/CD Integration](/tutorials/cicd-integration) - Automate scanning
-- [Configuration Guide](/how-to/configuration) - Customize behavior
+- [Quick Start Guide](/getting-started) - Run your first scan
+- [Core Concepts](/explanations/core-concepts/what-is-devguard) - Understand DevGuard architecture
 
 ---
 
 <Callout type="default">
-  **Need help?** Join our [community forum](https://github.com/l3montree-dev/devguard/discussions) or check the [troubleshooting guide](/troubleshooting).
+  **Need help?** Join our [discussions](https://github.com/l3montree-dev/devguard/discussions) or check out the [matrix chat](https://matrix.to/#/#devguard:matrix.org).
 </Callout>

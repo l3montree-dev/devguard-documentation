@@ -8,12 +8,12 @@ interface InfoNoticeProps {
 
 export default function InfoNotice(props: InfoNoticeProps) {
     return (
-        <div className="mt-10 rounded-md bg-blue-50 p-4">
+        <div className="mt-10 rounded-md bg-blue-100 p-4">
             <div className="flex">
                 <div className="flex-shrink-0">
                     <InformationCircleIcon
                         aria-hidden="true"
-                        className="h-5 w-5 text-blue-400"
+                        className="h-5 w-5 text-blue-500"
                     />
                 </div>
                 <div className="ml-3 flex-1 md:flex md:justify-between">
