@@ -24,30 +24,24 @@ Before you begin, ensure you have:
 Attestation policies are:
 
 - **Compliance-as-code** - Policies written in Rego language
-- **Automated evaluation** - Applied to every build/scan
 - **Framework-mapped** - Link to ISO 27001, CRA, SLSA, etc.
 - **Reusable** - Share across organization and projects
 - **Auditable** - Track evaluation results over time
 
 <Callout type="info">
-  Attestation policies use the Rego policy language. They evaluate attestations (SBOM, VEX, in-toto, etc.) generated during your CI/CD process to determine compliance.
+  Attestation policies use the Rego policy language. They evaluate metadata from attestations (SBOM, VEX, in-toto, etc.) during your CI/CD process to determine compliance.
+
 </Callout>
 
+
 ## View Compliance Dashboards
-
-Monitor compliance control evaluations and policy violations at all levels.
-
 ### Organization-Level Compliance View
-
-Access the organization-wide compliance dashboard to see all policies created by your organization:
 
 Navigate to **Organization** → **Compliance**
 
 ![Organization Compliance Dashboard](../../../assets/org-compliance-dashboard.png)
 
 ### Project-Level Compliance View
-
-Track compliance for all repositories within a specific project:
 
 Navigate to **Organization** → **Project** → **Compliance**
 
@@ -69,120 +63,6 @@ Navigate to **Organization** → **Project** → **Repository** → **Compliance
 
 Access policy management at organization level:
 
-### Organization-Level Policy Management
-
-1. Navigate to **Organization** → **Compliance** → **Policies**
-2. View all organization policies
-3. Create new policies
-4. Manage which policies are enabled globally
-
-### Project-Level Policy Configuration
-
-1. Navigate to **Organization** → **Project** → **Compliance**
-2. View policies available for this project
-3. Enable/disable policies per project
-4. Configure policy parameters
-5. See evaluation results
-
-### Repository-Level Policy Results
-
-1. Navigate to **Organization** → **Project** → **Repository** → **Compliance Controls**
-2. See how policies evaluate for this repository
-3. View violations and passing controls
-4. Inspect detailed policy results
-
-## Understand Built-In Policies
-
-DevGuard includes pre-built compliance policies:
-
-<Tabs items={['SBOM Policies', 'Security Scanning', 'Supply Chain', 'License Compliance']}>
-  <Tabs.Tab>
-    **SBOM and Component Policies**
-    
-    - **Current SBOM is present** - Check SBOM not older than 30 days
-    - **Uses CycloneDX format** - SBOM uses standard format
-    - **Components have licenses** - All components declare licenses
-    - **No unknown licenses** - All licenses are identified
-    
-    Maps to: ISO 27001 A.5.7, A.5.9
-  </Tabs.Tab>
-  
-  <Tabs.Tab>
-    **Security Scanning Policies**
-    
-    - **Container scanning executed** - Images scanned for vulnerabilities
-    - **Dependency scanning executed** - Dependencies checked for CVEs
-    - **Source code scanning executed** - Code scanned for secrets/SAST issues
-    - **Secret scanning executed** - No hardcoded secrets detected
-    
-    Maps to: ISO 27001 A.8.8
-  </Tabs.Tab>
-  
-  <Tabs.Tab>
-    **Supply Chain Policies**
-    
-    - **Build provenance recorded** - Build attestation created
-    - **Artifacts signed** - Build outputs cryptographically signed
-    - **Code review required** - Changes reviewed before merge
-    - **Build from signed source** - Built from verified source code
-    
-    Maps to: SLSA Level 3, CRA requirements
-  </Tabs.Tab>
-  
-  <Tabs.Tab>
-    **License Policies**
-    
-    - **Only OSI-approved licenses** - No proprietary/restricted licenses
-    - **No GPL licenses** - Organization doesn't use copyleft
-    - **No dual-licensed components** - Clear license per component
-    - **CIA requirements set** - Asset sensitivity defined
-    
-    Maps to: ISO 27001 A.5.12
-  </Tabs.Tab>
-</Tabs>
-
-## Create Custom Policy
-
-Write custom compliance-as-code policies:
-
-### Policy Structure
-
-Policies are written in Rego (Open Policy Agent language):
-
-```rego
-# METADATA
-# title: No vulnerabilities with exploits
-# description: Fail if any known vulnerability has public exploit
-# tags:
-# - security
-# - vulnerabilities
-# complianceFrameworks:
-# - ISO 27001
-
-package compliance
-
-import rego.v1
-
-default compliant := false
-
-compliant if {
-    # Check all components
-    every component in input.components[_] {
-        # For each component, check vulnerabilities
-        every vuln in component.vulnerabilities[_] {
-            # Fail if exploit is available
-            vuln.exploits_available == false
-        }
-    }
-}
-
-violations contains msg if {
-    input.components[i].vulnerabilities[j].exploits_available
-    msg := sprintf("Component %q has vulnerability with available exploit",
-        [input.components[i].name])
-}
-```
-
 ### Create and Enable Policy
 
 1. Navigate to **Organization** → **Compliance** → **Policies**
@@ -194,176 +74,16 @@ violations contains msg if {
    - **Framework mapping** - Link to ISO 27001, CRA, etc.
    - **Tags** - For organization (security, license, etc.)
 
-4. Click **Test Policy** to validate syntax
-5. Click **Create** to save
-6. Enable for projects that need it
 
-## Enable/Disable Policies
-
-Control which policies apply to which projects:
-
-1. Navigate to **Project** → **Compliance** → **Policies**
-2. View all available organization policies
-3. For each policy:
-   - **Enable** - Apply to this project
-   - **Disable** - Don't check in this project
-   - **Configure** - Set policy parameters
-
-Policies apply immediately to new scans.
-
-## Understanding Compliance Grid
-
-The Compliance Grid provides a visual overview of compliance status:
-
-- Each policy is shown as a square
-- **Green** = Policy passing (all controls pass)
-- **Red** = Policy failing (violations found)
-- **Gray** = Not evaluated (missing attestations)
-- **Hover** to see policy name and summary
-- **Click** to view detailed violation information
+[Create Attestation Policy](https://play.openpolicyagent.org/p/DKToCnw0DL)
 
 ## Inspect Policy Violations
 
 Understand why a policy failed:
 
-1. Click on a failing policy/control
-2. View **Violations** section showing:
-   - Specific violations found
-   - Which resources failed
-   - Detailed error messages
-3. View **Attestation** used in evaluation
-4. Check **Metadata** for policy details
+Navigate to **Organization** → **Compliance** → **Policies**
 
-**Example violation:**
-```
-Policy: No vulnerabilities with exploits
-Violation: Component "log4j2@2.16.0" has vulnerability with available exploit
-Reference: CVE-2021-44228
-Exploit: https://www.exploit-db.com/exploits/50489
-Recommendation: Upgrade to log4j2@2.17.0+
-```
-
-## Policy Evaluation Triggers
-
-Policies are evaluated when:
-
-1. **New scan uploaded** - SBOM, VEX, SARIF uploaded
-2. **Scan completed** - DevGuard finishes scanning
-3. **Attestation received** - CI/CD sends new attestation
-4. **Policy changed** - Policy modified, re-evaluates all assets
-5. **Manual trigger** - You click "Re-evaluate" in UI
-
-## Customize Policy Parameters
-
-Some policies accept parameters:
-
-1. In **Project** → **Compliance** → **Policies**
-2. Click policy you want to configure
-3. Set parameters:
-   - **SBOM max age** - How old SBOMs can be (default 30 days)
-   - **Allowed licenses** - List of acceptable licenses
-   - **Min CVSS score** - Threshold for severity
-   - **Required scanners** - Which scans must run
-
-4. Save configuration
-5. Policy re-evaluates with new parameters
-
-## Policy Compliance Mappings
-
-Policies link to compliance frameworks:
-
-### ISO 27001
-```
-A.5.7 Threat intelligence → Software composition analysis executed
-A.5.9 Inventory of assets → Current SBOM is present
-A.5.12 Classification → CIA requirements set for asset
-A.8.8 Vulnerabilities → Scanning policies executed
-```
-
-### Cyber Resilience Act (CRA)
-```
-Module C2: Build and integration
-Module C3: Supply chain
-Module C4: Delivery
-```
-
-### SLSA Framework
-```
-Level 1: Provenance available
-Level 2: Provenance from build service
-Level 3: Signed provenance
-```
-
-View mappings in policy details.
-
-## Policy Lifecycle Management
-
-Manage policies over time:
-
-### Version Policies
-
-1. Policies have versions
-2. Update policy by creating new version
-3. Existing evaluations keep old version
-4. New scans use latest version
-
-### Deprecate Old Policies
-
-1. Create new improved policy
-2. Mark old policy as deprecated
-3. Disable for new projects
-4. Allow existing projects time to migrate
-5. Archive old policy after transition
-
-### Policy Auditing
-
-1. View policy change history
-2. See who modified policy
-3. Track when policies were enabled/disabled
-4. Audit trail for compliance purposes
-
-## Troubleshooting Policy Issues
-
-### Policy not evaluating
-
-**Symptoms**: Control shows "Cannot evaluate"
-
-**Solutions**:
-1. Check required attestation is present
-2. Verify predicate type matches
-3. Run new scan to generate attestation
-4. Review policy syntax
-
-### Unexpected violations
-
-**Symptoms**: Policy fails when it shouldn't
-
-**Solutions**:
-1. Review violation details carefully
-2. Check policy parameters are correct
-3. Verify test data in policy
-4. Test policy with example attestation
-
-### Policy syntax errors
-
-**Symptoms**: Error when creating/updating policy
-
-**Solutions**:
-1. Use policy editor for syntax highlighting
-2. Run test on sample data
-3. Review Rego language documentation
-4. Contact DevGuard support with policy details
-
-## Best Practices
-
-1. **Start with built-in policies** - Use pre-built policies for common needs
-2. **Map to frameworks** - Always link policies to compliance requirements
-3. **Test thoroughly** - Validate policies before enabling broadly
-4. **Document requirements** - Explain why each policy is needed
-5. **Version policies** - Track policy changes
-6. **Get feedback** - Review policies with security/compliance team
-7. **Iterate** - Adjust policies based on real-world results
-8. **Communicate** - Tell teams about policy changes
+![Policy Violation](../../../assets/policy-violations.png)
 
 ## Next Steps
 
