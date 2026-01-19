@@ -1,0 +1,44 @@
+---
+title: Generate CSAF Reports
+description: Create Common Security Advisory Framework reports for vulnerability disclosure
+---
+
+import { Callout, Tabs } from 'nextra/components'
+
+# Generate CSAF Reports
+
+Generate CSAF (Common Security Advisory Framework) reports to document and distribute vulnerability information in a standardized format.
+
+## Prerequisites
+
+Before you begin, ensure you have:
+
+- Access to a DevGuard repository with detected vulnerabilities
+- Project admin or owner permissions
+- At least one vulnerability to report on
+- Knowledge about CSAF format
+
+
+
+## Access CSAF Reports
+
+CSAF reports are automatically generated on-demand by DevGuard:
+
+### Enable Public Access
+
+1. Navigate to **Asset Settings** → **Vulnerability Management**
+2. Enable the toggle: **"Enable public access to vulnerability data"**
+3. Three URLs will appear:
+   - **VEX-URL** - Vulnerability exploitability information
+   - **CSAF-URL** - CSAF provider metadata
+   - **SBOM-URL** - Software bill of materials
+
+![Download Vex Button](../../../assets/downloading-vex.png)
+
+
+
+## Next Steps
+
+- [Generate VEX Documents](./generate-vex-documents.mdx) - Export vulnerability exceptions
+- [Export SBOM](./export-sbom.mdx) - Download component inventory
+- [View Compliance Dashboards](./compliance-dashboards.mdx) - Monitor all vulnerabilities

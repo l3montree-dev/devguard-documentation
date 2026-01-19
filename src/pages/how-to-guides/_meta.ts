@@ -10,4 +10,8 @@ export default {
     'setup-gitlab-integration': { title: 'Setup GitLab Integration' },
     'setup-github-integration': { title: 'Setup GitHub Integration' },
     'uninstalling-devguard': { title: 'Uninstalling DevGuard' },
+    'compliance': { title: 'Compliance'},
+    'dependency-management': { title: 'Dependency Management' },
+
+
 }
