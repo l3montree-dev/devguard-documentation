@@ -1,289 +1,54 @@
 ---
-title: View Audit Logs
-description: Track all security decisions and compliance actions for audit trails
+title: View Vulnerability Event History
+description: Track vulnerability decisions and compliance actions through event timelines
 ---
 
-import { Callout, Tabs } from 'nextra/components'
+import { Callout } from 'nextra/components'
 
-# View Audit Logs
+# View Vulnerability Event History
 
-Access and review comprehensive audit logs of all security decisions, compliance actions, and system changes for regulatory compliance and forensic investigation.
+DevGuard automatically records every action taken on vulnerabilities, creating an audit trail of decisions and justifications. Access this event history on each vulnerability's detail page.
+
+<Callout type="info">
+  Event timelines provide comprehensive audit trails for compliance frameworks like ISO 27001, SOC 2, and CRA. Every vulnerability decision includes timestamps, user attribution, and justification.
+</Callout>
 
 ## Prerequisites
 
 Before you begin, ensure you have:
 
-- Access to a DevGuard organization
-- Audit log viewing permissions (typically admin or owner)
-- At least one scan or security event completed
-
-## What Are Audit Logs?
-
-Audit logs track:
-
-- **Security decisions** - When vulnerabilities were marked false positive, accepted, etc.
-- **Compliance actions** - Policy changes, license overrides, compliance reviews
-- **User actions** - Who made what changes and when
-- **System events** - Scans completed, attestations received, policies evaluated
-- **Timestamps** - Exact time of each action
-- **Justifications** - Reasoning provided for decisions
-
-<Callout type="info">
-  Comprehensive audit trails are essential for compliance frameworks like ISO 27001, SOC 2, CRA, and others. They demonstrate your organization's security practices to auditors.
-</Callout>
-
-## Navigate to Audit Logs
-
-Access audit logs at different levels:
-
-### Organization-Level Audit Logs
-
-1. Navigate to **Organization** → **Settings** → **Audit Logs**
-2. View all actions across organization
-3. Filter by date range, user, action type
-4. Export for compliance documentation
-
-### Project-Level Audit Logs
-
-1. Navigate to **Organization** → **Project** → **Settings** → **Audit Logs**
-2. View actions specific to this project
-3. Filter by repository, user, date
-
-### Repository-Level Audit Logs
-
-1. Navigate to **Organization** → **Project** → **Repository** → **History** or **Audit**
-2. View actions specific to this repository
-3. Most detailed view of security decisions
-
-## Understanding Audit Log Entries
-
-Each audit log entry contains:
-
-| Field | Description |
-|-------|-------------|
-| **Timestamp** | Exact date and time of action |
-| **User** | Who performed the action |
-| **Action** | What happened (e.g., "Vulnerability marked false positive") |
-| **Resource** | What was affected (e.g., CVE ID, component name) |
-| **Details** | Additional context and justification |
-| **Change** | What changed (before/after) |
-| **IP Address** | Source IP (for security investigation) |
-
-## Filter and Search Audit Logs
-
-Find specific events quickly:
-
-### By Action Type
-
-<Tabs items={['Vulnerability Events', 'License Decisions', 'Policy Changes', 'User Actions']}>
-  <Tabs.Tab>
-    Vulnerability management actions:
-    - Vulnerability marked false positive
-    - Vulnerability accepted (risk)
-    - Vulnerability reopened
-    - Vulnerability fixed
-    - Mitigations added
-    - Comments created
-  </Tabs.Tab>
-  
-  <Tabs.Tab>
-    License compliance actions:
-    - License marked as accepted
-    - License decision overridden
-    - License risk created/resolved
-    - License decision updated
-  </Tabs.Tab>
-  
-  <Tabs.Tab>
-    Policy and compliance actions:
-    - Policy created/modified
-    - Policy enabled/disabled
-    - Compliance controls reviewed
-    - Attestations uploaded
-  </Tabs.Tab>
-  
-  <Tabs.Tab>
-    User and access actions:
-    - User added/removed
-    - Permissions changed
-    - Access tokens created
-    - Settings modified
-  </Tabs.Tab>
-</Tabs>
-
-### Search Features
-
-1. **By date range** - Filter to specific time period
-2. **By user** - See what specific person did
-3. **By resource** - Find all actions on a CVE or component
-4. **By action** - Find all "vulnerability accepted" events
-5. **By status** - Filter by success/failure
-6. **Full text search** - Search justification text
-
-Example searches:
-```
-- User: "john@company.com" → All actions by John
-- Action: "false positive" → All false positive decisions
-- Date: "2024-01-01 to 2024-01-31" → January actions
-- Resource: "CVE-2024-1234" → All actions on this CVE
-```
-
-## Examine Detailed Event Information
-
-View complete details of any audit event:
-
-1. Click on an audit log entry
-2. View complete details including:
-   - **Full justification** - Complete reasoning provided
-   - **Comments** - Discussion or additional context
-   - **Related events** - Linked actions (e.g., if reopening, shows original closure)
-   - **Approval history** - If approval was required
-   - **Attachments** - Any documents referenced
+- Access to a DevGuard organization and project
+- An asset with scanned vulnerabilities
+- Read access to vulnerability details
 
 
-## Compliance-Required Audit Trail
+## View Event Details Across Assets
 
-Maintain records for compliance:
+For organization-wide compliance tracking, see [Compliance Dashboards](./compliance-dashboards.mdx) for vulnerability metrics and trends that reflect the cumulative impact of these vulnerability events.
 
-### Actions That Create Audit Entries
+### Generate PDF Reports for audits
 
-**Must be documented:**
-1. ✓ Every vulnerability decision (accepted, false positive, etc.)
-2. ✓ License overrides and decisions
-3. ✓ Compliance policy changes
-4. ✓ Security personnel actions
-5. ✓ Access control changes
+1. Navigate to **Organization** → **Overview** 
+2. Select Artifact on the left side.
 
-**Best practices:**
-- Always provide justification when creating events
-- Document business reasons for security decisions
-- Get peer review for significant decisions
-- Keep audit logs for compliance period (typically 1+ years)
+![Download PDF-Report](../../../assets/downloading-pdf-report.png)
 
-### Exporting for Compliance
+[PDF Example]("https://main.devguard.org/l3montree-cybersecurity/projects/devguard/assets/devguard/refs/main/vulnerability-report.pdf?artifact=pkg%3Aoci%2Fdevguard%3Frepository_url%3Dghcr.io%2Fl3montree-dev%2Fdevguard")
 
-Download audit logs for auditor review:
+### Exporting for Audits
 
-1. Navigate to **Audit Logs**
-2. Select date range and filters
-3. Click **Export**
-4. Choose format:
-   - **CSV** - For spreadsheet analysis
-   - **JSON** - For system import
-   - **PDF** - For documentation
-5. Download file
+To include vulnerability event history in compliance documentation:
 
-Use for:
-- Annual compliance audits
-- Incident investigations
-- Regulatory submissions
-- SOC 2 Type II reports
+1. Generate [CSAF Reports](./generate-csaf-reports.mdx) that include event justifications
+2. Generate [VEX Documents](./generate-vex-documents.mdx) that document vulnerability status decisions
 
-## Investigate Security Incidents
+These reports can be downloaded and provided to auditors as evidence of your vulnerability management process.
 
-Use audit logs for forensic investigation:
 
-1. **Identify the incident** - Note date/time and affected resource
-2. **Search audit logs** - Filter to relevant date range
-3. **Trace timeline** - See all actions before/after incident
-4. **Identify users** - Who had access and made changes
-5. **Review justifications** - Understand reasoning
-6. **Document findings** - Export logs as evidence
 
-Example investigation:
-```
-Incident: Unexpected vulnerability marked as false positive
-1. Search: CVE-X, date range, user "unknown"
-2. Find: Marked by automated process (DevGuard scanner)
-3. Review: Scanner had different risk assessment logic
-4. Resolution: Policy was updated, vulnerability re-evaluated
-```
+## Related Documentation
 
-## Archive and Retention
-
-Manage audit log retention:
-
-### Storage
-
-- **Online storage** - Last 90 days (always accessible)
-- **Archive storage** - Older logs (searchable, slower access)
-- **Backup** - Encrypted backup for compliance
-
-### Retention Policies
-
-Configure how long to keep logs:
-
-1. Go to **Organization** → **Settings** → **Audit Retention**
-2. Set retention period (minimum 1 year recommended)
-3. Choose archival strategy
-4. Configure backup frequency
-
-Compliance recommendations:
-- **ISO 27001** - Keep 1 year minimum
-- **SOC 2** - Keep 2 years minimum
-- **CRA** - Keep per regulation (check local rules)
-- **GDPR** - Keep per data protection requirements
-
-## Real-Time Audit Monitoring
-
-Monitor for unusual activity:
-
-### Set Up Alerts
-
-1. Go to **Organization** → **Settings** → **Audit Alerts**
-2. Configure notifications for:
-   - Mass false positive marking (potential abuse)
-   - Unusual user access patterns
-   - Policy changes
-   - Bulk license overrides
-   - Unauthorized access attempts
-
-3. Choose notification method (email, Slack, webhook)
-
-### Review Dashboard
-
-1. Navigate to **Organization** → **Dashboard**
-2. View **Recent Audit Activity** widget
-3. See:
-   - Last 10 actions
-   - Users most active
-   - Most changed resources
-   - Anomalies detected
-
-## Audit Log Best Practices
-
-1. **Always provide context** - When making decisions, explain why
-2. **Review decisions** - Have second person review major decisions
-3. **Export regularly** - Keep compliance-ready exports available
-4. **Monitor alerts** - Check for unusual patterns
-5. **Archive properly** - Retain logs per compliance requirements
-6. **Redact if needed** - Remove sensitive information before sharing
-7. **Document investigation** - If issues found, document remediation
-
-## Troubleshooting
-
-### Cannot access audit logs
-- Verify you have audit log viewing permissions
-- Check organization-level permissions
-- Contact administrator if needed
-
-### Logs not showing recent events
-- Events may take minutes to appear
-- Refresh the page
-- Check filters aren't hiding results
-
-### Cannot export large date ranges
-- Large exports take time
-- Try smaller date ranges
-- Contact support for bulk export
-
-### Justification text is incomplete
-- Click entry to view full details
-- Check original decision location
-- Comments may be in related entry
-
-## Next Steps
-
-- [View Compliance Dashboards](./compliance-dashboards.mdx) - Monitor compliance status
-- [Generate CSAF Reports](./generate-csaf-reports.mdx) - Create documented advisories
-- [Manage Attestation Policies](./attestation-policies.mdx) - Review policy evaluations
+- [Create Vulnerability Events](../vulnerability-management/create-vuln-events.mdx) - Add and manage events
+- [Compliance Audit Trails](../../explanations/compliance/audit-trails.mdx) - Understand audit logging concepts
+- [Generate CSAF Reports](./generate-csaf-reports.mdx) - Export event justifications
+- [Vulnerability Lifecycle](../../explanations/compliance/vulnerability-lifecycle.mdx) - Understand decision workflows

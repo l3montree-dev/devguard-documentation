@@ -4,14 +4,13 @@ export default {
     'risk-mitigation-guides': { title: 'Risk Mitigation Guides' },
     'vulnerability-management': { title: 'Vulnerability Management' },
     administration: { title: 'Administration' },
+    security: { title: 'Security' },
     'dependency-proxy': {
         title: 'Dependency Proxy with Malicious Package Firewall',
     },
     'setup-gitlab-integration': { title: 'Setup GitLab Integration' },
     'setup-github-integration': { title: 'Setup GitHub Integration' },
     'uninstalling-devguard': { title: 'Uninstalling DevGuard' },
-    'compliance': { title: 'Compliance'},
+    'compliance': { title: 'Compliance' },
     'dependency-management': { title: 'Dependency Management' },
-
-
 }

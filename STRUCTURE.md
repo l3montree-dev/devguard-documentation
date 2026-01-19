@@ -163,12 +163,8 @@
 │   │   └── signing-artifacts.mdx        # Artifact signing
 │   │
 │   └── access-control/
-│       ├── manage-users.mdx              # User management
-│       ├── setup-rbac.mdx                # Role-based access
-│       ├── organization-roles.mdx        # Org-level permissions
-│       ├── project-roles.mdx             # Project-level permissions
-│       ├── asset-roles.mdx               # Asset-level permissions
-│       └── api-tokens.mdx                # PAT management
+│       ├── manage-users.mdx              # Member management (org/project/asset)
+│       └── api-tokens.mdx                # Personal Access Token (PAT) management
 │
 ├── compliance/
 │   ├── generate-csaf-reports.mdx         # CSAF generation
