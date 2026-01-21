@@ -18,7 +18,9 @@ export default function PageContentComingSoon() {
                 </svg>
 
                 <span className="mt-2 block text-sm font-semibold text-gray-400">
-                    Sry 🫣, content is work in progress...
+                    Sorry, the content is coming soon. <br/>
+                    Work in is progress! <br/> 
+                    ✂️
                 </span>
             </div>
         </div>
