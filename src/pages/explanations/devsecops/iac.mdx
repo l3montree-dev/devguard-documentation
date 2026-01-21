@@ -25,4 +25,64 @@ Infrastructure as Code (IaC) scanning is a practice that involves static code an
 - **Improves Code Quality**: Encourages best practices in writing infrastructure code, leading to more efficient, reliable, and maintainable infrastructure setups.
 - **Automates Security Checks**: Automates the process of checking infrastructure code for security issues, making it easier to maintain secure environments at scale.
 
+## Example Findings
 
+IaC scanning can detect a wide range of security issues and misconfigurations. Here are some common examples:
+
+| Category | Example Finding | Risk |
+|----------|-----------------|------|
+| **Cloud Storage** | S3 bucket with public read access | Data exposure |
+| **Encryption** | Database storage without encryption at rest | Data breach risk |
+| **IAM/Access Control** | Overly permissive IAM policy with `*` permissions | Privilege escalation |
+| **Network Security** | Security group allowing SSH from 0.0.0.0/0 | Unauthorized access |
+| **Kubernetes** | Container running as root | Container escape |
+| **Docker** | Dockerfile using `latest` tag | Unpredictable builds |
+| **Secrets** | Hardcoded credentials in Terraform variables | Credential exposure |
+| **Logging** | CloudTrail logging disabled | Audit trail gaps |
+
+
+## How to do IaC Scanning with DevGuard
+
+DevGuard provides multiple ways to integrate IaC scanning into your workflow. The scan results are uploaded to DevGuard in SARIF format, where they are analyzed, tracked, and presented in your asset's security dashboard.
+
+### CLI
+
+Use the DevGuard Scanner CLI to run IaC scans locally or in custom CI/CD pipelines:
+
+```shell
+devguard-scanner iac ./terraform --assetName "myOrg/projects/myProject/assets/myAsset" --token $DEVGUARD_TOKEN
+```
+
+See the full [DevGuard Scanner IAC CLI Reference](/reference/scanner/iac) for all available options and examples.
+
+### CI/CD Integration
+
+DevGuard offers pre-built components for popular CI/CD platforms:
+
+- **GitHub Actions**: Use the [IAC GitHub Workflow](/reference/github-workflows/iac) to integrate IaC scanning into your GitHub pipelines
+- **GitLab CI**: Use the [IAC GitLab Component](/reference/gitlab-components/iac) for GitLab CI/CD integration
+
+For a comprehensive scan covering all DevGuard security checks including IaC, see:
+- [Full GitHub Workflow](/reference/github-workflows/full)
+- [Full GitLab Component](/reference/gitlab-components/full)
+
+## What Happens After Scanning
+
+Once an IaC scan completes, the results flow through DevGuard's security workflow:
+
+1. **Findings appear in your dashboard** - All detected misconfigurations and vulnerabilities are displayed in your asset's security dashboard, categorized by severity.
+2. **Prioritize based on risk** - DevGuard helps you focus on the most critical issues first, considering factors like exploitability and potential impact.
+3. **Remediate issues** - Use the provided guidance and links to fix misconfigurations in your infrastructure code.
+4. **Rescan to verify** - Run the scan again after applying fixes to confirm the issues are resolved.
+
+## Related Security Scanning Methods
+
+IaC scanning is one part of a comprehensive DevSecOps strategy. DevGuard also supports:
+
+- [Software Composition Analysis (SCA)](/explanations/devsecops/software-composition-analysis) - Identify vulnerabilities in third-party dependencies
+- [Static Application Security Testing (SAST)](/explanations/devsecops/sast) - Find security flaws in your application source code
+- [Container Scanning](/explanations/devsecops/container-scanning) - Detect vulnerabilities in container images
+- [Secret Scanning](/explanations/devsecops/secret-scanning) - Discover accidentally committed secrets and credentials
+- [Dynamic Application Security Testing (DAST)](/explanations/devsecops/dast) - Test running applications for vulnerabilities
+
+For a complete overview, see [Understanding the OWASP DevSecOps Pipeline](/explanations/devsecops/understanding-owasp-devsecops-pipeline).

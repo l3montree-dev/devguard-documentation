@@ -40,8 +40,8 @@
 
 ```
 /getting-started/
-├── index.mdx                    # What is DevGuard? (30-sec pitch)
-├── quick-start.mdx              # 5-minute installation
+###├── index.mdx                    # What is DevGuard? (30-sec pitch) -> is introduction
+├── quick-start.mdx              # 5-minute installation -> is index
 ├── first-scan.mdx               # Run your first vulnerability scan
 ├── understanding-results.mdx    # How to read vulnerability reports
 ├── key-concepts.mdx             # Core concepts in 5 minutes
@@ -78,8 +78,6 @@
 │   ├── github-actions-workflows.mdx    # Using devguard-action
 │   ├── gitlab-ci-setup.mdx             # GitLab CI integration
 │   ├── gitlab-ci-components.mdx        # Using devguard-ci-component
-│   ├── jenkins-integration.mdx         # Jenkins pipeline
-│   └── automated-scanning.mdx          # Continuous scanning
 │
 ├── compliance/
 │   ├── cyber-resilience-act.mdx        # EU CRA compliance tutorial
