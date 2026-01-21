@@ -78,8 +78,6 @@
 │   ├── github-actions-workflows.mdx    # Using devguard-action
 │   ├── gitlab-ci-setup.mdx             # GitLab CI integration
 │   ├── gitlab-ci-components.mdx        # Using devguard-ci-component
-│   ├── jenkins-integration.mdx         # Jenkins pipeline
-│   └── automated-scanning.mdx          # Continuous scanning
 │
 ├── compliance/
 │   ├── cyber-resilience-act.mdx        # EU CRA compliance tutorial
