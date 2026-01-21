@@ -5,4 +5,14 @@ const withNextra = nextra({
     themeConfig: './theme.config.tsx',
 })
 
-export default withNextra({})
+export default withNextra({
+    async redirects() {
+        return [
+        {
+            source: "/concept-guides/container-hardening/process",
+            destination: "/tutorials/container-hardening",
+            permanent: true,
+        },
+        ];
+    },
+})
