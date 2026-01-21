@@ -10,9 +10,14 @@ export default withNextra({
         return [
         {
             source: "/concept-guides/container-hardening/process",
-            destination: "/tutorials/container-hardening",
+            destination: "/tutorials/container-hardening/process",
             permanent: true,
         },
+        {   
+            source: "/concept-guides/container-hardening/cve-decision",
+            destination: "/tutorials/container-hardening/cve-decision",
+            permanent: true,
+        }
         ];
     },
 })
