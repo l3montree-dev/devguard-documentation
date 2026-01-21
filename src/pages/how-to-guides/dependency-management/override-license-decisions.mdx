@@ -1,0 +1,210 @@
+---
+title: Override License Decisions
+description: Correct or replace detected component licenses
+---
+
+import { Callout, Tabs } from 'nextra/components'
+
+# Override License Decisions
+
+Manually set or correct the license assigned to components when auto-detection is incorrect or needs updating.
+
+## Prerequisites
+
+Before you begin, ensure you have:
+
+- A repository with license risks identified
+- Project admin or owner permissions
+- Knowledge of the correct license for the component (verify from official source)
+
+## Why Override a License
+
+You might override a license when:
+
+- **Auto-detection failed** - No license was detected but the component has one
+- **Wrong license detected** - The tool detected the wrong license
+- **Multiple licenses** - The component has multiple licenses and you want to specify which applies
+- **Updated package** - The component's license changed in a newer version
+- **Business decision** - You've made a deliberate choice to use a different license
+
+## Access License Override Interface
+
+1. Navigate to **Organization** → **Project** → **Repository** → **License Compliance**
+2. Find the component with the license you want to override
+3. Click on the component row to view details
+
+## Select Correct License
+
+In the license details view:
+
+1. Look for the **"Corrected to License"** field
+2. If it shows "Not yet corrected", click to edit
+3. A dropdown appears with approved licenses
+
+**Available license categories:**
+
+<Tabs items={['Permissive', 'Copyleft', 'Proprietary', 'Other']}>
+  <Tabs.Tab>
+    **Permissive Licenses** - Allow commercial use with attribution
+    
+    - Apache-2.0 - Widely used, business-friendly
+    - MIT - Simple, minimal restrictions
+    - BSD 2-Clause, BSD 3-Clause - Flexible, attribution required
+    - ISC - Similar to MIT
+  </Tabs.Tab>
+  
+  <Tabs.Tab>
+    **Copyleft Licenses** - Require sharing of modifications
+    
+    - GPL-2.0, GPL-3.0 - Strong copyleft, code must be shared
+    - LGPL-2.1, LGPL-3.0 - Weak copyleft, linking allowed
+    - AGPL-3.0 - Network copyleft, covers distributed services
+  </Tabs.Tab>
+  
+  <Tabs.Tab>
+    **Proprietary/Restricted**
+    
+    - Business Source License (BSL)
+    - Evaluation licenses
+    - Custom proprietary licenses
+    - Non-commercial only licenses
+  </Tabs.Tab>
+  
+  <Tabs.Tab>
+    **Other**
+    
+    - Dual/Multi-licensing
+    - License expressions (e.g., "MIT OR Apache-2.0")
+    - Unknown or non-standard licenses
+  </Tabs.Tab>
+</Tabs>
+
+<Callout type="info">
+  Unsure which license applies? Check the component's official repository, LICENSE file, or package metadata on the registry (npm, PyPI, Maven, etc.).
+</Callout>
+
+## Override Steps
+
+1. **Click the component** in the license risks list
+2. **Review current license** shown in the risk details
+3. **Select new license** from the approved licenses dropdown
+4. **Provide justification** - Required field:
+   - Why you're overriding (e.g., "Verified as MIT from package.json")
+   - Business context (e.g., "Accepted due to component criticality")
+5. **Optionally add comment** for additional context
+6. **Confirm** the override
+
+The decision is immediately recorded and the component moves to "Resolved" status.
+
+## License Override Examples
+
+### Example 1: Auto-detection missed the license
+**Scenario**: React library shows "no license detected"
+
+1. Open the React component in License Compliance
+2. Check the official React repository → MIT license confirmed
+3. Select "MIT" from dropdown
+4. Justification: "Verified as MIT from React GitHub repository"
+5. Confirm override
+
+### Example 2: Dual-licensed component
+**Scenario**: Component can be used under GPL-2.0 OR Apache-2.0
+
+1. Open the component
+2. Review both licenses available
+3. Select "Apache-2.0" (your organization prefers permissive)
+4. Justification: "Dual-licensed; selected Apache-2.0 per organizational policy"
+5. Confirm
+
+### Example 3: Custom license discovered
+**Scenario**: Internal component with custom license
+
+1. Open the component
+2. If your custom license isn't in the dropdown, contact your administrator
+3. Alternatively, select closest matching OSI-approved license
+4. Justification: "Internal component; mapped to [license type] for compliance purposes"
+5. Confirm
+
+## Bulk Override Operations
+
+For multiple components with the same issue:
+
+1. **Identify the pattern** - All components with same problem (e.g., all missing licenses)
+2. **Contact administrator** for bulk operations
+3. DevGuard admin can apply the same decision to multiple components
+4. Each decision is tracked separately for audit purposes
+
+## View Override History
+
+To see all license override decisions:
+
+1. Go to **License Compliance** view
+2. Look for resolved issues (click **Resolved** tab)
+3. Click on any resolved license issue
+4. View the **Decision History** showing:
+   - Original detected license
+   - Overridden to license
+   - Who made the decision
+   - When it was made
+   - Justification provided
+   - Any comments
+
+## Correct or Update Overrides
+
+If you need to change a previous override:
+
+1. Navigate to the resolved license issue
+2. Click **Modify Decision**
+3. Select new license (or revert to original)
+4. Provide reason for the change
+5. Confirm update
+
+The old decision is preserved in audit trail, and the new decision becomes active.
+
+## Impact on Compliance Reports
+
+License overrides affect:
+
+- **SBOM exports** - Include the overridden license
+- **Compliance dashboards** - Show corrected license status
+- **Audit reports** - Document all decisions with justification
+- **VEX documents** - Include license exceptions
+
+## Revert an Override
+
+To go back to original auto-detected license:
+
+1. Open the overridden license
+2. Click **Revert Override**
+3. Provide reason (e.g., "Auto-detection now correct in newer version")
+4. Confirm reversion
+
+The original license becomes active again, but the override history remains for audit purposes.
+
+## Validate Your Overrides
+
+Best practices for accuracy:
+
+1. **Always verify** against official sources
+2. **Document your source** in justification field
+3. **Review regularly** - Licenses can change between versions
+4. **Team review** - Have another team member confirm important decisions
+5. **Audit trail** - Keep detailed justifications for compliance audits
+
+<Callout type="warning">
+  Incorrect license assignments can create legal risks. Always verify licenses against the official package source before overriding.
+</Callout>
+
+## Common Mistakes to Avoid
+
+- **Guessing licenses** - Always verify from official source
+- **Not documenting** - Always provide clear justification
+- **Ignoring copyleft** - GPL licenses require special handling
+- **Forgetting to override** - Both direct and transitive dependencies need review
+- **Manual overrides forever** - Monitor for fixes in package metadata
+
+## Next Steps
+
+- [License Compliance Management](./license-compliance.mdx) - Overall license strategy
+- [Export SBOM](../compliance/export-sbom.mdx) - Export with corrected licenses
+- [Manage Component Search](./component-search.mdx) - Find all uses of a component
