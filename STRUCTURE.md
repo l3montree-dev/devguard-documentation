@@ -109,10 +109,10 @@
 │   ├── upload-vex.mdx                    # Upload VEX documents
 │   └── scheduled-scans.mdx               # Automated scanning
 │
-├── vulnerability-management/
+├── vulnerability-management/ lars
 │   ├── mark-as-false-positive.mdx        # False positive handling
 │   ├── accept-risk.mdx                   # Risk acceptance
-│   ├── track-fix-progress.mdx            # Remediation tracking
+│   ├── track-fix-progress.mdx            # Remediation tracking 
 │   ├── create-vuln-events.mdx            # Event management
 │   ├── sync-external-data.mdx            # External vuln sync
 │   └── customize-risk-scores.mdx         # Risk scoring (CIA)
@@ -161,12 +161,8 @@
 │   │   └── signing-artifacts.mdx        # Artifact signing
 │   │
 │   └── access-control/
-│       ├── manage-users.mdx              # User management
-│       ├── setup-rbac.mdx                # Role-based access
-│       ├── organization-roles.mdx        # Org-level permissions
-│       ├── project-roles.mdx             # Project-level permissions
-│       ├── asset-roles.mdx               # Asset-level permissions
-│       └── api-tokens.mdx                # PAT management
+│       ├── manage-users.mdx              # Member management (org/project/asset)
+│       └── api-tokens.mdx                # Personal Access Token (PAT) management
 │
 ├── compliance/
 │   ├── generate-csaf-reports.mdx         # CSAF generation
