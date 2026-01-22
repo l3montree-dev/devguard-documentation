@@ -8,4 +8,5 @@ export default {
     'database-maintenance': { title: 'Database Maintenance' },
     'restricting-access': { title: 'OIDC/ SSO & Restricting Access' },
     'customize-ui': { title: 'Customize the UI' },
+    'uninstalling-devguard': { title: 'Uninstalling DevGuard' },
 }

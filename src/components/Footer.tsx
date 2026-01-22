@@ -21,10 +21,6 @@ const navigation = {
         },
         { name: 'Documentation', href: '/introduction' },
         {
-            name: 'Risk Mitigation Guides',
-            href: '/how-to-guides/risk-mitigation-guides',
-        },
-        {
             name: 'Status Page',
             href: 'https://status.devguard.org',
         },

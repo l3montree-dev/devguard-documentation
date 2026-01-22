@@ -1,11 +1,11 @@
 export default {
     index: 'Overview',
-    'container-hardening': {
-        title: 'Container Hardening Guide',
-    },
     basics: { title: 'Basics' },
-    'ci-cd-integration': { title: 'CI/CD Integration' },
     'vulnerability-management': { title: 'Vulnerability Management' },
+    'ci-cd-integration': { title: 'CI/CD Integration' },
     compliance: { title: 'Compliance' },
     advanced: { title: 'Advanced Topics' },
+    'container-hardening': {
+        title: 'Container Hardening',
+    },
 }
