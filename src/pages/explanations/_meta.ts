@@ -3,7 +3,7 @@ export default {
     'core-concepts': {
         title: 'Core Concepts',
     },
-    'architecture': { title: 'Architecture' },
+    architecture: { title: 'Architecture' },
     'vulnerability-management': { title: 'Vulnerability Management' },
     'dependency-management': { title: 'Dependency Management' },
     'license-management': { title: 'License Management' },
@@ -18,7 +18,7 @@ export default {
     'personal-access-token': { title: 'Personal Access Tokens' },
     'sbom-problem-statement': { title: 'SBOM Problem Statement' },
     'explaining-sboms': { title: 'Explaining SBOMs' },
-    'security': { title: 'Security' },
-    'integrations': { title: 'Integrations' },
+    security: { title: 'Security' },
+    integrations: { title: 'Integrations' },
     'advanced-topics': { title: 'Advanced Topics' },
 }

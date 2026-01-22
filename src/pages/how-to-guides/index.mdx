@@ -6,48 +6,101 @@ Welcome to the DevGuard how-to guides. These practical guides provide step-by-st
 
 Integrate security scanning into your development workflow:
 
-- [Scan Dependencies](/how-to-guides/scanning/scan-dependencies) — Scan your project dependencies for vulnerabilities.
-- [Scan Docker Images](/how-to-guides/scanning/scan-docker-images) — Scan container images for security issues.
+- [Scan OCI Images](/how-to-guides/scanning/scan-docker-images) — Scan container images for security issues.
 - [Scan Source Code](/how-to-guides/scanning/scan-source-code) — Perform static analysis on your source code.
+- [Scan Dependencies](/how-to-guides/scanning/scan-dependencies) — Scan your project dependencies for vulnerabilities.
 - [Scan with GitHub Actions](/how-to-guides/scanning/scan-with-github-actions) — Integrate DevGuard scanning into GitHub Actions workflows.
 - [Scan with GitLab CI](/how-to-guides/scanning/scan-with-gitlab-ci) — Integrate DevGuard scanning into GitLab CI/CD pipelines.
-- [Scheduled Scans](/how-to-guides/scanning/scheduled-scans) — Configure automated, scheduled security scans.
 - [Upload SBOM](/how-to-guides/scanning/upload-sbom) — Upload Software Bill of Materials (SBOM) files to DevGuard.
 - [Upload VEX](/how-to-guides/scanning/upload-vex) — Upload Vulnerability Exploitability eXchange (VEX) documents.
+- [Scheduled Scans](/how-to-guides/scanning/scheduled-scans) — Configure automated, scheduled security scans.
 
 ## Vulnerability Management
 
 Manage and track vulnerabilities across your software supply chain:
 
-- [CSAF (Common Security Advisory Framework)](/how-to-guides/vulnerability-management/csaf-common-security-advisory-framework) — Work with CSAF security advisories.
-- [Sync External Data](/how-to-guides/vulnerability-management/sync-external-data) — Synchronize vulnerability data from external sources.
+- [CSAF - Common Security Advisory Framework](/how-to-guides/vulnerability-management/csaf-common-security-advisory-framework) — Work with CSAF security advisories.
+- [Sync External Vulnerability Data (VeX Ingestion)](/how-to-guides/vulnerability-management/sync-external-data) — Synchronize vulnerability data from external sources.
 
-## Supply Chain Security
+## Dependency Management
 
-Protect your development environment from supply chain attacks:
+Manage and analyze your project dependencies:
 
-- [Dependency Proxy with Malicious Package Firewall](/how-to-guides/dependency-proxy) — Block malicious packages using the built-in dependency proxy for npm, PyPI, and Go modules.
+- [View Dependency Tree](/how-to-guides/dependency-management/view-dependency-tree) — Visualize your project's dependency hierarchy.
+- [Find Vulnerable Dependencies](/how-to-guides/dependency-management/find-vulnerable-deps) — Identify dependencies with known vulnerabilities.
+- [Manage License Compliance](/how-to-guides/dependency-management/license-compliance) — Track and manage software licenses in your dependencies.
+- [Override License Decisions](/how-to-guides/dependency-management/override-license-decisions) — Manually override license detection results.
+- [Search for Components](/how-to-guides/dependency-management/component-search) — Search and discover components across your projects.
+
+## Integrations
+
+Connect DevGuard with your development platforms:
+
+- [Create Webhook](/how-to-guides/integrations/create-webhook) — Set up webhooks for real-time notifications.
+- [Custom Webhooks](/how-to-guides/integrations/custom-webhooks) — Configure custom webhook integrations.
+- [Webhook Events](/how-to-guides/integrations/webhook-events) — Understand available webhook event types.
+- [Webhook Security](/how-to-guides/integrations/webhook-security) — Secure your webhook endpoints.
+
+### GitHub Integration
+- [Auto Setup](/how-to-guides/integrations/github/auto-setup) — Automatically set up GitHub integration.
+- [Permission Sync](/how-to-guides/integrations/github/permission-sync) — Synchronize permissions from GitHub.
+- [Setup GitHub Integration](/how-to-guides/integrations/github/setup-github-integration) — Manual GitHub integration setup.
+- [Webhooks](/how-to-guides/integrations/github/webhooks) — Configure GitHub webhooks.
+
+### GitLab Integration
+- [Permission Sync](/how-to-guides/integrations/gitlab/permission-sync) — Synchronize permissions from GitLab.
+- [Setup GitLab Integration](/how-to-guides/integrations/gitlab/setup-gitlab-integration) — Set up GitLab integration.
+- [Webhooks](/how-to-guides/integrations/gitlab/webhooks) — Configure GitLab webhooks.
+
+### Jira Integration
+- [Connect Jira](/how-to-guides/integrations/jira/connect-jira) — Connect your Jira instance.
+- [Issue Creation](/how-to-guides/integrations/jira/issue-creation) — Automatically create Jira issues.
+- [Sync Status](/how-to-guides/integrations/jira/sync-status) — Synchronize status between DevGuard and Jira.
+
+## Security
+
+Enhance the security of your development workflow:
+
+### Dependency Proxy
+- [Dependency Proxy Overview](/how-to-guides/security/dependency-proxy) — Use the dependency proxy to intercept and scan packages.
+- [Setup npm Proxy](/how-to-guides/security/dependency-proxy/setup-npm-proxy) — Configure the npm dependency proxy.
+- [Setup PyPI Proxy](/how-to-guides/security/dependency-proxy/setup-pypi-proxy) — Configure the PyPI dependency proxy.
+- [Setup Go Proxy](/how-to-guides/security/dependency-proxy/setup-go-proxy) — Configure the Go dependency proxy.
+- [Malicious Package Blocking](/how-to-guides/security/dependency-proxy/malicious-package-blocking) — Block malicious packages automatically.
+- [Cache Management](/how-to-guides/security/dependency-proxy/cache-management) — Manage the dependency proxy cache.
+
+### Supply Chain Security
+- [Create in-toto Links](/how-to-guides/security/supply-chain/create-in-toto-links) — Create in-toto attestation links.
+- [Manage Attestations](/how-to-guides/security/supply-chain/manage-attestations) — Manage supply chain attestations.
+- [Signing Artifacts](/how-to-guides/security/supply-chain/signing-artifacts) — Sign your build artifacts.
+- [Verify Supply Chain](/how-to-guides/security/supply-chain/verify-supply-chain) — Verify the integrity of your supply chain.
+
+### Access Control
+- [API Tokens](/how-to-guides/security/access-control/api-tokens) — Manage API tokens for authentication.
+- [Manage Users](/how-to-guides/security/access-control/manage-users) — Manage user accounts and permissions.
+
+## Compliance
+
+Ensure your projects meet compliance requirements:
+
+- [View Compliance Dashboards](/how-to-guides/compliance/compliance-dashboards) — Monitor compliance status across your organization.
+
+## API Usage
+
+Leverage the DevGuard API for automation and integration:
+
+- Coming soon...
 
 ## Administration
 
 Learn how to deploy, configure, and maintain your DevGuard instance:
 
-- [Deploy with Docker](/how-to-guides/administration/deploy-with-docker) — Deploy DevGuard using Docker containers.
 - [Deploy with Helm](/how-to-guides/administration/deploy-with-helm) — Deploy DevGuard on Kubernetes using Helm charts.
-- [Upgrade DevGuard](/how-to-guides/administration/upgrade-devguard) — Upgrade your DevGuard instance to the latest version.
+- [Deploy with Docker Compose](/how-to-guides/administration/deploy-with-docker) — Deploy DevGuard using Docker Compose.
 - [Backup & Restore](/how-to-guides/administration/backup-restore) — Back up and restore your DevGuard data and configuration.
-- [Database Maintenance](/how-to-guides/administration/database-maintenance) — Maintain and optimize your DevGuard database.
 - [Monitoring & Metrics](/how-to-guides/administration/monitoring-metrics) — Monitor your DevGuard instance and track key metrics.
-- [Customize UI](/how-to-guides/administration/customize-ui) — Customize the DevGuard user interface for your organization.
-- [Restricting Access](/how-to-guides/administration/restricting-access) — Configure access control and permissions.
-
-## Integration Setup
-
-Connect DevGuard with your development platforms:
-
-- [Setup GitHub Integration](/how-to-guides/setup-github-integration) — Integrate DevGuard with GitHub for seamless security scanning.
-- [Setup GitLab Integration](/how-to-guides/setup-gitlab-integration) — Integrate DevGuard with GitLab for automated security workflows.
-
-## Maintenance
-
-- [Uninstalling DevGuard](/how-to-guides/uninstalling-devguard) — Remove DevGuard from your system and explore alternative tools.
+- [Upgrade DevGuard](/how-to-guides/administration/upgrade-devguard) — Upgrade your DevGuard instance to the latest version.
+- [Database Maintenance](/how-to-guides/administration/database-maintenance) — Maintain and optimize your DevGuard database.
+- [OIDC/SSO & Restricting Access](/how-to-guides/administration/restricting-access) — Configure authentication and access restrictions.
+- [Customize the UI](/how-to-guides/administration/customize-ui) — Customize the DevGuard user interface for your organization.
+- [Uninstalling DevGuard](/how-to-guides/administration/uninstalling-devguard) — Remove DevGuard from your system.

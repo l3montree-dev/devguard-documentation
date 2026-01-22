@@ -4,7 +4,7 @@ const navigation = {
     product: [
         { name: 'Getting started', href: '/getting-started' },
         { name: 'How to Guides', href: '/how-to-guides' },
-    {
+        {
             name: 'Core Concepts',
             href: '/explanations/core-concepts/what-is-devguard',
         },

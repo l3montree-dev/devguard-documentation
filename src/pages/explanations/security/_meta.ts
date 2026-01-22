@@ -4,5 +4,5 @@ export default {
     'api-security': { title: 'API Security' },
     'cache-integrity': { title: 'Cache Integrity' },
     'rbac-model': { title: 'RBAC Model' },
-    'secrets-management': { title: 'Secrets Management' }
+    'secrets-management': { title: 'Secrets Management' },
 }

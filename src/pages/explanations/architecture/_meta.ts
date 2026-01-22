@@ -5,5 +5,5 @@ export default {
     'database-schema': { title: 'Database Schema' },
     'authentication-flow': { title: 'Authentication Flow' },
     'scanner-architecture': { title: 'Scanner Architecture' },
-    'scalability': { title: 'Scalability' },
+    scalability: { title: 'Scalability' },
 }

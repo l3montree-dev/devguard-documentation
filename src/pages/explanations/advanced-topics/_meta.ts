@@ -4,5 +4,5 @@ export default {
     'fixed-version-detection': { title: 'Fixed Version Detection' },
     'open-source-insights': { title: 'Open Source Insights' },
     'multi-tenancy': { title: 'Multi Tenancy' },
-    'statistics-calculation': { title: 'Statistics Calculation' }
+    'statistics-calculation': { title: 'Statistics Calculation' },
 }
