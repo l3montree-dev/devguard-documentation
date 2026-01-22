@@ -1,5 +1,119 @@
-import PageContentComingSoon from '@/components/PageContentComingSoon'
+import { Callout } from 'nextra/components'
+import { AttributedImage } from '@/components/AttributedImage'
 
 # Provenance Tracking
 
-<PageContentComingSoon />
+In the physical supply chain, "farm-to-table" tracking allows a grocery store to pick up a specific bag of spinach and trace it back to the exact field where it was harvested and the date it was packed. This creates accountability and safety; if a pathogen is found, you know exactly which batches to recall.
+
+**Provenance Tracking** brings this same capability to software. It is the practice of recording and persisting the history of a software artifact—from the specific line of code in a version control system, through the build environment, to the final deployable binary.
+
+While [Attestations](/explanation/supply-chain-security/attestations) are the vehicle for delivering this data, and [SLSA](/explanation/supply-chain-security/slsa-framework) is the standard for measuring its quality, Provenance Tracking is the operational discipline of maintaining this **genealogy** for every piece of software in your organization.
+
+---
+
+## The "Black Box" Problem
+
+Without provenance tracking, a container image in a registry is a "black box."
+You can see the final product, but the history is lost.
+
+-   **Question:** "Does this image contain the fix we merged into the `main` branch yesterday?"
+-   **Answer without Provenance:** "Maybe? The tag says `v1.2`, but I don't know if `v1.2` was built before or after the merge."
+
+<Callout type="info">
+    Provenance solves this ambiguity by creating a permanent link between the
+    **Artifact** (the binary) and the **Material** (the source code).
+</Callout>
+---
+
+## Anatomy of a Provenance Record
+
+To track provenance effectively, we need to capture specific metadata. Modern standards (like the SLSA v1.0 specification) divide this data into three primary buckets.
+
+### 1. The Builder (Who/Where)
+
+This identifies the entity that performed the build. It is critical that this identity is **trusted** and **verifiable**.
+
+-   **Builder ID:** A URI identifying the build service (e.g., `https://github.com/actions/runner-images`).
+-   **Builder Environment:** Details about the virtual machine or container used (e.g., "Ubuntu 22.04 Runner").
+
+_Why track this?_ If a specific build node is compromised (e.g., "Jenkins-Node-4"), you can query your provenance database to find every artifact built by that node and revoke them.
+
+### 2. The Recipe (How)
+
+This describes the process used to transform the source into the binary.
+
+-   **Entry Point:** The command or workflow file triggered (e.g., `.github/workflows/build.yaml`).
+-   **Parameters:** Any arguments passed to the build (e.g., `target_arch=amd64`, `release=true`).
+-   **Step definition:** The sequence of operations performed.
+
+_Why track this?_ It distinguishes between a "debug" build and a "release" build. Even if they use the same source code, a build run with `DEBUG=true` might expose sensitive internal endpoints and should not be deployed to production.
+
+### 3. The Materials (What)
+
+This lists the ingredients that went into the build.
+
+-   **Source URI:** The repository location (e.g., `git+https://github.com/org/repo`).
+-   **Digest:** The specific commit hash (SHA-1/SHA-256) of the source code.
+-   **Dependencies:** Ideally, this also includes the hashes of external files fetched during the build (though this often overlaps with SBOMs).
+
+_Why track this?_ This is the link to Version Control. It allows you to say with certainty: "This binary running in production was built from commit `8f2a1d`."
+
+---
+
+## The Concept of Hermeticity
+
+Provenance tracking is most effective when builds are **Hermetic**.
+
+A **Hermetic Build** is self-contained. It declares all its inputs upfront and is not allowed to access the network to fetch undeclared dependencies during the build process.
+
+-   **Non-Hermetic (Typical):** The build script runs `npm install`. The precise versions installed depend on the state of the npm registry at that exact second. If you run the build again tomorrow, you might get different code. The provenance is incomplete because "the internet" was an input.
+-   **Hermetic (Ideal):** The build is given a fixed set of dependencies. It produces the exact same output every time.
+
+<Callout type="info">
+    While strict hermeticity is difficult to achieve in modern web development,
+    provenance tracking aims to get as close as possible by recording the exact
+    hashes of everything fetched.
+</Callout>
+
+---
+
+## Use Case: Forensics and Incident Response
+
+The true value of provenance tracking reveals itself during a security incident.
+
+**Scenario:** A vulnerability is discovered in the `lib-crypto` library.
+
+1.  **Identification:** You identify the bad version of the library.
+2.  **Impact Analysis (SBOM):** You find 50 container images that contain this library.
+3.  **Root Cause Analysis (Provenance):**
+    -   You look at the provenance of those 50 images.
+    -   You see that 40 of them were built from the `legacy` branch which pins an old version of the library.
+    -   You see that 10 of them were built from `main`, but the build parameter `SKIP_UPDATE=true` was used.
+
+Without provenance, you would just know the images are vulnerable. With provenance, you know _why_ they are vulnerable (legacy branch + bad build parameter) and who triggered those builds.
+
+---
+
+## Use Case: Reproducible Builds
+
+Provenance is a prerequisite for **Reproducible Builds**. A reproducible build means that if two different people take the same source code and the same provenance data (recipe), they will produce bit-for-bit identical binaries.
+
+This is the ultimate verification against **Compiler trojans**. If a trusted auditor can read the provenance, rebuild the artifact themselves, and get the exact same hash as the one you are distributing, it proves that the build server was not tampering with the code during compilation.
+
+---
+
+## Conclusion
+
+Provenance Tracking is the bridge between the chaotic world of development (commits, branches, pull requests) and the rigid world of operations (artifacts, releases, deployments).
+
+It converts the software supply chain from a "trust me" model to a "show me" model. By capturing the Builder, the Recipe, and the Materials for every single artifact, organizations create an immutable audit trail that serves as the foundation for security, compliance, and debugging.
+
+This concludes the [Supply Chain Security](/explanation/supply-chain-security) explanation chapter. In the following sections, we will explore the specific [Compliance](/explanation/compliance) standards that often mandate these practices.
+
+---
+
+## References
+
+-   [SLSA Provenance Specification](https://slsa.dev/spec/v1.0/provenance)
+-   [Reproducible Builds Project](https://reproducible-builds.org/)
+-   [Tekton Chains (Automated Provenance Collection)](https://tekton.dev/docs/chains/)
