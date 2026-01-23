@@ -5,4 +5,31 @@ import PageContentComingSoon from '@/components/PageContentComingSoon'
 
 # Cache Management
 
-<PageContentComingSoon />
+## Initialization Protection
+
+To prevent cache poisoning attacks, the proxy blocks **all requests** until the malicious package database is fully loaded. This ensures:
+
+- No malicious packages can be cached during the initialization window
+- The system is secure by default
+- Users receive a clear "Service is initializing" message if they try to install packages too early
+
+## Integrity Verification
+
+All cached packages are protected with SHA256 checksums:
+
+1. When caching, the proxy calculates and stores a SHA256 hash
+2. Before serving from cache, the hash is verified
+3. If verification fails, the cache is invalidated and the package is refetched
+
+This prevents:
+- Cache corruption from disk errors
+- Manual tampering with cached files
+- Serving compromised packages
+
+## Cache Poisoning Prevention
+
+The proxy checks packages for malicious content **before** caching:
+
+1. Malicious packages are never cached
+2. If a package becomes flagged after being cached, it's automatically removed
+3. Each request is checked against the latest database

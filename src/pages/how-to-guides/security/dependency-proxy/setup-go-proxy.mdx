@@ -5,4 +5,48 @@ import PageContentComingSoon from '@/components/PageContentComingSoon'
 
 # Setup Go Proxy with DevGuard Dependency Proxy
 
-<PageContentComingSoon />
+## Setup
+
+- **Registry URL**: `http://localhost:8080/api/v1/dependency-proxy/go`
+- **Configuration**: Set via `GOPROXY` environment variable
+
+### Using enviromental variables
+
+Set the `GOPROXY` environment variable:
+
+```bash
+export GOPROXY="http://localhost:8080/api/v1/dependency-proxy/go"
+go get github.com/example/package
+```
+
+## Testing
+
+DevGuard includes test packages for verifying the proxy functionality:
+
+- `github.com/fake-org/malicious-package`
+
+These test packages are safe to use and will always be blocked by the proxy.
+
+## API Reference
+
+### Proxy Endpoints
+
+- `GET /api/v1/dependency-proxy/go/*` - Go modules proxy  
+
+### Response Headers
+
+- `X-Cache: HIT|MISS` - Indicates if the response was served from cache
+- `X-Proxy-Type: go` - Identifies the proxy type
+- `X-Malicious-Package: blocked` - Present when a package is blocked
+
+### Status Codes
+
+- `200 OK` - Package successfully proxied
+- `403 Forbidden` - Malicious package blocked
+- `503 Service Unavailable` - Database not yet loaded
+- `502 Bad Gateway` - Upstream registry error
+
+## Further Reading
+
+- [OSSF Malicious Packages](https://github.com/ossf/malicious-packages)
+- [Vulnerability Management](/explanations/vulnerability-management/vulnerability-lifecycle)
