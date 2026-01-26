@@ -4,16 +4,24 @@ import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip
 
 # Artifact Concept
 
-A single repository branch can produce multiple build artifacts—different Docker images for architectures, minimal vs full distributions, or separate deployment targets. DevGuard tracks vulnerabilities independently for each artifact, recognizing that different build configurations create different security profiles.
+A single repository branch can produce multiple build artifacts—different Docker images for architectures, minimal vs full distributions, or separate deployment targets. 
+
+<Callout intent="info">DevGuard tracks vulnerabilities together across artifacts. It expects each artifacts to origin from the same source code, thus a false positive in a dependency tree will affect **all** artifacts built from that code. The dependency tree is shared across artifacts originating from the same source.</Callout>
+
+If you need to track vulnerabilities separately, check out [Repository Versions](/explanations/core-concepts/repository-versions) to create separate branches for each artifact.
+
 ```mermaid
 graph TD
     A[Repository: main] --> B[Dockerfile.amd64]
     A --> C[Dockerfile.arm64]
     A --> D[Dockerfile.minimal]
+
     
-    B --> E[openssl, curl, node]
-    C --> F[openssl, curl, node]
-    D --> G[openssl, node]
+    B --> openssl
+    C --> openssl
+    D --> curl
+    B --> curl
+    D --> node
     
     style A fill:#e3f2fd,stroke:#1976d2,stroke-width:3px,color:#000
     style B fill:#fff3e0,stroke:#f57c00,stroke-width:2px,color:#000
@@ -31,10 +39,6 @@ Same source code produces different artifacts with distinct dependency sets:
 
 **Environment-specific**: Production strips dev dependencies. Development includes testing frameworks. Different dependencies = different vulnerability profiles.
 
-<Callout type="info" emoji="📦">
-  Without artifact-level tracking, you can't distinguish whether a dev-only dependency vulnerability affects production deployments.
-</Callout>
-
 ## Common Patterns
 
 **Multi-Architecture**: `Dockerfile.amd64` with x86_64 packages vs `Dockerfile.arm64` with aarch64 packages. Same base, different architecture packages with separate vulnerabilities.
@@ -45,40 +49,19 @@ Same source code produces different artifacts with distinct dependency sets:
 
 ## Artifact Identification
 
-DevGuard uses <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">PURL</span></TooltipTrigger><TooltipContent><p>Package URL - Standardized package identifier</p></TooltipContent></Tooltip> (Package URL) for unique identification:
+DevGuard prefers having <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">PURLs</span></TooltipTrigger><TooltipContent><p>Package URL - Standardized package identifier</p></TooltipContent></Tooltip> (Package URL) for unique identification. But you can use any string. In some places DevGuard will URL-Encode the artifact name and place it in a path. Some reverse proxies like [traefik will block url encoded slashes `%2F`](https://doc.traefik.io/traefik/security/request-path/#path-sanitization) so keep that in mind:
 ```
 pkg:oci/myapp@sha256:abc123?tag=v1.0.0-amd64
 pkg:oci/myapp@sha256:def456?tag=v1.0.0-arm64
 pkg:oci/myapp@sha256:ghi789?tag=v1.0.0-minimal
 ```
 
-## Independent Management
-
-**Separate SBOMs**: Each artifact generates its own <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">SBOM</span></TooltipTrigger><TooltipContent><p>Software Bill of Materials - Component inventory</p></TooltipContent></Tooltip> documenting actual components in that specific build.
-
-**Independent Risk Scores**: Calculated per artifact based on specific component versions, deployment context, and attack surface.
-
-**Separate VEX Statements**: Each artifact can have different <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">VEX</span></TooltipTrigger><TooltipContent><p>Vulnerability Exploitability eXchange - Impact assessments</p></TooltipContent></Tooltip> assessments—production marked "Not Affected" while development marked "Affected" for same CVE.
-
-<Callout type="info" emoji="🔄">
-  Track which artifacts receive fixes. A patch in standard builds doesn't automatically fix minimal builds if they use different dependency resolution.
-</Callout>
-
-## Example
-
-**Repository**: `backend-api` / **Branch**: `main`
-
-**Production AMD64**: node, express, pg → No vulnerabilities  
-**Production ARM64**: node, express, pg, arm-lib → CVE-2024-001 in arm-lib  
-**Minimal**: node, express (pg excluded) → No vulnerabilities, reduced attack surface  
-**Development**: All production + jest, nodemon → CVE-2024-002 in nodemon (dev only)
 
 ## Setup
 
 1. Configure which Dockerfiles/build targets to track
-2. Scan each artifact separately in CI/CD pipeline
-3. Ensure unique PURL per artifact
-4. Manage vulnerabilities per artifact independently
+2. Scan each artifact separately in CI/CD pipeline and pass the `--artifactName` flag to the scanner
+3. View vulnerabilities, connected to multiple artifacts in DevGuard UI
 
 ---
 
