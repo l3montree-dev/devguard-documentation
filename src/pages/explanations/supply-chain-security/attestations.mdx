@@ -1,4 +1,3 @@
-
 # Attestations
 
 In the previous chapters, we discussed how Supply Chain Security moves us from "implicit trust" to "explicit verification." The fundamental unit of this verification is the **Attestation**.
@@ -13,95 +12,117 @@ To make attestations interoperable between different tools (like DevGuard, Cosig
 
 You can visualize an attestation as an envelope containing a letter.
 
-
-
 ### 1. The Envelope (DSSE)
-The outer layer handles the cryptography. It does not care what is written inside; it only cares about *who* wrote it and that it hasn't been opened or changed.
-* **Payload**: The actual message (encoded in Base64).
-* **Payload Type**: A string identifying how to read the message (e.g., `application/vnd.in-toto+json`).
-* **Signatures**: One or more cryptographic signatures verifying the payload.
+
+The outer layer handles the cryptography. It does not care what is written inside; it only cares about _who_ wrote it and that it hasn't been opened or changed.
+
+-   **Payload**: The actual message (encoded in Base64).
+-   **Payload Type**: A string identifying how to read the message (e.g., `application/vnd.in-toto+json`).
+-   **Signatures**: One or more cryptographic signatures verifying the payload.
 
 ### 2. The Statement (In-Toto ITE-6)
+
 Inside the envelope, we find the "Statement." This binds the attestation to a specific software artifact.
-* **Subject**: The unique identifier of the artifact being discussed. This is almost always a cryptographic hash (SHA256).
-    * *Example:* `sha256:a1b2c3...` (referring to `my-app-v1.0.jar`)
-* **Predicate**: The actual factual claims being made. This varies depending on the *type* of attestation.
+
+-   **Subject**: The unique identifier of the artifact being discussed. This is almost always a cryptographic hash (SHA256).
+    -   _Example:_ `sha256:a1b2c3...` (referring to `my-app-v1.0.jar`)
+-   **Predicate**: The actual factual claims being made. This varies depending on the _type_ of attestation.
 
 ## Common Attestation Types
 
-While the envelope is generic, the "Predicate" defines the purpose of the attestation. DevGuard utilizes several key types to build a complete security picture.
+While the envelope is generic, the "Predicate" defines the purpose of the attestation. You can utilize several key types to build a complete security picture.
 
 ### 1. Provenance Attestation (SLSA)
-This is the most critical attestation for supply chain integrity. It describes *how* the artifact was built.
-* **Predicate Type:** `https://slsa.dev/provenance/v1`
-* **Content:**
-    * **Builder:** The ID of the build platform (e.g., GitHub Actions).
-    * **Recipe:** The commands executed (e.g., `docker build`).
-    * **Materials:** The git commit hash and dependencies used.
-* **Goal:** To prove that the binary was built from the correct source code by an authorized builder.
+
+This is the most critical attestation for supply chain integrity. It describes _how_ the artifact was built.
+
+-   **Predicate Type:** `https://slsa.dev/provenance/v1`
+-   **Content:**
+    -   **Builder:** The ID of the build platform (e.g., GitHub Actions).
+    -   **Recipe:** The commands executed (e.g., `docker build`).
+    -   **Materials:** The git commit hash and dependencies used.
+-   **Goal:** To prove that the binary was built from the correct source code by an authorized builder.
 
 ### 2. SBOM Attestation
-An SBOM (Software Bill of Materials) lists the ingredients inside the software. While an SBOM is often just a JSON file, wrapping it in an attestation binds it to the specific artifact hash.
-* **Predicate Type:** `https://spdx.dev/Document` or `https://cyclonedx.org/bom`
-* **Content:** The full list of libraries, modules, and licenses.
-* **Goal:** To allow scanners to detect vulnerabilities without needing to reverse-engineer the binary.
+
+An SBOM (Software Bill of Materials) lists the ingredients inside the software. While an SBOM is often just a JSON file,
+wrapping it in an attestation binds it to the specific artifact hash.
+
+-   **Predicate Type:** `https://spdx.dev/Document` or `https://cyclonedx.org/bom`
+-   **Content:** The full list of libraries, modules, and licenses.
+-   **Goal:** To allow scanners to detect vulnerabilities without needing to reverse-engineer the binary.
 
 ### 3. VEX Attestation (Vulnerability Exploitability eXchange)
+
 Scanners often find vulnerabilities that are technically present but not actually exploitable (e.g., a vulnerable function is never called). A VEX attestation allows you to assert this status ("Not Affected") officially.
-* **Predicate Type:** `https://openvex.dev/ns/v0.2.0`
-* **Content:** A list of CVEs and their status (Affected, Not Affected, Fixed, Under Investigation) with justification.
-* **Goal:** To reduce noise in security reports and prevent trusted builds from being blocked by false positives.
+
+-   **Predicate Type:** `https://openvex.dev/ns/v0.2.0`
+-   **Content:** A list of CVEs and their status (Affected, Not Affected, Fixed, Under Investigation) with justification.
+-   **Goal:** To reduce noise in security reports and prevent trusted builds from being blocked by false positives.
 
 ### 4. Vulnerability Scan Attestation
+
 This is a record that a scan took place.
-* **Predicate Type:** `https://devguard.io/attestation/vuln-scan/v1` (Custom or SARIF)
-* **Content:** Summary of findings (e.g., "0 Critical, 2 Low").
-* **Goal:** To prove to a deployment gate that the artifact passed a security check at a specific point in time.
+
+-   **Predicate Type:** `https://devguard.org/` (Custom or SARIF)
+-   **Content:** Summary of findings (e.g., "0 Critical, 2 Low").
+-   **Goal:** To prove to a deployment gate that the artifact passed a security check at a specific point in time.
 
 ## The Lifecycle of an Attestation
 
-Understanding how attestations are created and used helps clarify their role in the DevGuard ecosystem.
+Understanding how attestations are created and used helps clarify their role in the supply chain security ecosystem.
 
 ### Step 1: Generation (Signing)
+
 When a pipeline job finishes a task, it generates the attestation.
-* *Example:* The build job finishes compiling. It calculates the SHA256 of the binary. It creates a Provenance JSON. It signs this JSON using the CI system's OIDC identity (keyless signing) or a long-lived private key.
+
+-   _Example:_ The build job finishes compiling. It calculates the SHA256 of the binary. It creates a Provenance JSON. It signs this JSON using the CI system's OIDC identity (keyless signing) or a long-lived private key.
 
 ### Step 2: Storage (Registry)
-Attestations need to live somewhere accessible. The most common approach (used by DevGuard) is to store them alongside the artifact in the container registry (OCI).
-* If your image is at `registry.com/my-app:v1` (sha256:abc...), the attestation is uploaded as a related artifact or "tag" specifically linked to that hash.
-* This makes the attestations portable. Wherever the image goes, its paperwork follows.
+
+Attestations need to live somewhere accessible. The most common approach is to store them alongside the artifact in the container registry (OCI).
+
+-   If your image is at `registry.com/my-app:v1` (sha256:abc...), the attestation is uploaded as a related artifact or "tag" specifically linked to that hash.
+-   This makes the attestations portable. Wherever the image goes, its paperwork follows.
 
 ### Step 3: Discovery
+
 When DevGuard analyzes an image, it queries the registry: "Do you have any attestations for `sha256:abc...`?" It downloads all available envelopes (Provenance, SBOM, VEX) to reconstruct the history of the artifact.
 
 ### Step 4: Verification (Policy)
+
 This is the final gate. A policy engine (like Open Policy Agent or DevGuard's internal policy system) evaluates the bundle.
-* *Check:* "Is there a Provenance attestation?" (Yes)
-* *Check:* "Is it signed by the 'Production Build' key?" (Yes)
-* *Check:* "Is there a VEX attestation for CVE-2023-1234?" (Yes, status is 'Fixed').
-* *Result:* **PASS**.
+
+-   _Check:_ "Is there a Provenance attestation?" (Yes)
+-   _Check:_ "Is it signed by the 'Production Build' key?" (Yes)
+-   _Check:_ "Is there a VEX attestation for CVE-2023-1234?" (Yes, status is 'Fixed').
+-   _Result:_ **PASS**.
 
 ## Why Separation of Concerns Matters
 
 You might wonder: "Why not just put all this info into one big JSON file?"
 
 The power of attestations lies in their **modularity** and **authority**. Different actors have different knowledge authorities:
-* The **Builder** knows about the compiler and source code (Provenance).
-* The **Scanner** knows about CVEs (Scan Result).
-* The **Security Team** knows about risk acceptance (VEX).
+
+-   The **Builder** knows about the compiler and source code (Provenance).
+-   The **Scanner** knows about CVEs (Scan Result).
+-   The **Security Team** knows about risk acceptance (VEX).
 
 By keeping these as separate, individually signed attestations, you can update one without invalidating the others.
-* *Example:* You can add a VEX attestation to an existing image to "suppress" a CVE. You do *not* need to rebuild the image or change its Provenance. You simply attach a new signed statement that says, "We checked this CVE, and it's safe."
+
+-   _Example:_ You can add a VEX attestation to an existing image to "suppress" a CVE. You do _not_ need to rebuild the image or change its Provenance. You simply attach a new signed statement that says, "We checked this CVE, and it's safe."
 
 ## Conclusion
 
-Attestations are the currency of trust in a secure supply chain. They transform "institutional knowledge" (knowing a build is safe because you talked to the developer) into "cryptographic knowledge" (verifying a signature). By wrapping essential metadata—provenance, ingredient lists, and vulnerability assessments—into standardized, signed envelopes, DevGuard ensures that every decision to deploy software is based on verifiable facts, not assumptions.
+Attestations are the currency of trust in a secure supply chain. They transform "institutional knowledge" (knowing a build is safe because you talked to the developer)
+into "cryptographic knowledge" (verifying a signature). By wrapping essential metadata—provenance, ingredient lists, and vulnerability assessments—into standardized,
+signed envelopes, DevGuard ensures that every decision to deploy software is based on verifiable facts, not assumptions.
 
 ## References
 
 1.  **in-toto Attestation Framework**
-    * https://in-toto.io/docs/getting-started/
+    -   https://in-toto.io/docs/getting-started/
 2.  **DSSE Specification**
-    * https://github.com/secure-systems-lab/dsse/blob/master/background.md
+    -   https://github.com/secure-systems-lab/dsse/blob/master/background.md
 3.  **OpenVEX Specification**
-    * https://github.com/openvex/spec/blob/main/OPENVEX-SPEC.md
+    -   https://github.com/openvex/spec/blob/main/OPENVEX-SPEC.md
