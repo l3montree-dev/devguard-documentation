@@ -5,7 +5,6 @@ export default {
     },
     architecture: { title: 'Architecture' },
     'vulnerability-management': { title: 'Vulnerability Management' },
-    'dependency-management': { title: 'Dependency Management' },
     'license-management': { title: 'License Management' },
     'supply-chain-security': { title: 'Supply Chain Security' },
     devsecops: { title: 'DevSecOps' },
