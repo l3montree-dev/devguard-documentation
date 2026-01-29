@@ -1,0 +1,102 @@
+{
+  "purl": "pkg:npm/event-stream@3.3.6",
+  "ecosystem": "npm",
+  "name": "event-stream",
+  "version": "3.3.6",
+
+  "project": {
+    "projectKey": "github.com/dominictarr/event-stream",
+    "starsCount": 1400,
+    "forksCount": 220,
+    "openIssuesCount": 12,
+    "homepage": "https://github.com/dominictarr/event-stream",
+    "license": "MIT",
+    "description": "Toolkit to make creating and working with streams easy",
+
+    "scoreCard": {
+      "checks": [
+        {
+          "name": "Maintained",
+          "score": 2,
+          "reason": "No commit activity in the last 12 months"
+        },
+        {
+          "name": "Code-Review",
+          "score": 3,
+          "reason": "Most commits are directly pushed to main without review"
+        },
+        {
+          "name": "Signed-Releases",
+          "score": 0,
+          "reason": "No signed tags or releases detected"
+        },
+        {
+          "name": "Signed-Commits",
+          "score": 1,
+          "reason": "Only a small subset of commits are signed"
+        },
+        {
+          "name": "Branch-Protection",
+          "score": 0,
+          "reason": "Main branch allows force-pushes and direct commits"
+        },
+        {
+          "name": "CI-Tests",
+          "score": 4,
+          "reason": "Basic CI exists but coverage is minimal"
+        },
+        {
+          "name": "Fuzzing",
+          "score": 0,
+          "reason": "No fuzzing configuration detected"
+        },
+        {
+          "name": "Dependency-Update-Tool",
+          "score": 2,
+          "reason": "Dependabot is configured but updates are often ignored"
+        },
+        {
+          "name": "Security-Policy",
+          "score": 0,
+          "reason": "SECURITY.md not found"
+        },
+        {
+          "name": "Vulnerabilities",
+          "score": 3,
+          "reason": "Known historical vulnerabilities with no documented remediation"
+        },
+        {
+          "name": "Packaging",
+          "score": 1,
+          "reason": "Package includes postinstall scripts without sandboxing"
+        },
+        {
+          "name": "Binary-Artifacts",
+          "score": 0,
+          "reason": "Prebuilt binaries committed to the repository"
+        }
+      ],
+      "metadata": {
+        "tool": "openssf-scorecard",
+        "toolVersion": "5.0.0",
+        "generatedAt": "2024-09-30T11:22:00Z"
+      }
+    },
+
+    "scoreCardScore": 2.8,
+    "updatedAt": "2024-11-01T14:00:00Z"
+  },
+
+  "maliciousPackage": {
+    "id": "MAL-2024-000123",
+    "summary": "Malicious package targeting CI environments",
+    "details": "The package executes a post-install script that exfiltrates environment variables and SSH keys.",
+    "published": "2024-10-12T08:15:30Z",
+    "modified": "2024-11-01T14:42:10Z",
+    "affectedComponent": {
+      "id": "mac-001",
+      "versionRange": "<=3.3.6",
+      "firstObserved": "2024-10-10T09:00:00Z"
+    }
+  }
+}
