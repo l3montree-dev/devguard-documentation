@@ -24,9 +24,8 @@ export default {
     explanations: { title: 'Explanations' },
     reference: { title: 'Reference' },
     contributing: { title: 'Contributing' },
-    other: {
-        title: 'Other',
-    },
+    other: { title: 'Other', },
+    'vulnerability-database': { title: 'Vulnerability Database' },
     'header-pricing': {
         title: 'Pricing',
         type: 'page',
