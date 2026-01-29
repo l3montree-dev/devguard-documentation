@@ -24,12 +24,12 @@ export default {
     explanations: { title: 'Explanations' },
     reference: { title: 'Reference' },
     contributing: { title: 'Contributing' },
-    other: { title: 'Other', },
-    'vulnerability-database': { 
+    other: { title: 'Other' },
+    'vulnerability-database': {
         theme: {
             layout: 'raw',
         },
-        title: 'Vulnerability Database' 
+        title: 'Vulnerability Database',
     },
     'header-pricing': {
         title: 'Pricing',
