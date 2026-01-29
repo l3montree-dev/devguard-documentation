@@ -26,4 +26,4 @@ This comparison is community driven, based on documentation and user feedback. I
 
 ## Details 
 
-- [AboutCode Software Suite vs DevGuard](/comparison/aboutcode)
+- [AboutCode Software Suite vs DevGuard](/other/comparison/aboutcode)
