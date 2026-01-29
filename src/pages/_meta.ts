@@ -25,7 +25,12 @@ export default {
     reference: { title: 'Reference' },
     contributing: { title: 'Contributing' },
     other: { title: 'Other', },
-    'vulnerability-database': { title: 'Vulnerability Database' },
+    'vulnerability-database': { 
+        theme: {
+            layout: 'raw',
+        },
+        title: 'Vulnerability Database' 
+    },
     'header-pricing': {
         title: 'Pricing',
         type: 'page',
