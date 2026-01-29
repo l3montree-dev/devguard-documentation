@@ -1,3 +1,5 @@
+import { title } from "process";
+
 export default {
     index: {
         theme: {
@@ -8,6 +10,12 @@ export default {
     pricing: {
         theme: {
             layout: 'raw',
+        },
+        display: 'hidden',
+    },
+    "reachability-analysis": {
+        theme: {
+            layout: 'raw'
         },
         display: 'hidden',
     },
@@ -36,6 +44,11 @@ export default {
         title: 'Documentation',
         type: 'page',
         href: '/introduction',
+    },
+    'header-reachability':{
+        title: 'Reachability',
+        type: 'page',
+        href: '/reachability-analysis'
     },
     '404': {
         theme: {
