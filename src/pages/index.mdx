@@ -15,10 +15,23 @@ import FrosconTalkBanner from '../components/top-level-pages/FrosconTalk'
 import AnimatedLogoCloud from '../components/AnimatedLogoCloud'
 import GridScanSection from '../components/top-level-pages/GridScanSection'
 import FirewallSection from '../components/top-level-pages/FirewallSection'
+import GradualBlur from '../components/GradualBlur'
 
 export default function Home() {
     return (
         <>
+            {/* Gradual Blur effect at bottom of page */}
+            <GradualBlur
+                position="bottom"
+                target="page"
+                animated="scroll"
+                height="7rem"
+                strength={2}
+                divCount={5}
+                curve="bezier"
+                exponential
+                opacity={1}
+            />
             <FrosconTalkBanner />
             <div className="overflow-hidden">
                 <Hero />

@@ -41,20 +41,7 @@ const config: DocsThemeConfig = {
             </>
         )
     },
-    banner: {
-        key: 'development',
-        content: (
-            <a
-                href="https://github.com/l3montree-dev/devguard"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-                🚧 DevGuard & this page is under active development. Visit the
-                DevGuard Repo →
-            </a>
-        ),
-        dismissible: false,
-    },
+    
     logo: (
         <Image
             src="/logo_inverse_horizontal.svg"

@@ -1,59 +1,181 @@
 import { Button } from './button'
 import { Container } from './container'
 import { Link } from './link'
+import GradientBlinds from '../GradientBlinds'
+import SplitText from '../SplitText'
+import AnimatedContent from '../AnimatedContent'
+import ShinyText from '../ShinyText'
+import StarBorder from '../StarBorder'
 
 export default function Hero() {
     return (
-        <div className="relative">
-            <div className="from-28% absolute inset-2 bottom-0 rounded-xl bg-[linear-gradient(115deg,var(--tw-gradient-stops))] from-[#FFFFFF] to-[#FCBE25] ring-1 ring-inset ring-black/5 sm:bg-[linear-gradient(145deg,var(--tw-gradient-stops))] md:inset-12" />
-            <Container className="relative">
-                <div className="px-0 pb-20 pt-16 max-md:pl-2 sm:pt-24 md:px-12 md:pb-32 md:pt-32 2xl:px-0">
-                    <h1 className="break-words text-6xl font-semibold leading-tight tracking-tight text-background sm:text-5xl sm:leading-tight md:text-6xl md:leading-tight lg:text-7xl xl:text-8xl">
-                        Develop Secure
-                        <br />
-                        Software.
-                    </h1>
-                    <h2 className="font-regular mt-6 break-words text-2xl leading-tight tracking-tight text-background sm:text-3xl md:text-4xl md:leading-tight">
-                        Get full transparency of your <br />{' '}
-                        Software-Supply-Chain.
-                    </h2>
+        <div className="relative min-h-[87vh] flex items-center justify-center overflow-hidden bg-dg-950">
+            {/* Gradient Blinds Background */}
+            <div className="absolute inset-0 opacity-60">
+                <GradientBlinds
+                    gradientColors={['#FCBE25', '#d8ba1a', '#956b13', '#3d250b']}
+                    blindCount={12}
+                    angle={-15}
+                    noise={0.3}
+                    spotlightRadius={0.6}
+                    spotlightSoftness={0.9}
+                    spotlightOpacity={0.8}
+                    distortAmount={0.15}
+                    mouseDampening={0.1}
+                />
+            </div>
 
-                    <div className="mt-12 flex flex-col gap-x-6 gap-y-4 sm:flex-row">
-                        <Link
-                            href="https://app.devguard.org/login"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            <Button
-                                variant="secondary"
-                                data-umami-event="look-at-devguard"
-                            >
-                                Try DevGuard
-                            </Button>
-                        </Link>
-                        <Link href="/introduction">
-                            <Button
-                                variant="secondary"
-                                data-umami-event="hero-to-docs"
-                            >
-                                Read the docs
-                            </Button>
-                        </Link>
-                        <Link
-                            href="https://matrix.to/#/#devguard:matrix.org"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            <Button
-                                variant="outline"
-                                data-umami-event="Support"
-                            >
-                                Support (Element Chat)
-                            </Button>
-                        </Link>
+            {/* Subtle gradient overlay for depth */}
+            <div className="absolute inset-0 bg-gradient-to-b from-dg-950/70 via-dg-950/30 to-dg-950/60" />
+
+            <Container className="relative z-10">
+                <div className="flex flex-col items-center justify-center text-center">
+                   
+
+                    {/* Main Headline with Split Text Animation */}
+                    <div className="mb-2">
+                        <SplitText
+                            text="Develop Secure"
+                            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-medium tracking-tighter text-white"
+                            delay={30}
+                            duration={0.8}
+                            ease="power3.out"
+                            splitType="chars"
+                            from={{ opacity: 0, y: 50 }}
+                            to={{ opacity: 1, y: 0 }}
+                            threshold={0.1}
+                            tag="h1"
+                            textAlign="center"
+                        />
                     </div>
+                    <div className="mb-6">
+                        <SplitText
+                            text="Software."
+                            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-medium tracking-tighter text-l3-400"
+                            delay={30}
+                            duration={0.8}
+                            ease="power3.out"
+                            splitType="chars"
+                            from={{ opacity: 0, y: 50 }}
+                            to={{ opacity: 1, y: 0 }}
+                            threshold={0.1}
+                            tag="h1"
+                            textAlign="center"
+                        />
+                    </div>
+
+                    {/* Shiny Subheadline */}
+                    <AnimatedContent
+                        distance={40}
+                        direction="vertical"
+                        duration={0.7}
+                        delay={0.4}
+                    >
+                        <div className="max-w-3xl">
+                            <span className="text-2xl leading-relaxed font-base tracking-tight"    
+                            >
+                            Get full transparency of your Software-Supply-Chain. Open Source.
+                            </span>
+                        </div>
+                    </AnimatedContent>
+
+                    {/* CTA Buttons */}
+                    <AnimatedContent
+                        distance={50}
+                        direction="vertical"
+                        duration={0.7}
+                        delay={0.6}
+                    >
+                        <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+                            <Link
+                                href="https://app.devguard.org/login"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <Button
+                                    variant="default"
+                                    className="bg-l3-400 hover:bg-l3-500 text-dg-950 font-semibold px-8 h-12 text-base"
+                                    data-umami-event="look-at-devguard"
+                                >
+                                    Try DevGuard
+                                </Button>
+                            </Link>
+                            <Link href="/introduction">
+                                <Button
+                                    variant="outline"
+                                    className="border-white/30 text-white hover:bg-white/10 px-8 h-12 text-base"
+                                    data-umami-event="hero-to-docs"
+                                >
+                                    Read the docs
+                                </Button>
+                            </Link>
+                            <Link
+                                href="https://github.com/l3montree-dev/devguard"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <Button
+                                    variant="outline"
+                                    className="border-white/30 text-white hover:bg-white/10 px-8 h-12 text-base"
+                                    data-umami-event="hero-github"
+                                >
+                                    <svg
+                                        className="w-5 h-5 mr-2"
+                                        fill="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            fillRule="evenodd"
+                                            d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                                            clipRule="evenodd"
+                                        />
+                                    </svg>
+                                    GitHub
+                                </Button>
+                            </Link>
+                        </div>
+                    </AnimatedContent>
+
+                    {/* Feature highlights */}
+                    <AnimatedContent
+                        distance={60}
+                        direction="vertical"
+                        duration={0.7}
+                        delay={0.8}
+                    >
+                        <div className="mt-16 flex flex-wrap justify-center gap-x-10 gap-y-4 text-base text-gray-200">
+                            <div className="flex items-center gap-2">
+                                <div className="w-1.5 h-1.5 rounded-full bg-l3-400" />
+                                <span>Vulnerability Management</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <div className="w-1.5 h-1.5 rounded-full bg-l3-400" />
+                                <span>DevSecOps</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <div className="w-1.5 h-1.5 rounded-full bg-l3-400" />
+                                <span>Container Security</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <div className="w-1.5 h-1.5 rounded-full bg-l3-400" />
+                                <span>Dependency Firewall</span>
+                            </div>
+                        </div>
+                    </AnimatedContent>
                 </div>
             </Container>
+
+            {/* Scroll indicator */}
+            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10">
+                <AnimatedContent distance={20} direction="vertical" duration={0.5} delay={1.2}>
+                    <div className="flex flex-col items-center gap-2 text-gray-500">
+                        <span className="text-xs uppercase tracking-widest">Scroll</span>
+                        <div className="w-5 h-8 rounded-full border border-gray-500/50 flex justify-center pt-1.5">
+                            <div className="w-1 h-2 bg-gray-400 rounded-full animate-bounce" />
+                        </div>
+                    </div>
+                </AnimatedContent>
+            </div>
         </div>
     )
 }

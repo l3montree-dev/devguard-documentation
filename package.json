@@ -34,6 +34,7 @@
     },
     "homepage": "https://github.com/l3montree-dev/devguard-docs",
     "dependencies": {
+        "@gsap/react": "^2.1.2",
         "@headlessui/react": "^2.2.9",
         "@heroicons/react": "^2.2.0",
         "@ltonetwork/http-message-signatures": "^0.1.12",
@@ -47,13 +48,16 @@
         "dotenv": "^16.5.0",
         "eslint-config-prettier": "^9.1.2",
         "framer-motion": "^12.29.2",
+        "gsap": "^3.14.2",
         "lodash": "^4.17.23",
         "lucide-react": "^0.514.0",
+        "mathjs": "^14.9.1",
         "motion": "^12.29.2",
         "next": "15.4.11",
         "next-sitemap": "^4.2.3",
         "nextra": "3.3.1",
         "nextra-theme-docs": "3.3.1",
+        "ogl": "^1.0.11",
         "p-limit": "^6.2.0",
         "postprocessing": "^6.38.2",
         "radix-ui": "^1.4.3",
@@ -85,6 +89,7 @@
         "jest-environment-jsdom": "^29.7.0",
         "postcss": "^8.5.6",
         "prettier-plugin-tailwindcss": "^0.7.2",
+        "shadcn": "^3.7.0",
         "tailwindcss": "3.4.18",
         "typescript": "^5.9.3"
     }
