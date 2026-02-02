@@ -4,7 +4,7 @@ import { AttributedImage } from '@/components/AttributedImage'
 
 In modern software development, you rarely write 100% of your own code. Instead, you assemble products using a vast ecosystem of third-party libraries, build tools, container images, and CI/CD pipelines.\
 In fact, it has been estimated that **[70-90%](https://www.linuxfoundation.org/blog/blog/a-summary-of-census-ii-open-source-software-application-libraries-the-world-depends-on)** of current software is composed of
-Free and Open Source Software (FOSS). This heavy reliance on external dependencies has fundamentally altered the [threat landscape](/explanation/Supply-Chain-Security/what-is-supply-chain-security#the-threat-landscape),
+Free and Open Source Software (FOSS). This heavy reliance on external dependencies has fundamentally altered the [threat landscape](/explanations/Supply-Chain-Security/what-is-supply-chain-security#the-threat-landscape),
 shifting the risk from the code you write to the components you consume and the tools you use to deploy them.
 **Supply Chain Security** is the practice of ensuring that every component, process, and actor involved in the creation and delivery of your software is verified, untampered, and trustworthy.
 
@@ -15,16 +15,16 @@ It includes the tools, processes, and people responsible for writing and transfo
 
 The software supply chain for a typical project could involve for example (not exhaustive):
 
--   A developer writing source code
--   Version control systems (Git, SVN, etc.)
--   Third-party software libraries
--   Build tools (Maven, make, etc.)
--   CI/CD software (Jenkins, GitHub Actions, etc.)
--   Deployment system packaging the executable into a Docker image
--   Container registry storing the Docker image for deployment
--   Production environment running the Docker image
--   Package management software and ecosystems (npm, pip, etc.)
--   ...
+- A developer writing source code
+- Version control systems (Git, SVN, etc.)
+- Third-party software libraries
+- Build tools (Maven, make, etc.)
+- CI/CD software (Jenkins, GitHub Actions, etc.)
+- Deployment system packaging the executable into a Docker image
+- Container registry storing the Docker image for deployment
+- Production environment running the Docker image
+- Package management software and ecosystems (npm, pip, etc.)
+- ...
 
 Every one of these components has to be secured. A single vulnerability can put the entire software supply chain at risk.
 
@@ -35,10 +35,10 @@ Every one of these components has to be secured. A single vulnerability can put 
 Understanding the potential threats to the software supply chain is crucial for ensuring its security.
 By mapping the software supply chain, we can pinpoint vulnerabilities throughout the development lifecycle.
 These risks are categorized into **four strategic domains:**\
-[**Source**](/explanation/Supply-Chain-Security/what-is-supply-chain-security#1-source-threats),
-[**Build**](/explanation/Supply-Chain-Security/what-is-supply-chain-security#2-build-threats),
-[**Dependency**](/explanation/Supply-Chain-Security/what-is-supply-chain-security#3-dependency-threats),
-and [**Deployment & Runtime threats**](/explanation/Supply-Chain-Security/what-is-supply-chain-security#4-deployment-and-runtime-threats).
+[**Source**](/explanations/Supply-Chain-Security/what-is-supply-chain-security#1-source-threats),
+[**Build**](/explanations/Supply-Chain-Security/what-is-supply-chain-security#2-build-threats),
+[**Dependency**](/explanations/Supply-Chain-Security/what-is-supply-chain-security#3-dependency-threats),
+and [**Deployment & Runtime threats**](/explanations/Supply-Chain-Security/what-is-supply-chain-security#4-deployment-and-runtime-threats).
 
 ![Software Supply Chain Threat Model](/threat-landscape.png)
 
@@ -49,9 +49,9 @@ before the build process even begins.
 
 #### Examples of Source Threats
 
--   **Unauthorized Code Changes:** An attacker gains access to a developer's account or maintainer rights for a public repository and silently commits a backdoor into the codebase.
--   **Repo Configuration Weaknesses:** A public GitHub repository is accidentally configured to allow anyone to push code, or branch protection rules are bypassed.
--   **Insufficient Code Review:** Malicious or vulnerable code is merged into the main branch because peer review processes were skipped or automated scanners were ignored.
+- **Unauthorized Code Changes:** An attacker gains access to a developer's account or maintainer rights for a public repository and silently commits a backdoor into the codebase.
+- **Repo Configuration Weaknesses:** A public GitHub repository is accidentally configured to allow anyone to push code, or branch protection rules are bypassed.
+- **Insufficient Code Review:** Malicious or vulnerable code is merged into the main branch because peer review processes were skipped or automated scanners were ignored.
 
 <AttributedImage
     src="/XZ_logo_contributed_by_Jia_Tan.png"
@@ -98,9 +98,9 @@ Build threats focus on the "factory" where code is turned into executable softwa
 
 #### Examples of Build Threats
 
--   **Compromised Build Server:** An attacker infects the CI/CD pipeline (e.g., Jenkins or GitHub Actions), causing it to inject malware during the compilation process.
--   **Environmental Drift:** The build environment uses outdated or unpatched tools that have known vulnerabilities, which attackers exploit to alter the build output.
--   **Artifact Tampering:** A legitimate binary is replaced with a malicious version immediately after the build is completed but before it is signed or stored.
+- **Compromised Build Server:** An attacker infects the CI/CD pipeline (e.g., Jenkins or GitHub Actions), causing it to inject malware during the compilation process.
+- **Environmental Drift:** The build environment uses outdated or unpatched tools that have known vulnerabilities, which attackers exploit to alter the build output.
+- **Artifact Tampering:** A legitimate binary is replaced with a malicious version immediately after the build is completed but before it is signed or stored.
 
 **Real-World Example: [SolarWinds Incident (2020)](https://en.wikipedia.org/wiki/2020_United_States_federal_government_data_breach#Methodology)**
 This incident illustrates a critical failure in build security. Attackers compromised the **build environment and continuous integration server**, allowing them to modify and infect software updates
@@ -116,9 +116,9 @@ Modern software relies heavily on third-party libraries and open-source packages
 
 #### Examples of Dependency Threats
 
--   **Typosquatting:** An attacker publishes a malicious package with a name very similar to a popular library (e.g., `react-dom` vs. `reac-dom`), hoping developers install the wrong one by mistake.
--   **Dependency Confusion:** An attacker uploads a malicious package to a public registry with the same name as an internal, private package, tricking the build system into pulling the public (malicious) version.
--   **Vulnerable Transitive Dependencies:** A library you use depends on _another_ library that has a critical vulnerability (like Log4j), compromising your application indirectly.
+- **Typosquatting:** An attacker publishes a malicious package with a name very similar to a popular library (e.g., `react-dom` vs. `reac-dom`), hoping developers install the wrong one by mistake.
+- **Dependency Confusion:** An attacker uploads a malicious package to a public registry with the same name as an internal, private package, tricking the build system into pulling the public (malicious) version.
+- **Vulnerable Transitive Dependencies:** A library you use depends on _another_ library that has a critical vulnerability (like Log4j), compromising your application indirectly.
 
 **Real-World Example: [Log4Shell (2021)](https://en.wikipedia.org/wiki/Log4Shell)**
 The **Log4Shell** vulnerability in the ubiquitous Java logging library **Log4j** demonstrates the massive reach of dependency threats. A critical flaw in how the library processed log messages allowed attackers to
@@ -134,9 +134,9 @@ These threats occur after the software has been built and is running in its dest
 
 #### Examples of Deployment Threats
 
--   **Insecure Infrastructure-as-Code (IaC):** Deployment scripts (e.g., Terraform or Kubernetes manifests) are misconfigured, leaving cloud buckets or API endpoints exposed to the public.
--   **Runtime Injection:** An application running in production is exploited via a vulnerability (like SQL Injection or Remote Code Execution) to execute malicious commands.
--   **Unverified Artifact Deployment:** The production environment accepts and runs a container image that hasn't been signed or verified, allowing an attacker to deploy a rogue version of the application.
+- **Insecure Infrastructure-as-Code (IaC):** Deployment scripts (e.g., Terraform or Kubernetes manifests) are misconfigured, leaving cloud buckets or API endpoints exposed to the public.
+- **Runtime Injection:** An application running in production is exploited via a vulnerability (like SQL Injection or Remote Code Execution) to execute malicious commands.
+- **Unverified Artifact Deployment:** The production environment accepts and runs a container image that hasn't been signed or verified, allowing an attacker to deploy a rogue version of the application.
 
 **Real-World Example: [The Equifax Data Breach (2017)](https://en.wikipedia.org/wiki/2017_Equifax_data_breach)**
 While often cited as a failure to patch, this incident fundamentally illustrates a **Runtime Injection** attack via a supply chain dependency.
@@ -160,7 +160,7 @@ supply chain security focuses on verifying the trust and transparency of everyth
 
 You cannot secure what you cannot see. Modern software is rarely written from scratch; it is assembled from hundreds or thousands of open-source libraries and third-party components.
 
-**Visibility** is achieved through a **Software Bill of Materials** ([SBOM](/explanation/compliance/sbom-standards.mdx)). An SBOM is a formal, machine-readable inventory of every dependency,
+**Visibility** is achieved through a **Software Bill of Materials** ([SBOM](/explanations/compliance/sbom-standards.mdx)). An SBOM is a formal, machine-readable inventory of every dependency,
 library, and module included in your software. Just as a list of ingredients on a food package allows consumers to avoid allergens, an SBOM allows security teams to rapidly identify
 if they are affected when a major vulnerability is discovered in a widely used component.
 
@@ -171,9 +171,9 @@ for compromised packages regularly.
 
 In a distributed supply chain, it is difficult to know if a piece of code is authentic. Attackers may impersonate a trusted maintainer or inject malicious code into a package during transit.
 
--   **Identity** verifies who created an artifact (a developer or a build system).
+- **Identity** verifies who created an artifact (a developer or a build system).
 
--   **Integrity** verifies that the artifact has not been altered since it was created.
+- **Integrity** verifies that the artifact has not been altered since it was created.
 
 This is solved through **Cryptographic Signing**. By applying a digital signature to code commits, container images, and binaries using a private key,
 organizations ensure that the software received at the end of the chain is exactly identical to the software that was produced at the start.
@@ -222,32 +222,32 @@ It is less about specific tools and more about **organizational culture and poli
 
 The framework requires organizations to:
 
--   **Establish Policy**: Create formal policies for secure development, which are often required for compliance (e.g., [ISO 27001](https://www.iso.org/standard/27001), [SOC 2](https://www.aicpa-cima.com/resources/download/2017-trust-services-criteria-with-revised-points-of-focus-2022)).
+- **Establish Policy**: Create formal policies for secure development, which are often required for compliance (e.g., [ISO 27001](https://www.iso.org/standard/27001), [SOC 2](https://www.aicpa-cima.com/resources/download/2017-trust-services-criteria-with-revised-points-of-focus-2022)).
 
--   **Secure the Environment:** Protect source code repositories (e.g., via commit signing) and restrict access to authorized developers only.
+- **Secure the Environment:** Protect source code repositories (e.g., via commit signing) and restrict access to authorized developers only.
 
--   **Monitor Dependencies:** verify that third-party components meet security requirements.
+- **Monitor Dependencies:** verify that third-party components meet security requirements.
 
--   **Automate:** Implement continuous vulnerability scanning and adopt DevSecOps practices.
+- **Automate:** Implement continuous vulnerability scanning and adopt DevSecOps practices.
 
 In short, SSDF mandates that an organization has a secure process and a trained team to run it.
 
 ### SLSA (The Artifact Standard)
 
-[**Supply-chain Levels for Software Artifacts (SLSA)**](/explanation/supply-chain-security/slsa-framework.mdx) is a framework specifically designed to guarantee the integrity of the final software output.
+[**Supply-chain Levels for Software Artifacts (SLSA)**](/explanations/supply-chain-security/slsa-framework.mdx) is a framework specifically designed to guarantee the integrity of the final software output.
 
 Its fundamental concept is Provenance: metadata that describes exactly how an artifact was created, including the source code version, the build platform, and external parameters used.
 SLSA relies on the [in-toto framework](explanation/supply-chain-security/in-toto-framework) to provide the standard format for this metadata.
 
 SLSA defines four maturity levels to guide organizations from basic documentation to advanced hardening:
 
--   **Level 0:** No security guarantees or specific measures.
+- **Level 0:** No security guarantees or specific measures.
 
--   **Level 1:** Provenance exists. Metadata is available to trace how the software was built, allowing for better analysis.
+- **Level 1:** Provenance exists. Metadata is available to trace how the software was built, allowing for better analysis.
 
--   **Level 2:** Signed Provenance. The build runs on a hosted platform (not a developer's laptop) and generates signed provenance to prevent basic tampering.
+- **Level 2:** Signed Provenance. The build runs on a hosted platform (not a developer's laptop) and generates signed provenance to prevent basic tampering.
 
--   **Level 3:** Hardened Builds. The build process is isolated and resistant to tampering, even from insiders, offering the highest level of protection.
+- **Level 3:** Hardened Builds. The build process is isolated and resistant to tampering, even from insiders, offering the highest level of protection.
 
 ---
 
@@ -293,11 +293,11 @@ If a vulnerability was found, the release was blocked, and developers had to scr
 
 **Shift Left** moves these security processes to the **earlies** possible point in the development timeline:
 
--   **Design Phase:** Choosing safe dependencies before writing code.
+- **Design Phase:** Choosing safe dependencies before writing code.
 
--   **Coding Phase:** IDE plugins warn developers about vulnerable packages in real-time.
+- **Coding Phase:** IDE plugins warn developers about vulnerable packages in real-time.
 
--   **Build Phase:** Automated CI pipelines generate SBOMs and sign artifacts immediately upon commit.
+- **Build Phase:** Automated CI pipelines generate SBOMs and sign artifacts immediately upon commit.
 
 #### Why it matters
 
@@ -314,14 +314,14 @@ By shifting left, supply chain security becomes an integrated part of the develo
 Supply Chain Security is no longer optional in an era of automated, multi-layered software delivery. It requires moving beyond simple vulnerability scanning and into the realm of **provenance and integrity**.
 By understanding the flow of code from source to production, and by demanding cryptographic proof of every transformation, organizations can significantly reduce the risk of sophisticated supply chain attacks.
 
-In the following sections, we will explore the specific frameworks **DevGuard** uses to implement these concepts, including [In-toto](/explanation/in-toto-framework.mdx) and [SLSA](/explanation/slsa-framework.mdx).
+In the following sections, we will explore the specific frameworks **DevGuard** uses to implement these concepts, including [In-toto](/explanations/in-toto-framework.mdx) and [SLSA](/explanations/slsa-framework.mdx).
 
 ---
 
 ## References
 
--   [OWASP Software Supply Chain Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Software_Supply_Chain_Security_Cheat_Sheet.html)
--   [SLSA Threats Overview (v1.0)](https://slsa.dev/spec/v1.0/threats-overview)
--   [Warum Sicherheit in der Software-Lieferkette 2024 unverzichtbar ist](https://l3montree.com/blog/was-ist-die-software-lieferkette)
+- [OWASP Software Supply Chain Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Software_Supply_Chain_Security_Cheat_Sheet.html)
+- [SLSA Threats Overview (v1.0)](https://slsa.dev/spec/v1.0/threats-overview)
+- [Warum Sicherheit in der Software-Lieferkette 2024 unverzichtbar ist](https://l3montree.com/blog/was-ist-die-software-lieferkette)
 
 ---

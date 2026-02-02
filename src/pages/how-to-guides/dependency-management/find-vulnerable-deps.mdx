@@ -28,10 +28,11 @@ Navigate to the vulnerability search and filtering interface:
 ## Filter by Asset Versions (Git Branches/Tags)
 
 If your repository has multiple asset versions (e.g., branches or tags), filter vulnerabilities by specific versions:
+
 1. Use the **Asset Version Selector** dropdown at the top of the page
 2. Select the desired asset version (e.g., `main`, `release-1.0`, `v2.3.4`)
 3. The vulnerability list updates to show only vulnerabilities
-    associated with the selected asset version
+   associated with the selected asset version
 4. You can further filter within that asset version using the artifact selector, state and the search bar
 
 [Learn more about devguard's resource structure and how to organize your project using versions](/explanations/core-concepts/repository-versions).
@@ -45,7 +46,10 @@ If your repository contains multiple build artifacts or scanning sources, filter
 3. The vulnerability list updates to show only vulnerabilities in the selected artifact
 
 <Callout type="info">
-  Artifacts are created using the artifactName flag in the DevGuard-Scanner CLI during the scan. For example `devguard-scanner sca --artifactName="pkg:oci/redis" --assetVersion="..." --token="..." --apiUrl="..." .`.
+    Artifacts are created using the artifactName flag in the DevGuard-Scanner
+    CLI during the scan. For example `devguard-scanner sca
+    --artifactName="pkg:oci/redis" --assetVersion="..." --token="..."
+    --apiUrl="..." .`.
 </Callout>
 
 [Learn more about devguard's resource structure and how to organize your project using artifacts]/explanations/core-concepts/artifacts).
@@ -55,8 +59,8 @@ If your repository contains multiple build artifacts or scanning sources, filter
 Show vulnerabilities in different states:
 
 1. Use the **State Filter** tabs:
-   - **Open** - Unresolved vulnerabilities requiring action
-   - **Resolved** - Vulnerabilities you've handled (false positives, accepted risks, fixed)
+    - **Open** - Unresolved vulnerabilities requiring action
+    - **Resolved** - Vulnerabilities you've handled (false positives, accepted risks, fixed)
 
 ## Search for Vulnerabilities
 
@@ -76,7 +80,8 @@ Search Examples:
 ```
 
 <Callout type="warning">
-  The search requires at least 3 characters to avoid too many results. Shorter searches are ignored.
+    The search requires at least 3 characters to avoid too many results. Shorter
+    searches are ignored.
 </Callout>
 
 ## Analyze Package Vulnerabilities
@@ -85,12 +90,12 @@ Click on any package row to see detailed vulnerability information:
 
 1. Click a package name (e.g., `react@18.2.0`)
 2. View all CVEs affecting that package with:
-   - **CVE ID** - Official vulnerability identifier
-   - **Severity** - CVSS score and severity badge (Critical, High, Medium, Low)
-   - **Risk Score** - DevGuard's calculated risk considering CIA requirements
-   - **Description** - What the vulnerability affects
-   - **Exploits** - Known public exploits (if available)
-   - **Fixed in** - Recommended version to upgrade to
+    - **CVE ID** - Official vulnerability identifier
+    - **Severity** - CVSS score and severity badge (Critical, High, Medium, Low)
+    - **Risk Score** - DevGuard's calculated risk considering CIA requirements
+    - **Description** - What the vulnerability affects
+    - **Exploits** - Known public exploits (if available)
+    - **Fixed in** - Recommended version to upgrade to
 
 ### View Fix Recommendations
 
@@ -103,7 +108,9 @@ For each vulnerability:
 **Example**: If `react@18.2.0` has `CVE-2024-1234` fixed in `18.3.0`, upgrade to `18.3.0` or later.
 
 <Callout type="info">
-  Currently DevGuard will propose changes in your transitive dependencies, which cannot be directly upgraded. This is a known flaw and will be improved in future releases.
+    Currently DevGuard will propose changes in your transitive dependencies,
+    which cannot be directly upgraded. This is a known flaw and will be improved
+    in future releases.
 </Callout>
 
 ## Filter by Severity and Risk
@@ -111,13 +118,16 @@ For each vulnerability:
 Use advanced filtering to focus on the most critical vulnerabilities:
 
 ### By Severity Level
+
 - **Critical** - Highest priority, immediate action needed
 - **High** - Important security issues to address soon
 - **Medium** - Should be reviewed and prioritized
 - **Low** - Informational, lower priority
 
 ### By Risk Score
+
 The DevGuard risk score considers:
+
 - **CVSS Score** - Industry vulnerability severity
 - **Exploitability** - Availability of known exploits
 - **CIA Requirements** - Your asset's confidentiality, integrity, availability needs
@@ -130,6 +140,7 @@ The DevGuard risk score considers:
 The vulnerability list is ordered by risk score by default. The most critical vulnerabilities appear first.
 
 **Quick wins:**
+
 1. Look for multiple vulnerabilities in the same package
 2. Focus on packages with critical or high severity scores
 3. Prioritize packages with available exploits
@@ -141,13 +152,14 @@ Once you've reviewed a vulnerability, document your decision:
 
 1. Click on a vulnerability row
 2. Choose one of these actions:
-   - **Accept Risk** - You accept the security risk and won't fix immediately
-   - **Mark as False Positive** - The vulnerability doesn't apply to your situation
-   - **Mitigate** - You've implemented a workaround
-   - **Add Comment** - Document investigation or remediation progress
+    - **Accept Risk** - You accept the security risk and won't fix immediately
+    - **Mark as False Positive** - The vulnerability doesn't apply to your situation
+    - **Mitigate** - You've implemented a workaround
+    - **Add Comment** - Document investigation or remediation progress
 
 <Callout type="info">
-  Creating events doesn't fix the vulnerability. It tracks your organization's response for compliance and audit purposes.
+    Creating events doesn't fix the vulnerability. It tracks your organization's
+    response for compliance and audit purposes.
 </Callout>
 
 ## Export Results
@@ -161,16 +173,19 @@ Download vulnerability data for reports or external tools:
 ## Troubleshooting
 
 ### No vulnerabilities found
+
 - Your dependencies may have no known vulnerabilities
 - Verify your scan completed
 - Ensure your SBOM includes all actual dependencies
 
 ### Missing expected vulnerabilities
+
 - The vulnerability database may not include your ecosystem ([Currently we are syncing the following sources](/how-to-guides/administration/database-maintenance#data-source))
 - Some ecosystems (like private registries) aren't covered
 - Check if the package was actually included in your scan
 
 ### Cannot search for a specific CVE
+
 - The CVE may not be in the DevGuard vulnerability database yet
 - Search by component name instead
 - Check external sources like CVE Details or [osv.dev](osv.dev) for confirmation
@@ -179,4 +194,4 @@ Download vulnerability data for reports or external tools:
 
 - [Track Fix Progress](../../../vulnerability-management/track-fix-progress.mdx) - Monitor remediation efforts
 - [View Dependency Tree](./view-dependency-tree.mdx) - Explore dependency relationships
-- [Generate VEX Documents](../../../compliance/generate-vex-documents.mdx) - Document vulnerability decisions
+- [Generate VEX Documents](/how-to-guides/compliance/generate-vex-documents.mdx) - Document vulnerability decisions

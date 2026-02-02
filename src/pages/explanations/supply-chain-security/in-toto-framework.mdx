@@ -38,12 +38,12 @@ Understanding in-toto requires distinguishing between what you _expect_ to happe
 
 The **Layout** is the policy or the "contract" for the supply chain. It is a file (signed by the project owner) that defines:
 
--   **Steps:** What actions must be performed (e.g., "clone-repo", "build-binary", "run-tests").
--   **Functionaries:** Who is allowed to perform these steps (identified by their public keys).
--   **Materials and Products:**
-    -   **Materials:** What files go _into_ a step.
-    -   **Products:** What files come _out_ of a step.
--   **Inspections:** Rules to check that the products of one step match the materials of the next.
+- **Steps:** What actions must be performed (e.g., "clone-repo", "build-binary", "run-tests").
+- **Functionaries:** Who is allowed to perform these steps (identified by their public keys).
+- **Materials and Products:**
+    - **Materials:** What files go _into_ a step.
+    - **Products:** What files come _out_ of a step.
+- **Inspections:** Rules to check that the products of one step match the materials of the next.
 
 **Example Layout Logic:**
 
@@ -56,10 +56,10 @@ As the software moves through the supply chain, every actor (or "Functionary") c
 
 When a step is performed, the in-toto client records:
 
--   The exact hash of the files used (Materials).
--   The exact hash of the files created (Products).
--   The command that was executed.
--   The signature of the actor (Functionary) who performed the work.
+- The exact hash of the files used (Materials).
+- The exact hash of the files created (Products).
+- The command that was executed.
+- The signature of the actor (Functionary) who performed the work.
 
 **Example Link Logic:**
 
@@ -116,12 +116,12 @@ The verification fails if:
 
 You will often see in-toto mentioned alongside **SLSA** (Supply-chain Levels for Software Artifacts). It is important to understand their relationship:
 
--   **SLSA** is the **standard** that defines security levels (Level 1, 2, 3) and requirements.
--   **In-toto** is the **implementation format** used to satisfy those requirements.
+- **SLSA** is the **standard** that defines security levels (Level 1, 2, 3) and requirements.
+- **In-toto** is the **implementation format** used to satisfy those requirements.
 
 SLSA recommends using the in-toto attestation format to store provenance data. When you generate a "SLSA Provenance" document, it is technically a JSON file wrapped in an in-toto envelope.
 
-Read more about this relationship in the [SLSA Framework](/explanation/supply-chain-security/slsa-framework) chapter.
+Read more about this relationship in the [SLSA Framework](/explanations/supply-chain-security/slsa-framework) chapter.
 
 ---
 
@@ -136,6 +136,6 @@ It provides the mathematical proof that the software running in production is ex
 
 ## References
 
--   [The Official in-toto Project Website](https://in-toto.io/)
--   [CNCF: Securing the Software Supply Chain with in-toto](https://www.cncf.io/projects/in-toto/)
--   [Google Security Blog: MacChaffee and the Software Supply Chain](https://security.googleblog.com/2021/06/verifiable-software-supply-chain.html)
+- [The Official in-toto Project Website](https://in-toto.io/)
+- [CNCF: Securing the Software Supply Chain with in-toto](https://www.cncf.io/projects/in-toto/)
+- [Google Security Blog: MacChaffee and the Software Supply Chain](https://security.googleblog.com/2021/06/verifiable-software-supply-chain.html)

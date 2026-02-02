@@ -35,7 +35,9 @@ DevGuard identifies license risks when:
 - **Undeclared license** - License information is missing from package metadata
 
 <Callout type="info">
-  OSI-approved licenses include Apache 2.0, MIT, GPL 3.0, BSD variants, and many others. See [opensource.org/licenses](https://opensource.org/licenses) for the complete list.
+    OSI-approved licenses include Apache 2.0, MIT, GPL 3.0, BSD variants, and
+    many others. See [opensource.org/licenses](https://opensource.org/licenses)
+    for the complete list.
 </Callout>
 
 ## Filter by Status
@@ -43,8 +45,8 @@ DevGuard identifies license risks when:
 View license risks in different states:
 
 1. Use the **State Filter** tabs:
-   - **Open** - Unresolved license issues
-   - **Resolved** - Issues you've addressed (accepted, overridden, or components removed)
+    - **Open** - Unresolved license issues
+    - **Resolved** - Issues you've addressed (accepted, overridden, or components removed)
 
 2. Click the tab to filter the list
 
@@ -53,13 +55,14 @@ View license risks in different states:
 Locate specific components or licenses:
 
 1. Use the **search box** to find by:
-   - Component name (e.g., "react")
-   - Component version (e.g., "18.2.0")
-   - License type (e.g., "GPL", "Apache")
+    - Component name (e.g., "react")
+    - Component version (e.g., "18.2.0")
+    - License type (e.g., "GPL", "Apache")
 
 The search matches partial text and is case-insensitive.
 
 **Search examples:**
+
 ```
 - "react" → Finds React-related license issues
 - "GPL" → Shows all GPL-licensed components
@@ -88,6 +91,7 @@ Show licenses from specific build artifacts:
 For each problematic license, choose how to handle it:
 
 ### Accept the License Risk
+
 If you decide to use the component despite the licensing concerns:
 
 1. Click on the license risk
@@ -97,6 +101,7 @@ If you decide to use the component despite the licensing concerns:
 5. The risk moves to "Resolved" status
 
 ### Override with Different License
+
 If the detected license is incorrect:
 
 1. Click on the component/license combination
@@ -106,10 +111,12 @@ If the detected license is incorrect:
 5. The component is marked as resolved with the correct license
 
 <Callout type="warning">
-  Only override licenses if you're certain the auto-detection was incorrect. Verify against the package's official repository or LICENSE file.
+    Only override licenses if you're certain the auto-detection was incorrect.
+    Verify against the package's official repository or LICENSE file.
 </Callout>
 
 ### Remove Component
+
 If you decide not to use this component:
 
 1. Remove the dependency from your code
@@ -122,11 +129,11 @@ Track all license decisions for compliance:
 
 1. Click on any resolved license issue
 2. View the complete history showing:
-   - Who made the decision
-   - When the decision was made
-   - What was decided
-   - Justification provided
-   - Any comments or notes
+    - Who made the decision
+    - When the decision was made
+    - What was decided
+    - Justification provided
+    - Any comments or notes
 
 This audit trail is essential for compliance frameworks like ISO 27001 and CRA.
 
@@ -136,11 +143,12 @@ Understand your overall license compliance:
 
 1. Navigate to **Dependencies** section
 2. View the **License Distribution** chart showing:
-   - How many components use each license
-   - Percentage of OSI-approved vs. non-approved licenses
-   - License breakdown by category
+    - How many components use each license
+    - Percentage of OSI-approved vs. non-approved licenses
+    - License breakdown by category
 
 **Key metrics:**
+
 - **OSI-Approved Licenses**: Safe for most projects
 - **Copyleft Licenses** (GPL): Require source code disclosure
 - **Proprietary Licenses**: Check compatibility with your business model
@@ -160,26 +168,29 @@ Download license information for reporting:
 
 1. Click **Download SBOM** to export components with licenses
 2. The SBOM includes:
-   - All component names and versions
-   - Detected or overridden licenses
-   - License status (approved/non-approved)
+    - All component names and versions
+    - Detected or overridden licenses
+    - License status (approved/non-approved)
 3. Share with legal or compliance teams
 
 ## Troubleshooting
 
 ### "No license detected" for a component
+
 - Component metadata may not include license information
 - Check the package's official repository
 - Override with the correct license manually
 - Consider contributing the license to the package
 
 ### Can't find a specific license in the dropdown
+
 - DevGuard uses the OSI-approved licenses list
 - If your license isn't in the list, it's likely not OSI-approved
 - Consider choosing the closest compatible license
 - Or contact your DevGuard administrator to add it
 
 ### License decision not saving
+
 - Verify you have the correct permissions (project admin or owner)
 - Check your internet connection
 - Try again or contact support if the issue persists
@@ -188,4 +199,4 @@ Download license information for reporting:
 
 - [Override License Decisions](./override-license-decisions.mdx) - Change detected licenses
 - [Find Vulnerable Dependencies](./find-vulnerable-deps.mdx) - Check security alongside licenses
-- [Generate VEX Documents](../compliance/generate-vex-documents.mdx) - Include license decisions in VEX
+- [Generate VEX Documents](/how-to-guides/compliance/generate-vex-documents.mdx) - Include license decisions in VEX
