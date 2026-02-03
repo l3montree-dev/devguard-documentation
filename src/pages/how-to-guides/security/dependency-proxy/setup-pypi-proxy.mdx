@@ -5,4 +5,58 @@ import PageContentComingSoon from '@/components/PageContentComingSoon'
 
 # Setup PyPI Proxy with DevGuard Dependency Proxy
 
-<PageContentComingSoon />
+## Setup
+
+- **Registry URL**: `http://localhost:8080/api/v1/dependency-proxy/pypi/simple`
+- **Configuration**: Set via `pip.conf` or environment variables
+
+
+### Using a configuration file
+
+Create or edit `pip.conf`:
+
+```ini
+[global]
+index-url = http://localhost:8080/api/v1/dependency-proxy/pypi/simple
+trusted-host = localhost
+```
+
+### Using enviromental variables
+
+```bash
+export PIP_INDEX_URL="http://localhost:8080/api/v1/dependency-proxy/pypi/simple"
+export PIP_TRUSTED_HOST="localhost"
+pip install requests
+```
+
+## Testing
+
+DevGuard includes test packages for verifying the proxy functionality:
+
+- `fake-malicious-pypi-package`
+
+These test packages are safe to use and will always be blocked by the proxy.
+
+## API Reference
+
+### Proxy Endpoints
+
+- `GET /api/v1/dependency-proxy/pypi/*` - PyPI proxy
+
+### Response Headers
+
+- `X-Cache: HIT|MISS` - Indicates if the response was served from cache
+- `X-Proxy-Type: pypi` - Identifies the proxy type
+- `X-Malicious-Package: blocked` - Present when a package is blocked
+
+### Status Codes
+
+- `200 OK` - Package successfully proxied
+- `403 Forbidden` - Malicious package blocked
+- `503 Service Unavailable` - Database not yet loaded
+- `502 Bad Gateway` - Upstream registry error
+
+## Further Reading
+
+- [OSSF Malicious Packages](https://github.com/ossf/malicious-packages)
+- [Vulnerability Management](/explanations/vulnerability-management/vulnerability-lifecycle)

@@ -5,4 +5,72 @@ import PageContentComingSoon from '@/components/PageContentComingSoon'
 
 # Setup npm Proxy with DevGuard Dependency Proxy
 
-<PageContentComingSoon />
+## Setup
+
+- **Registry URL**: `http://localhost:8080/api/v1/dependency-proxy/npm`
+- **Configuration**: Set in `.npmrc` file
+
+### Using a configuration file
+
+Create or edit `.npmrc` in your project directory:
+
+```ini
+registry=http://localhost:8080/api/v1/dependency-proxy/npm
+strict-ssl=false # only for local testing; use true in production
+```
+
+Then install packages normally:
+
+```bash
+npm install lodash
+```
+
+## Testing
+
+DevGuard includes test packages for verifying the proxy functionality:
+
+- `fake-malicious-npm-package`
+
+These test packages are safe to use and will always be blocked by the proxy.
+
+### Example Test
+
+Create a test project with a malicious package:
+
+**package.json** (npm):
+```json
+{
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "fake-malicious-npm-package": "1.0.0"
+  }
+}
+```
+
+Run `npm install`:
+- ✅ `lodash` will install successfully
+- ❌ `fake-malicious-npm-package` will be blocked
+
+## API Reference
+
+### Proxy Endpoints
+
+- `GET /api/v1/dependency-proxy/npm/*`
+
+### Response Headers
+
+- `X-Cache: HIT|MISS` - Indicates if the response was served from cache
+- `X-Proxy-Type: npm` - Identifies the proxy type
+- `X-Malicious-Package: blocked` - Present when a package is blocked
+
+### Status Codes
+
+- `200 OK` - Package successfully proxied
+- `403 Forbidden` - Malicious package blocked
+- `503 Service Unavailable` - Database not yet loaded
+- `502 Bad Gateway` - Upstream registry error
+
+## Further Reading
+
+- [OSSF Malicious Packages](https://github.com/ossf/malicious-packages)
+- [Vulnerability Management](/explanations/vulnerability-management/vulnerability-lifecycle)

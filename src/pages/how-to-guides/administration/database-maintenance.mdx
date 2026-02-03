@@ -13,13 +13,12 @@ DevGuard downloads and updates the vulnerability database automatically:
 
 ### Data Source
 
-Vulnerability data is fetched from the [vulndb-diff](https://github.com/l3montree-dev/devguard/pkgs/container/devguard%2Fvulndb-diff) OCI registry. Each data package is **cryptographically signed** and verified before import using the bundled `cosign.pub` public key.
+Vulnerability data is fetched from the [vulndb/v1](https://github.com/l3montree-dev/devguard/pkgs/container/devguard%2Fvulndb%2Fv1) OCI registry. Each data package is **cryptographically signed** and verified before import using the bundled `cosign.pub` public key.
 
 Data sources aggregated in the vulndb include:
 - [OSV](https://osv.dev) (Open Source Vulnerabilities)
-- NVD (National Vulnerability Database)
 - [OSSF Malicious Packages](https://github.com/ossf/malicious-packages) database
-- EPSS (Exploit Prediction Scoring System)
+- [EPSS (Exploit Prediction Scoring System)](https://www.first.org/epss/)
 
 <Callout type="info">
 Initial database sync may take **10-30 minutes**. Vulnerability data won't be complete until this finishes.

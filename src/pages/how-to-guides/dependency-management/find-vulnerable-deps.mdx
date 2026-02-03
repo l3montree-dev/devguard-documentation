@@ -21,9 +21,20 @@ Before you begin, ensure you have:
 
 Navigate to the vulnerability search and filtering interface:
 
-1. Navigate to **Organization** → **Project** → **Repository** → **Risk Handling**
+1. Navigate to **Organization** → **Project** → **Repository** → **Dependency Risk Handling**
 2. You'll see a list of all packages with identified vulnerabilities
-3. Each row shows a package name and the vulnerabilities affecting it
+3. Each row shows a vulnerable component in your Repository
+
+## Filter by Asset Versions (Git Branches/Tags)
+
+If your repository has multiple asset versions (e.g., branches or tags), filter vulnerabilities by specific versions:
+1. Use the **Asset Version Selector** dropdown at the top of the page
+2. Select the desired asset version (e.g., `main`, `release-1.0`, `v2.3.4`)
+3. The vulnerability list updates to show only vulnerabilities
+    associated with the selected asset version
+4. You can further filter within that asset version using the artifact selector, state and the search bar
+
+[Learn more about devguard's resource structure and how to organize your project using versions](/explanations/core-concepts/repository-versions).
 
 ## Filter by Artifact
 
@@ -34,8 +45,10 @@ If your repository contains multiple build artifacts or scanning sources, filter
 3. The vulnerability list updates to show only vulnerabilities in the selected artifact
 
 <Callout type="info">
-  Artifacts are automatically detected from your SBOM. If you don't see expected artifacts, verify your scan included them.
+  Artifacts are created using the artifactName flag in the DevGuard-Scanner CLI during the scan. For example `devguard-scanner sca --artifactName="pkg:oci/redis" --assetVersion="..." --token="..." --apiUrl="..." .`.
 </Callout>
+
+[Learn more about devguard's resource structure and how to organize your project using artifacts]/explanations/core-concepts/artifacts).
 
 ## View Vulnerability Status
 
@@ -44,12 +57,6 @@ Show vulnerabilities in different states:
 1. Use the **State Filter** tabs:
    - **Open** - Unresolved vulnerabilities requiring action
    - **Resolved** - Vulnerabilities you've handled (false positives, accepted risks, fixed)
-
-2. Click the tab to filter the list
-
-**Understanding states:**
-- **Open**: Detected vulnerability not yet addressed
-- **Resolved**: You've created an event (accepted, false positive, or fixed)
 
 ## Search for Vulnerabilities
 
@@ -76,7 +83,7 @@ Search Examples:
 
 Click on any package row to see detailed vulnerability information:
 
-1. Click a package name (e.g., "react@18.2.0")
+1. Click a package name (e.g., `react@18.2.0`)
 2. View all CVEs affecting that package with:
    - **CVE ID** - Official vulnerability identifier
    - **Severity** - CVSS score and severity badge (Critical, High, Medium, Low)
@@ -93,7 +100,11 @@ For each vulnerability:
 2. This shows the minimum version that fixes the issue
 3. Upgrade your dependency to at least this version
 
-**Example**: If react@18.2.0 has CVE-2024-1234 fixed in 18.3.0, upgrade to 18.3.0 or later.
+**Example**: If `react@18.2.0` has `CVE-2024-1234` fixed in `18.3.0`, upgrade to `18.3.0` or later.
+
+<Callout type="info">
+  Currently DevGuard will propose changes in your transitive dependencies, which cannot be directly upgraded. This is a known flaw and will be improved in future releases.
+</Callout>
 
 ## Filter by Severity and Risk
 
@@ -110,7 +121,7 @@ The DevGuard risk score considers:
 - **CVSS Score** - Industry vulnerability severity
 - **Exploitability** - Availability of known exploits
 - **CIA Requirements** - Your asset's confidentiality, integrity, availability needs
-- **Impact Context** - Whether the vulnerable code is actually used
+- **Component depth** - How deeply the component is used in your application
 
 **Higher risk scores** mean the vulnerability is more likely to impact your application.
 
@@ -136,20 +147,8 @@ Once you've reviewed a vulnerability, document your decision:
    - **Add Comment** - Document investigation or remediation progress
 
 <Callout type="info">
-  Creating events doesn't fix the vulnerability—it tracks your organization's response for compliance and audit purposes.
+  Creating events doesn't fix the vulnerability. It tracks your organization's response for compliance and audit purposes.
 </Callout>
-
-## Version Comparison and Upgrade Planning
-
-Plan your upgrades using DevGuard's risk reduction analysis:
-
-1. Hover over a package name to see available upgrade versions
-2. Each version shows:
-   - **Risk reduction** - How much total risk is eliminated by upgrading
-   - **Remaining vulnerabilities** - CVEs that still affect the new version
-3. Choose the version that balances risk reduction with compatibility
-
-**Example**: If upgrading from react@18.2.0 to 18.3.0 reduces risk by 42%, you can see the exact vulnerabilities that would be fixed.
 
 ## Export Results
 
@@ -162,19 +161,19 @@ Download vulnerability data for reports or external tools:
 ## Troubleshooting
 
 ### No vulnerabilities found
-- Your dependencies may have no known vulnerabilities ✓
-- Verify your scan completed: Check **Scan History** tab
+- Your dependencies may have no known vulnerabilities
+- Verify your scan completed
 - Ensure your SBOM includes all actual dependencies
 
 ### Missing expected vulnerabilities
-- The vulnerability database may not include your ecosystem
+- The vulnerability database may not include your ecosystem ([Currently we are syncing the following sources](/how-to-guides/administration/database-maintenance#data-source))
 - Some ecosystems (like private registries) aren't covered
 - Check if the package was actually included in your scan
 
 ### Cannot search for a specific CVE
 - The CVE may not be in the DevGuard vulnerability database yet
 - Search by component name instead
-- Check external sources like CVE Details or NVD for confirmation
+- Check external sources like CVE Details or [osv.dev](osv.dev) for confirmation
 
 ## Next Steps
 
