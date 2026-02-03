@@ -19,4 +19,3 @@
 </div>
 
 # DevGuard Documentation
-Debug Message
