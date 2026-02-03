@@ -12,9 +12,9 @@
     Manage your CVEs seamlessly, Integrate your Vulnerability Scanners, Documentation made easy, Compliance to security Frameworks
     <br />
     <br />
-    <a href="https://github.com/l3montree-dev/devguard-docs/issues">Report Bug</a>
+    <a href="https://github.com/l3montree-dev/devguard-documentation/issues">Report Bug</a>
     ·
-    <a href="https://github.com/l3montree-dev/devguard-docs/issues">Request Feature</a>
+    <a href="https://github.com/l3montree-dev/devguard-documentation/issues">Request Feature</a>
   </p>
 </div>
 
