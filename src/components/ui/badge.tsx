@@ -21,6 +21,8 @@ const badgeVariants = cva(
                     'bg-[#26264a] text-[#c2b8ff] ring-1 ring-[#565280] text-sm h-5',
                 devguardWebBadge:
                     'bg-[#162c41] text-[#3aadff] ring-1 ring-[#1d4d73] text-sm h-5',
+                documentationRequired:
+                    'bg-[#cfbe50]/[0.18] text-[#cfbe4f] ring-1 ring-[#cfbe4f]/[0.3] text-sm h-5',
                 upcoming:
                     'bg-blue-400/10 text-blue-400 ring-1 ring-blue-400 text-sm h-6',
             },
