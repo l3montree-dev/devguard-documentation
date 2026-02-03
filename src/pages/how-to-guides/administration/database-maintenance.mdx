@@ -16,12 +16,14 @@ DevGuard downloads and updates the vulnerability database automatically:
 Vulnerability data is fetched from the [vulndb/v1](https://github.com/l3montree-dev/devguard/pkgs/container/devguard%2Fvulndb%2Fv1) OCI registry. Each data package is **cryptographically signed** and verified before import using the bundled `cosign.pub` public key.
 
 Data sources aggregated in the vulndb include:
+
 - [OSV](https://osv.dev) (Open Source Vulnerabilities)
 - [OSSF Malicious Packages](https://github.com/ossf/malicious-packages) database
 - [EPSS (Exploit Prediction Scoring System)](https://www.first.org/epss/)
 
 <Callout type="info">
-Initial database sync may take **10-30 minutes**. Vulnerability data won't be complete until this finishes.
+    Initial database sync may take **10-30 minutes**. Vulnerability data won't
+    be complete until this finishes.
 </Callout>
 
 ## Monitoring Updates
@@ -44,25 +46,27 @@ Note that if you have several API instances, only one instance will perform the 
 
 The vulnerability database is temporarily stored on disk during updates. Ensure sufficient disk space:
 
-| Component | Approximate Size |
-|-----------|-----------------|
-| VulnDB | ~2-4 GB |
-| Malicious packages DB | ~100 MB |
+| Component             | Approximate Size |
+| --------------------- | ---------------- |
+| VulnDB                | ~2-4 GB          |
+| Malicious packages DB | ~100 MB          |
 
 The Helm chart allocates an 8GB emptyDir for this purpose.
 
-The data is imported into the postgres database `devguard`. 
+The data is imported into the postgres database `devguard`.
 
 ## Manual Update
 
 Trigger a manual vulnerability database update by executing the CLI inside the container:
 
 **DevGuard CLI:**
+
 ```bash
 devguard-cli vulndb import
 ```
 
 **Kubernetes:**
+
 ```bash
 kubectl exec -it deployment/devguard-api-deployment -n devguard -- devguard-cli vulndb import
 ```
@@ -71,7 +75,7 @@ This fetches the latest differential updates from the vulndb-diff registry and a
 
 ## Malicious Package Database
 
-The malicious package database powers the [dependency proxy firewall](/how-to-guides/dependency-proxy). It updates alongside the vulnerability database.
+The malicious package database powers the [dependency proxy firewall](/how-to-guides/security/dependency-proxy). It updates alongside the vulnerability database.
 
 ## Troubleshooting
 
@@ -94,4 +98,3 @@ After initial sync, vulnerabilities should appear within minutes. If missing:
 1. Verify the database sync completed
 2. Check if the vulnerability exists e.g. in [OSV.dev](https://osv.dev)
 3. Re-scan the affected asset
-

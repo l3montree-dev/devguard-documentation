@@ -1,6 +1,10 @@
-import Image from 'next/image';
-import { Callout } from 'nextra/components';
-import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+import Image from 'next/image'
+import { Callout } from 'nextra/components'
+import {
+    Tooltip,
+    TooltipTrigger,
+    TooltipContent,
+} from '@/components/ui/tooltip'
 
 # Audit Logging & Compliance Trail
 
@@ -17,7 +21,9 @@ Compliance frameworks like ISO 27001 and CRA require demonstrable evidence of se
 **Incident Investigation**: Reconstruct what was known, when decisions were made, and which actions were taken during security incidents.
 
 <Callout type="info" emoji="📋">
-  Audit logging answers: "How did you handle this vulnerability? Who approved risk acceptance? When was it fixed?" Without trails, these become manual reconstruction exercises consuming audit time.
+    Audit logging answers: "How did you handle this vulnerability? Who approved
+    risk acceptance? When was it fixed?" Without trails, these become manual
+    reconstruction exercises consuming audit time.
 </Callout>
 
 ## What Gets Logged
@@ -31,6 +37,7 @@ Compliance frameworks like ISO 27001 and CRA require demonstrable evidence of se
 ### State Changes
 
 All vulnerability state transitions logged with complete context:
+
 - **Not Affected**: Justification, analyst, timestamp
 - **Under Investigation**: Start time, assigned personnel
 - **Fixed**: Patch version, deployment timestamp
@@ -45,12 +52,15 @@ DevGuard recalculates risk scores multiple times daily. Every change is logged w
 Every event system action is logged: issue tracker tickets, comments, false positive markings, risk acceptance decisions—all with author attribution and timestamps.
 
 <Callout type="info" emoji="🔄">
-  Component removal provides automatic remediation evidence—delete a vulnerable library, audit logs prove the vulnerability no longer affects your application without manual documentation.
+    Component removal provides automatic remediation evidence—delete a
+    vulnerable library, audit logs prove the vulnerability no longer affects
+    your application without manual documentation.
 </Callout>
 
 ## Event History Timeline
 
 DevGuard maintains chronological timelines for every vulnerability:
+
 - Discovery and initial assessment
 - Risk score evolution with justifications
 - State transitions with decision rationale
@@ -89,6 +99,7 @@ DevGuard maintains chronological timelines for every vulnerability:
 ## Report Generation
 
 Generate compliance reports from audit logs:
+
 - Vulnerability summary reports by timeframe
 - Remediation timeline reports demonstrating SLA compliance
 - Risk acceptance documentation with approval chains
@@ -100,6 +111,6 @@ Export formats: PDF (human review), JSON/CSV (automated tools), <Tooltip><Toolti
 
 ## Related Documentation
 
-- [Vulnerability Event System](vulnerability-event-system) - Actions generating audit events
-- [Vulnerability Lifecycle](vulnerability-lifecycle) - Complete management process
+- [Vulnerability Event System](/explanations/vulnerability-management/vulnerability-events) - Actions generating audit events
+- [Vulnerability Lifecycle](/explanations/vulnerability-management/vulnerability-lifecycle) - Complete management process
 - [Why Compliance Matters](why-compliance-matters) - Business case for audit trails

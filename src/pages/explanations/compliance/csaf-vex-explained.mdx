@@ -1,6 +1,10 @@
-import Image from 'next/image';
-import { Callout } from 'nextra/components';
-import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+import Image from 'next/image'
+import { Callout } from 'nextra/components'
+import {
+    Tooltip,
+    TooltipTrigger,
+    TooltipContent,
+} from '@/components/ui/tooltip'
 
 # CSAF & VEX Standards
 
@@ -25,7 +29,8 @@ VEX[^1] enables organizations to explain whether specific vulnerabilities actual
 **Under Investigation**: Actively analyzing whether vulnerability affects your deployment.
 
 <Callout type="info" emoji="📋">
-  VEX transforms vulnerability management from "list all CVEs" to "explain actual impact"—reducing false positive fatigue.
+    VEX transforms vulnerability management from "list all CVEs" to "explain
+    actual impact"—reducing false positive fatigue.
 </Callout>
 
 ## What is CSAF?
@@ -43,31 +48,39 @@ Both support VEX but differ in approach:
 ### CSAF VEX: Product-Centric
 
 Describes products and dependency relationships. Recipients see complete product structure with versions, platforms, OS.
+
 ```json
 {
-  "product_tree": {
-    "relationships": [{
-      "product_reference": "pkg:npm/prismjs@1.27.0",
-      "relates_to_product_reference": "pkg:oci/devguard-web@main"
-    }]
-  },
-  "vulnerabilities": [{
-    "cve": "CVE-2024-53382",
-    "product_status": { "under_investigation": ["CSAFPID-0003"] }
-  }]
+    "product_tree": {
+        "relationships": [
+            {
+                "product_reference": "pkg:npm/prismjs@1.27.0",
+                "relates_to_product_reference": "pkg:oci/devguard-web@main"
+            }
+        ]
+    },
+    "vulnerabilities": [
+        {
+            "cve": "CVE-2024-53382",
+            "product_status": { "under_investigation": ["CSAFPID-0003"] }
+        }
+    ]
 }
 ```
 
 ### CycloneDX VEX: Component-Centric
 
 Details vulnerabilities at component level using <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">PURL</span></TooltipTrigger><TooltipContent><p>Package URL - Standardized package identifier</p></TooltipContent></Tooltip> (Package URL).
+
 ```json
 {
-  "vulnerabilities": [{
-    "id": "CVE-2024-53382",
-    "analysis": { "state": "in_triage" },
-    "affects": [{ "ref": "pkg:npm/prismjs@1.27.0" }]
-  }]
+    "vulnerabilities": [
+        {
+            "id": "CVE-2024-53382",
+            "analysis": { "state": "in_triage" },
+            "affects": [{ "ref": "pkg:npm/prismjs@1.27.0" }]
+        }
+    ]
 }
 ```
 
@@ -82,7 +95,8 @@ Details vulnerabilities at component level using <Tooltip><TooltipTrigger asChil
 **Consuming**: Ingest upstream CSAF reports from suppliers. Configure supplier's CSAF URL and asset PURL to track.
 
 <Callout type="info" emoji="🔄">
-  CSAF upstream sources integrate with DevGuard's event handling. See [External Vulnerability Sync](external-vulnerability-sync) for details.
+    CSAF upstream sources integrate with DevGuard's event handling. See
+    [External Vulnerability Sync](external-vulnerability-sync) for details.
 </Callout>
 
 ## Use Cases
@@ -98,9 +112,9 @@ Details vulnerabilities at component level using <Tooltip><TooltipTrigger asChil
 ## Related Documentation
 
 - [External Vulnerability Sync](external-vulnerability-sync) - Importing/exporting vulnerability data
-- [Vulnerability States](vulnerability-states) - VEX states and justifications
+- [Vulnerability States](/explanations/vulnerability-management/vulnerability-lifecycle) - VEX states and justifications
 - [Why Compliance Matters](why-compliance-matters) - Business case for standards
 
 ## References
 
-[^1]: CISA, *Vulnerability Exploitability eXchange (VEX)*, https://www.cisa.gov/sbom
+[^1]: CISA, _Vulnerability Exploitability eXchange (VEX)_, https://www.cisa.gov/sbom

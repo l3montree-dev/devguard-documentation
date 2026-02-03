@@ -19,10 +19,11 @@ export default {
     },
     introduction: { title: 'Introduction' },
     'getting-started': { title: 'Getting Started' },
-    'how-to-guides': { title: 'How-to Guides' },
     tutorials: { title: 'Tutorials' },
-    explanations: { title: 'Explanations' },
+    'how-to-guides': { title: 'How-to Guides' },
     reference: { title: 'Reference' },
+    explanations: { title: 'Explanations' },
+    comparison: { title: 'Comparison' },
     contributing: { title: 'Contributing' },
     other: {
         title: 'Other',

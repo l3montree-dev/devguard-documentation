@@ -1,6 +1,10 @@
-import Image from 'next/image';
-import { Callout } from 'nextra/components';
-import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+import Image from 'next/image'
+import { Callout } from 'nextra/components'
+import {
+    Tooltip,
+    TooltipTrigger,
+    TooltipContent,
+} from '@/components/ui/tooltip'
 
 # Why Compliance Matters
 
@@ -27,7 +31,9 @@ The costs of non-compliance typically far exceed compliance investments:
 **Efficiency**: Structured development processes, automated security testing, continuous quality improvement, better documentation.
 
 <Callout type="info" emoji="💡">
-  Organizations treating compliance as strategic investment rather than burden gain competitive advantages—faster market entry, higher customer trust, and lower long-term security costs.
+    Organizations treating compliance as strategic investment rather than burden
+    gain competitive advantages—faster market entry, higher customer trust, and
+    lower long-term security costs.
 </Callout>
 
 ## What Compliance Means
@@ -67,6 +73,7 @@ The costs of non-compliance typically far exceed compliance investments:
 ### 1. Shift-Left Integration
 
 Integrate compliance from the beginning, not at the end:
+
 - Security requirements in planning phase
 - Automated tests in CI/CD pipelines
 - Continuous monitoring during development
@@ -75,6 +82,7 @@ Integrate compliance from the beginning, not at the end:
 ### 2. Automation
 
 Manual processes don't scale:
+
 - Automatic SBOM generation per build
 - Continuous vulnerability scanning
 - Automated risk assessment
@@ -83,13 +91,30 @@ Manual processes don't scale:
 ### 3. Prioritization by Actual Risk
 
 Not all vulnerabilities are equally critical:
+
 - Context-based risk assessment
 - Exploitability consideration
-- <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">VEX</span></TooltipTrigger><TooltipContent><p>Vulnerability Exploitability eXchange - Reduces false positives by documenting actual exploitability</p></TooltipContent></Tooltip> to reduce false positives
+- <Tooltip>
+      <TooltipTrigger asChild>
+          <span className="cursor-pointer underline decoration-yellow-400 decoration-dotted decoration-1 underline-offset-4">
+              VEX
+          </span>
+      </TooltipTrigger>
+      <TooltipContent>
+          <p>
+              Vulnerability Exploitability eXchange - Reduces false positives by
+              documenting actual exploitability
+          </p>
+      </TooltipContent>
+  </Tooltip>
+  to reduce false positives
 - Focus on highest risks
 
 <Callout type="info" emoji="🔄">
-  DevGuard addresses these challenges through automated vulnerability management, SBOM/VEX support, risk-based prioritization, and seamless CI/CD integration—enabling compliance as an integrated part of development rather than a burden.
+    DevGuard addresses these challenges through automated vulnerability
+    management, SBOM/VEX support, risk-based prioritization, and seamless CI/CD
+    integration—enabling compliance as an integrated part of development rather
+    than a burden.
 </Callout>
 
 ## Key Takeaways
@@ -108,4 +133,4 @@ Not all vulnerabilities are equally critical:
 
 - [Vulnerability Lifecycle](vulnerability-lifecycle) - Managing vulnerabilities throughout their lifecycle
 - [External Vulnerability Sync](external-vulnerability-sync) - SBOM/VEX generation and sharing
-- [Vulnerability Risk Assessment](risk-assessment-methodology) - Risk-based prioritization approach
+- [Vulnerability Risk Assessment](/explanations/vulnerability-management/risk-assessment-methodology) - Risk-based prioritization approach
