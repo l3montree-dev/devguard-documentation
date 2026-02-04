@@ -17,6 +17,11 @@ export default withNextra({
             source: "/concept-guides/container-hardening/cve-decision",
             destination: "/tutorials/container-hardening/cve-decision",
             permanent: true,
+        },
+        {
+            source: "/imprint",
+            destination: "https://l3montree.com/impressum",
+            permanent: false,
         }
         ];
     },
