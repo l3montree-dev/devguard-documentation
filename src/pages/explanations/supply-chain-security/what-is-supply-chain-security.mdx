@@ -4,7 +4,7 @@ import { AttributedImage } from '@/components/AttributedImage'
 
 In modern software development, you rarely write 100% of your own code. Instead, you assemble products using a vast ecosystem of third-party libraries, build tools, container images, and CI/CD pipelines.\
 In fact, it has been estimated that **[70-90%](https://www.linuxfoundation.org/blog/blog/a-summary-of-census-ii-open-source-software-application-libraries-the-world-depends-on)** of current software is composed of
-Free and Open Source Software (FOSS). This heavy reliance on external dependencies has fundamentally altered the [threat landscape](/explanations/Supply-Chain-Security/what-is-supply-chain-security#the-threat-landscape),
+Free and Open Source Software (FOSS). This heavy reliance on external dependencies has fundamentally altered the [threat landscape](/explanations/supply-chain-security/what-is-supply-chain-security#the-threat-landscape),
 shifting the risk from the code you write to the components you consume and the tools you use to deploy them.
 **Supply Chain Security** is the practice of ensuring that every component, process, and actor involved in the creation and delivery of your software is verified, untampered, and trustworthy.
 
@@ -35,10 +35,10 @@ Every one of these components has to be secured. A single vulnerability can put 
 Understanding the potential threats to the software supply chain is crucial for ensuring its security.
 By mapping the software supply chain, we can pinpoint vulnerabilities throughout the development lifecycle.
 These risks are categorized into **four strategic domains:**\
-[**Source**](/explanations/Supply-Chain-Security/what-is-supply-chain-security#1-source-threats),
-[**Build**](/explanations/Supply-Chain-Security/what-is-supply-chain-security#2-build-threats),
-[**Dependency**](/explanations/Supply-Chain-Security/what-is-supply-chain-security#3-dependency-threats),
-and [**Deployment & Runtime threats**](/explanations/Supply-Chain-Security/what-is-supply-chain-security#4-deployment-and-runtime-threats).
+[**Source**](/explanations/supply-chain-security/what-is-supply-chain-security#1-source-threats),
+[**Build**](/explanations/supply-chain-security/what-is-supply-chain-security#2-build-threats),
+[**Dependency**](/explanations/supply-chain-security/what-is-supply-chain-security#3-dependency-threats),
+and [**Deployment & Runtime threats**](/explanations/supply-chain-security/what-is-supply-chain-security#4-deployment-and-runtime-threats).
 
 ![Software Supply Chain Threat Model](/threat-landscape.png)
 
@@ -314,7 +314,7 @@ By shifting left, supply chain security becomes an integrated part of the develo
 Supply Chain Security is no longer optional in an era of automated, multi-layered software delivery. It requires moving beyond simple vulnerability scanning and into the realm of **provenance and integrity**.
 By understanding the flow of code from source to production, and by demanding cryptographic proof of every transformation, organizations can significantly reduce the risk of sophisticated supply chain attacks.
 
-In the following sections, we will explore the specific frameworks **DevGuard** uses to implement these concepts, including [In-toto](/explanations/in-toto-framework.mdx) and [SLSA](/explanations/slsa-framework.mdx).
+In the following sections, we will explore the specific frameworks **DevGuard** uses to implement these concepts, including [In-toto](/explanations/supply-chain-security/in-toto-framework.mdx) and [SLSA](/explanations/supply-chain-security/slsa-framework.mdx).
 
 ---
 
