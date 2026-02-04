@@ -65,6 +65,10 @@ const logos = [
         name: 'BCG',
         url: '/sponsors/sp-bcg.png',
     },
+    {
+        name: 'ReadyLabs GmbH',
+        url: '/sponsors/Ready-Labs-Logo-weiß.png',
+    },
 ]
 
 const AnimatedLogoCloud = () => {
