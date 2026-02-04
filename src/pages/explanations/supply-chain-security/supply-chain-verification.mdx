@@ -2,7 +2,7 @@ import { AttributedImage } from '@/components/AttributedImage'
 
 # Supply Chain Verification
 
-Creating secure software is only half the battle. You can generate SBOMs, sign your commits, and attach sophisticated [Attestations](/explanation/supply-chain-security/attestations) to your artifacts, but none of this matters if nobody checks them.
+Creating secure software is only half the battle. You can generate SBOMs, sign your commits, and attach sophisticated [Attestations](/explanations/supply-chain-security/attestations) to your artifacts, but none of this matters if nobody checks them.
 
 **Supply Chain Verification** is the automated process of validating these artifacts against a set of organizational rules before they are allowed to execute.
 It acts as the "Passport Control" of your infrastructure. Just as a border agent checks that a passport is authentic (signature) and
@@ -36,27 +36,27 @@ A robust verification engine performs checks in three distinct layers. If any la
 
 The first check is cryptographic. The verifier calculates the hash of the artifact and compares it to the hash signed in the attestation.
 
--   **Question:** Is this the exact same file that was signed?
--   **Mechanism:** SHA-256 Digest comparison and Digital Signature verification.
--   **Goal:** Prevent tampering. If a byte was changed in the binary after it was built, the signatures will not match.
+- **Question:** Is this the exact same file that was signed?
+- **Mechanism:** SHA-256 Digest comparison and Digital Signature verification.
+- **Goal:** Prevent tampering. If a byte was changed in the binary after it was built, the signatures will not match.
 
 ### 2. Authenticity (Who signed it?)
 
 Integrity proves the file hasn't changed, but it doesn't prove _who_ created it. A malicious actor can sign their own malware. Authenticity checks the **Identity** of the signer.
 
--   **Question:** Did this come from a trusted source?
--   **Mechanism:** Public Key Infrastructure (PKI) or Keyless Identity (OIDC).
--   **Goal:** Prevent spoofing. The verifier checks if the signing key belongs to a trusted list (the "Root of Trust") or if the OIDC identity matches the expected repository (e.g., `https://github.com/my-org/my-repo`).
+- **Question:** Did this come from a trusted source?
+- **Mechanism:** Public Key Infrastructure (PKI) or Keyless Identity (OIDC).
+- **Goal:** Prevent spoofing. The verifier checks if the signing key belongs to a trusted list (the "Root of Trust") or if the OIDC identity matches the expected repository (e.g., `https://github.com/my-org/my-repo`).
 
 ### 3. Compliance (Does it meet our standards?)
 
 This is the most complex layer. The artifact is signed and authentic, but is it _good_? This involves inspecting the **Predicate** (content) of the attestations.
 
--   **Question:** Does the data inside the attestation satisfy our rules?
--   **Mechanism:** Policy-as-Code (e.g., Rego/OPA, CUE).
--   **Goal:** Enforce quality and security standards.
-    -   _Example:_ "Reject if the SBOM contains 'log4j' version < 2.15."
-    -   _Example:_ "Reject if the Provenance shows the build was triggered by an external contributor."
+- **Question:** Does the data inside the attestation satisfy our rules?
+- **Mechanism:** Policy-as-Code (e.g., Rego/OPA, CUE).
+- **Goal:** Enforce quality and security standards.
+    - _Example:_ "Reject if the SBOM contains 'log4j' version < 2.15."
+    - _Example:_ "Reject if the Provenance shows the build was triggered by an external contributor."
 
 ---
 
