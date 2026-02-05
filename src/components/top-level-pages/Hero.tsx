@@ -25,9 +25,11 @@ export default function Hero() {
             </div>
 
             <Container className="relative z-10">
-                <div className="flex flex-col items-center justify-center text-center">
-                   
-
+                {/* Radial blurred backdrop to improve text readability */}
+                <div className="absolute blur-3xl inset-0 flex items-center justify-center z-0 pointer-events-none">
+                    
+                </div>
+                <div className="flex flex-col items-center justify-center text-center z-10">
                     {/* Main Headline with Split Text Animation */}
                     <div className="mb-2">
                         <SplitText
@@ -44,10 +46,11 @@ export default function Hero() {
                             textAlign="center"
                         />
                     </div>
-                    <div className="mb-6">
+                    <div className="mb-6 relative">
+                        <div className='absolute inset-0 blur-3xl bg-black/10' />
                         <SplitText
                             text="Software."
-                            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-medium tracking-tighter text-primary"
+                            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-medium tracking-tight text-amber-300"
                             delay={30}
                             duration={0.8}
                             ease="power3.out"
@@ -68,7 +71,8 @@ export default function Hero() {
                         delay={0.4}
                     >
                         <div className="max-w-3xl">
-                            <span className="text-2xl leading-relaxed font-base tracking-tight"    
+                            <div className='absolute inset-0 blur-2xl bg-black' />
+                            <span className="text-2xl relative p-2 rounded-md leading-relaxed font-base tracking-tight"    
                             >
                             Get full transparency of your Software-Supply-Chain. Open Source.
                             </span>
@@ -90,7 +94,7 @@ export default function Hero() {
                             >
                                 <Button
                                     variant="default"
-                                    className="bg-primary hover:opacity-80 text-dg-950 font-semibold px-8 h-12 text-base"
+                                    className="bg-white hover:opacity-80 text-dg-950 font-semibold px-8 h-12 text-base"
                                     data-umami-event="look-at-devguard"
                                 >
                                     Try DevGuard

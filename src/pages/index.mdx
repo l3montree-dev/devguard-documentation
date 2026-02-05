@@ -2,36 +2,25 @@
 title: Home
 ---
 
-import { Container } from '../components/top-level-pages/container'
-import { CallToAction } from '../components/top-level-pages/call-to-action'
-import { LogoLine } from '../components/top-level-pages/logo-line'
-import Hero from '../components/top-level-pages/Hero'
-import FeatureSection from '../components/top-level-pages/FeatureSection'
-import BentoSection from '../components/top-level-pages/BentoSection'
-import MissionSection from '../components/top-level-pages/MissionSection'
-import DarkBentoSection from '../components/top-level-pages/DarkBentoSection'
-import ThreeColumnBentoSection from '../components/top-level-pages/ThreeColumnBentoSection'
-import FrosconTalkBanner from '../components/top-level-pages/FrosconTalk'
 import AnimatedLogoCloud from '../components/AnimatedLogoCloud'
-import GridScanSection from '../components/top-level-pages/GridScanSection'
-import FirewallSection from '../components/top-level-pages/FirewallSection'
 import GradualBlur from '../components/GradualBlur'
+import BentoSection from '../components/top-level-pages/BentoSection'
+import { CallToAction } from '../components/top-level-pages/call-to-action'
+import { Container } from '../components/top-level-pages/container'
+import DarkBentoSection from '../components/top-level-pages/DarkBentoSection'
+import FeatureSection from '../components/top-level-pages/FeatureSection'
+import FirewallSection from '../components/top-level-pages/FirewallSection'
+import FrosconTalkBanner from '../components/top-level-pages/FrosconTalk'
+import GridScanSection from '../components/top-level-pages/GridScanSection'
+import Hero from '../components/top-level-pages/Hero'
+import { LogoLine } from '../components/top-level-pages/logo-line'
+import MissionSection from '../components/top-level-pages/MissionSection'
+import ThreeColumnBentoSection from '../components/top-level-pages/ThreeColumnBentoSection'
 
 export default function Home() {
     return (
         <>
-            {/* Gradual Blur effect at bottom of page */}
-            <GradualBlur
-                position="bottom"
-                target="page"
-                animated="scroll"
-                height="7rem"
-                strength={2}
-                divCount={5}
-                curve="bezier"
-                exponential
-                opacity={1}
-            />
+
             <div className="overflow-hidden">
                 <Hero />
                 <main>
