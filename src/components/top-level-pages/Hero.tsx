@@ -7,7 +7,7 @@ import FloatingLines from '../FloatingLines'
 
 export default function Hero() {
     return (
-        <div className="relative min-h-[87vh] flex items-center justify-center overflow-hidden bg-dg-950">
+        <div className="relative min-h-[87vh] pt-10 md:pt-0 flex items-center justify-center overflow-hidden bg-dg-950">
             {/* Gradient Blinds Background */}
             <div className="absolute inset-0 opacity-90">
                 <FloatingLines
@@ -26,9 +26,7 @@ export default function Hero() {
 
             <Container className="relative z-10">
                 {/* Radial blurred backdrop to improve text readability */}
-                <div className="absolute blur-3xl inset-0 flex items-center justify-center z-0 pointer-events-none">
-                    
-                </div>
+                <div className="absolute blur-3xl inset-0 flex items-center justify-center z-0 pointer-events-none" />
                 <div className="flex flex-col items-center justify-center text-center z-10">
                     {/* Main Headline with Split Text Animation */}
                     <div className="mb-2">
@@ -143,21 +141,21 @@ export default function Hero() {
                         duration={0.7}
                         delay={0.8}
                     >
-                        <div className="mt-16 flex flex-wrap justify-center gap-x-10 gap-y-4 text-base text-gray-200">
+                        <div className="mt-16 flex flex-wrap justify-center gap-x-10 gap-y-4 text-base text-white">
                             <div className="flex items-center gap-2">
-                                <div className="w-1.5 h-1.5 rounded-full bg-l3-400" />
+                                <div className="w-1.5 h-1.5 rounded-full bg-primary" />
                                 <span>Vulnerability Management</span>
                             </div>
                             <div className="flex items-center gap-2">
-                                <div className="w-1.5 h-1.5 rounded-full bg-l3-400" />
+                                <div className="w-1.5 h-1.5 rounded-full bg-primary" />
                                 <span>DevSecOps</span>
                             </div>
                             <div className="flex items-center gap-2">
-                                <div className="w-1.5 h-1.5 rounded-full bg-l3-400" />
+                                <div className="w-1.5 h-1.5 rounded-full bg-primary" />
                                 <span>Container Security</span>
                             </div>
                             <div className="flex items-center gap-2">
-                                <div className="w-1.5 h-1.5 rounded-full bg-l3-400" />
+                                <div className="w-1.5 h-1.5 rounded-full bg-primary" />
                                 <span>Dependency Firewall</span>
                             </div>
                         </div>
@@ -166,9 +164,9 @@ export default function Hero() {
             </Container>
 
             {/* Scroll indicator */}
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10">
+            <div className="absolute hidden md:block bottom-8 left-1/2 -translate-x-1/2 z-10">
                 <AnimatedContent distance={20} direction="vertical" duration={0.5} delay={1.2}>
-                    <div className="flex flex-col items-center gap-2 text-gray-500">
+                    <div className="flex flex-col items-center gap-2 text-white/50">
                         <span className="text-xs uppercase tracking-widest">Scroll</span>
                         <div className="w-5 h-8 rounded-full border border-gray-500/50 flex justify-center pt-1.5">
                             <div className="w-1 h-2 bg-gray-400 rounded-full animate-bounce" />
