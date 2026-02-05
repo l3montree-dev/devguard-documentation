@@ -1,17 +1,22 @@
+---
+title: 'What is supply chain security'
+metaDescription: 'Learn what software supply chain security is, explore real-world attacks like SolarWinds and Log4Shell, and discover core principles like SBOMs, provenance, and SLSA to protect your software.'
+---
+
 import { AttributedImage } from '@/components/AttributedImage'
 
-# What is Supply Chain Security?
+## What is Supply Chain Security?
 
 In modern software development, you rarely write 100% of your own code. Instead, you assemble products using a vast ecosystem of third-party libraries, build tools, container images, and CI/CD pipelines.\
 In fact, it has been estimated that **[70-90%](https://www.linuxfoundation.org/blog/blog/a-summary-of-census-ii-open-source-software-application-libraries-the-world-depends-on)** of current software is composed of
-Free and Open Source Software (FOSS). This heavy reliance on external dependencies has fundamentally altered the [threat landscape](/explanations/Supply-Chain-Security/what-is-supply-chain-security#the-threat-landscape),
-shifting the risk from the code you write to the components you consume and the tools you use to deploy them.
-**Supply Chain Security** is the practice of ensuring that every component, process, and actor involved in the creation and delivery of your software is verified, untampered, and trustworthy.
+Free and Open Source Software (FOSS). This heavy reliance on external dependencies has fundamentally altered the [threat landscape](/explanations/supply-chain-security/what-is-supply-chain-security#the-threat-landscape),
+shifting the risk from the code you write to the components you consume and the tools you use to deploy them.\
+**Supply chain security** is the practice of ensuring that every component, process, and actor involved in the creation and delivery of your software is verified, untampered, and trustworthy. Effective supply chain security requires a comprehensive understanding of your software's origins.
 
 ## What is the Software Supply Chain?
 
 A software supply chain consists of all the steps and components involved in creating, building, and deploying software in the [Software Development Life Cycle](https://en.wikipedia.org/wiki/Systems_development_life_cycle).
-It includes the tools, processes, and people responsible for writing and transforming source code into a deployable application.
+Understanding your software supply chain is fundamental to implementing supply chain security. It includes the tools, processes, and people responsible for writing and transforming source code into a deployable application.
 
 The software supply chain for a typical project could involve for example (not exhaustive):
 
@@ -26,25 +31,25 @@ The software supply chain for a typical project could involve for example (not e
 - Package management software and ecosystems (npm, pip, etc.)
 - ...
 
-Every one of these components has to be secured. A single vulnerability can put the entire software supply chain at risk.
+Every one of these components has to be secured. A single vulnerability can put the entire software supply chain at risk, which is why supply chain security must address each stage.
 
 ---
 
 ## The Threat Landscape
 
-Understanding the potential threats to the software supply chain is crucial for ensuring its security.
-By mapping the software supply chain, we can pinpoint vulnerabilities throughout the development lifecycle.
+Understanding the potential threats to the software supply chain is crucial for supply chain security.
+By mapping the software supply chain, we can pinpoint vulnerabilities throughout the development lifecycle. Robust supply chain security depends on identifying these risks early.
 These risks are categorized into **four strategic domains:**\
-[**Source**](/explanations/Supply-Chain-Security/what-is-supply-chain-security#1-source-threats),
-[**Build**](/explanations/Supply-Chain-Security/what-is-supply-chain-security#2-build-threats),
-[**Dependency**](/explanations/Supply-Chain-Security/what-is-supply-chain-security#3-dependency-threats),
-and [**Deployment & Runtime threats**](/explanations/Supply-Chain-Security/what-is-supply-chain-security#4-deployment-and-runtime-threats).
+[**Source**](/explanations/supply-chain-security/what-is-supply-chain-security#1-source-threats),
+[**Build**](/explanations/supply-chain-security/what-is-supply-chain-security#2-build-threats),
+[**Dependency**](/explanations/supply-chain-security/what-is-supply-chain-security#3-dependency-threats),
+and [**Deployment & Runtime threats**](/explanations/supply-chain-security/what-is-supply-chain-security#4-deployment-and-runtime-threats).
 
 ![Software Supply Chain Threat Model](/threat-landscape.png)
 
 ### 1. Source Threats
 
-These risks target the earliest stage of development—the code itself and the systems that manage it. Attackers aim to compromise source code repositories to inject malicious code or steal intellectual property
+Source threats represent a critical concern for supply chain security. These risks target the earliest stage of development—the code itself and the systems that manage it. Attackers aim to compromise source code repositories to inject malicious code or steal intellectual property
 before the build process even begins.
 
 #### Examples of Source Threats
@@ -54,8 +59,8 @@ before the build process even begins.
 - **Insufficient Code Review:** Malicious or vulnerable code is merged into the main branch because peer review processes were skipped or automated scanners were ignored.
 
 <AttributedImage
-    src="/XZ_logo_contributed_by_Jia_Tan.png"
-    alt="XZ Utils Logo"
+    src="/XZ-logo-contributed-by-Jia-Tan.png"
+    alt="XZ Utils Logo from supply chain attacker on library"
     float="right"
     width="280px"
     attribution={
@@ -84,17 +89,17 @@ before the build process even begins.
 </AttributedImage>
 
 **Real-World Example: [The 2024 XZ Utils Backdoor](https://en.wikipedia.org/wiki/XZ_Utils_backdoor)**
-In this sophisticated social engineering attack, a malicious actor known as "Jia Tan" spent years building trust to gain maintainer rights over **XZ Utils**, a widely used compression library.
+This attack demonstrates why supply chain security is essential. In this sophisticated social engineering attack, a malicious actor known as "Jia Tan" spent years building trust to gain maintainer rights over **XZ Utils**, a widely used compression library.
 Once in control, they injected a backdoor designed to allow unauthorized **remote code execution** on Linux servers.
 
-**Impact:** The attack was discovered by chance just weeks before it would have merged into stable Linux distributions. While this miracle discovery prevented the infection of **hundreds of millions of servers** globally,
+**Impact:** The attack was discovered by chance just weeks before it would have merged into stable Linux distributions. This near-miss highlights the importance of supply chain security vigilance. While this miracle discovery prevented the infection of **hundreds of millions of servers** globally,
 the compromised versions (5.6.0 and 5.6.1) still reached users of rolling-release distributions like Fedora Rawhide, Kali Linux, and openSUSE Tumbleweed.
 
 ---
 
 ### 2. Build Threats
 
-Build threats focus on the "factory" where code is turned into executable software. If the build environment or the process is compromised, the resulting artifact will be malicious, even if the original source code was clean.
+Build threats are a major focus of supply chain security. These threats target the "factory" where code is turned into executable software. If the build environment or the process is compromised, the resulting artifact will be malicious, even if the original source code was clean.
 
 #### Examples of Build Threats
 
@@ -103,16 +108,16 @@ Build threats focus on the "factory" where code is turned into executable softwa
 - **Artifact Tampering:** A legitimate binary is replaced with a malicious version immediately after the build is completed but before it is signed or stored.
 
 **Real-World Example: [SolarWinds Incident (2020)](https://en.wikipedia.org/wiki/2020_United_States_federal_government_data_breach#Methodology)**
-This incident illustrates a critical failure in build security. Attackers compromised the **build environment and continuous integration server**, allowing them to modify and infect software updates
+This incident illustrates a critical failure in supply chain security. Attackers compromised the **build environment and continuous integration server**, allowing them to modify and infect software updates
 for the **Orion** network monitoring tool.
 
-**Impact:** The fallout was severe, reaching over a dozen U.S. government departments—including the **military, executive branch, and intelligence services**—who unknowingly installed the compromised updates.
+**Impact:** The fallout was severe, reaching over a dozen U.S. government departments—including the **military, executive branch, and intelligence services**—who unknowingly installed the compromised updates. This attack became a catalyst for government supply chain security regulations.
 
 ---
 
 ### 3. Dependency Threats
 
-Modern software relies heavily on third-party libraries and open-source packages. Dependency threats exploit this trust by introducing vulnerabilities through the external components your software consumes.
+Dependency threats represent one of the most common supply chain security challenges. Modern software relies heavily on third-party libraries and open-source packages. These threats exploit this trust by introducing vulnerabilities through the external components your software consumes.
 
 #### Examples of Dependency Threats
 
@@ -121,16 +126,16 @@ Modern software relies heavily on third-party libraries and open-source packages
 - **Vulnerable Transitive Dependencies:** A library you use depends on _another_ library that has a critical vulnerability (like Log4j), compromising your application indirectly.
 
 **Real-World Example: [Log4Shell (2021)](https://en.wikipedia.org/wiki/Log4Shell)**
-The **Log4Shell** vulnerability in the ubiquitous Java logging library **Log4j** demonstrates the massive reach of dependency threats. A critical flaw in how the library processed log messages allowed attackers to
+The **Log4Shell** vulnerability demonstrates the massive reach of dependency threats and the importance of supply chain security. A critical flaw in how the ubiquitous Java logging library **Log4j** processed log messages allowed attackers to
 execute arbitrary code remotely (RCE) simply by sending a specific text string to a vulnerable server.
 
-**Impact:** Because Log4j was embedded as a dependency in **millions of applications**—from iCloud and Steam to enterprise software—the vulnerability left a vast portion of the internet exposed. It forced organizations globally to pause development and scramble to patch deep chains of transitive dependencies.
+**Impact:** Because Log4j was embedded as a dependency in **millions of applications**—from iCloud and Steam to enterprise software—the vulnerability left a vast portion of the internet exposed. It forced organizations globally to pause development and scramble to patch deep chains of transitive dependencies. This incident accelerated supply chain security adoption across the industry.
 
 ---
 
 ### 4. Deployment and Runtime Threats
 
-These threats occur after the software has been built and is running in its destination environment. Attackers target the deployment infrastructure or the application while it is active to manipulate its behavior or steal data.
+Deployment and runtime threats extend supply chain security concerns beyond the build process. These threats occur after the software has been built and is running in its destination environment. Attackers target the deployment infrastructure or the application while it is active to manipulate its behavior or steal data.
 
 #### Examples of Deployment Threats
 
@@ -146,7 +151,7 @@ Attackers exploited this by sending web requests with malicious commands injecte
 allowing attackers to bypass authentication entirely.
 
 **Impact:** The breach resulted in the theft of **147.9 million American consumer records**. It also exposed data for 15.2 million UK citizens and compromised approximately 10–11 million drivers' licenses,
-highlighting how a single runtime vulnerability can lead to catastrophic data loss.
+highlighting how a single runtime vulnerability can lead to catastrophic data loss and why comprehensive supply chain security is critical.
 
 ---
 
@@ -154,22 +159,22 @@ highlighting how a single runtime vulnerability can lead to catastrophic data lo
 
 To counter the threats described in the previous section, supply chain security relies on four fundamental concepts best implemented in your CI/CD (Continuous Integration/Continuous Deployment) pipeline.
 While traditional application security focuses on finding vulnerabilities in your own code,
-supply chain security focuses on verifying the trust and transparency of everything that enters and exits your pipeline.
+supply chain security focuses on verifying the trust and transparency of everything that enters and exits your pipeline. These supply chain security principles form the foundation of a robust defense strategy.
 
 ### Visibility
 
-You cannot secure what you cannot see. Modern software is rarely written from scratch; it is assembled from hundreds or thousands of open-source libraries and third-party components.
+Visibility is the first pillar of supply chain security. You cannot secure what you cannot see. Modern software is rarely written from scratch; it is assembled from hundreds or thousands of open-source libraries and third-party components.
 
 **Visibility** is achieved through a **Software Bill of Materials** ([SBOM](/explanations/compliance/sbom-standards.mdx)). An SBOM is a formal, machine-readable inventory of every dependency,
 library, and module included in your software. Just as a list of ingredients on a food package allows consumers to avoid allergens, an SBOM allows security teams to rapidly identify
-if they are affected when a major vulnerability is discovered in a widely used component.
+if they are affected when a major vulnerability is discovered in a widely used component. SBOMs are essential for effective supply chain security.
 
 For example, during the CI build process, a scanner analyzes the project’s manifest files (like package.json) and generates an SBOM JSON file, which can then get automatically checked
 for compromised packages regularly.
 
 ### Identity and Integrity
 
-In a distributed supply chain, it is difficult to know if a piece of code is authentic. Attackers may impersonate a trusted maintainer or inject malicious code into a package during transit.
+Identity and integrity are core components of supply chain security. In a distributed supply chain, it is difficult to know if a piece of code is authentic. Attackers may impersonate a trusted maintainer or inject malicious code into a package during transit.
 
 - **Identity** verifies who created an artifact (a developer or a build system).
 
@@ -184,10 +189,10 @@ If the signature is invalid, indicating the file was tampered with, the server r
 
 ### Provenance
 
-While signing proves _who_ signed an artifact, it does not prove _how_ it was built. A signed binary could still be malicious if it was built on a compromised laptop or build server.
+Provenance is a critical aspect of supply chain security. While signing proves _who_ signed an artifact, it does not prove _how_ it was built. A signed binary could still be malicious if it was built on a compromised laptop or build server.
 
 **Provenance** is the **verifiable "chain of custody"** for software. It is a set of **authenticated metadata**, often called [Attestations](/explanations/supply-chain-security/attestations) that records
-exactly **how** a software artifact was produced.
+exactly **how** a software artifact was produced. Provenance strengthens supply chain security by providing transparency into the build process.
 This includes which source code commit was used, which build parameters were set, and which specific build environment or CI runner performed the compilation.
 Provenance allows systems to **verify** that the software was built in a **trusted, isolated environment** rather than an insecure one.
 
@@ -198,11 +203,11 @@ This distinguishes an official, secure build from a counterfeit one built on an 
 
 ### Policy Enforcement
 
-Visibility, integrity, and provenance provide data, but that data must be acted upon. **Policy enforcement** is the **automated governance** layer that sits between the build and the deployment.
+Policy enforcement completes the supply chain security framework. Visibility, integrity, and provenance provide data, but that data must be acted upon. **Policy enforcement** is the **automated governance** layer that sits between the build and the deployment.
 
 Instead of relying on manual security reviews, policy engines use the data from the previous three pillars to make **automated** decisions, **blocking insecure artifacts** from moving downstream.
 A policy might state: "Do not allow this container to run in production unless it has a valid SBOM, is signed by our trusted key, and has provenance showing it was built on our secure server."
-This ensures that **security standards** are **applied consistently** across the entire organization.
+This ensures that **supply chain security standards** are **applied consistently** across the entire organization.
 
 For instance, a Kubernetes Admission Controller acts as a final gatekeeper. It is configured with a policy that states:
 "Reject any deployment that does not have a valid SBOM and a signature from our CI system." Even if a developer accidentally tries to deploy an insecure image, the cluster automatically rejects it.
@@ -211,14 +216,14 @@ For instance, a Kubernetes Admission Controller acts as a final gatekeeper. It i
 
 ## Industry Frameworks and Standards
 
-To standardize the security pillars described above, the industry relies on two primary frameworks:\
+To standardize supply chain security practices described above, the industry relies on two primary frameworks:\
 [**NIST SSDF**](https://csrc.nist.gov/projects/ssdf) and [**SLSA**](https://slsa.dev/).
-While they share the same goal, they approach the problem from different perspectives: **SSDF** focuses on the **process**, while **SLSA** focuses on the **artifact**.
+While they share the same goal of improving supply chain security, they approach the problem from different perspectives: **SSDF** focuses on the **process**, while **SLSA** focuses on the **artifact**.
 
 ### NIST SSDF (The Process Standard)
 
-The [**Secure Software Development Framework (SSDF)**](https://csrc.nist.gov/projects/ssdf), published by [NIST (SP 800-218)](https://csrc.nist.gov/pubs/sp/800/218/final), outlines high-level practices for the entire software lifecycle.
-It is less about specific tools and more about **organizational culture and policy**.
+The [**Secure Software Development Framework (SSDF)**](https://csrc.nist.gov/projects/ssdf), published by [NIST (SP 800-218)](https://csrc.nist.gov/pubs/sp/800/218/final), provides supply chain security guidelines for the entire software lifecycle.
+It is less about specific tools and more about **organizational culture and policy** for supply chain security.
 
 The framework requires organizations to:
 
@@ -234,10 +239,10 @@ In short, SSDF mandates that an organization has a secure process and a trained 
 
 ### SLSA (The Artifact Standard)
 
-[**Supply-chain Levels for Software Artifacts (SLSA)**](/explanations/supply-chain-security/slsa-framework.mdx) is a framework specifically designed to guarantee the integrity of the final software output.
+[**Supply-chain Levels for Software Artifacts (SLSA)**](/explanations/supply-chain-security/slsa-framework.mdx) is a supply chain security framework specifically designed to guarantee the integrity of the final software output.
 
 Its fundamental concept is Provenance: metadata that describes exactly how an artifact was created, including the source code version, the build platform, and external parameters used.
-SLSA relies on the [in-toto framework](/explanations/supply-chain-security/in-toto-framework) to provide the standard format for this metadata.
+SLSA relies on the [in-toto framework](/explanations/supply-chain-security/in-toto-framework) to provide the standard format for this metadata. SLSA has become a cornerstone of modern supply chain security.
 
 SLSA defines four maturity levels to guide organizations from basic documentation to advanced hardening:
 
@@ -254,10 +259,10 @@ SLSA defines four maturity levels to guide organizations from basic documentatio
 ## The "Shift Left" Philosophy
 
 Implementing supply chain security is not just about adding new tools; it requires a fundamental shift in when security checks occur.
-This concept is widely known in the industry as **"Shift Left"**.
+This concept is widely known in the industry as **"Shift Left"** and is essential for effective supply chain security.
 
 <AttributedImage
-    src="/DevOps_vs_DevSecOps.png"
+    src="/DevOps-vs-DevSecOps.png"
     alt="DevOps versus DevSecOps"
     float="right"
     width="100%"
@@ -291,13 +296,13 @@ In a traditional software lifecycle, modeled left-to-right from Design to Produc
 security testing often happened at the very end—just before deployment.
 If a vulnerability was found, the release was blocked, and developers had to scramble to fix code they wrote weeks ago.
 
-**Shift Left** moves these security processes to the **earlies** possible point in the development timeline:
+**Shift Left** moves supply chain security processes to the **earliest** possible point in the development timeline:
 
 - **Design Phase:** Choosing safe dependencies before writing code.
 
 - **Coding Phase:** IDE plugins warn developers about vulnerable packages in real-time.
 
-- **Build Phase:** Automated CI pipelines generate SBOMs and sign artifacts immediately upon commit.
+- **Build Phase:** Automated CI pipelines generate SBOMs and sign artifacts immediately upon commit, enforcing supply chain security at every step.
 
 #### Why it matters
 
@@ -311,10 +316,10 @@ By shifting left, supply chain security becomes an integrated part of the develo
 
 ## Conclusion
 
-Supply Chain Security is no longer optional in an era of automated, multi-layered software delivery. It requires moving beyond simple vulnerability scanning and into the realm of **provenance and integrity**.
-By understanding the flow of code from source to production, and by demanding cryptographic proof of every transformation, organizations can significantly reduce the risk of sophisticated supply chain attacks.
+Supply chain security is no longer optional in an era of automated, multi-layered software delivery. Implementing supply chain security requires moving beyond simple vulnerability scanning and into the realm of **provenance and integrity**.
+By understanding the flow of code from source to production, and by demanding cryptographic proof of every transformation, organizations can significantly reduce the risk of sophisticated supply chain attacks. Investing in supply chain security today protects your organization from tomorrow's threats.
 
-In the following sections, we will explore the specific frameworks **DevGuard** uses to implement these concepts, including [In-toto](/explanations/in-toto-framework.mdx) and [SLSA](/explanations/slsa-framework.mdx).
+In the following sections, we will explore the specific frameworks **DevGuard** uses to implement supply chain security concepts, including [In-toto](/explanations/supply-chain-security/in-toto-framework.mdx) and [SLSA](/explanations/supply-chain-security/slsa-framework.mdx).
 
 ---
 

@@ -19,6 +19,7 @@ const config: DocsThemeConfig = {
 
         return (
             <>
+                <link rel="canonical" href={url} />
                 <meta property="og:url" content={url} />
                 <meta
                     property="og:title"
@@ -31,6 +32,12 @@ const config: DocsThemeConfig = {
                     {(frontMatter.title ?? rest.title) + ' | DevGuard' ||
                         'DevGuard'}
                 </title>
+                {frontMatter.metaDescription && (
+                    <meta
+                        name="description"
+                        content={frontMatter.metaDescription}
+                    />
+                )}
                 {Boolean(websiteId) && Boolean(umamiUrl) && (
                     <script
                         defer
