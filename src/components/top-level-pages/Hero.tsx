@@ -7,12 +7,12 @@ import FloatingLines from '../FloatingLines'
 
 export default function Hero() {
     return (
-        <div className="relative min-h-[87vh] pt-10 md:pt-0 flex items-center justify-center overflow-hidden bg-dg-950">
+        <div className="relative flex min-h-[87vh] items-center justify-center overflow-hidden bg-dg-950 pt-10 md:pt-0">
             {/* Gradient Blinds Background */}
             <div className="absolute inset-0 opacity-90">
                 <FloatingLines
                     linesGradient={['#fbbd23', '#fbbd23a', '#fbbd23']}
-                    enabledWaves={["middle"]}
+                    enabledWaves={['middle']}
                     // Array - specify line count per wave; Number - same count for all waves
                     lineCount={3}
                     // Array - specify line distance per wave; Number - same distance for all waves
@@ -26,13 +26,13 @@ export default function Hero() {
 
             <Container className="relative z-10">
                 {/* Radial blurred backdrop to improve text readability */}
-                <div className="absolute blur-3xl inset-0 flex items-center justify-center z-0 pointer-events-none" />
-                <div className="flex flex-col items-center justify-center text-center z-10">
+                <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center blur-3xl" />
+                <div className="z-10 flex flex-col items-center justify-center text-center">
                     {/* Main Headline with Split Text Animation */}
                     <div className="mb-2">
                         <SplitText
                             text="Develop Secure"
-                            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-medium tracking-tighter text-white"
+                            className="text-5xl font-medium tracking-tighter text-white sm:text-6xl md:text-7xl lg:text-8xl"
                             delay={30}
                             duration={0.8}
                             ease="power3.out"
@@ -44,11 +44,11 @@ export default function Hero() {
                             textAlign="center"
                         />
                     </div>
-                    <div className="mb-6 relative">
-                        <div className='absolute inset-0 blur-3xl bg-black/10' />
+                    <div className="relative mb-6">
+                        <div className="absolute inset-0 bg-black/10 blur-3xl" />
                         <SplitText
                             text="Software."
-                            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-medium tracking-tight text-amber-300"
+                            className="text-5xl font-medium tracking-tight text-amber-300 sm:text-6xl md:text-7xl lg:text-8xl"
                             delay={30}
                             duration={0.8}
                             ease="power3.out"
@@ -69,10 +69,10 @@ export default function Hero() {
                         delay={0.4}
                     >
                         <div className="max-w-3xl">
-                            <div className='absolute inset-0 blur-2xl bg-black' />
-                            <span className="text-2xl relative p-2 rounded-md leading-relaxed font-base tracking-tight"    
-                            >
-                            Get full transparency of your Software-Supply-Chain. Open Source.
+                            <div className="absolute inset-0 bg-black blur-2xl" />
+                            <span className="font-base relative rounded-md p-2 text-2xl leading-relaxed tracking-tight">
+                                Get full transparency of your
+                                Software-Supply-Chain. Open Source.
                             </span>
                         </div>
                     </AnimatedContent>
@@ -84,7 +84,7 @@ export default function Hero() {
                         duration={0.7}
                         delay={0.6}
                     >
-                        <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+                        <div className="mt-10 flex flex-col justify-center gap-4 sm:flex-row">
                             <Link
                                 href="https://app.devguard.org/login"
                                 target="_blank"
@@ -92,7 +92,7 @@ export default function Hero() {
                             >
                                 <Button
                                     variant="default"
-                                    className="bg-white hover:opacity-80 text-dg-950 font-semibold px-8 h-12 text-base"
+                                    className="h-12 bg-white px-8 text-base font-semibold text-dg-950 hover:opacity-80"
                                     data-umami-event="look-at-devguard"
                                 >
                                     Try DevGuard
@@ -101,12 +101,13 @@ export default function Hero() {
                             <Link href="/introduction">
                                 <Button
                                     variant="outline"
-                                    className="border-white/30 text-white hover:bg-white/10 px-8 h-12 text-base"
+                                    className="h-12 border-white/30 px-8 text-base text-white hover:bg-white/10"
                                     data-umami-event="hero-to-docs"
                                 >
                                     Read the docs
                                 </Button>
                             </Link>
+
                             <Link
                                 href="https://github.com/l3montree-dev/devguard"
                                 target="_blank"
@@ -114,11 +115,11 @@ export default function Hero() {
                             >
                                 <Button
                                     variant="outline"
-                                    className="border-white/30 text-white hover:bg-white/10 px-8 h-12 text-base"
+                                    className="h-12 border-white/30 px-8 text-base text-white hover:bg-white/10"
                                     data-umami-event="hero-github"
                                 >
                                     <svg
-                                        className="w-5 h-5 mr-2"
+                                        className="mr-2 h-5 w-5"
                                         fill="currentColor"
                                         viewBox="0 0 24 24"
                                     >
@@ -143,19 +144,19 @@ export default function Hero() {
                     >
                         <div className="mt-16 flex flex-wrap justify-center gap-x-10 gap-y-4 text-base text-white">
                             <div className="flex items-center gap-2">
-                                <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                                <div className="h-1.5 w-1.5 rounded-full bg-primary" />
                                 <span>Vulnerability Management</span>
                             </div>
                             <div className="flex items-center gap-2">
-                                <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                                <div className="h-1.5 w-1.5 rounded-full bg-primary" />
                                 <span>DevSecOps</span>
                             </div>
                             <div className="flex items-center gap-2">
-                                <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                                <div className="h-1.5 w-1.5 rounded-full bg-primary" />
                                 <span>Container Security</span>
                             </div>
                             <div className="flex items-center gap-2">
-                                <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                                <div className="h-1.5 w-1.5 rounded-full bg-primary" />
                                 <span>Dependency Firewall</span>
                             </div>
                         </div>
@@ -164,12 +165,19 @@ export default function Hero() {
             </Container>
 
             {/* Scroll indicator */}
-            <div className="absolute hidden md:block bottom-8 left-1/2 -translate-x-1/2 z-10">
-                <AnimatedContent distance={20} direction="vertical" duration={0.5} delay={1.2}>
+            <div className="absolute bottom-8 left-1/2 z-10 hidden -translate-x-1/2 md:block">
+                <AnimatedContent
+                    distance={20}
+                    direction="vertical"
+                    duration={0.5}
+                    delay={1.2}
+                >
                     <div className="flex flex-col items-center gap-2 text-white/50">
-                        <span className="text-xs uppercase tracking-widest">Scroll</span>
-                        <div className="w-5 h-8 rounded-full border border-gray-500/50 flex justify-center pt-1.5">
-                            <div className="w-1 h-2 bg-gray-400 rounded-full animate-bounce" />
+                        <span className="text-xs uppercase tracking-widest">
+                            Scroll
+                        </span>
+                        <div className="flex h-8 w-5 justify-center rounded-full border border-gray-500/50 pt-1.5">
+                            <div className="h-2 w-1 animate-bounce rounded-full bg-gray-400" />
                         </div>
                     </div>
                 </AnimatedContent>
