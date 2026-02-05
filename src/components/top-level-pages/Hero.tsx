@@ -1,32 +1,28 @@
 import { Button } from './button'
 import { Container } from './container'
 import { Link } from './link'
-import GradientBlinds from '../GradientBlinds'
 import SplitText from '../SplitText'
 import AnimatedContent from '../AnimatedContent'
-import ShinyText from '../ShinyText'
-import StarBorder from '../StarBorder'
+import FloatingLines from '../FloatingLines'
 
 export default function Hero() {
     return (
         <div className="relative min-h-[87vh] flex items-center justify-center overflow-hidden bg-dg-950">
             {/* Gradient Blinds Background */}
-            <div className="absolute inset-0 opacity-60">
-                <GradientBlinds
-                    gradientColors={['#FCBE25', '#d8ba1a', '#956b13', '#3d250b']}
-                    blindCount={12}
-                    angle={-15}
-                    noise={0.3}
-                    spotlightRadius={0.6}
-                    spotlightSoftness={0.9}
-                    spotlightOpacity={0.8}
-                    distortAmount={0.15}
-                    mouseDampening={0.1}
+            <div className="absolute inset-0 opacity-90">
+                <FloatingLines
+                    linesGradient={['#fbbd23', '#fbbd23a', '#fbbd23']}
+                    enabledWaves={["middle"]}
+                    // Array - specify line count per wave; Number - same count for all waves
+                    lineCount={3}
+                    // Array - specify line distance per wave; Number - same distance for all waves
+                    lineDistance={25.5}
+                    bendRadius={5}
+                    bendStrength={-0.5}
+                    interactive={false}
+                    parallax={true}
                 />
             </div>
-
-            {/* Subtle gradient overlay for depth */}
-            <div className="absolute inset-0 bg-gradient-to-b from-dg-950/70 via-dg-950/30 to-dg-950/60" />
 
             <Container className="relative z-10">
                 <div className="flex flex-col items-center justify-center text-center">
@@ -51,7 +47,7 @@ export default function Hero() {
                     <div className="mb-6">
                         <SplitText
                             text="Software."
-                            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-medium tracking-tighter text-l3-400"
+                            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-medium tracking-tighter text-primary"
                             delay={30}
                             duration={0.8}
                             ease="power3.out"
@@ -94,7 +90,7 @@ export default function Hero() {
                             >
                                 <Button
                                     variant="default"
-                                    className="bg-l3-400 hover:bg-l3-500 text-dg-950 font-semibold px-8 h-12 text-base"
+                                    className="bg-primary hover:opacity-80 text-dg-950 font-semibold px-8 h-12 text-base"
                                     data-umami-event="look-at-devguard"
                                 >
                                     Try DevGuard
