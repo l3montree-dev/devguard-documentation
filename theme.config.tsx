@@ -32,10 +32,10 @@ const config: DocsThemeConfig = {
                     {(frontMatter.title ?? rest.title) + ' | DevGuard' ||
                         'DevGuard'}
                 </title>
-                {frontMatter.metaDescription && (
+                {frontMatter.description && (
                     <meta
                         name="description"
-                        content={frontMatter.metaDescription}
+                        content={frontMatter.description}
                     />
                 )}
                 {Boolean(websiteId) && Boolean(umamiUrl) && (
@@ -64,7 +64,7 @@ const config: DocsThemeConfig = {
     },
     logo: (
         <Image
-            src="/logo_inverse_horizontal.svg"
+            src="/logo-inverse-horizontal.svg"
             alt="DevGuard Logo"
             width={220}
             height={80}
