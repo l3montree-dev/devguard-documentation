@@ -46,12 +46,13 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 **Email verification**: No SMTP server is configured by default. During registration, skip email verification by clicking "Back".
 
-To enable email delivery, add `COURIER_SMTP_CONNECTION_URI` to the `kratos` service:
+To enable email delivery, you can additionally append the `COURIER_SMTP_CONNECTION_URI` environment-variable to the `kratos` service:
 
 ```yaml
 services:
     kratos:
         environment:
+            # Add your username and password in the url
             - COURIER_SMTP_CONNECTION_URI=smtp://user:password@smtp.example.com:587/?skip_ssl_verify=false
 ```
 
@@ -71,12 +72,24 @@ If you must use Docker Compose in production, **change all default passwords**:
 services:
     postgresql:
         environment:
-            POSTGRES_PASSWORD: your-secure-password # Change this
+            # Change to your password
+            POSTGRES_PASSWORD: change-me-definitely-when-not-testing 
+
+    #...
+
+    kratos-migrate:
+        environment:
+            # Add your password in url
+            - DSN=postgres://kratos:change-me-definitely-when-not-testing@postgresql:5432/kratos?sslmode=disable # Change to your password
+
+    #...
 
     kratos:
         environment:
-            DSN: postgres://kratos:your-secure-password@postgresql:5432/kratos?sslmode=disable
-        command: serve -c /etc/config/kratos/kratos.yml --watch-courier # Remove --dev
+            # Add your password in url
+            - DSN=postgres://kratos:change-me-definitely-when-not-testing@postgresql:5432/kratos?sslmode=disable
+        # Remove --dev flag from command
+        command: serve -c /etc/config/kratos/kratos.yml --dev --watch-courier 
 ```
 
 <Callout type="error">
