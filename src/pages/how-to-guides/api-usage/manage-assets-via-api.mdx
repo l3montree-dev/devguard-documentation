@@ -3,6 +3,163 @@ import { Callout } from 'nextra/components';
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import PageContentComingSoon from '@/components/PageContentComingSoon'
 
-# Manage Assets via DevGuard API
+# Managing Assets via API
 
-<PageContentComingSoon />
+This guide explains how to manage assets in DevGuard using the REST API. Assets represent applications, services, or components that you want to scan and monitor for vulnerabilities.
+
+## Authentication
+
+All endpoints require authentication using either:
+
+- **Cookie Authentication**: Session-based (`ory_kratos_session` cookie)
+- **Personal Access Token (PAT)**: HTTP request signing via `X-Signature` and `X-Fingerprint` headers
+
+Use the `devguard-scanner` CLI for PAT authentication:
+
+```bash
+export DEVGUARD_TOKEN="your-pat-token"
+devguard-scanner curl -X GET https://api.devguard.org/api/v1/organizations/my-org/projects/my-project/assets
+```
+
+## Base URL
+
+All endpoints use the base path: `https://api.devguard.org/api/v1`
+
+## Core Asset Operations
+
+### List Assets
+
+```bash
+GET /organizations/{org}/projects/{project}/assets
+```
+
+Returns all assets within a project you have access to.
+
+### Create Asset
+
+```bash
+POST /organizations/{org}/projects/{project}/assets
+```
+
+**Request Body**:
+```json
+{
+  "name": "my-application",
+  "description": "Application description",
+  "importance": "high",
+  "reachableFromInternet": true,
+  "confidentialityRequirement": "high",
+  "integrityRequirement": "high",
+  "availabilityRequirement": "medium",
+  "repositoryProvider": "github",
+  "enableTicketRange": true,
+  "cvssAutomaticTicketThreshold": 7.0,
+  "riskAutomaticTicketThreshold": "high"
+}
+```
+
+### Get Asset Details
+
+```bash
+GET /organizations/{org}/projects/{project}/assets/{asset}
+```
+
+Returns detailed information including versions, artifacts, and vulnerability statistics.
+
+### Update Asset
+
+```bash
+PATCH /organizations/{org}/projects/{project}/assets/{asset}
+```
+
+**Request Body**:
+```json
+{
+  "confidentialityRequirement": "high",
+  "integrityRequirement": "medium",
+  "availabilityRequirement": "low"
+}
+```
+
+### Delete Asset
+
+```bash
+DELETE /organizations/{org}/projects/{project}/assets/{asset}
+```
+
+Permanently deletes the asset and all associated data (versions, artifacts, vulnerabilities, VEX rules).
+
+### Lookup Asset by Repository
+
+```bash
+GET /lookup?provider=gitlab&id=12345
+```
+
+Finds an asset by its external repository ID. Returns organization, project, and asset slugs.
+
+## Security Configuration
+
+### CIA Requirements
+
+Configure Confidentiality, Integrity, and Availability requirements (`low`, `medium`, `high`). These affect vulnerability risk scoring and prioritization.
+
+### Importance Levels
+
+- `low`: Supporting or non-critical assets
+- `medium`: Standard production assets
+- `high`: Critical infrastructure
+
+### Automatic Ticket Creation
+
+Enable automatic issue creation for vulnerabilities exceeding thresholds:
+
+```json
+{
+  "enableTicketRange": true,
+  "cvssAutomaticTicketThreshold": 7.0,
+  "riskAutomaticTicketThreshold": "high"
+}
+```
+
+## Asset Versions & Artifacts
+
+Assets contain versions (branches/tags) and artifacts (SBOM files):
+
+```bash
+# List versions
+GET /organizations/{org}/projects/{project}/assets/{asset}/refs/
+
+# Get specific version
+GET /organizations/{org}/projects/{project}/assets/{asset}/refs/{version}/
+
+# List artifacts
+GET /organizations/{org}/projects/{project}/assets/{asset}/refs/{version}/artifacts/
+```
+
+## SBOM & VEX Reports
+
+Generate and retrieve compliance reports:
+
+```bash
+# SBOM in CycloneDX format
+GET /organizations/{org}/projects/{project}/assets/{asset}/refs/{version}/artifacts/{artifact}/sbom.json/
+
+# VEX document
+GET /organizations/{org}/projects/{project}/assets/{asset}/refs/{version}/artifacts/{artifact}/vex.json/
+```
+
+## CSAF Reports
+
+Common Security Advisory Framework reports:
+
+```bash
+# Provider metadata
+GET /organizations/{org}/csaf/provider-metadata.json/
+
+# Version-specific CSAF
+GET /organizations/{org}/projects/{project}/assets/{asset}/csaf/white/2024/v1.0.0/
+```
+
+## Access Control
+
+Asset access is controlled via role-based permissions on the parent project. Users need appropriate project-level permissions to view or modify assets.
