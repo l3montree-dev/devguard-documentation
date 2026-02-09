@@ -2,9 +2,12 @@ import Image from 'next/image';
 import { Callout } from 'nextra/components';
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 
-# Repository Versions (Branches)
+# Repository Versions (Branches & Tags)
 
-DevGuard tracks vulnerabilities across multiple branches within each repository, mirroring your Git workflow. Like GitLab's branch management, DevGuard scans and manages security findings independently per branch—enabling separate vulnerability tracking for production, development, and feature branches.
+DevGuard tracks vulnerabilities across multiple branches or tags within each repository, mirroring your Git workflow.
+Like Git's branch and tag management, DevGuard scans and manages security findings independently per branch or tag — enabling separate
+vulnerability tracking for production, development, and feature branches.
+
 ```mermaid
 graph TD
     A[Repository] --> B[main]
@@ -23,23 +26,19 @@ graph TD
 
 ## Independent Vulnerability Management
 
-Each branch maintains its own vulnerability findings, risk assessments, and remediation status. A vulnerability fixed in `main` doesn't automatically resolve in `develop`—branches are tracked independently.
+Each branch or tag maintains its own vulnerability findings, risk assessments, and remediation status.
+A vulnerability fixed in `main` doesn't automatically resolve in `develop`—branches are tracked independently.
 
-**Why**: Different branches contain different code and dependencies. A feature branch might introduce new dependencies with vulnerabilities not present in `main`. Production branches might use different versions than development.
+**Why**: Different branches contain different code and dependencies. A feature branch might introduce
+new dependencies with vulnerabilities not present in `main`. Production branches might use different versions than development.
 
-**Example**: `main` uses `express@4.18.2` (patched), while `develop` uses `express@4.17.1` (vulnerable). DevGuard tracks the vulnerability in `develop` while showing `main` as fixed.
+**Example**: `main` uses `express@4.18.2` (patched), while `develop` uses `express@4.17.1` (vulnerable). DevGuard tracks the
+vulnerability in `develop` while showing `main` as fixed.
 
-<Callout type="info" emoji="🌿">
-  Track only meaningful branches—typically `main`, `develop`, and active release branches. Tracking every feature branch creates noise.
+<Callout type="info">
+  NOTE: If you create a new branch or tag, it is always initalized with the vulnerability status of the `main` branch at the time of creation.
 </Callout>
 
-## Branch Selection
-
-**Default**: `main` branch tracked automatically.
-
-**Additional branches**: Enable tracking for `develop`, `staging`, or release branches in repository settings.
-
-**Feature branches**: Scan on-demand during CI/CD without permanent tracking.
 
 ## Vulnerability Handling Per Branch
 
@@ -50,20 +49,14 @@ Each branch maintains its own vulnerability findings, risk assessments, and reme
 - Mark "Not Affected" in `main` after analysis
 - Same vulnerability remains "Affected" in `develop` with different code paths
 - Independent justifications per branch
-
-### Risk Scores
-
-Calculated independently per branch based on:
-- Component versions (different dependencies = different scores)
-- Component depth (dependency tree structure varies)
-- Security requirements (production vs development CIA settings)
+- You can use query parameters to filter on vex live data endpoints per branch, e.g. `?ref=develop` to see only `develop` branch VEX data.
 
 ### Remediation Workflow
 
 1. Patch in feature branch
 2. Merge to `develop` with testing
 3. Merge to `main` for production
-4. DevGuard tracks progression automatically
+4. DevGuard tracks progression automatically as your new scan results flow through branches. Vulnerability status updates as fixes merge.
 
 <Callout type="info" emoji="🔄">
   DevGuard detects when dependency updates flow through branches. Vulnerability status updates automatically as fixes merge.
@@ -78,13 +71,6 @@ Calculated independently per branch based on:
 **Feature Branch Scanning**: Scan on pull requests to catch issues before merge without permanent tracking overhead.
 
 **Branch Comparison**: Identify vulnerabilities fixed in `main` but still present in `develop` requiring backport.
-
-## Setup
-
-1. Repository settings → select branches for tracking
-2. Configure CIA requirements per branch if needed
-3. Add DevGuard scanning to CI/CD pipeline per branch
-4. Establish merge policies (which severities block merges)
 
 ---
 
