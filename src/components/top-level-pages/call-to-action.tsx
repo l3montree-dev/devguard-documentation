@@ -12,7 +12,7 @@ export function CallToAction() {
                         <p className="mt-6 text-3xl font-medium tracking-tight text-gray-950 sm:text-5xl">
                             Ready to dive in?
                             <br />
-                            Become an beta tester today.
+                            Become a beta tester today.
                         </p>
                     </hgroup>
                     <p className="mx-auto mt-6 max-w-md text-sm/6 text-gray-700">
