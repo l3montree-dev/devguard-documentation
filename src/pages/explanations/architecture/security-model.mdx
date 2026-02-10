@@ -1,8 +1,85 @@
 import Image from 'next/image';
 import { Callout } from 'nextra/components';
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
-import PageContentComingSoon from '@/components/PageContentComingSoon'
 
 # Security Model
 
-<PageContentComingSoon />
+DevGuard follows a zero-trust security architecture where every request is cryptographically verified regardless of network location. As an [OWASP incubating project](https://owasp.org/), DevGuard is designed with compliance frameworks like BSI TR-03183, ISO 27001, and SOC 2 in mind.
+
+<Callout type="info">
+  For details on authentication methods and role-based access control, see the [Authentication Flow](/explanations/architecture/authentication-flow) page.
+</Callout>
+
+## Zero-Trust Architecture
+
+DevGuard assumes no implicit trust based on network location. Every API request must carry cryptographic proof of identity — either through an Ory Kratos session cookie or an ECDSA P-256 signed HTTP request using a Personal Access Token.
+
+This means DevGuard can be deployed in any environment — behind a reverse proxy, inside a service mesh, or exposed to the public internet — without weakening its security posture. Authentication and authorization are enforced at the application layer, independent of network topology.
+
+## Network Security
+
+DevGuard is designed as a containerized application and is typically deployed behind a reverse proxy that terminates TLS.
+
+The official Helm chart ships with **strict network policies** that restrict communication between pods. Only explicitly allowed traffic flows are permitted, limiting lateral movement in case of a compromised component.
+
+DevGuard can be deployed in a **service mesh** (e.g., Istio, Linkerd) for additional transport-level security through mutual TLS (mTLS) between services.
+
+## Data Protection
+
+### Data in Transit
+
+All external communication is encrypted via TLS, terminated at the reverse proxy or ingress controller. Internal cluster communication can be further secured using a service mesh with mTLS.
+
+### Data at Rest
+
+The underlying PostgreSQL database can be configured with encryption at rest depending on the deployment environment (e.g., via encrypted storage volumes or database-level encryption).
+
+Secrets such as Personal Access Token key fingerprints are **hashed** before storage. OAuth tokens for Git provider integrations (GitHub, GitLab) are stored in the database.
+
+<Callout type="warning">
+  OAuth integration tokens are currently stored unencrypted. Encrypting these tokens at rest is on the roadmap.
+</Callout>
+
+## Supply Chain Integrity
+
+A core principle of DevGuard is ensuring the integrity and authenticity of security scan results. Every scan submission uses **HTTP Message Signing** (based on [RFC 9421](https://www.rfc-editor.org/rfc/rfc9421)):
+
+1. The scanner (CLI or CI integration) signs each HTTP request using its ECDSA P-256 private key.
+2. DevGuard verifies the signature against the registered public key before accepting the results.
+3. The `Content-Digest` header ensures the request body has not been tampered with in transit.
+
+This guarantees that scan results originate from an authorized source and have not been modified, providing a chain of trust from the scanner to the DevGuard server.
+
+## Multi-Tenancy and Data Isolation
+
+DevGuard uses **organization-scoped data isolation**. All resources — projects, assets, vulnerabilities, and scan results — are scoped to an organization and enforced at the application layer through [Casbin](https://casbin.org/) RBAC policies.
+
+The access hierarchy follows:
+
+```
+Organization → Project → Asset
+```
+
+Each level has distinct roles (`owner`, `admin`, `member`) that cascade downward. An organization admin has access to all projects and assets within that organization, while a project member can only access assets within that specific project.
+
+Public resources (`is_public=true`) are an explicit opt-in that allows read-only access without authentication.
+
+## Deployment Security Considerations
+
+Since DevGuard is self-hosted, the security of the deployment environment is the operator's responsibility. Key recommendations:
+
+- **TLS termination**: Always deploy behind a reverse proxy (e.g., Nginx, Traefik) with valid TLS certificates.
+- **Network policies**: Use the Helm chart's built-in network policies to restrict pod-to-pod communication.
+- **Database encryption**: Enable encryption at rest for the PostgreSQL instance via your infrastructure provider.
+- **Ory Kratos configuration**: Follow the [Ory Kratos security best practices](https://www.ory.sh/docs/kratos/guides/production) for session management and identity configuration.
+
+## Compliance Alignment
+
+DevGuard is designed with the following standards and frameworks in mind:
+
+| Standard | Relevance |
+|---|---|
+| **OWASP** | DevGuard is an OWASP incubating project. It implements OWASP best practices for application security and helps users track OWASP-related vulnerabilities. |
+| **BSI TR-03183** | Aligned with BSI technical guidelines for software bill of materials (SBOM) and supply chain security. |
+| **ISO 27001** | Supports information security management through RBAC, audit-ready access control, and data isolation. |
+| **SOC 2** | Designed with SOC 2 trust principles (security, availability, confidentiality) in mind through its access control and data protection mechanisms. |
