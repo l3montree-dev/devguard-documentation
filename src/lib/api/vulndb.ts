@@ -23,7 +23,8 @@ export async function fetchRadarData(
                 count: Number(count),
             }))
             .sort((a, b) => b.count - a.count)
-            .slice(0, 6)
+            .slice(0, 7)
+            .sort(() => Math.random() - 0.5)
     } catch (error) {
         console.error('Failed API Fetch: ', error)
         return []
