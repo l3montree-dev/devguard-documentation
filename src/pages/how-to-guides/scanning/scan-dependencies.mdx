@@ -9,18 +9,44 @@ import { Callout, Tabs } from 'nextra/components'
 
 Run Software Composition Analysis (SCA) to scan your project dependencies for known vulnerabilities and generate a Software Bill of Materials (SBOM).
 
+DevGuard matches discovered components against the [OSV.dev](https://osv.dev/) vulnerability database, which covers a wide range of ecosystems including npm, PyPI, Go, Maven, Cargo, NuGet, RubyGems, and [many more](https://osv.dev/list).
+
+To learn more about how SCA fits into a DevSecOps pipeline, see [Software Composition Analysis](/explanations/devsecops/software-composition-analysis).
+
 ## Prerequisites
 
 Before you begin, ensure you have:
 
-- Docker installed on your system
-- A personal access token from DevGuard (create one in user settings)
+- Docker **or** the `devguard-scanner` binary installed
+- A [personal access token](/explanations/personal-access-token) from DevGuard (create one in user settings)
 - A repository created in DevGuard
+
+## Installation
+
+<Tabs items={["Docker (recommended)", "Go Install", "GitHub Release"]}>
+  <Tabs.Tab>
+    No installation needed — run the scanner directly via Docker:
+
+    ```bash copy
+    docker run ghcr.io/l3montree-dev/devguard/scanner:main-latest devguard-scanner --help
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    Install the scanner binary using Go:
+
+    ```bash copy
+    go install github.com/l3montree-dev/devguard/cmd/devguard-scanner@latest
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    Download the latest binary from the [GitHub Releases](https://github.com/l3montree-dev/devguard/releases) page for your platform.
+  </Tabs.Tab>
+</Tabs>
 
 ## Scan Project Dependencies
 
-    Scan a local project directory for dependencies:
-
+<Tabs items={["Docker", "Binary"]}>
+  <Tabs.Tab>
     ```bash copy
     docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main-latest \
       devguard-scanner sca \
@@ -29,23 +55,50 @@ Before you begin, ensure you have:
         --apiUrl="https://api.devguard.org" \
         --token="YOUR_TOKEN"
     ```
-
+  </Tabs.Tab>
+  <Tabs.Tab>
+    ```bash copy
+    devguard-scanner sca \
+      --path . \
+      --assetName="myorg/projects/myproject/assets/myrepo" \
+      --apiUrl="https://api.devguard.org" \
+      --token="YOUR_TOKEN"
+    ```
+  </Tabs.Tab>
+</Tabs>
 
 <Callout type="info">
   Replace `myorg/projects/myproject/assets/myrepo` with your repository's slug. You can copy this from the URL when viewing your repository in the DevGuard UI.
 </Callout>
 
-<Callout type="info">
-  Replace `/dev/app` with the appropriate path inside the container if you have mounted your project to a different location.
-</Callout>
+### Example Output
+
+```
++--------------------------------------------+---------------------+------+------+-----------------------------------+------------------------------------+--------+
+| LIBRARY                                    | VULNERABILITY       | RISK | CVSS | INSTALLED                         | FIXED                              | STATUS |
++--------------------------------------------+---------------------+------+------+-----------------------------------+------------------------------------+--------+
+| pkg:golang/github.com/cloudflare/golz4     | GO-2020-0022        | 0    | N/A  | 0.0.0-20150217214814-ef862a3cdc58 | v0.0.0-20140711154735N/A99f5f787806 | open   |
+|                                            | GHSA-4wp2-8rm2-jgmh | 1.50 | 9.8  | 0.0.0-20150217214814-ef862a3cdc58 | v0.0.0-20140711154735N/A99f5f787806 | open   |
++--------------------------------------------+---------------------+------+------+-----------------------------------+------------------------------------+--------+
+| pkg:golang/github.com/sigstore/rekor       | GO-2026-4354        | 0    | N/A  | 1.3.10                            | v1.5.0                             | open   |
+|                                            | GHSA-273p-m2cw-6833 | 0.49 | 5.3  | 1.3.10                            | v1.5.0                             | open   |
++--------------------------------------------+---------------------+------+------+-----------------------------------+------------------------------------+--------+
+| pkg:golang/golang.org/x/crypto             | GO-2025-4134        | 0    | N/A  | 0.44.0                            | v0.45.0                            | open   |
+|                                            | GHSA-f6x5-jh6r-wrfv | 2.45 | 5.3  | 0.44.0                            | v0.45.0                            | open   |
++--------------------------------------------+---------------------+------+------+-----------------------------------+------------------------------------+--------+
+| pkg:pypi/requests                          | GHSA-9hjg-9r4m-mvj7 | 0.81 | 5.3  | 2.32.3                            | 2.32.4                             | open   |
++--------------------------------------------+---------------------+------+------+-----------------------------------+------------------------------------+--------+
+```
+
+The output shows each affected library with its vulnerabilities, the contextual **Risk** score, raw **CVSS** score, currently installed version, available fix version, and current status.
 
 ## What the Scanner Does
 
-1. **Generates SBOM**: Creates a complete inventory of all software components and dependencies in your project
-2. **Uploads Data**: Sends the SBOM to DevGuard
-3. **Server-Side Scanning**: DevGuard analyzes all components against its vulnerability database and returns results
+1. **Generates SBOM**: Creates a complete inventory of all software components and dependencies in your project. See [Explaining SBOMs](/explanations/explaining-sboms) for details on the SBOM format.
+2. **Uploads Data**: Sends the SBOM to DevGuard, signed via HTTP Message Signing for integrity verification.
+3. **Server-Side Matching**: DevGuard matches all components against its [vulnerability database](/reference/vulnerability-database/data-sources) using [vulnerability matching](/explanations/vulnerability-management/vulnerability-matching) and returns results.
 
-**Verify it worked:** Navigate to your repository in DevGuard. You'll see detected vulnerabilities listed with severity scores, affected components, and fix recommendations.
+**Verify it worked:** Navigate to your repository in DevGuard. You'll see detected vulnerabilities listed with severity scores, affected components, and fix recommendations. Learn more about [vulnerability types](/explanations/core-concepts/vulnerability-types) and the [vulnerability lifecycle](/explanations/vulnerability-management/vulnerability-lifecycle).
 
 ## CI/CD Integration
 
@@ -55,26 +108,43 @@ For automated dependency scanning in CI/CD pipelines, DevGuard provides ready-to
 
 ## Advanced Options
 
-Fail the command based on risk level:
+### Fail on Vulnerability Threshold
+
+Configure the scanner to exit with a non-zero code based on the severity of detected vulnerabilities. This is useful for blocking CI/CD pipelines when critical issues are found.
 
 ```bash copy
---failOnRisk=critical  # Options: low, medium, high, critical (default: critical)
---failOnCVSS=critical  # Options: low, medium, high, critical (default: critical)
+--failOnRisk=critical
+--failOnCVSS=critical
 ```
 
-Specify an artifact name (useful for tracking multiple artifacts per repository):
+| Flag | Description | Options |
+|---|---|---|
+| `--failOnRisk` | Fail based on DevGuard's **contextual risk score**. This factors in EPSS probability, known exploit availability, CISA KEV status, and depth in the dependency tree. | `low`, `medium`, `high`, `critical` |
+| `--failOnCVSS` | Fail based on the raw **CVSS score** of the vulnerability. | `low`, `medium`, `high`, `critical` |
+
+<Callout type="info">
+  `--failOnRisk` is recommended over `--failOnCVSS` because it prioritizes vulnerabilities that are actually exploitable in your context, reducing noise from high-CVSS but low-risk findings. Learn more about how DevGuard calculates risk in [Risk Scoring](/explanations/core-concepts/risk-scoring).
+</Callout>
+
+### Artifact Name
+
+Specify an artifact name to track multiple artifacts per repository:
 
 ```bash copy
---artifactName="pkg:devguard/orgSlug/projectSlug/repoSlug" # Default is "pkg:devguard/{orgSlug}/{projectSlug}/{repoSlug}"
+--artifactName="pkg:devguard/orgSlug/projectSlug/repoSlug"
 ```
 
-Set a custom origin to track scan source:
+### Scan Origin
+
+Set a custom origin to track where the scan was triggered from:
 
 ```bash copy
 --origin="my-custom-origin"  # Default is "DEFAULT"
 ```
 
-Specify Git reference information:
+### Git Reference
+
+Specify Git reference information to associate scans with branches or tags:
 
 ```bash copy
 --ref="feature-branch"         # Git reference (branch, tag, or commit). Default is "main"
@@ -83,5 +153,12 @@ Specify Git reference information:
 ```
 
 <Callout type="info">
-  These flags help DevGuard track which branch or tag the scan is associated with. DevGuard will attempt to auto-detect Git information from the current directory if these flags are not specified.
+  DevGuard will attempt to auto-detect Git information from the current directory if these flags are not specified.
 </Callout>
+
+## Next Steps
+
+- [Scan Docker Images](/how-to-guides/scanning/scan-docker-images) — scan container images for vulnerabilities
+- [Scan Source Code](/how-to-guides/scanning/scan-source-code) — run SAST analysis on your codebase
+- [Triaging Vulnerabilities](/tutorials/vulnerability-management/triaging-vulnerabilities) — learn how to triage and manage discovered findings
+- [Upload an Existing SBOM](/how-to-guides/scanning/upload-sbom) — import SBOMs generated by other tools
