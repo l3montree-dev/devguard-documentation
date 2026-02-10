@@ -5,4 +5,94 @@ import PageContentComingSoon from '@/components/PageContentComingSoon'
 
 # Authentication Flow
 
-<PageContentComingSoon />
+DevGuard uses a multi-layered authentication system with Ory Kratos for session management, Personal Access Tokens (PAT) for API access, and Casbin for role-based authorization.
+
+## Authentication Methods
+
+### Cookie Authentication (Web UI)
+
+Users authenticate via Ory Kratos, which issues an `ory_kratos_session` cookie. Sessions include `scan` and `manage` scopes by default.
+
+### Personal Access Token (CLI/API)
+
+For programmatic access, DevGuard uses ECDSA P-256 signed HTTP requests.
+
+**Required Headers**:
+```
+X-Fingerprint: <sha256-of-public-key>
+Signature-Input: sig77=(...)
+Signature: :base64-signature:
+Content-Digest: sha-256=:base64-hash:
+```
+
+**Create Token**:
+```bash
+POST /api/v1/pats
+{
+  "description": "CI/CD Token",
+  "scopes": "scan manage",
+  "pubKey": "<hex-encoded-ecdsa-p256-public-key>"
+}
+```
+
+The system verifies signatures using the stored public key and creates sessions with the token's scopes (`scan`, `manage`).
+
+## Authorization (RBAC)
+
+DevGuard uses [Casbin](https://casbin.org/) for hierarchical role-based access control scoped to organizations (domains).
+
+### Role Hierarchy
+
+**Roles exist at three levels**:
+- **Organization**: `owner`, `admin`, `member`
+- **Project**: `owner`, `admin`, `member`
+- **Asset**: `owner`, `admin`, `member`
+
+Roles cascade down: organization admins can access all projects, project admins can access all assets within that project.
+
+### Permission Model
+
+Permissions follow the pattern: `subject` → `domain` → `object` → `action`
+
+**Example**:
+```go
+// Grant project admin role
+rbac.GrantRoleInProject(userID, shared.RoleAdmin, projectID)
+
+// Check permission
+allowed, err := rbac.IsAllowedInProject(&project, userID, shared.ObjectProject, shared.ActionUpdate)
+```
+
+### Middleware Enforcement
+
+Access control is enforced at each resource level:
+
+```go
+// Organization-level
+OrganizationAccessControlMiddleware(shared.ObjectOrganization, shared.ActionRead)
+
+// Project-level
+projectScopedRBAC(shared.ObjectProject, shared.ActionUpdate)
+
+// Asset-level
+assetScopedRBAC(shared.ObjectAsset, shared.ActionScan)
+
+// Scope validation
+NeededScope([]string{"scan", "manage"})
+```
+
+Public resources (`is_public=true`) allow read-only access without authentication.
+
+## External Integrations
+
+### OAuth2 (GitLab/GitHub)
+
+Users can authenticate via OAuth2 providers. Tokens are stored encrypted and refreshed automatically.
+
+**Endpoints**:
+- Login: `GET /api/v1/session/oauth2/gitlab/{integration}/`
+- Callback: `GET /api/v1/session/oauth2/gitlab/callback/{integration}/`
+
+### External Entity Provider RBAC
+
+For projects/assets linked to GitLab/GitHub repositories, DevGuard delegates permission checks to the external provider's API to verify repository access.
