@@ -1,11 +1,29 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
+type CVEList = {
+    total: number
+}
+
+export const getServerSideCVEs = async () => {
+    const res = await fetch(
+        'https://api.main.devguard.org/api/v1/vulndb/list-ids-by-creation-date',
+    )
+    const repo: CVEList = await res.json()
+    return repo
+}
+
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse,
 ) {
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://devguard.org'
-    const TOTAL_CVES = 200000
+    let TOTAL_CVES = 0
+    try {
+        const data = await getServerSideCVEs()
+        TOTAL_CVES = data?.total ?? 0
+    } catch (e) {
+        console.log(e)
+    }
     const CVES_PER_SITEMAP = 50000
     const numberOfCveSitemaps = Math.ceil(TOTAL_CVES / CVES_PER_SITEMAP)
 

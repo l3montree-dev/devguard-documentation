@@ -1,5 +1,27 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
+type CVEList = {
+    data: {
+        CVEID: string
+        CreatedAt: string
+    }[]
+}
+
+export const getServerSideCVEs = async (
+    offset: number,
+    CVES_PER_SITEMAP: number,
+) => {
+    try {
+        const res = await fetch(
+            `https://api.main.devguard.org/api/v1/vulndb/list-ids-by-creation-date?offset=${offset}&limit=${CVES_PER_SITEMAP}`,
+        )
+        const repo: CVEList = await res.json()
+        return repo
+    } catch (error) {
+        console.error('Failed API Fetch: ', error)
+    }
+}
+
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse,
@@ -15,13 +37,14 @@ export default async function handler(
     const CVES_PER_SITEMAP = 50000
     const offset = pageNum * CVES_PER_SITEMAP
 
-    // TODO: Hier deine CVE-Daten laden (offset, limit: CVES_PER_SITEMAP)
-    // const cves = await fetchCVEs(offset, CVES_PER_SITEMAP)
+    const data = await getServerSideCVEs(offset, CVES_PER_SITEMAP)
 
-    // Platzhalter – ersetze mit echten Daten
-    const cveUrls = Array.from(
-        { length: CVES_PER_SITEMAP },
-        (_, i) => `CVE-2024-${String(offset + i).padStart(5, '0')}`,
+    if (!data) {
+        return res.status(500).send('Failed to fetch CVE data')
+    }
+
+    const cveUrls = data.data.map(
+        (item) => `${baseUrl}/vulnerability-database/${item.CVEID}`,
     )
 
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
@@ -29,7 +52,7 @@ export default async function handler(
 ${cveUrls
     .map(
         (cve) => `  <url>
-    <loc>${baseUrl}/cve/${cve}</loc>
+    <loc>${cve}</loc>
   </url>`,
     )
     .join('\n')}
