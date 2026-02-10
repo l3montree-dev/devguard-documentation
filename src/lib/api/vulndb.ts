@@ -17,10 +17,13 @@ export async function fetchRadarData(
             return []
         }
         const result = await response.json()
-        return (result as any[]).map((it) => ({
-            ecosystem: String(it.ecosystem ?? it.name ?? 'unknown'),
-            count: Number(it.count ?? it.value ?? 0),
-        }))
+        return Object.entries(result)
+            .map(([ecosystem, count]) => ({
+                ecosystem,
+                count: Number(count),
+            }))
+            .sort((a, b) => b.count - a.count)
+            .slice(0, 6)
     } catch (error) {
         console.error('Failed API Fetch: ', error)
         return []
