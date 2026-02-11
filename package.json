@@ -72,6 +72,7 @@
         "sass": "^1.89.2",
         "sharp": "^0.34.5",
         "swagger-ui-react": "^5.31.0",
+        "swr": "^2.4.0",
         "tailwind-merge": "^3.3.1",
         "tailwindcss-animate": "^1.0.7",
         "three": "^0.181.2",
