@@ -5,4 +5,153 @@ import PageContentComingSoon from '@/components/PageContentComingSoon'
 
 # Dependency Proxy Security
 
-<PageContentComingSoon />
+## Overview
+
+The DevGuard Dependency Proxy is a security-focused intermediary that sits between your development environment and public package registries. When you request a package from npm, Go, or PyPI, the request goes through DevGuard's proxy, which performs security checks and caching before delivering the package to you.
+
+## Supported Ecosystems
+
+DevGuard currently proxies three major package ecosystems:
+
+- **npm** (Node.js packages from registry.npmjs.org)
+- **Go** (Go modules from proxy.golang.org)
+- **PyPI** (Python packages from pypi.org)
+
+## The Request Flow
+
+When a developer requests a package, the following process occurs:
+
+### 1. Request Reception
+The proxy receives the package request from the developer's package manager (npm, go, pip). The request includes the package name and optionally a specific version.
+
+### 2. Package Identification
+DevGuard parses the request path to extract:
+- Package name (including scoped packages like `@babel/core` for npm)
+- Version number (if specified)
+- Request type (metadata vs. actual package file)
+
+### 3. Malicious Package Check
+Before proceeding, DevGuard queries its malicious package database. This database is synchronized from the [OSS Malicious Packages Database](https://github.com/ossf/malicious-packages) maintained by the Open Source Security Foundation (OpenSSF).
+
+If the package is flagged as malicious:
+- The request is immediately blocked
+- A detailed explanation is returned to the client
+- The incident is logged and metrics are updated
+- Any existing cache of the package is purged
+
+### 4. Cache Lookup
+If the package passes the security check, DevGuard looks in its local cache. The cache system uses different time-to-live (TTL) values based on content type:
+
+**For npm:**
+- Package tarballs are cached for 24 hours
+- Package metadata is cached for 1 hour
+
+**For Go:**
+- Module files are cached for 7 days
+- Module lists are cached for 1 hour
+
+**For PyPI:**
+- Distribution files (wheels and source) are cached for 7 days
+- Package metadata is cached for 1 hour
+
+### 5. Integrity Verification
+When serving from cache, DevGuard verifies the integrity of the cached data using SHA256 checksums. Each cached file has an associated `.sha256` file containing its hash. If verification fails, the corrupted cache is discarded and the package is refetched.
+
+### 6. Upstream Fetch
+If there's a cache miss or the cache is expired, DevGuard fetches the package from the upstream registry. During this fetch, it forwards appropriate headers to ensure compatibility with registry requirements.
+
+### 7. Version Resolution (npm-specific)
+For npm metadata requests that don't specify a version, DevGuard performs an additional security step:
+- It fetches the package metadata
+- Extracts the "latest" version from the `dist-tags`
+- Checks if that resolved version is malicious
+- Blocks the request if the latest version is flagged, even though only metadata was requested
+
+This prevents scenarios where a developer runs `npm install package` (without version) and unknowingly gets a malicious latest version.
+
+### 8. Cache Storage
+Successful responses from upstream are stored in the cache along with their SHA256 integrity hash. The cache directory structure mirrors the package path for easy organization and cleanup.
+
+### 9. Response Delivery
+Finally, DevGuard returns the package to the client with additional headers indicating:
+- Cache status (`X-Cache: HIT` or `X-Cache: MISS`)
+- Proxy type (`X-Proxy-Type: npm/go/pypi`)
+- Malicious package status (if blocked)
+
+## Security Features
+
+### Malicious Package Detection
+
+The malicious package database contains information about:
+- Confirmed malicious packages
+- Typosquatting attempts
+- Packages containing backdoors or malware
+- Supply chain attack packages
+
+Detection works at multiple levels:
+
+**Explicit Version Requests**: When you request a specific version (e.g., `package@1.0.0`), DevGuard checks that exact version immediately.
+
+**Metadata Requests**: When you request package information without a version, DevGuard first checks if the request itself is suspicious, then after fetching metadata, checks the resolved "latest" version.
+
+**Cache Purging**: If a previously safe package is later discovered to be malicious, DevGuard removes it from the cache and blocks future requests.
+
+### Integrity Protection
+
+Every cached file is protected by SHA256 checksums. This ensures that:
+- Cached packages haven't been tampered with
+- Disk corruption is detected
+- Cache poisoning attempts are prevented
+
+If integrity verification fails, the cache entry is automatically removed and the package is refetched from the upstream registry.
+
+## Performance Optimization
+
+The caching system significantly reduces latency and bandwidth usage:
+
+**Reduced Upstream Requests**: Popular packages are served from local cache, avoiding repeated downloads from public registries.
+
+**Faster Build Times**: CI/CD pipelines benefit from cached dependencies, especially for frequently used packages.
+
+**Bandwidth Savings**: Organizations save bandwidth by caching packages locally instead of every developer fetching from the internet.
+
+## Monitoring and Observability
+
+DevGuard tracks several metrics through Prometheus:
+
+**Request Duration**: How long each proxy request takes, broken down by ecosystem (npm, go, pypi).
+
+**Malicious Package Blocks**: Count of blocked package attempts, labeled by ecosystem and package name. This helps identify attack patterns or typosquatting campaigns.
+
+**Cache Performance**: While not directly exposed as a metric, the `X-Cache` header in responses allows monitoring cache effectiveness through log analysis.
+
+## Ecosystem-Specific Behavior
+
+### npm Proxy
+- Handles both GET requests (for packages and metadata) and POST requests (for npm audit)
+- Supports scoped packages with proper URL encoding
+- Distinguishes between tarball downloads and metadata requests for optimal caching
+
+### Go Proxy
+- Implements the Go module proxy protocol
+- Handles module info, mod files, and zip archives
+- Supports version list queries
+
+### PyPI Proxy
+- Implements the Simple Repository API
+- Handles both wheel files and source distributions
+- Supports package metadata queries
+
+## Why This Matters
+
+The dependency proxy provides defense-in-depth for your software supply chain:
+
+**Proactive Protection**: Blocks malicious packages before they reach your system, rather than detecting them after installation.
+
+**Centralized Control**: Organizations can monitor and control all package downloads from a single point.
+
+**Performance Benefits**: Caching reduces build times and bandwidth usage without sacrificing security.
+
+**Transparency**: Detailed logging and metrics provide visibility into package usage and security incidents.
+
+**Minimal Disruption**: Works transparently with existing tools—no changes to your code or build scripts required beyond pointing to the proxy.
