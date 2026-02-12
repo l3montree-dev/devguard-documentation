@@ -1,8 +1,92 @@
 import Image from 'next/image';
-import { Callout } from 'nextra/components';
+import { Callout, Steps, Tabs } from 'nextra/components';
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
-import PageContentComingSoon from '@/components/PageContentComingSoon'
 
 # GitLab Integration
 
-<PageContentComingSoon />
+DevGuard integrates with GitLab through two authentication methods: **Personal Access Token (PAT)** or **OAuth2**. Both methods support gitlab.com and self-hosted GitLab instances.
+
+| Method | Use Case | 
+|--------|----------|
+| **Personal Access Token** | Repository access, issue management |
+| **OAuth2** | Permission sync, External Entity Provider | 
+
+<Callout type="info">
+  This page covers the **Personal Access Token** integration. For OAuth2-based integration, see [External Entity Providers](./external-entity-providers).
+</Callout>
+
+## Overview
+
+The GitLab PAT integration provides:
+
+- **Repository Access**: List and import GitLab projects
+- **Issue Management**: Create and update GitLab Issues for vulnerabilities
+- **Webhook Processing**: React to issue and note events in real-time
+- **CI/CD Integration**: Automated scanning via GitLab CI/CD pipelines
+
+<Callout type="info">
+  The GitLab PAT enables secure repository access and manages webhooks for issue tracking. Vulnerability scanning is authenticated separately using a DevGuard Token (Personal Access Token, PAT).
+</Callout> 
+
+## How It Works
+
+1. **Configure Integration**: Add your GitLab instance URL and Personal Access Token in DevGuard
+2. **Link Asset**: Connect a DevGuard asset to a GitLab project
+3. **Create Issues**: Vulnerabilities can be pushed to GitLab Issues for tracking (automatically or manually)
+4. **Sync Status**: Changes in either system are synchronized via webhooks
+
+
+## Issue Creation
+
+When a vulnerability is flagged for remediation, DevGuard creates a GitLab issue containing detailed information about the vulnerability, including severity, affected components, and labels for categorization.
+
+## Comment Commands
+
+Users can control vulnerability status through issue comments:
+
+| Command | Effect |
+|---------|--------|
+| `/accept <reason>` | Accept the vulnerability risk |
+| `/false-positive <reason>` | Mark as false positive |
+| `/reopen` | Reopen a closed vulnerability |
+
+## Webhook Processing
+
+DevGuard processes GitLab webhooks to synchronize issue state changes.
+
+<Callout type="warning">
+  Configure the webhook secret in your GitLab settings to ensure only authenticated requests are processed. DevGuard only accepts webhooks with a valid secret.
+</Callout>
+
+### Processed Events
+
+| Event | Action |
+|-------|--------|
+| Issue Closed | Vulnerability marked as accepted |
+| Issue Reopened | Vulnerability reopened |
+| Comment Added | Process slash commands |
+
+## Issue State Synchronization
+
+| GitLab Status | DevGuard Interpretation |
+|---------------|-------------------------|
+| Open | Open vulnerability |
+| Closed | Closed vulnerability |
+
+## Self-Hosted Instances
+
+GitLab integration fully supports self-hosted GitLab instances:
+
+- Configure your GitLab instance URL in the OAuth2 or Access Token settings
+- Multiple GitLab instances can be connected simultaneously
+- Each instance is treated as a separate External Entity Provider
+
+## Testing the Integration
+When saving a new GitLab integration, DevGuard performs a test connection to validate the provided credentials and permissions. If the test fails, an error message will indicate the issue.
+
+## Related Documentation
+
+- [Setup GitLab Integration](/how-to-guides/integrations/gitlab/setup-gitlab-integration) — Step-by-step setup guide
+- [GitLab Permission Sync](/how-to-guides/integrations/gitlab/permission-sync) — Configure permission synchronization
+- [GitLab Webhooks](/how-to-guides/integrations/gitlab/webhooks) — Configure webhooks
+- [External Entity Providers](/explanations/integrations/external-entity-providers) — Understanding external entities
