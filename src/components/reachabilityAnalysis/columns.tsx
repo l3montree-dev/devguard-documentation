@@ -17,7 +17,7 @@ export const columns: ColumnDef<Package>[] = [
         cell: ({ row }) => {
             const purl = row.getValue('purl') as string
             return (
-            <Link href={`/reachability-analysis/${purl}`}>
+            <Link href={`/reachability-analysis/${encodeURIComponent(purl)}`}>
                 <div className="w-32">{purl}</div>
             </Link>
             ) 

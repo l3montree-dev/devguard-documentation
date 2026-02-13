@@ -96,7 +96,7 @@ export function DataTable<TData, TValue>({
                                     }
                                     onClick={() =>
                                         router.push(
-                                            `/reachability-analysis/${(row.original as Package).purl}`,
+                                            `/reachability-analysis/${encodeURIComponent((row.original as Package).purl)}`,
                                         )
                                     }
                                     className="cursor-pointer hover:bg-muted/50"
