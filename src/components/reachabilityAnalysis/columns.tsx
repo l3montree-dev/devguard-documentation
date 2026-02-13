@@ -1,7 +1,6 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown } from 'lucide-react'
 import Link from 'next/link'
-import { formatDistanceToNow, format } from 'date-fns'
 
 export type Package = {
     purl: string

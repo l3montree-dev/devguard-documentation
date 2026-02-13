@@ -17,7 +17,7 @@ export default function CVEDetailComponent({ purl }: { purl?: string }) {
         fetcher,
     )
 
-    const [isDescriptionOpen, setIsDescriptionOpen] = useState(true)
+    const [isVulnerabilitiesOpen, setIsVulnerabilitiesOpen] = useState(false)
     const [isComponentsOpen, setIsComponentsOpen] = useState(false)
 
     const options: Intl.DateTimeFormatOptions = {
@@ -36,24 +36,8 @@ export default function CVEDetailComponent({ purl }: { purl?: string }) {
                         <div className="relative flex flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] p-8">
                             <div className="flex items-start justify-between">
                                 <div className="space-y-3">
-                                    <Skeleton className="h-9 w-64" />
-                                    <Skeleton className="h-4 w-48" />
-                                    <Skeleton className="h-4 w-48" />
+                                    <Skeleton className="h-9 w-96" />
                                 </div>
-                                <Skeleton className="h-48 w-48 rounded-full" />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="relative">
-                        <div className="absolute inset-px rounded-lg bg-white dark:bg-gray-800" />
-                        <div className="relative flex flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] p-8">
-                            <Skeleton className="h-6 w-32" />
-                            <div className="mt-4 space-y-3">
-                                <Skeleton className="h-5 w-full" />
-                                <Skeleton className="h-5 w-full" />
-                                <Skeleton className="h-5 w-full" />
-                                <Skeleton className="h-5 w-3/4" />
                             </div>
                         </div>
                     </div>
@@ -61,26 +45,16 @@ export default function CVEDetailComponent({ purl }: { purl?: string }) {
 
                 <div className="relative mb-6">
                     <div className="absolute inset-px rounded-lg bg-white dark:bg-gray-800" />
-                    <div className="relative flex flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] p-8">
-                        <Skeleton className="mb-4 h-6 w-32" />
-                        <Skeleton className="h-4 w-full" />
-                        <Skeleton className="mt-2 h-4 w-full" />
-                        <Skeleton className="mt-2 h-4 w-3/4" />
+                    <div className="relative flex flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] p-7">
+                        <Skeleton className="h-6 w-40" />
                     </div>
                 </div>
 
-                <div className="relative">
+                <div className="relative mb-4">
                     <div className="absolute inset-px rounded-lg bg-white dark:bg-gray-800" />
-                    <div className="relative flex flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] p-8">
-                        <Skeleton className="mb-4 h-6 w-48" />
-                        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-6">
-                            {[...Array(6)].map((_, i) => (
-                                <Skeleton
-                                    key={i}
-                                    className="h-32 w-full rounded-lg"
-                                />
-                            ))}
-                        </div>
+                    <div className="relative flex flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] p-7">
+                        <Skeleton className="h-6 w-48"
+                    />
                     </div>
                 </div>
             </Container>
@@ -93,207 +67,30 @@ export default function CVEDetailComponent({ purl }: { purl?: string }) {
 
     return (
         <Container>
-            <div className="mb-6 grid gap-4 lg:grid-cols-3">
+            <div className="mb-6 grid gap-4 lg:grid-cols-3 w-3/4">
                 <div className="relative lg:col-span-2">
                     <div className="absolute inset-px rounded-lg bg-white dark:bg-gray-800" />
                     <div className="relative flex flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] p-8">
                         <div className="flex items-start justify-between">
                             <div>
                                 <h1 className="text-3xl font-bold text-gray-950 dark:text-white">
-                                    {data.serialNumber}
+                                    {purl}
                                 </h1>
                             </div>
-                            <div className="flex flex-col items-center">
-                                <div className="h-48 w-48 text-sm text-gray-600 dark:text-gray-400">
-                                    <ChartContainer
-                                        config={{}}
-                                        className="aspect-square w-full"
-                                    >
-                                        <PieChart>
-                                            <Pie
-                                                data={[
-                                                    {
-                                                        name: 'Total',
-                                                        score: Math.max(
-                                                            0,
-                                                            10 - data.cvss,
-                                                        ),
-                                                        fill: 'hsl(var(--bg))',
-                                                    },
-                                                    {
-                                                        name: 'CVSS',
-                                                        score: Math.max(
-                                                            0,
-                                                            data.cvss,
-                                                        ),
-                                                        fill: 'hsl(var(--primary))',
-                                                    },
-                                                ]}
-                                                startAngle={-270}
-                                                dataKey="score"
-                                                nameKey="name"
-                                                innerRadius={60}
-                                                outerRadius={80}
-                                                strokeWidth={5}
-                                            >
-                                                <Label
-                                                    content={({ viewBox }) => {
-                                                        if (
-                                                            viewBox &&
-                                                            'cx' in viewBox &&
-                                                            'cy' in viewBox
-                                                        ) {
-                                                            return (
-                                                                <text
-                                                                    x={
-                                                                        viewBox.cx
-                                                                    }
-                                                                    y={
-                                                                        viewBox.cy
-                                                                    }
-                                                                    textAnchor="middle"
-                                                                    dominantBaseline="middle"
-                                                                >
-                                                                    <tspan
-                                                                        x={
-                                                                            viewBox.cx
-                                                                        }
-                                                                        y={
-                                                                            viewBox.cy
-                                                                        }
-                                                                        className="fill-foreground text-3xl font-bold"
-                                                                    >
-                                                                        {data.cvss ===
-                                                                        -1
-                                                                            ? 'N/A'
-                                                                            : data.cvss}
-                                                                    </tspan>
-                                                                    <tspan
-                                                                        x={
-                                                                            viewBox.cx
-                                                                        }
-                                                                        y={
-                                                                            (viewBox.cy ||
-                                                                                0) +
-                                                                            24
-                                                                        }
-                                                                        className="fill-muted-foreground"
-                                                                    >
-                                                                        CVSS
-                                                                    </tspan>
-                                                                </text>
-                                                            )
-                                                        }
-                                                    }}
-                                                />
-                                            </Pie>
-                                        </PieChart>
-                                    </ChartContainer>
-                                </div>
-                            </div>
                         </div>
                     </div>
-                    <div className="pointer-events-none absolute inset-px rounded-lg shadow outline outline-1 outline-black/5 dark:outline-white/15" />
-                </div>
-
-                <div className="relative">
-                    <div className="absolute inset-px rounded-lg bg-white dark:bg-gray-800" />
-                    <div className="relative flex flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] p-8">
-                        <p className="text-lg font-medium text-gray-950 dark:text-white">
-                            Risk Scores
-                        </p>
-                        <div className="mt-4 space-y-2">
-                            <div>
-                                <span className="text-sm text-gray-600 dark:text-gray-400">
-                                    BaseScore:
-                                </span>
-                                <span className="ml-2 font-semibold text-gray-950 dark:text-white">
-                                    {data.risk?.baseScore.toFixed(1) ?? 'N/A'}
-                                </span>
-                            </div>
-                            {data.risk?.withEnvironment && (
-                                <div>
-                                    <span className="text-sm text-gray-600 dark:text-gray-400">
-                                        With Environment:
-                                    </span>
-                                    <span className="ml-2 font-semibold text-gray-950 dark:text-white">
-                                        {data.risk.withEnvironment.toFixed(1)}
-                                    </span>
-                                </div>
-                            )}
-                            {data.risk?.withThreatIntelligence && (
-                                <div>
-                                    <span className="text-sm text-gray-600 dark:text-gray-400">
-                                        With Threat Intelligence:
-                                    </span>
-                                    <span className="ml-2 font-semibold text-gray-950 dark:text-white">
-                                        {data.risk.withThreatIntelligence.toFixed(
-                                            1,
-                                        )}
-                                    </span>
-                                </div>
-                            )}
-                            <div className="border-t border-gray-200 pt-2 dark:border-gray-700">
-                                <span className="text-sm text-gray-600 dark:text-gray-400">
-                                    EPSS:
-                                </span>
-                                <span className="ml-2 font-semibold text-gray-950 dark:text-white">
-                                    {data.epss
-                                        ? `${(data.epss * 100).toFixed(2)}%`
-                                        : 'N/A'}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="pointer-events-none absolute inset-px rounded-lg shadow outline outline-1 outline-black/5 dark:outline-white/15" />
                 </div>
             </div>
-
-            <div className="relative mb-6">
-                <div className="absolute inset-px rounded-lg bg-white dark:bg-gray-800" />
-                <div className="relative flex flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)]">
-                    <button
-                        onClick={() => setIsDescriptionOpen(!isDescriptionOpen)}
-                        className="flex w-full items-center justify-between p-8 text-left transition-colors hover:bg-gray-50 dark:hover:bg-gray-700/50"
-                    >
-                        <h2 className="text-lg font-medium text-gray-950 dark:text-white">
-                            Description
-                        </h2>
-                        <svg
-                            className={`h-5 w-5 transition-transform ${isDescriptionOpen ? 'rotate-180' : ''}`}
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M19 9l-7 7-7-7"
-                            />
-                        </svg>
-                    </button>
-                    {isDescriptionOpen && (
-                        <div className="px-8 pb-8">
-                            <p className="whitespace-pre-wrap text-sm text-gray-600 dark:text-gray-400">
-                                {data.description}
-                            </p>
-                        </div>
-                    )}
-                </div>
-                <div className="pointer-events-none absolute inset-px rounded-lg shadow outline outline-1 outline-black/5 dark:outline-white/15" />
-            </div>
-
-            <div className="relative">
+            <div className="relative mt-6">
                 <div className="absolute inset-px rounded-lg bg-white dark:bg-gray-800" />
                 <div className="relative flex flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)]">
                     <button
                         onClick={() => setIsComponentsOpen(!isComponentsOpen)}
-                        className="flex w-full items-center justify-between p-8 text-left transition-colors hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                        className="flex w-full items-center justify-between p-6 text-left transition-colors hover:bg-gray-50 dark:hover:bg-gray-700/50"
                     >
                         <h2 className="text-lg font-medium text-gray-950 dark:text-white">
-                            Affected Components (
-                            {data.affectedComponents.length})
+                            Components (
+                            {data.components.length})
                         </h2>
                         <svg
                             className={`h-5 w-5 transition-transform ${isComponentsOpen ? 'rotate-180' : ''}`}
@@ -311,30 +108,11 @@ export default function CVEDetailComponent({ purl }: { purl?: string }) {
                     </button>
                     {isComponentsOpen && (
                         <div className="px-8 pb-8">
-                            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-6">
-                                {data.affectedComponents.map((ac) => (
-                                    <div
-                                        key={ac.id}
-                                        className="rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-900/50"
-                                    >
-                                        <p className="font-semibold text-gray-950 dark:text-white">
-                                            {ac.name}
-                                        </p>
-                                        {ac.version && (
-                                            <p className="text-sm text-gray-600 dark:text-gray-400">
-                                                {ac.version}
-                                            </p>
-                                        )}
-                                        <p className="mt-1 text-xs text-gray-500 dark:text-gray-500">
-                                            Ecosystem: {ac.ecosystem}
-                                        </p>
-                                        <p className="mt-1 text-xs text-gray-500 dark:text-gray-500">
-                                            {}
-                                            <br /> Fix:{' '}
-                                            {ac.versionFixed
-                                                ? `${ac.versionFixed}%`
-                                                : 'N/A'}
-                                        </p>
+                            <div>
+                                {data.components.map((comp) => (
+                                    <div className='flex'>
+                                        <p className='px-4 mx-8 my-4 py-4 rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-900/50'>{comp.name}</p>
+                                        <p className='px-4 mx-8 my-4 py-4 rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-900/50'>{comp.type}</p>
                                     </div>
                                 ))}
                             </div>
@@ -343,10 +121,50 @@ export default function CVEDetailComponent({ purl }: { purl?: string }) {
                 </div>
                 <div className="pointer-events-none absolute inset-px rounded-lg shadow outline outline-1 outline-black/5 dark:outline-white/15" />
             </div>
-            <div className="mt-6 flex justify-end gap-3">
+            <div className="relative mt-6">
+                <div className="absolute inset-px rounded-lg bg-white dark:bg-gray-800" />
+                <div className="relative flex flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)]">
+                    <button
+                        onClick={() => setIsVulnerabilitiesOpen(!isVulnerabilitiesOpen)}
+                        className="flex w-full items-center justify-between p-6 text-left transition-colors hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                    >
+                        <h2 className="text-lg font-medium text-gray-950 dark:text-white">
+                            Vulnerabilities (
+                            {data.vulnerabilities.length})
+                        </h2>
+                        <svg
+                            className={`h-5 w-5 transition-transform ${isVulnerabilitiesOpen ? 'rotate-180' : ''}`}
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M19 9l-7 7-7-7"
+                            />
+                        </svg>
+                    </button>
+                    {isVulnerabilitiesOpen && (
+                        <div className="px-8 pb-8">
+                            <div>
+                                {data.vulnerabilities.map((vuln) => (
+                                    <div className='flex'>
+                                        <p className='px-4 mx-8 my-4 py-4 rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-900/50'>{vuln.id}</p>
+                                        <p className='px-4 mx-8 my-4 py-4 rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-900/50'>{vuln['bom-ref']}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </div>
+                <div className="pointer-events-none absolute inset-px rounded-lg shadow outline outline-1 outline-black/5 dark:outline-white/15" />
+            </div>
+            <div className="mt-8 flex gap-3">
                 <div>
                     <Button>
-                        <Link href="/vulnerability-database">Get Back</Link>
+                        <Link href="/reachability-analysis/">Get Back</Link>
                     </Button>
                 </div>
                 <div>

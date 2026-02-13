@@ -7,6 +7,7 @@ import {ColumnDef,SortingState,flexRender,getCoreRowModel,getSortedRowModel,useR
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
 import { Package } from './columns'
+import { Island_Moments } from 'next/font/google'
 
 const PAGE_SIZE = 10
 
@@ -46,6 +47,13 @@ export function DataTable<TData, TValue>({
             sorting,
         },
     })
+
+    if (!isLoading && data.length == 0) {
+        return (
+            <div className='my-40'>
+            </div>
+        )
+    }
 
     return (
         <div>
