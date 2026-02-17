@@ -1,9 +1,6 @@
 export default {
     index: {
-        theme: {
-            layout: 'raw',
-        },
-        display: 'hidden',
+        title: 'Introduction',
     },
     pricing: {
         theme: {
@@ -17,7 +14,6 @@ export default {
     'privacy-policy': {
         display: 'hidden',
     },
-    introduction: { title: 'Introduction' },
     'getting-started': { title: 'Getting Started' },
     tutorials: { title: 'Tutorials' },
     'how-to-guides': { title: 'How-to Guides' },

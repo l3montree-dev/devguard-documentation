@@ -14,7 +14,7 @@ const config: DocsThemeConfig = {
         // eslint-disable-next-line react-hooks/rules-of-hooks
         const { frontMatter, ...rest } = useConfig()
         const url =
-            'https://devguard.org' +
+            'https://docs.devguard.org' +
             (defaultLocale === locale ? asPath : `/${locale}${asPath}`)
 
         return (
@@ -48,7 +48,7 @@ const config: DocsThemeConfig = {
             </>
         )
     },
-    
+
     logo: (
         <Image
             src="/logo-inverse-horizontal.svg"

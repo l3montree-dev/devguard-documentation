@@ -8,21 +8,26 @@ const withNextra = nextra({
 export default withNextra({
     async redirects() {
         return [
-        {
-            source: "/concept-guides/container-hardening/process",
-            destination: "/tutorials/container-hardening/process",
-            permanent: true,
-        },
-        {   
-            source: "/concept-guides/container-hardening/cve-decision",
-            destination: "/tutorials/container-hardening/cve-decision",
-            permanent: true,
-        },
-        {
-            source: "/imprint",
-            destination: "https://l3montree.com/impressum",
-            permanent: false,
-        }
-        ];
+            {
+                source: '/introduction',
+                destination: '/',
+                permanent: true,
+            },
+            {
+                source: '/concept-guides/container-hardening/process',
+                destination: '/tutorials/container-hardening/process',
+                permanent: true,
+            },
+            {
+                source: '/concept-guides/container-hardening/cve-decision',
+                destination: '/tutorials/container-hardening/cve-decision',
+                permanent: true,
+            },
+            {
+                source: '/imprint',
+                destination: 'https://l3montree.com/impressum',
+                permanent: false,
+            },
+        ]
     },
 })
