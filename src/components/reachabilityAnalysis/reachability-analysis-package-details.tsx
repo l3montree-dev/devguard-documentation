@@ -1,17 +1,16 @@
 import { useState } from 'react'
 import { Container } from '../top-level-pages/container'
 import { ReachabilityAnalysisResponse } from 'src/components/reachabilityAnalysis/reachability-types'
-import { Label, Pie, PieChart } from 'recharts'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { ExternalLink } from 'lucide-react'
-import { fetcher } from '@/lib/fetcher'
+import { fetcher } from 'src/lib/fetcher'
 import useSWR from 'swr'
 
 
 
-export default function CVEDetailComponent({ purl }: { purl?: string }) {
+export default function ReachabilityAnalysisPackageDetails({ purl }: { purl?: string }) {
     const { data, error, isLoading } = useSWR<ReachabilityAnalysisResponse>(
         purl ? `http://localhost:8080/api/v1/vulndb/reachability/${purl}` : null,
         fetcher,
@@ -19,13 +18,6 @@ export default function CVEDetailComponent({ purl }: { purl?: string }) {
 
     const [isVulnerabilitiesOpen, setIsVulnerabilitiesOpen] = useState(false)
     const [isComponentsOpen, setIsComponentsOpen] = useState(false)
-
-    const options: Intl.DateTimeFormatOptions = {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-    }
 
     if (isLoading) {
         return (
@@ -53,8 +45,7 @@ export default function CVEDetailComponent({ purl }: { purl?: string }) {
                 <div className="relative mb-4">
                     <div className="absolute inset-px rounded-lg bg-white dark:bg-gray-800" />
                     <div className="relative flex flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] p-7">
-                        <Skeleton className="h-6 w-48"
-                    />
+                        <Skeleton className="h-6 w-48"/>
                     </div>
                 </div>
             </Container>

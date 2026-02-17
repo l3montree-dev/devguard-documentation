@@ -27,8 +27,8 @@ export const columns: ColumnDef<Package>[] = [
         header: 'Package Type',
         size: 600,
         cell: ({ row }) => {
-            const description = row.getValue('type') as string
-            return <div className="w-108">{description}</div>
+            const type = row.getValue('type') as string
+            return <div className="w-108">{type}</div>
         },
     },
     {
@@ -48,8 +48,8 @@ export const columns: ColumnDef<Package>[] = [
             )
         },
         cell: ({ row }) => {
-            const purl = row.getValue('name') as string
-            return <div className="w-32">{purl}</div>
+            const name = row.getValue('name') as string
+            return <div className="w-32">{name}</div>
         },
     },
 ]

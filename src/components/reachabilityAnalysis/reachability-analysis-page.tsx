@@ -52,10 +52,12 @@ export default function ReachabilityAnalysisPage() {
         })
     }
 
+    const APPROX_ROW_HEIGHT = 60
+
     return (
         <Container>
             <ReachabilityAnalysisHero searchTerm={searchTerm} setSearchTerm={setSearchTerm} onSearch={handleSearch}/>
-            <div ref={tableRef} style={{ scrollMarginTop: `${Math.max(80,520 - data.length * 60)}px`}}>
+            <div ref={tableRef} style={{ scrollMarginTop: `${Math.max(80,520 - data.length * APPROX_ROW_HEIGHT)}px`}}>
                 <DataTable
                     columns={columns}
                     data={data}
