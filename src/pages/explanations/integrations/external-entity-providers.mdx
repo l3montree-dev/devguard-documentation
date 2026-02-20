@@ -1,8 +1,84 @@
 import Image from 'next/image';
-import { Callout } from 'nextra/components';
+import { Callout, Steps } from 'nextra/components';
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
-import PageContentComingSoon from '@/components/PageContentComingSoon'
 
 # External Entity Providers
 
-<PageContentComingSoon />
+External Entity Providers allow DevGuard to synchronize organizational structure and permissions from external platforms like GitLab. Instead of manually creating organizations, projects, and assets in DevGuard, you can import them directly from your existing infrastructure.
+
+## Overview
+
+External Entity Providers enable:
+
+- **Automatic Organization Creation**: GitLab instances become DevGuard organizations
+- **Project Synchronization**: GitLab groups map to DevGuard projects
+- **Asset Discovery**: GitLab projects map to DevGuard assets
+- **Permission Inheritance**: External access levels translate to DevGuard roles
+- **Real-time Sync**: Permissions update when users authenticate
+- **Issue Management**: Vulnerabilities can be tracked in the same platform
+
+
+
+## Entity Mapping
+
+| External Entity | DevGuard Entity |
+|-----------------|-----------------|
+| GitLab Instance | Organization |
+| GitLab Group | Project |
+| GitLab Project | Asset |
+
+
+## Synchronization Process
+
+When a user authenticates via an external provider:
+
+1. **Token Retrieval**: DevGuard retrieves OAuth2 tokens from the identity provider
+2. **Organization Sync**: Organizations are created/updated based on the provider
+3. **Project Sync**: GitLab groups are synchronized as DevGuard projects
+4. **Asset Sync**: GitLab projects within groups are synchronized as DevGuard assets
+5. **Permission Sync**: User roles are updated based on external permissions
+
+## Permission Synchronization
+
+| GitLab Access Level | DevGuard Role |
+|---------------------|---------------|
+| Owner / Maintainer | Admin |
+| Developer / Reporter / Guest | Member |
+
+When external permissions change, DevGuard:
+
+- **Revokes Old Roles**: Removes access to projects/assets the user no longer has access to
+- **Grants New Roles**: Adds access based on current external permissions
+- **Updates Existing Roles**: Adjusts role levels if permissions changed
+
+## Triggering Sync
+
+### Automatic Sync
+
+Synchronization occurs automatically when:
+- Users authenticate via the external provider
+- Users access an organization linked to an external entity
+
+### Manual Sync
+
+Users can trigger a manual sync via the DevGuard UI or API endpoints.
+
+
+## Benefits
+
+- **Single Source of Truth**: Permissions are managed in your existing platform
+- **Reduced Administration**: No need to manually create DevGuard entities
+- **Automatic Updates**: Changes in external systems reflect in DevGuard
+- **Consistent Access**: Users have the same access levels across platforms
+
+## Limitations
+
+- **Provider Support**: Currently limited to GitLab
+- **Token Validity**: Requires valid OAuth2 tokens for sync
+
+
+## Related Documentation
+
+- [GitLab Integration](/explanations/integrations/gitlab-integration) — GitLab-specific integration details
+- [GitLab Permission Sync](/how-to-guides/integrations/gitlab/permission-sync) — Configure permission synchronization
+- [Integration Architecture](/explanations/integrations/integration-architecture) — Overall integration design

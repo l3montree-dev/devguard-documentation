@@ -1,8 +1,104 @@
 import Image from 'next/image';
-import { Callout } from 'nextra/components';
+import { Callout, Steps } from 'nextra/components';
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
-import PageContentComingSoon from '@/components/PageContentComingSoon'
 
 # Jira Integration
 
-<PageContentComingSoon />
+DevGuard integrates with Jira to provide vulnerability ticket management in your existing issue tracking workflow.
+
+## Overview
+
+The Jira integration provides:
+
+- **Issue Creation**: Create Jira issues for discovered vulnerabilities — this can happen automatically for dependency vulnerabilities when they exceed a threshold, or manually by users for any vulnerability type
+- **Issue Updates**: Sync vulnerability status changes to Jira
+- **Webhook Processing**: React to issue transitions and comments in real-time
+- **Bidirectional Sync**: Comments in Jira can update vulnerability status in DevGuard
+
+## Integration Setup
+
+The Jira integration requires an API token and user email for authentication:
+
+| Field | Description |
+|-------|-------------|
+| `URL` | Your Jira instance URL (e.g., `https://company.atlassian.net`) |
+| `Token` | Jira API token for authentication |
+| `UserEmail` | Email address of the Jira user for the API token |
+| `Name` | A friendly name for this integration |
+
+<Callout type="info">
+  Create an API token in your Atlassian account settings under **Security → API tokens**.
+</Callout>
+
+## How It Works
+
+1. **Configure Integration**: Add your Jira instance URL, API token, and user email in DevGuard
+2. **Link Asset**: Connect a DevGuard asset to a Jira project
+3. **Create Issues**: Vulnerabilities can be pushed to Jira as issues (automatically or manually)
+4. **Sync Status**: Changes in either system are synchronized via webhooks
+
+## Issue Creation
+
+When a vulnerability is flagged for remediation, DevGuard creates a Jira issue containing detailed information about the vulnerability, including severity, affected components, and labels for categorization.
+
+## Comment Commands
+
+Users can control vulnerability status through Jira comments:
+
+| Command | Effect |
+|---------|--------|
+| `/accept <reason>` | Accept the vulnerability risk |
+| `/false-positive <reason>` | Mark as false positive |
+| `/reopen` | Reopen a closed vulnerability |
+
+## Webhook Processing
+
+DevGuard processes Jira webhooks to synchronize issue state changes.
+
+<Callout type="warning">
+  Configure the webhook secret in your Jira settings to ensure only authenticated requests are processed. DevGuard only accepts webhooks with a valid secret.
+</Callout>
+
+### Processed Events
+
+| Event | Action |
+|-------|--------|
+| Issue Closed | Vulnerability marked as accepted |
+| Issue Reopened | Vulnerability reopened |
+| Comment Added | Process slash commands |
+
+## Issue State Synchronization
+
+DevGuard manages Jira issue states through transitions:
+
+| Jira Status Category | DevGuard Interpretation |
+|---------------------|--------------------------|
+| To Do | Open vulnerability |
+| In Progress | Open vulnerability |
+| Done | Closed vulnerability |
+
+## Priority Mapping
+
+DevGuard automatically sets the Jira issue priority based on vulnerability severity:
+
+| Severity | Jira Priority |
+|----------|---------------|
+| Critical | Highest |
+| High | Highest |
+| Medium | Default |
+| Low | Default |
+
+## Testing the Integration
+
+When saving a Jira integration, DevGuard validates:
+
+1. **API Token**: Tests authentication with Jira API
+2. **User Email**: Retrieves the Account ID for the provided email
+3. **Connection**: Verifies connectivity to the Jira instance
+
+## Related Documentation
+
+- [Connect Jira](/how-to-guides/integrations/jira/connect-jira) — Step-by-step setup guide
+- [Jira Issue Creation](/how-to-guides/integrations/jira/issue-creation) — Configure issue templates
+- [Jira Status Sync](/how-to-guides/integrations/jira/sync-status) — Understand status synchronization
+- [Integration Architecture](/explanations/integrations/integration-architecture) — Overall integration design
