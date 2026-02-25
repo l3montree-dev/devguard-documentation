@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import { extractPackageName } from '@/lib/utils'
+import { PackageInfo } from '@/components/package-inspector/types'
+import ScoreCardChart from '@/components/package-inspector/ScoreCardChart'
 
 export default function PackageDetailsPage() {
     const router = useRouter()
@@ -14,7 +16,11 @@ export default function PackageDetailsPage() {
     const [error, setError] = useState<string | null>(null)
 
     const purlString = typeof purl === 'string' ? purl : ''
-    const packageName = purlString ? extractPackageName(decodeURIComponent(purlString)) : ''
+    let packageName = ''
+
+    if (purlString) {
+        packageName = extractPackageName(decodeURIComponent(purlString))
+    }
 
     useEffect(() => {
         if (!purlString) return
@@ -29,8 +35,9 @@ export default function PackageDetailsPage() {
                     decodedPurl,
             )
 
-            if (response) {
-                setPackageInfo(response)
+            if (response.ok) {
+                const data: PackageInfo = await response.json()
+                setPackageInfo(data)
             } else {
                 setError('Package not found')
             }
@@ -51,4 +58,26 @@ export default function PackageDetailsPage() {
             </div>
         )
     }
+
+    if (error) {
+        return <div className="p-8 text-red-500">{error}</div>
+    }
+
+    if (!packageInfo) {
+        return null
+    }
+
+    return (
+        <div className="p-8">
+            <Head>
+                <title>{packageName} - Package Inspector</title>
+            </Head>
+            <h1 className="mb-6 text-2xl font-bold text-white">
+                {packageName}
+            </h1>
+            <ScoreCardChart
+                checks={packageInfo.component.project.scoreCard.checks}
+            />
+        </div>
+    )
 }
