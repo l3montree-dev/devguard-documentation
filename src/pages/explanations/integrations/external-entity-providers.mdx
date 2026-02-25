@@ -24,8 +24,8 @@ External Entity Providers enable:
 | External Entity | DevGuard Entity |
 |-----------------|-----------------|
 | GitLab Instance | Organization |
-| GitLab Group | Project |
-| GitLab Project | Asset |
+| GitLab Group | Group |
+| GitLab Project | Repository |
 
 
 ## Synchronization Process
@@ -57,7 +57,7 @@ When external permissions change, DevGuard:
 
 Synchronization occurs automatically when:
 - Users authenticate via the external provider
-- Users access an organization linked to an external entity
+- At regular intervals
 
 ### Manual Sync
 
@@ -75,6 +75,7 @@ Users can trigger a manual sync via the DevGuard UI or API endpoints.
 
 - **Provider Support**: Currently limited to GitLab
 - **Token Validity**: Requires valid OAuth2 tokens for sync
+- **Deleted Entities**: DevGuard can never decide if a user just lost access to a repository on GitLab or if it was deleted. Thus DevGuard will never delete any external entity projects and instead just revokes permissions
 
 
 ## Related Documentation

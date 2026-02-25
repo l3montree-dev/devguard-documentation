@@ -48,9 +48,12 @@ Users can control vulnerability status through Jira comments:
 | Command | Effect |
 |---------|--------|
 | `/accept <reason>` | Accept the vulnerability risk |
-| `/false-positive <reason>` | Mark as false positive |
+| `/component-not-present  <reason>` | Mark as false positive |
+| `/vulnerable-code-not-present <reason>` | Mark as false positive | 
+| `/vulnerable-code-not-in-execute-path  <reason>` | Mark as false positive | 
+| `/vulnerable-code-cannot-be-controlled-by-adversary  <reason>` | Mark as false positive | 
+| `/inline-mitigations-already-exist  <reason>` | Mark as false positive |  
 | `/reopen` | Reopen a closed vulnerability |
-
 ## Webhook Processing
 
 DevGuard processes Jira webhooks to synchronize issue state changes.
