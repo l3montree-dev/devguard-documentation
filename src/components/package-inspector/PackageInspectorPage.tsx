@@ -1,29 +1,44 @@
 import { useState } from 'react'
+import { useRouter } from 'next/router'
 import { Searchbar } from '@/components/ui/Searchbar'
 import { SearchResultCard } from './SearchResultCard'
 import { PackageInspectorHero } from './Hero'
-import mockData from './mock-data.json'
-
+import { extractPackageName } from '@/lib/utils'
 export function PackageInspectorPage() {
+    const router = useRouter()
+
     const [searchQuery, setSearchQuery] = useState('')
 
     const [isLoading, setIsLoading] = useState(false)
 
     const [results, setResults] = useState<any[]>([])
 
-    const [hasSearched, setHasSearched] = useState(false)
-
     const handleSearch = async () => {
         if (!searchQuery.trim()) return
 
         setIsLoading(true)
-        setHasSearched(true)
 
-        // TODO: replace with real API call when backend is ready
-        // simulate delay to test search button working and return mock data
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        setResults([mockData])
-        setIsLoading(false)
+        try {
+            const response = await fetch(
+                'https://api.main.devguard.org/api/v1/vulndb/purl-inspect/' +
+                    encodeURIComponent(searchQuery.trim()),
+            )
+            if (!response.ok) {
+                setResults([])
+                return
+            }
+            const data = await response.json()
+            const items = Array.isArray(data) ? data : [data]
+            setResults(
+                items.filter(
+                    (item: any) => item.component?.project?.description,
+                ),
+            )
+        } catch {
+            setResults([])
+        } finally {
+            setIsLoading(false)
+        }
     }
 
     return (
@@ -35,17 +50,19 @@ export function PackageInspectorPage() {
                     onChange={setSearchQuery}
                     onSubmit={handleSearch}
                     isLoading={isLoading}
-                    placeholder={'Search by package name or PURL'}
+                    placeholder={'Search by PURL'}
                 />
 
-                {hasSearched && (
+                {results.length > 0 && (
                     <div className="mx-auto mt-8 max-w-2xl">
                         {results.map((result) => (
                             <SearchResultCard
                                 key={result.purl}
-                                name={result.name}
-                                description={result.project?.description}
-                                version={result.version}
+                                name={extractPackageName(result.purl)}
+                                description={
+                                    result.component.project?.description
+                                }
+                                version={result.component.version}
                                 purl={result.purl}
                             />
                         ))}

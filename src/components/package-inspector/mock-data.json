@@ -1,102 +1,720 @@
 {
-  "purl": "pkg:npm/event-stream@3.3.6",
-  "ecosystem": "npm",
-  "name": "event-stream",
-  "version": "3.3.6",
-
-  "project": {
-    "projectKey": "github.com/dominictarr/event-stream",
-    "starsCount": 1400,
-    "forksCount": 220,
-    "openIssuesCount": 12,
-    "homepage": "https://github.com/dominictarr/event-stream",
-    "license": "MIT",
-    "description": "Toolkit to make creating and working with streams easy",
-
-    "scoreCard": {
-      "checks": [
-        {
-          "name": "Maintained",
-          "score": 2,
-          "reason": "No commit activity in the last 12 months"
-        },
-        {
-          "name": "Code-Review",
-          "score": 3,
-          "reason": "Most commits are directly pushed to main without review"
-        },
-        {
-          "name": "Signed-Releases",
-          "score": 0,
-          "reason": "No signed tags or releases detected"
-        },
-        {
-          "name": "Signed-Commits",
-          "score": 1,
-          "reason": "Only a small subset of commits are signed"
-        },
-        {
-          "name": "Branch-Protection",
-          "score": 0,
-          "reason": "Main branch allows force-pushes and direct commits"
-        },
-        {
-          "name": "CI-Tests",
-          "score": 4,
-          "reason": "Basic CI exists but coverage is minimal"
-        },
-        {
-          "name": "Fuzzing",
-          "score": 0,
-          "reason": "No fuzzing configuration detected"
-        },
-        {
-          "name": "Dependency-Update-Tool",
-          "score": 2,
-          "reason": "Dependabot is configured but updates are often ignored"
-        },
-        {
-          "name": "Security-Policy",
-          "score": 0,
-          "reason": "SECURITY.md not found"
-        },
-        {
-          "name": "Vulnerabilities",
-          "score": 3,
-          "reason": "Known historical vulnerabilities with no documented remediation"
-        },
-        {
-          "name": "Packaging",
-          "score": 1,
-          "reason": "Package includes postinstall scripts without sandboxing"
-        },
-        {
-          "name": "Binary-Artifacts",
-          "score": 0,
-          "reason": "Prebuilt binaries committed to the repository"
-        }
-      ],
-      "metadata": {
-        "tool": "openssf-scorecard",
-        "toolVersion": "5.0.0",
-        "generatedAt": "2024-09-30T11:22:00Z"
-      }
+    "purl": "pkg:npm/next@16.0.1",
+    "matchContext": {
+        "searchPurl": "pkg:npm/next",
+        "normalizedVersion": "16.0.1",
+        "howToInterpretVersionString": "semver_range",
+        "qualifiers": [],
+        "namespace": ""
     },
-
-    "scoreCardScore": 2.8,
-    "updatedAt": "2024-11-01T14:00:00Z"
-  },
-
-  "maliciousPackage": {
-    "id": "MAL-2024-000123",
-    "summary": "Malicious package targeting CI environments",
-    "details": "The package executes a post-install script that exfiltrates environment variables and SSH keys.",
-    "published": "2024-10-12T08:15:30Z",
-    "modified": "2024-11-01T14:42:10Z",
-    "affectedComponent": {
-      "id": "mac-001",
-      "versionRange": "<=3.3.6",
-      "firstObserved": "2024-10-10T09:00:00Z"
-    }
-  }
+    "component": {
+        "purl": "pkg:npm/next@16.0.1",
+        "dependsOn": [],
+        "componentType": "",
+        "version": "16.0.1",
+        "license": "MIT",
+        "published": "2025-10-28T19:22:29+01:00",
+        "project": {
+            "projectKey": "github.com/vercel/next.js",
+            "starsCount": 137830,
+            "forksCount": 30485,
+            "openIssuesCount": 0,
+            "homepage": "https://nextjs.org",
+            "license": "MIT",
+            "description": "The React Framework",
+            "scoreCard": {
+                "checks": [
+                    {
+                        "details": [],
+                        "documentation": {
+                            "shortDescription": "Determines if the project is \"actively maintained\".",
+                            "url": "https://github.com/ossf/scorecard/blob/4eda2f56f70fa619b8785a63deb68aac8e3538ff/docs/checks.md#maintained"
+                        },
+                        "name": "Maintained",
+                        "reason": "30 commit(s) and 10 issue activity found in the last 90 days -- score normalized to 10",
+                        "score": 10
+                    },
+                    {
+                        "details": [],
+                        "documentation": {
+                            "shortDescription": "Determines if the project requires human code review before pull requests (aka merge requests) are merged.",
+                            "url": "https://github.com/ossf/scorecard/blob/4eda2f56f70fa619b8785a63deb68aac8e3538ff/docs/checks.md#code-review"
+                        },
+                        "name": "Code-Review",
+                        "reason": "Found 26/30 approved changesets -- score normalized to 8",
+                        "score": 8
+                    },
+                    {
+                        "details": [],
+                        "documentation": {
+                            "shortDescription": "Determines if the project has an OpenSSF (formerly CII) Best Practices Badge.",
+                            "url": "https://github.com/ossf/scorecard/blob/4eda2f56f70fa619b8785a63deb68aac8e3538ff/docs/checks.md#cii-best-practices"
+                        },
+                        "name": "CII-Best-Practices",
+                        "reason": "no effort to earn an OpenSSF best practices badge detected",
+                        "score": 0
+                    },
+                    {
+                        "details": [],
+                        "documentation": {
+                            "shortDescription": "Determines if the project's GitHub Action workflows avoid dangerous patterns.",
+                            "url": "https://github.com/ossf/scorecard/blob/4eda2f56f70fa619b8785a63deb68aac8e3538ff/docs/checks.md#dangerous-workflow"
+                        },
+                        "name": "Dangerous-Workflow",
+                        "reason": "no dangerous workflow patterns detected",
+                        "score": 10
+                    },
+                    {
+                        "details": [
+                            "Info: project has a license file: license.md:0",
+                            "Info: FSF or OSI recognized license: MIT License: license.md:0"
+                        ],
+                        "documentation": {
+                            "shortDescription": "Determines if the project has defined a license.",
+                            "url": "https://github.com/ossf/scorecard/blob/4eda2f56f70fa619b8785a63deb68aac8e3538ff/docs/checks.md#license"
+                        },
+                        "name": "License",
+                        "reason": "license file detected",
+                        "score": 10
+                    },
+                    {
+                        "details": [
+                            "Warn: jobLevel 'contents' permission set to 'write': .github/workflows/build_and_deploy.yml:564",
+                            "Warn: jobLevel 'contents' permission set to 'write': .github/workflows/build_and_deploy.yml:619",
+                            "Info: jobLevel 'contents' permission set to 'read': .github/workflows/build_and_test.yml:32",
+                            "Warn: jobLevel 'contents' permission set to 'write': .github/workflows/release-next-rspack.yml:44",
+                            "Warn: no topLevel permission defined: .github/workflows/build_and_deploy.yml:1",
+                            "Warn: no topLevel permission defined: .github/workflows/build_and_test.yml:1",
+                            "Warn: no topLevel permission defined: .github/workflows/build_reusable.yml:1",
+                            "Warn: no topLevel permission defined: .github/workflows/code_freeze.yml:1",
+                            "Warn: no topLevel permission defined: .github/workflows/create_release_branch.yml:1",
+                            "Info: topLevel 'contents' permission set to 'read': .github/workflows/deploy_docs.yml:10",
+                            "Warn: no topLevel permission defined: .github/workflows/graphite_ci_optimizer.yml:1",
+                            "Warn: no topLevel permission defined: .github/workflows/integration_tests_reusable.yml:1",
+                            "Warn: no topLevel permission defined: .github/workflows/issue_stale.yml:1",
+                            "Warn: no topLevel permission defined: .github/workflows/issue_wrong_template.yml:1",
+                            "Warn: no topLevel permission defined: .github/workflows/popular.yml:1",
+                            "Warn: no topLevel permission defined: .github/workflows/pull_request_stats.yml:1",
+                            "Warn: no topLevel permission defined: .github/workflows/release-next-rspack.yml:1",
+                            "Warn: topLevel 'actions' permission set to 'write': .github/workflows/retry_deploy_test.yml:13",
+                            "Warn: topLevel 'actions' permission set to 'write': .github/workflows/retry_test.yml:16",
+                            "Warn: no topLevel permission defined: .github/workflows/rspack-nextjs-build-integration-tests.yml:1",
+                            "Warn: no topLevel permission defined: .github/workflows/rspack-nextjs-dev-integration-tests.yml:1",
+                            "Warn: no topLevel permission defined: .github/workflows/rspack-update-tests-manifest.yml:1",
+                            "Warn: no topLevel permission defined: .github/workflows/setup-nextjs-build.yml:1",
+                            "Warn: no topLevel permission defined: .github/workflows/test-turbopack-rust-bench-test.yml:1",
+                            "Warn: no topLevel permission defined: .github/workflows/test_e2e_deploy_release.yml:1",
+                            "Warn: no topLevel permission defined: .github/workflows/test_e2e_project_reset_cron.yml:1",
+                            "Warn: no topLevel permission defined: .github/workflows/test_examples.yml:1",
+                            "Warn: no topLevel permission defined: .github/workflows/trigger_release.yml:1",
+                            "Warn: no topLevel permission defined: .github/workflows/turbopack-benchmark.yml:1",
+                            "Warn: no topLevel permission defined: .github/workflows/turbopack-nextjs-build-integration-tests.yml:1",
+                            "Warn: no topLevel permission defined: .github/workflows/turbopack-nextjs-dev-integration-tests.yml:1",
+                            "Warn: no topLevel permission defined: .github/workflows/turbopack-update-tests-manifest.yml:1",
+                            "Warn: no topLevel permission defined: .github/workflows/update_fonts_data.yml:1",
+                            "Warn: no topLevel permission defined: .github/workflows/update_react.yml:1",
+                            "Warn: no topLevel permission defined: .github/workflows/upload-tests-manifest.yml:1"
+                        ],
+                        "documentation": {
+                            "shortDescription": "Determines if the project's workflows follow the principle of least privilege.",
+                            "url": "https://github.com/ossf/scorecard/blob/4eda2f56f70fa619b8785a63deb68aac8e3538ff/docs/checks.md#token-permissions"
+                        },
+                        "name": "Token-Permissions",
+                        "reason": "detected GitHub workflow tokens with excessive permissions",
+                        "score": 0
+                    },
+                    {
+                        "details": [],
+                        "documentation": {
+                            "shortDescription": "Determines if the default and release branches are protected with GitHub's branch protection settings.",
+                            "url": "https://github.com/ossf/scorecard/blob/4eda2f56f70fa619b8785a63deb68aac8e3538ff/docs/checks.md#branch-protection"
+                        },
+                        "name": "Branch-Protection",
+                        "reason": "internal error: error during branchesHandler.setup: internal error: some github tokens can't read classic branch protection rules: https://github.com/ossf/scorecard-action/blob/main/docs/authentication/fine-grained-auth-token.md",
+                        "score": -1
+                    },
+                    {
+                        "details": [],
+                        "documentation": {
+                            "shortDescription": "Determines if the project cryptographically signs release artifacts.",
+                            "url": "https://github.com/ossf/scorecard/blob/4eda2f56f70fa619b8785a63deb68aac8e3538ff/docs/checks.md#signed-releases"
+                        },
+                        "name": "Signed-Releases",
+                        "reason": "no releases found",
+                        "score": -1
+                    },
+                    {
+                        "details": [
+                            "Info: security policy file detected: github.com/vercel/.github/SECURITY.md:1",
+                            "Info: Found linked content: github.com/vercel/.github/SECURITY.md:1",
+                            "Info: Found disclosure, vulnerability, and/or timelines in security policy: github.com/vercel/.github/SECURITY.md:1",
+                            "Info: Found text in security policy: github.com/vercel/.github/SECURITY.md:1"
+                        ],
+                        "documentation": {
+                            "shortDescription": "Determines if the project has published a security policy.",
+                            "url": "https://github.com/ossf/scorecard/blob/4eda2f56f70fa619b8785a63deb68aac8e3538ff/docs/checks.md#security-policy"
+                        },
+                        "name": "Security-Policy",
+                        "reason": "security policy file detected",
+                        "score": 10
+                    },
+                    {
+                        "details": [
+                            "Warn: binary detected: examples/with-webassembly/add.wasm:1",
+                            "Warn: binary detected: packages/next/next_error_code_swc_plugin.wasm:1",
+                            "Warn: binary detected: packages/next/src/compiled/@vercel/og/resvg.wasm:1",
+                            "Warn: binary detected: packages/next/src/compiled/@vercel/og/yoga.wasm:1",
+                            "Warn: binary detected: packages/next/src/compiled/source-map08/mappings.wasm:1",
+                            "Warn: binary detected: test/e2e/app-dir/worker/app/add.wasm:1",
+                            "Warn: binary detected: test/e2e/edge-can-use-wasm-files/add.wasm:1",
+                            "Warn: binary detected: test/integration/edge-runtime-dynamic-code/lib/square.wasm:1",
+                            "Warn: binary detected: test/production/app-dir-edge-runtime-with-wasm/add.wasm:1",
+                            "Warn: binary detected: test/production/standalone-mode/tracing-unparsable/foo/binary:1",
+                            "Warn: binary detected: turbopack/crates/turbopack-tests/tests/execution/turbopack/wasm/module/input/add.wasm:1",
+                            "Warn: binary detected: turbopack/crates/turbopack-tests/tests/execution/turbopack/wasm/simple/input/add.wasm:1",
+                            "Warn: binary detected: turbopack/crates/turbopack-tests/tests/execution/turbopack/wasm/simple/input/factorial.wasm:1",
+                            "Warn: binary detected: turbopack/crates/turbopack-tests/tests/execution/turbopack/wasm/simple/input/fibonacci.wasm:1"
+                        ],
+                        "documentation": {
+                            "shortDescription": "Determines if the project has generated executable (binary) artifacts in the source repository.",
+                            "url": "https://github.com/ossf/scorecard/blob/4eda2f56f70fa619b8785a63deb68aac8e3538ff/docs/checks.md#binary-artifacts"
+                        },
+                        "name": "Binary-Artifacts",
+                        "reason": "binaries present in source code",
+                        "score": 0
+                    },
+                    {
+                        "details": [
+                            "Info: Project packages its releases by way of GitHub Actions.: .github/workflows/build_and_deploy.yml:614"
+                        ],
+                        "documentation": {
+                            "shortDescription": "Determines if the project is published as a package that others can easily download, install, easily update, and uninstall.",
+                            "url": "https://github.com/ossf/scorecard/blob/4eda2f56f70fa619b8785a63deb68aac8e3538ff/docs/checks.md#packaging"
+                        },
+                        "name": "Packaging",
+                        "reason": "packaging workflow detected",
+                        "score": 10
+                    },
+                    {
+                        "details": [
+                            "Info: RustCargoFuzzer integration found: turbopack/crates/turbo-tasks-backend/fuzz/fuzz_targets/graph.rs:4"
+                        ],
+                        "documentation": {
+                            "shortDescription": "Determines if the project uses fuzzing.",
+                            "url": "https://github.com/ossf/scorecard/blob/4eda2f56f70fa619b8785a63deb68aac8e3538ff/docs/checks.md#fuzzing"
+                        },
+                        "name": "Fuzzing",
+                        "reason": "project is fuzzed",
+                        "score": 10
+                    },
+                    {
+                        "details": [
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_and_deploy.yml:454: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_and_deploy.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_and_deploy.yml:457: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_and_deploy.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_and_deploy.yml:483: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_and_deploy.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_and_deploy.yml:489: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_and_deploy.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_and_deploy.yml:505: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_and_deploy.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_and_deploy.yml:518: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_and_deploy.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_and_deploy.yml:530: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_and_deploy.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_and_deploy.yml:536: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_and_deploy.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_and_deploy.yml:548: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_and_deploy.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_and_deploy.yml:622: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_and_deploy.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_and_deploy.yml:624: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_and_deploy.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_and_deploy.yml:655: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_and_deploy.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_and_deploy.yml:692: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_and_deploy.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_and_deploy.yml:41: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_and_deploy.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_and_deploy.yml:46: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_and_deploy.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_and_deploy.yml:90: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_and_deploy.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_and_deploy.yml:99: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_and_deploy.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_and_deploy.yml:106: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_and_deploy.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_and_deploy.yml:118: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_and_deploy.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_and_deploy.yml:319: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_and_deploy.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_and_deploy.yml:326: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_and_deploy.yml/canary?enable=pin",
+                            "Warn: third-party GitHubAction not pinned by hash: .github/workflows/build_and_deploy.yml:351: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_and_deploy.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_and_deploy.yml:422: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_and_deploy.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_and_deploy.yml:428: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_and_deploy.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_and_deploy.yml:434: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_and_deploy.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_and_deploy.yml:570: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_and_deploy.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_and_deploy.yml:583: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_and_deploy.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_and_deploy.yml:595: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_and_deploy.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_and_deploy.yml:601: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_and_deploy.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_and_test.yml:34: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_and_test.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_and_test.yml:114: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_and_test.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_and_test.yml:115: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_and_test.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_and_test.yml:193: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_and_test.yml/canary?enable=pin",
+                            "Warn: third-party GitHubAction not pinned by hash: .github/workflows/build_and_test.yml:195: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_and_test.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_reusable.yml:170: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_reusable.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_reusable.yml:207: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_reusable.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_reusable.yml:219: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_reusable.yml/canary?enable=pin",
+                            "Warn: third-party GitHubAction not pinned by hash: .github/workflows/build_reusable.yml:241: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_reusable.yml/canary?enable=pin",
+                            "Warn: third-party GitHubAction not pinned by hash: .github/workflows/build_reusable.yml:249: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_reusable.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_reusable.yml:277: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_reusable.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_reusable.yml:328: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_reusable.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_reusable.yml:335: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_reusable.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/build_reusable.yml:364: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/build_reusable.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/code_freeze.yml:30: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/code_freeze.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/create_release_branch.yml:37: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/create_release_branch.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/create_release_branch.yml:63: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/create_release_branch.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/deploy_docs.yml:24: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/deploy_docs.yml/canary?enable=pin",
+                            "Warn: third-party GitHubAction not pinned by hash: .github/workflows/graphite_ci_optimizer.yml:43: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/graphite_ci_optimizer.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/integration_tests_reusable.yml:156: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/integration_tests_reusable.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/integration_tests_reusable.yml:164: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/integration_tests_reusable.yml/canary?enable=pin",
+                            "Warn: third-party GitHubAction not pinned by hash: .github/workflows/issue_lock.yml:21: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/issue_lock.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/issue_stale.yml:13: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/issue_stale.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/issue_stale.yml:29: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/issue_stale.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/issue_stale.yml:44: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/issue_stale.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/issue_stale.yml:59: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/issue_stale.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/issue_wrong_template.yml:12: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/issue_wrong_template.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/issue_wrong_template.yml:13: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/issue_wrong_template.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/popular.yml:13: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/popular.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/popular.yml:14: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/popular.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/pull_request_stats.yml:56: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/pull_request_stats.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/pull_request_stats.yml:64: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/pull_request_stats.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/pull_request_stats.yml:85: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/pull_request_stats.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/pull_request_stats.yml:97: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/pull_request_stats.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/pull_request_stats.yml:107: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/pull_request_stats.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/pull_request_stats.yml:115: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/pull_request_stats.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/release-next-rspack.yml:50: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/release-next-rspack.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/release-next-rspack.yml:64: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/release-next-rspack.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/release-next-rspack.yml:79: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/release-next-rspack.yml/canary?enable=pin",
+                            "Warn: third-party GitHubAction not pinned by hash: .github/workflows/retry_deploy_test.yml:57: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/retry_deploy_test.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/retry_test.yml:32: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/retry_test.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/retry_test.yml:98: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/retry_test.yml/canary?enable=pin",
+                            "Warn: third-party GitHubAction not pinned by hash: .github/workflows/retry_test.yml:141: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/retry_test.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/rspack-update-tests-manifest.yml:17: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/rspack-update-tests-manifest.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/rspack-update-tests-manifest.yml:24: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/rspack-update-tests-manifest.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/rspack-update-tests-manifest.yml:57: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/rspack-update-tests-manifest.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/rspack-update-tests-manifest.yml:64: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/rspack-update-tests-manifest.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/setup-nextjs-build.yml:28: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/setup-nextjs-build.yml/canary?enable=pin",
+                            "Warn: third-party GitHubAction not pinned by hash: .github/workflows/setup-nextjs-build.yml:33: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/setup-nextjs-build.yml/canary?enable=pin",
+                            "Warn: third-party GitHubAction not pinned by hash: .github/workflows/setup-nextjs-build.yml:37: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/setup-nextjs-build.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/setup-nextjs-build.yml:57: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/setup-nextjs-build.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/setup-nextjs-build.yml:63: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/setup-nextjs-build.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/setup-nextjs-build.yml:70: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/setup-nextjs-build.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/setup-nextjs-build.yml:74: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/setup-nextjs-build.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/setup-nextjs-build.yml:120: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/setup-nextjs-build.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/test-turbopack-rust-bench-test.yml:33: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/test-turbopack-rust-bench-test.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/test-turbopack-rust-bench-test.yml:39: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/test-turbopack-rust-bench-test.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/test_e2e_deploy_release.yml:200: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/test_e2e_deploy_release.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/test_e2e_deploy_release.yml:230: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/test_e2e_deploy_release.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/test_e2e_deploy_release.yml:253: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/test_e2e_deploy_release.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/test_e2e_deploy_release.yml:301: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/test_e2e_deploy_release.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/test_e2e_deploy_release.yml:329: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/test_e2e_deploy_release.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/test_e2e_deploy_release.yml:51: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/test_e2e_deploy_release.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/test_e2e_deploy_release.yml:62: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/test_e2e_deploy_release.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/test_e2e_project_reset_cron.yml:27: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/test_e2e_project_reset_cron.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/test_e2e_project_reset_cron.yml:38: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/test_e2e_project_reset_cron.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/test_examples.yml:30: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/test_examples.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/test_examples.yml:38: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/test_examples.yml/canary?enable=pin",
+                            "Warn: third-party GitHubAction not pinned by hash: .github/workflows/triage.yml:26: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/triage.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/trigger_release.yml:51: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/trigger_release.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/trigger_release.yml:94: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/trigger_release.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/turbopack-benchmark.yml:33: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/turbopack-benchmark.yml/canary?enable=pin",
+                            "Warn: third-party GitHubAction not pinned by hash: .github/workflows/turbopack-benchmark.yml:39: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/turbopack-benchmark.yml/canary?enable=pin",
+                            "Warn: third-party GitHubAction not pinned by hash: .github/workflows/turbopack-benchmark.yml:44: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/turbopack-benchmark.yml/canary?enable=pin",
+                            "Warn: third-party GitHubAction not pinned by hash: .github/workflows/turbopack-benchmark.yml:63: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/turbopack-benchmark.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/turbopack-benchmark.yml:73: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/turbopack-benchmark.yml/canary?enable=pin",
+                            "Warn: third-party GitHubAction not pinned by hash: .github/workflows/turbopack-benchmark.yml:79: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/turbopack-benchmark.yml/canary?enable=pin",
+                            "Warn: third-party GitHubAction not pinned by hash: .github/workflows/turbopack-benchmark.yml:84: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/turbopack-benchmark.yml/canary?enable=pin",
+                            "Warn: third-party GitHubAction not pinned by hash: .github/workflows/turbopack-benchmark.yml:103: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/turbopack-benchmark.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/turbopack-benchmark.yml:114: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/turbopack-benchmark.yml/canary?enable=pin",
+                            "Warn: third-party GitHubAction not pinned by hash: .github/workflows/turbopack-benchmark.yml:120: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/turbopack-benchmark.yml/canary?enable=pin",
+                            "Warn: third-party GitHubAction not pinned by hash: .github/workflows/turbopack-benchmark.yml:130: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/turbopack-benchmark.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/turbopack-update-tests-manifest.yml:17: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/turbopack-update-tests-manifest.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/turbopack-update-tests-manifest.yml:24: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/turbopack-update-tests-manifest.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/turbopack-update-tests-manifest.yml:53: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/turbopack-update-tests-manifest.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/turbopack-update-tests-manifest.yml:60: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/turbopack-update-tests-manifest.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/update_fonts_data.yml:19: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/update_fonts_data.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/update_fonts_data.yml:26: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/update_fonts_data.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/update_react.yml:25: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/update_react.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/update_react.yml:37: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/update_react.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/upload-tests-manifest.yml:22: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/upload-tests-manifest.yml/canary?enable=pin",
+                            "Warn: GitHub-owned GitHubAction not pinned by hash: .github/workflows/upload-tests-manifest.yml:28: update your workflow using https://app.stepsecurity.io/secureworkflow/vercel/next.js/upload-tests-manifest.yml/canary?enable=pin",
+                            "Warn: containerImage not pinned by hash: .github/actions/next-stats-action/Dockerfile:3: pin your Docker image by updating ubuntu:22.04 to ubuntu:22.04@sha256:3ba65aa20f86a0fad9df2b2c259c613df006b2e6d0bfcc8a146afb8c525a9751",
+                            "Warn: containerImage not pinned by hash: examples/with-docker-compose/next-app/dev.Dockerfile:3: pin your Docker image by updating node:20-alpine to node:20-alpine@sha256:09e2b3d9726018aecf269bd35325f46bf75046a643a66d28360ec71132750ec8",
+                            "Warn: containerImage not pinned by hash: examples/with-docker-compose/next-app/prod-without-multistage.Dockerfile:3: pin your Docker image by updating node:20-alpine to node:20-alpine@sha256:09e2b3d9726018aecf269bd35325f46bf75046a643a66d28360ec71132750ec8",
+                            "Warn: containerImage not pinned by hash: examples/with-docker-compose/next-app/prod.Dockerfile:3: pin your Docker image by updating node:20-alpine to node:20-alpine@sha256:09e2b3d9726018aecf269bd35325f46bf75046a643a66d28360ec71132750ec8",
+                            "Warn: containerImage not pinned by hash: examples/with-docker-compose/next-app/prod.Dockerfile:6",
+                            "Warn: containerImage not pinned by hash: examples/with-docker-compose/next-app/prod.Dockerfile:48",
+                            "Warn: containerImage not pinned by hash: examples/with-docker-export-output/Dockerfile:12: pin your Docker image by updating node:24.13.0-slim to node:24.13.0-slim@sha256:4660b1ca8b28d6d1906fd644abe34b2ed81d15434d26d845ef0aced307cf4b6f",
+                            "Warn: containerImage not pinned by hash: examples/with-docker-export-output/Dockerfile:38: pin your Docker image by updating node:24.13.0-slim to node:24.13.0-slim@sha256:4660b1ca8b28d6d1906fd644abe34b2ed81d15434d26d845ef0aced307cf4b6f",
+                            "Warn: containerImage not pinned by hash: examples/with-docker-export-output/Dockerfile:72: pin your Docker image by updating nginxinc/nginx-unprivileged:alpine3.22 to nginxinc/nginx-unprivileged:alpine3.22@sha256:5aea7cc516b419e3526f47dd1531be31a56a046cfe44754d94f9383e13e2ee99",
+                            "Warn: containerImage not pinned by hash: examples/with-docker-export-output/Dockerfile.serve:10: pin your Docker image by updating node:24.13.0-slim to node:24.13.0-slim@sha256:4660b1ca8b28d6d1906fd644abe34b2ed81d15434d26d845ef0aced307cf4b6f",
+                            "Warn: containerImage not pinned by hash: examples/with-docker-export-output/Dockerfile.serve:36: pin your Docker image by updating node:24.13.0-slim to node:24.13.0-slim@sha256:4660b1ca8b28d6d1906fd644abe34b2ed81d15434d26d845ef0aced307cf4b6f",
+                            "Warn: containerImage not pinned by hash: examples/with-docker-export-output/Dockerfile.serve:71: pin your Docker image by updating node:24.13.0-slim to node:24.13.0-slim@sha256:4660b1ca8b28d6d1906fd644abe34b2ed81d15434d26d845ef0aced307cf4b6f",
+                            "Warn: containerImage not pinned by hash: examples/with-docker-multi-env/docker/development/Dockerfile:3: pin your Docker image by updating node:20-alpine to node:20-alpine@sha256:09e2b3d9726018aecf269bd35325f46bf75046a643a66d28360ec71132750ec8",
+                            "Warn: containerImage not pinned by hash: examples/with-docker-multi-env/docker/development/Dockerfile:6",
+                            "Warn: containerImage not pinned by hash: examples/with-docker-multi-env/docker/development/Dockerfile:22",
+                            "Warn: containerImage not pinned by hash: examples/with-docker-multi-env/docker/development/Dockerfile:31",
+                            "Warn: containerImage not pinned by hash: examples/with-docker-multi-env/docker/production/Dockerfile:3: pin your Docker image by updating node:20-alpine to node:20-alpine@sha256:09e2b3d9726018aecf269bd35325f46bf75046a643a66d28360ec71132750ec8",
+                            "Warn: containerImage not pinned by hash: examples/with-docker-multi-env/docker/production/Dockerfile:6",
+                            "Warn: containerImage not pinned by hash: examples/with-docker-multi-env/docker/production/Dockerfile:23",
+                            "Warn: containerImage not pinned by hash: examples/with-docker-multi-env/docker/production/Dockerfile:32",
+                            "Warn: containerImage not pinned by hash: examples/with-docker-multi-env/docker/staging/Dockerfile:3: pin your Docker image by updating node:20-alpine to node:20-alpine@sha256:09e2b3d9726018aecf269bd35325f46bf75046a643a66d28360ec71132750ec8",
+                            "Warn: containerImage not pinned by hash: examples/with-docker-multi-env/docker/staging/Dockerfile:6",
+                            "Warn: containerImage not pinned by hash: examples/with-docker-multi-env/docker/staging/Dockerfile:23",
+                            "Warn: containerImage not pinned by hash: examples/with-docker-multi-env/docker/staging/Dockerfile:32",
+                            "Warn: containerImage not pinned by hash: examples/with-docker/Dockerfile:10: pin your Docker image by updating node:24.13.0-slim to node:24.13.0-slim@sha256:4660b1ca8b28d6d1906fd644abe34b2ed81d15434d26d845ef0aced307cf4b6f",
+                            "Warn: containerImage not pinned by hash: examples/with-docker/Dockerfile:36: pin your Docker image by updating node:24.13.0-slim to node:24.13.0-slim@sha256:4660b1ca8b28d6d1906fd644abe34b2ed81d15434d26d845ef0aced307cf4b6f",
+                            "Warn: containerImage not pinned by hash: examples/with-docker/Dockerfile:70: pin your Docker image by updating node:24.13.0-slim to node:24.13.0-slim@sha256:4660b1ca8b28d6d1906fd644abe34b2ed81d15434d26d845ef0aced307cf4b6f",
+                            "Warn: containerImage not pinned by hash: examples/with-docker/Dockerfile.bun:8: pin your Docker image by updating oven/bun:1 to oven/bun:1@sha256:856da45d07aeb62eb38ea3e7f9e1794c0143a4ff63efb00e6c4491b627e2a521",
+                            "Warn: containerImage not pinned by hash: examples/with-docker/Dockerfile.bun:24: pin your Docker image by updating oven/bun:1 to oven/bun:1@sha256:856da45d07aeb62eb38ea3e7f9e1794c0143a4ff63efb00e6c4491b627e2a521",
+                            "Warn: containerImage not pinned by hash: examples/with-docker/Dockerfile.bun:49: pin your Docker image by updating oven/bun:1 to oven/bun:1@sha256:856da45d07aeb62eb38ea3e7f9e1794c0143a4ff63efb00e6c4491b627e2a521",
+                            "Warn: downloadThenRun not pinned by hash: .github/actions/next-stats-action/Dockerfile:14",
+                            "Warn: npmCommand not pinned by hash: .github/actions/next-stats-action/Dockerfile:15",
+                            "Warn: npmCommand not pinned by hash: examples/with-docker-export-output/Dockerfile.serve:78-79",
+                            "Warn: downloadThenRun not pinned by hash: .devcontainer/rust/install.sh:5",
+                            "Warn: npmCommand not pinned by hash: scripts/benchmark-boot-time.sh:59",
+                            "Warn: npmCommand not pinned by hash: scripts/deploy-docs.sh:23",
+                            "Warn: npmCommand not pinned by hash: scripts/deploy-docs.sh:33",
+                            "Warn: downloadThenRun not pinned by hash: scripts/setup-node.sh:5",
+                            "Warn: npmCommand not pinned by hash: .github/workflows/build_and_deploy.yml:96",
+                            "Warn: downloadThenRun not pinned by hash: .github/workflows/build_and_deploy.yml:470",
+                            "Warn: npmCommand not pinned by hash: .github/workflows/build_and_deploy.yml:511",
+                            "Warn: npmCommand not pinned by hash: .github/workflows/build_and_deploy.yml:576",
+                            "Warn: npmCommand not pinned by hash: .github/workflows/build_and_deploy.yml:608",
+                            "Warn: npmCommand not pinned by hash: .github/workflows/build_and_deploy.yml:630",
+                            "Warn: npmCommand not pinned by hash: .github/workflows/build_and_deploy.yml:52",
+                            "Warn: npmCommand not pinned by hash: .github/workflows/build_and_deploy.yml:660",
+                            "Warn: npmCommand not pinned by hash: .github/workflows/build_and_test.yml:120",
+                            "Warn: npmCommand not pinned by hash: .github/workflows/code_freeze.yml:36",
+                            "Warn: npmCommand not pinned by hash: .github/workflows/create_release_branch.yml:56",
+                            "Warn: npmCommand not pinned by hash: .github/workflows/deploy_docs.yml:31",
+                            "Warn: npmCommand not pinned by hash: .github/workflows/issue_wrong_template.yml:16",
+                            "Warn: npmCommand not pinned by hash: .github/workflows/popular.yml:17",
+                            "Warn: npmCommand not pinned by hash: .github/workflows/pull_request_stats.yml:123",
+                            "Warn: npmCommand not pinned by hash: .github/workflows/rspack-update-tests-manifest.yml:31",
+                            "Warn: npmCommand not pinned by hash: .github/workflows/rspack-update-tests-manifest.yml:71",
+                            "Warn: npmCommand not pinned by hash: .github/workflows/setup-nextjs-build.yml:85",
+                            "Warn: downloadThenRun not pinned by hash: .github/workflows/setup-nextjs-build.yml:109",
+                            "Warn: npmCommand not pinned by hash: .github/workflows/test_e2e_deploy_release.yml:58",
+                            "Warn: npmCommand not pinned by hash: .github/workflows/test_e2e_project_reset_cron.yml:34",
+                            "Warn: npmCommand not pinned by hash: .github/workflows/test_examples.yml:44",
+                            "Warn: npmCommand not pinned by hash: .github/workflows/trigger_release.yml:87",
+                            "Warn: npmCommand not pinned by hash: .github/workflows/turbopack-benchmark.yml:53",
+                            "Warn: npmCommand not pinned by hash: .github/workflows/turbopack-benchmark.yml:93",
+                            "Warn: npmCommand not pinned by hash: .github/workflows/turbopack-update-tests-manifest.yml:31",
+                            "Warn: npmCommand not pinned by hash: .github/workflows/turbopack-update-tests-manifest.yml:67",
+                            "Warn: npmCommand not pinned by hash: .github/workflows/update_fonts_data.yml:33",
+                            "Warn: npmCommand not pinned by hash: .github/workflows/update_react.yml:44",
+                            "Warn: npmCommand not pinned by hash: .github/workflows/upload-tests-manifest.yml:32",
+                            "Info:   0 out of 102 GitHub-owned GitHubAction dependencies pinned",
+                            "Info:   3 out of  22 third-party GitHubAction dependencies pinned",
+                            "Info:   0 out of  30 containerImage dependencies pinned",
+                            "Info:   0 out of   5 downloadThenRun dependencies pinned",
+                            "Info:   9 out of  42 npmCommand dependencies pinned"
+                        ],
+                        "documentation": {
+                            "shortDescription": "Determines if the project has declared and pinned the dependencies of its build process.",
+                            "url": "https://github.com/ossf/scorecard/blob/4eda2f56f70fa619b8785a63deb68aac8e3538ff/docs/checks.md#pinned-dependencies"
+                        },
+                        "name": "Pinned-Dependencies",
+                        "reason": "dependency not pinned by hash detected -- score normalized to 0",
+                        "score": 0
+                    },
+                    {
+                        "details": [
+                            "Warn: 0 commits out of 26 are checked with a SAST tool"
+                        ],
+                        "documentation": {
+                            "shortDescription": "Determines if the project uses static code analysis.",
+                            "url": "https://github.com/ossf/scorecard/blob/4eda2f56f70fa619b8785a63deb68aac8e3538ff/docs/checks.md#sast"
+                        },
+                        "name": "SAST",
+                        "reason": "SAST tool is not run on all commits -- score normalized to 0",
+                        "score": 0
+                    }
+                ],
+                "date": "2026-02-16T00:00:00Z",
+                "metadata": [],
+                "overallScore": 5.9,
+                "repository": {
+                    "commit": "3b94d8021af89754ee84252786bd9501a047bdf3",
+                    "name": "github.com/vercel/next.js"
+                },
+                "scorecard": {
+                    "commit": "4eda2f56f70fa619b8785a63deb68aac8e3538ff",
+                    "version": "v5.4.1-0.20260213160620-4eda2f56f70f"
+                }
+            },
+            "scoreCardScore": 5.9,
+            "updatedAt": "2026-02-24T19:21:41.80577+01:00"
+        },
+        "projectId": "github.com/vercel/next.js",
+        "isLicenseOverwritten": false
+    },
+    "affectedComponents": [
+        {
+            "id": "e1d3715cce9fe8e9",
+            "source": "osv",
+            "purl": "pkg:npm/next",
+            "ecosystem": "npm",
+            "scheme": "pkg",
+            "type": "npm",
+            "name": "next",
+            "namespace": "",
+            "version": null,
+            "semverStart": "16.0.0-beta.0",
+            "semverEnd": "16.1.5",
+            "versionIntroduced": null,
+            "versionFixed": null,
+            "cves": [
+                {
+                    "cve": "GHSA-5f7q-jpqc-wp7h",
+                    "createdAt": "2026-02-15T19:39:16.560738+01:00",
+                    "updatedAt": "2026-02-18T07:39:30.066671+01:00",
+                    "datePublished": "2026-01-28T16:20:55+01:00",
+                    "dateLastModified": "2026-02-06T14:13:43.709252+01:00",
+                    "description": "A denial of service vulnerability exists in Next.js versions with Partial Prerendering (PPR) enabled when running in minimal mode. The PPR resume endpoint accepts unauthenticated POST requests with the `Next-Resume: 1` header and processes attacker-controlled postponed state data. Two closely related vulnerabilities allow an attacker to crash the server process through memory exhaustion:\n\n1. **Unbounded request body buffering**: The server buffers the entire POST request body into memory using `Buffer.concat()` without enforcing any size limit, allowing arbitrarily large payloads to exhaust available memory.\n\n2. **Unbounded decompression (zipbomb)**: The resume data cache is decompressed using `inflateSync()` without limiting the decompressed output size. A small compressed payload can expand to hundreds of megabytes or gigabytes, causing memory exhaustion.\n\nBoth attack vectors result in a fatal V8 out-of-memory error (`FATAL ERROR: Reached heap limit Allocation failed - JavaScript heap out of memory`) causing the Node.js process to terminate. The zipbomb variant is particularly dangerous as it can bypass reverse proxy request size limits while still causing large memory allocation on the server.\n\nTo be affected, an application must run with `experimental.ppr: true` or `cacheComponents: true` configured along with the NEXT_PRIVATE_MINIMAL_MODE=1 environment variable.\n\nStrongly consider upgrading to 15.6.0-canary.61 or 16.1.5 to reduce risk and prevent availability issues in Next applications.",
+                    "cvss": 5.9,
+                    "references": "",
+                    "cisaExploitAdd": null,
+                    "cisaActionDue": null,
+                    "cisaRequiredAction": "",
+                    "cisaVulnerabilityName": "",
+                    "epss": 0.00052,
+                    "percentile": 0.1607,
+                    "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H",
+                    "risk": {
+                        "baseScore": 0,
+                        "withEnvironment": 0,
+                        "withThreatIntelligence": 0,
+                        "withEnvironmentAndThreatIntelligence": 0
+                    },
+                    "exploits": [],
+                    "relationships": [
+                        {
+                            "relationshipType": "alias",
+                            "targetCve": "CVE-2025-59472"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "9cd47fcd7f486ad4",
+            "source": "osv",
+            "purl": "pkg:npm/next",
+            "ecosystem": "npm",
+            "scheme": "pkg",
+            "type": "npm",
+            "name": "next",
+            "namespace": "",
+            "version": null,
+            "semverStart": "16.0.0-canary.0",
+            "semverEnd": "16.0.7",
+            "versionIntroduced": null,
+            "versionFixed": null,
+            "cves": [
+                {
+                    "cve": "GHSA-9qr9-h5gf-34mp",
+                    "createdAt": "2026-02-15T19:39:17.086167+01:00",
+                    "updatedAt": "2026-02-15T19:39:17.086167+01:00",
+                    "datePublished": "2025-12-03T20:07:11+01:00",
+                    "dateLastModified": "2026-02-04T04:45:15.823345+01:00",
+                    "description": "A vulnerability affects certain React packages\u003csup\u003e1\u003c/sup\u003e for versions 19.0.0, 19.1.0, 19.1.1, and 19.2.0 and frameworks that use the affected packages, including Next.js 15.x and 16.x using the App Router. The issue is tracked upstream as [CVE-2025-55182](https://www.cve.org/CVERecord?id=CVE-2025-55182). \n\nFixed in:\nReact: 19.0.1, 19.1.2, 19.2.1\nNext.js: 15.0.5, 15.1.9, 15.2.6, 15.3.6, 15.4.8, 15.5.7, 16.0.7, 15.6.0-canary.58, 16.1.0-canary.12+\n\nThe vulnerability also affects experimental canary releases starting with 14.3.0-canary.77. Users on any of the 14.3 canary builds should either downgrade to a 14.x stable release or 14.3.0-canary.76.\n\nAll users of stable 15.x or 16.x Next.js versions should upgrade to a patched, stable version immediately.\n\n\u003csup\u003e1\u003c/sup\u003e The affected React packages are:\n- react-server-dom-parcel\n- react-server-dom-turbopack\n- react-server-dom-webpack",
+                    "cvss": 10,
+                    "references": "",
+                    "cisaExploitAdd": null,
+                    "cisaActionDue": null,
+                    "cisaRequiredAction": "",
+                    "cisaVulnerabilityName": "",
+                    "epss": null,
+                    "percentile": null,
+                    "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+                    "risk": {
+                        "baseScore": 0,
+                        "withEnvironment": 0,
+                        "withThreatIntelligence": 0,
+                        "withEnvironmentAndThreatIntelligence": 0
+                    },
+                    "exploits": [],
+                    "relationships": []
+                }
+            ]
+        },
+        {
+            "id": "ae674bf228a06542",
+            "source": "osv",
+            "purl": "pkg:npm/next",
+            "ecosystem": "npm",
+            "scheme": "pkg",
+            "type": "npm",
+            "name": "next",
+            "namespace": "",
+            "version": null,
+            "semverStart": "15.6.0-canary.0",
+            "semverEnd": "16.1.5",
+            "versionIntroduced": null,
+            "versionFixed": null,
+            "cves": [
+                {
+                    "cve": "GHSA-9g9p-9gw9-jx7f",
+                    "createdAt": "2026-02-15T19:39:17.050812+01:00",
+                    "updatedAt": "2026-02-15T19:39:17.050812+01:00",
+                    "datePublished": "2026-01-27T20:18:25+01:00",
+                    "dateLastModified": "2026-02-10T02:28:46.973023+01:00",
+                    "description": "A DoS vulnerability exists in self-hosted Next.js applications that have `remotePatterns` configured for the Image Optimizer. The image optimization endpoint (`/_next/image`) loads external images entirely into memory without enforcing a maximum size limit, allowing an attacker to cause out-of-memory conditions by requesting optimization of arbitrarily large images. This vulnerability requires that `remotePatterns` is configured to allow image optimization from external domains and that the attacker can serve or control a large image on an allowed domain.\n\nStrongly consider upgrading to 15.5.10 and 16.1.5 to reduce risk and prevent availability issues in Next applications.",
+                    "cvss": 5.9,
+                    "references": "",
+                    "cisaExploitAdd": null,
+                    "cisaActionDue": null,
+                    "cisaRequiredAction": "",
+                    "cisaVulnerabilityName": "",
+                    "epss": 0.00078,
+                    "percentile": 0.23204,
+                    "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H",
+                    "risk": {
+                        "baseScore": 0,
+                        "withEnvironment": 0,
+                        "withThreatIntelligence": 0,
+                        "withEnvironmentAndThreatIntelligence": 0
+                    },
+                    "exploits": [],
+                    "relationships": [
+                        {
+                            "relationshipType": "alias",
+                            "targetCve": "CVE-2025-59471"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "b6533f888fef8bb2",
+            "source": "osv",
+            "purl": "pkg:npm/next",
+            "ecosystem": "npm",
+            "scheme": "pkg",
+            "type": "npm",
+            "name": "next",
+            "namespace": "",
+            "version": null,
+            "semverStart": "16.0.0-beta.0",
+            "semverEnd": "16.0.11",
+            "versionIntroduced": null,
+            "versionFixed": null,
+            "cves": [
+                {
+                    "cve": "GHSA-h25m-26qc-wcjf",
+                    "createdAt": "2026-02-15T19:39:17.440951+01:00",
+                    "updatedAt": "2026-02-18T07:39:30.880898+01:00",
+                    "datePublished": "2026-01-28T16:38:01+01:00",
+                    "dateLastModified": "2026-02-13T01:43:52.836085+01:00",
+                    "description": "A vulnerability affects certain React Server Components packages for versions 19.0.x, 19.1.x, and 19.2.x and frameworks that use the affected packages, including Next.js 13.x, 14.x, 15.x, and 16.x using the App Router. The issue is tracked upstream as [CVE-2026-23864](https://github.com/facebook/react/security/advisories/GHSA-83fc-fqcc-2hmg).\n\nA specially crafted HTTP request can be sent to any App Router Server Function endpoint that, when deserialized, may trigger excessive CPU usage, out-of-memory exceptions, or server crashes. This can result in denial of service in unpatched environments.",
+                    "cvss": 7.5,
+                    "references": "",
+                    "cisaExploitAdd": null,
+                    "cisaActionDue": null,
+                    "cisaRequiredAction": "",
+                    "cisaVulnerabilityName": "",
+                    "epss": null,
+                    "percentile": null,
+                    "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+                    "risk": {
+                        "baseScore": 0,
+                        "withEnvironment": 0,
+                        "withThreatIntelligence": 0,
+                        "withEnvironmentAndThreatIntelligence": 0
+                    },
+                    "exploits": [],
+                    "relationships": []
+                }
+            ]
+        },
+        {
+            "id": "18eb3deb3d5cf6fa",
+            "source": "osv",
+            "purl": "pkg:npm/next",
+            "ecosystem": "npm",
+            "scheme": "pkg",
+            "type": "npm",
+            "name": "next",
+            "namespace": "",
+            "version": null,
+            "semverStart": "16.0.0-beta.0",
+            "semverEnd": "16.0.9",
+            "versionIntroduced": null,
+            "versionFixed": null,
+            "cves": [
+                {
+                    "cve": "GHSA-mwv6-3258-q52c",
+                    "createdAt": "2026-02-15T19:39:17.783705+01:00",
+                    "updatedAt": "2026-02-15T19:39:17.783705+01:00",
+                    "datePublished": "2025-12-11T23:49:27+01:00",
+                    "dateLastModified": "2026-02-04T04:55:54.855562+01:00",
+                    "description": "A vulnerability affects certain React packages for versions 19.0.0, 19.0.1, 19.1.0, 19.1.1, 19.1.2, 19.2.0, and 19.2.1 and frameworks that use the affected packages, including Next.js 15.x and 16.x using the App Router. The issue is tracked upstream as [CVE-2025-55184](https://www.cve.org/CVERecord?id=CVE-2025-55184).\n\nA malicious HTTP request can be crafted and sent to any App Router endpoint that, when deserialized, can cause the server process to hang and consume CPU. This can result in denial of service in unpatched environments.",
+                    "cvss": 7.5,
+                    "references": "",
+                    "cisaExploitAdd": null,
+                    "cisaActionDue": null,
+                    "cisaRequiredAction": "",
+                    "cisaVulnerabilityName": "",
+                    "epss": null,
+                    "percentile": null,
+                    "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+                    "risk": {
+                        "baseScore": 0,
+                        "withEnvironment": 0,
+                        "withThreatIntelligence": 0,
+                        "withEnvironmentAndThreatIntelligence": 0
+                    },
+                    "exploits": [],
+                    "relationships": []
+                },
+                {
+                    "cve": "GHSA-w37m-7fhw-fmv9",
+                    "createdAt": "2026-02-15T19:39:18.795633+01:00",
+                    "updatedAt": "2026-02-15T19:39:18.795633+01:00",
+                    "datePublished": "2025-12-11T23:49:56+01:00",
+                    "dateLastModified": "2026-02-04T03:51:40.627151+01:00",
+                    "description": "A vulnerability affects certain React packages for versions 19.0.0, 19.0.1, 19.1.0, 19.1.1, 19.1.2, 19.2.0, and 19.2.1 and frameworks that use the affected packages, including Next.js 15.x and 16.x using the App Router. The issue is tracked upstream as [CVE-2025-55183](https://www.cve.org/CVERecord?id=CVE-2025-55183).\n\nA malicious HTTP request can be crafted and sent to any App Router endpoint that can return the compiled source code of [Server Functions](https://react.dev/reference/rsc/server-functions). This could reveal business logic, but would not expose secrets unless they were hardcoded directly into [Server Function](https://react.dev/reference/rsc/server-functions) code.",
+                    "cvss": 5.3,
+                    "references": "",
+                    "cisaExploitAdd": null,
+                    "cisaActionDue": null,
+                    "cisaRequiredAction": "",
+                    "cisaVulnerabilityName": "",
+                    "epss": null,
+                    "percentile": null,
+                    "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+                    "risk": {
+                        "baseScore": 0,
+                        "withEnvironment": 0,
+                        "withThreatIntelligence": 0,
+                        "withEnvironmentAndThreatIntelligence": 0
+                    },
+                    "exploits": [],
+                    "relationships": []
+                }
+            ]
+        }
+    ],
+    "vulns": [
+        {
+            "cveId": "GHSA-5f7q-jpqc-wp7h",
+            "fixedVersion": "16.1.5"
+        },
+        {
+            "cveId": "GHSA-9qr9-h5gf-34mp",
+            "fixedVersion": "16.0.7"
+        },
+        {
+            "cveId": "GHSA-9g9p-9gw9-jx7f",
+            "fixedVersion": "16.1.5"
+        },
+        {
+            "cveId": "GHSA-h25m-26qc-wcjf",
+            "fixedVersion": "16.0.11"
+        },
+        {
+            "cveId": "GHSA-mwv6-3258-q52c",
+            "fixedVersion": "16.0.9"
+        },
+        {
+            "cveId": "GHSA-w37m-7fhw-fmv9",
+            "fixedVersion": "16.0.9"
+        }
+    ],
+    "maliciousPackage": null
 }
