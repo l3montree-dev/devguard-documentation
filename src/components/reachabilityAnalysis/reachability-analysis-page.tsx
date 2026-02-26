@@ -2,12 +2,12 @@ import ReachabilityAnalysisHero from 'src/components/reachabilityAnalysis/reacha
 
 import { DataTable } from 'src/components/reachabilityAnalysis/reachability-analysis-results-table'
 import { columns } from 'src/components/reachabilityAnalysis/columns'
-import { Container } from 'src/components/top-level-pages/container'
 
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { fetcher } from 'src/lib/fetcher'
 import useSWR from 'swr'
+import { Container } from '../ui/container'
 
 const apiBaseURL = 'http://localhost:8080/api/v1/vulndb/reachability/'
 
