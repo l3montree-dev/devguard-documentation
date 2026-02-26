@@ -1,3 +1,5 @@
+import { title } from 'process'
+
 export default {
     index: {
         title: 'Introduction',
@@ -15,8 +17,24 @@ export default {
     explanations: { title: 'Explanations' },
     comparison: { title: 'Comparison' },
     contributing: { title: 'Contributing' },
-    other: {
-        title: 'Other',
+    other: { title: 'Other' },
+    'vulnerability-database': {
+        theme: {
+            layout: 'raw',
+        },
+        title: 'Vulnerability Database',
+    },
+    'package-inspector': { 
+        theme: { 
+            layout: 'raw' 
+        }, 
+        display: 'hidden' 
+    },
+    "reachability-analysis": {
+        theme: {
+            layout: 'raw'
+        },
+        display: 'hidden',
     },
     '404': {
         theme: {
