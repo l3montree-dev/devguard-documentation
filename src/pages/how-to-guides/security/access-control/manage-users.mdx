@@ -21,11 +21,11 @@ Before you begin, ensure you have:
 
 DevGuard uses two primary roles:
 
-| Role | Description | Permissions |
-|------|-------------|------------|
-| **Admin** | Full administrative access | Create/edit/delete, manage members, change settings, access all data |
-| **Member** | Standard team member access | View vulnerabilities, create events, manage within assigned scope |
-| **External** | GitHub/GitLab integrated user | Limited read-only access, no direct management capabilities |
+| Role         | Description                   | Permissions                                                          |
+| ------------ | ----------------------------- | -------------------------------------------------------------------- |
+| **Admin**    | Full administrative access    | Create/edit/delete, manage members, change settings, access all data |
+| **Member**   | Standard team member access   | View vulnerabilities, create events, manage within assigned scope    |
+| **External** | GitHub/GitLab integrated user | Limited read-only access, no direct management capabilities          |
 
 ## Manage Members
 
@@ -35,17 +35,14 @@ You can manage Members on each Hierarchy Level: **Organization**, **Group**, and
 
 1. Enter the user's email address
 2. Select role:
-   - **Admin** - Full organizational control
-   - **Member** - Standard team access
-
+    - **Admin** - Full organizational control
+    - **Member** - Standard team access
 
 ![Add Member to Organization](../../../../assets/add-members.png)
 
 The user receives an invitation and can accept to gain access.
 
-
-
-### Manage Member 
+### Manage Member
 
 Click the three-dot menu (**⋯**) on the right
 
@@ -53,11 +50,10 @@ Click the three-dot menu (**⋯**) on the right
 
 The user loses all access to the organization and its projects.
 
-
 <Callout type="info">
-  Project members must be organization members first. Adding a non-member requires inviting them to the organization.
+    Project members must be organization members first. Adding a non-member
+    requires inviting them to the organization.
 </Callout>
-
 
 ## Access Control Hierarchy
 
@@ -76,11 +72,11 @@ Organization Level
 ```
 
 **Key Points:**
+
 - Granting Admin at a higher level automatically includes lower levels
 - Revoking Member status at any level removes all sub-level access
 - External members (from GitHub/GitLab) have read-only access
 
-
-- [Create and Manage API Tokens](./api-tokens.mdx) - Generate tokens for API access
-- [Configure Webhooks](../../integrations/custom-webhooks/create-webhook.mdx) - Automate integrations
-- [Setup GitHub App](../../integrations/github/setup-github-app.mdx) - GitHub integration
+- [Create and Manage API Tokens](/how-to-guides/security/access-control/api-tokens) - Generate tokens for API access
+- [Configure Webhooks](/how-to-guides/integrations/create-webhook) - Automate integrations
+- [Setup GitHub App](/how-to-guides/integrations/github/setup-github-integration) - GitHub integration

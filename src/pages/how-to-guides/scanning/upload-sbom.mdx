@@ -49,6 +49,47 @@ docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main-late
 
 **Verify it worked:** Navigate to your repository in DevGuard. You'll see detected vulnerabilities listed with affected components and fix recommendations.
 
+## Scan Without Authentication
+
+You can upload an SBOM and scan it without a token or asset name to get vulnerability results without saving them to DevGuard.
+
+```bash copy
+docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main-latest \
+  devguard-scanner sbom /dev/app/sbom.json
+```
+
+When no `--token` and `--assetName` are provided, the scanner will print a warning and return results without persisting them:
+
+```
+Warning: You are scanning without saving the results. Provide --token and --assetName to save results to DevGuard.
+```
+
+<Callout type="info">
+  Unauthenticated scans check your SBOM against the vulnerability database and show results in the terminal, but findings are not tracked in DevGuard and will not appear in your repository's vulnerability dashboard.
+</Callout>
+
+## Merge and Scan Multiple SBOMs
+
+Use `merge-sboms` to combine multiple CycloneDX SBOMs and pipe the result directly into the `sbom` command for scanning. Pass `-` as the file argument to read from stdin:
+
+```bash copy
+devguard-scanner merge-sboms config.json | devguard-scanner sbom -
+```
+
+The merge config file specifies the target purl and the list of SBOM files to merge:
+
+```json
+{ "purl": "pkg:foo/bar@1.2.3", "sboms": ["a.json", "b.json"] }
+```
+
+To save the merged scan results to DevGuard, add authentication flags:
+
+```bash copy
+devguard-scanner merge-sboms config.json | devguard-scanner sbom - \
+  --assetName="myorg/projects/myproject/assets/myrepo" \
+  --token="YOUR_TOKEN"
+```
+
 ## CI/CD Integration
 For automated SBOM uploads in CI/CD pipelines, DevGuard provides ready-to-use integrations:
 - **GitHub Actions**: See [Scan with GitHub Actions](./scan-with-github-actions) for setup instructions

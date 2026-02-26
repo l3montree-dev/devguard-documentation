@@ -1,15 +1,6 @@
 export default {
     index: {
-        theme: {
-            layout: 'raw',
-        },
-        display: 'hidden',
-    },
-    pricing: {
-        theme: {
-            layout: 'raw',
-        },
-        display: 'hidden',
+        title: 'Introduction',
     },
     'terms-of-use': {
         display: 'hidden',
@@ -17,12 +8,12 @@ export default {
     'privacy-policy': {
         display: 'hidden',
     },
-    introduction: { title: 'Introduction' },
     'getting-started': { title: 'Getting Started' },
-    'how-to-guides': { title: 'How-to Guides' },
     tutorials: { title: 'Tutorials' },
-    explanations: { title: 'Explanations' },
+    'how-to-guides': { title: 'How-to Guides' },
     reference: { title: 'Reference' },
+    explanations: { title: 'Explanations' },
+    comparison: { title: 'Comparison' },
     contributing: { title: 'Contributing' },
     other: { title: 'Other' },
     'vulnerability-database': {
@@ -30,16 +21,6 @@ export default {
             layout: 'raw',
         },
         title: 'Vulnerability Database',
-    },
-    'header-pricing': {
-        title: 'Pricing',
-        type: 'page',
-        href: '/pricing',
-    },
-    'header-docs': {
-        title: 'Documentation',
-        type: 'page',
-        href: '/introduction',
     },
     '404': {
         theme: {

@@ -1,5 +1,118 @@
-import PageContentComingSoon from '@/components/PageContentComingSoon'
+import { AttributedImage } from '@/components/AttributedImage'
 
-# SLSA Framework
+# The SLSA Framework
 
-<PageContentComingSoon />
+Supply-chain Levels for Software Artifacts (pronounced "salsa") is a security framework that standardizes the defense against supply chain attacks. It is essentially a **maturity model**—a checklist of standards that allow you to grade how secure your software build process is.
+
+Think of SLSA like the safety ratings for cars. A car can be driven without airbags or crumple zones, but it receives a lower safety rating. Similarly, software can be built without signing or provenance, but SLSA classifies it as "Level 0"—unsafe for critical use.
+
+Originally inspired by Google's internal "Binary Authorization for Borg" system, SLSA is now an OpenSSF project maintained by the industry at large. Its primary goal is to prevent **tampering** during the build process and to ensure that the software you run is exactly the software you intended to build.
+
+---
+
+## The Core Philosophy: Trust the Builder
+
+In traditional security, we trust the _developer_ (via code review). In SLSA, we shift trust to the **Builder** (the CI/CD system).
+
+Humans are fallible; they lose keys, get phished, or turn rogue. A hardened Build Service (like GitHub Actions, GitLab CI, or a dedicated build farm), when properly configured, follows strict robotic instructions.
+
+SLSA asks three fundamental questions about an artifact:
+
+1.  **Provenance:** Do we have a record of how this was built?
+2.  **Isolation:** Was the build process isolated from outside interference?
+3.  **Authenticity:** Can we cryptographically prove the first two points?
+
+---
+
+## The SLSA Levels (Build Track)
+
+SLSA version 1.0 organizes requirements into "Levels." As you move up the levels, the difficulty of implementation increases, but the protection against tampering becomes significantly stronger.
+
+### Level 0: No Guarantees
+
+This is the default state of most software. The software is built, likely on a developer's laptop or a shared server, and uploaded to a registry.
+
+- **Risks:** There is no proof of who built it. A developer could accidentally upload a binary they compiled with a malicious library, or an attacker could overwrite the file on the server.
+- **Verdict:** "Use at your own risk."
+
+### Level 1: Provenance Exists
+
+At Level 1, the build process generates **Provenance**—metadata describing how the package was built (using the [in-toto](/explanations/supply-chain-security/in-toto-framework) format).
+
+- **Requirement:** The build system must generate a provenance file that identifies the source repository and the build instructions.
+- **Benefit:** **Mistake Detection.** It does not prevent tampering (a malicious builder can lie), but it allows software consumers to perform basic analysis and risk management. You can see _what_ went into the software.
+
+### Level 2: Signed Provenance & Hosted Build Service
+
+Level 2 adds the requirement of **tamper resistance**. You can no longer build software on a developer's laptop; it must be built on a **Hosted Build Service**.
+
+- **Requirement:**
+    - The build runs on a dedicated infrastructure (like GitHub Actions), not a personal machine.
+    - The provenance is **signed** by the build service.
+- **Benefit:** **Tamper Resistance.** Because the provenance is digitally signed by the service, a consumer can verify that the metadata is authentic. An attacker would need to compromise the build service itself to forge the provenance.
+
+### Level 3: Hardened Builds
+
+Level 3 is the gold standard. It addresses the risk of **cross-contamination** and **persistence**.
+
+- **Requirement:**
+    - **Ephemeral Environments:** The build environment (the virtual machine or container) is created _fresh_ for this specific build and destroyed immediately after. It has no memory of previous builds.
+    - **Isolation:** The build environment is isolated from other builds running on the same infrastructure.
+    - **Non-falsifiable:** The provenance generation is so tightly integrated into the build service that even the project maintainer cannot bypass it or force the service to lie.
+- **Benefit:** **Advanced Threat Protection.** This prevents complex attacks where an attacker compromises a build cache or uses a lingering secret from a previous job to infect a subsequent one.
+
+---
+
+## The Requirements Matrix
+
+To achieve a specific level, the build pipeline must satisfy specific requirements.
+
+| Requirement               | Level 1 | Level 2 | Level 3 |
+| :------------------------ | :-----: | :-----: | :-----: |
+| **Provenance Exists**     |   ✅    |   ✅    |   ✅    |
+| **Signed Provenance**     |         |   ✅    |   ✅    |
+| **Hosted Build Service**  |         |   ✅    |   ✅    |
+| **Ephemeral Environment** |         |         |   ✅    |
+| **Isolated Environment**  |         |         |   ✅    |
+| **Parameter Protection**  |         |         |   ✅    |
+
+---
+
+## SLSA Tracks
+
+It is important to note that SLSA v1.0 splits security into different "Tracks."
+
+- **Build Track:** (described above) Focuses on the transformation of source code into binary.
+- **Source Track:** (In development) Focuses on version control security (e.g., Two-Person Review, Branch Protection).
+
+Currently, when people say "SLSA Level 3," they almost always refer to the **Build Track**.
+
+---
+
+## Implementing SLSA
+
+How does an organization actually "do" SLSA? It is not a tool you install; it is a standard you meet. However, modern CI/CD tools are doing the heavy lifting for you.
+
+1.  **For Level 1:** You can use a generic script in your CI pipeline to generate a simple JSON provenance file.
+2.  **For Level 2:** You need to configure your CI provider (e.g., using the `slsa-github-generator` for GitHub Actions) to sign that provenance with a trusted key.
+3.  **For Level 3:** You must ensure your runners are ephemeral. If you use self-hosted runners that persist between jobs (e.g., a static Jenkins server), you generally **cannot** achieve SLSA Level 3 because a compromised job could leave a backdoor for the next job.
+
+### Verification is Mandatory
+
+Just generating SLSA provenance is not enough. You must also **verify** it. A SLSA Level 3 artifact provides no security if the deployment system doesn't check the level before running it. This is where [Supply Chain Verification](/explanations/supply-chain-security/supply-chain-verification) comes in.
+
+---
+
+## Conclusion
+
+SLSA provides the common language for supply chain security. It moves the industry away from vague promises of "secure software" to concrete, measurable tiers.
+
+For most organizations, achieving **SLSA Level 2** is the immediate pragmatic goal: ensuring that builds happen on a trusted server and that the output is signed. **SLSA Level 3** is the target for critical infrastructure and high-value targets, requiring strict infrastructure isolation.
+
+---
+
+## References
+
+- [SLSA.dev - The Official Specification](https://slsa.dev/spec/v1.0/levels)
+- [OpenSSF - Why SLSA matters](https://openssf.org/blog/2022/06/20/why-slsa-matters/)
+- [Google Online Security Blog - Introducing SLSA](https://security.googleblog.com/2021/06/introducing-slsa-end-to-end-framework.html)

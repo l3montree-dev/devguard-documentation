@@ -1,5 +1,158 @@
-import PageContentComingSoon from '@/components/PageContentComingSoon'
+import { AttributedImage } from '@/components/AttributedImage'
 
 # Supply Chain Verification
 
-<PageContentComingSoon />
+Creating secure software is only half the battle. You can generate SBOMs, sign your commits, and attach sophisticated [Attestations](/explanations/supply-chain-security/attestations) to your artifacts, but none of this matters if nobody checks them.
+
+**Supply Chain Verification** is the automated process of validating these artifacts against a set of organizational rules before they are allowed to execute.
+It acts as the "Passport Control" of your infrastructure. Just as a border agent checks that a passport is authentic (signature) and
+that the traveler is allowed to enter (policy), supply chain verification ensures that software is authentic and compliant.
+
+It transforms security from a manual "checkbox exercise" into an automated **Admission Gate**.
+
+---
+
+## The Verification Logic
+
+At a high level, verification is a function that takes three inputs and produces a single boolean decision (Allow/Deny).
+
+```
+Verification(Artifact, Attestations, Policy) = Decision
+```
+
+1.  **The Artifact:** The container image, binary, or library being deployed (identified by its immutable digest/hash).
+2.  **The Attestations:** The collection of signed metadata (Provenance, SBOMs, Scan Reports) associated with that artifact.
+3.  **The Policy:** The specific rules your organization has defined (e.g., "Must be built on GitHub Actions" or "Must have < 0 Critical CVEs").
+
+If the artifacts match the attestations, and the attestations satisfy the policy, the gate opens.
+
+---
+
+## The Three Pillars of Verification
+
+A robust verification engine performs checks in three distinct layers. If any layer fails, the artifact is rejected.
+
+### 1. Integrity (Has it changed?)
+
+The first check is cryptographic. The verifier calculates the hash of the artifact and compares it to the hash signed in the attestation.
+
+- **Question:** Is this the exact same file that was signed?
+- **Mechanism:** SHA-256 Digest comparison and Digital Signature verification.
+- **Goal:** Prevent tampering. If a byte was changed in the binary after it was built, the signatures will not match.
+
+### 2. Authenticity (Who signed it?)
+
+Integrity proves the file hasn't changed, but it doesn't prove _who_ created it. A malicious actor can sign their own malware. Authenticity checks the **Identity** of the signer.
+
+- **Question:** Did this come from a trusted source?
+- **Mechanism:** Public Key Infrastructure (PKI) or Keyless Identity (OIDC).
+- **Goal:** Prevent spoofing. The verifier checks if the signing key belongs to a trusted list (the "Root of Trust") or if the OIDC identity matches the expected repository (e.g., `https://github.com/my-org/my-repo`).
+
+### 3. Compliance (Does it meet our standards?)
+
+This is the most complex layer. The artifact is signed and authentic, but is it _good_? This involves inspecting the **Predicate** (content) of the attestations.
+
+- **Question:** Does the data inside the attestation satisfy our rules?
+- **Mechanism:** Policy-as-Code (e.g., Rego/OPA, CUE).
+- **Goal:** Enforce quality and security standards.
+    - _Example:_ "Reject if the SBOM contains 'log4j' version < 2.15."
+    - _Example:_ "Reject if the Provenance shows the build was triggered by an external contributor."
+
+---
+
+## Where Verification Happens
+
+Verification can be implemented at multiple stages of the lifecycle, but the industry standard for maximum security is **Admission Control**.
+
+<AttributedImage
+    src="/admission-control-phases.svg"
+    alt="Kubernetes Admission Controller Logic"
+    float="none"
+    width="100%"
+    attribution={
+        <>
+            <a
+                href="https://kubernetes.io/docs/reference/access-authn-authz/admission-control-phases.svg"
+                target="_blank"
+                className="nx-text-primary-600 underline"
+            >
+                Kubernetes API Admission Control
+            </a>
+            ,{' '}
+            <a
+                href="https://creativecommons.org/licenses/by/4.0"
+                target="_blank"
+                className="nx-text-primary-600 underline"
+            >
+                CC BY 4.0
+            </a>
+            , via Creative Commons
+        </>
+    }
+>
+    The "Gatekeeper" pattern: The API server intercepts requests to create pods.
+    The Admission Controller validates the image signature and policy before
+    allowing the workload to start.
+</AttributedImage>
+
+### The Admission Controller (The Gatekeeper)
+
+In a Kubernetes environment, an Admission Controller intercepts requests to the cluster API _before_ the object is persisted.
+
+1.  A developer runs `kubectl apply -f deployment.yaml`.
+2.  The cluster pauses the request and sends the container image reference to the **Verifier** (like DevGuard or Kyverno).
+3.  The Verifier looks up the attestations in the registry.
+4.  It evaluates the policy.
+5.  It returns `Allow` or `Deny` to the cluster.
+
+This ensures that **nothing** runs in your production environment unless it has passed verification, regardless of how it got there (manual deploy, CD pipeline, or accidental trigger).
+
+---
+
+## Policy-as-Code
+
+To make verification scalable, we cannot rely on hard-coded logic. We use **Policy-as-Code**. This separates the verification _engine_ from the verification _rules_.
+
+Policies are written in high-level languages like **Rego** (used by Open Policy Agent) or **CUE**. This allows security teams to update rules without redeploying the verifier.
+
+**Example Policy (Pseudo-code):**
+
+```yaml
+rule "Must have secure provenance" {
+  when:
+    attestation.type == "slsa-provenance"
+  condition:
+    # Ensure it was built on our trusted builder
+    attestation.builder.id == "[https://github.com/actions/runner-images](https://github.com/actions/runner-images)"
+    # Ensure it was built from the 'main' branch
+    attestation.source.ref == "refs/heads/main"
+}
+```
+
+## Verification Modes
+
+When implementing supply chain verification, organizations typically move through maturity phases to avoid disrupting operations.
+
+1. **Audit Mode** (Dry Run)
+   The verifier runs and checks every artifact, but never blocks. If a check fails, it simply logs a warning.\
+   **Use case:** Understanding the current state of compliance and debugging policies without breaking production.
+2. **Enforce Mode** (Blocking)
+   The verifier blocks any artifact that fails the policy.\
+   **Use case:** Mature production environments where security is non-negotiable.
+3. **Break-Glass**
+   An emergency bypass mechanism. In a critical outage, you may need to deploy a hotfix immediately, even if the signing infrastructure is down.\
+   **Use case:** Disaster recovery. This action should always trigger a high-priority alert to the security team.
+
+## Conclusion
+
+Verification is the mechanism that turns **"Visibility" (SBOMs/Attestations) into "Control."** Without verification, supply chain security artifacts are just documentation. With verification, they become executable security gates that actively protect your infrastructure from compromised builds, unverified software, and human error.
+
+In the SLSA Framework, reaching the highest levels (SLSA L3) requires not just generating provenance, but verifying it at the point of deployment.
+
+## References
+
+[Kubernetes Admission Controllers Reference](https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/)
+
+[Sigstore Policy Controller](https://docs.sigstore.dev/policy-controller/overview/)
+
+[Open Policy Agent (OPA) Introduction](https://www.openpolicyagent.org/docs)

@@ -14,11 +14,12 @@ const config: DocsThemeConfig = {
         // eslint-disable-next-line react-hooks/rules-of-hooks
         const { frontMatter, ...rest } = useConfig()
         const url =
-            'https://devguard.org' +
+            'https://docs.devguard.org' +
             (defaultLocale === locale ? asPath : `/${locale}${asPath}`)
 
         return (
             <>
+                <link rel="canonical" href={url} />
                 <meta property="og:url" content={url} />
                 <meta
                     property="og:title"
@@ -31,6 +32,12 @@ const config: DocsThemeConfig = {
                     {(frontMatter.title ?? rest.title) + ' | DevGuard' ||
                         'DevGuard'}
                 </title>
+                {frontMatter.description && (
+                    <meta
+                        name="description"
+                        content={frontMatter.description}
+                    />
+                )}
                 {Boolean(websiteId) && Boolean(umamiUrl) && (
                     <script
                         defer
@@ -41,23 +48,10 @@ const config: DocsThemeConfig = {
             </>
         )
     },
-    banner: {
-        key: 'development',
-        content: (
-            <a
-                href="https://github.com/l3montree-dev/devguard"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-                🚧 DevGuard & this page is under active development. Visit the
-                DevGuard Repo →
-            </a>
-        ),
-        dismissible: false,
-    },
+
     logo: (
         <Image
-            src="/logo_inverse_horizontal.svg"
+            src="/logo-inverse-horizontal.svg"
             alt="DevGuard Logo"
             width={220}
             height={80}

@@ -28,4 +28,7 @@ export default {
     'github-workflows': {
         title: 'GitHub Workflows',
     },
+    'vulnerability-database': {
+        title: 'Vulnerability Database',
+    },
 }

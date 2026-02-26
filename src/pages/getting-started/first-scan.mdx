@@ -1,5 +1,133 @@
-import PageContentComingSoon from '@/components/PageContentComingSoon'
+---
+title: Your First Scan
+description: Run a dependency scan against your project and view results in DevGuard
+---
+
+import { Callout, Steps } from 'nextra/components'
 
 # Your First Scan
 
-<PageContentComingSoon />
+This guide walks you through running a dependency scan (SCA) on your project using the DevGuard scanner and viewing the results in the DevGuard UI. It takes about 5 minutes.
+
+## Prerequisites
+
+Before you begin, ensure you have:
+
+- **Docker** installed on your system
+- Access to a **DevGuard instance** ([DevGuard Cloud](https://app.devguard.org) or [self-hosted](/how-to-guides/administration))
+- A **repository** created in DevGuard (organization → group → repository)
+
+If you need to set up a local instance from scratch, follow the [Quickstart](/getting-started) instead.
+
+## Steps
+
+<Steps>
+
+### Create a Personal Access Token
+
+The scanner authenticates with DevGuard using a personal access token (PAT).
+
+1. Log into your DevGuard instance
+2. Navigate to **User Settings** (click your avatar → Settings)
+3. Under **Personal Access Tokens**, click **Create Token**
+4. Give the token a descriptive name (e.g., "CLI Scanner")
+5. Copy the generated token — you won't be able to see it again
+
+<Callout type="warning">
+  Store your token securely. Never commit it to version control. Use environment variables or a secrets manager in CI/CD pipelines.
+</Callout>
+
+### Identify Your Asset Name
+
+Every scan targets a specific repository (called an **asset**) in DevGuard. The asset name follows this pattern:
+
+```
+{org}/{projects}/{project}/{assets}/{repository}
+```
+
+You can copy the full asset name from the URL when viewing your repository in the DevGuard UI. For example, if your URL is:
+
+```
+https://app.devguard.org/myorg/projects/myproject/assets/myrepo
+```
+
+Then your asset name is `myorg/projects/myproject/assets/myrepo`.
+
+### Run the Dependency Scan
+
+Navigate to the root of your project directory and run:
+
+```bash copy
+docker run -v "$(pwd):/app" ghcr.io/l3montree-dev/devguard/scanner:main-latest \
+  devguard-scanner sca \
+    --path /app/ \
+    --assetName="myorg/projects/myproject/assets/myrepo" \
+    --apiUrl="https://api.devguard.org" \
+    --token="YOUR_TOKEN"
+```
+
+<Callout type="info">
+  **Self-hosted?** Replace `--apiUrl` with the URL of your DevGuard API (e.g., `http://localhost:8080`).
+</Callout>
+
+The scanner will:
+1. Detect your project's package manager and parse dependency files
+2. Generate a Software Bill of Materials (SBOM)
+3. Upload the SBOM to DevGuard
+4. Match all components against the vulnerability database
+5. Print a summary of findings to your terminal
+
+### Review the Terminal Output
+
+A successful scan produces a table like this:
+
+```
+11:48AM INF scanning directory dir=/app
+11:49AM INF Scan completed successfully dependencyVulnAmount=4 openedByThisScan=4 closedByThisScan=0
++--------------------------------------------+----------------+------+------+---------------------+---------+--------+
+| LIBRARY                                    | VULNERABILITY  | RISK | CVSS | INSTALLED           | FIXED   | STATUS |
++--------------------------------------------+----------------+------+------+---------------------+---------+--------+
+| pkg:golang/golang.org/x/crypto             | CVE-2025-47914 | 0.49 |  5.3 | 0.44.0              | v0.45.0 | open   |
+| pkg:golang/github.com/dvsekhvalnov/jose2go | CVE-2025-63811 | 0.57 |  7.5 | 1.6.0               | v1.7.0  | open   |
+| pkg:golang/github.com/aws/aws-sdk-go       | CVE-2020-8911  | 0.63 |  5.6 | 1.55.7              |         | open   |
+| pkg:pypi/requests                          | CVE-2024-47081 | 1.22 |  5.3 | 2.32.3              | 2.32.4  | open   |
++--------------------------------------------+----------------+------+------+---------------------+---------+--------+
+```
+
+| Column | Description |
+|---|---|
+| **LIBRARY** | The affected package in [Package URL](https://github.com/package-url/purl-spec) format |
+| **VULNERABILITY** | CVE or advisory identifier |
+| **RISK** | DevGuard's contextual [risk score](/explanations/core-concepts/risk-scoring) — factors in exploitability, known exploits, and dependency depth |
+| **CVSS** | Raw CVSS severity score |
+| **INSTALLED** | The version currently in your project |
+| **FIXED** | The version that resolves the vulnerability (empty if no fix is available) |
+| **STATUS** | Current vulnerability status (`open`, `fixed`, etc.) |
+
+<Callout type="info">
+  **No vulnerabilities found?** That's a good sign. The scan still uploaded your SBOM to DevGuard — you'll see your dependency inventory in the UI even without active vulnerabilities.
+</Callout>
+
+### View Results in DevGuard
+
+Open your repository in the DevGuard web UI. You'll see:
+
+- A **vulnerability overview** with detected issues sorted by risk
+- The **dependency inventory** generated from your SBOM
+- **Risk distribution** across your project's components
+
+![Dependency scan results](../../assets/getting-started/dependency-scan-results.png)
+
+Click on any vulnerability to see detailed information including affected versions, fix recommendations, and links to the original advisory.
+
+</Steps>
+
+## Next Steps
+
+Now that you've completed your first scan, explore additional security scanning capabilities:
+
+- **[Scan Source Code](/how-to-guides/scanning/scan-source-code)** — Run SAST, secret scanning, and IaC analysis on your codebase
+- **[Scan OCI Images](/how-to-guides/scanning/scan-docker-images)** — Scan container images for vulnerabilities
+- **[Scan with GitHub Actions](/how-to-guides/scanning/scan-with-github-actions)** — Automate scanning in CI/CD
+- **[Scan with GitLab CI](/how-to-guides/scanning/scan-with-gitlab-ci)** — Automate scanning in GitLab pipelines
+- **[DevGuard's Key Concepts](/getting-started/key-concepts)** — Understand risk scoring, vulnerability lifecycle, and more

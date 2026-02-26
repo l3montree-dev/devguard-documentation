@@ -1,5 +1,98 @@
 import PageContentComingSoon from '@/components/PageContentComingSoon'
 
-# DevGuards Key Concepts in 5 Minutes
+# DevGuards Key Concepts in 2 Minutes
 
-<PageContentComingSoon />
+# Core Concepts of the DevGuard OSS Security Platform
+
+Modern software development faces the challenge of integrating security into fast-paced, complex DevOps workflows—without slowing down productivity. DevGuard is built by developers for developers to make security **practical, automated, and transparent**.
+
+---
+
+## DevSecOps & Security Shift Left: Security by Design
+
+**DevSecOps** integrates security seamlessly into DevOps, making it a **continuous, automated process**—not a roadblock. **"Shift Left"** moves security checks to the earliest stages of development, where vulnerabilities are fastest and cheapest to fix.
+
+### Why Shift Left?
+- **Early Detection:** Identify and resolve issues during coding or CI/CD—**before** they reach production.
+- **Cost Efficiency:** Fixing flaws early is **a more efficient and safer way** than handling them post-breach.
+- **Developer-Centric:** Security alerts appear directly in your normal development environments like GitHub/GitLab as issues, to reduce friction.
+- **Automated Compliance:** Generate audit-ready documentation (SBOMs, VeX) without manual effort.
+
+By embedding security where code is written—**in IDEs, pipelines, and dependency checks**—teams prevent risks before they escalate. Tools like DevGuard make this process **invisible yet powerful**, turning security from a bottleneck into a natural part of development.
+
+---
+*Outcome: Fewer incidents, faster releases, and compliance built in from the start.*
+
+
+
+
+
+## 1. Efficient Vulnerability Management
+DevGuard automatically scans code, dependencies, and containers for vulnerabilities and prioritizes them based on **actual risk**—not just CVSS scores. By integrating with issue trackers like GitHub, GitLab, or Jira, security tasks are created as tickets, allowing teams to address vulnerabilities like any other task. Informations about vulnerabilities can be shared via the Vulnerability Exchange (VEX), false positives are filtered out, and only relevant risks are highlighted based on exploitability and project impact.
+
+**Benefits:**
+- Saves time through automation
+- Focuses on critical vulnerabilities
+- Seamlessly fits into existing workflows
+
+---
+
+## 2. Complete OWASP DevSecOps Pipeline
+DevGuard integrates **Secret Scanning**, **SAST** (Static Application Security Testing), **SCA** (Software Composition Analysis), **IaC scans** (Infrastructure as Code), and **secret detection** directly into CI/CD pipelines. Security checks become a standard part of the development process—without manual effort.
+
+**Example:**
+A push to the main branch automatically triggers scans, with results commented directly in the pull request.
+
+---
+
+## 3. SBOM Generation and Validation
+DevGuard automatically generates and updates **Software Bills of Materials (SBOMs)**. These inventories document all dependencies and enable continuous monitoring for known vulnerabilities. SBOMs are essential for compliance (e.g., Cyber Resilience Act) and transparency with customers and regulators.
+
+**Practical Use:**
+- SBOMs are generated with every build
+- Real-time comparison with CVE databases
+- Easy export for audits
+
+---
+
+## 4. Fully Functional VeX-ing
+With **Vulnerability Exploitability eXchange (VeX)**, teams can centrally document which vulnerabilities are already patched, irrelevant, or false positives. DevGuard keeps this information up to date and shares it transparently—such as through linked VeX documents.
+
+**Application:**
+- Makes risk assessments traceable
+- Simplifies communication with customers and authorities
+
+---
+
+## 5. Dependency Proxy for npm, Go, and Python
+The built-in proxy checks dependencies **before** they are downloaded, blocking unsafe packages before they enter the codebase.
+
+**Security Gain:**
+- Proactive defense against supply chain attacks
+- Compatible with popular package managers
+
+---
+
+## 6. in-toto Integration
+DevGuard supports the **in-toto framework** to secure the integrity of the software supply chain. Every step in the build process is cryptographically verified to detect tampering.
+
+**Goal:**
+- Trustworthy builds according to SLSA standards
+- Provable compliance
+
+---
+
+## 7. SLSA Level 2
+DevGuard helps achieve **Supply-chain Levels for Software Artifacts (SLSA) Level 2** by securing and making build processes traceable. This includes:
+- Automated builds in isolated environments
+- Provenance metadata for every artifact version
+
+---
+
+## 8. License Management
+Automated scans identify license conflicts in open-source dependencies and warn about compliance risks (e.g., GPL vs. proprietary projects).
+
+**Features:**
+- License whitelisting/blacklisting
+- Reports for legal reviews
+

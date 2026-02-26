@@ -77,7 +77,7 @@ export default function Footer() {
                             width={200}
                             height={50}
                             alt="DevGuard Logo"
-                            src="/logo_inverse_horizontal.svg"
+                            src="/logo-inverse-horizontal.svg"
                             className="h-12 w-auto"
                         />
                         <p className="text-balance text-sm/6 text-gray-300">

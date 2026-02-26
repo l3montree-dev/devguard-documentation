@@ -1,6 +1,6 @@
 import Link from 'next/link'
-import { Button } from './top-level-pages/button'
 import Image from 'next/image'
+import { Button } from './ui/button'
 
 export default function NotFoundPage() {
     return (

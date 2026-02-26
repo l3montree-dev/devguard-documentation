@@ -1,7 +1,11 @@
-import Image from 'next/image';
-import { Callout } from 'nextra/components';
-import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
-import { Badge } from "@/components/ui/badge";
+import Image from 'next/image'
+import { Callout } from 'nextra/components'
+import {
+    Tooltip,
+    TooltipTrigger,
+    TooltipContent,
+} from '@/components/ui/tooltip'
+import { Badge } from '@/components/ui/badge'
 
 # SBOM Standards: CycloneDX & SPDX
 
@@ -16,7 +20,8 @@ A Software Bill of Materials (<Tooltip><TooltipTrigger asChild><span className="
 **Compliance**: Regulations like the EU Cyber Resilience Act require machine-readable SBOMs demonstrating supply chain transparency.
 
 <Callout type="info" emoji="📦">
-  SBOMs answer: "What's actually in my software?" Without this inventory, vulnerability management becomes guesswork.
+    SBOMs answer: "What's actually in my software?" Without this inventory,
+    vulnerability management becomes guesswork.
 </Callout>
 
 ## CycloneDX
@@ -24,6 +29,7 @@ A Software Bill of Materials (<Tooltip><TooltipTrigger asChild><span className="
 CycloneDX is a lightweight standard designed specifically for application security and supply chain component analysis[^1].
 
 **Key Features**:
+
 - Security-first design for vulnerability management
 - Native <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">VEX</span></TooltipTrigger><TooltipContent><p>Vulnerability Exploitability eXchange - Vulnerability impact assessments</p></TooltipContent></Tooltip> integration within SBOM documents
 - Rich metadata: licenses, <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">PURL</span></TooltipTrigger><TooltipContent><p>Package URL - Standardized package identifier</p></TooltipContent></Tooltip> identifiers, component hashes
@@ -39,6 +45,7 @@ CycloneDX is a lightweight standard designed specifically for application securi
 SPDX (Software Package Data Exchange) is a mature standard maintained by the Linux Foundation, originally designed for license compliance[^2].
 
 **Key Features**:
+
 - License-focused with extensive tracking capabilities
 - Comprehensive file and package metadata
 - Broad adoption in embedded systems and automotive
@@ -51,16 +58,18 @@ SPDX (Software Package Data Exchange) is a mature standard maintained by the Lin
 
 ## CycloneDX vs SPDX
 
-| Feature | CycloneDX | SPDX |
-|---------|-----------|------|
-| **Primary Focus** | Security & vulnerabilities | License compliance |
-| **VEX Support** | Native integration | Limited |
-| **File Size** | Smaller, optimized | Larger, comprehensive |
-| **Maturity** | Newer (2017) | Mature (2010, ISO) |
-| **Adoption** | Growing DevSecOps | Automotive/embedded |
+| Feature           | CycloneDX                  | SPDX                  |
+| ----------------- | -------------------------- | --------------------- |
+| **Primary Focus** | Security & vulnerabilities | License compliance    |
+| **VEX Support**   | Native integration         | Limited               |
+| **File Size**     | Smaller, optimized         | Larger, comprehensive |
+| **Maturity**      | Newer (2017)               | Mature (2010, ISO)    |
+| **Adoption**      | Growing DevSecOps          | Automotive/embedded   |
 
 <Callout type="info" emoji="🔄">
-  Both standards are valid—choice depends on use case. Security teams prefer CycloneDX; legal/compliance teams prefer SPDX. Some organizations generate both.
+    Both standards are valid—choice depends on use case. Security teams prefer
+    CycloneDX; legal/compliance teams prefer SPDX. Some organizations generate
+    both.
 </Callout>
 
 ## DevGuard Support
@@ -79,11 +88,12 @@ SPDX (Software Package Data Exchange) is a mature standard maintained by the Lin
 
 ## Related Documentation
 
-- [CSAF & VEX Standards](csaf-vex-standards) - Vulnerability communication formats
-- [External Vulnerability Sync](external-vulnerability-sync) - Importing/exporting SBOMs
+- [CSAF & VEX Standards](csaf-vex-explained) - Vulnerability communication formats
+- [External Vulnerability Sync](/explanations/vulnerability-management/external-vuln-sync) - Importing/exporting SBOMs
 - [Why Compliance Matters](why-compliance-matters) - Business case for SBOMs
 
 ## References
 
-[^1]: CycloneDX, *CycloneDX Specification*, OWASP Foundation, https://cyclonedx.org/specification/overview/
-[^2]: Linux Foundation, *SPDX Specification*, https://spdx.dev/specifications/
+[^1]: CycloneDX, _CycloneDX Specification_, OWASP Foundation, https://cyclonedx.org/specification/overview/
+
+[^2]: Linux Foundation, _SPDX Specification_, https://spdx.dev/specifications/

@@ -84,9 +84,24 @@ module.exports = {
 					from: { transform: 'translateX(0)' },
 					to: { transform: 'translateX(calc(-100% - 4rem))' },
 				},
+				'shimmer': {
+					'0%': { transform: 'translateX(-100%)' },
+					'100%': { transform: 'translateX(100%)' },
+				},
+				'star-movement-bottom': {
+					'0%': { transform: 'translate(0%, 0%)', opacity: '1' },
+					'100%': { transform: 'translate(-100%, 0%)', opacity: '0' },
+				},
+				'star-movement-top': {
+					'0%': { transform: 'translate(0%, 0%)', opacity: '1' },
+					'100%': { transform: 'translate(100%, 0%)', opacity: '0' },
+				},
 			}, 
 			animation: {
-				'logo-cloud': 'logo-cloud 85s linear infinite', // Adjust duration and timing as needed for your design.
+				'logo-cloud': 'logo-cloud 85s linear infinite',
+				'shimmer': 'shimmer 2s infinite',
+				'star-movement-bottom': 'star-movement-bottom linear infinite alternate',
+				'star-movement-top': 'star-movement-top linear infinite alternate',
 			}
     	}
     },

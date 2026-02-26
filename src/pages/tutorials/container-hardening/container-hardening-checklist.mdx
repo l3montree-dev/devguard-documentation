@@ -52,7 +52,7 @@ We welcome contributions and suggestions for improvement.
 
 - **All components are identified** - Every software component, library, and dependency within the container is catalogued and documented. _This enables you to know exactly what you're running and assess your exposure when new vulnerabilities are discovered._ [^NIST-SP-4-1-1-2] [^BSI-GS-23-SYS-1-6-A14] [^BSI-TR-03185-2-QA.01]
 
-- **Component PURLs can be matched to CVE reports** (Optional if VEX with URL is implemented and kept up to date) - Each component has a Package URL (PURL) identifier that enables automated matching against Common Vulnerabilities and Exposures (CVE) databases. This means you need to stick to an ecosystem or at least try to crossreference CVEs with the osv.dev Database. Can a CVE be found for a given PURL in the Database. A reverse search makes sense: I am trying to install nodejs, lets check the osv.dev for CVEs for osv and check what purls they are specified with. _This allows automated tooling to immediately alert you when any component in your container has a known vulnerability._ [^NIST-SP-4-1-1-2]
+- **Component PURLs can be matched to CVE reports** (Optional if VEX with URL is implemented and kept up to date) - Each component has a Package URL (PURL) identifier that enables automated matching against Common Vulnerabilities and Exposures (CVE) databases. This means you need to stick to an ecosystem or at least try to cross-reference CVEs with the osv.dev Database. Can a CVE be found for a given PURL in the Database. A reverse search makes sense: I am trying to install nodejs, lets check the osv.dev for CVEs for osv and check what purls they are specified with. _This allows automated tooling to immediately alert you when any component in your container has a known vulnerability._ [^NIST-SP-4-1-1-2]
 
 - **Component checksums are verified** - All components have cryptographic checksums (SHA256 or higher) that are verified during build and can be validated against known-good values to ensure integrity. _This detects if dependencies were corrupted or maliciously modified during download or storage._ [^SLSA-1-2-rc-1-build-track]
 
@@ -70,15 +70,15 @@ We welcome contributions and suggestions for improvement.
 
 - **Resource limits are documented** - Expected CPU, memory, and storage requirements are documented as metadata or in accompanying documentation to inform deployment configurations. This can be done using Labels:
 
-  ```Containerfile
-  LABEL org.opencontainers.image.title="myapp"
-  LABEL org.opencontainers.image.description="Web API for X"
-  LABEL org.opencontainers.image.resource.cpu="500m"
-  LABEL org.opencontainers.image.resource.memory="256Mi"
-  LABEL org.opencontainers.image.resource.ephemeral-storage="1Gi"
-  ```
+    ```Containerfile
+    LABEL org.opencontainers.image.title="myapp"
+    LABEL org.opencontainers.image.description="Web API for X"
+    LABEL org.opencontainers.image.resource.cpu="500m"
+    LABEL org.opencontainers.image.resource.memory="256Mi"
+    LABEL org.opencontainers.image.resource.ephemeral-storage="1Gi"
+    ```
 
-  _This enables proper resource allocation to prevent denial-of-service and ensures the container runs within expected parameters._ [^NIST-SP-5-3-4] [^BSI-GS-23-SYS-1-6-A15] [^ig-bvc_datenspeicherung_2]
+    _This enables proper resource allocation to prevent denial-of-service and ensures the container runs within expected parameters._ [^NIST-SP-5-3-4] [^BSI-GS-23-SYS-1-6-A15] [^ig-bvc_datenspeicherung_2]
 
 - **Container runs as non-root user** - Application executes with a non-privileged user account (UID > 1000) to limit potential damage from container breakouts or exploits. _This limits what an attacker can do if they compromise the application, preventing them from modifying system files or escalating privileges._ [^NIST-SP-4-1-2] [^BSI-GS-23-SYS-1-6-A18] [^ig-bvc_datenspeicherung_4] [^ig-bvc_konfiguration_1]
 
@@ -114,38 +114,54 @@ We welcome contributions and suggestions for improvement.
 
 - **VEX is attested** - Vulnerability Exploitability eXchange (VEX) documents are provided and attested, indicating which vulnerabilities are exploitable in the specific container context and which are mitigated. _This reduces alert fatigue by documenting which CVEs don't actually affect your container due to configuration or usage patterns._ [^NIST-SP-4-1-1] [^BSI-GS-23-SYS-1-6-A14]
 
-
 ---
 
 [^NIST-SP-4-1-1]: NIST Special Publication 800-190, Section 4.1.1, "use tools that take the pipeline-based build approach and immutable nature of containers and images into their design to provide more actionable and reliable results", "There is a need for container technology-specific vulnerability management", "prevent the progression of images that include vulnerabilities with Common Vulnerability Scoring System (CVSS) ratings above a selected threshold"
+
 [^NIST-SP-4-1-1-2]: NIST Special Publication 800-190, Section 4.1.1, listing 2, "Visibility into vulnerabilities at all layers of the image, not just the base layer of the image but also application frameworks and custom software"
+
 [^NIST-SP-4-1-2]: NIST Special Publication 800-190, Section 4.1.2, "secure configuration best practices. For example, images should be configured to run as non-privileged users"
+
 [^NIST-SP-4-1-2-4]: NIST Special Publication 800-190, Section 4.1.2, listing 4, "base layers from minimalistic technologies [...] to reduce attack surface areas"
+
 [^NIST-SP-4-1-4]: NIST Special Publication 800-190, Section 4.1.4, "Secrets (e.g., passwords, API keys, certificates) should not be stored in images"
+
 [^NIST-SP-4-1-5]: NIST Special Publication 800-190, Section 4.1.5, "Organizations should maintain a set of trusted images and registries", "identification of each image by cryptographic signature"
+
 [^NIST-SP-4-2-2]: NIST Special Publication 800-190, Section 4.2.2, "Secrets should be stored outside of images and provided dynamically at runtime"
+
 [^NIST-SP-4-4-3]: NIST Special Publication 800-190, Section 4.4.3, "profiles are another mechanism that can be used to constrain the system-level capabilities containers are allocated at runtime"
+
 [^NIST-SP-4-4-4]: NIST Special Publication 800-190, Section 4.4.4, "These tools should be able to automatically profile containerized apps using behavioral learning and build security profiles for them to minimize human interaction. "
+
 [^NIST-SP-4-5-1]: NIST Special Publication 800-190, Section 4.5.1, "Whenever possible, organizations should use these minimalistic OSs to reduce their attack surfaces and mitigate the typical risks and hardening activities associated with general-purpose OSs."
+
 [^NIST-SP-5-3-4]:
     NIST Special Publication 800-190, Section 5.3, listing 4, "Implementing runtime controls that limit the container's ability to abuse resources,
     escalate privileges, and run executables."
 
 [^SLSA-1-2-rc-1-build-track]: https://slsa.dev/spec/v1.2-rc1/build-track-basics, "Provenance showing how the package was built (Mistakes, documentation)", "Signed provenance, generated by a hosted build platform (Tampering after the build)", "Hardened build platform (Tampering during the build)"
+
 [^BSI-GS-23-SYS-1-6-A6]:
     BSI IT-Grundschutz 2023, SYS.1.6.A6 Verwendung sicherer Images (B), "Images nur aus vertrauenswürdigen Quellen
     stammen. Es MUSS eindeutig identifizierbar sein, wer das Image erstellt hat.", "Die Quelle MUSS danach ausgewählt werden, dass die im Image enthaltene Software regelmäßig auf Sicherheitsprobleme geprüft wird und diese behoben sowie dokumentiert werden."
 
 [^BSI-GS-23-SYS-1-6-A8]: BSI IT-Grundschutz 2023, SYS.1.6.A8 Sichere Speicherung von Zugangsdaten bei Containern (B), "MUSS sichergestellt sein, dass Zugangsdaten nur an besonders geschützten Orten und nicht in den Images liegen"
+
 [^BSI-GS-23-SYS-1-6-A12]:
     BSI IT-Grundschutz 2023, SYS.1.6.A12 Verteilung sicherer Images (S), "Quellen für Images als vertrauenswürdig
     klassifiziert wurden und warum", "wie Images bzw. die im Image enthaltenen Softwarebestandteile aus vertrauenswürdigen Quellen bezogen und schließlich für den produktiven Betrieb bereitgestellt werden", "Metadaten verfügen, die die Funktion und die Historie des Images nachvollziehbar machen", "Digitale Signaturen SOLLTEN jedes Image gegen Veränderung absichern."
 
 [^BSI-GS-23-SYS-1-6-A14]: BSI IT-Grundschutz 2023, SYS.1.6.A14 Aktualisierung von Images (S), "Patch- und Änderungsmanagement [...] wann und wie die Updates der Images bzw. der betriebenen Software oder des betriebenen Dienstes ausgerollt werden"
+
 [^BSI-GS-23-SYS-1-6-A15]: BSI IT-Grundschutz 2023, SYS.1.6.A15 Limitierung der Ressourcen pro Container (S), "Ressourcen auf dem Host-System, wie CPU, flüchtiger und persistenter Speicher sowie Netzbandbreite, angemessen reserviert und limitiert werden"
+
 [^BSI-GS-23-SYS-1-6-A18]: BSI IT-Grundschutz 2023, SYS.1.6.A18 Accounts der Anwendungsdienste (S), "Die System-Accounts innerhalb eines Containers SOLLTEN keine Berechtigungen auf dem HostSystem haben"
+
 [^BSI-GS-23-SYS-1-6-A21]: BSI IT-Grundschutz 2023, SYS.1.6.A21 Erweiterte Sicherheitsrichtlinien (H), "Erweiterte Richtlinien SOLLTEN die Berechtigungen der Container einschränken."
+
 [^MS-CSSC-Build]: Containers Secure Supply Chain Framework (CSSC), Microsoft, Build Stage, Recommended practices
+
 [^ISO-5.19]:
     ISO/IEC 27001:2022 – 5.19 Informationssicherheit in Lieferantenbeziehungen  
     _Es müssen Prozesse und Verfahren festgelegt und umgesetzt werden, um die mit der Nutzung der Produkte oder Dienstleistungen des Lieferanten verbundenen Informationssicherheitsrisiken zu beherrschen._
@@ -195,37 +211,67 @@ We welcome contributions and suggestions for improvement.
     _Sicherheitsprüfverfahren müssen definiert und in den Entwicklungslebenszyklus integriert werden._
 
 [^BSI-TR-03185-2-QA.01]: BSI Secure Software Lifecycle for Open Source Software, TR-03185-2.QA.01 Requirements Quality, "A list of third-party components used in the software MUST be available."
+
 [^BSI-TR-03185-2-BR.01]: BSI Secure Software Lifecycle for Open Source Software, TR-03185-2.BR.01 Requirements Build and Release, "Information on how to build all software assets MUST be publicly available."
+
 [^BSI-TR-03185-2-BR.04]: BSI Secure Software Lifecycle for Open Source Software, TR-03185-2.BR.04 Requirements Build and Release, "All releases MUST provide a descriptive log of functional and security modifications."
+
 [^BSI-TR-03185-2-BR.06]: BSI Secure Software Lifecycle for Open Source Software, TR-03185-2.BR.06 Requirements Build and Release, "Builds SHOULD be reproducible."
+
 [^BSI-TR-03185-2-QA.04]: BSI Secure Software Lifecycle for Open Source Software, TR-03185-2.QA.04 Requirements Quality, "Procedures for testing MUST be implemented and utilised."
+
 [^BSI-TR-03185-2-QA.05]: BSI Secure Software Lifecycle for Open Source Software, TR-03185-2.QA.05 Requirements Quality, "The project SHOULD take measures to reduce or avoid memory safety issues."
+
 [^BSI-TR-03185-2-QA.06]: BSI Secure Software Lifecycle for Open Source Software, TR-03185-2.QA.06 Requirements Quality, "All changes to the source code SHOULD be peer-reviewed."
+
 [^BSI-TR-03185-2-BR.05]: BSI Secure Software Lifecycle for Open Source Software, TR-03185-2.BR.05 Requirements Build and Release, "Released source packages MUST NOT contain any content that is not present in the project's repository or cannot be deterministically generated from that repository."
+
 [^ig-bvc_datenspeicherung_1]: "sicherstellen, dass keine Zugangsdaten (z.B. Passworte, geheime/private Schlüssel, API-Keys, Schlüssel für symmetrische Verschlüsselungen) in Container-Images bzw. in Konfigurationsdateien gespeichert werden.2 (SYS.1.6.A8 B)"
+
 [^ig-bvc_datenspeicherung_2]: "die Container mit Ressourcenbeschränkungen ausliefern (z.B. Datenmenge und Speicherzugriffe). (SYS.1.6A23 H)"
+
 [^ig-bvc_datenspeicherung_3]: "sicherstellen, dass Daten, die im Container ausschließlich gelesen werden, als Read-Only-Volume in den Container eingebunden werden. (SYS.1.6A23 H)"
+
 [^ig-bvc_datenspeicherung_4]: "für seine Software sicherstellen, dass diese mit minimalen Berechtigungen lauffähig ist.3 (SYS.1.6.A21 H)"
+
 [^ig-bvc_datenspeicherung_5]: "für seine Software sicherstellen, dass diese nicht in das Root-File-System des Containers schreiben darf. (SYS.1.6A23 H)"
+
 [^ig-bvc_datenspeicherung_6]: "das temporäre Speichern von Daten5 in dediziert dafür bereitgestellten Volumes (gängigerweise Ephemeral Storage) vornehmen. (SYS.1.6.A23 H)"
+
 [^ig-bvc_fehlertoleranz_1]: "die Anwendung Stateless gestalten, um die Mittel der Plattform bei einer Umsetzung von Hochverfügbarkeit nutzen zu können.2 (APP.4.4.A19 H)"
+
 [^ig-bvc_fehlertoleranz_2]: "Start-up-Checks für den Start der Container implementieren.4 (APP.4.4.A11 S)"
+
 [^ig-bvc_images_1]: "Vorgaben für möglichst minimale Images festlegen und veröffentlichen. (SYS1.6.A6 S)"
+
 [^ig-bvc_images_2]: "bewerten und sicherstellen, dass sämtliche Bestandteile seiner Anwendungsimages aus vertrauenswürdigen Quellen stammen. Dabei kann auf vom Plattformbetreiber freigegebene Base-Images aufgesetzt werden. (SYS.1.6.A6 S)"
+
 [^ig-bvc_images_3]: "das Image signieren. (SYS.1.6.A12 S)"
+
 [^ig-bvc_images_4]: "dem Softwarebetreiber Container Images mit allen zur Runtime benötigten Modulen bereitstellen. Ein Nachladen von Modulen DARF NICHT erfolgen. (SYS.1.6.A6 S)"
+
 [^ig-bvc_images_5]: "Der Softwarelieferant MUSS die Container Images so umsetzen, dass die Ausführung der Anwendung nicht an spezifische User IDs gebunden ist."
+
 [^ig-bvc_images_6]: "regelmäßig Images auf Schwachstellen und Schadcode prüfen2 und bei Bedarf geeignete Updates zur Verfügung stellen.3 (SYS.1.6.A6 S)"
+
 [^ig-bvc_kommunikationsverbindungen_1]: "die Software so bereitstellen, dass keine Fernwartung möglich ist.1 (SYS.1.6.A16 S)"
+
 [^ig-bvc_konfiguration_1]:
     "die Software so gestalten, dass die Container-Runtime und alle instanziierten Container nur von einem nicht-privilegierten System-Account ausgeführt werden, der keine erweiterten Rechte für den Container-Dienst bzw. das Betriebssystem des Host-Systems benötigt oder diese Rechte erlangen kann.
     Ausnahmen hiervon sind Container, welche Aufgaben des Host-Systems übernehmen. 1 (SYS.1.6.A17 S)"
 
 [^ig-bvc_konfiguration_2]: "Konfigurationsanpassungen so ausführen, dass keine manuellen Anpassungen in laufenden Containern erfolgen. (SYS.1.6.A9 S)"
+
 [^ig-bvc_konfiguration_3]: "die Privilegien für Container auf das erforderliche Minimum begrenzen. (SYS.1.6.A17 S)"
+
 [^ig-bvc_konfiguration_4]: "die Software so gestalten, dass die genutzten User- und Group-ID's keine Berechtigungen auf die System- und Datenbereiche des Hosts erfordern. (SYS.1.6.A18 S)"
+
 [^ig-bvc_monitoring_1]: "Start-up-Checks für den Start der Container implementieren.3 (APP.4.4.A11 S)"
+
 [^ig-bvc_monitoring_2]: "die forensische Analyse unterstützen, indem u.a. die eingehenden und ausgehenden Requests, sowie Konfigurationsänderungen geloggt werden. (SYS.1.6.A22 H)"
+
 [^ig-bvc_protokollierung_1]: "alle Protokolldaten der Anwendung im Container über die Standardausgabe ausgeben.1 (SYS.1.6.A7 B)"
+
 [^ig-bvc_updatepatchmgmt_1]: "sicherstellen, dass Updates von Software nicht im laufenden Container installiert werden. Bei persistenten Containern SOLLTE geprüft werden, ob in (absolut seltenen) Ausnahmefällen ein Update des jeweiligen Containers geeigneter ist, als den Container vollständig neu zu provisionieren.1 (SYS.1.6.A14 S)"
+
 [^ig-bvc_updatepatchmgmt_2]: "bei sicherheitsrelevanten und featurebasierten Updates der Anwendungen oder der Standardimages neue Images erstellen und eindeutig versioniert innerhalb der vereinbarten Zeiträume / SLAs zur Verfügung stellen. (SYS.1.6.A14 S)"
