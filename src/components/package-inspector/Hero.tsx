@@ -1,5 +1,6 @@
-import { Container } from '@/components/top-level-pages/container'
+
 import { Shield } from 'lucide-react'
+import { Container } from '../ui/container'
 
 export function PackageInspectorHero() {
     return (
