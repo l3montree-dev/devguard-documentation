@@ -1,72 +1,74 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { ScoreCardCheck } from './types'
 import { cn } from '@/lib/utils'
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from '@/components/ui/tooltip'
 
 interface ScoreCardChartProps {
     checks: ScoreCardCheck[]
 }
 
 function getScoreColor(score: number): string {
-    if (score >= 7) return 'bg-green-500'
-    if (score >= 4) return 'bg-yellow-500'
+    if (score >= 4) return 'bg-primary'
     return 'bg-red-500'
 }
 
 function getScoreTextColor(score: number): string {
-    if (score >= 7) return 'text-green-600 dark:text-green-400'
-    if (score >= 4) return 'text-yellow-600 dark:text-yellow-400'
-    return 'text-red-600 dark:text-red-400'
+    if (score >= 4) return 'text-primary'
+    return 'text-red-500'
 }
 
 function ScoreBar({ check }: { check: ScoreCardCheck }) {
-    const percentage = (check.score / 10) * 100
+    const [open, setOpen] = useState(false)
+    const isNA = check.score < 0
+    const percentage = isNA ? 0 : (check.score / 10) * 100
 
     return (
-        <TooltipProvider>
-            <Tooltip>
-                <TooltipTrigger asChild>
-                    <div className="group cursor-help">
-                        <div className="mb-1 flex items-center justify-between">
-                            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                                {check.name}
-                            </span>
-                            <span
-                                className={cn(
-                                    'text-sm font-bold',
-                                    getScoreTextColor(check.score),
-                                )}
-                            >
-                                {check.score}/10
-                            </span>
-                        </div>
-                        <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
-                            <div
-                                className={cn(
-                                    'h-full rounded-full transition-all',
-                                    getScoreColor(check.score),
-                                )}
-                                style={{ width: `${percentage}%` }}
-                            />
-                        </div>
-                    </div>
-                </TooltipTrigger>
-                <TooltipContent side="top" className="max-w-xs">
-                    <p className="text-sm">{check.reason}</p>
-                </TooltipContent>
-            </Tooltip>
-        </TooltipProvider>
+        <div>
+            <div className="mb-1 flex items-center justify-between">
+                <span className="flex items-center gap-1 text-sm font-medium text-gray-300">
+                    <button
+                        type="button"
+                        onClick={() => setOpen(!open)}
+                        className={cn(
+                            'inline-flex items-center justify-center text-gray-400 transition-transform hover:text-gray-200',
+                            open && 'rotate-90',
+                        )}
+                        aria-expanded={open}
+                        aria-label={`Toggle reason for ${check.name}`}
+                    >
+                        ▶
+                    </button>
+                    {check.name}
+                </span>
+                <span
+                    className={cn(
+                        'text-sm font-bold',
+                        isNA ? 'text-gray-500' : getScoreTextColor(check.score),
+                    )}
+                >
+                    {isNA ? 'N/A' : `${check.score}/10`}
+                </span>
+            </div>
+            <div className="h-2 w-full overflow-hidden rounded-full bg-gray-700">
+                {!isNA && (
+                    <div
+                        className={cn(
+                            'h-full rounded-full transition-all',
+                            getScoreColor(check.score),
+                        )}
+                        style={{ width: `${percentage}%` }}
+                    />
+                )}
+            </div>
+            {open && (
+                <p className="mt-1 text-xs text-gray-300">{check.reason}</p>
+            )}
+        </div>
     )
 }
 
 export default function ScoreCardChart({ checks }: ScoreCardChartProps) {
     return (
-        <div className="space-y-4">
+        <div className="space-y-2">
             {checks.map((check) => (
                 <ScoreBar key={check.name} check={check} />
             ))}
