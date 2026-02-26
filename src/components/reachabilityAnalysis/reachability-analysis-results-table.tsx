@@ -1,0 +1,163 @@
+
+import { Button } from 'src/components/ui/button'
+import { Skeleton } from 'src/components/ui/skeleton'
+import {Table,TableBody,TableCell,TableHead,TableHeader,TableRow} from 'src/components/ui/table'
+import {ColumnDef,SortingState,flexRender,getCoreRowModel,getSortedRowModel,useReactTable} from '@tanstack/react-table'
+
+import * as React from 'react'
+import { useRouter } from 'next/navigation'
+import { Package } from './columns'
+
+const PAGE_SIZE = 10
+
+interface DataTableProps<TData, TValue> {
+    columns: ColumnDef<TData, TValue>[]
+    data: TData[]
+    isLoading?: boolean
+    total?: number
+    page?: number
+    onPageChange?: (page: number) => void
+}
+
+export function DataTable<TData, TValue>({
+    columns,
+    data,
+    isLoading = false,
+    total = 0,
+    page = 1,
+    onPageChange,
+}: DataTableProps<TData, TValue>) {
+    const router = useRouter()
+
+    const [sorting, setSorting] = React.useState<SortingState>([
+        {
+            id: 'purl',
+            desc: true,
+        },
+    ])
+
+    const table = useReactTable({
+        data,
+        columns,
+        getCoreRowModel: getCoreRowModel(),
+        onSortingChange: setSorting,
+        getSortedRowModel: getSortedRowModel(),
+        state: {
+            sorting,
+        },
+    })
+
+    if (!isLoading && data.length == 0) {
+        return (
+            <div className='my-40'>
+            </div>
+        )
+    }
+
+    return (
+        <div>
+            <div className="overflow-hidden rounded-md border">
+                <Table>
+                    <TableHeader>
+                        {table.getHeaderGroups().map((headerGroup) => (
+                            <TableRow key={headerGroup.id}>
+                                {headerGroup.headers.map((header) => {
+                                    return (
+                                        <TableHead key={header.id}>
+                                            {header.isPlaceholder
+                                                ? null
+                                                : flexRender(
+                                                      header.column.columnDef
+                                                          .header,
+                                                      header.getContext(),
+                                                  )}
+                                        </TableHead>
+                                    )
+                                })}
+                            </TableRow>
+                        ))}
+                    </TableHeader>
+                    <TableBody>
+                        {isLoading ? (
+                            Array(1)
+                                .fill(0)
+                                .map((_, rowIndex) => (
+                                    <TableRow key={`skeleton-${rowIndex}`}>
+                                        {columns.map((column, cellIndex) => (
+                                            <TableCell
+                                                key={`skeleton-cell-${cellIndex}`}
+                                                className="h-[75px] overflow-hidden"
+                                                style={{ width: column.size }}
+                                            >
+                                                <Skeleton className="h-4 w-full" />
+                                            </TableCell>
+                                        ))}
+                                    </TableRow>
+                                ))
+                        ) : table.getRowModel().rows?.length ? (
+                            table.getRowModel().rows.map((row) => (
+                                <TableRow
+                                    key={row.id}
+                                    data-state={
+                                        row.getIsSelected() && 'selected'
+                                    }
+                                    onClick={() =>
+                                        router.push(
+                                            `/reachability-analysis/${encodeURIComponent((row.original as Package).purl)}`,
+                                        )
+                                    }
+                                    className="cursor-pointer hover:bg-muted/50"
+                                >
+                                    {row.getVisibleCells().map((cell) => (
+                                        <TableCell
+                                            key={cell.id}
+                                            className="h-[75px] overflow-hidden"
+                                        >
+                                            {flexRender(
+                                                cell.column.columnDef.cell,
+                                                cell.getContext(),
+                                            )}
+                                        </TableCell>
+                                    ))}
+                                </TableRow>
+                            ))
+                        ) : (
+                            <TableRow>
+                                <TableCell
+                                    colSpan={columns.length}
+                                    className="h-24 text-center"
+                                >
+                                    No results.
+                                </TableCell>
+                            </TableRow>
+                        )}
+                    </TableBody>
+                </Table>
+            </div>
+            <div className="flex items-center justify-between py-4">
+                <div className="text-sm text-muted-foreground">
+                    Showing {Math.min((page - 1) * PAGE_SIZE + 1, total)}–
+                    {Math.min(page * PAGE_SIZE, total)} of {total} results
+                </div>
+                <div className="flex items-center space-x-2">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => onPageChange?.(page - 1)}
+                        disabled={page <= 1}
+                    >
+                        Previous
+                    </Button>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => onPageChange?.(page + 1)}
+                        disabled={page * PAGE_SIZE >= total}
+                    >
+                        Next
+                    </Button>
+                </div>
+            </div>
+        </div>
+    )
+}

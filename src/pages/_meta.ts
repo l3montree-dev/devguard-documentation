@@ -1,6 +1,14 @@
+import { title } from "process";
+
 export default {
     index: {
         title: 'Introduction',
+    },
+    "reachability-analysis": {
+        theme: {
+            layout: 'raw'
+        },
+        display: 'hidden',
     },
     'terms-of-use': {
         display: 'hidden',
@@ -21,6 +29,11 @@ export default {
             layout: 'raw',
         },
         title: 'Vulnerability Database',
+    },
+    'header-reachability':{
+        title: 'Reachability',
+        type: 'page',
+        href: '/reachability-analysis'
     },
     '404': {
         theme: {
