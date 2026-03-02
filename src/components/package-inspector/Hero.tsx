@@ -1,7 +1,43 @@
 import { useState } from 'react'
 import { Search, ChevronDown } from 'lucide-react'
+import Image from 'next/image'
 import { HeroSection } from '@/components/ui/hero-input'
+import AnimatedContent from '@/components/ui/animated-content'
+import CenterFlow from '@/components/animated-blocks/center-flow'
 import { cn } from '@/lib/utils'
+
+const ECOSYSTEM_NODES = [
+    { src: '/icons/eco-logos/npm-icon.svg', alt: 'npm' },
+    { src: '/icons/eco-logos/go-programming-language-icon.svg', alt: 'Go' },
+    { src: '/icons/eco-logos/debian-logo-icon.svg', alt: 'Debian' },
+    { src: '/icons/eco-logos/python-programming-language-icon.svg', alt: 'Python' },
+]
+
+const nodeItems = ECOSYSTEM_NODES.map((eco) => ({
+    content: (
+        <div className="flex h-full w-full items-center justify-center">
+            <Image
+                src={eco.src}
+                alt={eco.alt}
+                width={24}
+                height={24}
+                className="h-6 w-6 object-contain"
+            />
+        </div>
+    ),
+}))
+
+const centerContent = (
+    <div className="flex h-full w-full items-center justify-center">
+        <Image
+            src="/logo_icon.svg"
+            alt="DevGuard Logo"
+            width={24}
+            height={24}
+            className="h-11 w-auto"
+        />
+    </div>
+)
 
 const ECOSYSTEMS = [
     { label: 'alpine', value: 'alpine' },
@@ -70,7 +106,8 @@ export function PackageInspectorHero({
 
     return (
         <div className="relative">
-            <div className="mx-auto max-w-7xl pb-24 pt-10 sm:pb-32 lg:grid lg:grid-cols-2 lg:items-center lg:gap-x-8 lg:py-40">
+            <div className="mx-auto max-w-7xl pb-24 pt-10 sm:pb-32 lg:grid lg:grid-cols-2 lg:items-center lg:gap-x-8 lg:py-40 px-6 lg:px-8">
+                <div>
                 <HeroSection
                     title="Package Inspector"
                     subtitle={
@@ -217,6 +254,40 @@ export function PackageInspectorHero({
                         </div>
                     </form>
                 </HeroSection>
+                </div>
+
+                <AnimatedContent
+                    distance={40}
+                    direction="vertical"
+                    duration={0.7}
+                    delay={0.15}
+                >
+                    <div className="hidden lg:block h-[500px] w-full">
+                        <CenterFlow
+                            nodeItems={nodeItems}
+                            centerContent={centerContent}
+                            centerSize={100}
+                            nodeSize={48}
+                            pulseDuration={5}
+                            pulseInterval={10}
+                            pulseLength={0.4}
+                            lineWidth={1}
+                            pulseWidth={1}
+                            pulseSoftness={10}
+                            lineColor="#323232"
+                            lineColorLight="#e0e0e0"
+                            pulseColor="#ffffff"
+                            pulseColorLight="#f9bd24"
+                            glowColor="#f9bd24"
+                            glowColorLight="#f9bd24"
+                            maxGlowIntensity={25}
+                            glowDecay={0.95}
+                            borderRadius={35}
+                            nodeDistance={0.7}
+                            disableBlinking={false}
+                        />
+                    </div>
+                </AnimatedContent>
             </div>
         </div>
     )
