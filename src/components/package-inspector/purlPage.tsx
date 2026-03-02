@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
 import Head from 'next/head'
+import useSWR from 'swr'
+import { fetcher } from '@/lib/fetcher'
 import { extractPackageName } from '@/lib/utils'
 import { PackageInspectResult } from '@/components/package-inspector/types'
 import ScoreCardChart from '@/components/package-inspector/ScoreCardChart'
@@ -8,41 +9,20 @@ import OverallScoreGauge from '@/components/package-inspector/OverallScoreIcon'
 import VulnerabilityList from '@/components/package-inspector/VulnerabilityList'
 
 export default function PurlPageComponent({ purl }: { purl?: string }) {
-    const [result, setResult] = useState<PackageInspectResult | null>(null)
-    const [isLoading, setIsLoading] = useState(true)
-    const [error, setError] = useState<string | null>(null)
-
     const purlString = typeof purl === 'string' ? purl : ''
-    let packageName = ''
+    const decodedPurl = purlString ? decodeURIComponent(purlString) : ''
+    const packageName = decodedPurl ? extractPackageName(decodedPurl) : ''
 
-    if (purlString) {
-        packageName = extractPackageName(decodeURIComponent(purlString))
-    }
+    const url = decodedPurl
+        ? 'https://api.main.devguard.org/api/v1/vulndb/purl-inspect/' +
+          decodedPurl
+        : null
 
-    useEffect(() => {
-        if (!purlString) return
-
-        const fetchPackageInfo = async () => {
-            setIsLoading(true)
-            setError(null)
-            const decodedPurl = decodeURIComponent(purlString)
-
-            const response = await fetch(
-                'https://api.main.devguard.org/api/v1/vulndb/purl-inspect/' +
-                    decodedPurl,
-            )
-
-            if (response.ok) {
-                const data: PackageInspectResult = await response.json()
-                setResult(data)
-            } else {
-                setError('Package not found')
-            }
-
-            setIsLoading(false)
-        }
-        fetchPackageInfo()
-    }, [purlString])
+    const {
+        data: result,
+        error,
+        isLoading,
+    } = useSWR<PackageInspectResult>(url, fetcher)
 
     if (isLoading) {
         return (
@@ -58,7 +38,7 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
     }
 
     if (error) {
-        return <div className="p-8 text-red-500">{error}</div>
+        return <div className="p-8 text-red-500">Package not found</div>
     }
 
     if (!result) {

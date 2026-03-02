@@ -9,7 +9,7 @@ export type RadarDatum = {
 
 export function useRadarData() {
     const { data, error, isLoading } = useSWR(
-        `https://api.main.devguard.org/api/v1/vulndb/affected-package-distribution/`,
+        `https://api.main.devguard.org/api/v1/vulndb/cve-ecosystem-distribution/`,
         fetcher,
     )
 

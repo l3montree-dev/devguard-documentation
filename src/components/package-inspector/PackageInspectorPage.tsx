@@ -1,74 +1,70 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
-import { Searchbar } from '@/components/ui/Searchbar'
-import { SearchResultCard } from './SearchResultCard'
 import { PackageInspectorHero } from './Hero'
-import { extractPackageName } from '@/lib/utils'
+import { Container } from '../ui/container'
+import Particles from './particels'
+
 export function PackageInspectorPage() {
     const router = useRouter()
-
     const [searchQuery, setSearchQuery] = useState('')
+    const [error, setError] = useState<string | null>(null)
+    const [isSearching, setIsSearching] = useState(false)
 
-    const [isLoading, setIsLoading] = useState(false)
+    const handleSearch = async (purl?: string) => {
+        const trimmed = (purl ?? searchQuery).trim()
+        if (!trimmed) return
 
-    const [results, setResults] = useState<any[]>([])
-
-    const handleSearch = async () => {
-        if (!searchQuery.trim()) return
-
-        setIsLoading(true)
+        setError(null)
+        setIsSearching(true)
 
         try {
             const response = await fetch(
                 'https://api.main.devguard.org/api/v1/vulndb/purl-inspect/' +
-                    encodeURIComponent(searchQuery.trim()),
+                    encodeURIComponent(trimmed),
             )
             if (!response.ok) {
-                setResults([])
+                setError('Package not found. Please check your purl.')
                 return
             }
             const data = await response.json()
-            const items = Array.isArray(data) ? data : [data]
-            setResults(
-                items.filter(
-                    (item: any) => item.component?.project?.description,
-                ),
+            if (!data?.component) {
+                setError('Package not found. Please check your purl.')
+                return
+            }
+            router.push(
+                '/package-inspector/' + encodeURIComponent(trimmed),
             )
         } catch {
-            setResults([])
+            setError('Could not reach the API. Please try again.')
         } finally {
-            setIsLoading(false)
+            setIsSearching(false)
         }
     }
 
     return (
-        <>
-            <PackageInspectorHero />
-            <div className="pb-16">
-                <Searchbar
-                    value={searchQuery}
-                    onChange={setSearchQuery}
-                    onSubmit={handleSearch}
-                    isLoading={isLoading}
-                    placeholder={'Search by PURL'}
+        <Container>
+            <div className="absolute inset-0 -z-10">
+                <Particles
+                    particleColors={['#ffffff']}
+                    particleCount={300}
+                    particleSpread={30}
+                    speed={0.2}
+                    particleBaseSize={100}
+                    alphaParticles={false}
+                    disableRotation
+                    pixelRatio={1}
                 />
-
-                {results.length > 0 && (
-                    <div className="mx-auto mt-8 max-w-2xl">
-                        {results.map((result) => (
-                            <SearchResultCard
-                                key={result.purl}
-                                name={extractPackageName(result.purl)}
-                                description={
-                                    result.component.project?.description
-                                }
-                                version={result.component.version}
-                                purl={result.purl}
-                            />
-                        ))}
-                    </div>
-                )}
             </div>
-        </>
+            <PackageInspectorHero
+                searchTerm={searchQuery}
+                setSearchTerm={(v) => {
+                    setSearchQuery(v)
+                    setError(null)
+                }}
+                onSearch={handleSearch}
+                error={error}
+                isSearching={isSearching}
+            />
+        </Container>
     )
 }
