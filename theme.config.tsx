@@ -144,7 +144,6 @@ const config: Partial<KernuxThemeConfig> = {
             className="h-12 w-auto"
         />
     ),
-    logoText: 'DevGuard',
     sidebar: {
         defaultMenuCollapseLevel: 1,
         disable: false,
