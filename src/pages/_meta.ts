@@ -2,12 +2,6 @@ export default {
     index: {
         title: 'Introduction',
     },
-    pricing: {
-        theme: {
-            layout: 'raw',
-        },
-        display: 'hidden',
-    },
     'terms-of-use': {
         display: 'hidden',
     },
@@ -23,16 +17,6 @@ export default {
     contributing: { title: 'Contributing' },
     other: {
         title: 'Other',
-    },
-    'header-pricing': {
-        title: 'Pricing',
-        type: 'page',
-        href: '/pricing',
-    },
-    'header-docs': {
-        title: 'Documentation',
-        type: 'page',
-        href: '/introduction',
     },
     '404': {
         theme: {
