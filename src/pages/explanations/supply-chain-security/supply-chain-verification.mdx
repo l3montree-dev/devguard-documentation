@@ -10,7 +10,7 @@ that the traveler is allowed to enter (policy), supply chain verification ensure
 
 It transforms security from a manual "checkbox exercise" into an automated **Admission Gate**.
 
----
+***
 
 ## The Verification Logic
 
@@ -26,7 +26,7 @@ Verification(Artifact, Attestations, Policy) = Decision
 
 If the artifacts match the attestations, and the attestations satisfy the policy, the gate opens.
 
----
+***
 
 ## The Three Pillars of Verification
 
@@ -58,7 +58,7 @@ This is the most complex layer. The artifact is signed and authentic, but is it 
     - _Example:_ "Reject if the SBOM contains 'log4j' version < 2.15."
     - _Example:_ "Reject if the Provenance shows the build was triggered by an external contributor."
 
----
+***
 
 ## Where Verification Happens
 
@@ -107,7 +107,7 @@ In a Kubernetes environment, an Admission Controller intercepts requests to the 
 
 This ensures that **nothing** runs in your production environment unless it has passed verification, regardless of how it got there (manual deploy, CD pipeline, or accidental trigger).
 
----
+***
 
 ## Policy-as-Code
 

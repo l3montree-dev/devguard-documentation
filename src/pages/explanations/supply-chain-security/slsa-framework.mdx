@@ -8,7 +8,7 @@ Think of SLSA like the safety ratings for cars. A car can be driven without airb
 
 Originally inspired by Google's internal "Binary Authorization for Borg" system, SLSA is now an OpenSSF project maintained by the industry at large. Its primary goal is to prevent **tampering** during the build process and to ensure that the software you run is exactly the software you intended to build.
 
----
+***
 
 ## The Core Philosophy: Trust the Builder
 
@@ -22,7 +22,7 @@ SLSA asks three fundamental questions about an artifact:
 2.  **Isolation:** Was the build process isolated from outside interference?
 3.  **Authenticity:** Can we cryptographically prove the first two points?
 
----
+***
 
 ## The SLSA Levels (Build Track)
 
@@ -61,7 +61,7 @@ Level 3 is the gold standard. It addresses the risk of **cross-contamination** a
     - **Non-falsifiable:** The provenance generation is so tightly integrated into the build service that even the project maintainer cannot bypass it or force the service to lie.
 - **Benefit:** **Advanced Threat Protection.** This prevents complex attacks where an attacker compromises a build cache or uses a lingering secret from a previous job to infect a subsequent one.
 
----
+***
 
 ## The Requirements Matrix
 
@@ -76,7 +76,7 @@ To achieve a specific level, the build pipeline must satisfy specific requiremen
 | **Isolated Environment**  |         |         |   ✅    |
 | **Parameter Protection**  |         |         |   ✅    |
 
----
+***
 
 ## SLSA Tracks
 
@@ -87,7 +87,7 @@ It is important to note that SLSA v1.0 splits security into different "Tracks."
 
 Currently, when people say "SLSA Level 3," they almost always refer to the **Build Track**.
 
----
+***
 
 ## Implementing SLSA
 
@@ -101,7 +101,7 @@ How does an organization actually "do" SLSA? It is not a tool you install; it is
 
 Just generating SLSA provenance is not enough. You must also **verify** it. A SLSA Level 3 artifact provides no security if the deployment system doesn't check the level before running it. This is where [Supply Chain Verification](/explanations/supply-chain-security/supply-chain-verification) comes in.
 
----
+***
 
 ## Conclusion
 
@@ -109,7 +109,7 @@ SLSA provides the common language for supply chain security. It moves the indust
 
 For most organizations, achieving **SLSA Level 2** is the immediate pragmatic goal: ensuring that builds happen on a trusted server and that the output is signed. **SLSA Level 3** is the target for critical infrastructure and high-value targets, requiring strict infrastructure isolation.
 
----
+***
 
 ## References
 
