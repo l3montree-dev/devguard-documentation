@@ -63,8 +63,20 @@ export default function ProjectStats({
                     <Scale className="h-4 w-4" />
                     {project.license}
                 </Badge>
-                <StatCard icon={Star} value={project.starsCount} />
-                <StatCard icon={GitFork} value={project.forksCount} />
+                <Badge
+                    variant="outline"
+                    className="flex w-fit items-center gap-1.5 text-sm"
+                >
+                    <Star className="h-4 w-4" />
+                    {project.starsCount.toLocaleString('de-DE')}
+                </Badge>
+                <Badge
+                    variant="outline"
+                    className="flex w-fit items-center gap-1.5 text-sm"
+                >
+                    <GitFork className="h-4 w-4" />
+                    {project.forksCount.toLocaleString('de-DE')}
+                </Badge>
             </div>
 
             <div className="flex flex-wrap gap-x-4 text-xs text-gray-400">

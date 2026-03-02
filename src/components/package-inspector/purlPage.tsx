@@ -1,5 +1,7 @@
 import Head from 'next/head'
 import useSWR from 'swr'
+import Link from 'next/link'
+import { ExternalLink } from 'lucide-react'
 import { fetcher } from '@/lib/fetcher'
 import { extractPackageName } from '@/lib/utils'
 import { PackageInspectResult } from '@/components/package-inspector/types'
@@ -7,6 +9,7 @@ import ScoreCardChart from '@/components/package-inspector/ScoreCardChart'
 import ProjectStats from '@/components/package-inspector/ProjectStats'
 import OverallScoreGauge from '@/components/package-inspector/OverallScoreIcon'
 import VulnerabilityList from '@/components/package-inspector/VulnerabilityList'
+import { Button } from '@/components/ui/button'
 
 export default function PurlPageComponent({ purl }: { purl?: string }) {
     const purlString = typeof purl === 'string' ? purl : ''
@@ -59,45 +62,75 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
                 <p className="mb-1 text-sm font-medium uppercase tracking-wider text-gray-500">
                     Package Inspector
                 </p>
-                <div className="flex items-baseline gap-3">
-                    <h1 className="text-3xl font-bold text-white">
-                        {packageName}
-                    </h1>
-                    {component.version && (
-                        <span className="text-lg text-gray-400">
-                            v{component.version}
-                        </span>
-                    )}
-                </div>
             </div>
-            {/* Top row: Project stats + Overall score */}
-            <div className="mb-8 flex items-start gap-16">
-                <div className="min-w-0 max-w-2xl flex-1">
-                    <ProjectStats
-                        project={project}
-                        purl={result.purl}
-                        published={component.published}
-                        isMalicious={result.maliciousPackage != null}
-                    />
-                </div>
-                <div className="shrink-0">
-                    <OverallScoreGauge score={project.scoreCardScore} />
+
+            {/* Hero card */}
+            <div className="mb-4 rounded-xl border border-gray-700 bg-gray-800/50 p-6">
+                <div className="flex items-start justify-between gap-6">
+                    <div className="min-w-0 flex-1">
+                        <div className="mb-1 flex items-baseline gap-3">
+                            <h1 className="text-3xl font-bold text-white">
+                                {packageName}
+                            </h1>
+                            {component.version && (
+                                <span className="text-lg text-gray-400">
+                                    v{component.version}
+                                </span>
+                            )}
+                        </div>
+                        <ProjectStats
+                            project={project}
+                            purl={result.purl}
+                            published={component.published}
+                            isMalicious={result.maliciousPackage != null}
+                        />
+                    </div>
+                    <div className="shrink-0">
+                        <OverallScoreGauge score={project.scoreCardScore} />
+                    </div>
                 </div>
             </div>
 
-            {/* Bottom row: Scorecard bars + Vulnerability list */}
-            <div className="grid items-start gap-12 md:grid-cols-2">
-                <div>
-                    <h2 className="mb-4 text-xl font-semibold text-white">
-                        Open SSF Scorecard Checks
+            {/* Two-column: Scorecard + Vulnerabilities */}
+            <div className="grid items-stretch gap-4 md:grid-cols-2">
+                <div className="rounded-xl border border-gray-700 bg-gray-800/50 p-6">
+                    <h2 className="mb-4 text-base font-bold text-white">
+                        Open SSF Scorecard
                     </h2>
                     <ScoreCardChart checks={project.scoreCard.checks} />
                 </div>
 
-                <VulnerabilityList
-                    vulns={vulns}
-                    affectedComponents={affectedComponents}
-                />
+                <div className="rounded-xl border border-gray-700 bg-gray-800/50 p-6">
+                    <h2 className="mb-4 text-base font-bold text-white">
+                        Vulnerabilities fixed in later releases
+                    </h2>
+                    <VulnerabilityList
+                        vulns={vulns}
+                        affectedComponents={affectedComponents}
+                    />
+                </div>
+            </div>
+
+            {/* Bottom buttons */}
+            <div className="mt-6 flex justify-end gap-3">
+                <div>
+                    <Button>
+                        <Link href="/package-inspector">Get Back</Link>
+                    </Button>
+                </div>
+                <div>
+                    <Button>
+                        <a
+                            target="_blank"
+                            href="https://main.devguard.org/"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2"
+                        >
+                            Try DevGuard
+                            <ExternalLink size={16} />
+                        </a>
+                    </Button>
+                </div>
             </div>
         </div>
     )
