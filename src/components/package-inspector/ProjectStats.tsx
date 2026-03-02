@@ -11,7 +11,7 @@ import { Project } from './types'
 import { Badge } from '@/components/ui/badge'
 
 interface ProjectStatsProps {
-    project: Project
+    project: Project | null
     purl: string
     published?: string
     isMalicious: boolean
@@ -44,9 +44,11 @@ export default function ProjectStats({
 
     return (
         <div className="space-y-3">
-            <p className="line-clamp-2 text-lg text-gray-400">
-                {project.description}
-            </p>
+            {project?.description && (
+                <p className="line-clamp-2 text-lg text-gray-400">
+                    {project.description}
+                </p>
+            )}
 
             <div className="flex flex-wrap items-center gap-2">
                 <Badge
@@ -56,27 +58,31 @@ export default function ProjectStats({
                     <Package className="h-4 w-4" />
                     {packageManager}
                 </Badge>
-                <Badge
-                    variant="outline"
-                    className="flex w-fit items-center gap-1.5 text-sm"
-                >
-                    <Scale className="h-4 w-4" />
-                    {project.license}
-                </Badge>
-                <Badge
-                    variant="outline"
-                    className="flex w-fit items-center gap-1.5 text-sm"
-                >
-                    <Star className="h-4 w-4" />
-                    {project.starsCount.toLocaleString('de-DE')}
-                </Badge>
-                <Badge
-                    variant="outline"
-                    className="flex w-fit items-center gap-1.5 text-sm"
-                >
-                    <GitFork className="h-4 w-4" />
-                    {project.forksCount.toLocaleString('de-DE')}
-                </Badge>
+                {project && (
+                    <>
+                        <Badge
+                            variant="outline"
+                            className="flex w-fit items-center gap-1.5 text-sm"
+                        >
+                            <Scale className="h-4 w-4" />
+                            {project.license}
+                        </Badge>
+                        <Badge
+                            variant="outline"
+                            className="flex w-fit items-center gap-1.5 text-sm"
+                        >
+                            <Star className="h-4 w-4" />
+                            {project.starsCount.toLocaleString('de-DE')}
+                        </Badge>
+                        <Badge
+                            variant="outline"
+                            className="flex w-fit items-center gap-1.5 text-sm"
+                        >
+                            <GitFork className="h-4 w-4" />
+                            {project.forksCount.toLocaleString('de-DE')}
+                        </Badge>
+                    </>
+                )}
             </div>
 
             <div className="flex flex-wrap gap-x-4 text-xs text-gray-400">
@@ -92,53 +98,57 @@ export default function ProjectStats({
                 )}
             </div>
 
-            <div className="flex flex-wrap items-center gap-4">
-                <a
-                    href={'https://' + project.projectKey}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 text-sm text-blue-400 hover:underline"
-                >
-                    <ExternalLink className="h-4 w-4" />
-                    View on GitHub
-                </a>
-            </div>
-            <div className="flex flex-wrap items-center">
-                {project.homepage && (
-                    <a
-                        href={project.homepage}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-1.5 text-sm text-blue-400 hover:underline"
-                    >
-                        <ExternalLink className="h-4 w-4" />
-                        Project Homepage
-                    </a>
-                )}
-            </div>
-            <div className="flex flex-wrap items-center">
-                {!isMalicious && (
-                    <div>
-                        <div className="flex items-center gap-1.5 rounded-md border border-green-700 bg-green-900/30 px-3 py-2">
-                            <ShieldCheck className="h-4 w-4 shrink-0 text-green-400" />
-                            <span className="text-xs font-semibold text-green-300">
-                                Not flagged as malicious
-                            </span>
-                        </div>
-                        <span className="mt-1 block text-xs text-gray-400">
-                            Scorecard updated:{' '}
-                            {new Date(project.updatedAt).toLocaleDateString(
-                                'en-US',
-                                {
-                                    year: 'numeric',
-                                    month: 'long',
-                                    day: 'numeric',
-                                },
-                            )}
-                        </span>
+            {project && (
+                <>
+                    <div className="flex flex-wrap items-center gap-4">
+                        <a
+                            href={'https://' + project.projectKey}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1.5 text-sm text-blue-400 hover:underline"
+                        >
+                            <ExternalLink className="h-4 w-4" />
+                            View on GitHub
+                        </a>
                     </div>
-                )}
-            </div>
+                    <div className="flex flex-wrap items-center">
+                        {project.homepage && (
+                            <a
+                                href={project.homepage}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-1.5 text-sm text-blue-400 hover:underline"
+                            >
+                                <ExternalLink className="h-4 w-4" />
+                                Project Homepage
+                            </a>
+                        )}
+                    </div>
+                    <div className="flex flex-wrap items-center">
+                        {!isMalicious && (
+                            <div>
+                                <div className="flex items-center gap-1.5 rounded-md border border-green-700 bg-green-900/30 px-3 py-2">
+                                    <ShieldCheck className="h-4 w-4 shrink-0 text-green-400" />
+                                    <span className="text-xs font-semibold text-green-300">
+                                        Not flagged as malicious
+                                    </span>
+                                </div>
+                                <span className="mt-1 block text-xs text-gray-400">
+                                    Scorecard updated:{' '}
+                                    {new Date(project.updatedAt).toLocaleDateString(
+                                        'en-US',
+                                        {
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric',
+                                        },
+                                    )}
+                                </span>
+                            </div>
+                        )}
+                    </div>
+                </>
+            )}
         </div>
     )
 }

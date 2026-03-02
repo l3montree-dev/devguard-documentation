@@ -85,20 +85,24 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
                             isMalicious={result.maliciousPackage != null}
                         />
                     </div>
-                    <div className="shrink-0">
-                        <OverallScoreGauge score={project.scoreCardScore} />
-                    </div>
+                    {project && (
+                        <div className="shrink-0">
+                            <OverallScoreGauge score={project.scoreCardScore} />
+                        </div>
+                    )}
                 </div>
             </div>
 
             {/* Two-column: Scorecard + Vulnerabilities */}
             <div className="grid items-stretch gap-4 md:grid-cols-2">
-                <div className="rounded-xl border border-gray-700 bg-gray-800/50 p-6">
-                    <h2 className="mb-4 text-base font-bold text-white">
-                        Open SSF Scorecard
-                    </h2>
-                    <ScoreCardChart checks={project.scoreCard.checks} />
-                </div>
+                {project?.scoreCard && (
+                    <div className="rounded-xl border border-gray-700 bg-gray-800/50 p-6">
+                        <h2 className="mb-4 text-base font-bold text-white">
+                            Open SSF Scorecard
+                        </h2>
+                        <ScoreCardChart checks={project.scoreCard.checks} />
+                    </div>
+                )}
 
                 <div className="rounded-xl border border-gray-700 bg-gray-800/50 p-6">
                     <h2 className="mb-4 text-base font-bold text-white">
