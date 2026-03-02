@@ -1,25 +1,27 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+// TW v4: @import must come before @config
+@import "tailwindcss";
+@config "../../tailwind.config.js";
 @import 'swagger-ui-react/swagger-ui.css';
 @import "./swagger-ui-custom.scss";
 
-._bg-neutral-900 {
-  background-color: #1F2937;
-}
-
-.dark\:_bg-\[linear-gradient\(1deg\,\#383838\,\#212121\)\]:is(html[class~=dark] *) {
-  background-image: none;
-}
-
-.dark\:_bg-neutral-900:is(html[class~=dark] *) {
-  background-color: #161B23;
-}
-
-.nextra-sidebar-footer {
-  background-color: #050505;
-  box-shadow: none;
-}
+// --- nextra-theme-docs specific overrides (dead code with DWT, kept for reference) ---
+// ._bg-neutral-900 {
+//   background-color: #1F2937;
+// }
+//
+// .dark\:_bg-\[linear-gradient\(1deg\,\#383838\,\#212121\)\]:is(html[class~=dark] *) {
+//   background-image: none;
+// }
+//
+// .dark\:_bg-neutral-900:is(html[class~=dark] *) {
+//   background-color: #161B23;
+// }
+//
+// .nextra-sidebar-footer {
+//   background-color: #050505;
+//   box-shadow: none;
+// }
+// --- end nextra-theme-docs overrides ---
 
 summary h4 {
   margin-top: 0px !important;
@@ -90,7 +92,7 @@ summary h4 {
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
 
-    --nextra-bg: 0 0% 2% !important;
+    // --nextra-bg: 0 0% 2% !important; // nextra-theme-docs specific variable, dead code with DWT
   }
 }
 
@@ -122,6 +124,7 @@ nav > div > div {
   box-shadow: none !important;
 }
 
-._mx-auto._flex._max-w-\[90rem\] {
-  position: relative;
-}
+// nextra-theme-docs internal layout class (dead code with DWT)
+// ._mx-auto._flex._max-w-\[90rem\] {
+//   position: relative;
+// }
