@@ -43,12 +43,12 @@ export function PackageInspectorPage() {
 
     return (
         <Container>
-            <div className="absolute inset-0 -z-10">
+            <div className="pointer-events-none fixed inset-0 -z-50">
                 <Particles
                     particleColors={['#ffffff']}
                     particleCount={300}
                     particleSpread={30}
-                    speed={0.2}
+                    speed={0.05}
                     particleBaseSize={100}
                     alphaParticles={false}
                     disableRotation

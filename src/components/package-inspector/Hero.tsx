@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Search, ChevronDown } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
 import Image from 'next/image'
 import { HeroSection } from '@/components/ui/hero-input'
 import AnimatedContent from '@/components/ui/animated-content'
@@ -11,6 +11,10 @@ const ECOSYSTEM_NODES = [
     { src: '/icons/eco-logos/go-programming-language-icon.svg', alt: 'Go' },
     { src: '/icons/eco-logos/debian-logo-icon.svg', alt: 'Debian' },
     { src: '/icons/eco-logos/python-programming-language-icon.svg', alt: 'Python' },
+    { src: '/icons/eco-logos/Red_Hat_logo.svg', alt: 'Red Hat' },
+    { src: '/icons/eco-logos/Apache_Maven_logo.svg', alt: 'Maven' },
+    { src: '/icons/eco-logos/Alpine_logo.svg', alt: 'Alpine' },
+    { src: '/icons/eco-logos/Git_icon.svg', alt: 'Git' },
 ]
 
 const nodeItems = ECOSYSTEM_NODES.map((eco) => ({
@@ -40,22 +44,22 @@ const centerContent = (
 )
 
 const ECOSYSTEMS = [
-    { label: 'alpine', value: 'alpine' },
-    { label: 'bitnami', value: 'bitnami' },
-    { label: 'crates.io', value: 'crates.io' },
-    { label: 'debian', value: 'debian' },
-    { label: 'git', value: 'git' },
-    { label: 'go', value: 'go' },
-    { label: 'hex', value: 'hex' },
-    { label: 'maven', value: 'maven' },
+    { label: 'Alpine', value: 'alpine' },
+    { label: 'Bitnami', value: 'bitnami' },
+    { label: 'Crates.io', value: 'crates.io' },
+    { label: 'Debian', value: 'debian' },
+    { label: 'Git', value: 'git' },
+    { label: 'Go', value: 'go' },
+    { label: 'Hex', value: 'hex' },
+    { label: 'Maven', value: 'maven' },
     { label: 'npm', value: 'npm' },
-    { label: 'nuget', value: 'nuget' },
-    { label: 'opam', value: 'opam' },
-    { label: 'oss-fuzz', value: 'oss-fuzz' },
-    { label: 'packagist', value: 'packagist' },
-    { label: 'pub', value: 'pub' },
-    { label: 'red-hat', value: 'red-hat' },
-    { label: 'rubygems', value: 'rubygems' },
+    { label: 'NuGet', value: 'nuget' },
+    { label: 'Opam', value: 'opam' },
+    { label: 'OSS-Fuzz', value: 'oss-fuzz' },
+    { label: 'Packagist', value: 'packagist' },
+    { label: 'Pub', value: 'pub' },
+    { label: 'Red-Hat', value: 'red-hat' },
+    { label: 'Rubygems', value: 'rubygems' },
 ]
 
 interface PackageInspectorHeroProps {
@@ -73,7 +77,7 @@ export function PackageInspectorHero({
     error,
     isSearching,
 }: PackageInspectorHeroProps) {
-    const [mode, setMode] = useState<'idle' | 'structured' | 'direct'>('idle')
+    const [mode, setMode] = useState<'structured' | 'direct'>('structured')
     const [ecosystem, setEcosystem] = useState('npm')
     const [packageName, setPackageName] = useState('')
     const [version, setVersion] = useState('')
@@ -106,8 +110,7 @@ export function PackageInspectorHero({
 
     return (
         <div className="relative">
-            <div className="mx-auto max-w-7xl pb-24 pt-10 sm:pb-32 lg:grid lg:grid-cols-2 lg:items-center lg:gap-x-8 lg:py-40 px-6 lg:px-8">
-                <div>
+            <div className="mx-auto max-w-7xl pb-24 pt-10 sm:pb-32 lg:grid lg:grid-cols-2 lg:items-center lg:gap-x-8 lg:py-40">
                 <HeroSection
                     title="Package Inspector"
                     subtitle={
@@ -125,33 +128,11 @@ export function PackageInspectorHero({
                         }}
                     >
                         <div className="relative">
-                            {mode === 'idle' && (
-                                <div className="group relative">
-                                    <Search
-                                        className="absolute left-3 h-5 w-5 text-muted-foreground"
-                                        style={{ top: '2.125rem' }}
-                                    />
-                                    <input
-                                        readOnly
-                                        placeholder="Search purl..."
-                                        className={cn(
-                                            inputBaseClass,
-                                            'mt-5 cursor-pointer pl-10 pr-2.5',
-                                            error
-                                                ? 'border-red-500 focus-visible:border-red-500 focus-visible:ring-red-500/50'
-                                                : '',
-                                        )}
-                                        onFocus={() => setMode('structured')}
-                                        disabled={isSearching}
-                                    />
-                                </div>
-                            )}
-
                             {mode === 'structured' && (
                                 <>
                                     <div
                                         className={cn(
-                                            'mt-5 flex items-center rounded-xl border border-input bg-transparent transition-colors focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50 dark:bg-input/30',
+                                            'mt-5 flex items-center rounded-xl border border-input bg-background transition-colors focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50',
                                             error
                                                 ? 'border-red-500 focus-within:border-red-500 focus-within:ring-red-500/50'
                                                 : '',
@@ -184,7 +165,7 @@ export function PackageInspectorHero({
                                             onChange={(e) =>
                                                 setPackageName(e.target.value)
                                             }
-                                            placeholder="Name"
+                                            placeholder="name"
                                             className="h-12 flex-1 min-w-0 bg-transparent px-3 text-base outline-none placeholder:text-muted-foreground md:text-lg"
                                             disabled={isSearching}
                                             autoFocus
@@ -197,7 +178,7 @@ export function PackageInspectorHero({
                                                 setVersion(e.target.value)
                                                 setVersionError(null)
                                             }}
-                                            placeholder="Version"
+                                            placeholder="version"
                                             className="h-12 w-28 bg-transparent px-3 text-base outline-none placeholder:text-muted-foreground rounded-r-xl md:text-lg"
                                             disabled={isSearching}
                                         />
@@ -207,7 +188,7 @@ export function PackageInspectorHero({
                                         onClick={() => setMode('direct')}
                                         className="pl-1 mt-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
                                     >
-                                        Direct Search
+                                        Search via full purl
                                     </button>
                                 </>
                             )}
@@ -216,7 +197,7 @@ export function PackageInspectorHero({
                                 <>
                                     <div
                                         className={cn(
-                                            'mt-5 flex items-center rounded-xl border border-input bg-transparent transition-colors focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50 dark:bg-input/30',
+                                            'mt-5 flex items-center rounded-xl border border-input bg-background transition-colors focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50',
                                             error
                                                 ? 'border-red-500 focus-within:border-red-500 focus-within:ring-red-500/50'
                                                 : '',
@@ -254,7 +235,6 @@ export function PackageInspectorHero({
                         </div>
                     </form>
                 </HeroSection>
-                </div>
 
                 <AnimatedContent
                     distance={40}
