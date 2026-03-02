@@ -28,13 +28,13 @@ export default {
         theme: { 
             layout: 'raw' 
         }, 
-        display: 'hidden' 
+        title: 'Package Inspector',
     },
     "reachability-analysis": {
         theme: {
             layout: 'raw'
         },
-        display: 'hidden',
+        title: 'Reachability Analysis',
     },
     '404': {
         theme: {
