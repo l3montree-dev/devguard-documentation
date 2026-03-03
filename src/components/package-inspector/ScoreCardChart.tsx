@@ -76,7 +76,8 @@ function getScoreLabel(score: number): string {
 }
 
 export default function ScoreCardChart({ checks, score }: ScoreCardChartProps) {
-    const [expanded, setExpanded] = useState(false)
+    const [failingExpanded, setFailingExpanded] = useState(false)
+    const [passingExpanded, setPassingExpanded] = useState(false)
 
     const failing = checks.filter((c) => c.score === 0)
     const passing = checks
@@ -96,25 +97,19 @@ export default function ScoreCardChart({ checks, score }: ScoreCardChartProps) {
                             Supply chain security checks
                         </p>
                     </div>
-                    <button
-                        onClick={() => setExpanded(!expanded)}
-                        className="rounded-lg border border-gray-700 px-4 py-2 text-sm text-gray-400 transition-colors hover:bg-white/5 hover:text-gray-200"
-                    >
-                        {expanded ? '↑ Collapse' : '↓ Show all'}
-                    </button>
-                </div>
-
-                <div className="mb-5 flex justify-center">
-                    <OverallScoreGauge score={score} checks={checks} />
+                    <OverallScoreGauge score={score} />
                 </div>
 
                 {/* Failing */}
                 {failing.length > 0 && (
                     <div className="mb-4">
-                        <div className="mb-2 text-xs font-semibold uppercase tracking-wider text-gray-500">
-                            ● Failing
-                        </div>
-                        {!expanded ? (
+                        <button
+                            onClick={() => setFailingExpanded(!failingExpanded)}
+                            className="mb-2 text-xs font-semibold uppercase tracking-wider text-gray-500 transition-colors hover:text-gray-300"
+                        >
+                            {failingExpanded ? '▾' : '▸'} Failing ({failing.length})
+                        </button>
+                        {!failingExpanded ? (
                             <div className="flex flex-wrap gap-1.5">
                                 {failing.map((check) => (
                                     <Tooltip key={check.name}>
@@ -177,10 +172,13 @@ export default function ScoreCardChart({ checks, score }: ScoreCardChartProps) {
 
                 {/* Passing + N/A */}
                 <div>
-                    <div className="mb-2 text-xs font-semibold uppercase tracking-wider text-gray-500">
-                        ● Passing
-                    </div>
-                    {!expanded ? (
+                    <button
+                        onClick={() => setPassingExpanded(!passingExpanded)}
+                        className="mb-2 text-xs font-semibold uppercase tracking-wider text-gray-500 transition-colors hover:text-gray-300"
+                    >
+                        {passingExpanded ? '▾' : '▸'} Passing ({passing.length + na.length})
+                    </button>
+                    {!passingExpanded ? (
                         <div className="flex flex-wrap gap-1.5">
                             {[...passing, ...na].map((check) => (
                                 <Tooltip key={check.name}>
