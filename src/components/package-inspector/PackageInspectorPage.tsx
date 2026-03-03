@@ -43,6 +43,11 @@ export function PackageInspectorPage() {
 
     return (
         <Container>
+            {/* Left edge grid pattern */}
+            <div className="pointer-events-none fixed inset-y-0 left-0 z-50 hidden w-8 border-r border-r-[var(--grid-line-color)] bg-[repeating-linear-gradient(315deg,var(--grid-line-color)_0,var(--grid-line-color)_1px,transparent_0,transparent_50%)] [background-size:10px_10px] bg-fixed opacity-80 sm:block" />
+
+            {/* Right edge grid pattern */}
+            <div className="pointer-events-none fixed inset-y-0 right-0 z-50 hidden w-8 border-l border-l-[var(--grid-line-color)] bg-[repeating-linear-gradient(315deg,var(--grid-line-color)_0,var(--grid-line-color)_1px,transparent_0,transparent_50%)] [background-size:10px_10px] bg-fixed opacity-80 sm:block" />
             <div className="pointer-events-none fixed inset-0 -z-50">
                 <Particles
                     particleColors={['#ffffff']}

@@ -2,10 +2,12 @@ import React from 'react'
 import { Label, Pie, PieChart } from 'recharts'
 import { cn } from '@/lib/utils'
 import { ChartContainer } from '@/components/ui/chart'
+import { ScoreCardCheck } from './types'
 
 interface OverallScoreGaugeProps {
     score: number
     maxScore?: number
+    checks?: ScoreCardCheck[]
 }
 
 function getScoreLabel(score: number): string {
@@ -31,7 +33,11 @@ function getScoreFill(score: number): string {
 export default function OverallScoreGauge({
     score,
     maxScore = 10,
+    checks,
 }: OverallScoreGaugeProps) {
+    const passingCount = checks?.filter((c) => c.score > 0).length ?? 0
+    const failingCount = checks?.filter((c) => c.score === 0).length ?? 0
+    const naCount = checks?.filter((c) => c.score < 0).length ?? 0
     const data = [
         {
             name: 'Score',
@@ -46,11 +52,12 @@ export default function OverallScoreGauge({
     ]
 
     return (
-        <div className="flex flex-col items-center">
+        <div className="flex items-center">
+            <div className="flex flex-col items-center pr-5">
             <h3 className="mb-2 text-base font-semibold text-white">
                 Overall Score
             </h3>
-            <div className="h-[154px] w-[154px]">
+            <div className="h-[154px] w-[170px]">
                 <ChartContainer config={{}} className="aspect-square w-full">
                     <PieChart>
                         <Pie
@@ -106,6 +113,35 @@ export default function OverallScoreGauge({
             >
                 {getScoreLabel(score)}
             </span>
+            </div>
+            {checks && (
+                <div className="mt-3 flex flex-col items-center gap-3">
+                    <div className="text-center">
+                        <div className="font-mono text-base font-bold text-green-400">
+                            {passingCount}
+                        </div>
+                        <div className="text-[10px] text-gray-500">
+                            passing
+                        </div>
+                    </div>
+                    <div className="w-full h-px bg-white/[0.06]" />
+                    <div className="text-center">
+                        <div className="font-mono text-base font-bold text-red-400">
+                            {failingCount}
+                        </div>
+                        <div className="text-[10px] text-gray-500">
+                            failing
+                        </div>
+                    </div>
+                    <div className="w-full h-px bg-white/[0.06]" />
+                    <div className="text-center">
+                        <div className="font-mono text-base font-bold text-gray-500">
+                            {naCount}
+                        </div>
+                        <div className="text-[10px] text-gray-500">n/a</div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

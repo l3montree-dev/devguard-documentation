@@ -5,11 +5,11 @@ import { ExternalLink } from 'lucide-react'
 import { fetcher } from '@/lib/fetcher'
 import { extractPackageName } from '@/lib/utils'
 import { PackageInspectResult } from '@/components/package-inspector/types'
+import PackageHeroCard from '@/components/package-inspector/PackageHeroCard'
 import ScoreCardChart from '@/components/package-inspector/ScoreCardChart'
-import ProjectStats from '@/components/package-inspector/ProjectStats'
-import OverallScoreGauge from '@/components/package-inspector/OverallScoreIcon'
 import VulnerabilityList from '@/components/package-inspector/VulnerabilityList'
 import { Button } from '@/components/ui/button'
+import { Container } from '../ui/container'
 
 export default function PurlPageComponent({ purl }: { purl?: string }) {
     const purlString = typeof purl === 'string' ? purl : ''
@@ -50,9 +50,16 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
 
     const { component, affectedComponents, vulns } = result
     const { project } = component
+    const packageManager = result.purl.replace(/^pkg:/, '').split('/')[0]
+    const isMalicious = result.maliciousPackage != null
 
     return (
-        <div className="mx-auto max-w-6xl p-8">
+        <Container showTopGrid={false} showBottomGrid={false} className='py-5'>
+            {/* Left edge grid pattern */}
+            <div className="pointer-events-none fixed inset-y-0 left-0 z-50 hidden w-8 border-r border-r-[var(--grid-line-color)] bg-[repeating-linear-gradient(315deg,var(--grid-line-color)_0,var(--grid-line-color)_1px,transparent_0,transparent_50%)] [background-size:10px_10px] bg-fixed opacity-80 sm:block" />
+
+            {/* Right edge grid pattern */}
+            <div className="pointer-events-none fixed inset-y-0 right-0 z-50 hidden w-8 border-l border-l-[var(--grid-line-color)] bg-[repeating-linear-gradient(315deg,var(--grid-line-color)_0,var(--grid-line-color)_1px,transparent_0,transparent_50%)] [background-size:10px_10px] bg-fixed opacity-80 sm:block" />
             <Head>
                 <title>{packageName} | Package Inspector</title>
             </Head>
@@ -64,43 +71,19 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
                 </p>
             </div>
 
-            {/* Hero card */}
-            <div className="mb-4 rounded-xl border border-gray-700 bg-gray-800/50 p-6">
-                <div className="flex items-start justify-between gap-6">
-                    <div className="min-w-0 flex-1">
-                        <div className="mb-1 flex items-baseline gap-3">
-                            <h1 className="text-3xl font-bold text-white">
-                                {packageName}
-                            </h1>
-                            {component.version && (
-                                <span className="text-lg text-gray-400">
-                                    v{component.version}
-                                </span>
-                            )}
-                        </div>
-                        <ProjectStats
-                            project={project}
-                            purl={result.purl}
-                            published={component.published}
-                            isMalicious={result.maliciousPackage != null}
-                        />
-                    </div>
-                    {project && (
-                        <div className="shrink-0">
-                            <OverallScoreGauge score={project.scoreCardScore} />
-                        </div>
-                    )}
-                </div>
-            </div>
+            <PackageHeroCard
+                packageName={packageName}
+                packageManager={packageManager}
+                component={component}
+                project={project}
+                isMalicious={isMalicious}
+            />
 
             {/* Two-column: Scorecard + Vulnerabilities */}
             <div className="grid items-stretch gap-4 md:grid-cols-2">
                 {project?.scoreCard && (
                     <div className="rounded-xl border border-gray-700 bg-gray-800/50 p-6">
-                        <h2 className="mb-4 text-base font-bold text-white">
-                            Open SSF Scorecard
-                        </h2>
-                        <ScoreCardChart checks={project.scoreCard.checks} />
+                        <ScoreCardChart checks={project.scoreCard.checks} score={project.scoreCardScore} />
                     </div>
                 )}
 
@@ -136,6 +119,6 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
                     </Button>
                 </div>
             </div>
-        </div>
+        </Container>
     )
 }
