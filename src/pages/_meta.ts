@@ -23,12 +23,16 @@ export default {
             layout: 'raw',
         },
         title: 'Vulnerability Database',
+        type: 'page',
+        href: '/vulnerability-database'
     },
     'package-inspector': { 
         theme: { 
             layout: 'raw' 
         }, 
         title: 'Package Inspector',
+        type: 'page',
+        href: '/package-inspector'
     },
     "reachability-analysis": {
         theme: {
