@@ -1,9 +1,9 @@
-import {ContainerScanning} from '../../../components/texts/CICDJobs'
+# Container Scanning
 
-<ContainerScanning />
-
+The container-scanning component scans your container images for vulnerabilities. This ensures that your Docker images do not contain known vulnerabilities before they are deployed.
 
 The `container-scanning` component accepts the following inputs:
+
 | Name        | Description                     | Required     | Default Value        |
 |-------------|---------------------------------|-------------|----------------------|
 | `api_url`   | The DevGuard API URL             | No           |       `https://api.devguard.org`     |
@@ -15,13 +15,12 @@ The `container-scanning` component accepts the following inputs:
 
 
 
-### Usage Example:
-Here’s an example of how to call this component:
+## Usage Example:
+Here's an example of how to call this component:
 ```yaml copy
 include:
 - remote: "https://gitlab.com/l3montree/devguard/-/raw/main/templates/container-scanning.yml@main
   inputs:
-    asset_name: "myOrgnaization/projects/myProject/assets/myAsset"
+    asset_name: "myOrganization/projects/myProject/assets/myAsset"
     token: "$DEVGUARD_TOKEN"
 ```
-

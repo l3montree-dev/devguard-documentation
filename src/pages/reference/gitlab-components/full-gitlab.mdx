@@ -1,10 +1,17 @@
-import {Full} from '../../../components/texts/CICDJobs'
+# Full DevGuard Scan
 
-<Full />
+This reusable workflow performs a comprehensive security scan of your codebase using DevGuard.
+It includes:
+- Container Scanning
+- Static Application Security Testing (SAST)
+- Software Composition Analysis (SCA)
+- Secret Scanning
+- Infrastructure as Code (IaC) scanning
+- Image building
+- Image signing
+- Image deployment
 
-
-
-The `full-scan` workflow accepts the following inputs:
+The `full-scan` component accepts the following inputs:
 
 | Name        | Description                     | Required     | Default Value        |
 |-------------|---------------------------------|-------------|----------------------|
@@ -23,13 +30,13 @@ The `full-scan` workflow accepts the following inputs:
 
 
 
-Usage Example:
-Here’s an example of how to call this component:
+## Usage Example:
+Here's an example of how to call this component:
 
 ```yaml copy
 include:
 - remote: "https://gitlab.com/l3montree/devguard/-/raw/main/templates/full.yml@main
   inputs:
-    asset_name: "myOrgnaization/projects/myProject/assets/myAsset"
+    asset_name: "myOrganization/projects/myProject/assets/myAsset"
     token: "$DEVGUARD_TOKEN"
 ```

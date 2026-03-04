@@ -1,9 +1,8 @@
-import {CodeRiskIdentification} from '../../../components/texts/CICDJobs'
+# Code Risk Identification
 
-<CodeRiskIdentification />
+This workflow identifies potential security vulnerabilities in your codebase. It requires a sarif file as input to analyze and ensure that all code is secure and up to date.
 
-
-The `code-risk-identification` accepts the following inputs:
+The `code-risk-identification` workflow accepts the following inputs:
 
 | Name                   | Description                                                                   | Required    | Default Value                                    | 
 |------------------------|--------------------------|-----|----------------------------------|
@@ -12,9 +11,9 @@ The `code-risk-identification` accepts the following inputs:
 | `sarif-file`              | Path to the sarif file to be scanned | Yes         |         `sbom.json`                               |
 | `sarif-artifact-name`              | Name of the SBOM artifact to be downloaded | No         |         `''`                               |
 
-Usage Examples:
+## Usage Examples:
 
-if you have the sarif in the repository:
+If you have the sarif in the repository:
 
 ```yaml copy
 on:
@@ -25,7 +24,7 @@ jobs:
         uses: l3montree-dev/devguard-action/.github/workflows/code-risk-identification.yml@main
         with:
           api-url: https://api.devguard.org
-          asset-name: 'myOrgnaization/projects/myProject/assets/myAsset'
+          asset-name: 'myOrganization/projects/myProject/assets/myAsset'
           sbom-file: "./sbom.json" 
         secrets:
           devguard-token: ${{ secrets.DEVGUARD_TOKEN }}    
@@ -64,7 +63,7 @@ jobs:
         uses: l3montree-dev/devguard-action/.github/workflows/code-risk-identification.yml@feautre/sarif-sbom-upload-actions
         with:
           api-url: https://api.devguard.org
-          asset-name: 'myOrgnaization/projects/myProject/assets/myAsset'
+          asset-name: 'myOrganization/projects/myProject/assets/myAsset'
           sarif-artifact-name: gitleaks-report
           sarif-file: gitleaks.sarif.json
         secrets:

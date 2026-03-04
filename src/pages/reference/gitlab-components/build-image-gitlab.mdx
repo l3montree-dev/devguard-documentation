@@ -1,8 +1,9 @@
-import {Build} from '../../../components/texts/CICDJobs'
+# Build Image
 
-<Build />
+This workflow uses Kaniko to build and archive a Docker image. The image tag is created based on user inputs, Git tags, or commit information. The image is built, saved as a `.tar` file, and the digest is retrieved using crane. Finally, the image, tag, and digest are uploaded as artifacts. To use this component, you need to have a `Dockerfile` in your repository's root directory.
 
-The `build-image` workflow accepts the following inputs:
+The `build-image` component accepts the following inputs:
+
 | Name        | Description                     | Required     | Default Value        |
 |-------------|---------------------------------|-------------|----------------------|
 | `api_url`   | The DevGuard API URL             | No           |       `https://api.devguard.org`     |
@@ -15,15 +16,13 @@ The `build-image` workflow accepts the following inputs:
 | `push_image`| Pushes the image directly to the registry instead of uploading as an artifact | No | `false` |
 
 
-Usage Example:
-Here’s an example of how to call this component:
+## Usage Example:
+Here's an example of how to call this component:
 
 ```yaml copy
 include:
 - remote: "https://gitlab.com/l3montree/devguard/-/raw/main/templates/build-image.yml@main
   inputs:
-    asset_name: "myOrgnaization/projects/myProject/assets/myAsset"
+    asset_name: "myOrganization/projects/myProject/assets/myAsset"
     token: "$DEVGUARD_TOKEN"
 ```
-
-

@@ -1,9 +1,8 @@
-import {DependencyRiskIdentification} from '../../../components/texts/CICDJobs'
+# Dependency Risk Identification
 
-<DependencyRiskIdentification />
+This workflow identifies potential security vulnerabilities in a project's dependencies. It requires a Software Bill of Materials (SBOM) as input to analyze and ensure that all dependencies are secure and up to date.
 
-
-The `dependency-risk-identification` accepts the following inputs:
+The `dependency-risk-identification` workflow accepts the following inputs:
 | Name                   | Description                                                                   | Required    | Default Value                                    | 
 |------------------------|--------------------------|-----|----------------------------------|
 | `api-url`               | URL of the DevGuard API                                           | No          | `https://api.devguard.org`                 |  
@@ -11,9 +10,9 @@ The `dependency-risk-identification` accepts the following inputs:
 | `sbom-file`              | Path to the SBOM file to be scanned | Yes         |         `sbom.json`                               |
 | `sbom-artifact-name`              | Name of the SBOM artifact to be downloaded | No         |         `''`                               |
 
-Usage Examples:
+## Usage Examples:
 
-if you have the sbom in the repository:
+If you have the sbom in the repository:
 
 ```yaml copy
 name: DevGuard Workflow
@@ -26,7 +25,7 @@ jobs:
         uses: l3montree-dev/devguard-action/.github/workflows/dependency-risk-identification.yml@main
         with:
           api-url: https://api.devguard.org
-          asset-name: 'myOrgnaization/projects/myProject/assets/myAsset'
+          asset-name: 'myOrganization/projects/myProject/assets/myAsset'
           sbom-file: "./sbom.json" 
         secrets:
           devguard-token: ${{ secrets.DEVGUARD_TOKEN }}    
@@ -66,7 +65,7 @@ jobs:
         uses: l3montree-dev/devguard-action/.github/workflows/dependency-risk-identification.yml@main
         with:
           api-url: https://api.devguard.org
-          asset-name: 'myOrgnaization/projects/myProject/assets/myAsset'
+          asset-name: 'myOrganization/projects/myProject/assets/myAsset'
           sbom-artifact-name: sbom-report
           sbom-file: sbom.json
         secrets:

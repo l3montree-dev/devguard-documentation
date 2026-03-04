@@ -1,38 +1,37 @@
 // Copyright 2025 rafaeishikho.
 // SPDX-License-Identifier: Apache-2.0
 export default {
-    full: {
+    'full-github': {
         title: 'Full',
     },
-
-    'secret-scanning': {
+    'secret-scanning-github': {
         title: 'Secret Scanning',
     },
-    sast: {
+    'sast-github': {
         title: 'Static Application Security Testing',
     },
-    iac: {
+    'iac-github': {
         title: 'Infrastructure as Code',
     },
-    sca: {
+    'sca-github': {
         title: 'Software Composition Analysis',
     },
-    'container-scanning': {
+    'container-scanning-github': {
         title: 'Container Scanning',
     },
-    'build-image': {
+    'build-image-github': {
         title: 'Build Image',
     },
-    sign: {
+    'sign-github': {
         title: 'Sign Image',
     },
-    deploy: {
+    'deploy-github': {
         title: 'Deploy Image',
     },
-    'dependency-risk-identification': {
+    'dependency-risk-identification-github': {
         title: 'Dependency Risk Identification',
     },
-    'code-risk-identification': {
+    'code-risk-identification-github': {
         title: 'Code Risk Identification',
     },
 }
