@@ -1,6 +1,88 @@
-// TW v4: @import must come before @config
 @import "tailwindcss" prefix(custom);
-@config "../../tailwind.config.js";
+
+@custom-variant dark (&:where([data-kern-theme="dark"], [data-kern-theme="dark"] *));
+
+@theme {
+  /* Font families */
+  --font-family-sans: var(--font-inter), Inter, sans-serif;
+  --font-family-lexend: var(--font-lexend), Lexend, sans-serif;
+
+  /* l3 brand colors */
+  --color-l3-50: #fbfcea;
+  --color-l3-100: #f9f9c8;
+  --color-l3-200: #f5f193;
+  --color-l3-300: #efe355;
+  --color-l3-400: #e9d432;
+  --color-l3-500: #d8ba1a;
+  --color-l3-600: #ba9214;
+  --color-l3-700: #956b13;
+  --color-l3-800: #7c5517;
+  --color-l3-900: #69461a;
+  --color-l3-950: #3d250b;
+
+  /* devguard colors */
+  --color-dg-300: #161b23;
+  --color-dg-400: #0c1117;
+  --color-dg-950: #02040a;
+  --color-bg-secondary: #161b23;
+
+  /* Keyframes */
+  @keyframes logo-cloud {
+    from { transform: translateX(0); }
+    to { transform: translateX(calc(-100% - 4rem)); }
+  }
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+  @keyframes star-movement-bottom {
+    0% { transform: translate(0%, 0%); opacity: 1; }
+    100% { transform: translate(-100%, 0%); opacity: 0; }
+  }
+  @keyframes star-movement-top {
+    0% { transform: translate(0%, 0%); opacity: 1; }
+    100% { transform: translate(100%, 0%); opacity: 0; }
+  }
+
+  /* Animations */
+  --animate-logo-cloud: logo-cloud 85s linear infinite;
+  --animate-shimmer: shimmer 2s infinite;
+  --animate-star-movement-bottom: star-movement-bottom linear infinite alternate;
+  --animate-star-movement-top: star-movement-top linear infinite alternate;
+}
+
+@theme inline {
+  /* shadcn/ui semantic colors — inlined so utilities reference runtime CSS vars */
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-chart-1: hsl(var(--chart-1));
+  --color-chart-2: hsl(var(--chart-2));
+  --color-chart-3: hsl(var(--chart-3));
+  --color-chart-4: hsl(var(--chart-4));
+  --color-chart-5: hsl(var(--chart-5));
+
+  /* Border radius — reference the :root --radius variable from shadcn */
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+}
 @import 'swagger-ui-react/swagger-ui.css';
 @import "./swagger-ui-custom.scss";
 
