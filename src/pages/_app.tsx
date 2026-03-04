@@ -12,7 +12,7 @@ export default function MyApp({ Component, pageProps }: any) {
                 className={cn(
                     inter.variable,
                     lexend.variable,
-                    'font-sans text-base',
+                    'custom:font-sans custom:text-base',
                 )}
             >
                 <Component {...pageProps} />

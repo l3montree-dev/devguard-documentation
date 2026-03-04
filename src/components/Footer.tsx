@@ -69,57 +69,57 @@ const navigation = {
 
 export default function Footer() {
     return (
-        <footer className="bg-[#161B23]">
-            <div className="mx-auto max-w-7xl px-6 pb-8 pt-16 sm:pt-24 lg:px-8 lg:pt-32">
-                <div className="xl:grid xl:grid-cols-3 xl:gap-8">
-                    <div className="space-y-8">
+        <footer className="custom:bg-[#161B23]">
+            <div className="custom:mx-auto custom:max-w-7xl custom:px-6 custom:pb-8 custom:pt-16 custom:sm:pt-24 custom:lg:px-8 custom:lg:pt-32">
+                <div className="custom:xl:grid custom:xl:grid-cols-3 custom:xl:gap-8">
+                    <div className="custom:space-y-8">
                         <Image
                             width={200}
                             height={50}
                             alt="DevGuard Logo"
                             src="/logo-inverse-horizontal.svg"
-                            className="h-12 w-auto"
+                            className="custom:h-12 custom:w-auto"
                         />
-                        <p className="text-balance text-sm/6 text-gray-300">
+                        <p className="custom:text-balance custom:text-sm/6 custom:text-gray-300">
                             The bond between the most important building blocks
                             of software security - simple, powerful & European
-                            <span className="ml-2 text-xl">🇪🇺</span>
+                            <span className="custom:ml-2 custom:text-xl">🇪🇺</span>
                         </p>
-                        <div className="flex gap-x-6">
+                        <div className="custom:flex custom:gap-x-6">
                             {navigation.social.map((item) => (
                                 <a
                                     key={item.name}
                                     href={item.href}
-                                    className="hover:opacity-50"
+                                    className="custom:hover:opacity-50"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
-                                    <span className="sr-only">{item.name}</span>
+                                    <span className="custom:sr-only">{item.name}</span>
                                     <Image
                                         src={item.icon}
                                         alt={item.name}
                                         width={24}
                                         height={24}
-                                        className="h-6 w-6 opacity-80"
+                                        className="custom:h-6 custom:w-6 custom:opacity-80"
                                     />
                                 </a>
                             ))}
                         </div>
                     </div>
-                    <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
-                        <div className="md:grid md:grid-cols-2 md:gap-8">
+                    <div className="custom:mt-16 custom:grid custom:grid-cols-2 custom:gap-8 custom:xl:col-span-2 custom:xl:mt-0">
+                        <div className="custom:md:grid custom:md:grid-cols-2 custom:md:gap-8">
                             <div>
-                                <h3 className="text-sm/6 font-semibold text-white">
+                                <h3 className="custom:text-sm/6 custom:font-semibold custom:text-white">
                                     Product
                                 </h3>
-                                <ul role="list" className="mt-6 space-y-4">
+                                <ul role="list" className="custom:mt-6 custom:space-y-4">
                                     {navigation.product.map((item) => (
                                         <li key={item.name}>
                                             <a
                                                 href={item.href}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="text-sm/6 text-gray-400 hover:text-white"
+                                                className="custom:text-sm/6 custom:text-gray-400 custom:hover:text-white"
                                             >
                                                 {item.name}
                                             </a>
@@ -127,18 +127,18 @@ export default function Footer() {
                                     ))}
                                 </ul>
                             </div>
-                            <div className="mt-10 md:mt-0">
-                                <h3 className="text-sm/6 font-semibold text-white">
+                            <div className="custom:mt-10 custom:md:mt-0">
+                                <h3 className="custom:text-sm/6 custom:font-semibold custom:text-white">
                                     Support
                                 </h3>
-                                <ul role="list" className="mt-6 space-y-4">
+                                <ul role="list" className="custom:mt-6 custom:space-y-4">
                                     {navigation.support.map((item) => (
                                         <li key={item.name}>
                                             <a
                                                 href={item.href}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="text-sm/6 text-gray-400 hover:text-white"
+                                                className="custom:text-sm/6 custom:text-gray-400 custom:hover:text-white"
                                             >
                                                 {item.name}
                                             </a>
@@ -147,19 +147,19 @@ export default function Footer() {
                                 </ul>
                             </div>
                         </div>
-                        <div className="md:grid md:grid-cols-2 md:gap-8">
+                        <div className="custom:md:grid custom:md:grid-cols-2 custom:md:gap-8">
                             <div>
-                                <h3 className="text-sm/6 font-semibold text-white">
+                                <h3 className="custom:text-sm/6 custom:font-semibold custom:text-white">
                                     Company
                                 </h3>
-                                <ul role="list" className="mt-6 space-y-4">
+                                <ul role="list" className="custom:mt-6 custom:space-y-4">
                                     {navigation.company.map((item) => (
                                         <li key={item.name}>
                                             <a
                                                 href={item.href}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="text-sm/6 text-gray-400 hover:text-white"
+                                                className="custom:text-sm/6 custom:text-gray-400 custom:hover:text-white"
                                             >
                                                 {item.name}
                                             </a>
@@ -167,18 +167,18 @@ export default function Footer() {
                                     ))}
                                 </ul>
                             </div>
-                            <div className="mt-10 md:mt-0">
-                                <h3 className="text-sm/6 font-semibold text-white">
+                            <div className="custom:mt-10 custom:md:mt-0">
+                                <h3 className="custom:text-sm/6 custom:font-semibold custom:text-white">
                                     Legal
                                 </h3>
-                                <ul role="list" className="mt-6 space-y-4">
+                                <ul role="list" className="custom:mt-6 custom:space-y-4">
                                     {navigation.legal.map((item) => (
                                         <li key={item.name}>
                                             <a
                                                 href={item.href}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="text-sm/6 text-gray-400 hover:text-white"
+                                                className="custom:text-sm/6 custom:text-gray-400 custom:hover:text-white"
                                             >
                                                 {item.name}
                                             </a>
@@ -189,8 +189,8 @@ export default function Footer() {
                         </div>
                     </div>
                 </div>
-                <div className="mt-16 border-t border-white/10 pt-8 sm:mt-20 lg:mt-24">
-                    <p className="text-sm/6 text-gray-400">
+                <div className="custom:mt-16 custom:border-t custom:border-white/10 custom:pt-8 custom:sm:mt-20 custom:lg:mt-24">
+                    <p className="custom:text-sm/6 custom:text-gray-400">
                         © {new Date().getFullYear()} L3montree GmbH and the
                         DevGuard Contributors
                     </p>

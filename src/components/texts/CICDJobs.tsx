@@ -7,7 +7,7 @@ export function SCA() {
     return (
         <CICDJobsText
             title="Software Composition Analysis (SCA)"
-            description="The software-composition-analysis (SCA) workflow performs Software Composition Analysis (SCA) to detect vulnerabilities in your project’s dependencies. It scans your software for outdated or vulnerable third-party libraries, helping you manage risks early in the development process."
+            description="The software-composition-analysis (SCA) workflow performs Software Composition Analysis (SCA) to detect vulnerabilities in your project's dependencies. It scans your software for outdated or vulnerable third-party libraries, helping you manage risks early in the development process."
         />
     )
 }
@@ -110,7 +110,7 @@ export function Full() {
                     This reusable workflow performs a comprehensive security
                     scan of your codebase using DevGuard. <br />
                     It includes:
-                    <ul className="mt-1 list-disc pl-5">
+                    <ul className="custom:mt-1 custom:list-disc custom:pl-5">
                         <li>Container Scanning</li>
                         <li>Static Application Security Testing (SAST)</li>
                         <li>Software Composition Analysis (SCA)</li>

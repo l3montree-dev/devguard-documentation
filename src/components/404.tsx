@@ -5,26 +5,26 @@ import { Button } from './ui/button'
 export default function NotFoundPage() {
     return (
         <>
-            <main className="grid min-h-full place-items-center bg-[#0C0F14] px-6 py-24 sm:py-32 lg:px-8">
-                <div className="text-center">
+            <main className="custom:grid custom:min-h-full custom:place-items-center custom:bg-[#0C0F14] custom:px-6 custom:py-24 custom:sm:py-32 custom:lg:px-8">
+                <div className="custom:text-center">
                     <Image
                         src="/404-gopher-dark.png"
                         alt="404 Not Found"
                         width={500}
                         height={500}
-                        className="mx-auto h-48 w-auto"
+                        className="custom:mx-auto custom:h-48 custom:w-auto"
                     />
-                    <h1 className="mt-4 text-balance text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+                    <h1 className="custom:mt-4 custom:text-balance custom:text-4xl custom:font-semibold custom:tracking-tight custom:text-white custom:sm:text-5xl">
                         Page not found
                     </h1>
-                    <p className="mt-6 text-pretty text-lg font-medium text-gray-400 sm:text-xl/8">
-                        Sorry, we couldn’t find the page you’re looking for.
+                    <p className="custom:mt-6 custom:text-pretty custom:text-lg custom:font-medium custom:text-gray-400 custom:sm:text-xl/8">
+                        Sorry, we couldn't find the page you're looking for.
                     </p>
-                    <div className="mt-10 flex items-center justify-center gap-x-6">
+                    <div className="custom:mt-10 custom:flex custom:items-center custom:justify-center custom:gap-x-6">
                         <Link href="/introduction">
                             <Button
                                 variant="secondary"
-                                className="bg-l3-400 !text-black hover:bg-l3-500"
+                                className="custom:bg-l3-400 custom:!text-black custom:hover:bg-l3-500"
                             >
                                 Back to documentation
                             </Button>

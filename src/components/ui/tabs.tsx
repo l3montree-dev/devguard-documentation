@@ -12,7 +12,7 @@ const TabsList = React.forwardRef<
     <TabsPrimitive.List
         ref={ref}
         className={cn(
-            'inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground',
+            'custom:inline-flex custom:h-10 custom:items-center custom:justify-center custom:rounded-md custom:bg-muted custom:p-1 custom:text-muted-foreground',
             className,
         )}
         {...props}
@@ -27,7 +27,7 @@ const TabsTrigger = React.forwardRef<
     <TabsPrimitive.Trigger
         ref={ref}
         className={cn(
-            'inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm',
+            'custom:inline-flex custom:items-center custom:justify-center custom:whitespace-nowrap custom:rounded-sm custom:px-3 custom:py-1.5 custom:text-sm custom:font-medium custom:ring-offset-background custom:transition-all custom:focus-visible:outline-none custom:focus-visible:ring-2 custom:focus-visible:ring-ring custom:focus-visible:ring-offset-2 custom:disabled:pointer-events-none custom:disabled:opacity-50 data-[state=active]:custom:bg-background data-[state=active]:custom:text-foreground data-[state=active]:custom:shadow-sm',
             className,
         )}
         {...props}
@@ -42,7 +42,7 @@ const TabsContent = React.forwardRef<
     <TabsPrimitive.Content
         ref={ref}
         className={cn(
-            'mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+            'custom:mt-2 custom:ring-offset-background custom:focus-visible:outline-none custom:focus-visible:ring-2 custom:focus-visible:ring-ring custom:focus-visible:ring-offset-2',
             className,
         )}
         {...props}

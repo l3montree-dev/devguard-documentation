@@ -1,5 +1,5 @@
 // TW v4: @import must come before @config
-@import "tailwindcss";
+@import "tailwindcss" prefix(custom);
 @config "../../tailwind.config.js";
 @import 'swagger-ui-react/swagger-ui.css';
 @import "./swagger-ui-custom.scss";
@@ -100,10 +100,10 @@ summary h4 {
 
 @layer base {
   * {
-    @apply border-border;
+    @apply custom:border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply custom:bg-background custom:text-foreground;
   }
 }
 

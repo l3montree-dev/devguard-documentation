@@ -19,13 +19,13 @@
 /* Reset Swagger UI to work with dark theme */
 .swagger-ui {
     h4 {
-        @apply text-foreground font-sans font-semibold;
+        @apply custom:text-foreground custom:font-sans custom:font-semibold;
     }
-    @apply text-foreground;
+    @apply custom:text-foreground;
     font-family: var(--font-inter), Inter, sans-serif;
 
     .json-schema-2020-12__title {
-        @apply text-foreground text-base font-semibold font-sans;
+        @apply custom:text-foreground custom:text-base custom:font-semibold custom:font-sans;
     }
 
     .model-box-control:focus,
@@ -39,45 +39,45 @@
     .opblock.opblock-put .tab-header .tab-item.active h4 span:after,
     .opblock.opblock-patch .tab-header .tab-item.active h4 span:after,
     .opblock.opblock-get .tab-header .tab-item.active h4 span:after {
-        @apply bg-primary;
+        @apply custom:bg-primary;
     }
 
     /* Fix wrapper background */
     .wrapper {
-        @apply p-0;
+        @apply custom:p-0;
     }
 
     .tab li {
-        @apply text-muted-foreground text-sm font-sans;
+        @apply custom:text-muted-foreground custom:text-sm custom:font-sans;
     }
 
     .tab {
-        @apply mb-2;
+        @apply custom:mb-2;
     }
 
     .opblock-description-wrapper p,
     .opblock-external-docs-wrapper p,
     .opblock-title_normal p {
-        @apply text-foreground text-sm font-sans;
+        @apply custom:text-foreground custom:text-sm custom:font-sans;
     }
 
     .parameter__name.required:after {
-        @apply text-destructive text-base top-0;
+        @apply custom:text-destructive custom:text-base custom:top-0;
         content: ' *';
     }
 
     .json-schema-2020-12__attribute.json-schema-2020-12__attribute--primary {
-        @apply text-primary font-semibold font-sans;
+        @apply custom:text-primary custom:font-semibold custom:font-sans;
     }
 
     .models .json-schema-2020-12 {
         .json-schema-2020-12-expand-deep-button {
-            @apply text-muted-foreground font-semibold font-sans;
+            @apply custom:text-muted-foreground custom:font-semibold custom:font-sans;
         }
 
 
         .json-schema-2020-12__title {
-            @apply text-foreground text-base font-semibold font-sans;
+            @apply custom:text-foreground custom:text-base custom:font-semibold custom:font-sans;
         }
     }
 
@@ -94,26 +94,26 @@
     }
 
     .computed-url {
-        @apply text-foreground;
+        @apply custom:text-foreground;
 
         code {
-            @apply bg-input text-sm rounded-md;
+            @apply custom:bg-input custom:text-sm custom:rounded-md;
         }
     }
 
     /* Information section */
     .info {
-        @apply my-5 hidden;
+        @apply custom:my-5 custom:hidden;
     }
 
     .info .title {
         font-family: var(--font-lexend), Lexend, sans-serif !important;
-        @apply font-bold text-3xl text-foreground
+        @apply custom:font-bold custom:text-3xl custom:text-foreground
     }
 
     .info .description p,
     .info .description div {
-        @apply text-foreground text-base leading-7 font-sans
+        @apply custom:text-foreground custom:text-base custom:leading-7 custom:font-sans
     }
 
     /* Operation blocks */
@@ -130,7 +130,7 @@
     .topbar {
         background: hsl(var(--card)) !important;
         border: 1px solid hsl(var(--border)) !important;
-        @apply rounded-md;
+        @apply custom:rounded-md;
         box-shadow: none !important;
     }
 
@@ -140,25 +140,25 @@
     }
 
     .opblock .opblock-section-header h4 {
-        @apply text-foreground font-semibold;
+        @apply custom:text-foreground custom:font-semibold;
     }
 
     .response-col_links {
-        @apply text-foreground;
+        @apply custom:text-foreground;
     }
 
     .response-control-media-type__accept-message {
-        @apply text-foreground;
+        @apply custom:text-foreground;
     }
 
     .opblock-description-wrapper p,
     .opblock-external-docs-wrapper p,
     .opblock-title_normal p {
-        @apply text-foreground text-sm;
+        @apply custom:text-foreground custom:text-sm;
     }
 
     .opblock-summary-path-description-wrapper {
-        @apply mt-0.5
+        @apply custom:mt-0.5
     }
 
     .opblock .opblock-summary .opblock-summary-control {}
@@ -169,7 +169,7 @@
 
     .opblock {
         /* keep opblock-specific spacing */
-        @apply mb-4;
+        @apply custom:mb-4;
     }
 
     .opblock .opblock-summary {
@@ -178,24 +178,24 @@
     }
 
     .opblock-tag {
-        @apply py-2.5 mt-5 mb-2.5;
+        @apply custom:py-2.5 custom:mt-5 custom:mb-2.5;
         color: hsl(var(--foreground)) !important;
         font-family: var(--font-lexend), Lexend, sans-serif !important;
         border-bottom: none !important;
 
         a.nostyle {
             color: white !important;
-            @apply text-2xl font-semibold text-foreground;
+            @apply custom:text-2xl custom:font-semibold custom:text-foreground;
         }
     }
 
     .opblock .opblock-summary-method {
-        @apply rounded-md font-semibold text-center w-20;
+        @apply custom:rounded-md custom:font-semibold custom:text-center custom:w-20;
     }
 
     .opblock {
         .opblock-section-header {
-            @apply bg-card text-foreground;
+            @apply custom:bg-card custom:text-foreground;
 
             .opblock-title {
                 color: hsl(var(--foreground)) !important;
@@ -221,7 +221,7 @@
     .json-schema-2020-12-keyword--enum .json-schema-2020-12-json-viewer__value,
     .json-schema-2020-12-keyword--examples .json-schema-2020-12-json-viewer__name,
     .json-schema-2020-12-keyword--examples .json-schema-2020-12-json-viewer__value {
-        @apply text-muted-foreground;
+        @apply custom:text-muted-foreground;
 
     }
 
@@ -275,7 +275,7 @@
         /* Summary text */
         .opblock-summary-description,
         .opblock-summary-path {
-            @apply text-sm text-muted-foreground font-sans;
+            @apply custom:text-sm custom:text-muted-foreground custom:font-sans;
         }
     }
 
@@ -298,12 +298,12 @@
     /* Parameters */
     .parameters-col_description {
         color: hsl(var(--foreground)) !important;
-        @apply text-sm;
+        @apply custom:text-sm;
     }
 
     .parameter__name,
     .parameter__type {
-        @apply font-semibold
+        @apply custom:font-semibold
     }
 
     .parameter__name {
@@ -313,11 +313,11 @@
 
 
     .json-schema-2020-12-expand-deep-button {
-        @apply text-muted-foreground font-semibold font-sans;
+        @apply custom:text-muted-foreground custom:font-semibold custom:font-sans;
     }
 
     .json-schema-2020-12-property .json-schema-2020-12__title {
-        @apply text-foreground text-sm font-semibold font-sans;
+        @apply custom:text-foreground custom:text-sm custom:font-semibold custom:font-sans;
     }
 
     .parameter__type {
@@ -333,7 +333,7 @@
     table thead tr td {
         color: hsl(var(--foreground)) !important;
         border-bottom: 1px solid hsl(var(--border)) !important;
-        @apply text-sm;
+        @apply custom:text-sm;
     }
 
     .parameters thead {
@@ -364,7 +364,7 @@
     .highlight-code {
         background: hsl(var(--muted)) !important;
         border: 1px solid hsl(var(--border)) !important;
-        @apply rounded-md;
+        @apply custom:rounded-md;
         color: hsl(var(--foreground)) !important;
     }
 
@@ -381,14 +381,14 @@
 
     .model-box,
     section.models .model-container {
-        @apply rounded-md;
+        @apply custom:rounded-md;
     }
 
     .model-title,
     section.models h4 {
         color: hsl(var(--foreground)) !important;
         border-bottom: 1px solid hsl(var(--border)) !important;
-        @apply pb-2;
+        @apply custom:pb-2;
     }
 
     .model .property {
@@ -412,10 +412,10 @@
 
     .scheme-container {
         box-shadow: none !important;
-        @apply rounded-md text-foreground p-4;
+        @apply custom:rounded-md custom:text-foreground custom:p-4;
 
         .servers-title {
-            @apply font-semibold text-base mb-1 block;
+            @apply custom:font-semibold custom:text-base custom:mb-1 custom:block;
         }
 
         .servers table tbody tr td:nth-child(1) {
@@ -432,7 +432,7 @@
         background: hsl(var(--input)) !important;
         color: hsl(var(--foreground)) !important;
         border: 1px solid hsl(var(--border)) !important;
-        @apply rounded-md;
+        @apply custom:rounded-md;
     }
 
     input[type=text]:focus,
@@ -452,7 +452,7 @@
         border-color: hsl(var(--primary)) !important;
         box-shadow: none !important;
         font-weight: 600 !important;
-        @apply rounded-md font-semibold;
+        @apply custom:rounded-md custom:font-semibold;
     }
 
     .btn:hover {
@@ -490,11 +490,11 @@
     .info a,
     a {
         color: hsl(var(--nextra-primary-hue) var(--nextra-primary-saturation) calc(var(--nextra-primary-lightness) + 0%) / var(--tw-text-opacity, 1)) !important;
-        @apply text-base
+        @apply custom:text-base
     }
 
     .info hgroup.main a {
-        @apply text-sm
+        @apply custom:text-sm
     }
 
     a.nostyle {
@@ -502,7 +502,7 @@
     }
 
     a:hover {
-        @apply underline;
+        @apply custom:underline;
         color: hsl(var(--nextra-primary-hue) var(--nextra-primary-saturation) calc(var(--nextra-primary-lightness) + 0%) / var(--tw-text-opacity, 1)) !important;
     }
 
@@ -545,7 +545,7 @@
     .info .title small {
         background: hsl(var(--muted)) !important;
         color: hsl(var(--muted-foreground)) !important;
-        @apply rounded-md px-1.5 py-0;
+        @apply custom:rounded-md custom:px-1.5 custom:py-0;
     }
 
     /* JSON schema properties */
@@ -567,7 +567,7 @@
     .markdown code {
         background: hsl(var(--muted)) !important;
         padding: 2px 6px !important;
-        @apply px-1.5 py-0.5;
+        @apply custom:px-1.5 custom:py-0.5;
         border-radius: calc(var(--radius) - 2px) !important;
     }
 
@@ -576,7 +576,7 @@
         background: hsl(var(--destructive) / 0.1) !important;
         border: 1px solid hsl(var(--destructive) / 0.3) !important;
         color: hsl(var(--destructive)) !important;
-        @apply rounded-md;
+        @apply custom:rounded-md;
     }
 
     /* Success messages */

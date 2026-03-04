@@ -1,14 +1,14 @@
 export default function PageContentComingSoon() {
     return (
-        <div className="px-8 py-24">
-            <div className="relative block w-full rounded-lg border-2 border-dashed border-gray-400/40 p-12 text-center">
+        <div className="custom:px-8 custom:py-24">
+            <div className="custom:relative custom:block custom:w-full custom:rounded-lg custom:border-2 custom:border-dashed custom:border-gray-400/40 custom:p-12 custom:text-center">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
                     strokeWidth={1}
                     stroke="currentColor"
-                    className="mx-auto size-12 text-gray-400"
+                    className="custom:mx-auto custom:size-12 custom:text-gray-400"
                 >
                     <path
                         strokeLinecap="round"
@@ -17,7 +17,7 @@ export default function PageContentComingSoon() {
                     />
                 </svg>
 
-                <span className="mt-2 block text-sm font-semibold text-gray-400">
+                <span className="custom:mt-2 custom:block custom:text-sm custom:font-semibold custom:text-gray-400">
                     Sorry, the content is coming soon. <br />
                     Work in is progress! <br />
                     ✂️

@@ -8,11 +8,11 @@ import {
 
 # CSAF & VEX Standards
 
-Modern software supply chains require standardized formats for communicating vulnerability information. <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">CSAF</span></TooltipTrigger><TooltipContent><p>Common Security Advisory Framework - Machine-readable security advisories</p></TooltipContent></Tooltip> (Common Security Advisory Framework) publishes security advisories while <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">VEX</span></TooltipTrigger><TooltipContent><p>Vulnerability Exploitability eXchange - Vulnerability impact assessments</p></TooltipContent></Tooltip> (Vulnerability Exploitability eXchange) communicates vulnerability impact assessments.
+Modern software supply chains require standardized formats for communicating vulnerability information. <Tooltip><TooltipTrigger asChild><span className="custom:underline custom:decoration-dotted custom:decoration-yellow-400 custom:decoration-1 custom:underline-offset-4 custom:cursor-pointer">CSAF</span></TooltipTrigger><TooltipContent><p>Common Security Advisory Framework - Machine-readable security advisories</p></TooltipContent></Tooltip> (Common Security Advisory Framework) publishes security advisories while <Tooltip><TooltipTrigger asChild><span className="custom:underline custom:decoration-dotted custom:decoration-yellow-400 custom:decoration-1 custom:underline-offset-4 custom:cursor-pointer">VEX</span></TooltipTrigger><TooltipContent><p>Vulnerability Exploitability eXchange - Vulnerability impact assessments</p></TooltipContent></Tooltip> (Vulnerability Exploitability eXchange) communicates vulnerability impact assessments.
 
 ## What is VEX?
 
-VEX[^1] enables organizations to explain whether specific vulnerabilities actually affect their products. A <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">CVE</span></TooltipTrigger><TooltipContent><p>Common Vulnerabilities and Exposures - Standardized vulnerability identifiers</p></TooltipContent></Tooltip> in your dependencies doesn't necessarily mean your application is exploitable—the vulnerability might exist in code never called, affect unused configurations, or be mitigated by compensating controls.
+VEX[^1] enables organizations to explain whether specific vulnerabilities actually affect their products. A <Tooltip><TooltipTrigger asChild><span className="custom:underline custom:decoration-dotted custom:decoration-yellow-400 custom:decoration-1 custom:underline-offset-4 custom:cursor-pointer">CVE</span></TooltipTrigger><TooltipContent><p>Common Vulnerabilities and Exposures - Standardized vulnerability identifiers</p></TooltipContent></Tooltip> in your dependencies doesn't necessarily mean your application is exploitable—the vulnerability might exist in code never called, affect unused configurations, or be mitigated by compensating controls.
 
 **Without VEX**: Customers see scan results and assume you're vulnerable. You repeatedly explain why specific CVEs don't affect you.
 
@@ -70,7 +70,7 @@ Describes products and dependency relationships. Recipients see complete product
 
 ### CycloneDX VEX: Component-Centric
 
-Details vulnerabilities at component level using <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">PURL</span></TooltipTrigger><TooltipContent><p>Package URL - Standardized package identifier</p></TooltipContent></Tooltip> (Package URL).
+Details vulnerabilities at component level using <Tooltip><TooltipTrigger asChild><span className="custom:underline custom:decoration-dotted custom:decoration-yellow-400 custom:decoration-1 custom:underline-offset-4 custom:cursor-pointer">PURL</span></TooltipTrigger><TooltipContent><p>Package URL - Standardized package identifier</p></TooltipContent></Tooltip> (Package URL).
 
 ```json
 {

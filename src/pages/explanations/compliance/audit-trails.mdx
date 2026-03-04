@@ -30,7 +30,7 @@ Compliance frameworks like ISO 27001 and CRA require demonstrable evidence of se
 
 ### Vulnerability Discovery & Tracking
 
-**Initial Detection**: When scanners identify a <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">CVE</span></TooltipTrigger><TooltipContent><p>Common Vulnerabilities and Exposures - Standardized vulnerability identifier</p></TooltipContent></Tooltip>, DevGuard logs discovery timestamp, affected component, initial risk score, and detection method.
+**Initial Detection**: When scanners identify a <Tooltip><TooltipTrigger asChild><span className="custom:underline custom:decoration-dotted custom:decoration-yellow-400 custom:decoration-1 custom:underline-offset-4 custom:cursor-pointer">CVE</span></TooltipTrigger><TooltipContent><p>Common Vulnerabilities and Exposures - Standardized vulnerability identifier</p></TooltipContent></Tooltip>, DevGuard logs discovery timestamp, affected component, initial risk score, and detection method.
 
 **Component Lifecycle**: Every library addition, update, and removal is tracked. When vulnerable components are removed, DevGuard automatically updates vulnerability status and logs the removal—providing evidence the vulnerability no longer exists.
 
@@ -45,7 +45,7 @@ All vulnerability state transitions logged with complete context:
 
 ### Risk Score Evolution
 
-DevGuard recalculates risk scores multiple times daily. Every change is logged with reasoning: new <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">EPSS</span></TooltipTrigger><TooltipContent><p>Exploit Prediction Scoring System - Exploitation probability</p></TooltipContent></Tooltip> data, exploit publication, patch availability, component depth changes.
+DevGuard recalculates risk scores multiple times daily. Every change is logged with reasoning: new <Tooltip><TooltipTrigger asChild><span className="custom:underline custom:decoration-dotted custom:decoration-yellow-400 custom:decoration-1 custom:underline-offset-4 custom:cursor-pointer">EPSS</span></TooltipTrigger><TooltipContent><p>Exploit Prediction Scoring System - Exploitation probability</p></TooltipContent></Tooltip> data, exploit publication, patch availability, component depth changes.
 
 ### Response Actions
 
@@ -105,7 +105,7 @@ Generate compliance reports from audit logs:
 - Risk acceptance documentation with approval chains
 - Component inventory with historical tracking
 
-Export formats: PDF (human review), JSON/CSV (automated tools), <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">VEX</span></TooltipTrigger><TooltipContent><p>Vulnerability Exploitability eXchange - Machine-readable assessments</p></TooltipContent></Tooltip> (supply chain partners).
+Export formats: PDF (human review), JSON/CSV (automated tools), <Tooltip><TooltipTrigger asChild><span className="custom:underline custom:decoration-dotted custom:decoration-yellow-400 custom:decoration-1 custom:underline-offset-4 custom:cursor-pointer">VEX</span></TooltipTrigger><TooltipContent><p>Vulnerability Exploitability eXchange - Machine-readable assessments</p></TooltipContent></Tooltip> (supply chain partners).
 
 ***
 

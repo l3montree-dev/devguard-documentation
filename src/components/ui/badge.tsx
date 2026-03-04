@@ -4,27 +4,27 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 
 const badgeVariants = cva(
-    'inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
+    'custom:inline-flex custom:items-center custom:rounded-full custom:border custom:px-2.5 custom:py-0.5 custom:text-xs custom:font-semibold custom:transition-colors custom:focus:outline-none custom:focus:ring-2 custom:focus:ring-ring custom:focus:ring-offset-2',
     {
         variants: {
             variant: {
                 default:
-                    'border-transparent bg-primary text-primary-foreground hover:bg-primary/80',
+                    'custom:border-transparent custom:bg-primary custom:text-primary-foreground custom:hover:bg-primary/80',
                 secondary:
-                    'border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80',
+                    'custom:border-transparent custom:bg-secondary custom:text-secondary-foreground custom:hover:bg-secondary/80',
                 destructive:
-                    'border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80',
-                outline: 'text-foreground',
+                    'custom:border-transparent custom:bg-destructive custom:text-destructive-foreground custom:hover:bg-destructive/80',
+                outline: 'custom:text-foreground',
                 goodFirstIssueBadge:
-                    'bg-[#26264a] text-[#c2b8ff] ring-1 ring-[#565280] text-sm h-5',
+                    'custom:bg-[#26264a] custom:text-[#c2b8ff] custom:ring-1 custom:ring-[#565280] custom:text-sm custom:h-5',
                 devguardBadge:
-                    'bg-[#26264a] text-[#c2b8ff] ring-1 ring-[#565280] text-sm h-5',
+                    'custom:bg-[#26264a] custom:text-[#c2b8ff] custom:ring-1 custom:ring-[#565280] custom:text-sm custom:h-5',
                 devguardWebBadge:
-                    'bg-[#162c41] text-[#3aadff] ring-1 ring-[#1d4d73] text-sm h-5',
+                    'custom:bg-[#162c41] custom:text-[#3aadff] custom:ring-1 custom:ring-[#1d4d73] custom:text-sm custom:h-5',
                 documentationRequired:
-                    'bg-[#cfbe50]/[0.18] text-[#cfbe4f] ring-1 ring-[#cfbe4f]/[0.3] text-sm h-5',
+                    'custom:bg-[#cfbe50]/[0.18] custom:text-[#cfbe4f] custom:ring-1 custom:ring-[#cfbe4f]/[0.3] custom:text-sm custom:h-5',
                 upcoming:
-                    'bg-blue-400/10 text-blue-400 ring-1 ring-blue-400 text-sm h-6',
+                    'custom:bg-blue-400/10 custom:text-blue-400 custom:ring-1 custom:ring-blue-400 custom:text-sm custom:h-6',
             },
         },
         defaultVariants: {
