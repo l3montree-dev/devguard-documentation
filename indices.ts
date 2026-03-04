@@ -241,6 +241,13 @@ export const indices = {
     }
   },
   "how-to-guides/security": {},
+  "how-to-guides/vexing": {
+    "vexing-debian-packages": {
+      "title": "Investigate CVE Findings in Debian Packages",
+      "description": "A repeatable, evidence-based playbook for determining whether a CVE in a Debian package is a false positive or requires an accept-risk justification using binary analysis.",
+      "filepath": "vexing-debian-packages"
+    }
+  },
   "how-to-guides/vulnerability-management": {
     "create-vuln-events": {
       "title": "Create Vulnerability Events",
