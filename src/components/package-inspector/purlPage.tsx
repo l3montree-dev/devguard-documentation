@@ -283,12 +283,12 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
             {/* Bottom buttons */}
             <div className="mt-6 flex justify-end gap-3">
                 <div>
-                    <Button>
+                    <Button asChild>
                         <Link href="/package-inspector">Get Back</Link>
                     </Button>
                 </div>
                 <div>
-                    <Button>
+                    <Button asChild>
                         <a
                             target="_blank"
                             href="https://main.devguard.org/"

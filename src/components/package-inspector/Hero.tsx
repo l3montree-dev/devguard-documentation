@@ -105,9 +105,6 @@ export function PackageInspectorHero({
         onSearch(purl)
     }
 
-    const inputBaseClass =
-        'h-12 w-full rounded-xl border border-input bg-transparent text-base outline-none transition-colors focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 dark:bg-input/30 md:text-lg'
-
     return (
         <div className="relative">
             <div className="mx-auto max-w-7xl pb-24 pt-10 sm:pb-32 lg:grid lg:grid-cols-2 lg:items-center lg:gap-x-8 lg:py-40">

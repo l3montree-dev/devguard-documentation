@@ -154,12 +154,12 @@ export default function ReachabilityAnalysisPackageDetails({ purl }: { purl?: st
             </div>
             <div className="mt-8 flex gap-3">
                 <div>
-                    <Button>
+                    <Button asChild>
                         <Link href="/reachability-analysis/">Get Back</Link>
                     </Button>
                 </div>
                 <div>
-                    <Button>
+                    <Button asChild>
                         <a
                             target="_blank"
                             href="https://main.devguard.org/"

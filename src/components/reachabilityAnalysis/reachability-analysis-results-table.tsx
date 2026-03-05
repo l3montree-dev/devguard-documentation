@@ -5,7 +5,7 @@ import {Table,TableBody,TableCell,TableHead,TableHeader,TableRow} from 'src/comp
 import {ColumnDef,SortingState,flexRender,getCoreRowModel,getSortedRowModel,useReactTable} from '@tanstack/react-table'
 
 import * as React from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/router'
 import { Package } from './columns'
 
 const PAGE_SIZE = 10

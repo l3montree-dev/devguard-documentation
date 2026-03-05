@@ -1,4 +1,4 @@
-export type affectedComponent = {
+export type AffectedComponent = {
     id: string
     Source: string
     purl: string
@@ -16,4 +16,4 @@ export type affectedComponent = {
     cves?: string
 }
 
-export type affectedComponents = affectedComponent[]
+export type AffectedComponents = AffectedComponent[]

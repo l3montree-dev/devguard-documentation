@@ -15,6 +15,10 @@ export const getServerSideCVEs = async (
         const res = await fetch(
             `https://api.main.devguard.org/api/v1/vulndb/list-ids-by-creation-date?offset=${offset}&limit=${CVES_PER_SITEMAP}`,
         )
+        if (!res.ok) {
+            console.error(`Upstream API error: ${res.status} ${res.statusText}`)
+            return undefined
+        }
         const repo: CVEList = await res.json()
         return repo
     } catch (error) {
