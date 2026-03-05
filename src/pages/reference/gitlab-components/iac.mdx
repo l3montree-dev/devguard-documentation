@@ -1,22 +1,22 @@
-# Sign
+# Infrastructure as Code (IaC) Gitlab Component
 
-The sign component is used to sign your code and artifacts. This ensures that the code you are deploying is the same code that was built and tested, providing an additional layer of security and trust in your deployment process.
+The Infrastructure as Code (iac) component focuses on analyzing your infrastructure code for security vulnerabilities. This component helps in identifying misconfigurations and security risks in your infrastructure setup, ensuring that your cloud resources are configured securely before deployment.
 
-The `sign` component accepts the following inputs:
+The `iac` component accepts the following inputs:
 
 | Name        | Description                     | Required     | Default Value        |
 |-------------|---------------------------------|-------------|----------------------|
 | `api_url`   | The DevGuard API URL             | No           |       `https://api.devguard.org`     |
 | `asset_name`| Name of the asset to scan                    |      Yes  |      |
 | `token`     | API token for authenticating with DevGuard   |      Yes   |      |
-| `sign_stage`| The stage where the scan is run      | No       |     `deploy`     |
+| `scan_stage`| The stage where the scan is run       | No       |     `test`     |
 | `runner_tags` | The runner tags used to select appropriate CI runners.   | No  | `""` |
 
 ## Usage Example:
 Here's an example of how to call this component:
 ```yaml copy
 include:
-- remote: "https://gitlab.com/l3montree/devguard/-/raw/main/templates/sign.yml"
+- remote: "https://gitlab.com/l3montree/devguard/-/raw/main/templates/infrastructure-as-code-scanning.yml"
   inputs:
     asset_name: "myOrganization/projects/myProject/assets/myAsset"
     token: "$DEVGUARD_TOKEN"

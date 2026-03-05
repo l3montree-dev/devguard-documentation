@@ -1,37 +1,37 @@
 // Copyright 2025 rafaeishikho.
 // SPDX-License-Identifier: Apache-2.0
 export default {
-    'full-gitlab': {
-        title: 'Full',
+    'full-scan': {
+        title: 'Full DevGuard Scan',
     },
-    'secret-scanning-gitlab': {
+    'secret-scanning': {
         title: 'Secret Scanning',
     },
-    'sast-gitlab': {
+    sast: {
         title: 'Static Application Security Testing (SAST)',
     },
-    'iac-gitlab': {
-        title: 'IaC',
+    iac: {
+        title: 'Infrastructure as Code (IaC)',
     },
-    'sca-gitlab': {
-        title: 'SCA',
+    sca: {
+        title: 'Software Composition Analysis (SCA)',
     },
-    'container-scanning-gitlab': {
+    'container-scanning': {
         title: 'Container Scanning',
     },
-    'build-image-gitlab': {
+    'build-image': {
         title: 'Build Image',
     },
-    'sign-gitlab': {
+    sign: {
         title: 'Sign Image',
     },
-    'deploy-gitlab': {
+    deploy: {
         title: 'Deploy Image',
     },
-    'dependency-risk-identification-gitlab': {
+    'dependency-risk-identification': {
         title: 'Dependency Risk Identification',
     },
-    'code-risk-identification-gitlab': {
+    'code-risk-identification': {
         title: 'Code Risk Identification',
     },
 }

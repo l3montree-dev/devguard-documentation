@@ -1,4 +1,4 @@
-# Build Image
+# Build Image Gitlab Component
 
 This workflow uses Kaniko to build and archive a Docker image. The image tag is created based on user inputs, Git tags, or commit information. The image is built, saved as a `.tar` file, and the digest is retrieved using crane. Finally, the image, tag, and digest are uploaded as artifacts. To use this component, you need to have a `Dockerfile` in your repository's root directory.
 
