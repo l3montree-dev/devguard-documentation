@@ -1,8 +1,9 @@
-import {IAC} from '../../../components/texts/CICDJobs'
+# Infrastructure as Code (IaC) Gitlab Component
 
-<IAC />
+The Infrastructure as Code (iac) component focuses on analyzing your infrastructure code for security vulnerabilities. This component helps in identifying misconfigurations and security risks in your infrastructure setup, ensuring that your cloud resources are configured securely before deployment.
 
-  The `iac` accept a following inputs:
+The `iac` component accepts the following inputs:
+
 | Name        | Description                     | Required     | Default Value        |
 |-------------|---------------------------------|-------------|----------------------|
 | `api_url`   | The DevGuard API URL             | No           |       `https://api.devguard.org`     |
@@ -11,13 +12,12 @@ import {IAC} from '../../../components/texts/CICDJobs'
 | `scan_stage`| The stage where the scan is run       | No       |     `test`     |
 | `runner_tags` | The runner tags used to select appropriate CI runners.   | No  | `""` |
 
-Usage Example:
-Here’s an example of how to call this component:
+## Usage Example:
+Here's an example of how to call this component:
 ```yaml copy
 include:
 - remote: "https://gitlab.com/l3montree/devguard/-/raw/main/templates/infrastructure-as-code-scanning.yml"
   inputs:
-    asset_name: "myOrgnaization/projects/myProject/assets/myAsset"
+    asset_name: "myOrganization/projects/myProject/assets/myAsset"
     token: "$DEVGUARD_TOKEN"
 ```
-

@@ -1,8 +1,8 @@
-import {Deploy} from '../../../components/texts/CICDJobs'
+# Deploy Gitlab Component
 
-<Deploy />
+The devguard-deploy component deploys the created OCI (Open Container Initiative) image to the GitLab container registry. This ensures that your images are securely stored and ready for deployment in your infrastructure. The deploy step runs only if the following jobs complete successfully: build-image, container-scanning, software-composition-analysis, sast, and secret-scanning.
 
-The `deploy` accepts the following inputs:
+The `deploy` component accepts the following inputs:
 
 | Name        | Description                     | Required     | Default Value        |
 |-------------|---------------------------------|-------------|----------------------|
@@ -13,14 +13,13 @@ The `deploy` accepts the following inputs:
 | `deploy_stage`| The stage where the scan is run       | No       |     `deploy`     |
 | `image_already_in_registry`| If the image is already in the registry, set this to true. This will skip the initial push step      | No       |     `false`     |
 
-Usage Example:
-Here’s an example of how to call this component:
+## Usage Example:
+Here's an example of how to call this component:
 
 ```yaml copy
 include:
 - remote: "https://gitlab.com/l3montree/devguard/-/raw/main/templates/deploy.yml"
   inputs:
-    asset_name: "myOrgnaization/projects/myProject/assets/myAsset"
+    asset_name: "myOrganization/projects/myProject/assets/myAsset"
     token: "$DEVGUARD_TOKEN"
 ```
-

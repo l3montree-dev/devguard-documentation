@@ -1,9 +1,8 @@
-import {CodeRiskIdentification} from '../../../components/texts/CICDJobs'
+# Code Risk Identification Gitlab Component
 
-<CodeRiskIdentification />
+This workflow identifies potential security vulnerabilities in your codebase. It requires a sarif file as input to analyze and ensure that all code is secure and up to date.
 
-
-The `code-risk-identification` accepts the following inputs:
+The `code-risk-identification` component accepts the following inputs:
 
 | Name        | Description                     | Required     | Default Value        |
 |-------------|---------------------------------|-------------|----------------------|
@@ -16,14 +15,14 @@ The `code-risk-identification` accepts the following inputs:
 | `needs`| The jobs that this job depends on      | No       |     `""`     |
 | `dependencies`| Specifies the jobs whose artifacts this job relies on | No | `""` |
 
-Usage Examples:
+## Usage Examples:
 
-if you have the sarif in the repository:
+If you have the sarif in the repository:
 
 ```yaml copy
 include:
   - remote: "https://gitlab.com/l3montree/devguard/-/raw/main/templates/code-risk-identification@main"
-      asset_name: "myOrgnaization/projects/myProject/assets/myAsset"
+      asset_name: "myOrganization/projects/myProject/assets/myAsset"
       token: "$DEVGUARD_TOKEN"
       sarif-file: "./result.sarif"
 
@@ -47,7 +46,7 @@ gitleaks-secret-scanning:
 include:
   - component: $CI_SERVER_FQDN/$CI_PROJECT_PATH/code-risk-identification@$CI_COMMIT_SHA
     inputs:
-      asset_name: "myOrgnaization/projects/myProject/assets/myAsset"
+      asset_name: "myOrganization/projects/myProject/assets/myAsset"
       token: "$DEVGUARD_TOKEN"
       sarif_file: "./result.sarif"
       needs: "gitleaks-secret-scanning"
