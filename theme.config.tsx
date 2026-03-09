@@ -104,6 +104,7 @@ const websiteId = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID
 const umamiUrl = process.env.NEXT_PUBLIC_UMAMI_URL
 
 const config: Partial<KernuxThemeConfig> = {
+    defaultLocale: 'en',
     umbrellaHeader: false,
     umbrellaFooter: false,
     docsRepositoryBase: 'https://github.com/l3montree-dev/devguard',
@@ -148,6 +149,10 @@ const config: Partial<KernuxThemeConfig> = {
         defaultMenuCollapseLevel: 1,
         disable: false,
         toggleButton: true,
+    },
+    search: {
+        placeholder: 'Search documentation...',
+        error: 'Failed to load search index.',
     },
     footer: {
         component: <Footer />,
