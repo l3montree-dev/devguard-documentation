@@ -110,7 +110,7 @@ export function Full() {
                     This reusable workflow performs a comprehensive security
                     scan of your codebase using DevGuard. <br />
                     It includes:
-                    <ul className="custom:mt-1 custom:list-disc custom:pl-5">
+                    <ul className="mt-1 list-disc pl-5">
                         <li>Container Scanning</li>
                         <li>Static Application Security Testing (SAST)</li>
                         <li>Software Composition Analysis (SCA)</li>

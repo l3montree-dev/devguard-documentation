@@ -23,11 +23,11 @@ export function AttributedImage({
     captionClassName = '',
     children,
 }: AttributedImageProps) {
-    let containerClasses = 'custom:my-6 custom:block'
+    let containerClasses = 'my-6 block'
     if (float === 'right') {
-        containerClasses += ' custom:md:float-right custom:md:ml-6 custom:md:mb-4 custom:md:clear-right'
+        containerClasses += ' md:float-right md:ml-6 md:mb-4 md:clear-right'
     } else if (float === 'left') {
-        containerClasses += ' custom:md:float-left custom:md:mr-6 custom:md:mb-4 custom:md:clear-left'
+        containerClasses += ' md:float-left md:mr-6 md:mb-4 md:clear-left'
     }
 
     const containerStyle =
@@ -38,20 +38,20 @@ export function AttributedImage({
             <img
                 src={src}
                 alt={alt}
-                className="custom:h-auto custom:w-full custom:rounded-lg custom:border custom:border-gray-200 custom:bg-white custom:shadow-xs custom:dark:border-gray-700 custom:dark:bg-black"
+                className="h-auto w-full rounded-lg border border-gray-200 bg-white shadow-xs dark:border-gray-700 dark:bg-black"
             />
 
-            <figcaption className="custom:text-left">
+            <figcaption className="text-left">
                 {/* attribution/source */}
                 {attribution && (
-                    <div className="custom:mt-1 custom:text-[10px] custom:leading-tight custom:text-gray-500 custom:dark:text-gray-500">
+                    <div className="mt-1 text-[10px] leading-tight text-gray-500 dark:text-gray-500">
                         {attribution}
                     </div>
                 )}
                 {/* description caption */}
                 {children && (
                     <div
-                        className={`custom:mt-2 custom:text-xs custom:font-medium custom:text-gray-700 custom:dark:text-gray-300 ${captionClassName}`}
+                        className={`mt-2 text-xs font-medium text-gray-700 dark:text-gray-300 ${captionClassName}`}
                     >
                         {children}
                     </div>

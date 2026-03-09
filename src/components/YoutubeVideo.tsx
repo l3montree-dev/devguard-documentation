@@ -30,20 +30,20 @@ const YoutubeVideo: FunctionComponent<{
         return (
             <div
                 className={cn(
-                    'custom:my-12 custom:ring-1 custom:ring-muted-foreground/50 custom:sm:rounded-lg',
+                    'my-12 ring-1 ring-muted-foreground/50 sm:rounded-lg',
                     props.className,
                 )}
             >
-                <div className="custom:items-center custom:px-4 custom:py-5 custom:text-center custom:sm:p-6">
-                    <p className="custom:text-base custom:font-semibold custom:text-white">
+                <div className="items-center px-4 py-5 text-center sm:p-6">
+                    <p className="text-base font-semibold text-white">
                         YouTube Video
                     </p>
-                    <p className="custom:mx-auto custom:mt-2 custom:max-w-xl custom:text-sm custom:text-muted-foreground">
+                    <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">
                         We require your consent. This content is provided by
                         YouTube. If you activate the content, personal data may
                         be processed and cookies may be set.
                     </p>
-                    <div className="custom:mt-6">
+                    <div className="mt-6">
                         <Button
                             variant="secondary"
                             className=""
@@ -58,9 +58,9 @@ const YoutubeVideo: FunctionComponent<{
     }
 
     return (
-        <div className="custom:my-12">
+        <div className="my-12">
             <iframe
-                className="custom:aspect-video custom:h-full custom:rounded-xl custom:shadow-2xl custom:ring-1 custom:ring-white/10"
+                className="aspect-video h-full rounded-xl shadow-2xl ring-1 ring-white/10"
                 width={'100%'}
                 src={attrs.src}
                 title={attrs.title}

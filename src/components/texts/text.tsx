@@ -8,10 +8,10 @@ interface CICDJobsTextProps {
 
 export default function CICDJobsText(props: CICDJobsTextProps) {
     return (
-        <div className="custom:mx-auto custom:mt-3 custom:max-w-7xl">
-            <div className="custom:mx-auto custom:max-w-4xl">
-                <h1 className="custom:text-3xl custom:font-bold custom:text-white">{props.title}</h1>
-                <p className="custom:mt-4 custom:text-base">{props.description}</p>
+        <div className="mx-auto mt-3 max-w-7xl">
+            <div className="mx-auto max-w-4xl">
+                <h1 className="text-3xl font-bold text-white">{props.title}</h1>
+                <p className="mt-4 text-base">{props.description}</p>
             </div>
         </div>
     )

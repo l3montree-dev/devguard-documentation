@@ -4,11 +4,11 @@ import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip
 
 # Risk Scoring
 
-DevGuard calculates risk scores for every vulnerability using a multi-dimensional formula that goes beyond simple <Tooltip><TooltipTrigger asChild><span className="custom:underline custom:decoration-dotted custom:decoration-yellow-400 custom:decoration-1 custom:underline-offset-4 custom:cursor-pointer">CVSS</span></TooltipTrigger><TooltipContent><p>Common Vulnerability Scoring System - Technical severity rating</p></TooltipContent></Tooltip> severity ratings. This enables accurate prioritization based on actual threat to your applications, not just theoretical vulnerability severity.
+DevGuard calculates risk scores for every vulnerability using a multi-dimensional formula that goes beyond simple <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">CVSS</span></TooltipTrigger><TooltipContent><p>Common Vulnerability Scoring System - Technical severity rating</p></TooltipContent></Tooltip> severity ratings. This enables accurate prioritization based on actual threat to your applications, not just theoretical vulnerability severity.
 
 ## Why Risk Scoring Matters
 
-Not all "High" severity vulnerabilities pose equal risk. A critical <Tooltip><TooltipTrigger asChild><span className="custom:underline custom:decoration-dotted custom:decoration-yellow-400 custom:decoration-1 custom:underline-offset-4 custom:cursor-pointer">CVE</span></TooltipTrigger><TooltipContent><p>Common Vulnerabilities and Exposures - Standardized vulnerability identifier</p></TooltipContent></Tooltip> in a deep transitive dependency with no known exploits presents far less danger than a moderate severity vulnerability in a direct dependency actively exploited in the wild. DevGuard's risk scoring combines multiple factors to answer: *Which vulnerabilities actually threaten your applications?*
+Not all "High" severity vulnerabilities pose equal risk. A critical <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">CVE</span></TooltipTrigger><TooltipContent><p>Common Vulnerabilities and Exposures - Standardized vulnerability identifier</p></TooltipContent></Tooltip> in a deep transitive dependency with no known exploits presents far less danger than a moderate severity vulnerability in a direct dependency actively exploited in the wild. DevGuard's risk scoring combines multiple factors to answer: *Which vulnerabilities actually threaten your applications?*
 
 ## The Risk Formula
 

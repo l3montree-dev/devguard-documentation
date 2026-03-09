@@ -49,7 +49,7 @@ Same source code produces different artifacts with distinct dependency sets:
 
 ## Artifact Identification
 
-DevGuard prefers having <Tooltip><TooltipTrigger asChild><span className="custom:underline custom:decoration-dotted custom:decoration-yellow-400 custom:decoration-1 custom:underline-offset-4 custom:cursor-pointer">PURLs</span></TooltipTrigger><TooltipContent><p>Package URL - Standardized package identifier</p></TooltipContent></Tooltip> (Package URL) for unique identification. But you can use any string. In some places DevGuard will URL-Encode the artifact name and place it in a path. Some reverse proxies like [traefik will block url encoded slashes `%2F`](https://doc.traefik.io/traefik/security/request-path/#path-sanitization) so keep that in mind:
+DevGuard prefers having <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">PURLs</span></TooltipTrigger><TooltipContent><p>Package URL - Standardized package identifier</p></TooltipContent></Tooltip> (Package URL) for unique identification. But you can use any string. In some places DevGuard will URL-Encode the artifact name and place it in a path. Some reverse proxies like [traefik will block url encoded slashes `%2F`](https://doc.traefik.io/traefik/security/request-path/#path-sanitization) so keep that in mind:
 ```
 pkg:oci/myapp@sha256:abc123?tag=v1.0.0-amd64
 pkg:oci/myapp@sha256:def456?tag=v1.0.0-arm64

@@ -1,5 +1,4 @@
-@import "tailwindcss" prefix(custom);
-
+@import "tailwindcss";
 @custom-variant dark (&:where([data-kern-theme="dark"], [data-kern-theme="dark"] *));
 
 @theme {
@@ -70,6 +69,7 @@
   --color-accent-foreground: hsl(var(--accent-foreground));
   --color-popover: hsl(var(--popover));
   --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-sidebar: hsl(var(--background));
   --color-card: hsl(var(--card));
   --color-card-foreground: hsl(var(--card-foreground));
   --color-chart-1: hsl(var(--chart-1));
@@ -180,12 +180,20 @@ summary h4 {
 
 
 
+/* Override DWT sidebar color — must be outside @layer to beat DWT's unlayered rules */
+:root {
+  --kern-color-layout-background-hued: hsl(var(--background));
+}
+[data-kern-theme="dark"] {
+  --kern-color-layout-background-hued: hsl(var(--background));
+}
+
 @layer base {
   * {
-    @apply custom:border-border;
+    @apply border-border;
   }
   body {
-    @apply custom:bg-background custom:text-foreground;
+    @apply bg-background text-foreground;
   }
 }
 
@@ -205,6 +213,23 @@ nav > div > p {
 nav > div > div {
   box-shadow: none !important;
 }
+
+// Search input — DWT-specific class, won't affect any other inputs in the project
+.kern-form-input__input {
+  background-color: hsl(var(--muted));
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  color: hsl(var(--foreground));
+
+  &::placeholder {
+    color: hsl(var(--muted-foreground));
+  }
+  &:focus {
+    outline: none;
+    border-color: hsl(var(--ring));
+  }
+}
+
 
 // nextra-theme-docs internal layout class (dead code with DWT)
 // ._mx-auto._flex._max-w-\[90rem\] {
