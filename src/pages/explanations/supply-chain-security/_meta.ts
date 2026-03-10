@@ -7,4 +7,5 @@ export default {
     'supply-chain-verification': { title: 'Supply Chain Verification' },
     'slsa-framework': { title: 'SLSA Framework' },
     'provenance-tracking': { title: 'Provenance Tracking' },
+    'transitive-vulnerability-path-analysis': { title: 'Transitive Vulnerability Path Analysis' },
 }
