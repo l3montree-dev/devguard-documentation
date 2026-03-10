@@ -70,7 +70,6 @@
         "remark-gemoji": "^8.0.0",
         "remark-gfm": "^4.0.1",
         "remark-mdx-disable-explicit-jsx": "^0.1.0",
-        "sass": "^1.97.3",
         "sharp": "^0.34.5",
         "sonner": "^2.0.6",
         "swagger-ui-react": "^5.31.2",

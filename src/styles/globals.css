@@ -1,0 +1,107 @@
+@import "@document-writing-tools/kernux-nextra-theme/src/opencode.css";
+
+/* Tell Tailwind to scan landing-page source files for used classes */
+@source "../**/*.{tsx,ts,jsx,js}";
+@source "../**/*.{md,mdx}";
+@source "../../node_modules/@document-writing-tools/kernux-nextra-theme";
+
+@import 'swagger-ui-react/swagger-ui.css';
+@import "./swagger-ui-custom.css";
+
+summary h4 {
+  margin-top: 0px !important;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Headings should be in Lexend font */
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-lexend), Lexend, sans-serif;
+  }
+
+  h1 {
+    line-height: normal;
+  }
+}
+
+nav>div>p {
+  box-shadow: none !important;
+}
+
+nav>div>div {
+  box-shadow: none !important;
+}
+
+.kern-form-input__input {
+  @apply h-10
+}
+
+@theme {
+  /* l3 brand colors */
+  --color-l3-50: #fbfcea;
+  --color-l3-100: #f9f9c8;
+  --color-l3-200: #f5f193;
+  --color-l3-300: #efe355;
+  --color-l3-400: #e9d432;
+  --color-l3-500: #d8ba1a;
+  --color-l3-600: #ba9214;
+  --color-l3-700: #956b13;
+  --color-l3-800: #7c5517;
+  --color-l3-900: #69461a;
+  --color-l3-950: #3d250b;
+
+  /* devguard colors */
+  --color-dg-300: #161b23;
+}
+
+:root {
+  --sidebar-background: var(--background);
+
+  /* ── Typography (consumed by DWT theme-bridge) ── */
+  --font-family: Inter, sans-serif;
+  --font-display: Lexend, sans-serif;
+
+  /* ── Swagger UI extras ───────────────────────── */
+  --blue: hsl(204 86% 53%);
+}
+
+[data-kern-theme="dark"] {
+  /* ── Colors ─────────────────────────────────── */
+  --primary: #d8ba1a;
+  --primary-foreground: #171717;
+  --background: #050505;
+  --foreground: #fafafa;
+  --muted: #262626;
+  --muted-foreground: #a3a3a3;
+  --border: #262626;
+  --accent: #262626;
+  --link-color: #d8ba1a;
+  --accent-foreground: #040202;
+  --destructive: #ef4444;
+  --destructive-foreground: #fafafa;
+
+  /* ── Optional surfaces ───────────────────────── */
+  --card: #0a0a0a;
+  --secondary: #262626;
+  --secondary-foreground: #fafafa;
+  --popover: #0a0a0a;
+  --popover-foreground: #fafafa;
+  --input: #262626;
+
+  /* ── Shape ───────────────────────────────────── */
+  --ring: #d8ba1a;
+}

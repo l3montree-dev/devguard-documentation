@@ -1,7 +1,6 @@
 // DWT theme styles must be imported first so project overrides take precedence
-import '@document-writing-tools/kernux-nextra-theme/style.css'
 import { cn } from '@/lib/utils'
-import '../styles/globals.scss'
+import '../styles/globals.css'
 import { inter, lexend } from '../fonts'
 import { TooltipProvider } from '@/components/ui/tooltip'
 

@@ -12,7 +12,7 @@
 }
 
 .swagger-ui .opblock.opblock-get .tab-header .tab-item.active h4 span:after {
-    background: hsl(var(--primary)) !important;
+    background: var(--primary) !important;
 }
 
 
@@ -88,7 +88,7 @@
         }
 
         path {
-            fill: hsl(var(--muted-foreground)) !important;
+            fill: var(--muted-foreground) !important;
             scale: 0.7;
         }
     }
@@ -128,15 +128,15 @@
     .model-box,
     .scheme-container,
     .topbar {
-        background: hsl(var(--card)) !important;
-        border: 1px solid hsl(var(--border)) !important;
+        background: var(--card) !important;
+        border: 1px solid var(--border) !important;
         @apply rounded-md;
         box-shadow: none !important;
     }
 
     table thead tr td,
     table thead tr th {
-        background: hsl(var(--background)) !important;
+        background: var(--background) !important;
     }
 
     .opblock .opblock-section-header h4 {
@@ -164,7 +164,7 @@
     .opblock .opblock-summary .opblock-summary-control {}
 
     .authorization__btn path {
-        fill: hsl(var(--muted-foreground)) !important;
+        fill: var(--muted-foreground) !important;
     }
 
     .opblock {
@@ -173,13 +173,13 @@
     }
 
     .opblock .opblock-summary {
-        border-color: hsl(var(--border)) !important;
+        border-color: var(--border) !important;
         background: transparent !important;
     }
 
     .opblock-tag {
         @apply py-2.5 mt-5 mb-2.5;
-        color: hsl(var(--foreground)) !important;
+        color: var(--foreground) !important;
         font-family: var(--font-lexend), Lexend, sans-serif !important;
         border-bottom: none !important;
 
@@ -198,7 +198,7 @@
             @apply bg-card text-foreground;
 
             .opblock-title {
-                color: hsl(var(--foreground)) !important;
+                color: var(--foreground) !important;
             }
         }
     }
@@ -211,7 +211,7 @@
             svg {
 
                 path {
-                    fill: hsl(var(--muted-foreground)) !important;
+                    fill: var(--muted-foreground) !important;
                 }
             }
         }
@@ -244,25 +244,25 @@
     /* GET method */
     .opblock.opblock-get .opblock-summary-method {
         background: hsl(168 100% 41%) !important;
-        color: hsl(var(--background)) !important;
+        color: var(--background) !important;
     }
 
     /* POST method */
     .opblock.opblock-post .opblock-summary-method {
         background: hsl(204 86% 53%) !important;
-        color: hsl(var(--background)) !important;
+        color: var(--background) !important;
     }
 
     /* PUT method */
     .opblock.opblock-put .opblock-summary-method {
         background: hsl(43 74% 66%) !important;
-        color: hsl(var(--background)) !important;
+        color: var(--background) !important;
     }
 
     /* PATCH method */
     .opblock.opblock-patch .opblock-summary-method {
         background: hsl(27 87% 67%) !important;
-        color: hsl(var(--background)) !important;
+        color: var(--background) !important;
     }
 
     /* DELETE method */
@@ -292,12 +292,12 @@
     .opblock-description-wrapper,
     .opblock-external-docs-wrapper,
     .opblock-title_normal {
-        color: hsl(var(--foreground)) !important;
+        color: var(--foreground) !important;
     }
 
     /* Parameters */
     .parameters-col_description {
-        color: hsl(var(--foreground)) !important;
+        color: var(--foreground) !important;
         @apply text-sm;
     }
 
@@ -307,7 +307,7 @@
     }
 
     .parameter__name {
-        color: hsl(var(--foreground)) !important;
+        color: var(--foreground) !important;
     }
 
 
@@ -321,18 +321,18 @@
     }
 
     .parameter__type {
-        color: hsl(var(--muted-foreground)) !important;
+        color: var(--muted-foreground) !important;
     }
 
     .parameter__in {
-        color: hsl(var(--muted-foreground)) !important;
+        color: var(--muted-foreground) !important;
         font-style: italic !important;
     }
 
     table thead tr th,
     table thead tr td {
-        color: hsl(var(--foreground)) !important;
-        border-bottom: 1px solid hsl(var(--border)) !important;
+        color: var(--foreground) !important;
+        border-bottom: 1px solid var(--border) !important;
         @apply text-sm;
     }
 
@@ -346,31 +346,31 @@
     }
 
     .responses-wrapper .btn {
-        background: hsl(var(--secondary)) !important;
-        color: hsl(var(--secondary-foreground)) !important;
-        border-color: hsl(var(--border)) !important;
+        background: var(--secondary) !important;
+        color: var(--secondary-foreground) !important;
+        border-color: var(--border) !important;
     }
 
     .response-col_status {
-        color: hsl(var(--foreground)) !important;
+        color: var(--foreground) !important;
     }
 
     .response-col_description {
-        color: hsl(var(--foreground)) !important;
+        color: var(--foreground) !important;
     }
 
     /* Code blocks */
     pre.microlight,
     .highlight-code {
-        background: hsl(var(--muted)) !important;
-        border: 1px solid hsl(var(--border)) !important;
+        background: var(--muted) !important;
+        border: 1px solid var(--border) !important;
         @apply rounded-md;
-        color: hsl(var(--foreground)) !important;
+        color: var(--foreground) !important;
     }
 
     .response code,
     .response pre {
-        color: hsl(var(--foreground)) !important;
+        color: var(--foreground) !important;
     }
 
     /* Models section */
@@ -386,28 +386,28 @@
 
     .model-title,
     section.models h4 {
-        color: hsl(var(--foreground)) !important;
-        border-bottom: 1px solid hsl(var(--border)) !important;
+        color: var(--foreground) !important;
+        border-bottom: 1px solid var(--border) !important;
         @apply pb-2;
     }
 
     .model .property {
-        color: hsl(var(--foreground)) !important;
+        color: var(--foreground) !important;
     }
 
     .model .property.primitive {
-        color: hsl(var(--muted-foreground)) !important;
+        color: var(--muted-foreground) !important;
     }
 
     /* Authorization */
     .btn.authorize {
-        background: hsl(var(--primary)) !important;
-        color: hsl(var(--primary-foreground)) !important;
-        border-color: hsl(var(--primary)) !important;
+        background: var(--primary) !important;
+        color: var(--primary-foreground) !important;
+        border-color: var(--primary) !important;
     }
 
     .btn.authorize svg {
-        fill: hsl(var(--primary-foreground)) !important;
+        fill: var(--primary-foreground) !important;
     }
 
     .scheme-container {
@@ -429,9 +429,9 @@
     input[type=email],
     textarea,
     select {
-        background: hsl(var(--input)) !important;
-        color: hsl(var(--foreground)) !important;
-        border: 1px solid hsl(var(--border)) !important;
+        background: var(--input) !important;
+        color: var(--foreground) !important;
+        border: 1px solid var(--border) !important;
         @apply rounded-md;
     }
 
@@ -440,16 +440,16 @@
     input[type=email]:focus,
     textarea:focus,
     select:focus {
-        border-color: hsl(var(--ring)) !important;
+        border-color: var(--ring) !important;
         outline: none !important;
-        box-shadow: 0 0 0 1px hsl(var(--ring)) !important;
+        box-shadow: 0 0 0 1px var(--ring) !important;
     }
 
     /* Buttons */
     .btn {
-        background: hsl(var(--primary)) !important;
-        color: hsl(var(--primary-foreground)) !important;
-        border-color: hsl(var(--primary)) !important;
+        background: var(--primary) !important;
+        color: var(--primary-foreground) !important;
+        border-color: var(--primary) !important;
         box-shadow: none !important;
         font-weight: 600 !important;
         @apply rounded-md font-semibold;
@@ -460,30 +460,30 @@
     }
 
     .btn-clear {
-        background: hsl(var(--secondary)) !important;
-        color: hsl(var(--secondary-foreground)) !important;
-        border-color: hsl(var(--border)) !important;
+        background: var(--secondary) !important;
+        color: var(--secondary-foreground) !important;
+        border-color: var(--border) !important;
     }
 
     .btn.execute {
-        background: hsl(var(--primary)) !important;
-        color: hsl(var(--primary-foreground)) !important;
+        background: var(--primary) !important;
+        color: var(--primary-foreground) !important;
     }
 
     /* Try it out section */
     .try-out__btn {
-        background: hsl(var(--secondary)) !important;
-        color: hsl(var(--secondary-foreground)) !important;
-        border: 1px solid hsl(var(--border)) !important;
+        background: var(--secondary) !important;
+        color: var(--secondary-foreground) !important;
+        border: 1px solid var(--border) !important;
     }
 
     /* Schema model */
     .model {
-        color: hsl(var(--foreground)) !important;
+        color: var(--foreground) !important;
     }
 
     .model-toggle {
-        color: hsl(var(--primary)) !important;
+        color: var(--primary) !important;
     }
 
     /* Links */
@@ -508,64 +508,64 @@
 
     /* Tab navigation */
     .tab li {
-        color: hsl(var(--muted-foreground)) !important;
+        color: var(--muted-foreground) !important;
     }
 
     .tab li.active {
-        color: hsl(var(--foreground)) !important;
+        color: var(--foreground) !important;
     }
 
     /* Topbar (if shown) */
     .topbar {
-        background: hsl(var(--card)) !important;
-        border-bottom: 1px solid hsl(var(--border)) !important;
+        background: var(--card) !important;
+        border-bottom: 1px solid var(--border) !important;
     }
 
     /* Loading animation */
     .loading-container .loading:before {
-        border-color: hsl(var(--muted-foreground)) !important;
+        border-color: var(--muted-foreground) !important;
     }
 
     .loading-container .loading:after {
-        border-top-color: hsl(var(--primary)) !important;
+        border-top-color: var(--primary) !important;
     }
 
     /* Server selection */
     select {
-        background: hsl(var(--input)) !important;
-        color: hsl(var(--foreground)) !important;
-        border: 1px solid hsl(var(--border)) !important;
+        background: var(--input) !important;
+        color: var(--foreground) !important;
+        border: 1px solid var(--border) !important;
     }
 
     label {
-        color: hsl(var(--foreground)) !important;
+        color: var(--foreground) !important;
     }
 
     /* Security definitions display */
     .info .title small {
-        background: hsl(var(--muted)) !important;
-        color: hsl(var(--muted-foreground)) !important;
+        background: var(--muted) !important;
+        color: var(--muted-foreground) !important;
         @apply rounded-md px-1.5 py-0;
     }
 
     /* JSON schema properties */
     .prop-type {
-        color: hsl(var(--blue)) !important;
+        color: var(--blue) !important;
     }
 
     .prop-format {
-        color: hsl(var(--muted-foreground)) !important;
+        color: var(--muted-foreground) !important;
     }
 
     /* Markdown rendered content */
     .markdown p,
     .markdown pre,
     .markdown code {
-        color: hsl(var(--foreground)) !important;
+        color: var(--foreground) !important;
     }
 
     .markdown code {
-        background: hsl(var(--muted)) !important;
+        background: var(--muted) !important;
         padding: 2px 6px !important;
         @apply px-1.5 py-0.5;
         border-radius: calc(var(--radius) - 2px) !important;
@@ -575,7 +575,7 @@
     .errors-wrapper {
         background: hsl(var(--destructive) / 0.1) !important;
         border: 1px solid hsl(var(--destructive) / 0.3) !important;
-        color: hsl(var(--destructive)) !important;
+        color: var(--destructive) !important;
         @apply rounded-md;
     }
 
@@ -587,13 +587,13 @@
 
     /* Copy button */
     .copy-to-clipboard {
-        background: hsl(var(--secondary)) !important;
-        color: hsl(var(--secondary-foreground)) !important;
-        border: 1px solid hsl(var(--border)) !important;
+        background: var(--secondary) !important;
+        color: var(--secondary-foreground) !important;
+        border: 1px solid var(--border) !important;
     }
 
     .copy-to-clipboard button {
         background: transparent !important;
-        color: hsl(var(--secondary-foreground)) !important;
+        color: var(--secondary-foreground) !important;
     }
 }
