@@ -1,17 +1,25 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { API_BASE_URL } from '@/lib/fetcher'
 
 type CVEList = {
     total: number
 }
 
-export const getServerSideCVEs = async () => {
+let cachedTotal: { value: number; expiresAt: number } | null = null
+const CACHE_TTL_MS = 12 * 60 * 60 * 1000 // 12 hours
+
+export const getServerSideCVEs = async (): Promise<CVEList> => {
+    if (cachedTotal && Date.now() < cachedTotal.expiresAt) {
+        return { total: cachedTotal.value }
+    }
     const res = await fetch(
-        'https://api.main.devguard.org/api/v1/vulndb/list-ids-by-creation-date',
+        `${API_BASE_URL}/vulndb/list-ids-by-creation-date`,
     )
     if (!res.ok) {
         throw new Error(`Upstream API error: ${res.status} ${res.statusText}`)
     }
     const repo: CVEList = await res.json()
+    cachedTotal = { value: repo.total, expiresAt: Date.now() + CACHE_TTL_MS }
     return repo
 }
 

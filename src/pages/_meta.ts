@@ -22,19 +22,19 @@ export default {
         },
         title: 'Vulnerability Database',
         type: 'page',
-        href: '/vulnerability-database'
+        href: '/vulnerability-database',
     },
-    'package-inspector': { 
-        theme: { 
-            layout: 'raw' 
-        }, 
+    'package-inspector': {
+        theme: {
+            layout: 'raw',
+        },
         title: 'Package Inspector',
         type: 'page',
-        href: '/package-inspector'
+        href: '/package-inspector',
     },
-    "reachability-analysis": {
+    'reachability-analysis': {
         theme: {
-            layout: 'raw'
+            layout: 'raw',
         },
         title: 'Reachability Analysis',
     },

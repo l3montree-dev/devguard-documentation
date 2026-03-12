@@ -1,7 +1,7 @@
 import { clsx } from 'clsx'
 
 const gridClass = [
-    'pointer-events-none inset-x-0 z-50 block h-8',
+    'pointer-events-none inset-x-0 z-50 hidden lg:block h-8',
     'border-t border-b',
     'bg-[repeating-linear-gradient(315deg,var(--grid-line-color)_0,var(--grid-line-color)_1px,transparent_0,transparent_50%)]',
     'bg-[length:10px_10px] bg-fixed opacity-80',
@@ -9,8 +9,8 @@ const gridClass = [
 
 export function Container({
     className,
-    showTopGrid = true,
-    showBottomGrid = true,
+    showTopGrid = false,
+    showBottomGrid = false,
     children,
 }: {
     className?: string

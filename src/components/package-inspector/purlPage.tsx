@@ -4,7 +4,7 @@ import useSWR from 'swr'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { ExternalLink, Search, X, ChevronDown } from 'lucide-react'
-import { fetcher } from '@/lib/fetcher'
+import { fetcher, API_BASE_URL } from '@/lib/fetcher'
 import { extractPackageName, cn } from '@/lib/utils'
 import { PackageInspectResult } from '@/components/package-inspector/types'
 import PackageHeroCard from '@/components/package-inspector/PackageHeroCard'
@@ -65,8 +65,7 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
         setIsSearching(true)
         try {
             const response = await fetch(
-                'https://api.main.devguard.org/api/v1/vulndb/purl-inspect/' +
-                    encodeURIComponent(newPurl),
+                `${API_BASE_URL}/vulndb/purl-inspect/${encodeURIComponent(newPurl)}`,
             )
             if (!response.ok) {
                 setSearchError('Package not found. Please check your input.')
@@ -86,8 +85,7 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
     }
 
     const url = decodedPurl
-        ? 'https://api.main.devguard.org/api/v1/vulndb/purl-inspect/' +
-          decodedPurl
+        ? `${API_BASE_URL}/vulndb/purl-inspect/${encodeURIComponent(decodedPurl)}`
         : null
 
     const {
@@ -98,7 +96,11 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
 
     if (isLoading) {
         return (
-            <Container showTopGrid={false} showBottomGrid={false} className="py-5">
+            <Container
+                showTopGrid={false}
+                showBottomGrid={false}
+                className="py-5"
+            >
                 <div className="mb-6">
                     <Skeleton className="mb-1 h-4 w-32" />
                 </div>
@@ -157,12 +159,7 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
     const isMalicious = result.maliciousPackage != null
 
     return (
-        <Container showTopGrid={false} showBottomGrid={false} className='py-5'>
-            {/* Left edge grid pattern */}
-            <div className="pointer-events-none fixed inset-y-0 left-0 z-50 hidden w-8 border-r border-r-[var(--grid-line-color)] bg-[repeating-linear-gradient(315deg,var(--grid-line-color)_0,var(--grid-line-color)_1px,transparent_0,transparent_50%)] [background-size:10px_10px] bg-fixed opacity-80 sm:block" />
-
-            {/* Right edge grid pattern */}
-            <div className="pointer-events-none fixed inset-y-0 right-0 z-50 hidden w-8 border-l border-l-[var(--grid-line-color)] bg-[repeating-linear-gradient(315deg,var(--grid-line-color)_0,var(--grid-line-color)_1px,transparent_0,transparent_50%)] [background-size:10px_10px] bg-fixed opacity-80 sm:block" />
+        <Container showTopGrid={false} showBottomGrid={false} className="py-5">
             <Head>
                 <title>{packageName} | Package Inspector</title>
             </Head>
@@ -193,18 +190,25 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
                             <div
                                 className={cn(
                                     'flex items-center rounded-xl border border-input bg-transparent transition-colors focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50',
-                                    searchError ? 'border-red-500 focus-within:border-red-500 focus-within:ring-red-500/50' : '',
+                                    searchError
+                                        ? 'border-red-500 focus-within:border-red-500 focus-within:ring-red-500/50'
+                                        : '',
                                 )}
                             >
                                 <div className="relative flex items-center">
                                     <select
                                         value={ecosystem}
-                                        onChange={(e) => setEcosystem(e.target.value)}
-                                        className="h-9 appearance-none bg-transparent pl-2.5 pr-6 text-xs outline-none rounded-l-xl cursor-pointer"
+                                        onChange={(e) =>
+                                            setEcosystem(e.target.value)
+                                        }
+                                        className="h-9 cursor-pointer appearance-none rounded-l-xl bg-transparent pl-2.5 pr-6 text-xs outline-none"
                                         disabled={isSearching}
                                     >
                                         {ECOSYSTEMS.map((eco) => (
-                                            <option key={eco.value} value={eco.value}>
+                                            <option
+                                                key={eco.value}
+                                                value={eco.value}
+                                            >
                                                 {eco.label}
                                             </option>
                                         ))}
@@ -215,7 +219,9 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
                                 <input
                                     type="text"
                                     value={searchName}
-                                    onChange={(e) => setSearchName(e.target.value)}
+                                    onChange={(e) =>
+                                        setSearchName(e.target.value)
+                                    }
                                     placeholder="name"
                                     className="h-9 w-24 min-w-0 bg-transparent px-2 text-xs outline-none placeholder:text-muted-foreground"
                                     disabled={isSearching}
@@ -246,7 +252,9 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
                             </div>
                             <button type="submit" className="hidden" />
                             {searchError && (
-                                <span className="text-xs text-red-400">{searchError}</span>
+                                <span className="text-xs text-red-400">
+                                    {searchError}
+                                </span>
                             )}
                         </form>
                     )}
@@ -265,7 +273,10 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
             <div className="grid items-stretch gap-4 md:grid-cols-2">
                 {project?.scoreCard && (
                     <div className="rounded-xl border border-gray-700 bg-gray-800/50 p-6">
-                        <ScoreCardChart checks={project.scoreCard.checks} score={project.scoreCardScore} />
+                        <ScoreCardChart
+                            checks={project.scoreCard.checks}
+                            score={project.scoreCardScore}
+                        />
                     </div>
                 )}
 

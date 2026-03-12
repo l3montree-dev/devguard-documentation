@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { API_BASE_URL } from '@/lib/fetcher'
 
 type CVEList = {
     data: {
@@ -7,19 +8,27 @@ type CVEList = {
     }[]
 }
 
+const cache = new Map<number, { data: CVEList; expiresAt: number }>()
+const CACHE_TTL_MS = 12 * 60 * 60 * 1000 // 12 hours
+
 export const getServerSideCVEs = async (
     offset: number,
     CVES_PER_SITEMAP: number,
-) => {
+): Promise<CVEList | undefined> => {
+    const cached = cache.get(offset)
+    if (cached && Date.now() < cached.expiresAt) {
+        return cached.data
+    }
     try {
         const res = await fetch(
-            `https://api.main.devguard.org/api/v1/vulndb/list-ids-by-creation-date?offset=${offset}&limit=${CVES_PER_SITEMAP}`,
+            `${API_BASE_URL}/vulndb/list-ids-by-creation-date?offset=${encodeURIComponent(String(offset))}&limit=${encodeURIComponent(String(CVES_PER_SITEMAP))}`,
         )
         if (!res.ok) {
             console.error(`Upstream API error: ${res.status} ${res.statusText}`)
             return undefined
         }
         const repo: CVEList = await res.json()
+        cache.set(offset, { data: repo, expiresAt: Date.now() + CACHE_TTL_MS })
         return repo
     } catch (error) {
         console.error('Failed API Fetch: ', error)

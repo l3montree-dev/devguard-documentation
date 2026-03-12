@@ -5,11 +5,15 @@ import { columns } from 'src/components/reachabilityAnalysis/columns'
 
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/router'
-import { fetcher } from 'src/lib/fetcher'
+import { fetcher, API_BASE_URL } from 'src/lib/fetcher'
 import useSWR from 'swr'
 import { Container } from '../ui/container'
+import type { Package } from 'src/components/reachabilityAnalysis/columns'
 
-const apiBaseURL = 'http://localhost:8080/api/v1/vulndb/reachability/'
+interface ReachabilityResponse {
+    data: Package[]
+    total: number
+}
 
 export default function ReachabilityAnalysisPage() {
     const router = useRouter()
@@ -23,13 +27,13 @@ export default function ReachabilityAnalysisPage() {
 
     let url = null
     if (router.isReady && pageParam) {
-        url = `http://localhost:8080/api/v1/vulndb/reachability?pageSize=10&page=${page}`
+        url = `${API_BASE_URL}/vulndb/reachability?pageSize=10&page=${encodeURIComponent(page)}`
         if (query) {
-            url += `&filterQuery[npm][like]=%25${query}%25`
+            url += `&filterQuery[npm][like]=%25${encodeURIComponent(query)}%25`
         }
     }
 
-    const { data: apiResponse, error, isLoading } = useSWR(url, fetcher)
+    const { data: apiResponse, error, isLoading } = useSWR<ReachabilityResponse>(url, fetcher)
 
     const data = apiResponse?.data ?? []
     const total = apiResponse?.total ?? 0
