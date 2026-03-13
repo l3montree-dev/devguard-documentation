@@ -1,8 +1,79 @@
 import Image from 'next/image';
-import { Callout } from 'nextra/components';
+import { Callout, Steps, Tabs } from 'nextra/components';
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
-import PageContentComingSoon from '@/components/PageContentComingSoon'
 
 # GitHub Integration
 
-<PageContentComingSoon />
+DevGuard integrates with GitHub through a **GitHub App**, providing secure access to your repositories for issue management.
+
+## Overview
+
+The GitHub integration provides:
+
+- **Repository Access**: List and import repositories from GitHub organizations
+- **Issue Management**: Create and update GitHub Issues for discovered vulnerabilities
+- **Webhook Processing**: React to issue changes and comments in real-time
+- **CI/CD Integration**: Automated scanning via GitHub Actions
+
+<Callout type="info">
+  The GitHub App enables secure repository access and manages webhooks for issue tracking. Vulnerability scanning is authenticated separately using a DevGuard Token (Personal Access Token, PAT).
+</Callout> 
+
+
+
+## How It Works
+
+1. **Configure Integration**: Add the DevGuard GitHub App to your GitHub organization
+2. **Link Asset**: Connect a DevGuard asset to a GitHub repository
+3. **Create Issues**: Vulnerabilities can be pushed to GitHub Issues for tracking (automatically or manually)
+4. **Sync Status**: Changes in either system are synchronized via webhooks
+
+
+## Issue Creation
+
+When a vulnerability is flagged for remediation, DevGuard creates a GitHub issue containing detailed information about the vulnerability, including severity, affected components, and labels for categorization.
+
+## Comment Commands
+
+Users can control vulnerability status through issue comments:
+
+| Command | Effect |
+|---------|--------|
+| `/accept <reason>` | Accept the vulnerability risk |
+| `/component-not-present  <reason>` | Mark as false positive |
+| `/vulnerable-code-not-present <reason>` | Mark as false positive | 
+| `/vulnerable-code-not-in-execute-path  <reason>` | Mark as false positive | 
+| `/vulnerable-code-cannot-be-controlled-by-adversary  <reason>` | Mark as false positive | 
+| `/inline-mitigations-already-exist  <reason>` | Mark as false positive |  
+| `/reopen` | Reopen a closed vulnerability |
+
+<Callout type="info">
+  Only repository collaborators can use these commands. DevGuard verifies permissions before processing.
+</Callout>
+
+
+
+### Processed Events
+
+| Event | Action |
+|-------|--------|
+| Issue Closed | Vulnerability marked as accepted |
+| Issue Reopened | Vulnerability reopened |
+| Issue Deleted | Vulnerability marked as false positive |
+| Comment Added | Process slash commands |
+
+## Issue State Synchronization
+
+| GitHub Action | DevGuard Interpretation |
+|---------------|-------------------------|
+| Close issue | Vulnerability accepted |
+| Reopen issue | Vulnerability reopened |
+| Delete issue | Vulnerability false positive |
+
+
+## Related Documentation
+
+- [Setup GitHub Integration](/how-to-guides/integrations/github/setup-github-integration) — Step-by-step setup guide
+- [GitHub Webhooks](/how-to-guides/integrations/github/webhooks) — Configure webhooks
+- [GitHub Auto-Setup](/how-to-guides/integrations/github/auto-setup) — Automated repository configuration
+- [Scan with GitHub Actions](/how-to-guides/scanning/scan-with-github-actions) — CI/CD integration guide
