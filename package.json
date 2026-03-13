@@ -34,8 +34,8 @@
     },
     "homepage": "https://github.com/l3montree-dev/devguard-documentation",
     "dependencies": {
-        "@document-writing-tools/kernux-nextra-theme": "^1.6.0-containergov.2",
-        "@document-writing-tools/kernux-react": "^1.6.0-containergov.2",
+        "@document-writing-tools/kernux-nextra-theme": "2.0.0-rc.0",
+        "@document-writing-tools/kernux-react": "2.0.0-rc.0",
         "@headlessui/react": "^2.2.9",
         "@heroicons/react": "^2.2.0",
         "@ltonetwork/http-message-signatures": "^0.1.12",
