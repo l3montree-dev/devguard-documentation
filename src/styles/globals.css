@@ -49,11 +49,11 @@
   --foreground:         #fafafa;
   --muted:              #262626;
   --muted-foreground:   #a3a3a3;
-  --border:             #262626;
+  --border:             #262626;  
   --accent:             #262626;
   --link-color:         #d8ba1a;
   --accent-foreground:  #040202;
-  --sidebar-accent-foreground: #fafafa;
+  --sidebar-accent-foreground: #a3a3a3;
   --sidebar-accent:     #ffffff0d;
   --sidebar-accent-active:    #fddd8c1a; /*TODO: add this to DWT theme */
   --destructive:        #ef4444;
@@ -85,10 +85,15 @@
   h1 { @apply text-[36px]!; line-height: normal !important; }
   h2 { @apply text-[30px]!; }
   h3 { @apply text-[24px]!; }
+  
 
   /* Heading font — Lexend */
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-lexend), Lexend, sans-serif !important;
+  }
+
+  footer h3 {
+    @apply text-xs!;
   }
 
   pre,
@@ -122,25 +127,52 @@
 
 /* ─── 8. Utility layer ───────────────────────────────────────── */
 @layer utilities {
+  
   /* Code blocks: */
   pre {
     @apply text-[14px]! leading-8;
     @apply bg-black!;
     @apply overflow-x-auto;
     @apply ring-1 ring-border;
+    /* overflow-wrap: normal !important; */
     white-space: pre!important;
     word-break: normal !important;
-    overflow-wrap: normal !important;
     hyphens: none !important;
+    /* 
+     */
   }
   pre ::before {
     @apply inline-block mr-4!; /* TODO: check why it does not applied */
   }
 
-  /* Sidebar: */
-  a[data-active="true"][data-sidebar] {
-    @apply bg-(--sidebar-accent-active) text-(--link-color);
-    @apply font-semibold;
+  /* Header: */
+  header img[alt="DevGuard Logo"] {
+    @apply h-[48px];
+  }
+  header nav {
+    @apply max-w-[1440px]! mx-auto!;
   }
 
+  /* Sidebar: */
+  a[data-sidebar], button[data-sidebar] {
+    @apply text-(--sidebar-accent-foreground) hover:text-(--foreground)!;
+    @apply text-[14px]!;
+  }
+  a[data-active="true"][data-sidebar] {
+    @apply bg-(--sidebar-accent-active) text-(--link-color)!;
+    @apply font-semibold;
+  }
+  
+
+  /* TOC */
+  #toc .kern-link {
+    @apply text-[14px]! no-underline! font-semibold!;
+    @apply text-(--sidebar-accent-foreground)! visited:text-(--sidebar-accent-foreground)! hover:text-(--foreground)!;
+  }
+  #toc .kern-link[data-active="true"] {
+    @apply text-(--link-color)!;
+  }
+  #toc .kern-heading-medium {
+    @apply text-[14px]! font-semibold!;
+  }
 }

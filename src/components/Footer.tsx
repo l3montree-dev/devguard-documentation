@@ -70,7 +70,7 @@ const navigation = {
 export default function Footer() {
     return (
         <footer className="bg-[#161B23]">
-            <div className="mx-auto max-w-7xl px-6 pb-8 pt-16 sm:pt-24 lg:px-8 lg:pt-32">
+            <div className="mx-auto max-w-7xl px-6 pt-16 pb-8 sm:pt-24 lg:px-8 lg:pt-32">
                 <div className="xl:grid xl:grid-cols-3 xl:gap-8">
                     <div className="space-y-8">
                         <Image
@@ -80,10 +80,10 @@ export default function Footer() {
                             src="/logo-inverse-horizontal.svg"
                             className="h-12 w-auto"
                         />
-                        <p className="text-balance text-sm/6 text-gray-300">
+                        <p className="text-sm/6 text-balance text-gray-300">
                             The bond between the most important building blocks
                             of software security - simple, powerful & European
-                            <span className="ml-2 text-xl">🇪🇺</span>
+                            <span className="ml-2 text-lg">🇪🇺</span>
                         </p>
                         <div className="flex gap-x-6">
                             {navigation.social.map((item) => (
@@ -109,7 +109,7 @@ export default function Footer() {
                     <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
                         <div className="md:grid md:grid-cols-2 md:gap-8">
                             <div>
-                                <h3 className="text-sm/6 font-semibold text-white">
+                                <h3 className="text-sm/6! font-semibold text-white">
                                     Product
                                 </h3>
                                 <ul role="list" className="mt-6 space-y-4">
