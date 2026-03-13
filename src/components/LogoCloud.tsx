@@ -5,7 +5,7 @@ export default function LogoCloud() {
         <div className="mt-12">
             <div className="mx-auto max-w-7xl">
                 <div className="-mx-6 grid grid-cols-2 gap-0.5 overflow-hidden sm:mx-0 sm:rounded-lg md:grid-cols-3">
-                    <div className="bg-dg-300 flex items-center p-8 sm:p-10">
+                    <div className="bg-dg-300 p-8 sm:p-10">
                         <a
                             href="https://owasp.org/www-project-devguard/"
                             target="_blank"
@@ -80,7 +80,7 @@ export default function LogoCloud() {
                             />
                         </a>
                     </div>
-                    <div className="bg-dg-300 flex items-center p-8 sm:p-10">
+                    <div className="bg-dg-300 items-center p-8 sm:p-10">
                         <a
                             href="https://www.heylogin.com/en"
                             target="_blank"
@@ -140,7 +140,7 @@ export default function LogoCloud() {
                             />
                         </a>
                     </div>
-                    <div className="bg-dg-300 flex items-center p-6 sm:p-10">
+                    <div className="bg-dg-300 items-center p-6 sm:p-10">
                         <a
                             href="https://www.bonnconsulting.group/"
                             target="_blank"
