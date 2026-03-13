@@ -12,6 +12,7 @@ import OverallScoreGauge from './OverallScoreIcon'
 interface ScoreCardChartProps {
     checks: ScoreCardCheck[]
     score: number
+    updatedAt?: string
 }
 
 const checkDescriptions: Record<string, string> = {
@@ -41,8 +42,7 @@ const checkDescriptions: Record<string, string> = {
     'Pinned-Dependencies':
         'Whether the project pins dependencies to specific versions instead of mutable tags.',
     SAST: 'Whether the project runs static analysis tools to catch bugs before they ship.',
-    Vulnerabilities:
-        'Whether the project has known unfixed vulnerabilities.',
+    Vulnerabilities: 'Whether the project has known unfixed vulnerabilities.',
     Contributors:
         'Whether the project has a healthy number of contributors from different organizations.',
     'Dependency-Update-Tool':
@@ -51,13 +51,8 @@ const checkDescriptions: Record<string, string> = {
         'Whether the project uses webhooks with secrets to authenticate deliveries.',
 }
 
-function getScoreColor(score: number): string {
-    if (score >= 4) return 'bg-primary'
-    return 'bg-red-500'
-}
-
 function getScoreBadgeClasses(score: number): string {
-    if (score < 0) return 'bg-gray-500/15 text-gray-500'
+    if (score < 0) return 'bg-gray-500/15 text-gray-400'
     if (score === 0) return 'bg-red-500/15 text-red-400'
     if (score < 5) return 'bg-orange-400/15 text-orange-400'
     if (score < 8) return 'bg-yellow-400/15 text-yellow-400'
@@ -75,7 +70,11 @@ function getScoreLabel(score: number): string {
     return `${score}/10`
 }
 
-export default function ScoreCardChart({ checks, score }: ScoreCardChartProps) {
+export default function ScoreCardChart({
+    checks,
+    score,
+    updatedAt,
+}: ScoreCardChartProps) {
     const [failingExpanded, setFailingExpanded] = useState(false)
     const [passingExpanded, setPassingExpanded] = useState(false)
 
@@ -90,12 +89,25 @@ export default function ScoreCardChart({ checks, score }: ScoreCardChartProps) {
             <div>
                 <div className="mb-5 flex items-center justify-between">
                     <div>
-                        <h2 className="text-sm font-semibold text-white">
+                        <h2 className="text-base font-semibold text-foreground">
                             Open SSF Scorecard
                         </h2>
-                        <p className="mt-0.5 text-xs text-gray-500">
+                        <p className="mt-0.5 text-sm text-muted-foreground">
                             Supply chain security checks
                         </p>
+                        {updatedAt && (
+                            <span className="font-mono mt-1 block text-sm text-muted-foreground">
+                                Scorecard:{' '}
+                                {new Date(updatedAt).toLocaleDateString(
+                                    'en-US',
+                                    {
+                                        year: 'numeric',
+                                        month: 'short',
+                                        day: 'numeric',
+                                    },
+                                )}
+                            </span>
+                        )}
                     </div>
                     <OverallScoreGauge score={score} />
                 </div>
@@ -105,9 +117,10 @@ export default function ScoreCardChart({ checks, score }: ScoreCardChartProps) {
                     <div className="mb-4">
                         <button
                             onClick={() => setFailingExpanded(!failingExpanded)}
-                            className="mb-2 text-xs font-semibold uppercase tracking-wider text-gray-500 transition-colors hover:text-gray-300"
+                            className="mb-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground transition-colors hover:text-foreground"
                         >
-                            {failingExpanded ? '▾' : '▸'} Failing ({failing.length})
+                            {failingExpanded ? '▾' : '▸'} Failing (
+                            {failing.length})
                         </button>
                         {!failingExpanded ? (
                             <div className="flex flex-wrap gap-1.5">
@@ -116,7 +129,7 @@ export default function ScoreCardChart({ checks, score }: ScoreCardChartProps) {
                                         <TooltipTrigger asChild>
                                             <span
                                                 className={cn(
-                                                    'inline-flex cursor-default items-center rounded-md px-2.5 py-1 font-mono text-xs font-medium',
+                                                    'font-mono inline-flex cursor-default items-center rounded-md px-2.5 py-1 text-sm font-medium',
                                                     getScoreBadgeClasses(
                                                         check.score,
                                                     ),
@@ -140,13 +153,13 @@ export default function ScoreCardChart({ checks, score }: ScoreCardChartProps) {
                                 {failing.map((check) => (
                                     <Tooltip key={check.name}>
                                         <TooltipTrigger asChild>
-                                            <div className="flex cursor-default items-center justify-between rounded-lg px-3.5 py-2 transition-colors hover:bg-white/[0.04]">
-                                                <span className="text-sm text-gray-300">
+                                            <div className="flex cursor-default items-center justify-between rounded-lg px-3.5 py-2 transition-colors hover:bg-accent/50">
+                                                <span className="text-base text-foreground/80">
                                                     {check.name}
                                                 </span>
                                                 <span
                                                     className={cn(
-                                                        'inline-flex items-center rounded-md px-2.5 py-1 font-mono text-xs font-medium',
+                                                        'font-mono inline-flex items-center rounded-md px-2.5 py-1 text-sm font-medium',
                                                         getScoreBadgeClasses(
                                                             check.score,
                                                         ),
@@ -174,9 +187,10 @@ export default function ScoreCardChart({ checks, score }: ScoreCardChartProps) {
                 <div>
                     <button
                         onClick={() => setPassingExpanded(!passingExpanded)}
-                        className="mb-2 text-xs font-semibold uppercase tracking-wider text-gray-500 transition-colors hover:text-gray-300"
+                        className="mb-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground transition-colors hover:text-foreground"
                     >
-                        {passingExpanded ? '▾' : '▸'} Passing ({passing.length + na.length})
+                        {passingExpanded ? '▾' : '▸'} Passing (
+                        {passing.length + na.length})
                     </button>
                     {!passingExpanded ? (
                         <div className="flex flex-wrap gap-1.5">
@@ -185,7 +199,7 @@ export default function ScoreCardChart({ checks, score }: ScoreCardChartProps) {
                                     <TooltipTrigger asChild>
                                         <span
                                             className={cn(
-                                                'inline-flex cursor-default items-center rounded-md px-2.5 py-1 font-mono text-xs font-medium',
+                                                'font-mono inline-flex cursor-default items-center rounded-md px-2.5 py-1 text-sm font-medium',
                                                 getScoreBadgeClasses(
                                                     check.score,
                                                 ),
@@ -209,8 +223,8 @@ export default function ScoreCardChart({ checks, score }: ScoreCardChartProps) {
                             {[...passing, ...na].map((check) => (
                                 <Tooltip key={check.name}>
                                     <TooltipTrigger asChild>
-                                        <div className="flex cursor-default items-center justify-between rounded-lg px-3.5 py-2 transition-colors hover:bg-white/[0.04]">
-                                            <span className="text-sm text-gray-300">
+                                        <div className="flex cursor-default items-center justify-between rounded-lg px-3.5 py-2 transition-colors hover:bg-accent/50">
+                                            <span className="text-base text-foreground/80">
                                                 {check.name}
                                             </span>
                                             <div className="flex items-center gap-2.5">
@@ -231,15 +245,13 @@ export default function ScoreCardChart({ checks, score }: ScoreCardChartProps) {
                                                 )}
                                                 <span
                                                     className={cn(
-                                                        'inline-flex items-center rounded-md px-2.5 py-1 font-mono text-xs font-medium',
+                                                        'font-mono inline-flex items-center rounded-md px-2.5 py-1 text-sm font-medium',
                                                         getScoreBadgeClasses(
                                                             check.score,
                                                         ),
                                                     )}
                                                 >
-                                                    {getScoreLabel(
-                                                        check.score,
-                                                    )}
+                                                    {getScoreLabel(check.score)}
                                                 </span>
                                             </div>
                                         </div>

@@ -7,6 +7,7 @@ import {
     ShieldCheck,
 } from 'lucide-react'
 import { Component, Project } from '@/components/package-inspector/types'
+import { Card, CardHeader } from '@/components/ui/card'
 
 interface PackageHeroCardProps {
     packageName: string
@@ -24,125 +25,114 @@ export default function PackageHeroCard({
     isMalicious,
 }: PackageHeroCardProps) {
     return (
-        <div className="relative mb-4 flex items-center overflow-hidden rounded-xl border border-gray-700 bg-gray-800/50 px-7 py-[16px] justify-between">
-            <div>
-            {/* Name */}
-            <div className="flex min-w-[160px] flex-col gap-0.5 pr-7">
-                <h1 className="font-mono text-[22px] font-semibold leading-none tracking-tight text-[#f0f0f0]">
-                    {packageName}
-                </h1>
-                {component.version && (
-                    <span className="mt-1 font-mono tracking-wider text-xs text-gray-500">
-                        v{component.version}
-                    </span>
-                )}
-                {project?.description && (
-                    <span className="mt-1 text-xs text-gray-500 font-light tracking-wide">
-                        {project.description}
-                    </span>
-                )}
-            </div>
-            {/* Badge */}
-            {project && !isMalicious && (
-                <div className="flex flex-shrink-0 flex-col gap-1.5 pt-5">
-                    <div className="flex items-center gap-1.5 rounded-[5px] border border-[#1e4d35] bg-[#0f2a1e] px-3 py-1.5 font-mono text-[11px] text-emerald-400">
-                        <ShieldCheck className="h-3.5 w-3.5 flex-shrink-0" />
-                        Not flagged as malicious
-                    </div>
-                    <span className="pl-0.5 font-mono text-xs text-gray-500">
-                        Scorecard:{' '}
-                        {new Date(
-                            project.updatedAt,
-                        ).toLocaleDateString('en-US', {
-                            year: 'numeric',
-                            month: 'short',
-                            day: 'numeric',
-                        })}
-                    </span>
-                </div>
-            )}
-            </div>
-
-            <div className='flex flex-col items-end gap-3'>
-            {/* Stats */}
-            <div className="flex items-center gap-5 pl-7">
-                <div className="flex items-center gap-1.5 whitespace-nowrap font-mono text-xs text-[#888]">
-                    <Package className="h-3.5 w-3.5 opacity-60" />
-                    <span className="font-medium text-[#bbb]">
-                        {packageManager}
-                    </span>
-                </div>
-                {project && (
-                    <>
-                        <div className="flex items-center gap-1.5 whitespace-nowrap font-mono text-xs text-[#888]">
-                            <Scale className="h-[13px] w-[13px] opacity-60" />
-                            <span className="font-medium text-[#bbb]">
-                                {project.license}
+        <Card className="mb-4">
+            <CardHeader>
+                <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+                    {/* Left: Name + badge */}
+                    <div className="min-w-0 flex-1">
+                        <h1 className="font-mono text-2xl font-semibold leading-none tracking-tight sm:text-[26px]">
+                            {packageName}
+                        </h1>
+                        {component.version && (
+                            <span className="font-mono mt-1 block text-sm tracking-wider text-muted-foreground">
+                                v{component.version}
                             </span>
-                        </div>
-                        <div className="flex items-center gap-1.5 whitespace-nowrap font-mono text-xs text-[#888]">
-                            <Star className="h-[13px] w-[13px] opacity-60" />
-                            <span className="font-medium text-[#bbb]">
-                                {project.starsCount.toLocaleString('de-DE')}
-                            </span>
-                        </div>
-                        <div className="flex items-center gap-1.5 whitespace-nowrap font-mono text-xs text-[#888]">
-                            <GitFork className="h-[13px] w-[13px] opacity-60" />
-                            <span className="font-medium text-[#bbb]">
-                                {project.forksCount.toLocaleString('de-DE')}
-                            </span>
-                        </div>
-                    </>
-                )}
-            </div>
-
-
-
-            {/* Meta: Published */}
-            {component.published && (
-                <div className="flex flex-col items-end pl-7">
-                    <span className="font-mono uppercase tracking-widest text-xs text-gray-500">
-                        Published
-                    </span>
-                    <span className="font-mono text-[11px] text-gray-400">
-                        {new Date(component.published).toLocaleDateString(
-                            'en-US',
-                            {
-                                year: 'numeric',
-                                month: 'short',
-                                day: 'numeric',
-                            },
                         )}
-                    </span>
-                </div>
-            )}
+                        {project?.description && (
+                            <span className="mt-1 block text-sm font-light tracking-wide text-muted-foreground">
+                                {project.description}
+                            </span>
+                        )}
+                        {project && !isMalicious && (
+                            <div className="mt-4 flex flex-col gap-1.5">
+                                <div className="font-mono inline-flex w-fit items-center gap-1.5 rounded-[5px] border border-emerald-700/50 bg-emerald-950/30 px-3 py-1.5 text-sm text-emerald-400">
+                                    <ShieldCheck className="h-3.5 w-3.5 shrink-0" />
+                                    Not flagged as malicious
+                                </div>
+                            </div>
+                        )}
+                    </div>
 
-            {/* Links */}
-            {project && (
-                <div className="flex items-center gap-4 pl-7">
-                    <a
-                        href={'https://' + project.projectKey}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-[5px] whitespace-nowrap font-mono text-[11px] text-emerald-400 opacity-85 transition-opacity hover:opacity-100"
-                    >
-                        <ExternalLink className="h-[11px] w-[11px]" />
-                        GitHub
-                    </a>
-                    {project.homepage && (
-                        <a
-                            href={project.homepage}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-[5px] whitespace-nowrap font-mono text-[11px] text-emerald-400 opacity-85 transition-opacity hover:opacity-100"
-                        >
-                            <ExternalLink className="h-[11px] w-[11px]" />
-                            Homepage
-                        </a>
-                    )}
+                    {/* Right: Stats + meta + links */}
+                    <div className="flex flex-col gap-3 lg:items-end">
+                        {/* Stats row */}
+                        <div className="flex flex-wrap items-center gap-4">
+                            <div className="font-mono flex items-center gap-1.5 whitespace-nowrap text-sm text-muted-foreground">
+                                <Package className="h-4 w-4 opacity-60" />
+                                <span className="font-medium text-foreground/80">
+                                    {packageManager}
+                                </span>
+                            </div>
+                            {project && (
+                                <>
+                                    <div className="font-mono flex items-center gap-1.5 whitespace-nowrap text-sm text-muted-foreground">
+                                        <Scale className="h-4 w-4 opacity-60" />
+                                        <span className="font-medium text-foreground/80">
+                                            {project.license}
+                                        </span>
+                                    </div>
+                                    <div className="font-mono flex items-center gap-1.5 whitespace-nowrap text-sm text-muted-foreground">
+                                        <Star className="h-4 w-4 opacity-60" />
+                                        <span className="font-medium text-foreground/80">
+                                            {project.starsCount.toLocaleString()}
+                                        </span>
+                                    </div>
+                                    <div className="font-mono flex items-center gap-1.5 whitespace-nowrap text-sm text-muted-foreground">
+                                        <GitFork className="h-4 w-4 opacity-60" />
+                                        <span className="font-medium text-foreground/80">
+                                            {project.forksCount.toLocaleString()}
+                                        </span>
+                                    </div>
+                                </>
+                            )}
+                        </div>
+
+                        {/* Published */}
+                        {component.published && (
+                            <div className="flex flex-col lg:items-end">
+                                <span className="font-mono text-sm uppercase tracking-widest text-muted-foreground">
+                                    Published
+                                </span>
+                                <span className="font-mono text-xs text-foreground/80">
+                                    {new Date(
+                                        component.published,
+                                    ).toLocaleDateString('en-US', {
+                                        year: 'numeric',
+                                        month: 'short',
+                                        day: 'numeric',
+                                    })}
+                                </span>
+                            </div>
+                        )}
+
+                        {/* Links */}
+                        {project && (
+                            <div className="flex items-center gap-4">
+                                <a
+                                    href={'https://' + project.projectKey}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="font-mono flex items-center gap-[5px] whitespace-nowrap text-sm opacity-85 transition-opacity hover:opacity-100"
+                                >
+                                    <ExternalLink className="h-3 w-3" />
+                                    GitHub
+                                </a>
+                                {project.homepage && (
+                                    <a
+                                        href={project.homepage}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="font-mono flex items-center gap-[5px] whitespace-nowrap text-sm opacity-85 transition-opacity hover:opacity-100"
+                                    >
+                                        <ExternalLink className="h-3 w-3" />
+                                        Homepage
+                                    </a>
+                                )}
+                            </div>
+                        )}
+                    </div>
                 </div>
-            )}
-</div>            
-        </div>
+            </CardHeader>
+        </Card>
     )
 }

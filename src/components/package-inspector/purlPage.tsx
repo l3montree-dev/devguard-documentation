@@ -3,35 +3,18 @@ import Head from 'next/head'
 import useSWR from 'swr'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { ExternalLink, Search, X, ChevronDown } from 'lucide-react'
+import { ExternalLink, ShieldOff } from 'lucide-react'
 import { fetcher, API_BASE_URL } from '@/lib/fetcher'
-import { extractPackageName, cn } from '@/lib/utils'
+import { extractPackageName } from '@/lib/utils'
 import { PackageInspectResult } from '@/components/package-inspector/types'
 import PackageHeroCard from '@/components/package-inspector/PackageHeroCard'
 import ScoreCardChart from '@/components/package-inspector/ScoreCardChart'
 import VulnerabilityList from '@/components/package-inspector/VulnerabilityList'
+import PackageSearch from '@/components/package-inspector/PackageSearch'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Container } from '../ui/container'
-
-const ECOSYSTEMS = [
-    { label: 'Alpine', value: 'alpine' },
-    { label: 'Bitnami', value: 'bitnami' },
-    { label: 'Crates.io', value: 'crates.io' },
-    { label: 'Debian', value: 'debian' },
-    { label: 'Git', value: 'git' },
-    { label: 'Go', value: 'go' },
-    { label: 'Hex', value: 'hex' },
-    { label: 'Maven', value: 'maven' },
-    { label: 'npm', value: 'npm' },
-    { label: 'NuGet', value: 'nuget' },
-    { label: 'Opam', value: 'opam' },
-    { label: 'OSS-Fuzz', value: 'oss-fuzz' },
-    { label: 'Packagist', value: 'packagist' },
-    { label: 'Pub', value: 'pub' },
-    { label: 'Red-Hat', value: 'red-hat' },
-    { label: 'Rubygems', value: 'rubygems' },
-]
 
 export default function PurlPageComponent({ purl }: { purl?: string }) {
     const router = useRouter()
@@ -39,29 +22,16 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
     const decodedPurl = purlString ? decodeURIComponent(purlString) : ''
     const packageName = decodedPurl ? extractPackageName(decodedPurl) : ''
 
-    const [searchOpen, setSearchOpen] = useState(false)
-    const [ecosystem, setEcosystem] = useState('npm')
-    const [searchName, setSearchName] = useState('')
-    const [version, setVersion] = useState('')
     const [searchError, setSearchError] = useState<string | null>(null)
     const [isSearching, setIsSearching] = useState(false)
 
     useEffect(() => {
-        setSearchOpen(false)
-        setSearchName('')
-        setVersion('')
         setSearchError(null)
         setIsSearching(false)
     }, [purl])
 
-    const handleSearchSubmit = async () => {
+    const navigateToPurl = async (newPurl: string) => {
         setSearchError(null)
-        if (!searchName.trim() || !version.trim()) {
-            setSearchError('Please fill in both fields.')
-            return
-        }
-        const versionPart = version.trim() ? `@${version.trim()}` : ''
-        const newPurl = `pkg:${ecosystem}/${searchName.trim()}${versionPart}`
         setIsSearching(true)
         try {
             const response = await fetch(
@@ -94,63 +64,93 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
         isLoading,
     } = useSWR<PackageInspectResult>(url, fetcher)
 
-    if (isLoading) {
-        return (
-            <Container
-                showTopGrid={false}
-                showBottomGrid={false}
-                className="py-5"
-            >
-                <div className="mb-6">
-                    <Skeleton className="mb-1 h-4 w-32" />
-                </div>
+    const renderSkeleton = () => (
+        <Container
+            showTopGrid={false}
+            showBottomGrid={false}
+            className="card-blue py-5"
+        >
+            <div className="mb-6">
+                <Skeleton className="mb-1 h-4 w-32" />
+            </div>
 
-                {/* Hero card skeleton */}
-                <div className="mb-4 rounded-xl border border-gray-700 bg-gray-800/50 p-6">
+            {/* Hero card skeleton */}
+            <Card className="mb-4">
+                <CardContent className="p-6">
                     <div className="flex items-center gap-4">
                         <Skeleton className="h-12 w-12 rounded-full" />
                         <div className="flex-1 space-y-2">
-                            <Skeleton className="h-6 w-48" />
-                            <Skeleton className="h-4 w-32" />
+                            <Skeleton className="h-6 w-3/4 max-w-48" />
+                            <Skeleton className="h-4 w-1/2 max-w-32" />
                         </div>
                     </div>
                     <div className="mt-4 space-y-2">
                         <Skeleton className="h-4 w-full" />
                         <Skeleton className="h-4 w-3/4" />
                     </div>
-                </div>
+                </CardContent>
+            </Card>
 
-                {/* Two-column skeleton */}
-                <div className="grid items-stretch gap-4 md:grid-cols-2">
-                    <div className="rounded-xl border border-gray-700 bg-gray-800/50 p-6">
+            {/* Two-column skeleton */}
+            <div className="grid items-stretch gap-4 lg:grid-cols-2">
+                <Card>
+                    <CardContent className="p-6">
                         <Skeleton className="mb-4 h-5 w-24" />
                         <Skeleton className="h-48 w-full rounded-lg" />
-                    </div>
-                    <div className="rounded-xl border border-gray-700 bg-gray-800/50 p-6">
-                        <Skeleton className="mb-4 h-5 w-40" />
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardContent className="p-6">
+                        <Skeleton className="mb-4 h-5 w-3/4 max-w-40" />
                         <div className="space-y-3">
                             <Skeleton className="h-10 w-full" />
                             <Skeleton className="h-10 w-full" />
                             <Skeleton className="h-10 w-full" />
                         </div>
-                    </div>
-                </div>
+                    </CardContent>
+                </Card>
+            </div>
 
-                {/* Bottom buttons skeleton */}
-                <div className="mt-6 flex justify-end gap-3">
-                    <Skeleton className="h-10 w-24 rounded-md" />
-                    <Skeleton className="h-10 w-32 rounded-md" />
+            {/* Bottom buttons skeleton */}
+            <div className="mt-6 flex justify-end gap-3">
+                <Skeleton className="h-10 w-24 rounded-md" />
+                <Skeleton className="hidden h-10 w-32 rounded-md sm:block" />
+            </div>
+        </Container>
+    )
+
+    if (isLoading) {
+        return renderSkeleton()
+    }
+
+    if (error) {
+        return (
+            <Container
+                showTopGrid={false}
+                showBottomGrid={false}
+                className="card-blue py-5"
+            >
+                <div className="flex flex-col items-center justify-center py-20 text-center">
+                    <h2 className="mb-2 text-3xl font-bold text-foreground">
+                        Package not found
+                    </h2>
+                    <p className="mb-6 max-w-md text-base text-muted-foreground">
+                        The package you are looking for does not exist or could
+                        not be retrieved. Please verify the package URL and try
+                        again.
+                    </p>
+                    <Button asChild>
+                        <Link href="/package-inspector">
+                            Back to Package Inspector
+                        </Link>
+                    </Button>
                 </div>
             </Container>
         )
     }
 
-    if (error) {
-        return <div className="p-8 text-red-500">Package not found</div>
-    }
-
     if (!result) {
-        return null
+        return renderSkeleton()
     }
 
     const { component, affectedComponents, vulns } = result
@@ -159,107 +159,31 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
     const isMalicious = result.maliciousPackage != null
 
     return (
-        <Container showTopGrid={false} showBottomGrid={false} className="py-5">
+        <Container
+            showTopGrid={false}
+            showBottomGrid={false}
+            className="card-blue py-5"
+        >
             <Head>
                 <title>{packageName} | Package Inspector</title>
+                <meta
+                    name="description"
+                    content={`Inspect ${packageName} — view OpenSSF scorecard, known vulnerabilities, and security insights for this open-source package.`}
+                />
             </Head>
 
             {/* Header */}
-            <div className="mb-6 flex items-end justify-between">
-                <p className="mb-1 text-sm font-medium uppercase tracking-wider text-gray-500">
-                    Package Inspector
-                </p>
-                <div className="relative">
-                    {!searchOpen ? (
-                        <button
-                            type="button"
-                            onClick={() => setSearchOpen(true)}
-                            className="flex items-center gap-2 rounded-lg border border-gray-700 bg-gray-800/50 px-3 py-1.5 text-xs text-gray-400 transition-colors hover:border-gray-600 hover:text-gray-300"
-                        >
-                            <Search className="h-3.5 w-3.5" />
-                            Search again
-                        </button>
-                    ) : (
-                        <form
-                            onSubmit={(e) => {
-                                e.preventDefault()
-                                handleSearchSubmit()
-                            }}
-                            className="flex flex-col items-end gap-2"
-                        >
-                            <div
-                                className={cn(
-                                    'flex items-center rounded-xl border border-input bg-transparent transition-colors focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50',
-                                    searchError
-                                        ? 'border-red-500 focus-within:border-red-500 focus-within:ring-red-500/50'
-                                        : '',
-                                )}
-                            >
-                                <div className="relative flex items-center">
-                                    <select
-                                        value={ecosystem}
-                                        onChange={(e) =>
-                                            setEcosystem(e.target.value)
-                                        }
-                                        className="h-9 cursor-pointer appearance-none rounded-l-xl bg-transparent pl-2.5 pr-6 text-xs outline-none"
-                                        disabled={isSearching}
-                                    >
-                                        {ECOSYSTEMS.map((eco) => (
-                                            <option
-                                                key={eco.value}
-                                                value={eco.value}
-                                            >
-                                                {eco.label}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    <ChevronDown className="pointer-events-none absolute right-1 h-3 w-3 text-muted-foreground" />
-                                </div>
-                                <div className="h-6 w-px bg-input" />
-                                <input
-                                    type="text"
-                                    value={searchName}
-                                    onChange={(e) =>
-                                        setSearchName(e.target.value)
-                                    }
-                                    placeholder="name"
-                                    className="h-9 w-24 min-w-0 bg-transparent px-2 text-xs outline-none placeholder:text-muted-foreground"
-                                    disabled={isSearching}
-                                    autoFocus
-                                />
-                                <div className="h-6 w-px bg-input" />
-                                <input
-                                    type="text"
-                                    value={version}
-                                    onChange={(e) => {
-                                        setVersion(e.target.value)
-                                        setSearchError(null)
-                                    }}
-                                    placeholder="version"
-                                    className="h-9 w-20 bg-transparent px-2 text-xs outline-none placeholder:text-muted-foreground"
-                                    disabled={isSearching}
-                                />
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        setSearchOpen(false)
-                                        setSearchError(null)
-                                    }}
-                                    className="mr-1.5 flex items-center text-gray-500 hover:text-gray-300"
-                                >
-                                    <X className="h-3.5 w-3.5" />
-                                </button>
-                            </div>
-                            <button type="submit" className="hidden" />
-                            {searchError && (
-                                <span className="text-xs text-red-400">
-                                    {searchError}
-                                </span>
-                            )}
-                        </form>
-                    )}
-                </div>
-            </div>
+            <p className="mb-2 text-base font-medium uppercase tracking-wider text-muted-foreground">
+                Package Inspector
+            </p>
+
+            {/* Search — matches Hero styling */}
+            <PackageSearch
+                onSubmit={navigateToPurl}
+                error={searchError}
+                isSearching={isSearching}
+                className="mb-6"
+            />
 
             <PackageHeroCard
                 packageName={packageName}
@@ -270,47 +194,63 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
             />
 
             {/* Two-column: Scorecard + Vulnerabilities */}
-            <div className="grid items-stretch gap-4 md:grid-cols-2">
-                {project?.scoreCard && (
-                    <div className="rounded-xl border border-gray-700 bg-gray-800/50 p-6">
-                        <ScoreCardChart
-                            checks={project.scoreCard.checks}
-                            score={project.scoreCardScore}
-                        />
-                    </div>
-                )}
+            <div className="grid items-stretch gap-4 lg:grid-cols-2">
+                <Card>
+                    <CardContent className="flex h-full flex-col p-6">
+                        {project?.scoreCard ? (
+                            <ScoreCardChart
+                                checks={project.scoreCard.checks}
+                                score={project.scoreCardScore}
+                                updatedAt={project.updatedAt}
+                            />
+                        ) : (
+                            <div className="flex flex-1 flex-col items-center justify-center py-12 text-center">
+                                <ShieldOff className="mb-3 h-10 w-10 text-muted-foreground/30" />
+                                <h3 className="text-base font-semibold text-foreground">
+                                    OpenSSF Scorecard
+                                </h3>
+                                <p className="mt-1 max-w-[220px] text-sm text-muted-foreground">
+                                    No scorecard data available for this
+                                    package.
+                                </p>
+                            </div>
+                        )}
+                    </CardContent>
+                </Card>
 
-                <div className="rounded-xl border border-gray-700 bg-gray-800/50 p-6">
-                    <h2 className="mb-4 text-base font-bold text-white">
-                        Vulnerabilities fixed in later releases
-                    </h2>
-                    <VulnerabilityList
-                        vulns={vulns}
-                        affectedComponents={affectedComponents}
-                    />
-                </div>
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="text-lg">
+                            Vulnerabilities fixed in later releases
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <VulnerabilityList
+                            vulns={vulns}
+                            affectedComponents={affectedComponents}
+                        />
+                    </CardContent>
+                </Card>
             </div>
 
             {/* Bottom buttons */}
-            <div className="mt-6 flex justify-end gap-3">
-                <div>
-                    <Button asChild>
-                        <Link href="/package-inspector">Get Back</Link>
-                    </Button>
-                </div>
-                <div>
-                    <Button asChild>
-                        <a
-                            target="_blank"
-                            href="https://main.devguard.org/"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-2"
-                        >
-                            Try DevGuard
-                            <ExternalLink size={16} />
-                        </a>
-                    </Button>
-                </div>
+            <div className="mt-6 flex flex-col justify-end gap-3 sm:flex-row">
+                <Button asChild>
+                    <Link href="/package-inspector">
+                        Back to Package Inspector
+                    </Link>
+                </Button>
+                <Button asChild className="hidden sm:inline-flex">
+                    <a
+                        target="_blank"
+                        href="https://app.devguard.org/"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2"
+                    >
+                        Try DevGuard
+                        <ExternalLink size={16} />
+                    </a>
+                </Button>
             </div>
         </Container>
     )

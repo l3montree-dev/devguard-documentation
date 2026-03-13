@@ -32,12 +32,6 @@ export default {
         type: 'page',
         href: '/package-inspector',
     },
-    'reachability-analysis': {
-        theme: {
-            layout: 'raw',
-        },
-        title: 'Reachability Analysis',
-    },
     '404': {
         theme: {
             layout: 'raw',

@@ -7,12 +7,11 @@ import Particles from './particels'
 
 export function PackageInspectorPage() {
     const router = useRouter()
-    const [searchQuery, setSearchQuery] = useState('')
     const [error, setError] = useState<string | null>(null)
     const [isSearching, setIsSearching] = useState(false)
 
-    const handleSearch = async (purl?: string) => {
-        const trimmed = (purl ?? searchQuery).trim()
+    const handleSearch = async (purl: string) => {
+        const trimmed = purl.trim()
         if (!trimmed) return
 
         setError(null)
@@ -40,8 +39,15 @@ export function PackageInspectorPage() {
     }
 
     return (
-        <Container>
-            <div className="pointer-events-none fixed inset-0 -z-50">
+        <Container className="relative py-16 max-sm:py-8">
+            <div className="z-10">
+                <PackageInspectorHero
+                    onSearch={handleSearch}
+                    error={error}
+                    isSearching={isSearching}
+                />
+            </div>
+            <div className="pointer-events-none fixed inset-0 -z-10">
                 <Particles
                     particleColors={['#ffffff']}
                     particleCount={300}
@@ -53,16 +59,6 @@ export function PackageInspectorPage() {
                     pixelRatio={1}
                 />
             </div>
-            <PackageInspectorHero
-                searchTerm={searchQuery}
-                setSearchTerm={(v) => {
-                    setSearchQuery(v)
-                    setError(null)
-                }}
-                onSearch={handleSearch}
-                error={error}
-                isSearching={isSearching}
-            />
         </Container>
     )
 }
