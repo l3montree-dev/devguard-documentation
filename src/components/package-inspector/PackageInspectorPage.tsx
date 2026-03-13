@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
-import { API_BASE_URL } from '@/lib/fetcher'
 import { PackageInspectorHero } from './Hero'
 import { Container } from '../ui/container'
 import Particles from './particels'
@@ -19,7 +18,7 @@ export function PackageInspectorPage() {
 
         try {
             const response = await fetch(
-                `${API_BASE_URL}/vulndb/purl-inspect/${encodeURIComponent(trimmed)}`,
+                `/api/vulndb/purl-inspect/${encodeURIComponent(trimmed)}`,
             )
             if (!response.ok) {
                 setError('Package not found. Please check your purl.')

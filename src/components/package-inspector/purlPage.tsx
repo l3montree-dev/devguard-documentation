@@ -4,7 +4,7 @@ import useSWR from 'swr'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { ExternalLink, ShieldOff } from 'lucide-react'
-import { fetcher, API_BASE_URL } from '@/lib/fetcher'
+import { fetcher } from '@/lib/fetcher'
 import { extractPackageName } from '@/lib/utils'
 import { PackageInspectResult } from '@/components/package-inspector/types'
 import PackageHeroCard from '@/components/package-inspector/PackageHeroCard'
@@ -35,7 +35,7 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
         setIsSearching(true)
         try {
             const response = await fetch(
-                `${API_BASE_URL}/vulndb/purl-inspect/${encodeURIComponent(newPurl)}`,
+                `/api/vulndb/purl-inspect/${encodeURIComponent(newPurl)}`,
             )
             if (!response.ok) {
                 setSearchError('Package not found. Please check your input.')
@@ -55,7 +55,7 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
     }
 
     const url = decodedPurl
-        ? `${API_BASE_URL}/vulndb/purl-inspect/${encodeURIComponent(decodedPurl)}`
+        ? `/api/vulndb/purl-inspect/${encodeURIComponent(decodedPurl)}`
         : null
 
     const {
