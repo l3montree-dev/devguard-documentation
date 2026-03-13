@@ -10,13 +10,8 @@
 
 import { withMarkdownWebBook } from '@document-writing-tools/kernux-nextra-theme/withMarkdownWebBook'
 
-// Keep a single config that supports both static export and server deploys.
-const exportType =
-    process.env.STATIC_EXPORT === 'true' ? 'export' : 'standalone'
-
 const config = withMarkdownWebBook({
     trailingSlash: true,
-    output: exportType,
     eslint: {
         ignoreDuringBuilds: true,
     },
