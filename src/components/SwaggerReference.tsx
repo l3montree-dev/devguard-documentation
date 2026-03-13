@@ -67,7 +67,7 @@ export interface SwaggerSpec {
 
 const SwaggerReference: React.FC = () => {
     // hard caching of request interceptor - thus we need to use refs
-    const keyRef = useRef<string>(null)
+    const keyRef = useRef<string | null>(null)
     const [privateKey, setPrivateKey] = useState('')
     const [showDialog, setShowDialog] = useState(false)
     const [isConfigured, setIsConfigured] = useState(false)

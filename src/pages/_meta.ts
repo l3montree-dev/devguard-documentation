@@ -15,8 +15,22 @@ export default {
     explanations: { title: 'Explanations' },
     comparison: { title: 'Comparison' },
     contributing: { title: 'Contributing' },
-    other: {
-        title: 'Other',
+    other: { title: 'Other' },
+    'vulnerability-database': {
+        theme: {
+            layout: 'raw',
+        },
+        title: 'Vulnerability Database',
+        type: 'page',
+        href: '/vulnerability-database',
+    },
+    'package-inspector': {
+        theme: {
+            layout: 'raw',
+        },
+        title: 'Package Inspector',
+        type: 'page',
+        href: '/package-inspector',
     },
     '404': {
         theme: {

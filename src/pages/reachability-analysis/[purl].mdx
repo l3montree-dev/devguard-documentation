@@ -1,0 +1,35 @@
+import PackageDetailComponent from 'src/components/reachabilityAnalysis/reachability-analysis-package-details'
+import { useRouter } from 'next/router'
+
+export const PackageDetails = () => {
+    const router = useRouter()
+    const { purl } = router.query
+    const packageURL = Array.isArray(purl) ? purl[0] : purl
+    return (
+        <>
+            <style jsx global>{`
+    aside.nextra-sidebar-container { display: none !important; }
+    .nextra-toc { display: none !important; }
+    aside[class*="nextra-toc"] { display: none !important; }
+    .nextra-content { 
+        max-width: 100% !important; 
+        padding: 0 !important;
+    }
+    .nextra-content > div,
+    [class*="_max-w-6xl"] {
+        max-width: 100% !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    nav.nextra-nav-container { position: sticky !important; top: 0 !important; }
+    a.nextra-focus[class*="max-w-"] { display: none !important; }
+    nav[class*="border-t"] { display: none !important; }
+    ._mt-12._mb-8._block._text-xs { display: none !important; }
+    ._mb-8._flex._items-center._border-t._pt-8 { display: none !important; }
+`}</style>
+            <PackageDetailComponent purl={packageURL}/>
+        </>
+    )
+}
+
+<PackageDetails />
