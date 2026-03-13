@@ -175,4 +175,7 @@
   #toc .kern-heading-medium {
     @apply text-[14px]! font-semibold!;
   }
+  #toc-footer .kern-link {
+    @apply text-[12px]!;
+  }
 }
