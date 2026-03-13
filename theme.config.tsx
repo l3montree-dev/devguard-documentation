@@ -19,22 +19,25 @@ const config: DocsThemeConfig = {
 
         return (
             <>
+                <meta httpEquiv="content-language" content="en" />
                 <link rel="canonical" href={url} />
-                <meta property="og:url" content={url} />
+                <meta property="og:url" content={url} key="og:url" />
                 <meta
                     property="og:title"
+                    key="og:title"
                     content={
                         (frontMatter.title ?? rest.title) + ' | DevGuard' ||
                         'DevGuard'
                     }
                 />
-                <title>
+                <title key="title">
                     {(frontMatter.title ?? rest.title) + ' | DevGuard' ||
                         'DevGuard'}
                 </title>
                 {frontMatter.description && (
                     <meta
                         name="description"
+                        key="description"
                         content={frontMatter.description}
                     />
                 )}
@@ -50,13 +53,15 @@ const config: DocsThemeConfig = {
     },
 
     logo: (
-        <Image
-            src="/logo-inverse-horizontal.svg"
-            alt="DevGuard Logo"
-            width={220}
-            height={80}
-            className="h-12 w-auto"
-        />
+        <span aria-label="DevGuard - Back to homepage">
+            <Image
+                src="/logo-inverse-horizontal.svg"
+                alt="DevGuard Logo"
+                width={220}
+                height={80}
+                className="h-12 w-auto"
+            />
+        </span>
     ),
     sidebar: {
         defaultMenuCollapseLevel: 1,

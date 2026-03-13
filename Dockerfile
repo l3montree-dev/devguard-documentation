@@ -30,17 +30,19 @@ ENV NEXT_PUBLIC_UMAMI_URL=$NEXT_PUBLIC_UMAMI_URL
 ARG NEXT_PUBLIC_SITE_URL
 ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
 
+ARG NEXT_PUBLIC_DEVGUARD_API_URL
+ENV NEXT_PUBLIC_DEVGUARD_API_URL=$NEXT_PUBLIC_DEVGUARD_API_URL
+
 # Build
 RUN npm run build
 
 RUN mkdir -p /usr/app/.next/cache/images && chown -R 53111:53111 /usr/app/.next/cache/images
 
-FROM registry.opencode.de/open-code/oci/nodejs:24-main-minimal-amd64@sha256:c34bdc1e4b8d444d5a91fbc650cea4b1eea79405a6e2d843866f34f3127da48d
+FROM registry.opencode.de/open-code/oci/nodejs:24-minimal@sha256:8a5b144301ac2f11e2a10c39218e6cd200a7d90a238c3ace7c43a32dff975c19
 
 USER 53111
 
 WORKDIR /usr/app/
-
 ENV PORT=3000
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1

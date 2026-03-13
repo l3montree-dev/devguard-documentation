@@ -63,6 +63,8 @@ summary h4 {
   --chart-4: 43 74% 66%;
   --chart-5: 27 87% 67%;
   --radius: 0.5rem;
+
+  --grid-line-color: rgba(0, 0, 0, 0.15);
   }
   .dark {
     --background: 0 0% 2%;
@@ -89,8 +91,17 @@ summary h4 {
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
-
+    --grid-line-color: rgba(255, 255, 255, 0.08);
     --nextra-bg: 0 0% 2% !important;
+  }
+
+  .card-blue {
+    --card: 210 50% 97%;
+    --border: 210 25% 88%;
+  }
+  .dark .card-blue {
+    --card: 210 30% 8%;
+    --border: 210 20% 18%;
   }
 }
 
