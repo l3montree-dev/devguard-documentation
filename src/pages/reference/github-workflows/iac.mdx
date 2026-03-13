@@ -1,16 +1,16 @@
-import {IAC} from '../../../components/texts/CICDJobs'
+# Infrastructure as Code (IaC) GitHub Workflow
 
-<IAC />
+The Infrastructure as Code (iac) component focuses on analyzing your infrastructure code for security vulnerabilities. This component helps in identifying misconfigurations and security risks in your infrastructure setup, ensuring that your cloud resources are configured securely before deployment.
 
-  The `iac` accept a following inputs:
+  The `iac` workflow accepts the following inputs:
   | Name                   | Description                                                                   | Required    | Default Value                                    | 
 |------------------------|--------------------------|-----|----------------------------------|
 | `api-url`               | URL of the DevGuard API                                                       | No          | `https://api.devguard.org`                 |  
 | `asset-name`            | Name of the asset to be scanned                                               | Yes         |                                                 |           
 | `path`              | Path to the source code to be scanned                                         | No          | `.`                                              | 
 
-Usage Example:
-Here’s an example of how to call this reusable workflow from another workflow file:
+## Usage Example:
+Here's an example of how to call this reusable workflow from another workflow file:
 ```yaml copy
 name: DevGuard Workflow
 
@@ -22,8 +22,7 @@ jobs:
         uses: l3montree-dev/devguard-action/.github/workflows/iac.yml@main
         with:
           api-url: https://api.devguard.org
-          asset-name: 'myOrgnaization/projects/myProject/assets/myAsset'
+          asset-name: 'myOrganization/projects/myProject/assets/myAsset'
         secrets:
           devguard-token: ${{ secrets.DEVGUARD_TOKEN }}
 ```
-

@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://docs.devguard.org
+
+# Sitemaps
+Sitemap: https://docs.devguard.org/sitemap.xml

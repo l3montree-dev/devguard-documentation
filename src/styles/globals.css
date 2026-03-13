@@ -39,6 +39,8 @@
 
   /* ── Swagger UI extras ───────────────────────── */
   --blue: hsl(204 86% 53%);
+
+  --grid-line-color: rgba(255, 255, 255, 0.08);
 }
 
 [data-kern-theme="dark"] {
@@ -183,4 +185,14 @@
   #toc-footer .kern-link {
     @apply text-[12px]!;
   }
+}
+
+
+.card-blue {
+  --card: 210 50% 97%;
+  --border: 210 25% 88%;
+}
+.dark .card-blue {
+  --card: 210 30% 8%;
+  --border: 210 20% 18%;
 }

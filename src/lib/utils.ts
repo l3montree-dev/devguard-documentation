@@ -19,6 +19,17 @@ type YoutubeAttributes = {
     srcdoc: string
 }
 
+export function extractPackageName(purl: string): string {
+    return purl
+        .split('?')[0]
+        .split('@')
+        .slice(0, -1)
+        .join('@')
+        .split('/')
+        .slice(1)
+        .join('/')
+}
+
 export function extractAttributes(iFrame: string): YoutubeAttributes {
     const attributes = iFrame
         .split(' ')

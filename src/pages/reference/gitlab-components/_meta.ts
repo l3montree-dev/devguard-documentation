@@ -1,21 +1,20 @@
 // Copyright 2025 rafaeishikho.
 // SPDX-License-Identifier: Apache-2.0
 export default {
-    full: {
-        title: 'Full',
+    'full-scan': {
+        title: 'Full DevGuard Scan',
     },
-
     'secret-scanning': {
         title: 'Secret Scanning',
     },
     sast: {
-        title: 'Static Application Security Testing',
+        title: 'Static Application Security Testing (SAST)',
     },
     iac: {
-        title: 'Infrastructure as Code',
+        title: 'Infrastructure as Code (IaC)',
     },
     sca: {
-        title: 'Software Composition Analysis',
+        title: 'Software Composition Analysis (SCA)',
     },
     'container-scanning': {
         title: 'Container Scanning',

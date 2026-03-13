@@ -1,7 +1,15 @@
-import {Full} from '../../../components/texts/CICDJobs'
+# Full DevGuard Scan GitHub Workflow
 
-<Full />
-
+This reusable workflow performs a comprehensive security scan of your codebase using DevGuard.
+It includes:
+- [Container Scanning](/reference/github-workflows/container-scanning)
+- [Static Application Security Testing (SAST)](/reference/github-workflows/sast)
+- [Software Composition Analysis (SCA)](/reference/github-workflows/sca)
+- [Secret Scanning](/reference/github-workflows/secret-scanning)
+- [Infrastructure as Code (IaC) scanning](/reference/github-workflows/iac)
+- [Image building](/reference/github-workflows/build-image)
+- [Image signing](/reference/github-workflows/sign)
+- [Image deployment](/reference/github-workflows/deploy)
 
 The `deploy` step runs only if the following jobs complete successfully:  
 `build-image`, `container-scanning`, `software-composition-analysis`, `sast`, and `secret-scanning`.
@@ -19,8 +27,8 @@ The `full-scan` workflow accepts the following inputs:
 | `disable-artifact-registry-as-image-store`               |    If the artifact size is too big for your github usage quota, set this to true. This will push the image directly to the registry instead of uploading it as artifact.   | No          | `false`                                              | 
 | `should-deploy`|Should the deploy job run | No          | `true`                                      | 
 
-Usage Example:
-Here’s an example of how to call this reusable workflow from another workflow file:
+## Usage Example:
+Here's an example of how to call this reusable workflow from another workflow file:
 ```yaml copy
 name: DevGuard Workflow
 
@@ -32,7 +40,7 @@ jobs:
         uses: l3montree-dev/devguard-action/.github/workflows/full.yml@main
         with:
           api-url: https://api.devguard.org
-          asset-name: 'myOrgnaization/projects/myProject/assets/myAsset'
+          asset-name: 'myOrganization/projects/myProject/assets/myAsset'
         secrets:
           devguard-token: ${{ secrets.DEVGUARD_TOKEN }}
 ```

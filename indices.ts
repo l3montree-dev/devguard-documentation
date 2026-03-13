@@ -4,6 +4,16 @@ export const indices = {
       "sidebar_position": 1,
       "title": "Introduction",
       "filepath": "index"
+    },
+    "package-inspector": {
+      "title": "Package Inspector",
+      "description": "Analyze the security state of open-source packages. Get insights on maintenance, vulnerabilities, and supply chain risks.",
+      "filepath": "package-inspector"
+    },
+    "vulnerability-database": {
+      "title": "Vulnerability Database - Search CVEs, Analyze Risks",
+      "description": "Search and explore known vulnerabilities (CVE, RHSA, GHSA) with CVSS scores, EPSS probabilities, affected components, and risk analysis.",
+      "filepath": "vulnerability-database"
     }
   },
   "comparison": {},
@@ -69,8 +79,10 @@ export const indices = {
       "filepath": "sponsors-partners"
     }
   },
+  "package-inspector": {},
   "reference": {},
   "tutorials": {},
+  "vulnerability-database": {},
   "explanations/advanced-topics": {},
   "explanations/architecture": {},
   "explanations/attestations-provenance": {},
@@ -266,7 +278,13 @@ export const indices = {
     }
   },
   "reference/github-workflows": {},
-  "reference/gitlab-components": {},
+  "reference/gitlab-components": {
+    "sast": {
+      "title": "SAST Gitlab Component",
+      "description": "Configure the DevGuard SAST GitLab component to scan source code for vulnerabilities. See all available inputs, defaults, and usage examples.",
+      "filepath": "sast"
+    }
+  },
   "reference/scanner": {},
   "reference/vulnerability-database": {
     "update-schedule": {

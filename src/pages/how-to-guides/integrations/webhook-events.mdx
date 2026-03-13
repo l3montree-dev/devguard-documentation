@@ -1,8 +1,200 @@
 import Image from 'next/image';
 import { Callout } from '@document-writing-tools/kernux-nextra-theme'
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
-import PageContentComingSoon from '@/components/PageContentComingSoon'
 
 # Webhook Events
 
-<PageContentComingSoon />
+DevGuard can send HTTP POST requests to a URL of your choice whenever specific security events occur. Use webhooks to integrate DevGuard with external systems such as notification services, SIEMs, ticketing tools, or custom automation pipelines.
+
+## Supported Event Types
+
+| Type | Description | Triggered when |
+| --- | --- | --- |
+| `sbom` | Software Bill of Materials | A new SBOM is generated for an asset version |
+| `dependencyVulnerabilities` | Dependency vulnerabilities | New dependency vulnerabilities are detected (SCA) |
+| `firstPartyVulnerabilities` | First-party vulnerabilities | New first-party vulnerabilities are detected (SAST) |
+| `test` | Test event | A test webhook is sent manually from the UI or API |
+
+## Webhook Scope
+
+Webhooks can be registered at two levels:
+
+- **Organization level** — receives events for **all projects** within the organization.
+- **Project level** — receives events only for assets within that specific project.
+
+When an event fires, DevGuard delivers it to all matching webhooks: project-scoped webhooks for that project **and** organization-scoped webhooks.
+
+## Creating a Webhook
+
+### Via the API
+
+```bash
+POST /api/v1/organizations/{org}/integrations/webhook/test-and-save/
+```
+
+For a project-scoped webhook:
+
+```bash
+POST /api/v1/organizations/{org}/projects/{project}/integrations/webhook/test-and-save/
+```
+
+**Request Body:**
+
+```json
+{
+  "name": "My SIEM Integration",
+  "description": "Forward vulnerability events to our SIEM",
+  "url": "https://example.com/devguard-webhook",
+  "secret": "my-shared-secret",
+  "sbomEnabled": true,
+  "vulnEnabled": true
+}
+```
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `name` | string | no | Display name for the webhook |
+| `description` | string | no | Description of the webhook's purpose |
+| `url` | string | **yes** | The endpoint URL that will receive the POST requests |
+| `secret` | string | no | Shared secret sent as the `X-Webhook-Secret` header for verification |
+| `sbomEnabled` | boolean | no | Enable delivery of SBOM events |
+| `vulnEnabled` | boolean | no | Enable delivery of vulnerability events (dependency & first-party) |
+
+**Example Response:**
+
+```json
+{
+  "id": "a1b2c3d4-...",
+  "name": "My SIEM Integration",
+  "description": "Forward vulnerability events to our SIEM",
+  "url": "https://example.com/devguard-webhook",
+  "sbomEnabled": true,
+  "vulnEnabled": true
+}
+```
+
+<Callout type="info">
+  DevGuard sends a test request to your URL during creation. If your endpoint does not return a `2xx` status, the webhook will not be saved.
+</Callout>
+
+### Updating a Webhook
+
+```bash
+PUT /api/v1/organizations/{org}/integrations/webhook/{id}/
+```
+
+The request body is the same as creation, but must also include the `id` field.
+
+### Deleting a Webhook
+
+```bash
+DELETE /api/v1/organizations/{org}/integrations/webhook/{id}/
+```
+
+## Payload Format
+
+Every webhook delivery is an HTTP `POST` with `Content-Type: application/json`. The payload follows this structure:
+
+```json
+{
+  "type": "sbom | dependencyVulnerabilities | firstPartyVulnerabilities | test",
+  "organization": {
+    "id": "uuid",
+    "name": "My Org",
+    "slug": "my-org"
+  },
+  "project": {
+    "id": "uuid",
+    "name": "My Project",
+    "slug": "my-project"
+  },
+  "asset": {
+    "id": "uuid",
+    "name": "My Asset",
+    "slug": "my-asset",
+    "description": "..."
+  },
+  "assetVersion": {
+    "name": "main",
+    "slug": "main",
+    "defaultBranch": true,
+    "type": "branch"
+  },
+  "artifact": {
+    "artifactName": "my-image:latest"
+  },
+  "payload": "..."
+}
+```
+
+The `payload` field contains the event-specific data and varies by event type:
+
+- **`sbom`** — A full [CycloneDX](https://cyclonedx.org/) BOM object.
+- **`dependencyVulnerabilities`** — An array of dependency vulnerability objects including CVE details, component purl, CVSS score, risk assessment, and fix version.
+- **`firstPartyVulnerabilities`** — An array of first-party vulnerability objects including rule ID, file URI, code snippet, scanner ID, and severity.
+- **`test`** — A simple object with a `message` and `timestamp`.
+
+## Verifying Webhook Deliveries
+
+If you configured a `secret` when creating the webhook, DevGuard includes it in every request to your endpoint as:
+
+```
+X-Webhook-Secret: <your-secret>
+```
+
+Your endpoint should validate this header to ensure the request originates from DevGuard.
+
+The following example shows how this could look like in your backend server.
+
+**Example usage of webhook secret (Node.js / Express):**
+
+```js
+app.post("/devguard-webhook", (req, res) => {
+  const secret = req.headers["x-webhook-secret"];
+  if (secret !== process.env.DEVGUARD_WEBHOOK_SECRET) {
+    return res.status(401).send("Unauthorized");
+  }
+
+  const event = req.body;
+  console.log(`Received ${event.type} event for ${event.asset.name}`);
+
+  // Process the event...
+  res.status(200).send("OK");
+});
+```
+
+## Retry Behavior
+
+If your endpoint does not return a `2xx` status code, DevGuard retries the delivery up to **3 times** with increasing delays: **1 second**, **5 seconds**, and **10 seconds**.
+
+Requests time out after **120 seconds**.
+
+## Testing a Webhook
+
+You can send a test payload to any URL without saving it:
+
+```bash
+POST /api/v1/organizations/{org}/integrations/webhook/test/
+```
+
+
+**Request Body:**
+
+```json
+{
+  "url": "https://example.com/devguard-webhook",
+  "secret": "my-shared-secret",
+  "payloadType": "sampleDependencyVulns"
+}
+```
+
+DevGuard will take the URL you provided and send a test-payload to it to verify the webhook integration.
+
+Supported `payloadType` values:
+
+| Value | Description |
+| --- | --- |
+| `empty` | Simple test message with a timestamp |
+| `sampleSbom` | A sample CycloneDX SBOM |
+| `sampleDependencyVulns` | A sample dependency vulnerability (CVE-2021-44228) |
+| `sampleFirstPartyVulns` | A sample first-party vulnerability (SQL injection) |

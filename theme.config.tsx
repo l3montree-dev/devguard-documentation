@@ -27,6 +27,7 @@ const config: Partial<KernuxThemeConfig> = {
 
         return (
             <>
+                <meta httpEquiv="content-language" content="en" />
                 <link rel="canonical" href={url} />
                 <meta property="og:url" content={url} />
                 <meta property="og:title" content={pageTitle} />
@@ -44,13 +45,15 @@ const config: Partial<KernuxThemeConfig> = {
         )
     },
     logo: (
-        <Image
-            src="/logo-inverse-horizontal.svg"
-            alt="DevGuard Logo"
-            width={220}
-            height={80}
-            className="h-12 w-auto"
-        />
+        <span aria-label="DevGuard - Back to homepage">
+            <Image
+                src="/logo-inverse-horizontal.svg"
+                alt="DevGuard Logo"
+                width={220}
+                height={80}
+                className="h-12 w-auto"
+            />
+        </span>
     ),
     sidebar: {
         defaultMenuCollapseLevel: 1,
