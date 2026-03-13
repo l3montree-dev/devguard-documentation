@@ -153,6 +153,12 @@
     @apply max-w-[1440px]! mx-auto!;
   }
 
+  /* Breadcrumb */
+  #breadcrumb .kern-link {
+    @apply text-[14px]! no-underline! font-semibold!;
+    @apply text-(--sidebar-accent-foreground)! visited:text-(--sidebar-accent-foreground)! hover:text-(--foreground)!;
+  }
+
   /* Sidebar: */
   a[data-sidebar], button[data-sidebar] {
     @apply text-(--sidebar-accent-foreground) hover:text-(--foreground)!;
@@ -162,7 +168,6 @@
     @apply bg-(--sidebar-accent-active) text-(--link-color)!;
     @apply font-semibold;
   }
-  
 
   /* TOC */
   #toc .kern-link {
