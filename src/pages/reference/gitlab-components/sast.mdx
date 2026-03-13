@@ -1,8 +1,12 @@
-import {SAST} from '../../../components/texts/CICDJobs'
+---
+title: 'SAST Gitlab Component'
+description: 'Configure the DevGuard SAST GitLab component to scan source code for vulnerabilities. See all available inputs, defaults, and usage examples.'
+---
+# Static Application Security Testing (SAST) Gitlab Component
 
-<SAST />
+The Static Application Security Testing component (`sast`) focuses on [Static Application Security Testing (SAST)](/explanations/devsecops/sast) to analyze your source code for vulnerabilities without executing it. This component helps in identifying security flaws early in the development cycle, ensuring that code quality and security are prioritized before deployment.
 
- The `sast` accept a following inputs:
+ The `sast` component accepts the following inputs:
 
 | Name        | Description                     | Required     | Default Value        |
 |-------------|---------------------------------|-------------|----------------------|
@@ -12,13 +16,12 @@ import {SAST} from '../../../components/texts/CICDJobs'
 | `scan_stage`| The stage where the scan is run       | No       |     `test`     |
 | `runner_tags` | The runner tags used to select appropriate CI runners.   | No  | `""` |
 
-Usage Example:
-Here’s an example of how to call this component:
+## Usage Example
+Here's an example of how to call this component:
 ```yaml copy
 include:
 - remote: "https://gitlab.com/l3montree/devguard/-/raw/main/templates/static-application-security-testing.yml"
   inputs:
-    asset_name: "myOrgnaization/projects/myProject/assets/myAsset"
+    asset_name: "myOrganization/projects/myProject/assets/myAsset"
     token: "$DEVGUARD_TOKEN"
 ```
-

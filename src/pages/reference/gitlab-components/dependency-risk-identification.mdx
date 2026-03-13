@@ -1,9 +1,9 @@
-import { DependencyRiskIdentification } from '../../../components/texts/CICDJobs'
+# Dependency Risk Identification Gitlab Component
 
-<DependencyRiskIdentification />
+This workflow identifies potential security vulnerabilities in a project's dependencies. It requires a Software Bill of Materials (SBOM) as input to analyze and ensure that all dependencies are secure and up to date.
 
+The `dependency-risk-identification` component accepts the following inputs:
 
-The `dependency-risk-identification` accepts the following inputs:
 | Name        | Description                     | Required     | Default Value        |
 |-------------|---------------------------------|-------------|----------------------|
 | `api_url`   | The DevGuard API URL             | No           |       `https://api.devguard.org`     |
@@ -16,14 +16,14 @@ The `dependency-risk-identification` accepts the following inputs:
 | `dependencies`| Specifies the jobs whose artifacts this job relies on | No | `""` |
 | `scanner_id`| The ID of the scanner used to generate the SBOM | No | `"sbom-upload"` |
 
-Usage Examples:
+## Usage Examples:
 
-if you have the sbom in the repository:
+If you have the sbom in the repository:
 
 ```yaml copy
 include:
   - remote: "https://gitlab.com/l3montree/devguard/-/raw/main/templates/dependency-risk-identification@main"
-    asset_name: "myOrgnaization/projects/myProject/assets/myAsset"
+    asset_name: "myOrganization/projects/myProject/assets/myAsset"
     token: "$DEVGUARD_TOKEN_TEST"
     sbom_file: "./sbom.json"
 
