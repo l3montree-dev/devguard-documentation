@@ -10,7 +10,8 @@ tags:
   - tutorial
 ---
 
-import { Tabs, Steps, Callout } from 'nextra/components'
+import { DocSteps as Steps, Callout } from '@document-writing-tools/kernux-nextra-theme'
+import { DocTabs as Tabs } from '@document-writing-tools/kernux-nextra-theme'
 
 # Setup a Fresh DevGuard Instance and Scan for Vulnerabilities
 
@@ -125,7 +126,7 @@ Repositories represent the actual software projects you want to scan for vulnera
 
 Click the **Setup Risk Scanning** button to configure how you'll scan your code. For this tutorial, we'll use the Custom Setup option to perform a single scan.
 
-<Callout type="tip">
+<Callout type="default">
 If you're using GitLab, the Auto Setup option can automatically configure DevGuard CI/CD integration for your repository.
 </Callout>
 

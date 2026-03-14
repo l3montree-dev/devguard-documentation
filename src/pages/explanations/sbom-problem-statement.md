@@ -10,7 +10,7 @@ It can be useful to ensure that:
 
 This provides a complete and auditable picture of what’s running and what might be vulnerable.
 
----
+***
 
 ## Scenario: Custom Binaries Often Overlooked
 
@@ -27,7 +27,7 @@ A standard Trivy scan might detect OS packages and language dependencies, but th
 > It examines `/opt/bitnami/<component>/.spdx-<component>.spdx` files and matches components against known CVEs.  
 > Still, binaries not represented in the SBOM are missed unless additional metadata or attestations are provided.
 
----
+***
 
 ## 1. Generate an Initial SBOM of the Container Dependencies (solves 1.)
 
@@ -45,7 +45,7 @@ This captures:
 
 Custom binaries like `binary-x` may not appear yet. As well as all the dependencies of binary-x.
 
----
+***
 
 ## 2. Check Release Attestations to Identify missed binaries (solves 2.)
 
@@ -70,7 +70,7 @@ Foreach custom binary identified through release attestations (e.g. binary-x):
 1. Check if there are any sboms inside /opt/sboms/<component>
 2. Merge them into the main SBOM
 
----
+***
 
 ## 3. Scan the SBOM
 
@@ -84,7 +84,7 @@ trivy sbom container-sbom.json
 * Includes custom binaries via SBOM entries
 * Leverages **first-party advisories embedded in release attestations**
 
----
+***
 
 ## Benefits
 
@@ -93,7 +93,7 @@ trivy sbom container-sbom.json
 * Provides an **auditable trail** of software, versions, and attestations.
 * Can be integrated into CI/CD pipelines for container hardening and vulnerability validation.
 
----
+***
 
 ## References
 

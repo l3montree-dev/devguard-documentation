@@ -9,9 +9,9 @@ tags:
   - installation
 ---
 
-import { Callout } from 'nextra/components'
-import { Steps } from 'nextra/components'
-import { Tabs } from 'nextra/components'
+import { Callout } from '@document-writing-tools/kernux-nextra-theme'
+import { DocSteps as Steps } from '@document-writing-tools/kernux-nextra-theme'
+import { DocTabs as Tabs } from '@document-writing-tools/kernux-nextra-theme'
 
 # Installation Guide
 
@@ -53,8 +53,8 @@ The scanner is the primary tool for running security scans. It's a standalone bi
     devguard-scanner --version
     ```
 
-    <Callout type="tip">
-      **Tip:** Add the PATH export to your `~/.bashrc` or `~/.zshrc` for permanent access
+    <Callout type="default">
+      Add the PATH export to your `~/.bashrc` or `~/.zshrc` for permanent access
     </Callout>
   </Tabs.Tab>
 
@@ -162,7 +162,7 @@ The scanner is the primary tool for running security scans. It's a standalone bi
   </Tabs.Tab>
 </Tabs>
 
----
+***
 
 ## DevGuard CLI
 
@@ -194,7 +194,7 @@ The CLI tool provides additional management capabilities for vulnerability datab
   </Tabs.Tab>
 </Tabs>
 
----
+***
 
 ## DevGuard Platform (Self-Hosted)
 
@@ -218,14 +218,14 @@ See the [Docker Compose Deployment Guide](/how-to-guides/administration/deploy-w
 </Tabs>
 
 
----
+***
 
 ## Next Steps
 
 - [Quick Start Guide](/getting-started) - Run your first scan
 - [Core Concepts](/explanations/core-concepts/what-is-devguard) - Understand DevGuard architecture
 
----
+***
 
 <Callout type="default">
   **Need help?** Join our [discussions](https://github.com/l3montree-dev/devguard/discussions) or check out the [matrix chat](https://matrix.to/#/#devguard:matrix.org).

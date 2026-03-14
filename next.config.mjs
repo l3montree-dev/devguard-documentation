@@ -1,11 +1,28 @@
-import nextra from 'nextra'
+// Legacy Nextra docs-theme config (kept for reference during migration):
+// import nextra from 'nextra'
+//
+// const withNextra = nextra({
+//     theme: 'nextra-theme-docs',
+//     themeConfig: './theme.config.tsx',
+// })
+//
+// export default withNextra({ ... })
 
-const withNextra = nextra({
-    theme: 'nextra-theme-docs',
-    themeConfig: './theme.config.tsx',
-})
+import { withMarkdownWebBook } from '@document-writing-tools/kernux-nextra-theme/withMarkdownWebBook'
 
-export default withNextra({
+const config = withMarkdownWebBook({
+    trailingSlash: true,
+    eslint: {
+        ignoreDuringBuilds: true,
+    },
+    compiler: {
+        removeConsole: false,
+    },
+    webpack: (config) => {
+        config.resolve.fallback = { fs: false }
+        return config
+    },
+    basePath: process.env.BASE_PATH,
     async redirects() {
         return [
             {
@@ -31,3 +48,5 @@ export default withNextra({
         ]
     },
 })
+
+export default config

@@ -1,6 +1,6 @@
 import { clsx } from 'clsx'
 
-const gridClass = [
+export const gridClass = [
     'pointer-events-none inset-x-0 z-50 hidden lg:block h-8',
     'border-t border-b',
     'bg-[repeating-linear-gradient(315deg,var(--grid-line-color)_0,var(--grid-line-color)_1px,transparent_0,transparent_50%)]',

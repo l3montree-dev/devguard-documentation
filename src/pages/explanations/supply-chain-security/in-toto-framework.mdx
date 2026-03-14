@@ -8,7 +8,7 @@ Securing individual components of a software supply chain—like signing a commi
 
 It allows project owners to define a **layout** (the rules) for how software should be built, and requires every actor in the chain to provide **links** (evidence) that they followed those rules. By cryptographically linking each step to the next, in-toto creates an unbreakable chain of custody from source code to production artifact, ensuring that no unauthorized modifications occurred at any transition point.
 
----
+***
 
 ## The Problem: The Chain of Custody
 
@@ -50,7 +50,7 @@ Then, during verification, in-toto ensures:
 If an attacker modifies a file between Step 2 and Step 3, the hash mismatch is immediately detected. If a step is skipped, the missing link metadata fails verification. If an unauthorized actor performs a step, the signature validation fails.
 The result: **mathematical** proof that the artifact in production is exactly what the developer committed, processed through exactly the expected pipeline, with no unauthorized modifications.
 
----
+***
 
 ## Core Concepts
 
@@ -149,7 +149,7 @@ When a step is performed, the in-toto client records:
 }
 ```
 
----
+***
 
 ## How Verification Works
 
@@ -275,7 +275,7 @@ This combination provides both:
 
 Read more about this relationship in the [SLSA Framework](/explanations/supply-chain-security/slsa-framework) chapter and the [official SLSA/in-toto blog post](https://slsa.dev/blog/2023/05/in-toto-and-slsa).
 
----
+***
 
 ## Limitations and Considerations
 
@@ -286,7 +286,7 @@ While in-toto provides strong guarantees, it's important to understand its bound
 - **Side Channels:** In-toto doesn't prevent timing attacks, resource exhaustion, or other side-channel attacks during the build process.
 - **Operational Overhead:** Implementing in-toto requires process changes and adds complexity to your CI/CD pipeline.
 
----
+***
 
 ## Simplifying In-Toto with DevGuard
 
@@ -317,7 +317,7 @@ GET /api/v1/verify-supply-chain?supplyChainId=XYZ&supplyChainOutputDigest=ab23cd
 The call to this endpoint results either in a `200 OK` or a `400 Bad Request` response. 
 Besides that, the verification can be done manually by downloading the links and verifying them against the root.layout. All those artifacts are stored and free to download by the developer.
 
----
+***
 
 ## Conclusion
 
@@ -328,7 +328,7 @@ It provides the mathematical proof that the software running in production is ex
 
 Unlike traditional code signing (which only validates "who"), in-toto validates "who did what, when, and how"—creating an auditable trail for the entire software supply chain.
 
----
+***
 
 ## References
 

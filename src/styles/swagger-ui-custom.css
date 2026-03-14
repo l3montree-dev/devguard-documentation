@@ -1,0 +1,507 @@
+/* Swagger UI Custom Styles — aligned with DWT / kernux-nextra theme */
+
+/* Reset global theme pre/code overrides inside swagger */
+.swagger-ui pre,
+.swagger-ui pre *,
+.swagger-ui code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+    white-space: pre !important;
+    word-break: normal !important;
+    hyphens: none !important;
+    background: unset !important;
+    box-shadow: none !important;
+    overflow-x: auto;
+    font-size: 12px !important;
+    line-height: 1.5 !important;
+}
+
+.swagger-ui pre ::before,
+.swagger-ui pre *::before {
+    display: none !important;
+    content: none !important;
+    margin: 0 !important;
+}
+
+/* Hide built-in auth — we use custom PAT dialog */
+.swagger-ui .auth-wrapper,
+.swagger-ui .authorization__btn {
+    display: none !important;
+}
+
+/* Hide padlock icons */
+.swagger-ui .opblock-summary .opblock-summary-control svg[aria-label] {
+    display: none !important;
+}
+
+.swagger-ui {
+    font-family: var(--font-inter), Inter, sans-serif;
+    font-size: 13px;
+    @apply text-foreground;
+
+    /* ── Focus resets ────────────────────────────── */
+    .model-box-control:focus,
+    .models-control:focus,
+    .opblock-summary-control:focus {
+        outline: none !important;
+    }
+
+    /* ── Wrapper ─────────────────────────────────── */
+    .wrapper {
+        @apply p-0;
+    }
+
+    /* ── Info section (hidden — we write our own intro) ── */
+    .info {
+        @apply hidden;
+    }
+
+    /* ── Scheme container ────────────────────────── */
+    .scheme-container {
+        background: var(--card) !important;
+        border: 1px solid var(--border) !important;
+        box-shadow: none !important;
+        @apply rounded-md p-4 mb-4;
+
+        .servers-title {
+            @apply text-xs font-semibold uppercase text-muted-foreground mb-1 block;
+            letter-spacing: 0.05em;
+        }
+
+        label {
+            @apply text-xs text-muted-foreground;
+        }
+    }
+
+    /* ── Operation tag headings ──────────────────── */
+    .opblock-tag {
+        @apply py-2 mt-6 mb-2;
+        border-bottom: 1px solid var(--border) !important;
+
+        .expand-operation path {
+            fill: var(--muted-foreground) !important;
+        }
+
+        a.nostyle {
+            font-family: var(--font-lexend), Lexend, sans-serif !important;
+            @apply text-base font-semibold text-foreground;
+        }
+
+        small {
+            @apply text-xs text-muted-foreground;
+        }
+    }
+
+    /* ── Operation blocks ────────────────────────── */
+    .opblock {
+        background: var(--card) !important;
+        border: 1px solid var(--border) !important;
+        box-shadow: none !important;
+        @apply rounded-md mb-2;
+    }
+
+    .opblock .opblock-summary {
+        border-color: var(--border) !important;
+        background: transparent !important;
+    }
+
+    .opblock-body {
+        background: transparent !important;
+    }
+
+    /* Method badges */
+    .opblock .opblock-summary-method {
+        @apply rounded-sm text-xs font-semibold text-center;
+        min-width: 64px;
+        padding: 4px 6px;
+        letter-spacing: 0.04em;
+    }
+
+    .opblock.opblock-get    .opblock-summary-method { background: hsl(168 100% 41%) !important; color: #000 !important; }
+    .opblock.opblock-post   .opblock-summary-method { background: var(--blue) !important;        color: #000 !important; }
+    .opblock.opblock-put    .opblock-summary-method { background: hsl(43 74% 66%)  !important;   color: #000 !important; }
+    .opblock.opblock-patch  .opblock-summary-method { background: hsl(27 87% 67%)  !important;   color: #000 !important; }
+    .opblock.opblock-delete .opblock-summary-method { background: var(--destructive) !important; color: #fff !important; }
+
+    /* Tab underline accent */
+    .opblock.opblock-get    .tab-header .tab-item.active h4 span:after,
+    .opblock.opblock-post   .tab-header .tab-item.active h4 span:after,
+    .opblock.opblock-put    .tab-header .tab-item.active h4 span:after,
+    .opblock.opblock-patch  .tab-header .tab-item.active h4 span:after,
+    .opblock.opblock-delete .tab-header .tab-item.active h4 span:after {
+        @apply bg-primary;
+    }
+
+    /* Summary text */
+    .opblock-summary-path {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+        @apply text-sm text-foreground;
+    }
+
+    .opblock-summary-description {
+        color: var(--muted-foreground) !important;
+        @apply text-xs;
+    }
+
+    .opblock-summary-path-description-wrapper {
+        @apply mt-0.5;
+    }
+
+    /* Section headers inside expanded block */
+    .opblock .opblock-section-header {
+        background: var(--card) !important;
+
+        h4 {
+            @apply text-xs font-semibold uppercase text-muted-foreground;
+            letter-spacing: 0.05em;
+        }
+
+        .opblock-title {
+            color: var(--muted-foreground) !important;
+        }
+    }
+
+    .opblock-description-wrapper p,
+    .opblock-external-docs-wrapper p,
+    .opblock-title_normal p {
+        @apply text-sm text-foreground;
+    }
+
+    /* Collapse arrow */
+    .opblock-control-arrow {
+        padding-left: 8px;
+        svg { width: 14px; height: 14px; }
+        path { fill: var(--muted-foreground) !important; }
+    }
+
+    /* ── Parameters ──────────────────────────────── */
+    .parameters-col_description {
+        color: var(--foreground) !important;
+        @apply text-xs;
+    }
+
+    .parameter__name {
+        color: var(--foreground) !important;
+        @apply text-xs font-semibold;
+    }
+
+    .parameter__name.required:after {
+        @apply text-destructive top-0;
+        font-size: 11px;
+        content: ' *';
+    }
+
+    .parameter__type {
+        color: var(--muted-foreground) !important;
+        @apply text-xs font-semibold;
+    }
+
+    .parameter__in {
+        color: var(--muted-foreground) !important;
+        font-style: italic !important;
+        @apply text-xs;
+    }
+
+    /* ── Tables ──────────────────────────────────── */
+    table thead tr th,
+    table thead tr td {
+        background: transparent !important;
+        color: var(--foreground) !important;
+        border-bottom: 1px solid var(--border) !important;
+        @apply text-xs;
+    }
+
+    .parameters thead {
+        background: transparent !important;
+    }
+
+    .parameters-col_name {
+        width: 220px;
+        min-width: 220px;
+    }
+
+    /* ── Tab bar ─────────────────────────────────── */
+    .tab {
+        @apply mb-2;
+    }
+
+    .tab li {
+        color: var(--muted-foreground) !important;
+        @apply text-xs font-sans;
+    }
+
+    .tab li.active {
+        color: var(--foreground) !important;
+    }
+
+    /* ── Responses ───────────────────────────────── */
+    .responses-inner {
+        background: transparent !important;
+    }
+
+    .response-col_status,
+    .response-col_description,
+    .response-col_links {
+        color: var(--foreground) !important;
+        @apply text-xs;
+    }
+
+    .response-control-media-type__accept-message {
+        @apply text-xs text-foreground;
+    }
+
+    .responses-wrapper .btn {
+        background: var(--secondary) !important;
+        color: var(--secondary-foreground) !important;
+        border-color: var(--border) !important;
+    }
+
+    /* ── Code blocks ─────────────────────────────── */
+    pre.microlight,
+    .highlight-code {
+        background: var(--muted) !important;
+        border: 1px solid var(--border) !important;
+        @apply rounded-md text-xs;
+        color: var(--foreground) !important;
+    }
+
+    .response code,
+    .response pre {
+        color: var(--foreground) !important;
+        @apply text-xs;
+    }
+
+    .computed-url {
+        @apply text-foreground text-xs;
+
+        code {
+            @apply bg-input rounded-sm;
+        }
+    }
+
+    /* ── Models section ──────────────────────────── */
+    .model-container,
+    section.models {
+        background: transparent !important;
+    }
+
+    .model-box,
+    section.models .model-container {
+        @apply rounded-md;
+    }
+
+    .model-box,
+    .scheme-container {
+        background: var(--card) !important;
+        border: 1px solid var(--border) !important;
+        box-shadow: none !important;
+    }
+
+    .model-title,
+    section.models h4 {
+        color: var(--foreground) !important;
+        border-bottom: 1px solid var(--border) !important;
+        @apply text-xs font-semibold pb-2;
+    }
+
+    .model .property {
+        color: var(--foreground) !important;
+        @apply text-xs;
+    }
+
+    .model .property.primitive {
+        color: var(--muted-foreground) !important;
+    }
+
+    .model-toggle {
+        color: var(--primary) !important;
+    }
+
+    /* ── JSON Schema 2020-12 ─────────────────────── */
+    .json-schema-2020-12__title {
+        @apply text-sm font-semibold font-sans text-foreground;
+    }
+
+    .json-schema-2020-12-property .json-schema-2020-12__title {
+        @apply text-xs font-semibold font-sans text-foreground;
+    }
+
+    .json-schema-2020-12__attribute.json-schema-2020-12__attribute--primary {
+        @apply text-xs font-semibold font-sans text-primary;
+    }
+
+    .json-schema-2020-12-keyword__name--primary,
+    .json-schema-2020-12-keyword--enum .json-schema-2020-12-json-viewer__name,
+    .json-schema-2020-12-keyword--enum .json-schema-2020-12-json-viewer__value,
+    .json-schema-2020-12-keyword--examples .json-schema-2020-12-json-viewer__name,
+    .json-schema-2020-12-keyword--examples .json-schema-2020-12-json-viewer__value {
+        @apply text-xs text-muted-foreground;
+    }
+
+    .json-schema-2020-12-expand-deep-button {
+        @apply text-xs font-semibold font-sans text-muted-foreground;
+    }
+
+    .json-schema-2020-12-accordion {
+        position: relative;
+        right: 4px;
+
+        .json-schema-2020-12-accordion__icon svg path {
+            fill: var(--muted-foreground) !important;
+        }
+    }
+
+    .json-schema-2020-12-keyword--enum .json-schema-2020-12-accordion__icon {
+        position: relative;
+        bottom: 0 !important;
+    }
+
+    .models .json-schema-2020-12 {
+        .json-schema-2020-12-expand-deep-button {
+            @apply text-xs font-semibold font-sans text-muted-foreground;
+        }
+
+        .json-schema-2020-12__title {
+            @apply text-sm font-semibold font-sans text-foreground;
+        }
+
+        .json-schema-2020-12-accordion .json-schema-2020-12-accordion__icon {
+            position: relative;
+            bottom: 4px;
+        }
+    }
+
+    /* ── Buttons ─────────────────────────────────── */
+    .btn {
+        background: var(--secondary) !important;
+        color: var(--secondary-foreground) !important;
+        border: 1px solid var(--border) !important;
+        box-shadow: none !important;
+        @apply rounded-md text-xs font-semibold;
+    }
+
+    .btn:hover {
+        opacity: 0.85 !important;
+    }
+
+    .btn.execute,
+    .btn.authorize {
+        background: var(--primary) !important;
+        color: var(--primary-foreground) !important;
+        border-color: var(--primary) !important;
+    }
+
+    .btn-clear {
+        background: var(--secondary) !important;
+        color: var(--secondary-foreground) !important;
+        border-color: var(--border) !important;
+    }
+
+    .try-out__btn {
+        background: var(--secondary) !important;
+        color: var(--secondary-foreground) !important;
+        border: 1px solid var(--border) !important;
+    }
+
+    /* ── Inputs ──────────────────────────────────── */
+    input[type=text],
+    input[type=password],
+    input[type=email],
+    textarea,
+    select {
+        background: var(--input) !important;
+        color: var(--foreground) !important;
+        border: 1px solid var(--border) !important;
+        @apply rounded-md text-xs;
+    }
+
+    input[type=text]:focus,
+    input[type=password]:focus,
+    input[type=email]:focus,
+    textarea:focus,
+    select:focus {
+        border-color: var(--ring) !important;
+        outline: none !important;
+        box-shadow: 0 0 0 1px var(--ring) !important;
+    }
+
+    label {
+        color: var(--foreground) !important;
+        @apply text-xs;
+    }
+
+    /* ── Links ───────────────────────────────────── */
+    a {
+        color: var(--primary) !important;
+        @apply text-xs;
+    }
+
+    a:hover {
+        @apply underline;
+    }
+
+    a.nostyle {
+        color: var(--foreground) !important;
+        text-decoration: none !important;
+    }
+
+    /* ── Markdown content ────────────────────────── */
+    .markdown p,
+    .markdown pre,
+    .markdown code {
+        color: var(--foreground) !important;
+        @apply text-xs;
+    }
+
+    .markdown code {
+        background: var(--muted) !important;
+        @apply px-1.5 py-0.5 rounded-sm;
+    }
+
+    /* ── JSON schema type/format ─────────────────── */
+    .prop-type {
+        color: var(--blue) !important;
+    }
+
+    .prop-format {
+        color: var(--muted-foreground) !important;
+    }
+
+    /* ── Error / success states ──────────────────── */
+    .errors-wrapper {
+        background: rgb(from var(--destructive) r g b / 0.1) !important;
+        border: 1px solid rgb(from var(--destructive) r g b / 0.3) !important;
+        color: var(--destructive) !important;
+        @apply rounded-md text-xs;
+    }
+
+    .response.success {
+        border-color: rgb(from var(--success) r g b / 0.3) !important;
+        background: rgb(from var(--success) r g b / 0.05) !important;
+    }
+
+    /* ── Copy button ─────────────────────────────── */
+    .copy-to-clipboard {
+        background: var(--secondary) !important;
+        color: var(--secondary-foreground) !important;
+        border: 1px solid var(--border) !important;
+    }
+
+    .copy-to-clipboard button {
+        background: transparent !important;
+        color: var(--secondary-foreground) !important;
+    }
+
+    /* ── Loading ─────────────────────────────────── */
+    .loading-container .loading:before {
+        border-color: var(--muted-foreground) !important;
+    }
+
+    .loading-container .loading:after {
+        border-top-color: var(--primary) !important;
+    }
+
+    /* ── Topbar (hidden) ─────────────────────────── */
+    .topbar {
+        display: none !important;
+    }
+}

@@ -8,4 +8,5 @@ export default {
     compliance: { title: 'Compliance' },
     'api-usage': { title: 'API Usage' },
     administration: { title: 'Administration' },
+    vexing: { title: 'Vexing Vulnerabilities' },
 }

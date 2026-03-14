@@ -81,7 +81,7 @@ export default function PackageSearch({
                 <>
                     <div
                         className={cn(
-                            'flex items-center rounded-xl border border-input bg-transparent transition-colors focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50 dark:bg-input/30',
+                            'border-input focus-within:border-ring focus-within:ring-ring/50 dark:bg-input/30 flex items-center rounded-md border bg-transparent transition-colors focus-within:ring-[3px]',
                             displayError
                                 ? 'border-destructive focus-within:border-destructive focus-within:ring-destructive/50'
                                 : '',
@@ -91,7 +91,7 @@ export default function PackageSearch({
                             <select
                                 value={ecosystem}
                                 onChange={(e) => setEcosystem(e.target.value)}
-                                className="h-12 cursor-pointer appearance-none rounded-l-xl bg-transparent pl-3 pr-7 text-base outline-none md:text-lg"
+                                className="h-12 cursor-pointer appearance-none rounded-l-md bg-transparent pr-7 pl-3 text-base outline-none md:text-lg"
                                 disabled={isSearching}
                                 aria-label="Ecosystem"
                             >
@@ -101,19 +101,19 @@ export default function PackageSearch({
                                     </option>
                                 ))}
                             </select>
-                            <ChevronDown className="pointer-events-none absolute right-1.5 h-4 w-4 text-muted-foreground" />
+                            <ChevronDown className="text-muted-foreground pointer-events-none absolute right-1.5 h-4 w-4" />
                         </div>
-                        <div className="h-8 w-px bg-input" />
+                        <div className="bg-input h-8 w-px" />
                         <input
                             type="text"
                             value={packageName}
                             onChange={(e) => setPackageName(e.target.value)}
                             placeholder="name"
-                            className="h-12 min-w-0 flex-1 bg-transparent px-3 text-base outline-none placeholder:text-muted-foreground md:text-lg"
+                            className="placeholder:text-muted-foreground h-12 min-w-0 flex-1 bg-transparent px-3 text-base outline-none md:text-lg"
                             disabled={isSearching}
                             autoFocus={autoFocus}
                         />
-                        <div className="h-8 w-px bg-input" />
+                        <div className="bg-input h-8 w-px" />
                         <input
                             type="text"
                             value={version}
@@ -122,13 +122,13 @@ export default function PackageSearch({
                                 setLocalError(null)
                             }}
                             placeholder="version"
-                            className="h-12 w-20 bg-transparent px-3 text-base outline-none placeholder:text-muted-foreground sm:w-28 md:text-lg"
+                            className="placeholder:text-muted-foreground h-12 w-20 bg-transparent px-3 text-base outline-none sm:w-28 md:text-lg"
                             disabled={isSearching}
                         />
                         <button
                             type="submit"
                             disabled={isSearching}
-                            className="mr-1.5 inline-flex h-9 shrink-0 items-center gap-1.5 rounded-lg bg-primary px-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-50"
+                            className="bg-primary text-primary-foreground hover:bg-primary/90 mr-1.5 inline-flex h-9 shrink-0 items-center gap-1.5 rounded-sm px-3 text-sm font-medium transition-colors disabled:opacity-50"
                         >
                             {isSearching ? (
                                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -144,7 +144,7 @@ export default function PackageSearch({
                             setMode('direct')
                             setLocalError(null)
                         }}
-                        className="mt-2 pl-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                        className="text-muted-foreground hover:text-foreground mt-2 pl-1 text-sm transition-colors"
                     >
                         Search via full purl
                     </button>
@@ -155,7 +155,7 @@ export default function PackageSearch({
                 <>
                     <div
                         className={cn(
-                            'flex items-center rounded-xl border border-input bg-transparent transition-colors focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50 dark:bg-input/30',
+                            'border-input focus-within:border-ring focus-within:ring-ring/50 dark:bg-input/30 flex items-center rounded-md border bg-transparent transition-colors focus-within:ring-[3px]',
                             displayError
                                 ? 'border-destructive focus-within:border-destructive focus-within:ring-destructive/50'
                                 : '',
@@ -169,14 +169,14 @@ export default function PackageSearch({
                                 setLocalError(null)
                             }}
                             placeholder="pkg:eco/name@version"
-                            className="h-12 min-w-0 flex-1 rounded-l-xl bg-transparent pl-3 pr-2.5 text-base outline-none placeholder:text-muted-foreground md:text-lg"
+                            className="placeholder:text-muted-foreground h-12 min-w-0 flex-1 rounded-l-md bg-transparent pr-2.5 pl-3 text-base outline-none md:text-lg"
                             disabled={isSearching}
                             autoFocus={autoFocus}
                         />
                         <button
                             type="submit"
                             disabled={isSearching}
-                            className="mr-1.5 inline-flex h-9 shrink-0 items-center gap-1.5 rounded-lg bg-primary px-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-50"
+                            className="bg-primary text-primary-foreground hover:bg-primary/90 mr-1.5 inline-flex h-9 shrink-0 items-center gap-1.5 rounded-sm px-3 text-sm font-medium transition-colors disabled:opacity-50"
                         >
                             {isSearching ? (
                                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -192,7 +192,7 @@ export default function PackageSearch({
                             setMode('structured')
                             setLocalError(null)
                         }}
-                        className="mt-2 pl-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                        className="text-muted-foreground hover:text-foreground mt-2 pl-1 text-sm transition-colors"
                     >
                         Guided Search
                     </button>
@@ -200,7 +200,7 @@ export default function PackageSearch({
             )}
 
             {displayError && (
-                <p role="alert" className="mt-2 pl-1 text-sm text-destructive">
+                <p role="alert" className="text-destructive mt-2 pl-1 text-sm">
                     {displayError}
                 </p>
             )}

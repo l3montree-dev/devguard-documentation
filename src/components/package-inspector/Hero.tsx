@@ -57,7 +57,7 @@ export function PackageInspectorHero({
 }: PackageInspectorHeroProps) {
     return (
         <div className="relative px-12 max-sm:px-0">
-            <div className="mx-auto max-w-7xl pb-24 pt-10 sm:pb-32 lg:grid lg:grid-cols-2 lg:items-center lg:gap-x-8 lg:py-40">
+            <div className="mx-auto max-w-7xl pt-10 pb-24 sm:pb-32 lg:grid lg:grid-cols-2 lg:items-center lg:gap-x-8 lg:py-40">
                 <HeroSection
                     title="Package Inspector"
                     subtitle={
@@ -83,7 +83,7 @@ export function PackageInspectorHero({
                     duration={0.7}
                     delay={0.15}
                 >
-                    <div className="hidden h-[500px] w-full lg:block">
+                    <div className="hidden h-[400px] w-full lg:block">
                         <CenterFlow
                             nodeItems={nodeItems}
                             centerContent={centerContent}

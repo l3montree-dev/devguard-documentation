@@ -1,0 +1,205 @@
+/* ─── 1. Imports ─────────────────────────────────────────────── */
+@import "@document-writing-tools/kernux-nextra-theme/src/styles.css";
+@import 'swagger-ui-react/swagger-ui.css';
+@import "./swagger-ui-custom.css";
+
+/* ─── 2. Tailwind source scanning ───────────────────────────── */
+/* Tell Tailwind to scan landing-page source files for used classes */
+@source "../**/*.{tsx,ts,jsx,js}";
+@source "../**/*.{md,mdx}";
+@source "../../node_modules/@document-writing-tools/kernux-nextra-theme";
+
+/* ─── 3. Design tokens ───────────────────────────────────────── */
+@theme {
+  /* semantic status colors */
+  --color-success: #22c55e;
+  --color-warning: #d8ba1a;
+
+  /* l3 brand colors */
+  --color-l3-50:  #fbfcea;
+  --color-l3-100: #f9f9c8;
+  --color-l3-200: #f5f193;
+  --color-l3-300: #efe355;
+  --color-l3-400: #e9d432;
+  --color-l3-500: #d8ba1a;
+  --color-l3-600: #ba9214;
+  --color-l3-700: #956b13;
+  --color-l3-800: #7c5517;
+  --color-l3-900: #69461a;
+  --color-l3-950: #3d250b;
+
+  /* devguard colors */
+  --color-dg-300: #161b23;
+}
+
+/* ─── 4. CSS variable overrides (unlayered — intentional DWT override) ── */
+:root {
+  font-size: 13.3333px;
+  --sidebar-background: var(--background);
+
+  /* ── Typography (consumed by DWT theme-bridge) ── */
+  --font-family: Inter, sans-serif;
+  --font-display: Lexend, sans-serif;
+
+  /* ── Swagger UI extras ───────────────────────── */
+  --blue: hsl(204 86% 53%);
+
+  --grid-line-color: rgba(255, 255, 255, 0.08);
+
+  --color-card: #161B23 !important;
+  --color-border: hsl(215 22% 15%) !important;
+ 
+}
+
+[data-kern-theme="dark"] {
+  /* ── Colors ─────────────────────────────────── */
+  --primary:            #d8ba1a;
+  --primary-foreground: #171717;
+  --background: hsl(213 27% 6%);
+  --foreground:         #fafafa;
+  --muted: hsl(0 0% 95%);
+  --muted-foreground: hsl(0 0% 45%);
+  --border:             #262626;  
+  --link-color:         #d8ba1a;
+  --accent-foreground:  #040202;
+  --sidebar-accent-foreground: #a3a3a3;
+  --sidebar-accent:     #ffffff0d;
+  --sidebar-accent-active:    #fddd8c1a; /*TODO: add this to DWT theme */
+  --destructive:        #ef4444;
+  --destructive-foreground: #fafafa;
+
+  --accent: hsl(0 0% 96%);
+  --accent-foreground: hsl(0 0% 5%);
+
+  /* ── Optional surfaces ───────────────────────── */
+  --card:               #0a0a0a;
+  --secondary:          #262626;
+  --secondary-foreground: #fafafa;
+  --popover:            #0a0a0a;
+  --popover-foreground: #fafafa;
+  --input:              #262626;
+
+  /* ── Shape ───────────────────────────────────── */
+  --ring: #262626;
+}
+
+/* ─── 5. Base layer ──────────────────────────────────────────── */
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  /* Heading sizes */
+  h1 { @apply text-[36px]!; line-height: normal !important; }
+  h2 { @apply text-[30px]!; }
+  h3 { @apply text-[24px]!; }
+  
+
+  /* Heading font — Lexend */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-lexend), Lexend, sans-serif !important;
+  }
+
+  footer h3 {
+    @apply text-xs!;
+  }
+
+  pre,
+  pre * {
+    font-family: var(--default-mono-font-family, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace) !important;
+  }
+
+  summary h4 {
+    margin-top: 0px !important;
+  }
+
+  /* 3rd-party nav shadow resets */
+  nav > div > p,
+  nav > div > div {
+    box-shadow: none !important;
+  }
+}
+
+/* ─── 6. Unlayered overrides (beats all layers) ─────────────── */
+.kern-form-input__input {
+  @apply h-10;
+  @apply border-none
+}
+
+.content-wrapper {
+  @apply max-w-[1440px] mx-auto px-4;
+}
+/* ─── 7. Component layer ─────────────────────────────────────── */
+@layer components {
+}
+
+/* ─── 8. Utility layer ───────────────────────────────────────── */
+@layer utilities {
+  
+  /* Code blocks: */
+  pre {
+    @apply text-[14px]! leading-8;
+    @apply bg-black!;
+    @apply overflow-x-auto;
+    @apply ring-1 ring-border;
+    /* overflow-wrap: normal !important; */
+    white-space: pre!important;
+    word-break: normal !important;
+    hyphens: none !important;
+    /* 
+     */
+  }
+  pre ::before {
+    @apply inline-block mr-4!; /* TODO: check why it does not applied */
+  }
+
+  /* Header: */
+  header img[alt="DevGuard Logo"] {
+    @apply h-[48px];
+  }
+  header nav {
+    @apply max-w-[1440px]! mx-auto!;
+  }
+
+  /* Breadcrumb */
+  #breadcrumb .kern-link {
+    @apply text-[14px]! no-underline! font-semibold!;
+    @apply text-(--sidebar-accent-foreground)! visited:text-(--sidebar-accent-foreground)! hover:text-(--foreground)!;
+  }
+
+  /* Sidebar: */
+  a[data-sidebar], button[data-sidebar] {
+    @apply text-(--sidebar-accent-foreground) hover:text-(--foreground)!;
+    @apply text-[14px]!;
+  }
+  a[data-active="true"][data-sidebar] {
+    @apply bg-(--sidebar-accent-active) text-(--link-color)!;
+    @apply font-semibold;
+  }
+
+  /* TOC */
+  #toc .kern-link {
+    @apply text-[14px]! no-underline! font-semibold!;
+    @apply text-(--sidebar-accent-foreground)! visited:text-(--sidebar-accent-foreground)! hover:text-(--foreground)!;
+  }
+  #toc .kern-link[data-active="true"] {
+    @apply text-(--link-color)!;
+  }
+  #toc .kern-heading-medium {
+    @apply text-[14px]! font-semibold!;
+  }
+  #toc-footer .kern-link {
+    @apply text-[12px]!;
+  }
+}
+
+p>code,
+ul>code,
+li>code,
+strong>code {
+  @apply bg-black!;
+}

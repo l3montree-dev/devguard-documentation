@@ -52,17 +52,17 @@ const checkDescriptions: Record<string, string> = {
 }
 
 function getScoreBadgeClasses(score: number): string {
-    if (score < 0) return 'bg-gray-500/15 text-gray-400'
-    if (score === 0) return 'bg-red-500/15 text-red-400'
-    if (score < 5) return 'bg-orange-400/15 text-orange-400'
-    if (score < 8) return 'bg-yellow-400/15 text-yellow-400'
-    return 'bg-green-400/15 text-green-400'
+    if (score < 0) return 'bg-muted text-muted-foreground'
+    if (score === 0) return 'bg-destructive/15 text-destructive'
+    if (score < 5) return 'bg-warning/15 text-warning'
+    if (score < 8) return 'bg-warning/15 text-warning'
+    return 'bg-success/15 text-success'
 }
 
 function getScoreBarColor(score: number): string {
-    if (score < 5) return 'bg-orange-400'
-    if (score < 8) return 'bg-yellow-400'
-    return 'bg-green-400'
+    if (score < 5) return 'bg-warning'
+    if (score < 8) return 'bg-warning'
+    return 'bg-success'
 }
 
 function getScoreLabel(score: number): string {
@@ -89,14 +89,14 @@ export default function ScoreCardChart({
             <div>
                 <div className="mb-5 flex items-center justify-between">
                     <div>
-                        <h2 className="text-base font-semibold text-foreground">
+                        <h4 className="text-foreground text-base font-semibold">
                             Open SSF Scorecard
-                        </h2>
-                        <p className="mt-0.5 text-sm text-muted-foreground">
+                        </h4>
+                        <p className="text-muted-foreground mt-0.5 text-sm">
                             Supply chain security checks
                         </p>
                         {updatedAt && (
-                            <span className="font-mono mt-1 block text-sm text-muted-foreground">
+                            <span className="text-muted-foreground mt-1 block font-mono text-sm">
                                 Scorecard:{' '}
                                 {new Date(updatedAt).toLocaleDateString(
                                     'en-US',
@@ -117,7 +117,7 @@ export default function ScoreCardChart({
                     <div className="mb-4">
                         <button
                             onClick={() => setFailingExpanded(!failingExpanded)}
-                            className="mb-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground transition-colors hover:text-foreground"
+                            className="text-muted-foreground hover:text-foreground mb-2 text-sm font-semibold tracking-wider uppercase transition-colors"
                         >
                             {failingExpanded ? '▾' : '▸'} Failing (
                             {failing.length})
@@ -129,7 +129,7 @@ export default function ScoreCardChart({
                                         <TooltipTrigger asChild>
                                             <span
                                                 className={cn(
-                                                    'font-mono inline-flex cursor-default items-center rounded-md px-2.5 py-1 text-sm font-medium',
+                                                    'inline-flex cursor-default items-center rounded-md px-2.5 py-1 font-mono text-sm font-medium',
                                                     getScoreBadgeClasses(
                                                         check.score,
                                                     ),
@@ -140,7 +140,7 @@ export default function ScoreCardChart({
                                         </TooltipTrigger>
                                         <TooltipContent
                                             side="top"
-                                            className="max-w-xs"
+                                            className="w-64 whitespace-normal"
                                         >
                                             {checkDescriptions[check.name] ??
                                                 check.reason}
@@ -153,13 +153,13 @@ export default function ScoreCardChart({
                                 {failing.map((check) => (
                                     <Tooltip key={check.name}>
                                         <TooltipTrigger asChild>
-                                            <div className="flex cursor-default items-center justify-between rounded-lg px-3.5 py-2 transition-colors hover:bg-accent/50">
-                                                <span className="text-base text-foreground/80">
+                                            <div className="hover:bg-accent/50 flex cursor-default items-center justify-between rounded-lg px-3.5 py-2 transition-colors">
+                                                <span className="text-foreground/80 text-base">
                                                     {check.name}
                                                 </span>
                                                 <span
                                                     className={cn(
-                                                        'font-mono inline-flex items-center rounded-md px-2.5 py-1 text-sm font-medium',
+                                                        'inline-flex items-center rounded-md px-2.5 py-1 font-mono text-sm font-medium',
                                                         getScoreBadgeClasses(
                                                             check.score,
                                                         ),
@@ -171,7 +171,7 @@ export default function ScoreCardChart({
                                         </TooltipTrigger>
                                         <TooltipContent
                                             side="top"
-                                            className="max-w-xs"
+                                            className="w-64 whitespace-normal"
                                         >
                                             {checkDescriptions[check.name] ??
                                                 check.reason}
@@ -187,7 +187,7 @@ export default function ScoreCardChart({
                 <div>
                     <button
                         onClick={() => setPassingExpanded(!passingExpanded)}
-                        className="mb-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground transition-colors hover:text-foreground"
+                        className="text-muted-foreground hover:text-foreground mb-2 text-sm font-semibold tracking-wider uppercase transition-colors"
                     >
                         {passingExpanded ? '▾' : '▸'} Passing (
                         {passing.length + na.length})
@@ -199,7 +199,7 @@ export default function ScoreCardChart({
                                     <TooltipTrigger asChild>
                                         <span
                                             className={cn(
-                                                'font-mono inline-flex cursor-default items-center rounded-md px-2.5 py-1 text-sm font-medium',
+                                                'inline-flex cursor-default items-center rounded-md px-2.5 py-1 font-mono text-sm font-medium',
                                                 getScoreBadgeClasses(
                                                     check.score,
                                                 ),
@@ -210,7 +210,7 @@ export default function ScoreCardChart({
                                     </TooltipTrigger>
                                     <TooltipContent
                                         side="top"
-                                        className="max-w-xs"
+                                        className="w-64 whitespace-normal"
                                     >
                                         {checkDescriptions[check.name] ??
                                             check.reason}
@@ -223,16 +223,16 @@ export default function ScoreCardChart({
                             {[...passing, ...na].map((check) => (
                                 <Tooltip key={check.name}>
                                     <TooltipTrigger asChild>
-                                        <div className="flex cursor-default items-center justify-between rounded-lg px-3.5 py-2 transition-colors hover:bg-accent/50">
-                                            <span className="text-base text-foreground/80">
+                                        <div className="hover:bg-accent/50 flex cursor-default items-center justify-between rounded-lg px-3.5 py-2 transition-colors">
+                                            <span className="text-foreground/80 text-base">
                                                 {check.name}
                                             </span>
                                             <div className="flex items-center gap-2.5">
                                                 {check.score > 0 && (
-                                                    <div className="h-1 w-20 overflow-hidden rounded-full bg-white/[0.06]">
+                                                    <div className="bg-secondary h-1 w-20 overflow-hidden rounded-sm">
                                                         <div
                                                             className={cn(
-                                                                'h-full rounded-full',
+                                                                'h-full',
                                                                 getScoreBarColor(
                                                                     check.score,
                                                                 ),
@@ -245,7 +245,7 @@ export default function ScoreCardChart({
                                                 )}
                                                 <span
                                                     className={cn(
-                                                        'font-mono inline-flex items-center rounded-md px-2.5 py-1 text-sm font-medium',
+                                                        'inline-flex items-center rounded-md px-2.5 py-1 font-mono text-sm font-medium',
                                                         getScoreBadgeClasses(
                                                             check.score,
                                                         ),
@@ -258,7 +258,7 @@ export default function ScoreCardChart({
                                     </TooltipTrigger>
                                     <TooltipContent
                                         side="top"
-                                        className="max-w-xs"
+                                        className="w-64 whitespace-normal"
                                     >
                                         {checkDescriptions[check.name] ??
                                             check.reason}

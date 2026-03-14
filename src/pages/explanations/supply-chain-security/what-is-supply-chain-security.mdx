@@ -34,7 +34,7 @@ The software supply chain for a typical project could involve for example (not e
 
 Every one of these components has to be secured. A single vulnerability can put the entire software supply chain at risk, which is why each stage needs to be addressed.
 
----
+***
 
 ## The Threat Landscape
 
@@ -96,7 +96,7 @@ Once in control, they injected a backdoor designed to allow unauthorized **remot
 **Impact:** The attack was discovered by chance just weeks before it would have merged into stable Linux distributions. This near-miss highlights the importance of supply chain security vigilance. While this miracle discovery prevented the infection of **hundreds of millions of servers** globally,
 the compromised versions (5.6.0 and 5.6.1) still reached users of rolling-release distributions like Fedora Rawhide, Kali Linux, and openSUSE Tumbleweed.
 
----
+***
 
 ### 2. Build Threats
 
@@ -114,7 +114,7 @@ for the **Orion** network monitoring tool.
 
 **Impact:** The fallout was severe, reaching over a dozen U.S. government departments—including the **military, executive branch, and intelligence services**—who unknowingly installed the compromised updates.
 
----
+***
 
 ### 3. Dependency Threats
 
@@ -132,7 +132,7 @@ execute arbitrary code remotely (RCE) simply by sending a specific text string t
 
 **Impact:** Because Log4j was embedded as a dependency in **millions of applications**—from iCloud and Steam to enterprise software—the vulnerability left a vast portion of the internet exposed. It forced organizations globally to pause development and scramble to patch deep chains of transitive dependencies.
 
----
+***
 
 ### 4. Deployment and Runtime Threats
 
@@ -154,7 +154,7 @@ allowing attackers to bypass authentication entirely.
 **Impact:** The breach resulted in the theft of **147.9 million American consumer records**. It also exposed data for 15.2 million UK citizens and compromised approximately 10–11 million drivers' licenses,
 highlighting how a single runtime vulnerability can lead to catastrophic data loss and why comprehensive supply chain security is critical.
 
----
+***
 
 ## Core Mitigation Principles of Supply Chain Security
 
@@ -213,7 +213,7 @@ This ensures that **supply chain security standards** are **applied consistently
 For instance, a Kubernetes Admission Controller acts as a final gatekeeper. It is configured with a policy that states:
 "Reject any deployment that does not have a valid SBOM and a signature from our CI system." Even if a developer accidentally tries to deploy an insecure image, the cluster automatically rejects it.
 
----
+***
 
 ## Industry Frameworks and Standards
 
@@ -255,7 +255,7 @@ SLSA defines four maturity levels to guide organizations from basic documentatio
 
 - **Level 3:** Hardened Builds. The build process is isolated and resistant to tampering, even from insiders, offering the highest level of protection.
 
----
+***
 
 ## The "Shift Left" Philosophy
 
@@ -313,7 +313,7 @@ takes days or weeks and introduces significant risk.
 
 By shifting left, supply chain security becomes an integrated part of the developer workflow, rather than a final gatekeeper.
 
----
+***
 
 ## Conclusion
 
@@ -322,7 +322,7 @@ By understanding the flow of code from source to production, and by demanding cr
 
 In the following sections, we will explore the specific frameworks **DevGuard** uses to implement these concepts and frameworks, including [In-toto](/explanations/supply-chain-security/in-toto-framework.mdx) and [SLSA](/explanations/supply-chain-security/slsa-framework.mdx).
 
----
+***
 
 ## References
 
@@ -330,4 +330,4 @@ In the following sections, we will explore the specific frameworks **DevGuard** 
 - [SLSA Threats Overview (v1.0)](https://slsa.dev/spec/v1.0/threats-overview)
 - [Warum Sicherheit in der Software-Lieferkette 2024 unverzichtbar ist](https://l3montree.com/blog/was-ist-die-software-lieferkette)
 
----
+***

@@ -1,4 +1,4 @@
-import { Callout } from 'nextra/components'
+import { Callout } from '@document-writing-tools/kernux-nextra-theme'
 import { AttributedImage } from '@/components/AttributedImage'
 
 # Provenance Tracking
@@ -9,7 +9,7 @@ In the physical supply chain, "farm-to-table" tracking allows a grocery store to
 
 While [Attestations](/explanations/supply-chain-security/attestations) are the vehicle for delivering this data, and [SLSA](/explanations/supply-chain-security/slsa-framework) is the standard for measuring its quality, Provenance Tracking is the operational discipline of maintaining this **genealogy** for every piece of software in your organization.
 
----
+***
 
 ## The "Black Box" Problem
 
@@ -23,7 +23,7 @@ You can see the final product, but the history is lost.
     Provenance solves this ambiguity by creating a permanent link between the
     **Artifact** (the binary) and the **Material** (the source code).
 </Callout>
----
+***
 
 ## Anatomy of a Provenance Record
 
@@ -58,7 +58,7 @@ This lists the ingredients that went into the build.
 
 _Why track this?_ This is the link to Version Control. It allows you to say with certainty: "This binary running in production was built from commit `8f2a1d`."
 
----
+***
 
 ## The Concept of Hermeticity
 
@@ -75,7 +75,7 @@ A **Hermetic Build** is self-contained. It declares all its inputs upfront and i
     hashes of everything fetched.
 </Callout>
 
----
+***
 
 ## Use Case: Forensics and Incident Response
 
@@ -92,7 +92,7 @@ The true value of provenance tracking reveals itself during a security incident.
 
 Without provenance, you would just know the images are vulnerable. With provenance, you know _why_ they are vulnerable (legacy branch + bad build parameter) and who triggered those builds.
 
----
+***
 
 ## Use Case: Reproducible Builds
 
@@ -100,7 +100,7 @@ Provenance is a prerequisite for **Reproducible Builds**. A reproducible build m
 
 This is the ultimate verification against **Compiler trojans**. If a trusted auditor can read the provenance, rebuild the artifact themselves, and get the exact same hash as the one you are distributing, it proves that the build server was not tampering with the code during compilation.
 
----
+***
 
 ## Conclusion
 
@@ -110,7 +110,7 @@ It converts the software supply chain from a "trust me" model to a "show me" mod
 
 This concludes the **supply chain security** explanation chapter. In the following sections, we will explore the specific [compliance](/explanations/compliance/why-compliance-matters) standards that often mandate these practices.
 
----
+***
 
 ## References
 

@@ -38,7 +38,7 @@ export function AttributedImage({
             <img
                 src={src}
                 alt={alt}
-                className="h-auto w-full rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-black"
+                className="h-auto w-full rounded-lg border border-gray-200 bg-white shadow-xs dark:border-gray-700 dark:bg-black"
             />
 
             <figcaption className="text-left">
