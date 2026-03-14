@@ -11,6 +11,10 @@
 
 /* ─── 3. Design tokens ───────────────────────────────────────── */
 @theme {
+  /* semantic status colors */
+  --color-success: #22c55e;
+  --color-warning: #d8ba1a;
+
   /* l3 brand colors */
   --color-l3-50:  #fbfcea;
   --color-l3-100: #f9f9c8;
@@ -41,18 +45,21 @@
   --blue: hsl(204 86% 53%);
 
   --grid-line-color: rgba(255, 255, 255, 0.08);
+
+  --color-card: #161B23 !important;
+  --color-border: hsl(215 22% 15%) !important;
+ 
 }
 
 [data-kern-theme="dark"] {
   /* ── Colors ─────────────────────────────────── */
   --primary:            #d8ba1a;
   --primary-foreground: #171717;
-  --background:         #050505;
+  --background: hsl(213 27% 6%);
   --foreground:         #fafafa;
-  --muted:              #262626;
-  --muted-foreground:   #a3a3a3;
+  --muted: hsl(0 0% 95%);
+  --muted-foreground: hsl(0 0% 45%);
   --border:             #262626;  
-  --accent:             #262626;
   --link-color:         #d8ba1a;
   --accent-foreground:  #040202;
   --sidebar-accent-foreground: #a3a3a3;
@@ -60,6 +67,9 @@
   --sidebar-accent-active:    #fddd8c1a; /*TODO: add this to DWT theme */
   --destructive:        #ef4444;
   --destructive-foreground: #fafafa;
+
+  --accent: hsl(0 0% 96%);
+  --accent-foreground: hsl(0 0% 5%);
 
   /* ── Optional surfaces ───────────────────────── */
   --card:               #0a0a0a;
@@ -187,11 +197,9 @@
   }
 }
 
-.card-blue {
-  --card: 210 50% 97%;
-  --border: 210 25% 88%;
-}
-.dark .card-blue {
-  --card: 210 30% 8%;
-  --border: 210 20% 18%;
+p>code,
+ul>code,
+li>code,
+strong>code {
+  @apply bg-black!;
 }

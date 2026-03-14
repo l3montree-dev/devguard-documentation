@@ -15,13 +15,9 @@ function getScoreLabel(score: number): string {
 }
 
 function getScoreBadgeClasses(score: number): string {
-    if (score >= 8) return 'bg-green-400/15 text-green-400 border-green-400/30'
-    if (score >= 6) return 'bg-green-400/10 text-green-300 border-green-300/30'
-    if (score >= 4)
-        return 'bg-yellow-400/15 text-yellow-400 border-yellow-400/30'
-    if (score >= 2)
-        return 'bg-orange-400/15 text-orange-400 border-orange-400/30'
-    return 'bg-red-400/15 text-red-400 border-red-400/30'
+    if (score >= 6) return 'bg-success/15 text-success border-success/30'
+    if (score >= 2) return 'bg-warning/15 text-warning border-warning/30'
+    return 'bg-destructive/15 text-destructive border-destructive/30'
 }
 
 export default function OverallScoreGauge({
@@ -30,17 +26,17 @@ export default function OverallScoreGauge({
 }: OverallScoreGaugeProps) {
     return (
         <div className="flex items-center gap-3">
-            <span className="text-sm text-muted-foreground">Overall Score</span>
-            <span className="font-mono text-lg font-bold text-foreground">
+            <span className="text-muted-foreground text-sm">Overall Score</span>
+            <span className="text-foreground font-mono text-lg font-bold">
                 {score.toFixed(1)}
-                <span className="text-sm font-normal text-muted-foreground">
+                <span className="text-muted-foreground text-sm font-normal">
                     {' '}
                     / {maxScore}
                 </span>
             </span>
             <span
                 className={cn(
-                    'rounded-full border px-2.5 py-0.5 text-xs font-semibold',
+                    'rounded-md border px-2.5 py-0.5 text-xs font-semibold',
                     getScoreBadgeClasses(score),
                 )}
             >

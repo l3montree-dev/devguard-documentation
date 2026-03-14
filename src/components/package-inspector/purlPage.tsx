@@ -131,10 +131,10 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
                 className="card-blue py-5"
             >
                 <div className="flex flex-col items-center justify-center py-20 text-center">
-                    <h2 className="mb-2 text-3xl font-bold text-foreground">
+                    <h2 className="text-foreground mb-2 text-3xl font-bold">
                         Package not found
                     </h2>
-                    <p className="mb-6 max-w-md text-base text-muted-foreground">
+                    <p className="text-muted-foreground mb-6 max-w-md text-base">
                         The package you are looking for does not exist or could
                         not be retrieved. Please verify the package URL and try
                         again.
@@ -173,7 +173,7 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
             </Head>
 
             {/* Header */}
-            <p className="mb-2 text-base font-medium uppercase tracking-wider text-muted-foreground">
+            <p className="text-muted-foreground mb-2 text-base font-medium tracking-wider uppercase">
                 Package Inspector
             </p>
 
@@ -205,11 +205,11 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
                             />
                         ) : (
                             <div className="flex flex-1 flex-col items-center justify-center py-12 text-center">
-                                <ShieldOff className="mb-3 h-10 w-10 text-muted-foreground/30" />
-                                <h3 className="text-base font-semibold text-foreground">
+                                <ShieldOff className="text-muted-foreground/30 mb-3 h-10 w-10" />
+                                <h3 className="text-foreground text-base font-semibold">
                                     OpenSSF Scorecard
                                 </h3>
-                                <p className="mt-1 max-w-[220px] text-sm text-muted-foreground">
+                                <p className="text-muted-foreground mt-1 max-w-[220px] text-sm">
                                     No scorecard data available for this
                                     package.
                                 </p>
@@ -220,7 +220,7 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
 
                 <Card>
                     <CardHeader>
-                        <CardTitle className="text-lg">
+                        <CardTitle className="text-base">
                             Vulnerabilities fixed in later releases
                         </CardTitle>
                     </CardHeader>

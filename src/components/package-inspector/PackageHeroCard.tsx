@@ -4,6 +4,7 @@ import {
     GitFork,
     Scale,
     Package,
+    ShieldAlert,
     ShieldCheck,
 } from 'lucide-react'
 import { Component, Project } from '@/components/package-inspector/types'
@@ -30,25 +31,32 @@ export default function PackageHeroCard({
                 <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
                     {/* Left: Name + badge */}
                     <div className="min-w-0 flex-1">
-                        <h1 className="font-mono text-2xl font-semibold leading-none tracking-tight sm:text-[26px]">
+                        <h1 className="font-mono text-2xl leading-none font-semibold tracking-tight sm:text-[26px]">
                             {packageName}
                         </h1>
                         {component.version && (
-                            <span className="font-mono mt-1 block text-sm tracking-wider text-muted-foreground">
+                            <span className="text-muted-foreground mt-1 block font-mono text-sm tracking-wider">
                                 v{component.version}
                             </span>
                         )}
                         {project?.description && (
-                            <span className="mt-1 block text-sm font-light tracking-wide text-muted-foreground">
+                            <span className="text-muted-foreground mt-1 block text-sm font-light tracking-wide">
                                 {project.description}
                             </span>
                         )}
-                        {project && !isMalicious && (
+                        {project && (
                             <div className="mt-4 flex flex-col gap-1.5">
-                                <div className="font-mono inline-flex w-fit items-center gap-1.5 rounded-[5px] border border-emerald-700/50 bg-emerald-950/30 px-3 py-1.5 text-sm text-emerald-400">
-                                    <ShieldCheck className="h-3.5 w-3.5 shrink-0" />
-                                    Not flagged as malicious
-                                </div>
+                                {isMalicious ? (
+                                    <div className="border-destructive/30 bg-destructive/10 text-destructive inline-flex w-fit items-center gap-1.5 rounded-md border px-3 py-1.5 font-mono text-sm">
+                                        <ShieldAlert className="h-3.5 w-3.5 shrink-0" />
+                                        Flagged as malicious
+                                    </div>
+                                ) : (
+                                    <div className="border-success/30 bg-success/10 text-success inline-flex w-fit items-center gap-1.5 rounded-md border px-3 py-1.5 font-mono text-sm">
+                                        <ShieldCheck className="h-3.5 w-3.5 shrink-0" />
+                                        Not flagged as malicious
+                                    </div>
+                                )}
                             </div>
                         )}
                     </div>
@@ -57,29 +65,29 @@ export default function PackageHeroCard({
                     <div className="flex flex-col gap-3 lg:items-end">
                         {/* Stats row */}
                         <div className="flex flex-wrap items-center gap-4">
-                            <div className="font-mono flex items-center gap-1.5 whitespace-nowrap text-sm text-muted-foreground">
+                            <div className="text-muted-foreground flex items-center gap-1.5 font-mono text-sm whitespace-nowrap">
                                 <Package className="h-4 w-4 opacity-60" />
-                                <span className="font-medium text-foreground/80">
+                                <span className="text-foreground/80 font-medium">
                                     {packageManager}
                                 </span>
                             </div>
                             {project && (
                                 <>
-                                    <div className="font-mono flex items-center gap-1.5 whitespace-nowrap text-sm text-muted-foreground">
+                                    <div className="text-muted-foreground flex items-center gap-1.5 font-mono text-sm whitespace-nowrap">
                                         <Scale className="h-4 w-4 opacity-60" />
-                                        <span className="font-medium text-foreground/80">
+                                        <span className="text-foreground/80 font-medium">
                                             {project.license}
                                         </span>
                                     </div>
-                                    <div className="font-mono flex items-center gap-1.5 whitespace-nowrap text-sm text-muted-foreground">
+                                    <div className="text-muted-foreground flex items-center gap-1.5 font-mono text-sm whitespace-nowrap">
                                         <Star className="h-4 w-4 opacity-60" />
-                                        <span className="font-medium text-foreground/80">
+                                        <span className="text-foreground/80 font-medium">
                                             {project.starsCount.toLocaleString()}
                                         </span>
                                     </div>
-                                    <div className="font-mono flex items-center gap-1.5 whitespace-nowrap text-sm text-muted-foreground">
+                                    <div className="text-muted-foreground flex items-center gap-1.5 font-mono text-sm whitespace-nowrap">
                                         <GitFork className="h-4 w-4 opacity-60" />
-                                        <span className="font-medium text-foreground/80">
+                                        <span className="text-foreground/80 font-medium">
                                             {project.forksCount.toLocaleString()}
                                         </span>
                                     </div>
@@ -90,10 +98,10 @@ export default function PackageHeroCard({
                         {/* Published */}
                         {component.published && (
                             <div className="flex flex-col lg:items-end">
-                                <span className="font-mono text-sm uppercase tracking-widest text-muted-foreground">
+                                <span className="text-muted-foreground font-mono text-sm tracking-widest uppercase">
                                     Published
                                 </span>
-                                <span className="font-mono text-xs text-foreground/80">
+                                <span className="text-foreground/80 font-mono text-xs">
                                     {new Date(
                                         component.published,
                                     ).toLocaleDateString('en-US', {
@@ -112,7 +120,7 @@ export default function PackageHeroCard({
                                     href={'https://' + project.projectKey}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="font-mono flex items-center gap-[5px] whitespace-nowrap text-sm opacity-85 transition-opacity hover:opacity-100"
+                                    className="flex items-center gap-[5px] font-mono text-sm whitespace-nowrap opacity-85 transition-opacity hover:opacity-100"
                                 >
                                     <ExternalLink className="h-3 w-3" />
                                     GitHub
@@ -122,7 +130,7 @@ export default function PackageHeroCard({
                                         href={project.homepage}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="font-mono flex items-center gap-[5px] whitespace-nowrap text-sm opacity-85 transition-opacity hover:opacity-100"
+                                        className="flex items-center gap-[5px] font-mono text-sm whitespace-nowrap opacity-85 transition-opacity hover:opacity-100"
                                     >
                                         <ExternalLink className="h-3 w-3" />
                                         Homepage

@@ -1,175 +1,102 @@
-/* Swagger UI Custom Styles for devguard Documentation */
+/* Swagger UI Custom Styles — aligned with DWT / kernux-nextra theme */
 
-/* Hide the built-in Authorize button - we use custom PAT dialog */
+/* Reset global theme pre/code overrides inside swagger */
+.swagger-ui pre,
+.swagger-ui pre *,
+.swagger-ui code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+    white-space: pre !important;
+    word-break: normal !important;
+    hyphens: none !important;
+    background: unset !important;
+    box-shadow: none !important;
+    overflow-x: auto;
+    font-size: 12px !important;
+    line-height: 1.5 !important;
+}
+
+.swagger-ui pre ::before,
+.swagger-ui pre *::before {
+    display: none !important;
+    content: none !important;
+    margin: 0 !important;
+}
+
+/* Hide built-in auth — we use custom PAT dialog */
 .swagger-ui .auth-wrapper,
 .swagger-ui .authorization__btn {
     display: none !important;
 }
 
-/* Hide padlock icons - authentication is handled by custom PAT dialog */
+/* Hide padlock icons */
 .swagger-ui .opblock-summary .opblock-summary-control svg[aria-label] {
     display: none !important;
 }
 
-.swagger-ui .opblock.opblock-get .tab-header .tab-item.active h4 span:after {
-    background: var(--primary) !important;
-}
-
-
-/* Reset Swagger UI to work with dark theme */
 .swagger-ui {
-    h4 {
-        @apply text-foreground font-sans font-semibold;
-    }
-    @apply text-foreground;
     font-family: var(--font-inter), Inter, sans-serif;
+    font-size: 13px;
+    @apply text-foreground;
 
-    .json-schema-2020-12__title {
-        @apply text-foreground text-base font-semibold font-sans;
-    }
-
+    /* ── Focus resets ────────────────────────────── */
     .model-box-control:focus,
     .models-control:focus,
     .opblock-summary-control:focus {
         outline: none !important;
     }
 
-    .opblock.opblock-post .tab-header .tab-item.active h4 span:after,
-    .opblock.opblock-delete .tab-header .tab-item.active h4 span:after,
-    .opblock.opblock-put .tab-header .tab-item.active h4 span:after,
-    .opblock.opblock-patch .tab-header .tab-item.active h4 span:after,
-    .opblock.opblock-get .tab-header .tab-item.active h4 span:after {
-        @apply bg-primary;
-    }
-
-    /* Fix wrapper background */
+    /* ── Wrapper ─────────────────────────────────── */
     .wrapper {
         @apply p-0;
     }
 
-    .tab li {
-        @apply text-muted-foreground text-sm font-sans;
-    }
-
-    .tab {
-        @apply mb-2;
-    }
-
-    .opblock-description-wrapper p,
-    .opblock-external-docs-wrapper p,
-    .opblock-title_normal p {
-        @apply text-foreground text-sm font-sans;
-    }
-
-    .parameter__name.required:after {
-        @apply text-destructive text-base top-0;
-        content: ' *';
-    }
-
-    .json-schema-2020-12__attribute.json-schema-2020-12__attribute--primary {
-        @apply text-primary font-semibold font-sans;
-    }
-
-    .models .json-schema-2020-12 {
-        .json-schema-2020-12-expand-deep-button {
-            @apply text-muted-foreground font-semibold font-sans;
-        }
-
-
-        .json-schema-2020-12__title {
-            @apply text-foreground text-base font-semibold font-sans;
-        }
-    }
-
-    .opblock-control-arrow {
-        svg {
-            position: relative;
-            left: 4px;
-        }
-
-        path {
-            fill: var(--muted-foreground) !important;
-            scale: 0.7;
-        }
-    }
-
-    .computed-url {
-        @apply text-foreground;
-
-        code {
-            @apply bg-input text-sm rounded-md;
-        }
-    }
-
-    /* Information section */
+    /* ── Info section (hidden — we write our own intro) ── */
     .info {
-        @apply my-5 hidden;
+        @apply hidden;
     }
 
-    .info .title {
-        font-family: var(--font-lexend), Lexend, sans-serif !important;
-        @apply font-bold text-3xl text-foreground
-    }
-
-    .info .description p,
-    .info .description div {
-        @apply text-foreground text-base leading-7 font-sans
-    }
-
-    /* Operation blocks */
-    /* Shared card-like styling for opblocks, model boxes and scheme container */
-
-    .opblock,
-    .opblock.opblock-get,
-    .opblock.opblock-post,
-    .opblock.opblock-put,
-    .opblock.opblock-patch,
-    .opblock.opblock-delete,
-    .model-box,
-    .scheme-container,
-    .topbar {
+    /* ── Scheme container ────────────────────────── */
+    .scheme-container {
         background: var(--card) !important;
         border: 1px solid var(--border) !important;
-        @apply rounded-md;
         box-shadow: none !important;
+        @apply rounded-md p-4 mb-4;
+
+        .servers-title {
+            @apply text-xs font-semibold uppercase text-muted-foreground mb-1 block;
+            letter-spacing: 0.05em;
+        }
+
+        label {
+            @apply text-xs text-muted-foreground;
+        }
     }
 
-    table thead tr td,
-    table thead tr th {
-        background: var(--background) !important;
+    /* ── Operation tag headings ──────────────────── */
+    .opblock-tag {
+        @apply py-2 mt-6 mb-2;
+        border-bottom: 1px solid var(--border) !important;
+
+        .expand-operation path {
+            fill: var(--muted-foreground) !important;
+        }
+
+        a.nostyle {
+            font-family: var(--font-lexend), Lexend, sans-serif !important;
+            @apply text-base font-semibold text-foreground;
+        }
+
+        small {
+            @apply text-xs text-muted-foreground;
+        }
     }
 
-    .opblock .opblock-section-header h4 {
-        @apply text-foreground font-semibold;
-    }
-
-    .response-col_links {
-        @apply text-foreground;
-    }
-
-    .response-control-media-type__accept-message {
-        @apply text-foreground;
-    }
-
-    .opblock-description-wrapper p,
-    .opblock-external-docs-wrapper p,
-    .opblock-title_normal p {
-        @apply text-foreground text-sm;
-    }
-
-    .opblock-summary-path-description-wrapper {
-        @apply mt-0.5
-    }
-
-    .opblock .opblock-summary .opblock-summary-control {}
-
-    .authorization__btn path {
-        fill: var(--muted-foreground) !important;
-    }
-
+    /* ── Operation blocks ────────────────────────── */
     .opblock {
-        /* keep opblock-specific spacing */
-        @apply mb-4;
+        background: var(--card) !important;
+        border: 1px solid var(--border) !important;
+        box-shadow: none !important;
+        @apply rounded-md mb-2;
     }
 
     .opblock .opblock-summary {
@@ -177,172 +104,149 @@
         background: transparent !important;
     }
 
-    .opblock-tag {
-        @apply py-2.5 mt-5 mb-2.5;
-        color: var(--foreground) !important;
-        font-family: var(--font-lexend), Lexend, sans-serif !important;
-        border-bottom: none !important;
-
-        a.nostyle {
-            color: white !important;
-            @apply text-2xl font-semibold text-foreground;
-        }
-    }
-
-    .opblock .opblock-summary-method {
-        @apply rounded-md font-semibold text-center w-20;
-    }
-
-    .opblock {
-        .opblock-section-header {
-            @apply bg-card text-foreground;
-
-            .opblock-title {
-                color: var(--foreground) !important;
-            }
-        }
-    }
-
-    .json-schema-2020-12-accordion {
-        position: relative;
-        right: 4px;
-
-        .json-schema-2020-12-accordion__icon {
-            svg {
-
-                path {
-                    fill: var(--muted-foreground) !important;
-                }
-            }
-        }
-    }
-    .json-schema-2020-12-keyword__name--primary,
-    .json-schema-2020-12-keyword--enum .json-schema-2020-12-json-viewer__name,
-    .json-schema-2020-12-keyword--enum .json-schema-2020-12-json-viewer__value,
-    .json-schema-2020-12-keyword--examples .json-schema-2020-12-json-viewer__name,
-    .json-schema-2020-12-keyword--examples .json-schema-2020-12-json-viewer__value {
-        @apply text-muted-foreground;
-
-    }
-
-    .json-schema-2020-12-keyword--enum .json-schema-2020-12-accordion__icon {
-        position: relative;
-        bottom: 0px !important;
-    }
-
-
-
-    .models {
-        .json-schema-2020-12-accordion {
-            .json-schema-2020-12-accordion__icon {
-                position: relative;
-                bottom: 4px;
-            }
-        }
-    }
-
-    /* GET method */
-    .opblock.opblock-get .opblock-summary-method {
-        background: hsl(168 100% 41%) !important;
-        color: var(--background) !important;
-    }
-
-    /* POST method */
-    .opblock.opblock-post .opblock-summary-method {
-        background: hsl(204 86% 53%) !important;
-        color: var(--background) !important;
-    }
-
-    /* PUT method */
-    .opblock.opblock-put .opblock-summary-method {
-        background: hsl(43 74% 66%) !important;
-        color: var(--background) !important;
-    }
-
-    /* PATCH method */
-    .opblock.opblock-patch .opblock-summary-method {
-        background: hsl(27 87% 67%) !important;
-        color: var(--background) !important;
-    }
-
-    /* DELETE method */
-    .opblock.opblock-delete .opblock-summary-method {
-        background: hsl(0 84.2% 60.2%) !important;
-    }
-
-    .opblock {
-
-        /* Summary text */
-        .opblock-summary-description,
-        .opblock-summary-path {
-            @apply text-sm text-muted-foreground font-sans;
-        }
-    }
-
-
-    .opblock-summary-path {
-        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
-    }
-
-    /* Expanded operation body */
     .opblock-body {
         background: transparent !important;
     }
 
-    .opblock-description-wrapper,
-    .opblock-external-docs-wrapper,
-    .opblock-title_normal {
-        color: var(--foreground) !important;
+    /* Method badges */
+    .opblock .opblock-summary-method {
+        @apply rounded-sm text-xs font-semibold text-center;
+        min-width: 64px;
+        padding: 4px 6px;
+        letter-spacing: 0.04em;
     }
 
-    /* Parameters */
+    .opblock.opblock-get    .opblock-summary-method { background: hsl(168 100% 41%) !important; color: #000 !important; }
+    .opblock.opblock-post   .opblock-summary-method { background: var(--blue) !important;        color: #000 !important; }
+    .opblock.opblock-put    .opblock-summary-method { background: hsl(43 74% 66%)  !important;   color: #000 !important; }
+    .opblock.opblock-patch  .opblock-summary-method { background: hsl(27 87% 67%)  !important;   color: #000 !important; }
+    .opblock.opblock-delete .opblock-summary-method { background: var(--destructive) !important; color: #fff !important; }
+
+    /* Tab underline accent */
+    .opblock.opblock-get    .tab-header .tab-item.active h4 span:after,
+    .opblock.opblock-post   .tab-header .tab-item.active h4 span:after,
+    .opblock.opblock-put    .tab-header .tab-item.active h4 span:after,
+    .opblock.opblock-patch  .tab-header .tab-item.active h4 span:after,
+    .opblock.opblock-delete .tab-header .tab-item.active h4 span:after {
+        @apply bg-primary;
+    }
+
+    /* Summary text */
+    .opblock-summary-path {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+        @apply text-sm text-foreground;
+    }
+
+    .opblock-summary-description {
+        color: var(--muted-foreground) !important;
+        @apply text-xs;
+    }
+
+    .opblock-summary-path-description-wrapper {
+        @apply mt-0.5;
+    }
+
+    /* Section headers inside expanded block */
+    .opblock .opblock-section-header {
+        background: var(--card) !important;
+
+        h4 {
+            @apply text-xs font-semibold uppercase text-muted-foreground;
+            letter-spacing: 0.05em;
+        }
+
+        .opblock-title {
+            color: var(--muted-foreground) !important;
+        }
+    }
+
+    .opblock-description-wrapper p,
+    .opblock-external-docs-wrapper p,
+    .opblock-title_normal p {
+        @apply text-sm text-foreground;
+    }
+
+    /* Collapse arrow */
+    .opblock-control-arrow {
+        padding-left: 8px;
+        svg { width: 14px; height: 14px; }
+        path { fill: var(--muted-foreground) !important; }
+    }
+
+    /* ── Parameters ──────────────────────────────── */
     .parameters-col_description {
         color: var(--foreground) !important;
-        @apply text-sm;
-    }
-
-    .parameter__name,
-    .parameter__type {
-        @apply font-semibold
+        @apply text-xs;
     }
 
     .parameter__name {
         color: var(--foreground) !important;
+        @apply text-xs font-semibold;
     }
 
-
-
-    .json-schema-2020-12-expand-deep-button {
-        @apply text-muted-foreground font-semibold font-sans;
-    }
-
-    .json-schema-2020-12-property .json-schema-2020-12__title {
-        @apply text-foreground text-sm font-semibold font-sans;
+    .parameter__name.required:after {
+        @apply text-destructive top-0;
+        font-size: 11px;
+        content: ' *';
     }
 
     .parameter__type {
         color: var(--muted-foreground) !important;
+        @apply text-xs font-semibold;
     }
 
     .parameter__in {
         color: var(--muted-foreground) !important;
         font-style: italic !important;
+        @apply text-xs;
     }
 
+    /* ── Tables ──────────────────────────────────── */
     table thead tr th,
     table thead tr td {
+        background: transparent !important;
         color: var(--foreground) !important;
         border-bottom: 1px solid var(--border) !important;
-        @apply text-sm;
+        @apply text-xs;
     }
 
     .parameters thead {
         background: transparent !important;
     }
 
-    /* Response section */
+    .parameters-col_name {
+        width: 220px;
+        min-width: 220px;
+    }
+
+    /* ── Tab bar ─────────────────────────────────── */
+    .tab {
+        @apply mb-2;
+    }
+
+    .tab li {
+        color: var(--muted-foreground) !important;
+        @apply text-xs font-sans;
+    }
+
+    .tab li.active {
+        color: var(--foreground) !important;
+    }
+
+    /* ── Responses ───────────────────────────────── */
     .responses-inner {
         background: transparent !important;
+    }
+
+    .response-col_status,
+    .response-col_description,
+    .response-col_links {
+        color: var(--foreground) !important;
+        @apply text-xs;
+    }
+
+    .response-control-media-type__accept-message {
+        @apply text-xs text-foreground;
     }
 
     .responses-wrapper .btn {
@@ -351,29 +255,30 @@
         border-color: var(--border) !important;
     }
 
-    .response-col_status {
-        color: var(--foreground) !important;
-    }
-
-    .response-col_description {
-        color: var(--foreground) !important;
-    }
-
-    /* Code blocks */
+    /* ── Code blocks ─────────────────────────────── */
     pre.microlight,
     .highlight-code {
         background: var(--muted) !important;
         border: 1px solid var(--border) !important;
-        @apply rounded-md;
+        @apply rounded-md text-xs;
         color: var(--foreground) !important;
     }
 
     .response code,
     .response pre {
         color: var(--foreground) !important;
+        @apply text-xs;
     }
 
-    /* Models section */
+    .computed-url {
+        @apply text-foreground text-xs;
+
+        code {
+            @apply bg-input rounded-sm;
+        }
+    }
+
+    /* ── Models section ──────────────────────────── */
     .model-container,
     section.models {
         background: transparent !important;
@@ -384,46 +289,120 @@
         @apply rounded-md;
     }
 
+    .model-box,
+    .scheme-container {
+        background: var(--card) !important;
+        border: 1px solid var(--border) !important;
+        box-shadow: none !important;
+    }
+
     .model-title,
     section.models h4 {
         color: var(--foreground) !important;
         border-bottom: 1px solid var(--border) !important;
-        @apply pb-2;
+        @apply text-xs font-semibold pb-2;
     }
 
     .model .property {
         color: var(--foreground) !important;
+        @apply text-xs;
     }
 
     .model .property.primitive {
         color: var(--muted-foreground) !important;
     }
 
-    /* Authorization */
+    .model-toggle {
+        color: var(--primary) !important;
+    }
+
+    /* ── JSON Schema 2020-12 ─────────────────────── */
+    .json-schema-2020-12__title {
+        @apply text-sm font-semibold font-sans text-foreground;
+    }
+
+    .json-schema-2020-12-property .json-schema-2020-12__title {
+        @apply text-xs font-semibold font-sans text-foreground;
+    }
+
+    .json-schema-2020-12__attribute.json-schema-2020-12__attribute--primary {
+        @apply text-xs font-semibold font-sans text-primary;
+    }
+
+    .json-schema-2020-12-keyword__name--primary,
+    .json-schema-2020-12-keyword--enum .json-schema-2020-12-json-viewer__name,
+    .json-schema-2020-12-keyword--enum .json-schema-2020-12-json-viewer__value,
+    .json-schema-2020-12-keyword--examples .json-schema-2020-12-json-viewer__name,
+    .json-schema-2020-12-keyword--examples .json-schema-2020-12-json-viewer__value {
+        @apply text-xs text-muted-foreground;
+    }
+
+    .json-schema-2020-12-expand-deep-button {
+        @apply text-xs font-semibold font-sans text-muted-foreground;
+    }
+
+    .json-schema-2020-12-accordion {
+        position: relative;
+        right: 4px;
+
+        .json-schema-2020-12-accordion__icon svg path {
+            fill: var(--muted-foreground) !important;
+        }
+    }
+
+    .json-schema-2020-12-keyword--enum .json-schema-2020-12-accordion__icon {
+        position: relative;
+        bottom: 0 !important;
+    }
+
+    .models .json-schema-2020-12 {
+        .json-schema-2020-12-expand-deep-button {
+            @apply text-xs font-semibold font-sans text-muted-foreground;
+        }
+
+        .json-schema-2020-12__title {
+            @apply text-sm font-semibold font-sans text-foreground;
+        }
+
+        .json-schema-2020-12-accordion .json-schema-2020-12-accordion__icon {
+            position: relative;
+            bottom: 4px;
+        }
+    }
+
+    /* ── Buttons ─────────────────────────────────── */
+    .btn {
+        background: var(--secondary) !important;
+        color: var(--secondary-foreground) !important;
+        border: 1px solid var(--border) !important;
+        box-shadow: none !important;
+        @apply rounded-md text-xs font-semibold;
+    }
+
+    .btn:hover {
+        opacity: 0.85 !important;
+    }
+
+    .btn.execute,
     .btn.authorize {
         background: var(--primary) !important;
         color: var(--primary-foreground) !important;
         border-color: var(--primary) !important;
     }
 
-    .btn.authorize svg {
-        fill: var(--primary-foreground) !important;
+    .btn-clear {
+        background: var(--secondary) !important;
+        color: var(--secondary-foreground) !important;
+        border-color: var(--border) !important;
     }
 
-    .scheme-container {
-        box-shadow: none !important;
-        @apply rounded-md text-foreground p-4;
-
-        .servers-title {
-            @apply font-semibold text-base mb-1 block;
-        }
-
-        .servers table tbody tr td:nth-child(1) {
-            text-transform: capitalize;
-        }
+    .try-out__btn {
+        background: var(--secondary) !important;
+        color: var(--secondary-foreground) !important;
+        border: 1px solid var(--border) !important;
     }
 
-    /* Input fields */
+    /* ── Inputs ──────────────────────────────────── */
     input[type=text],
     input[type=password],
     input[type=email],
@@ -432,7 +411,7 @@
         background: var(--input) !important;
         color: var(--foreground) !important;
         border: 1px solid var(--border) !important;
-        @apply rounded-md;
+        @apply rounded-md text-xs;
     }
 
     input[type=text]:focus,
@@ -445,110 +424,40 @@
         box-shadow: 0 0 0 1px var(--ring) !important;
     }
 
-    /* Buttons */
-    .btn {
-        background: var(--primary) !important;
-        color: var(--primary-foreground) !important;
-        border-color: var(--primary) !important;
-        box-shadow: none !important;
-        font-weight: 600 !important;
-        @apply rounded-md font-semibold;
-    }
-
-    .btn:hover {
-        opacity: 0.9 !important;
-    }
-
-    .btn-clear {
-        background: var(--secondary) !important;
-        color: var(--secondary-foreground) !important;
-        border-color: var(--border) !important;
-    }
-
-    .btn.execute {
-        background: var(--primary) !important;
-        color: var(--primary-foreground) !important;
-    }
-
-    /* Try it out section */
-    .try-out__btn {
-        background: var(--secondary) !important;
-        color: var(--secondary-foreground) !important;
-        border: 1px solid var(--border) !important;
-    }
-
-    /* Schema model */
-    .model {
+    label {
         color: var(--foreground) !important;
+        @apply text-xs;
     }
 
-    .model-toggle {
-        color: var(--primary) !important;
-    }
-
-    /* Links */
-    .info a,
+    /* ── Links ───────────────────────────────────── */
     a {
-        color: hsl(var(--nextra-primary-hue) var(--nextra-primary-saturation) calc(var(--nextra-primary-lightness) + 0%) / var(--tw-text-opacity, 1)) !important;
-        @apply text-base
-    }
-
-    .info hgroup.main a {
-        @apply text-sm
-    }
-
-    a.nostyle {
-        color: rgba(255, 255, 255, 1) !important;
+        color: var(--primary) !important;
+        @apply text-xs;
     }
 
     a:hover {
         @apply underline;
-        color: hsl(var(--nextra-primary-hue) var(--nextra-primary-saturation) calc(var(--nextra-primary-lightness) + 0%) / var(--tw-text-opacity, 1)) !important;
     }
 
-    /* Tab navigation */
-    .tab li {
-        color: var(--muted-foreground) !important;
-    }
-
-    .tab li.active {
+    a.nostyle {
         color: var(--foreground) !important;
+        text-decoration: none !important;
     }
 
-    /* Topbar (if shown) */
-    .topbar {
-        background: var(--card) !important;
-        border-bottom: 1px solid var(--border) !important;
-    }
-
-    /* Loading animation */
-    .loading-container .loading:before {
-        border-color: var(--muted-foreground) !important;
-    }
-
-    .loading-container .loading:after {
-        border-top-color: var(--primary) !important;
-    }
-
-    /* Server selection */
-    select {
-        background: var(--input) !important;
+    /* ── Markdown content ────────────────────────── */
+    .markdown p,
+    .markdown pre,
+    .markdown code {
         color: var(--foreground) !important;
-        border: 1px solid var(--border) !important;
+        @apply text-xs;
     }
 
-    label {
-        color: var(--foreground) !important;
-    }
-
-    /* Security definitions display */
-    .info .title small {
+    .markdown code {
         background: var(--muted) !important;
-        color: var(--muted-foreground) !important;
-        @apply rounded-md px-1.5 py-0;
+        @apply px-1.5 py-0.5 rounded-sm;
     }
 
-    /* JSON schema properties */
+    /* ── JSON schema type/format ─────────────────── */
     .prop-type {
         color: var(--blue) !important;
     }
@@ -557,35 +466,20 @@
         color: var(--muted-foreground) !important;
     }
 
-    /* Markdown rendered content */
-    .markdown p,
-    .markdown pre,
-    .markdown code {
-        color: var(--foreground) !important;
-    }
-
-    .markdown code {
-        background: var(--muted) !important;
-        padding: 2px 6px !important;
-        @apply px-1.5 py-0.5;
-        border-radius: calc(var(--radius) - 2px) !important;
-    }
-
-    /* Error messages */
+    /* ── Error / success states ──────────────────── */
     .errors-wrapper {
-        background: hsl(var(--destructive) / 0.1) !important;
-        border: 1px solid hsl(var(--destructive) / 0.3) !important;
+        background: rgb(from var(--destructive) r g b / 0.1) !important;
+        border: 1px solid rgb(from var(--destructive) r g b / 0.3) !important;
         color: var(--destructive) !important;
-        @apply rounded-md;
+        @apply rounded-md text-xs;
     }
 
-    /* Success messages */
     .response.success {
-        border-color: hsl(168 100% 41% / 0.3) !important;
-        background: hsl(168 100% 41% / 0.05) !important;
+        border-color: rgb(from var(--success) r g b / 0.3) !important;
+        background: rgb(from var(--success) r g b / 0.05) !important;
     }
 
-    /* Copy button */
+    /* ── Copy button ─────────────────────────────── */
     .copy-to-clipboard {
         background: var(--secondary) !important;
         color: var(--secondary-foreground) !important;
@@ -595,5 +489,19 @@
     .copy-to-clipboard button {
         background: transparent !important;
         color: var(--secondary-foreground) !important;
+    }
+
+    /* ── Loading ─────────────────────────────────── */
+    .loading-container .loading:before {
+        border-color: var(--muted-foreground) !important;
+    }
+
+    .loading-container .loading:after {
+        border-top-color: var(--primary) !important;
+    }
+
+    /* ── Topbar (hidden) ─────────────────────────── */
+    .topbar {
+        display: none !important;
     }
 }

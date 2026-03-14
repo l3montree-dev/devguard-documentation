@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import SwaggerUI from 'swagger-ui-react'
 
 import {
@@ -15,43 +15,47 @@ import { Button } from '@/components/ui/button'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Textarea } from './ui/textarea'
 import { uniq } from 'lodash'
-import Link from 'next/link'
+
 import { signRequest } from '../services/request-signing'
 
 /**
- * Custom TOC Component for Swagger API Tags
+ * Injects API tag links into the DWT theme's #toc-inner element.
  */
-const SwaggerTOC: React.FC<{
-    tags: Array<string>
-}> = ({ tags }) => {
-    if (tags.length === 0) return null
+const SwaggerTOC: React.FC<{ tags: Array<string> }> = ({ tags }) => {
+    useEffect(() => {
+        if (tags.length === 0) return
 
-    return (
-        <div className="nextra-toc _order-last max-xl:_hidden _w-64 _shrink-0 print:_hidden absolute bottom-0 right-0 top-0 px-4">
-            <div className="sticky top-16">
-                <div className="_grid _grid-rows-[min-content_1fr_min-content] _sticky _top-[--nextra-navbar-height] _pt-6 _text-sm _max-h-[calc(100vh-var(--nextra-navbar-height))]">
-                    <p className="_font-semibold _tracking-tight _pb-2">
-                        On This Page
-                    </p>
-                    <ul>
-                        {tags.map((tag) => (
-                            <li
-                                key={tag}
-                                className="_my-2 _scroll-my-6 _scroll-py-6"
-                            >
-                                <Link
-                                    className="nextra-focus _font-semibold _block _transition-colors _subpixel-antialiased _text-gray-500 dark:_text-gray-400 contrast-more:_text-gray-900 contrast-more:_underline contrast-more:dark:_text-gray-50 _break-words no-underline dark:hover:text-primary"
-                                    href={`#operations-tag-${tag}`}
-                                >
-                                    {tag}
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            </div>
-        </div>
-    )
+        const tocInner = document.getElementById('toc-inner')
+        if (!tocInner) return
+
+        // Remove any previously injected swagger TOC list
+        tocInner.querySelector('#swagger-toc-list')?.remove()
+
+        const ul = document.createElement('ul')
+        ul.id = 'swagger-toc-list'
+        ul.className = 'mt-4 flex flex-col gap-1'
+        ul.style.maxHeight = 'calc(100vh - 200px)'
+        ul.style.overflowY = 'auto'
+
+        tags.forEach((tag) => {
+            const li = document.createElement('li')
+            const a = document.createElement('a')
+            a.href = `#operations-tag-${tag}`
+            a.className = 'kern-link block transition-colors duration-200'
+            a.textContent = tag
+            li.appendChild(a)
+            ul.appendChild(li)
+        })
+
+        const tocFooter = document.getElementById('toc-footer')
+        tocInner.insertBefore(ul, tocFooter)
+
+        return () => {
+            tocInner.querySelector('#swagger-toc-list')?.remove()
+        }
+    }, [tags])
+
+    return null
 }
 
 export interface SwaggerSpec {
@@ -144,7 +148,7 @@ const SwaggerReference: React.FC = () => {
             <div className="mt-6">
                 {/* PAT Configuration Banner */}
                 <Alert
-                    className={`mb-5 ${isConfigured ? 'border-green-500/30 bg-green-500/10' : ''}`}
+                    className={`mb-5 ${isConfigured ? 'border-success/30 bg-success/10' : ''}`}
                 >
                     <div className="flex items-center justify-between">
                         <div>

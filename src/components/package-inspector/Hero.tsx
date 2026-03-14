@@ -83,7 +83,7 @@ export function PackageInspectorHero({
                     duration={0.7}
                     delay={0.15}
                 >
-                    <div className="hidden h-[500px] w-full lg:block">
+                    <div className="hidden h-[400px] w-full lg:block">
                         <CenterFlow
                             nodeItems={nodeItems}
                             centerContent={centerContent}
