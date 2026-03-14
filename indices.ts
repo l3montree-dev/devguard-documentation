@@ -1,5 +1,9 @@
 export const indices = {
   "": {
+    "404": {
+      "disableToc": true,
+      "filepath": "404"
+    },
     "index": {
       "sidebar_position": 1,
       "title": "Introduction",
@@ -8,11 +12,13 @@ export const indices = {
     "package-inspector": {
       "title": "Package Inspector",
       "description": "Analyze the security state of open-source packages. Get insights on maintenance, vulnerabilities, and supply chain risks.",
+      "disableToc": true,
       "filepath": "package-inspector"
     },
     "vulnerability-database": {
       "title": "Vulnerability Database - Search CVEs, Analyze Risks",
       "description": "Search and explore known vulnerabilities (CVE, RHSA, GHSA) with CVSS scores, EPSS probabilities, affected components, and risk analysis.",
+      "disableToc": true,
       "filepath": "vulnerability-database"
     }
   },
@@ -79,10 +85,20 @@ export const indices = {
       "filepath": "sponsors-partners"
     }
   },
-  "package-inspector": {},
+  "package-inspector": {
+    "[purl]": {
+      "disableToc": true,
+      "filepath": "[purl]"
+    }
+  },
   "reference": {},
   "tutorials": {},
-  "vulnerability-database": {},
+  "vulnerability-database": {
+    "[ID]": {
+      "disableToc": true,
+      "filepath": "[ID]"
+    }
+  },
   "explanations/advanced-topics": {},
   "explanations/architecture": {},
   "explanations/attestations-provenance": {},

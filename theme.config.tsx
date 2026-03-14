@@ -4,6 +4,7 @@ import { useConfig } from '@document-writing-tools/kernux-nextra-theme'
 import { useRouter } from 'next/router'
 import Image from 'next/image'
 import Footer from './src/components/Footer'
+import Script from 'next/script'
 
 const websiteId = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID
 const umamiUrl = process.env.NEXT_PUBLIC_UMAMI_URL
@@ -39,7 +40,7 @@ const config: Partial<KernuxThemeConfig> = {
                     />
                 )}
                 {Boolean(websiteId) && Boolean(umamiUrl) && (
-                    <script defer src={umamiUrl} data-website-id={websiteId} />
+                    <Script defer src={umamiUrl} data-website-id={websiteId} />
                 )}
             </>
         )
