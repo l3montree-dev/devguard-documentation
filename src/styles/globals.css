@@ -57,8 +57,8 @@
   --primary-foreground: #171717;
   --background: hsl(213 27% 6%);
   --foreground:         #fafafa;
-  --muted: hsl(0 0% 95%);
-  --muted-foreground: hsl(0 0% 45%);
+  --muted: hsl(213 15% 15%);
+  --muted-foreground: hsl(212 9% 59%);
   --border:             #262626;  
   --link-color:         #d8ba1a;
   --accent-foreground:  #040202;
