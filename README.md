@@ -19,3 +19,16 @@
 </div>
 
 # DevGuard Documentation
+
+## Link Checking
+
+Broken links are checked automatically on every push via the [Link Check](.github/workflows/link-check.yaml) workflow. The build continues even when broken links are found — results appear in the GitHub Actions job summary.
+
+To run the check locally, install [lychee](https://github.com/lycheeverse/lychee) and then:
+
+```sh
+lychee src/pages --root-dir $PWD/src/pages
+```
+
+Configuration (excluded domains, fallback extensions, path remapping for `public/` assets) lives in [`lychee.toml`](lychee.toml).
+

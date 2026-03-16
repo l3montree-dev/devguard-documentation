@@ -1,0 +1,17 @@
+name: Link Check
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  lychee:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: lycheeverse/lychee-action@v2
+        with:
+          args: src/pages --root-dir ${{ github.workspace }}/src/pages
+          # Report broken links in the job summary but do not fail the build
+        continue-on-error: true

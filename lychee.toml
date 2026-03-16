@@ -1,0 +1,24 @@
+# Accept 3xx redirects as valid (e.g. login redirects return 303)
+accept = ["200..=299", "301", "302", "303", "307", "308"]
+
+# Try .mdx and .md when a local file path has no extension (internal page links)
+fallback_extensions = ["mdx", "md"]
+
+# Remap file:// paths for static assets: Next.js serves these from public/,
+# but lychee resolves absolute paths against --root-dir (src/pages/).
+remap = [
+    # Any file with an extension in src/pages/ is a static asset served from public/.
+    # Internal page links have no extension (resolved via fallback_extensions) so they are unaffected.
+    "(file://.+)/src/pages/(.+\\.(?:svg|png|jpg|jpeg|gif|ico|webp|pdf|mp4|webm|nix|json)) $1/public/$2",
+]
+
+exclude = [
+    # Local development server URLs — only valid when devguard is running locally
+    "http://localhost",
+    # GitHub rate-limits unauthenticated requests heavily; set GITHUB_TOKEN to check these
+    "github\\.com",
+    # DevGuard public API endpoints require bearer-token authentication
+    "api\\.main\\.devguard\\.org",
+    # DoD media server blocks automated crawlers
+    "media\\.defense\\.gov",
+]
