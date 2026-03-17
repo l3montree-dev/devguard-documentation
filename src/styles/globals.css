@@ -1,5 +1,5 @@
 /* ─── 1. Imports ─────────────────────────────────────────────── */
-@import "@document-writing-tools/kernux-nextra-theme/src/styles.css";
+@import "@document-writing-tools/kernux-theme/src/styles.css";
 @import 'swagger-ui-react/swagger-ui.css';
 @import "./swagger-ui-custom.css";
 
@@ -7,7 +7,7 @@
 /* Tell Tailwind to scan landing-page source files for used classes */
 @source "../**/*.{tsx,ts,jsx,js}";
 @source "../**/*.{md,mdx}";
-@source "../../node_modules/@document-writing-tools/kernux-nextra-theme";
+@source "../../node_modules/@document-writing-tools/kernux-theme";
 
 /* ─── 3. Design tokens ───────────────────────────────────────── */
 @theme {

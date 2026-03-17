@@ -8,7 +8,12 @@
 //
 // export default withNextra({ ... })
 
-import { withMarkdownWebBook } from '@document-writing-tools/kernux-nextra-theme/withMarkdownWebBook'
+import { withMarkdownWebBook } from '@document-writing-tools/kernux-theme/withMarkdownWebBook'
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
 
 const config = withMarkdownWebBook({
     trailingSlash: true,
@@ -20,6 +25,14 @@ const config = withMarkdownWebBook({
     },
     webpack: (config) => {
         config.resolve.fallback = { fs: false }
+        config.resolve.alias['react'] = path.resolve(
+        __dirname,
+        'node_modules/react',
+        )
+        config.resolve.alias['react-dom'] = path.resolve(
+        __dirname,
+        'node_modules/react-dom',
+        )
         return config
     },
     basePath: process.env.BASE_PATH,
