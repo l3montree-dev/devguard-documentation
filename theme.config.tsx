@@ -1,6 +1,6 @@
 import React from 'react'
-import type { KernuxThemeConfig } from '@document-writing-tools/kernux-nextra-theme'
-import { useConfig } from '@document-writing-tools/kernux-nextra-theme'
+import type { KernuxThemeConfig } from '@document-writing-tools/kernux-theme'
+import { useConfig } from '@document-writing-tools/kernux-theme'
 import { useRouter } from 'next/router'
 import Image from 'next/image'
 import Footer from './src/components/Footer'
