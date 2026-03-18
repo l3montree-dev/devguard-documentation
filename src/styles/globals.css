@@ -40,6 +40,7 @@
   /* ── Typography (consumed by DWT theme-bridge) ── */
   --font-family: Inter, sans-serif;
   --font-display: Lexend, sans-serif;
+  --font-weight-heading: 600;
 
   /* ── Swagger UI extras ───────────────────────── */
   --blue: hsl(204 86% 53%);
@@ -47,8 +48,7 @@
   --grid-line-color: rgba(255, 255, 255, 0.08);
 
   --color-card: #161B23 !important;
-  --color-border: hsl(215 22% 15%) !important;
- 
+  --color-border: hsl(215 22% 15%) !important; 
 }
 
 [data-kern-theme="dark"] {
@@ -157,10 +157,6 @@
     @apply inline-block mr-4!; /* TODO: check why it does not applied */
   }
 
-  /* Header: */
-  header img[alt="DevGuard Logo"] {
-    @apply h-[48px];
-  }
   header nav {
     @apply max-w-[1440px]! mx-auto!;
   }

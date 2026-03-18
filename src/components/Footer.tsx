@@ -78,7 +78,6 @@ export default function Footer() {
                             height={50}
                             alt="DevGuard Logo"
                             src="/logo-inverse-horizontal.svg"
-                            className="h-12 w-auto"
                         />
                         <p className="text-sm/6 text-balance text-gray-300">
                             The bond between the most important building blocks

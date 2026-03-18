@@ -17,9 +17,6 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const config = withMarkdownWebBook({
     trailingSlash: true,
-    eslint: {
-        ignoreDuringBuilds: true,
-    },
     compiler: {
         removeConsole: false,
     },
