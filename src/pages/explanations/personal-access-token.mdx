@@ -1,5 +1,114 @@
-import PageContentComingSoon from '@/components/PageContentComingSoon'
+---
+title: Personal Access Tokens
+---
 
-# Personal Access Token
+import { Callout } from '@document-writing-tools/kernux-theme'
 
-<PageContentComingSoon />
+# Personal Access Tokens
+
+Personal Access Tokens (PATs) are how you authenticate non-interactive clients — CI/CD pipelines, the DevGuard scanner, and API scripts — against DevGuard. They use public-key cryptography so the private key never leaves the machine that created it, and every request is individually signed rather than replayed.
+
+---
+
+## How PATs work
+
+Unlike a traditional bearer token, a DevGuard PAT is not a shared secret you present on each request. Instead:
+
+1. **Your browser generates an ECDSA P-256 key pair** entirely client-side using the Web Crypto API.
+2. **Only the public key is sent to DevGuard.** The private key is shown to you once and never transmitted to or stored by the server.
+3. **Each API request is signed** with the private key. The signature covers the HTTP method and a digest of the request body, so it cannot be replayed or tampered with.
+4. **DevGuard verifies the signature** by looking up the stored public key via a fingerprint included in the request header.
+
+This means that even if the DevGuard database were compromised, no private keys could be extracted from it.
+
+---
+
+## Scopes
+
+Every token is created with one or more scopes that limit what it can do:
+
+| Scope | Purpose |
+|-------|---------|
+| `scan` | Run scans and submit findings — used by the DevGuard scanner in CI/CD pipelines |
+| `manage` | Create and manage assets, projects, and other resources via the API |
+
+Both scopes can be combined on a single token. If a request requires a scope the token does not have, the API returns `403 Forbidden`.
+
+---
+
+## Creating a token
+
+1. Go to **User Settings → Personal Access Tokens**
+2. Enter a description (e.g., `gitlab-ci-main-repo`) and select the required scopes
+3. Click **Create** — the private key is displayed **once**
+4. Copy the private key immediately and store it securely (e.g., as a CI/CD secret variable)
+
+<Callout type="warning">
+  The private key is shown only once and is never stored by DevGuard. If you lose it, you must delete the token and create a new one.
+</Callout>
+
+---
+
+## Using a token
+
+Pass the private key to the DevGuard scanner via the `--token` flag. The scanner handles request signing automatically:
+
+```bash
+devguard-scanner sca --token <private-key>
+```
+
+The scanner also accepts the token via the `DEVGUARD_TOKEN` environment variable (useful in CI where you store the key as a secret):
+
+```bash
+DEVGUARD_TOKEN=<private-key> devguard-scanner sca
+```
+
+For direct API calls, the request must be signed using the private key. The scanner and the official client libraries handle this for you. The signed request includes:
+
+- `X-Fingerprint` — identifies which public key to verify against
+- `Signature-Input` — describes what was signed
+- `Signature` — the ECDSA-P256 signature
+- `Content-Digest` — SHA-256 digest of the request body
+
+---
+
+## Token lifecycle
+
+### Viewing tokens
+
+All active tokens are listed under **User Settings → Personal Access Tokens**. Each entry shows:
+- Description
+- Scopes
+- Creation date
+- Last used timestamp — useful for spotting tokens that are no longer in use
+
+### Revoking a token
+
+**From the UI**: Find the token in the list and click the delete button. You must be logged in.
+
+**By private key** (useful if you can no longer log in, or for scripted revocation):
+
+```bash
+curl -X POST https://api.devguard.org/api/v1/pats/revoke-by-private-key \
+  -H "Content-Type: application/json" \
+  -d '{"privkey": "<private-key>"}'
+```
+
+This derives the fingerprint from the private key and deletes the matching token. No session authentication is required — possession of the private key is sufficient proof of ownership.
+
+---
+
+## Security properties
+
+- **Private key never stored server-side** — the server only stores the public key and a SHA-256 fingerprint of it
+- **Per-request signatures** — each request carries a fresh signature; stolen headers cannot be replayed
+- **Scope isolation** — a `scan`-only token cannot perform management operations even if compromised
+- **Last-used tracking** — you can see when each token was last authenticated and remove stale ones
+
+---
+
+## Related
+
+- [Authenticate with the API](/how-to-guides/api-usage/authenticate-with-api) — step-by-step guide to creating a token and making signed API requests
+- [Scan with GitLab CI](/how-to-guides/scanning/scan-with-gitlab-ci) — how to pass a token to the scanner in a pipeline
+- [Scan with GitHub Actions](/how-to-guides/scanning/scan-with-github-actions) — the equivalent for GitHub

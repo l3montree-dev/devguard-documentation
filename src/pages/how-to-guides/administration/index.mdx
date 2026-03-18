@@ -1,26 +1,154 @@
+---
+title: Administration Overview
+---
+
 import { Callout } from '@document-writing-tools/kernux-theme'
 
-# Administration Overview
+# Administration
 
-This section covers deployment, maintenance, and configuration of self-hosted DevGuard instances.
+This section covers everything you need to run DevGuard on your own infrastructure: deploying, configuring, securing, maintaining, and upgrading a self-hosted instance.
 
-## Deployment Options
+<Callout type="info">
+  If you are using the hosted version at [app.devguard.org](https://app.devguard.org), you can skip most of this section. The hosted version is fully managed — no deployment or infrastructure configuration required.
+</Callout>
 
-Generally the DevGuard Project offers container images for deployment. Choose the method that best fits your environment:
+---
 
-| Method | Use Case |
-|--------|----------|
-| [Helm Chart](/how-to-guides/administration/deploy-with-helm) | Production Deployment |
-| [Docker Compose](/how-to-guides/administration/deploy-with-docker) | Local testing, evaluation |
+## Architecture overview
 
-## Maintenance Guides
+A self-hosted DevGuard deployment consists of four services:
 
-- [Backup & Restore](/how-to-guides/administration/backup-restore) — PostgreSQL backup procedures
-- [Monitoring & Metrics](/how-to-guides/administration/monitoring-metrics) — Prometheus metrics
-- [Upgrade DevGuard](/how-to-guides/administration/upgrade-devguard) — Version upgrades
-- [Database Maintenance](/how-to-guides/administration/database-maintenance) — Vulnerability database updates
+| Service | Image | Purpose |
+|---------|-------|---------|
+| **devguard-api** | `ghcr.io/l3montree-dev/devguard` | Backend API, vulnerability database, scan processing |
+| **devguard-web** | `ghcr.io/l3montree-dev/devguard-web` | Web frontend |
+| **PostgreSQL** | `postgres:16` | Application data and user data (two databases: `devguard`, `kratos`) |
+| **Ory Kratos** | `oryd/kratos` | Identity and authentication management |
 
-## Configuration Guides
+All services are distributed as OCI container images. The recommended production deployment method is the official Helm chart for Kubernetes.
 
-- [Restricting Access](/how-to-guides/administration/restricting-access) — OIDC, authentication settings
-- [Customize the UI](/how-to-guides/administration/customize-ui) — Corporate identity theming
+---
+
+## Deployment
+
+Choose the method that fits your environment:
+
+| Method | Recommended for |
+|--------|----------------|
+| [Deploy with Helm](/how-to-guides/administration/deploy-with-helm) | Production — Kubernetes environments |
+| [Deploy with Docker Compose](/how-to-guides/administration/deploy-with-docker) | Local testing and evaluation only |
+
+<Callout type="warning">
+  The Docker Compose setup uses default passwords that are publicly known. Never use it in production without changing all credentials.
+</Callout>
+
+---
+
+## Post-deployment configuration
+
+After deploying, configure these settings before onboarding users:
+
+### Authentication & access control
+
+DevGuard supports multiple authentication methods via Ory Kratos. Configure which methods are active and optionally lock down access to specific identity providers:
+
+- **Password login** — enabled by default
+- **Passkeys (WebAuthn)** — passwordless authentication
+- **OIDC / SSO** — connect GitHub, GitLab, or any OIDC-compatible provider
+- **OIDC-only mode** — disable all other methods to enforce single sign-on
+- **Disable registration** — prevent new user sign-ups and restrict access to invited users
+
+See [OIDC & Restricting Access](/how-to-guides/administration/restricting-access) for configuration details.
+
+### UI customization
+
+Customize the web interface to match your organization's branding:
+
+- Inject custom CSS and JavaScript via external URLs
+- Configure links for privacy policy, terms of use, and imprint
+- Set the account deletion contact email
+
+See [Customize the UI](/how-to-guides/administration/customize-ui).
+
+### CSAF support (optional)
+
+If you intend to publish CSAF (Common Security Advisory Framework) advisories, create a PGP key pair and configure the aggregator name and contact details during Helm chart installation.
+
+See the CSAF section in [Deploy with Helm](/how-to-guides/administration/deploy-with-helm#optional-csaf-support).
+
+---
+
+## Maintenance
+
+### Backups
+
+DevGuard stores all state in two PostgreSQL databases:
+- `devguard` — application data (projects, assets, vulnerabilities, events)
+- `kratos` — user identities and sessions
+
+Back up both with `pg_dump` on a regular schedule. See [Backup & Restore](/how-to-guides/administration/backup-restore).
+
+### Vulnerability database updates
+
+The API downloads and maintains a local copy of the vulnerability database automatically:
+
+- **On startup**: full sync from the latest snapshot
+- **Periodically**: incremental differential updates
+
+The database is sourced from the [vulndb OCI registry](https://github.com/l3montree-dev/devguard/pkgs/container/devguard%2Fvulndb%2Fv1), cryptographically signed and verified before import. Initial sync after a fresh install can take 5–15 minutes.
+
+See [Database Maintenance](/how-to-guides/administration/database-maintenance) for monitoring, manual updates, and storage requirements.
+
+### Monitoring
+
+Both services expose health endpoints used by Kubernetes liveness and readiness probes:
+- **API**: `GET /api/v1/health`
+- **Web**: `GET /api/health`
+
+For deeper observability, the Helm chart supports optional Prometheus ServiceMonitors (requires Prometheus Operator) and a Grafana dashboard for span metrics when distributed tracing is enabled.
+
+See [Monitoring & Metrics](/how-to-guides/administration/monitoring-metrics).
+
+---
+
+## Upgrades
+
+DevGuard runs database migrations automatically on startup — no manual migration steps required.
+
+Before upgrading:
+1. Check the [changelog](https://github.com/l3montree-dev/devguard/blob/main/CHANGELOG.md) for breaking changes
+2. Create a database backup
+3. Test in staging if possible
+
+For Kubernetes deployments, upgrade with `helm upgrade`. For Docker Compose, update the image tags and restart.
+
+See [Upgrade DevGuard](/how-to-guides/administration/upgrade-devguard).
+
+---
+
+## Uninstalling
+
+DevGuard is designed for digital sovereignty — you own your data and can leave at any time.
+
+Uninstalling involves three components:
+- **Server infrastructure** — `helm delete` or `docker-compose down`
+- **DevGuard CLI** — remove the `devguard-scanner` binary
+- **CI/CD components** — remove the reusable workflow or GitLab CI component from your repositories
+
+See [Uninstalling DevGuard](/how-to-guides/administration/uninstalling-devguard) for full instructions and a list of alternative open-source tools.
+
+---
+
+## Quick reference
+
+| Task | Guide |
+|------|-------|
+| Deploy to Kubernetes | [Deploy with Helm](/how-to-guides/administration/deploy-with-helm) |
+| Run locally for testing | [Deploy with Docker Compose](/how-to-guides/administration/deploy-with-docker) |
+| Configure SSO / OIDC | [OIDC & Restricting Access](/how-to-guides/administration/restricting-access) |
+| Add custom branding | [Customize the UI](/how-to-guides/administration/customize-ui) |
+| Set up database backups | [Backup & Restore](/how-to-guides/administration/backup-restore) |
+| Monitor the API | [Monitoring & Metrics](/how-to-guides/administration/monitoring-metrics) |
+| Keep vulnerabilities up to date | [Database Maintenance](/how-to-guides/administration/database-maintenance) |
+| Upgrade to a new version | [Upgrade DevGuard](/how-to-guides/administration/upgrade-devguard) |
+| Remove DevGuard | [Uninstalling DevGuard](/how-to-guides/administration/uninstalling-devguard) |

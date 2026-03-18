@@ -1,32 +1,150 @@
+---
+title: Monitoring & Metrics
+---
+
+import { Callout } from '@document-writing-tools/kernux-theme'
+
 # Monitoring & Metrics
 
-DevGuard exposes Prometheus metrics and health endpoints for monitoring.
+DevGuard exposes health endpoints for Kubernetes probes and optionally integrates with Prometheus and Grafana via the Helm chart's built-in observability stack.
+
+---
 
 ## Health Endpoints
 
-| Endpoint | Service | Description |
-|----------|---------|-------------|
-| `/api/v1/health` | API | API health status |
-| `/api/health` | Web | Frontend health status |
+Both services expose health endpoints configured as Kubernetes liveness and readiness probes:
 
-## Metrics Endpoint
+| Endpoint | Service | Port |
+|----------|---------|------|
+| `/api/v1/health` | API | 8080 |
+| `/api/health` | Web frontend | 3000 |
 
-The DevGuard API exposes Prometheus metrics at `/api/v1/metrics` (port 8080).
+---
 
-```bash
-curl http://devguard-api:8080/api/v1/metrics
+## Distributed Tracing & Span Metrics
+
+When `api.tracing.enabled: true` is set, the Helm chart injects an **OTel Collector sidecar** into the API pod. The sidecar runs alongside the API container and handles three things:
+
+1. **Receives traces** from the API on `localhost:4317` (gRPC) — the API is automatically configured to export traces to the sidecar
+2. **Generates span metrics** — converts spans into Prometheus-format histogram metrics on port `8889`
+3. **Forwards traces** to your backend (Jaeger, Grafana Tempo, or any OTLP-compatible collector)
+
+```
+API container  →  [localhost:4317]  →  OTel Collector sidecar  →  :8889 (Prometheus scrape)
+                                                               →  otlpEndpoint (Jaeger / Tempo / ...)
 ```
 
-## Example Metrics
+### Enable tracing
 
-DevGuard exposes various metrics. Here are some examples:
+Add the following to your `values.yaml`:
 
-| Metric | Type | Description |
-|--------|------|-------------|
-| `devguard_dependency_vuln_scan_duration_minutes` | Histogram | Duration of SCA scans |
-| `devguard_first_party_scan_duration_minutes` | Histogram | Duration of SAST scans |
-| `devguard_daemon_vulndb_update_duration_minutes` | Histogram | VulnDB update duration |
-| `devguard_daemon_statistics_update_duration_minutes` | Histogram | Statistics calculation duration |
-| `devguard_upstream_sync_duration_minutes` | Histogram | Upstream repository sync duration |
-| `devguard_ticket_created_amount` | Counter | Total tickets created |
-| `devguard_ticket_closed_amount` | Counter | Total tickets closed |
+```yaml
+api:
+  tracing:
+    enabled: true
+    # Fraction of requests to trace (0.0 – 1.0)
+    sampleRate: "0.1"
+    # OTLP endpoint to forward traces to, e.g. Jaeger or Grafana Tempo
+    otlpEndpoint: "http://jaeger-collector:4318"
+```
+
+For backends that require authentication, provide credentials via a secret:
+
+```yaml
+api:
+  tracing:
+    enabled: true
+    otlpEndpoint: "https://tempo.example.com:4318"
+    existingSecretName: otlp-basic-auth   # keys: username, password
+```
+
+Create the secret:
+
+```bash
+kubectl create secret generic otlp-basic-auth \
+  --from-literal=username="your-username" \
+  --from-literal=password="your-password" \
+  -n devguard
+```
+
+### Sidecar image and resources
+
+The sidecar uses `otel/opentelemetry-collector-contrib`. You can tune resource limits and the span metrics configuration:
+
+```yaml
+api:
+  tracing:
+    spanMetrics:
+      image:
+        repository: otel/opentelemetry-collector-contrib
+        tag: "0.147.0"
+      # Latency histogram buckets
+      histogram:
+        buckets: [100us, 1ms, 2ms, 6ms, 10ms, 100ms, 250ms]
+      # Span attributes to break metrics down by
+      dimensions:
+        - name: http.method
+        - name: http.status_code
+        - name: http.route
+      resources:
+        limits:
+          cpu: 200m
+          memory: 256Mi
+        requests:
+          cpu: 50m
+          memory: 64Mi
+```
+
+---
+
+## Prometheus ServiceMonitor (optional)
+
+When using the [Prometheus Operator](https://prometheus-operator.dev/), enable ServiceMonitor resources for automatic scrape target discovery:
+
+```yaml
+observability:
+  serviceMonitor:
+    enabled: true
+    # Labels that your Prometheus Operator uses to discover ServiceMonitors
+    additionalLabels: {}
+    # Namespace where Prometheus runs (opens NetworkPolicy egress)
+    prometheusNamespace: monitoring
+    interval: 30s
+    scrapeTimeout: 10s
+```
+
+<Callout type="info">
+  The **API ServiceMonitor** is only created when both `observability.serviceMonitor.enabled: true` **and** `api.tracing.enabled: true`. It scrapes the OTel sidecar's span metrics from port `8889`.
+</Callout>
+
+The **PostgreSQL ServiceMonitor** is created whenever `observability.serviceMonitor.enabled: true`, regardless of tracing. It deploys a `postgres-exporter` sidecar and scrapes it on port `9187`.
+
+---
+
+## Grafana Dashboard (optional)
+
+A Grafana dashboard ConfigMap for the span metrics can be deployed automatically:
+
+```yaml
+observability:
+  grafanaDashboard:
+    enabled: true
+```
+
+<Callout type="info">
+  Requires the Grafana sidecar to watch for ConfigMaps with the label `grafana_dashboard=1`.
+</Callout>
+
+---
+
+## Checking logs
+
+For operational visibility without a full observability stack, check the API logs directly:
+
+```bash
+# Kubernetes
+kubectl logs -f deployment/devguard-api-deployment -n devguard
+
+# Docker Compose
+docker logs -f devguard-api
+```

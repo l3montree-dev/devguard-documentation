@@ -1,12 +1,281 @@
 ---
 title: Scan with GitLab CI
-description: Integrate DevGuard scanning into your GitLab CI/CD pipeline
 ---
 
 import { Callout } from '@document-writing-tools/kernux-theme'
 
 # Scan with GitLab CI
 
+DevGuard provides reusable GitLab CI components that you can include in your `.gitlab-ci.yml` to add security scanning with minimal configuration. Each component is a self-contained job definition — you pick what you need and pass your DevGuard credentials as inputs.
+
+## Prerequisites
+
+- A DevGuard account and an asset created for your repository
+- A DevGuard Personal Access Token with the `scan` scope — create one under **User Settings → Personal Access Tokens**
+- The asset name in the format `@<org>/projects/<project>/assets/<asset>` (visible in the asset settings)
+
+Store both values as GitLab CI/CD variables in your project:
+
+| Variable | Value |
+|----------|-------|
+| `DEVGUARD_TOKEN` | Your PAT private key |
+| `DEVGUARD_ASSET_NAME` | e.g. `@myorg/projects/backend/assets/api` |
+
+---
+
+## Quick start: full pipeline
+
+The `full` component wires together all scanning jobs and the complete container lifecycle in one include. It's the fastest way to get a complete DevSecOps pipeline:
+
+```yaml
+stages:
+  - test
+  - oci-image
+  - attestation
+
+include:
+  - remote: "https://gitlab.com/l3montree/devguard/-/raw/main/templates/full.yml"
+    inputs:
+      devguard_api_url: "https://api.devguard.org"
+      devguard_web_ui: "https://app.devguard.org"
+      devguard_asset_name: "$DEVGUARD_ASSET_NAME"
+      devguard_token: "$DEVGUARD_TOKEN"
+```
+
+This adds the following jobs to your pipeline:
+
+- `devguard:secret_scanning` — detect leaked secrets with Gitleaks
+- `devguard:static_application_security_testing` — SAST on your source code
+- `devguard:infrastructure_as_code_scanning` — scan IaC files for misconfigurations
+- `devguard:software_composition_analysis` — scan dependencies for known CVEs
+- `devguard:generate_tag` → `devguard:build_oci_image` → `devguard:container_scanning` → `devguard:push_oci_image` → `devguard:sign_oci_image` → `devguard:attest`
+
 <Callout type="info">
-  📚 This documentation is coming soon. Please check back later for detailed instructions on integrating DevGuard scanning with GitLab CI.
+  If you don't build a container image, use individual scanning components instead of `full` to avoid the container lifecycle jobs.
 </Callout>
+
+---
+
+## Individual scanning components
+
+### Secret scanning
+
+Detects secrets, API keys, and credentials in your repository using Gitleaks.
+
+```yaml
+stages:
+  - test
+
+include:
+  - remote: "https://gitlab.com/l3montree/devguard/-/raw/main/templates/secret-scanning.yml"
+    inputs:
+      devguard_api_url: "https://api.devguard.org"
+      devguard_web_ui: "https://app.devguard.org"
+      devguard_asset_name: "$DEVGUARD_ASSET_NAME"
+      devguard_token: "$DEVGUARD_TOKEN"
+```
+
+### SAST
+
+Analyzes source code for security vulnerabilities without executing it.
+
+```yaml
+include:
+  - remote: "https://gitlab.com/l3montree/devguard/-/raw/main/templates/static-application-security-testing.yml"
+    inputs:
+      devguard_api_url: "https://api.devguard.org"
+      devguard_web_ui: "https://app.devguard.org"
+      devguard_asset_name: "$DEVGUARD_ASSET_NAME"
+      devguard_token: "$DEVGUARD_TOKEN"
+```
+
+### Infrastructure-as-Code scanning
+
+Scans Terraform, Kubernetes manifests, Docker configurations and other IaC files for misconfigurations.
+
+```yaml
+include:
+  - remote: "https://gitlab.com/l3montree/devguard/-/raw/main/templates/infrastructure-as-code-scanning.yml"
+    inputs:
+      devguard_api_url: "https://api.devguard.org"
+      devguard_web_ui: "https://app.devguard.org"
+      devguard_asset_name: "$DEVGUARD_ASSET_NAME"
+      devguard_token: "$DEVGUARD_TOKEN"
+```
+
+### Software Composition Analysis (SCA)
+
+Scans your dependencies for known vulnerabilities. Fails the pipeline if findings meet or exceed `fail_on_risk` / `fail_on_cvss`.
+
+```yaml
+include:
+  - remote: "https://gitlab.com/l3montree/devguard/-/raw/main/templates/software-composition-analysis.yml"
+    inputs:
+      devguard_api_url: "https://api.devguard.org"
+      devguard_web_ui: "https://app.devguard.org"
+      devguard_asset_name: "$DEVGUARD_ASSET_NAME"
+      devguard_token: "$DEVGUARD_TOKEN"
+      fail_on_risk: "critical"   # none | low | medium | high | critical
+      fail_on_cvss: "critical"   # none | low | medium | high | critical
+```
+
+### Container scanning
+
+Scans a container image for vulnerabilities. Accepts either a local tar file (from a previous build job) or a remote image from a registry.
+
+**Scan a local tar artifact:**
+```yaml
+include:
+  - remote: "https://gitlab.com/l3montree/devguard/-/raw/main/templates/container-scanning.yml"
+    inputs:
+      devguard_api_url: "https://api.devguard.org"
+      devguard_web_ui: "https://app.devguard.org"
+      devguard_asset_name: "$DEVGUARD_ASSET_NAME"
+      devguard_token: "$DEVGUARD_TOKEN"
+      image_tar_path: "image.tar"
+```
+
+**Scan a remote image from the registry:**
+```yaml
+include:
+  - remote: "https://gitlab.com/l3montree/devguard/-/raw/main/templates/container-scanning.yml"
+    inputs:
+      devguard_api_url: "https://api.devguard.org"
+      devguard_web_ui: "https://app.devguard.org"
+      devguard_asset_name: "$DEVGUARD_ASSET_NAME"
+      devguard_token: "$DEVGUARD_TOKEN"
+      image_tag: "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA"
+```
+
+If both `image_tag` and `image_tar_path` are provided, `image_tag` takes precedence.
+
+---
+
+## Container lifecycle
+
+For projects that build and push container images, the `container-lifecycle` component handles the complete workflow: tag generation → build (Kaniko) → container scan → push → Cosign signing → in-toto attestation.
+
+```yaml
+stages:
+  - oci-image
+  - attestation
+
+include:
+  - remote: "https://gitlab.com/l3montree/devguard/-/raw/main/templates/container-lifecycle.yml"
+    inputs:
+      devguard_api_url: "https://api.devguard.org"
+      devguard_web_ui: "https://app.devguard.org"
+      devguard_asset_name: "$DEVGUARD_ASSET_NAME"
+      devguard_token: "$DEVGUARD_TOKEN"
+      build_args: "--context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile"
+```
+
+The image tag is generated automatically from the branch name, commit SHA, and timestamp. It is passed between all jobs via the `$IMAGE_TAG` variable. The image is only pushed after the container scan passes.
+
+---
+
+## Bring your own scanner (upload components)
+
+If you already run your own scanners, you can upload their output to DevGuard directly:
+
+**Upload a SARIF file** (from any SAST tool):
+```yaml
+include:
+  - remote: "https://gitlab.com/l3montree/devguard/-/raw/main/templates/sarif-upload.yml"
+    inputs:
+      devguard_api_url: "https://api.devguard.org"
+      devguard_web_ui: "https://app.devguard.org"
+      devguard_asset_name: "$DEVGUARD_ASSET_NAME"
+      devguard_token: "$DEVGUARD_TOKEN"
+      sarif_file: "results.sarif"
+```
+
+**Upload an SBOM** (CycloneDX JSON/XML):
+```yaml
+include:
+  - remote: "https://gitlab.com/l3montree/devguard/-/raw/main/templates/sbom-upload.yml"
+    inputs:
+      devguard_api_url: "https://api.devguard.org"
+      devguard_web_ui: "https://app.devguard.org"
+      devguard_asset_name: "$DEVGUARD_ASSET_NAME"
+      devguard_token: "$DEVGUARD_TOKEN"
+      sbom_file: "sbom.json"
+```
+
+**Upload a VEX document:**
+```yaml
+include:
+  - remote: "https://gitlab.com/l3montree/devguard/-/raw/main/templates/vex-upload.yml"
+    inputs:
+      devguard_api_url: "https://api.devguard.org"
+      devguard_asset_name: "$DEVGUARD_ASSET_NAME"
+      devguard_token: "$DEVGUARD_TOKEN"
+      vex_file: "vex.json"
+```
+
+---
+
+## Common inputs reference
+
+All components accept these shared inputs:
+
+| Input | Default | Description |
+|-------|---------|-------------|
+| `devguard_api_url` | `https://api.devguard.org` | DevGuard API URL (change for self-hosted) |
+| `devguard_web_ui` | `https://app.devguard.org` | DevGuard UI URL (used in job links) |
+| `devguard_asset_name` | `$DEVGUARD_ASSET_NAME` | Asset identifier |
+| `devguard_token` | `$DEVGUARD_TOKEN` | PAT private key |
+| `stage` | varies per component | GitLab pipeline stage |
+| `allow_failure` | `false` | Let the pipeline continue even if the job fails |
+| `fail_on_risk` | `critical` | Minimum DevGuard risk level to fail the job (SCA/container scanning) |
+| `fail_on_cvss` | `critical` | Minimum CVSS severity to fail the job (SCA/container scanning) |
+| `runner_tags` | `[]` | GitLab runner tags |
+| `job_suffix` | `""` | Append a suffix to job names — required when including the same component twice |
+| `pull_policy` | `always` | Docker image pull policy |
+
+---
+
+## Using the same component twice
+
+To run the same component twice in one pipeline (e.g., scanning two separate paths in a monorepo), use `job_suffix` to avoid job name collisions:
+
+```yaml
+include:
+  - remote: "https://gitlab.com/l3montree/devguard/-/raw/main/templates/software-composition-analysis.yml"
+    inputs:
+      devguard_asset_name: "$DEVGUARD_ASSET_NAME"
+      devguard_token: "$DEVGUARD_TOKEN"
+      job_suffix: "-frontend"
+      path: "$CI_PROJECT_DIR/frontend"
+
+  - remote: "https://gitlab.com/l3montree/devguard/-/raw/main/templates/software-composition-analysis.yml"
+    inputs:
+      devguard_asset_name: "$DEVGUARD_ASSET_NAME"
+      devguard_token: "$DEVGUARD_TOKEN"
+      job_suffix: "-backend"
+      path: "$CI_PROJECT_DIR/backend"
+```
+
+---
+
+## Self-hosted DevGuard
+
+If you run DevGuard on your own infrastructure, replace the API and web UI URLs:
+
+```yaml
+include:
+  - remote: "https://gitlab.com/l3montree/devguard/-/raw/main/templates/full.yml"
+    inputs:
+      devguard_api_url: "https://devguard-api.example.com"
+      devguard_web_ui: "https://devguard.example.com"
+      devguard_asset_name: "$DEVGUARD_ASSET_NAME"
+      devguard_token: "$DEVGUARD_TOKEN"
+```
+
+---
+
+## Related
+
+- [Set up GitLab integration](/how-to-guides/integrations/gitlab/setup-gitlab-integration) — connect DevGuard to your GitLab instance for issue creation and permission sync
+- [Scan with GitHub Actions](/how-to-guides/scanning/scan-with-github-actions) — the equivalent guide for GitHub
+- [Upload an SBOM](/how-to-guides/scanning/upload-sbom) — upload pre-generated SBOMs

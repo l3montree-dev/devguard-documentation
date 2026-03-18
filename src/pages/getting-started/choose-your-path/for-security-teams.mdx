@@ -1,5 +1,169 @@
-import PageContentComingSoon from '@/components/PageContentComingSoon'
+---
+title: DevGuard for Security Teams
+---
 
 # DevGuard for Security Teams
 
-<PageContentComingSoon />
+As a security team, you need visibility across your entire software portfolio, the ability to enforce security policies, and a way to communicate risk effectively to both developers and management. DevGuard gives you the control plane to do exactly that—without creating friction for the development teams you work with.
+
+---
+
+## What DevGuard gives you
+
+### Organization-wide risk visibility
+
+DevGuard aggregates vulnerability data across all projects and assets in your organization into a single dashboard. You can see:
+
+- Total open vulnerabilities by severity (critical, high, medium, low)
+- Top vulnerable projects and assets
+- Most common CVEs across your portfolio
+- CVEs with known active exploits
+- Risk history trends over the last 30 days
+- Average time-to-fix by severity
+
+This gives you the executive-level overview you need for reporting, and the drill-down detail to support development teams.
+
+### Risk-based prioritization—not just CVSS
+
+Raw CVSS scores are a poor proxy for actual risk. DevGuard calculates a composite risk score that combines:
+
+- **CVSS Base Score** (v2, v3, v4)
+- **EPSS** (Exploit Prediction Scoring System) — the probability of exploitation in the wild
+- **Threat intelligence** — known exploit existence, CISA KEV alerts, verified public exploits
+- **Environmental context** — the asset's configured confidentiality, integrity, and availability requirements
+- **Component depth** — how deep in the dependency tree the vulnerable component sits
+
+This means a CVE with a high CVSS score but no known exploits and deep transitive dependency gets deprioritized, while a medium-severity CVE with a public exploit in a directly imported package gets surfaced first.
+
+### Set environmental context per asset
+
+Not all assets carry the same risk. Configure risk requirements per asset to reflect business impact:
+
+- **Confidentiality Requirement** — how sensitive is the data this asset processes?
+- **Integrity Requirement** — how critical is correctness?
+- **Availability Requirement** — what is the blast radius of downtime?
+- **Reachable from Internet** — is this asset externally exposed?
+
+DevGuard factors these settings into risk scoring automatically.
+
+---
+
+## Policy enforcement with OPA/Rego
+
+DevGuard has a built-in policy engine based on [Open Policy Agent](https://www.openpolicyagent.org/). You can define organization-wide security policies as code (in Rego) and enforce them across all projects.
+
+Policies are evaluated against attestations produced by your CI/CD pipelines—every scan result, SBOM, and build artifact is a piece of compliance evidence.
+
+### What you can enforce
+
+- Require SBOM generation before deployment
+- Block releases with critical vulnerabilities
+- Require signed container images
+- Enforce SAST scan results
+- Check infrastructure-as-code for misconfigurations
+- Validate supply chain provenance
+
+### Community policies vs. custom policies
+
+DevGuard ships with a set of community-managed policies aligned to common frameworks (ISO 27001, CRA, SLSA). You can:
+
+- Enable or disable community policies per project
+- Write custom Rego policies for your specific requirements
+- Map policies to compliance controls for audit evidence
+
+---
+
+## VEX rules: triage at scale
+
+As your portfolio grows, vulnerability noise becomes a serious problem. DevGuard's VEX (Vulnerability Exploitability eXchange) rule system lets you define suppression rules that apply across all matching vulnerabilities automatically.
+
+A VEX rule matches vulnerabilities by package path pattern and provides a justified disposition:
+
+- **Not affected** — the vulnerable code path is not reachable
+- **Fixed** — the vulnerability has been remediated
+- **Under investigation** — being reviewed
+- **Exploitable** — confirmed exploitable, needs immediate action
+
+Rules are reusable: once you determine a false positive pattern, you write the rule once and it applies to all current and future matching findings. You can reapply rules to existing vulnerabilities after creation.
+
+---
+
+## License risk management
+
+Unapproved open-source licenses can create legal exposure. DevGuard scans all dependencies for license information and flags components with licenses that may conflict with your project's licensing model or internal policy.
+
+For each license risk, you can:
+
+- Record a decision with justification
+- Override the detected license for a specific component
+- Make a final binding decision for audit purposes
+
+---
+
+## Team management and RBAC
+
+DevGuard uses a hierarchical role model at three levels: **Organization**, **Project**, and **Asset**.
+
+| Role | Can do |
+|------|--------|
+| **Owner** | Full control including billing and deletion |
+| **Admin** | Manage members, change roles, configure integrations |
+| **Member** | View and interact with resources |
+
+As a security team, you typically operate at the Organization level with Admin or Owner access, giving you the ability to:
+
+- Invite and manage members across the organization
+- Assign roles at the project or asset level to limit developer blast radius
+- Audit who has access to what
+
+---
+
+## Notifications and integrations
+
+### Webhooks
+
+Set up webhooks to push vulnerability events to your SIEM, ticketing system, or alert infrastructure. DevGuard supports event-filtered webhooks for:
+
+- New SBOM created
+- First-party (custom code) vulnerabilities detected
+- Dependency vulnerabilities detected
+
+Webhooks support HMAC secrets for payload verification.
+
+### Issue tracker integration
+
+DevGuard integrates with GitHub Issues, GitLab Issues, and Jira to automatically create tickets for open vulnerabilities. This keeps security work in the developer's existing workflow without requiring them to context-switch to a separate security portal.
+
+---
+
+## Reporting and exports
+
+| Report | Format | Use case |
+|--------|--------|----------|
+| **SBOM** | CycloneDX JSON / XML | Supply chain transparency, CRA compliance, customer requests |
+| **VEX** | CycloneDX JSON / XML | Share exploitability context with customers or regulators |
+| **Vulnerability report** | PDF | Executive briefings, audits |
+
+SBOMs and VEX documents are updated with every build, ensuring the data you share is always current.
+
+---
+
+## Recommended first steps
+
+1. **Create your organization** and invite your security team members with Admin roles
+2. **Add your projects and assets** — or have your DevOps team do it via the GitHub/GitLab integration
+3. **Configure environmental requirements** on each asset to calibrate risk scoring
+4. **Enable relevant community policies** for your compliance framework (ISO 27001, CRA, SLSA)
+5. **Set up webhooks** to route vulnerability events to your existing tooling
+6. **Write VEX rules** for known false positives to reduce noise immediately
+7. **Review the organization statistics dashboard** — this becomes your weekly security posture view
+
+---
+
+## What's next
+
+- [Set up the GitHub integration](/how-to-guides/integrations/github/setup-github-integration) — get CI/CD scanning running across your repositories
+- [Set up the GitLab integration](/how-to-guides/integrations/gitlab/setup-gitlab-integration)
+- [Understand risk scoring](/explanations/devsecops/software-composition-analysis) — how DevGuard calculates prioritized risk
+- [ISO 27001 mapping](/explanations/compliance/iso-27001-mapping) — how DevGuard maps to ISO 27001 controls
+- [Cyber Resilience Act](/explanations/compliance/cyber-resilience-act) — how DevGuard supports CRA compliance

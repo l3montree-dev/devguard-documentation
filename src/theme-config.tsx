@@ -1,5 +1,5 @@
 import type { KernuxThemeConfig } from '@document-writing-tools/kernux-theme'
-import { DefaultHead } from '@document-writing-tools/kernux-theme'
+import { Head } from '@document-writing-tools/kernux-theme'
 import Image from 'next/image'
 import Script from 'next/script'
 import Footer from './components/Footer'
@@ -14,15 +14,11 @@ const config: Partial<KernuxThemeConfig> = {
     project: {
         link: 'https://github.com/l3montree-dev/devguard-documentation',
     },
-    head: () => {
-        return (
-            <DefaultHead>
-                {Boolean(websiteId) && Boolean(umamiUrl) && (
-                    <Script defer src={umamiUrl} data-website-id={websiteId} />
-                )}
-            </DefaultHead>
-        )
-    },
+    head: <Head>
+        {Boolean(websiteId) && Boolean(umamiUrl) && (
+            <Script defer src={umamiUrl} data-website-id={websiteId} />
+        )}
+    </Head>,
     logo: (
         <span aria-label="DevGuard - Back to homepage">
             <Image
