@@ -7,8 +7,6 @@ import themeConfig from '../theme-config'
 import { inter, lexend } from '../fonts'
 import '../styles/globals.css'
 
-
-
 export default function MyApp({ Component, pageProps }: any) {
     const router = useRouter()
     const page = findPage(pageMap, router.pathname)

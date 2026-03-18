@@ -6,7 +6,7 @@ import {
     TooltipContent,
     TooltipProvider,
     TooltipTrigger,
-} from '@/components/ui/tooltip'
+} from '@document-writing-tools/kernux-theme'
 import OverallScoreGauge from './OverallScoreIcon'
 
 interface ScoreCardChartProps {
