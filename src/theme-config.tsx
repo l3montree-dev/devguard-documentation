@@ -14,6 +14,9 @@ const config: Partial<KernuxThemeConfig> = {
     project: {
         link: 'https://github.com/l3montree-dev/devguard-documentation',
     },
+    theme: {
+        forcedTheme: "dark",
+    },
     head: <Head>
         {Boolean(websiteId) && Boolean(umamiUrl) && (
             <Script defer src={umamiUrl} data-website-id={websiteId} />

@@ -3,7 +3,8 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://devguard.org
+Host: https://docs.devguard.org
 
 # Sitemaps
-Sitemap: https://devguard.org/sitemap.xml
+Sitemap: https://docs.devguard.org/sitemap.xml
+Sitemap: https://docs.devguard.org/api/sitemap.xml
