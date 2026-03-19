@@ -30,7 +30,7 @@ const YoutubeVideo: FunctionComponent<{
         return (
             <div
                 className={cn(
-                    'my-12 ring-1 ring-muted-foreground/50 sm:rounded-lg',
+                    'ring-muted-foreground/50 my-12 ring-1 sm:rounded-lg',
                     props.className,
                 )}
             >
@@ -38,7 +38,7 @@ const YoutubeVideo: FunctionComponent<{
                     <p className="text-base font-semibold text-white">
                         YouTube Video
                     </p>
-                    <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">
+                    <p className="text-muted-foreground mx-auto mt-2 text-sm">
                         We require your consent. This content is provided by
                         YouTube. If you activate the content, personal data may
                         be processed and cookies may be set.
