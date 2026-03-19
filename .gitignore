@@ -42,3 +42,4 @@ image.tar
 .env.sentry-build-plugin
 search-data.json
 pageMap.ts
+sitemap-0.xml

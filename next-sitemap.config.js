@@ -50,6 +50,7 @@ module.exports = {
             const fileContent = fs.readFileSync(fullPath, 'utf-8')
             const { data } = grayMatter(fileContent)
             if (data.seo && data.seo.robots && data.seo.robots.includes('noindex')) {
+                console.log(`Page ${p} has noindex in frontmatter, skipping...`)
                 return null
             }
 
