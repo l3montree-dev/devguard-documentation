@@ -10,14 +10,14 @@ export default function NotFoundPage() {
                     <Image
                         src="/404-gopher.png"
                         alt="404 Not Found"
-                        width={500}
-                        height={500}
-                        className="mx-auto h-48 w-auto"
+                        width={200}
+                        height={200}
+                        className="mx-auto"
                     />
                     <h1 className="mt-4 text-4xl font-semibold tracking-tight text-balance text-white sm:text-5xl">
                         Page not found
                     </h1>
-                    <p className="mt-6 text-lg font-medium text-pretty text-gray-400 sm:text-xl/8">
+                    <p className="mt-6 text-lg text-muted-foreground font-medium">
                         Sorry, we couldn&apos;t find the page you&apos;re
                         looking for.
                     </p>

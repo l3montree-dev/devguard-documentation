@@ -5,6 +5,8 @@ LABEL maintainer="Sebastian Kawelke <sebatian.kawelke@l3montree.com"
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 
+RUN apt-get update && apt-get install -y --no-install-recommends git && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /usr/app/
 
 ENV PORT=3000
