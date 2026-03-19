@@ -81,6 +81,7 @@
         "prettier-plugin-tailwindcss": "^0.7.2",
         "shadcn": "^4.0.8",
         "tailwindcss": "^4.2.1",
-        "typescript": "^5.9.3"
+        "typescript": "^5.9.3",
+        "gray-matter": "^4.0.3"
     }
 }
