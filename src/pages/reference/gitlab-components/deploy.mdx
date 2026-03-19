@@ -1,3 +1,18 @@
+---
+title: Deploy GitLab Component
+description: Reference for the DevGuard deploy GitLab component — deploy OCI images to the GitLab container registry after security checks pass
+seo:
+  keyword_primary: "deploy GitLab component DevGuard"
+  keywords_secondary:
+    - "GitLab container registry deploy"
+    - "secure deployment pipeline"
+    - "OCI image deployment CI"
+  og:
+    title: "Deploy GitLab Component | DevGuard"
+    description: "Reference for the DevGuard deploy GitLab component — deploy OCI images after security checks pass."
+    type: "article"
+---
+
 # Deploy Gitlab Component
 
 The devguard-deploy component deploys the created OCI (Open Container Initiative) image to the GitLab container registry. This ensures that your images are securely stored and ready for deployment in your infrastructure. The deploy step runs only if the following jobs complete successfully: build-image, container-scanning, software-composition-analysis, sast, and secret-scanning.
