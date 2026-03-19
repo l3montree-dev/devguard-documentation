@@ -47,7 +47,7 @@ ${Array.from(
 ).join('\n')}
 </sitemapindex>`
 
-    res.setHeader('Content-Type', 'text/xml')
+    res.setHeader('Content-Type', 'application/xml')
     res.setHeader(
         'Cache-Control',
         'public, s-maxage=43200, stale-while-revalidate',
