@@ -1,9 +1,152 @@
 ---
+title: DevGuard for DevOps
+description: How DevOps teams use DevGuard to secure the software delivery lifecycle — CI/CD scanning, container image signing, attestation-based deployment policies, and incident response.
 seo:
-  robots: "noindex, nofollow"
+  keyword_primary: "DevGuard for DevOps"
+  keywords_secondary:
+    - "CI/CD security pipeline DevGuard"
+    - "container image signing attestation"
+    - "Kyverno policy image verification"
+    - "DevOps vulnerability management"
+  og:
+    type: "article"
 ---
-import PageContentComingSoon from '@/components/PageContentComingSoon'
 
 # DevGuard for DevOps
 
-<PageContentComingSoon />
+As a DevOps team, you own the pipeline from commit to production. DevGuard integrates directly into that pipeline — scanning code and dependencies, building and signing container images, attaching attestations, and providing the verification primitives you need to enforce policy at deployment time. The primary focus is container-based delivery, but the scanning components work for any build output.
+
+---
+
+## What DevGuard gives you
+
+### Integrated CI/CD security scanning
+
+DevGuard ships reusable GitHub Actions workflows and GitLab CI components. A single include adds the following security scans to your pipeline:
+
+- **SCA** — dependency vulnerabilities via [Software Composition Analysis](/explanations/devsecops/software-composition-analysis)
+- **SAST** — static code analysis via Semgrep ([learn more](/explanations/devsecops/sast))
+- **Secret scanning** — leaked credentials and API keys via Gitleaks ([learn more](/explanations/devsecops/secret-scanning))
+- **IaC** — infrastructure-as-code misconfigurations via Checkov ([learn more](/explanations/devsecops/iac))
+- **Container scanning** — vulnerabilities in the built container image ([learn more](/explanations/devsecops/container-scanning))
+
+In addition, the full-scan pipeline handles image building, signing, attestation, and deployment.
+
+For background on how these stages fit together, see [Understanding the OWASP DevSecOps Pipeline](/explanations/devsecops/understanding-owasp-devsecops-pipeline).
+
+### Container image signing and attestations
+
+After a successful pipeline run, DevGuard signs the container image using cosign with the private key derived from your PAT. Retrieve the corresponding public key at any time:
+
+```sh
+devguard-scanner inspect-devguard-token --token $DEVGUARD_TOKEN
+```
+
+The pipeline also generates and attaches a **SLSA provenance attestation** recording the builder identity (`devguard.org`), source repository, and triggering commit. Both signature and attestation are stored as OCI artifacts alongside the image in your container registry.
+
+For deeper supply chain tracking, DevGuard additionally supports In-Toto link metadata via `devguard-scanner intoto`, recording materials and products at each build step.
+
+### SBOM generation per artifact
+
+Every container scan produces a CycloneDX SBOM for the image. SBOMs are stored per artifact (image tag) and downloadable in JSON, XML, or PDF format — giving you a precise bill of materials for every image you ship.
+
+---
+
+## CI/CD pipeline integration
+
+The `full-scan` workflow orchestrates all scans, image build, signing, attestation, and deployment. The `deploy` step is gated: it only runs if `build-image`, `container-scanning`, `software-composition-analysis`, `sast`, and `secret-scanning` all succeed.
+
+**GitHub Actions** — `.github/workflows/devguard.yml`:
+
+```yaml copy
+jobs:
+  devguard-full-scan:
+    uses: l3montree-dev/devguard-action/.github/workflows/full.yml@main
+    with:
+      asset-name: 'myOrganization/projects/myProject/assets/myAsset'
+    secrets:
+      devguard-token: ${{ secrets.DEVGUARD_TOKEN }}
+```
+
+**GitLab CI** — `.gitlab-ci.yml`:
+
+```yaml copy
+include:
+  - remote: "https://gitlab.com/l3montree/devguard/-/raw/main/templates/full.yml"
+    inputs:
+      asset_name: "myOrganization/projects/myProject/assets/myAsset"
+      token: "$DEVGUARD_TOKEN"
+```
+
+Both require a single secret: a DevGuard Personal Access Token with `scan` scope.
+
+### Pipeline gate behavior
+
+By default, the pipeline fails on `critical` risk findings. Adjust per workflow with `--failOnRisk` (composite risk score including EPSS, exploit intelligence, and environmental context) or `--failOnCVSS` (raw CVSS severity). Available thresholds: `low`, `medium`, `high`, `critical`.
+
+See the [GitHub integration setup guide](/how-to-guides/integrations/github/setup-github-integration) or [GitLab integration setup guide](/how-to-guides/integrations/gitlab/setup-gitlab-integration) for connecting your repositories. For all workflow inputs, see the [GitHub Actions reference](/reference/github-workflows/full-scan) and [GitLab CI reference](/reference/gitlab-components/full-scan).
+
+---
+
+## Deployment-time verification with Kyverno
+
+The signatures and attestations produced by DevGuard can be verified at Kubernetes admission time using [Kyverno](https://kyverno.io/). This lets you enforce that only images built through your DevGuard-connected pipeline, signed with your key, and carrying valid SLSA provenance, get scheduled in your cluster.
+
+A Kyverno `ClusterPolicy` with `verifyImages` rules can check:
+
+- **Image signature** — cosign verification against your DevGuard public key
+- **SLSA provenance attestation** — predicate type `https://slsa.dev/provenance/v1` with conditions on builder identity (`devguard.org`), source repository, and committer
+
+This closes the loop: code is scanned, the image is signed, provenance is recorded, and nothing reaches your cluster without passing all checks.
+
+See the [DevGuard Helm chart Kyverno policy](https://github.com/l3montree-dev/devguard-helm-chart/blob/main/templates/kyverno-policy.yaml) for a production-ready template you can adapt with your own public key and repository allowlist.
+
+---
+
+## Dependency proxy
+
+DevGuard includes a dependency proxy that sits between your build environment and public package registries (npm, Go modules, PyPI). Every package download is checked against the [OSSF malicious packages database](https://github.com/ossf/malicious-packages) before it reaches your build. Flagged packages — typosquatting, injected malicious versions, compromised releases — are blocked with a `403`.
+
+Downloaded packages are cached with SHA256 integrity verification, speeding up subsequent builds while preventing cache poisoning. The malicious package database updates automatically several times a day.
+
+See [Dependency Proxy setup](/how-to-guides/security/dependency-proxy) for per-ecosystem configuration.
+
+---
+
+## Visibility and incident response
+
+### Scan results
+
+After each pipeline run, results appear in DevGuard's asset view — dependency risks, code risks, and container findings, each with severity, CVSS, EPSS, and composite risk score. You can track vulnerability events over time and see average fixing times per severity.
+
+### Group-level dependency search
+
+When a critical CVE drops, you need to know which assets are affected now — not after re-scanning everything. DevGuard's group-level dependency search lets you query all components across all assets in a group by package name, version, or ecosystem. You get: which assets contain the package, which version, and the current risk state.
+
+---
+
+## Self-hosting DevGuard
+
+If your team also operates the DevGuard platform, the [administration guides](/how-to-guides/administration) cover deployment (Helm for production, Docker Compose for testing), backup, monitoring, and upgrades.
+
+---
+
+## Recommended first steps
+
+1. **Set up the integration** ([GitHub](/how-to-guides/integrations/github/setup-github-integration) | [GitLab](/how-to-guides/integrations/gitlab/setup-gitlab-integration)) — connects your repositories and generates the pipeline snippet
+2. **Create a Personal Access Token** with `scan` scope and store it as a CI/CD secret (`DEVGUARD_TOKEN`)
+3. **Add the `full-scan` workflow or component** to one repository as a pilot — verify results in the DevGuard UI before rolling out
+4. **Retrieve the DevGuard public key** with `devguard-scanner inspect-devguard-token` and add it to a Kyverno policy for deployment-time verification
+5. **Adjust `--failOnRisk` thresholds** per asset — the default is `critical`; tune based on exposure
+6. **Configure the [dependency proxy](/how-to-guides/security/dependency-proxy)** for your build environments to block malicious packages
+
+---
+
+## What's next
+
+- [GitHub Actions workflow reference](/reference/github-workflows/full-scan) — all inputs for the full-scan workflow
+- [GitLab CI component reference](/reference/gitlab-components/full-scan) — all inputs for the full-scan component
+- [Understanding the OWASP DevSecOps Pipeline](/explanations/devsecops/understanding-owasp-devsecops-pipeline) — background on each scan stage
+- [Container Scanning](/explanations/devsecops/container-scanning) — how image scanning works
+- [Software Composition Analysis](/explanations/devsecops/software-composition-analysis) — how dependency scanning works
+- [Administration overview](/how-to-guides/administration) — if you self-host DevGuard
