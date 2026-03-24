@@ -1,0 +1,276 @@
+---
+title: DevGuard as an Open Source Steward Tool under the CRA
+description: A scientific analysis of how DevGuard supports open source stewards in meeting their obligations under the EU Cyber Resilience Act (Regulation (EU) 2024/2847), including Article 24 cybersecurity policy requirements, coordinated vulnerability disclosure, and incident reporting.
+seo:
+  keyword_primary: "CRA open source steward obligations"
+  keywords_secondary:
+    - "Cyber Resilience Act open source"
+    - "Article 24 CRA compliance"
+    - "open source steward cybersecurity policy"
+    - "DevGuard CRA open source"
+    - "EU CRA FOSS obligations"
+  og:
+    type: "article"
+---
+
+import { Callout } from '@document-writing-tools/kernux-theme'
+import {
+    Tooltip,
+    TooltipTrigger,
+    TooltipContent,
+} from '@document-writing-tools/kernux-theme'
+
+# DevGuard as an Open Source Steward Tool under the CRA
+
+## Introduction
+
+The EU Cyber Resilience Act (Regulation (EU) 2024/2847, hereinafter "CRA") entered into force on 10 December 2024 and becomes fully applicable on 11 December 2027. The CRA establishes the first comprehensive horizontal cybersecurity regulatory framework for products with digital elements placed on the EU internal market. Its enactment marked a paradigm shift: for the first time, free and open-source software (FOSS) is explicitly addressed in a major EU product safety regulation, recognising both its foundational role in the digital economy and the unique governance structures through which it is produced.
+
+A significant innovation of the CRA is the introduction of a distinct regulatory category—the **open-source software steward**—alongside the principal obligations that fall on manufacturers. This document provides a rigorous analysis of that category, its legal obligations under the CRA, and how DevGuard operationalises compliance for organisations that qualify as open-source software stewards.
+
+<Callout type="info">
+    This page focuses exclusively on the **open-source software steward** regime under CRA Article 24. For the broader obligations applicable to software manufacturers, see [Cyber Resilience Act](/explanations/compliance/cyber-resilience-act).
+</Callout>
+
+---
+
+## 1. Legal Framework and Scope
+
+### 1.1 The CRA's Treatment of Open Source Software
+
+The CRA applies to products with digital elements "supplied for distribution or use on the [EU] market in the course of a commercial activity" (Article 2(1); Recital 15, Regulation (EU) 2024/2847). This commercial-activity threshold is the primary criterion for determining whether FOSS falls within the regulation's scope.
+
+Recital 18 clarifies that "the provision of products with digital elements qualifying as free and open-source software that are not monetised by their manufacturers should not be considered to be a commercial activity." Consequently, genuinely non-commercial FOSS projects—volunteer-maintained, unpaid, and not integrated into commercial offerings by their developers—are entirely outside the CRA's scope. Recital 18 further specifies that mere public availability on repositories such as GitHub or package registries does not constitute placing a product on the market, a point also elaborated in Recital 20.
+
+However, FOSS that is intended for integration into commercial products, or that is developed and maintained by legal entities with a commercial-adjacent purpose, occupies a more complex regulatory position. It is for precisely these situations that the CRA introduces the steward category.
+
+### 1.2 Definition: Free and Open-Source Software
+
+Article 3(48) of the CRA defines free and open-source software as:
+
+> "software the source code of which is openly shared and which is made available under a free and open-source licence which provides for all rights to make it freely accessible, usable, modifiable and redistributable."
+
+This definition encompasses software distributed under OSI-approved licences, including permissive licences (MIT, Apache-2.0, BSD) and copyleft licences (GPL-2.0, GPL-3.0, AGPL-3.0, EUPL-1.2). The definition is licence-centric rather than process-centric: the development methodology is legally irrelevant for determining scope.
+
+---
+
+## 2. The Open-Source Software Steward: Definition and Scope
+
+### 2.1 Statutory Definition
+
+Article 3(14) of the CRA defines an open-source software steward as:
+
+> "a legal person, other than a manufacturer, that has the purpose or objective of systematically providing support on a sustained basis for the development of specific products with digital elements, qualifying as free and open-source software intended for commercial activities, and that ensures the viability of those products."
+
+This definition comprises five cumulative elements, each of which must be satisfied:
+
+| Element | Legal Basis | Interpretation |
+|---|---|---|
+| Legal person | Article 3(14) | Natural persons and informal communities are excluded; incorporation or equivalent legal personality is required |
+| Other than a manufacturer | Article 3(14) | Steward and manufacturer are mutually exclusive; a steward does not place products on the market in its own name |
+| Systematic and sustained support | Article 3(14) | Ad hoc contributions are insufficient; structured, ongoing involvement is required |
+| Intended for commercial activities | Article 3(14) | The supported software must be aimed at commercial use, not purely hobbyist or academic |
+| Ensures viability | Article 3(14) | The steward plays a principal role in the project's continuity, e.g., hosting, governance, funding coordination |
+
+### 2.2 Archetypical Steward Entities
+
+Recital 19 of the CRA enumerates examples of entities that may qualify as open-source software stewards:
+
+> "certain foundations as well as entities that develop and publish free and open-source software in a business context, including not-for-profit entities"
+
+Based on this guidance and the criteria in Article 3(14), the following organisational types typically qualify:
+
+- **Open source foundations**: Apache Software Foundation, Linux Foundation, Eclipse Foundation, Python Software Foundation, CNCF, OpenSSF
+- **Not-for-profit organisations**: Mozilla Foundation, Wikimedia Foundation, Document Foundation
+- **Corporate open source programs**: Legal entities that develop and publish FOSS as part of a commercial strategy but do not themselves market the software as a product
+- **Public-sector software stewards**: Governmental entities that maintain FOSS for the public benefit, provided the software is intended for commercial use
+
+Recital 19 also notes that manufacturers who provide "regular financial assistance" to open source projects "to ensure the continuity of those products" may cause the recipient organisation to qualify as a steward, effectively transferring oversight responsibility to the steward from the individual manufacturers.
+
+### 2.3 Distinction from Manufacturers
+
+The steward category is explicitly mutually exclusive from the manufacturer category. Article 3(13) defines a manufacturer as "a natural or legal person who develops or manufactures products with digital elements or has products with digital elements designed, developed or manufactured, and markets them under its name or trademark."
+
+The decisive distinguishing criterion is **market placement**: a manufacturer commercialises the product; a steward supports its development without placing it on the market in its own name. Where a FOSS project is simultaneously developed by a steward foundation and commercially marketed by a contributing company, the company assumes manufacturer obligations while the foundation operates under the steward regime.
+
+<Callout type="warning">
+    The steward and manufacturer regimes are **mutually exclusive** under Article 3. An entity that markets a product under its own name cannot simultaneously rely on the lighter steward obligations for that same product. Legal classification requires careful analysis of commercial activities.
+</Callout>
+
+---
+
+## 3. Legal Obligations of Open-Source Software Stewards
+
+### 3.1 Overview: A Light-Touch Regulatory Regime
+
+Recital 19 explicitly states that open-source software stewards "should be subject to a light-touch and tailor-made regulatory regime." Article 24 operationalises this policy intention. The steward regime involves two principal categories of obligation: (i) adoption and documentation of a cybersecurity policy, and (ii) conditional incident and vulnerability reporting. Critically, stewards are **not** subject to administrative fines (Article 64(10)(b)) and cannot affix CE marking to the products they support (Recital 19).
+
+### 3.2 Cybersecurity Policy Obligation (Article 24(1))
+
+Article 24(1) establishes the primary obligation of open-source software stewards:
+
+> "Open-source software stewards shall put in place and document in a verifiable manner a cybersecurity policy to foster the development of a secure product with digital elements as well as an effective handling of vulnerabilities by the developers of that product. That policy shall also foster the voluntary reporting of vulnerabilities as laid down in Article 15 by the developers of that product and take into account the specific nature of the open-source software steward and the legal and organisational arrangements to which it is subject. That policy shall, in particular, include aspects related to documenting, addressing and remediating vulnerabilities and promote the sharing of information concerning discovered vulnerabilities within the open-source community."
+
+The obligation has four substantive dimensions:
+
+1. **Policy adoption and documentation**: The cybersecurity policy must be formally documented "in a verifiable manner," meaning it must be accessible for review by market surveillance authorities and, implicitly, by the developer community.
+
+2. **Vulnerability handling framework**: The policy must address the lifecycle of vulnerabilities—discovery, documentation, triage, remediation, and disclosure. This mirrors, in lighter form, the vulnerability handling requirements in Annex I, Part II of the CRA applicable to manufacturers.
+
+3. **Promotion of coordinated vulnerability disclosure (CVD)**: The policy must foster voluntary reporting under Article 15, which establishes the EU-wide CVD mechanism. Stewards are expected to create accessible channels for reporting vulnerabilities in their managed projects and to promote disclosure to national CSIRTs.
+
+4. **Community information sharing**: The policy must promote "sharing of information concerning discovered vulnerabilities within the open-source community," reflecting the CRA's recognition that open source security is a collective responsibility.
+
+### 3.3 Cooperation with Market Surveillance Authorities (Article 24(2))
+
+Article 24(2) imposes a cooperation obligation:
+
+> "Open-source software stewards shall cooperate with the market surveillance authorities, at their request, with a view to mitigating the cybersecurity risks posed by a product with digital elements qualifying as free and open-source software. Further to a reasoned request from a market surveillance authority, open-source software stewards shall provide that authority, in a language which can be easily understood by that authority, with the documentation referred to in paragraph 1, in paper or electronic form."
+
+This obligation requires stewards to maintain documentation in a form suitable for regulatory review and to respond to formal requests from competent authorities under Chapter VII of the CRA.
+
+### 3.4 Conditional Incident and Vulnerability Reporting (Article 24(3))
+
+Article 24(3) subjects stewards to a subset of the Article 14 reporting obligations, conditioned on their level of involvement in development:
+
+> "The obligations laid down in Article 14(1) shall apply to open-source software stewards to the extent that they are involved in the development of the products with digital elements. The obligations laid down in Article 14(3) and (8) shall apply to open-source software stewards to the extent that severe incidents having an impact on the security of products with digital elements affect network and information systems provided by the open-source software stewards for the development of such products."
+
+The relevant Article 14 provisions, as applied to stewards, require:
+
+| Article 14 Provision | Obligation | Trigger for Stewards |
+|---|---|---|
+| Article 14(1) | Report actively exploited vulnerabilities to CSIRT and ENISA via single reporting platform (Article 16); early warning within 24 hours, full notification within 72 hours, final report within 14 days of corrective measure | Only where the steward is "involved in development" |
+| Article 14(3) | Report severe incidents impacting product security; same 24h/72h/1-month timeline | Only where incidents affect the steward's own development infrastructure |
+| Article 14(8) | Inform impacted users of exploited vulnerabilities or severe incidents without undue delay | Only for the steward's own infrastructure; not for all downstream users of the FOSS |
+
+Article 14 reporting obligations apply from **11 September 2026** (Article 71(2)).
+
+---
+
+## 4. Obligations Not Applicable to Stewards
+
+A key feature of the steward regime is the explicit exclusion of many manufacturer obligations. The following table provides a comparative overview:
+
+| Obligation | Manufacturer | Open-Source Software Steward |
+|---|---|---|
+| CE marking | Mandatory (Article 28) | Explicitly excluded (Recital 19) |
+| Full conformity assessment | Mandatory (Articles 32–39) | Not applicable |
+| Technical documentation per Annex VII | Mandatory | Not applicable (only cybersecurity policy) |
+| EU Declaration of Conformity | Mandatory (Article 28) | Not applicable |
+| Full vulnerability handling (Annex I, Part II) | Mandatory | Policy-level obligation only (Article 24(1)) |
+| Administrative fines | Up to €15M or 2.5% global turnover (Article 64) | Explicitly exempt (Article 64(10)(b)) |
+| All Article 14 reporting | All vulnerabilities, unconditional | Actively exploited only, conditional (Article 24(3)) |
+| SBOM generation | Mandatory per Annex I, Part II(1) | Not directly required; facilitated through policy |
+
+---
+
+## 5. DevGuard's Role in the Open-Source Steward Context
+
+DevGuard addresses the practical challenge of implementing the CRA steward regime across multiple open source projects simultaneously. The steward's obligations are structurally different from those of a single-product manufacturer: a steward may oversee dozens or hundreds of FOSS repositories across different programming ecosystems, each with distinct dependency graphs, release cadences, and contributor communities. DevGuard provides the tooling layer that transforms policy-level obligations into operational workflows.
+
+### 5.1 Multi-Project Vulnerability Tracking (Article 24(1))
+
+A core element of the Article 24(1) cybersecurity policy is "documenting, addressing and remediating vulnerabilities." DevGuard enables stewards to fulfil this obligation at scale:
+
+- **Continuous scanning** across all managed repositories detects vulnerabilities in dependencies (SCA) and source code (SAST) automatically on every commit or release
+- **Centralised vulnerability inventory** aggregates findings across projects into a single audit-ready record, providing the "documented in a verifiable manner" evidence base required by Article 24(1)
+- **Risk prioritisation** based on CVSS, EPSS, and contextual exploitability data enables stewards to demonstrate that vulnerability triage follows a systematic methodology aligned with Article 24(1)'s requirement for "effective handling of vulnerabilities"
+- **Vulnerability lifecycle tracking** records the progression from detection through triage to remediation, generating an immutable audit trail suitable for market surveillance authority review under Article 24(2)
+
+### 5.2 Coordinated Vulnerability Disclosure Infrastructure (Article 24(1) and Article 15)
+
+The Article 24(1) obligation to "foster the voluntary reporting of vulnerabilities as laid down in Article 15" and to "promote the sharing of information concerning discovered vulnerabilities within the open-source community" requires stewards to maintain accessible CVD channels.
+
+DevGuard supports this through:
+
+- **VEX (Vulnerability Exploitability eXchange) document generation** in CycloneDX format, allowing stewards to publicly communicate exploitability assessments to downstream integrators and the broader community
+- **CSAF (Common Security Advisory Framework) report generation**, enabling machine-readable security advisory publication. CSAF is the EU's preferred format for structured vulnerability disclosure (referenced in ENISA guidance) and satisfies the "promotion of sharing information" requirement of Article 24(1)
+- **Configurable public access** to vulnerability data per repository, allowing stewards to selectively expose findings consistent with responsible disclosure timelines
+
+### 5.3 SBOM Generation and Supply Chain Transparency
+
+Although the CRA does not directly require stewards to generate SBOMs (this is a manufacturer obligation under Annex I, Part II(1)), stewards that promote SBOM generation across their managed projects fulfil a complementary function: enabling downstream manufacturers who consume the FOSS to meet their own SBOM obligations. Article 13(6) additionally requires manufacturers to contribute vulnerability fixes back to upstream open source projects—a provision that creates a direct feedback loop between manufacturers' SBOM data and stewards' vulnerability management.
+
+DevGuard facilitates this ecosystem role by:
+
+- Generating **CycloneDX and SPDX SBOMs** for all scanned repositories, usable by both the steward and downstream manufacturers
+- Providing SBOM exports suitable for inclusion in the technical documentation that manufacturers must maintain
+
+### 5.4 Documentation for Market Surveillance Authority Cooperation (Article 24(2))
+
+Article 24(2) requires stewards to provide their Article 24(1) cybersecurity policy documentation to market surveillance authorities upon reasoned request. DevGuard's audit trail and reporting infrastructure directly supports this:
+
+- **Audit logs** record all significant security-relevant actions (vulnerability acknowledgements, risk acceptances, SBOM publications) with timestamps and actor identity, providing contemporaneous evidence of policy implementation
+- **Compliance dashboards** offer a structured, exportable view of the security posture across all managed projects
+- **Historical vulnerability data** is retained, enabling stewards to demonstrate that their policies were operationally active and not merely nominal
+
+### 5.5 Incident Reporting Support (Article 24(3))
+
+Where stewards are involved in development or operate development infrastructure (e.g., CI/CD systems, package registries, code hosting), Article 24(3) activates conditional reporting obligations under Article 14. DevGuard supports this by:
+
+- **Real-time alerting** for newly disclosed vulnerabilities with active exploitation indicators (CISA KEV, EPSS), enabling stewards to trigger the 24-hour early warning process under Article 14(1)
+- **Vulnerability notification workflows** that can route findings to relevant CSIRT contacts and internal security teams, supporting the Article 14 reporting chain
+- **Severity classification** aligned with CVSS v3.1 and v4.0, facilitating identification of "severe incidents" that trigger Article 14(3) obligations
+
+---
+
+## 6. Requirement Mapping: Article 24 Obligations and DevGuard Features
+
+The following table maps each Article 24 obligation to the corresponding DevGuard capability:
+
+| Obligation | Legal Basis | DevGuard Capability | Coverage |
+|---|---|---|---|
+| Adopt and document cybersecurity policy | Article 24(1) | Audit logs, compliance dashboards, policy documentation exports | 🔵 Supports implementation |
+| Document vulnerability handling | Article 24(1) | Vulnerability lifecycle tracking, risk assessment records | ✅ Covers |
+| Foster CVD and vulnerability reporting | Article 24(1), Article 15 | Public security contact pages, CVD workflow integration | ✅ Covers |
+| Promote community vulnerability sharing | Article 24(1) | CSAF report generation, public VEX documents | ✅ Covers |
+| Cooperate with market surveillance authorities | Article 24(2) | Audit trail exports, compliance dashboard exports | 🔵 Supports implementation |
+| Report actively exploited vulnerabilities (conditional) | Article 24(3), Article 14(1) | EPSS/KEV monitoring, alerting, 24h early warning workflows | 🔵 Supports implementation |
+| Report severe incidents on own infrastructure (conditional) | Article 24(3), Article 14(3) | Incident severity classification, notification routing | 🔵 Supports implementation |
+| Inform impacted users of incidents (conditional) | Article 24(3), Article 14(8) | CSAF advisories, VEX publication | ✅ Covers |
+| SBOM availability for downstream manufacturers | Ecosystem role (cf. Annex I, Part II(1)) | CycloneDX/SPDX SBOM generation and export | ✅ Covers |
+
+| Symbol | Meaning |
+|---|---|
+| ✅ | DevGuard covers this requirement for monitored projects |
+| 🔵 | DevGuard supports or partially implements this requirement |
+
+---
+
+## 7. Timeline and Applicability
+
+The CRA's provisions become applicable in two tranches relevant to stewards:
+
+- **11 September 2026**: Article 14 reporting obligations apply (Article 71(2)), including the conditional obligations imposed on stewards by Article 24(3). Stewards with involvement in development should have incident detection and reporting workflows operational by this date.
+- **11 December 2027**: Full CRA applicability. All Article 24 obligations, including the cybersecurity policy requirement, are enforceable. Stewards should have their documented cybersecurity policies and supporting tooling fully deployed.
+
+<Callout type="warning">
+    Although stewards are exempt from administrative fines (Article 64(10)(b)), market surveillance authorities retain the power to request documentation and to impose corrective measures. The absence of financial penalties does not imply the absence of regulatory scrutiny.
+</Callout>
+
+---
+
+## References
+
+1. Regulation (EU) 2024/2847 of the European Parliament and of the Council of 23 October 2024 on horizontal cybersecurity requirements for products with digital elements (Cyber Resilience Act). *OJ L, 2024/2847*. https://eur-lex.europa.eu/eli/reg/2024/2847/oj/eng
+2. European Commission. (2024). *Cyber Resilience Act — Summary*. Digital Strategy. https://digital-strategy.ec.europa.eu/en/policies/cra-summary
+3. European Commission. (2024). *Cyber Resilience Act and Open Source Software*. Digital Strategy. https://digital-strategy.ec.europa.eu/en/policies/cra-open-source
+4. Open Regulatory Compliance Working Group (ORCWG). (2024). *Open Source Stewards and the Cyber Resilience Act*. GitHub. https://github.com/orcwg/orcwg/blob/main/cyber-resilience-sig/whitepapers/stewards-and-cra.md
+5. OpenSSF Best Practices Working Group. (2024). *A Brief Guide to the EU Cyber Resilience Act for Open Source Developers*. https://best.openssf.org/CRA-Brief-Guide-for-OSS-Developers.html
+6. Eclipse Foundation. (2024). *Understanding Open Source Stewards and the Cyber Resilience Act*. https://blogs.eclipse.org/post/marta-rybczynska/understanding-open-source-stewards-and-cyber-resilience-act
+7. Rybczynska, M. (2025). CRA and Open Source: A Fine Balancing Act. *Journal of Intellectual Property, Information Technology and Electronic Commerce Law (JIPITEC)*, 16(1). https://www.jipitec.eu/jipitec/article/download/421/424
+8. GitHub. (2024). *What the EU's New Software Legislation Means for Developers*. GitHub Blog. https://github.blog/open-source/maintainers/what-the-eus-new-software-legislation-means-for-developers/
+9. OpenSSF. (2024). *EU Cyber Resilience Act*. https://openssf.org/public-policy/eu-cyber-resilience-act/
+10. ENISA. (2024). *ENISA's Role under the Cyber Resilience Act*. European Union Agency for Cybersecurity. https://www.enisa.europa.eu/topics/cyber-resilience-act
+
+---
+
+## Related Documentation
+
+- [Cyber Resilience Act — Manufacturer Obligations](/explanations/compliance/cyber-resilience-act) — Full CRA requirements for software manufacturers
+- [CSAF and VEX Explained](/explanations/compliance/csaf-vex-explained) — Technical standards for vulnerability disclosure
+- [SBOM Standards](/explanations/compliance/sbom-standards) — CycloneDX vs SPDX for SBOM generation
+- [Audit Logging](/explanations/compliance/audit-trails) — Audit trail capabilities for regulatory documentation
+- [Generate CSAF Reports](/how-to-guides/compliance/generate-csaf-reports) — How to publish machine-readable security advisories
+- [Generate VEX Documents](/how-to-guides/compliance/generate-vex-documents) — How to communicate exploitability to the community
+- [Export SBOM](/how-to-guides/compliance/export-sbom) — How to generate and export SBOMs for managed projects

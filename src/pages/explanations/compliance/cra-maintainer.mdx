@@ -1,0 +1,193 @@
+---
+title: DevGuard for Open Source Maintainers under the CRA
+description: How individual open source maintainers can use DevGuard to generate the security evidence that downstream manufacturers need for CRA Annex VII compliance — SBOM, SARIF, VEX, CSAF, and SLSA provenance.
+seo:
+  keyword_primary: "CRA open source maintainer obligations"
+  keywords_secondary:
+    - "Cyber Resilience Act maintainer"
+    - "open source CRA compliance evidence"
+    - "SBOM SARIF VEX provenance CRA"
+    - "DevGuard open source maintainer"
+  og:
+    type: "article"
+---
+
+import { Callout } from '@document-writing-tools/kernux-theme'
+import {
+    Tooltip,
+    TooltipTrigger,
+    TooltipContent,
+} from '@document-writing-tools/kernux-theme'
+
+# DevGuard for Open Source Maintainers under the CRA
+
+## Introduction
+
+Individual open source maintainers occupy a legally distinct position under the EU Cyber Resilience Act (Regulation (EU) 2024/2847, hereinafter "CRA"). Unlike manufacturers — who bear the full weight of Annex I requirements, conformity assessment, and CE marking — and unlike open-source software stewards — who must adopt a formal Article 24 cybersecurity policy — individual maintainers publishing non-commercial FOSS are largely outside the CRA's scope.
+
+Yet maintainers sit at the origin of the software supply chain. The technical artefacts they produce or neglect to produce directly determine how easily downstream manufacturers can meet their own CRA obligations. This document analyses the maintainer's legal position, clarifies what the CRA does and does not require of them, and shows how DevGuard enables maintainers to generate the evidence that makes downstream compliance tractable.
+
+<Callout type="info">
+    This page covers individual open source **maintainers**. For the obligations of legal entities that govern open source projects, see [CRA: Open Source Steward](/explanations/compliance/cra-open-source-steward). For the full manufacturer regime, see [CRA: Manufacturer](/explanations/compliance/cra-manufacturer).
+</Callout>
+
+---
+
+## 1. Legal Position of Individual Maintainers under the CRA
+
+### 1.1 The Commercial Activity Threshold
+
+The CRA's scope is bounded by a commercial activity test. Article 2(1) limits applicability to products "placed on the market in the course of a commercial activity." Recital 18 states explicitly that "the provision of products with digital elements qualifying as free and open-source software that are not monetised by their manufacturers should not be considered to be a commercial activity."
+
+For most individual maintainers, this threshold is not crossed. A developer who:
+
+- publishes software on a public repository (GitHub, GitLab, Codeberg) under an open-source licence,
+- does not charge for the software or for associated technical support beyond cost recovery,
+- does not receive donations exceeding actual operational costs, and
+- does not integrate the software into a commercial service or product they market
+
+...is operating outside the CRA's scope entirely. Recital 18 further confirms that "contributing to a project that another entity is responsible for shall not be considered making a product available on the market."
+
+<Callout type="warning">
+    The line shifts if a maintainer monetises their project — for example, by charging for support contracts, offering a hosted service built on the software, or integrating it into a commercial product they sell. At that point, the maintainer transitions from the non-commercial exemption into the manufacturer category. See [CRA: Manufacturer](/explanations/compliance/cra-manufacturer).
+</Callout>
+
+### 1.2 The Upstream-Downstream Relationship
+
+While individual maintainers bear no direct CRA obligations for non-commercial FOSS, their projects are not isolated from the regulation. Every manufacturer who integrates a maintainer's component into a commercial product must, under Article 13(5), "exercise due diligence" over that component. When a manufacturer discovers a vulnerability in an upstream open-source component, Article 13(6) requires them to report it to the maintainer and contribute the fix.
+
+This creates an asymmetric relationship: the CRA imposes obligations on the downstream manufacturer, but those obligations generate upstream pressure on the maintainer — pressure to maintain a vulnerability reporting channel, to have a process for receiving and acting on disclosures, and to publish security artefacts that manufacturers can reference in their Annex VII technical documentation.
+
+The practical consequence is that **maintainers who publish security artefacts proactively make themselves and their users better off**, even though the CRA does not directly require them to do so.
+
+---
+
+## 2. What Manufacturers Need from Maintainers
+
+When a manufacturer uses an open-source component in a CRA-regulated product, they need to answer specific questions in their Annex VII technical documentation. Many of those answers depend on evidence produced by the upstream maintainer:
+
+| Manufacturer's Annex I/VII obligation | Evidence they need from the maintainer |
+|---|---|
+| Annex I Part II(1) — SBOM covering components | SBOM of the upstream component in CycloneDX or SPDX format |
+| Annex I Part II(1) — vulnerability identification | CVE data, VEX exploitability statements |
+| Annex I Part II(3) — regular security testing | SARIF reports from SAST/SCA runs in the upstream CI |
+| Annex I Part II(4) — public disclosure of fixed vulns | Security advisories, CSAF documents |
+| Annex I Part II(5)/(6) — CVD policy and contact | `security.txt`, CVD policy, security contact address |
+| Annex I Part I(2)(i) — exploitation mitigation | Evidence of secure coding practices, compiler flags |
+| Article 13(5) — due diligence on components | SLSA build provenance, signed release artefacts |
+
+The more completely a maintainer publishes these artefacts, the more straightforwardly a manufacturer can fulfil their own obligations when integrating the component.
+
+---
+
+## 3. DevGuard's Role: Generating the Evidence Layer
+
+DevGuard provides the tooling to generate and publish each of these artefacts automatically within a standard CI/CD pipeline, without requiring maintainers to engage with the CRA's legal framework directly.
+
+### 3.1 SBOM Generation (Annex I Part II(1))
+
+DevGuard generates Software Bills of Materials in CycloneDX (ECMA-424) and SPDX (ISO/IEC 5962:2021) format on every build, covering both top-level and transitive dependencies. Published as release artefacts, these SBOMs are directly consumable by manufacturers filling in their own `SBOM.md` compliance template:
+
+- **CycloneDX JSON** — the format expected by most CRA tooling and by the compliance-templates machine checker
+- **Transitive coverage** — exceeds the CRA minimum of top-level dependencies, giving manufacturers full supply chain visibility into the component
+- **Per-release snapshots** — maintains historical records aligned with the 10-year retention requirement of Article 13(7)
+
+### 3.2 SAST and SCA Scanning (Annex I Part II(3) and Part I(2))
+
+DevGuard integrates SAST (Static Application Security Testing) and SCA (Software Composition Analysis) into the CI pipeline, producing SARIF-format reports on every commit. These reports serve as the evidence that manufacturers need to demonstrate regular security testing of integrated components:
+
+- **SARIF reports** attached to CI runs or release artefacts — machine-verifiable by the compliance-templates checker
+- **Quality gates** that block releases with unresolved high-severity findings — giving manufacturers confidence that the component was delivered without known exploitable vulnerabilities (Annex I Part I(2))
+- **Continuous monitoring** after release — detecting newly published CVEs against the component's SBOM and alerting maintainers immediately
+
+### 3.3 VEX Documents (Annex I Part II(1) and (4))
+
+Not every CVE that matches a component's dependency tree is actually exploitable in that component's context. DevGuard generates Vulnerability Exploitability eXchange (VEX) documents in CycloneDX VEX format, allowing maintainers to communicate exploitability assessments to downstream manufacturers:
+
+- A VEX statement of `not_affected` for a CVE with an unreachable code path eliminates false positives in a manufacturer's vulnerability dashboard
+- A VEX statement of `affected` with remediation information provides manufacturers with the precise data they need for their own public disclosure obligations under Annex I Part II(4)
+- Published as release artefacts, VEX documents are directly consumable by the compliance-templates machine checker
+
+### 3.4 CSAF Security Advisories (Annex I Part II(4))
+
+When a security fix is released, manufacturers need a machine-readable advisory to populate their own disclosure obligations. DevGuard generates CSAF (Common Security Advisory Framework) documents automatically from its vulnerability tracking data, providing:
+
+- Structured JSON advisories including CVE identifier, affected versions, severity (CVSS), and remediation guidance
+- The standard format used by ENISA, BSI, and national CSIRTs for structured vulnerability disclosure
+- A public feed that manufacturers can reference in their `SECURITY.md` compliance template under Annex I Part II(4)
+
+### 3.5 Coordinated Vulnerability Disclosure Infrastructure (Annex I Part II(5) and (6))
+
+DevGuard provides per-repository security contact pages and CVD workflow tooling that enables maintainers to establish the disclosure infrastructure manufacturers expect:
+
+- **Public security contact** — satisfies the Annex I Part II(6) contact address requirement from the manufacturer's perspective of due diligence
+- **CVD workflow** — tracks incoming vulnerability reports from initial disclosure through triage to remediation and public advisory, producing an audit trail of the coordinated disclosure process
+- **`security.txt` compatibility** — the security contact data published by DevGuard is compatible with RFC 9116 `security.txt` format
+
+### 3.6 Build Provenance and Supply Chain Integrity (Article 13(5))
+
+A manufacturer exercising due diligence over an open-source component under Article 13(5) needs to trust that the artefact they download is what the maintainer actually produced. DevGuard supports:
+
+- **SLSA provenance attestations** generated during CI builds, providing cryptographically verifiable evidence of the build environment and source commit
+- **Cosign-signed OCI images** — for containerised software, enabling manufacturers to verify image authenticity before integration
+- **Source provenance attestations** compatible with the openCode source provenance schema
+
+---
+
+## 4. The Compliance-Templates Pattern
+
+The [compliance-templates](https://github.com/l3montree-dev/compliance-templates) project formalises the relationship between maintainer-produced artefacts and manufacturer Annex VII documentation. Each `.compliance/` file in a repository contains:
+
+- A **prose self-assessment** answering the technical questions a maintainer can answer about their own code
+- **Frontmatter evidence fields** linking to the machine-verifiable artefacts generated by DevGuard
+
+The questions tagged `[maintainer]` in the templates are precisely those DevGuard helps answer:
+
+| Template file | `[maintainer]` questions DevGuard directly supports |
+|---|---|
+| `SBOM.md` | What format is the SBOM? Where is it published? → DevGuard generates and publishes CycloneDX/SPDX per release |
+| `SECURITY_SCANNING.md` | What tools are used? Is scanning in CI? → DevGuard SAST/SCA in pipeline with SARIF output |
+| `SECURITY_SCANNING.md` | How are false positives documented? → DevGuard VEX generation |
+| `SECURITY.md` | Where are advisories published? → DevGuard CSAF generation |
+| `SECURE_CODING_STANDARD.md` | What build provenance measures are in place? → DevGuard SLSA attestations |
+| `SECURITY.md` | What is the CVD contact? → DevGuard security contact pages |
+
+The questions tagged `[manufacturer]` remain for the downstream manufacturer to complete. The questions tagged `[steward]` require a formal legal entity if they are to carry binding weight.
+
+---
+
+## 5. Summary: What Maintainers Are and Are Not Responsible For
+
+| Question | Maintainer's responsibility |
+|---|---|
+| CRA compliance for their own non-commercial FOSS | None — outside CRA scope (Recital 18) |
+| CRA compliance for the manufacturer's product | None — the manufacturer is responsible |
+| Publishing SBOMs for the component | Best practice; enables downstream compliance; DevGuard automates this |
+| Maintaining a CVD channel | Best practice; required by Article 13(6) feedback loop |
+| Producing security advisories (CSAF) | Best practice; directly supports manufacturer Annex I Part II(4) |
+| Signing releases and attesting provenance | Best practice; supports manufacturer Article 13(5) due diligence |
+| EU Declaration of Conformity | Never — this is the manufacturer's legal document |
+| CE marking | Never — this belongs to the manufacturer |
+
+---
+
+## References
+
+1. Regulation (EU) 2024/2847 of the European Parliament and of the Council of 23 October 2024 (Cyber Resilience Act). *OJ L, 2024/2847*, Recitals 15–20, Articles 2, 13. https://eur-lex.europa.eu/eli/reg/2024/2847/oj/eng
+2. OpenSSF Best Practices Working Group. (2024). *A Brief Guide to the EU Cyber Resilience Act for Open Source Developers*. https://best.openssf.org/CRA-Brief-Guide-for-OSS-Developers.html
+3. GitHub. (2024). *What the EU's New Software Legislation Means for Developers*. https://github.blog/open-source/maintainers/what-the-eus-new-software-legislation-means-for-developers/
+4. Open Regulatory Compliance Working Group (ORCWG). (2024). *Open Source Stewards and the Cyber Resilience Act*. https://github.com/orcwg/orcwg/blob/main/cyber-resilience-sig/whitepapers/stewards-and-cra.md
+5. ECMA International. (2023). *ECMA-424: CycloneDX Bill of Materials (BOM) Standard*. https://ecma-international.org/publications-and-standards/standards/ecma-424/
+6. ISO/IEC 29147:2018. *Vulnerability disclosure*. International Organization for Standardization.
+
+---
+
+## Related Documentation
+
+- [CRA: Open Source Steward](/explanations/compliance/cra-open-source-steward) — Obligations of foundations and steward legal entities under Article 24
+- [CRA: Manufacturer](/explanations/compliance/cra-manufacturer) — Full Annex I obligations for commercial products
+- [CSAF and VEX Explained](/explanations/compliance/csaf-vex-explained) — The disclosure formats maintainers publish
+- [SBOM Standards](/explanations/compliance/sbom-standards) — CycloneDX vs SPDX for upstream component transparency
+- [Generate CSAF Reports](/how-to-guides/compliance/generate-csaf-reports) — Publishing machine-readable security advisories
+- [Generate VEX Documents](/how-to-guides/compliance/generate-vex-documents) — Communicating exploitability to downstream manufacturers
+- [Export SBOM](/how-to-guides/compliance/export-sbom) — Publishing component inventories for downstream use

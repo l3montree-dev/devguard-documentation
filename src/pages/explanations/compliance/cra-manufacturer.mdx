@@ -1,0 +1,430 @@
+---
+title: DevGuard as a Manufacturer Compliance Tool under the CRA
+description: A scientific analysis of how DevGuard supports software manufacturers in meeting their obligations under the EU Cyber Resilience Act (Regulation (EU) 2024/2847), covering Annex I security requirements, vulnerability handling, SBOM, incident reporting, and conformity assessment.
+seo:
+  keyword_primary: "CRA manufacturer obligations DevGuard"
+  keywords_secondary:
+    - "Cyber Resilience Act manufacturer requirements"
+    - "CRA Annex I compliance"
+    - "CRA Article 13 manufacturer"
+    - "CRA Article 14 vulnerability reporting"
+    - "DevGuard CRA software manufacturer"
+  og:
+    type: "article"
+---
+
+import { Callout } from '@document-writing-tools/kernux-theme'
+import {
+    Tooltip,
+    TooltipTrigger,
+    TooltipContent,
+} from '@document-writing-tools/kernux-theme'
+
+# DevGuard as a Manufacturer Compliance Tool under the CRA
+
+## Introduction
+
+The EU Cyber Resilience Act (Regulation (EU) 2024/2847, hereinafter "CRA") entered into force on 10 December 2024, with full applicability from 11 December 2027. Its central addressees are **manufacturers**: the legal and natural persons responsible for placing products with digital elements on the EU internal market. For manufacturers, the CRA establishes a comprehensive, lifecycle-spanning set of obligations—encompassing secure design, vulnerability management, incident reporting, software composition transparency, and market conformity assessment.
+
+This document provides a rigorous legal and technical analysis of the CRA's manufacturer obligations and demonstrates how DevGuard operationalises compliance across each obligation cluster. Unlike lighter frameworks applicable to open-source software stewards, the full manufacturer regime imposes binding technical, organisational, and procedural requirements backed by significant administrative penalties.
+
+<Callout type="info">
+    This page covers the **manufacturer** regime under the CRA. For the lighter obligations applicable to open-source foundations and similar entities, see [CRA: Open Source Steward](/explanations/compliance/cra-open-source-steward).
+</Callout>
+
+---
+
+## 1. Legal Framework and Scope
+
+### 1.1 The Manufacturer as Central Regulatory Addressee
+
+The CRA establishes a tiered hierarchy of economic operators—manufacturers, authorised representatives, importers, and distributors—each bearing proportionate obligations. Manufacturers bear the heaviest burden because they make the decisive design, development, and commercialisation choices that determine a product's inherent security level.
+
+Article 3(13) defines a manufacturer as:
+
+> "a natural or legal person who develops or manufactures products with digital elements or has products with digital elements designed, developed or manufactured, and markets them under its name or trademark, whether for payment or free of charge."
+
+Three features of this definition warrant attention:
+
+1. **Marketing under own name or trademark**: The criterion is commercial accountability, not technical authorship. A company that outsources development but markets the resulting product under its brand is a manufacturer.
+2. **Payment is irrelevant**: A manufacturer distributing software free of charge (e.g., as a freemium product or open-core offering) remains a manufacturer if it markets the product in the course of commercial activity (Recital 15).
+3. **Natural persons are included**: Individual developers who commercialise products are manufacturers, subject to the same obligations as large corporations, though the CRA's proportionality principle (Article 13(3)) applies.
+
+### 1.2 Product with Digital Elements
+
+Article 3(1) defines a product with digital elements as:
+
+> "software or hardware product and its remote data processing solutions, including software or hardware components to be placed on the market separately."
+
+Article 2(1) limits scope to products "made available on the market" in the course of a commercial activity. Recital 20 clarifies that publication of software on public code repositories does not in itself constitute making a product available on the market. However, packaging that software as a product—whether sold, licensed, offered as SaaS, or distributed under a commercial open-core model—triggers manufacturer obligations.
+
+Excluded from scope (Article 2(2)) are products already subject to sector-specific EU regulations with equivalent requirements: medical devices (Regulations (EU) 2017/745 and 2017/746), motor vehicles (Regulation (EU) 2019/2144), aviation products (Regulation (EU) 2018/1139), and naval equipment (Directive 2014/90/EU), among others.
+
+### 1.3 Product Risk Classification
+
+The CRA classifies products into three risk tiers, each with different conformity assessment requirements:
+
+| Class | Description | Examples | Conformity Assessment |
+|---|---|---|---|
+| **Default** | All products not classified as Critical Class I or II | Most commercial software, productivity tools, basic IoT devices | Self-assessment (Article 32) |
+| **Critical Class I** | Products with significant cybersecurity risk listed in Annex III | Identity management software, browsers, VPNs, password managers, network monitoring tools, SIEM | Self-assessment with harmonised standards, or third-party assessment (Article 33) |
+| **Critical Class II** | Products with high cybersecurity risk listed in Annex IV | OS for servers/industrial/IoT, hypervisors, firewalls, industrial control systems, tamper-resistant microprocessors | Mandatory third-party assessment by notified body (Article 34) |
+
+The classification has significant practical implications: Class II manufacturers must engage an EU-notified body for conformity assessment, while default-class manufacturers may self-certify provided they apply harmonised standards.
+
+---
+
+## 2. Core Manufacturer Obligations
+
+### 2.1 Essential Cybersecurity Requirements (Article 6 and Annex I)
+
+The bedrock of the CRA's technical obligations is Annex I, which is divided into two parts: security properties of the product itself (Part I) and vulnerability handling processes (Part II). Article 6(1) requires that products be designed, developed, and produced in accordance with the essential cybersecurity requirements in Annex I.
+
+#### Annex I, Part I — Security Properties of Products with Digital Elements
+
+| ID | Requirement (Regulation (EU) 2024/2847, Annex I, Part I) |
+|---|---|
+| 1 | Designed, developed and produced to ensure an appropriate level of cybersecurity based on the risks |
+| 2 | Delivered without any known exploitable vulnerabilities |
+| 2(a) | Delivered with a secure by default configuration, including the possibility to reset to original state |
+| 2(b) | Protection from unauthorised access by appropriate control mechanisms, including authentication, identity or access management systems |
+| 2(c) | Protection of the confidentiality of stored, transmitted or otherwise processed data by state-of-the-art mechanisms (e.g., encryption at rest and in transit) |
+| 2(d) | Protection of the integrity of stored, transmitted or otherwise processed data, commands, programs and configuration against manipulation; reporting of corruptions |
+| 2(e) | Data minimisation: process only data adequate, relevant and limited to the intended use ('minimisation of data') |
+| 2(f) | Protection of availability of essential functions, including resilience against denial of service attacks |
+| 2(g) | Minimisation of own negative impact on availability of services provided by other devices or networks |
+| 2(h) | Design to limit attack surfaces, including external interfaces |
+| 2(i) | Design to reduce the impact of an incident using appropriate exploitation mitigation mechanisms and techniques |
+| 2(j) | Security-related information by recording and/or monitoring relevant internal activity, including access to or modification of data, services or functions |
+| 2(k) | Vulnerabilities can be addressed through security updates, including, where applicable, automatic updates and notification of available updates to users |
+
+#### Annex I, Part II — Vulnerability Handling Requirements
+
+| ID | Requirement (Regulation (EU) 2024/2847, Annex I, Part II) |
+|---|---|
+| 1 | Identify and document vulnerabilities and components contained in the product, including by drawing up an SBOM in a commonly used and machine-readable format covering at least the top-level dependencies |
+| 2 | Address and remediate vulnerabilities without delay, including by providing security updates |
+| 3 | Apply effective and regular tests and reviews of the security of the product |
+| 4 | Once a security update is available, publicly disclose information about fixed vulnerabilities: description, affected products, impacts, severity, and remediation guidance |
+| 5 | Put in place and enforce a policy on coordinated vulnerability disclosure (CVD) |
+| 6 | Take measures to facilitate information sharing about potential vulnerabilities in the product and in third-party components, including a contact address for vulnerability reports |
+| 7 | Provide mechanisms to securely distribute security updates to ensure exploitable vulnerabilities are fixed or mitigated in a timely manner |
+| 8 | Ensure security patches or updates are disseminated without delay and free of charge, accompanied by advisory messages with information on potential action to be taken |
+
+### 2.2 Manufacturer Obligations over the Product Lifecycle (Article 13)
+
+Article 13 is the primary provision governing manufacturer conduct. It operationalises Annex I across the full product lifecycle—design, development, production, and post-market support.
+
+Key obligations under Article 13 include:
+
+- **Article 13(1)**: Ensure conformity with Annex I requirements throughout design, development, production, and across the support period.
+- **Article 13(3)**: Apply a risk-based approach; take into account evolving technical knowledge; document the risk assessment as part of the technical documentation in Annex VII.
+- **Article 13(5)**: Exercise due diligence when integrating third-party components, including FOSS, to ensure that components do not compromise the product's cybersecurity.
+- **Article 13(6)**: Where a vulnerability in an integrated third-party component is fixed, manufacturers must report the vulnerability to the component maintainer and contribute the fix upstream.
+- **Article 13(7)**: Maintain technical documentation per Annex VII throughout the support period and for at least 10 years after market placement.
+- **Article 13(8)**: Ensure that SBOM data is available to market surveillance authorities and, where requested, to users in a machine-readable format.
+- **Article 13(9)**: Cooperate with national competent authorities; provide all information and documentation required to demonstrate conformity.
+- **Article 13(10)**: Where a product poses a significant cybersecurity risk, immediately inform competent authorities and take corrective action.
+- **Article 13(14)**: Affix CE marking per Article 28 only after completing the applicable conformity assessment procedure.
+
+### 2.3 Support Period
+
+Article 13(1) requires conformity throughout the product's support period. Article 13(4) requires manufacturers to determine a support period "commensurate with the expected use of the product." The Commission may establish minimum support periods by delegated act; the CRA Delegated Regulation under discussion suggests a default of five years for most software products.
+
+During the support period, manufacturers must:
+- Continuously monitor and address newly discovered vulnerabilities (Annex I, Part II(2))
+- Provide security updates free of charge (Annex I, Part II(8))
+- Maintain and update SBOM records (Annex I, Part II(1))
+
+### 2.4 Vulnerability Reporting Obligations (Article 14)
+
+Article 14 establishes time-critical reporting obligations with hard deadlines. These obligations apply from **11 September 2026** (Article 71(2)).
+
+#### Article 14(1) — Actively Exploited Vulnerabilities
+
+Manufacturers must notify the CSIRT coordinator designated under Article 16 and ENISA simultaneously via the single reporting platform:
+
+| Report Type | Deadline | Content |
+|---|---|---|
+| Early warning | Within **24 hours** of awareness of active exploitation | Indicate whether the vulnerability is suspected to be caused by unlawful or malicious acts |
+| Vulnerability notification | Within **72 hours** of awareness | Severity and impact of the vulnerability; where available, information about the malicious actor |
+| Final report | Within **14 days** after corrective measure is available | Description of the vulnerability, severity, impact, affected products, corrective measure |
+
+#### Article 14(2) — Severe Incidents
+
+Manufacturers must report severe incidents having an impact on the security of the product, following the same 24h / 72h / 1-month timeline. A severe incident is one that may have a significant impact on the EU market.
+
+#### Article 14(4) — Disclosure Timing
+
+Manufacturers may request that the coordinating CSIRT defer disclosure of a vulnerability for justified reasons (e.g., ongoing patch development). The CSIRT may grant a justified delay.
+
+#### Article 14(8) — User Notification
+
+Without undue delay, manufacturers must inform affected users of actively exploited vulnerabilities and severe incidents, including information about remediation measures they can take.
+
+### 2.5 Coordinated Vulnerability Disclosure (Article 15)
+
+Article 15 requires manufacturers to adopt a policy on coordinated vulnerability disclosure (CVD). This policy must:
+
+- Designate a single point of contact for vulnerability reports
+- Specify the process for receiving, acknowledging, and responding to vulnerability disclosures
+- Define timelines for remediation and public disclosure
+- Align with international standards, in particular ISO/IEC 30111 (vulnerability handling processes) and ISO/IEC 29147 (vulnerability disclosure)
+
+Manufacturers must also register their CVD contact on the ENISA vulnerability database (Article 12(1)).
+
+### 2.6 Technical Documentation (Article 13(7) and Annex VII)
+
+Manufacturers must compile technical documentation per Annex VII before placing a product on the market and maintain it for at least 10 years. Annex VII specifies that documentation must include, inter alia:
+
+1. General description of the product, its intended purpose, and essential characteristics
+2. Risk assessment per Article 13(3): cybersecurity risks to third parties, anticipated effect of dependencies on the product's security
+3. List of harmonised standards, common specifications, or other technical specifications applied
+4. EU declaration of conformity (or reference thereto)
+5. SBOM or reference to accessible SBOM
+6. Copy of the information and instructions to users
+7. Procedures for vulnerability handling, including the CVD policy
+8. Where applicable, information about the notified body performing conformity assessment
+
+### 2.7 SBOM Obligation (Annex I, Part II(1))
+
+The SBOM obligation is one of the most operationally significant requirements for software manufacturers. The CRA requires that the SBOM:
+
+- Cover **at least the top-level dependencies** of the product (minimum threshold; comprehensive coverage is best practice)
+- Be in a **commonly used and machine-readable format**: CycloneDX (ECMA-424) and SPDX (ISO/IEC 5962:2021) are the predominant formats recognised in harmonised standards work
+- Be maintained throughout the support period, updated as components change
+
+### 2.8 CE Marking and Declaration of Conformity (Articles 28–31)
+
+Before placing a product on the EU market, manufacturers must:
+
+1. Complete the applicable conformity assessment (Articles 32–34)
+2. Compile technical documentation (Annex VII)
+3. Draw up an EU Declaration of Conformity (Article 28(1))
+4. Affix the CE marking (Article 28(2))
+5. Register the product in the ENISA database where required (Article 29 for Critical Class I and II)
+
+The CE marking signifies that the manufacturer declares the product meets all applicable CRA essential requirements. It is **not** issued by a third party for default-class products—it is a self-declaration.
+
+### 2.9 Penalties (Article 64)
+
+The CRA's enforcement regime is modelled on GDPR-style tiered penalties:
+
+| Infringement | Maximum Fine |
+|---|---|
+| Non-compliance with essential cybersecurity requirements (Annex I) or reporting obligations (Article 14) | **€15 million** or **2.5%** of total worldwide annual turnover, whichever is higher |
+| Non-compliance with other manufacturer obligations (Articles 13, 28–31) | **€10 million** or **2%** of total worldwide annual turnover, whichever is higher |
+| Provision of incorrect, incomplete or misleading information to authorities | **€5 million** or **1%** of total worldwide annual turnover, whichever is higher |
+
+These penalties apply to manufacturers and other economic operators but **not** to open-source software stewards (Article 64(10)(b)).
+
+---
+
+## 3. DevGuard's Role in the Manufacturer Context
+
+The CRA's manufacturer obligations span the entire software development lifecycle. DevGuard addresses compliance across four principal phases: **development-time security**, **vulnerability management**, **transparency and disclosure**, and **regulatory documentation**.
+
+### 3.1 Delivering Products Without Known Exploitable Vulnerabilities (Annex I, Part I(2))
+
+The obligation to deliver products "without any known exploitable vulnerabilities" requires continuous, integrated security scanning. DevGuard integrates directly into the CI/CD pipeline to prevent vulnerable artefacts from reaching production:
+
+- **Software Composition Analysis (SCA)** scans all third-party dependencies on every commit, comparing against the NVD, OSV, and GitHub Advisory Database to detect known CVEs before release
+- **Static Application Security Testing (SAST)** analyses source code for security weaknesses (CWEs) that could constitute exploitable vulnerabilities, addressing Annex I, Part I(2) pre-release
+- **Container image scanning** extends coverage to runtime dependencies packaged in container layers, including OS-level packages
+- **Configurable quality gates** block pipeline progression when findings exceed a defined severity threshold, creating a machine-enforced "no known exploitable vulnerability" release gate consistent with Annex I, Part I(2)
+
+The combination ensures that Annex I, Part I(2) is not a point-in-time assertion but a continuously verified property of every released artefact.
+
+### 3.2 SBOM Generation and Component Inventory (Annex I, Part II(1))
+
+DevGuard automates the SBOM lifecycle required by Annex I, Part II(1):
+
+- **Automatic SBOM generation** in CycloneDX (ECMA-424) format from source code, build artefacts, and container images on every build
+- **Top-level and transitive dependency coverage**, exceeding the CRA minimum of top-level dependencies and providing a comprehensive supply chain inventory
+- **SBOM versioning and retention**, maintaining a historical record of component inventories aligned with the 10-year documentation retention requirement of Article 13(7)
+- **SBOM export** in machine-readable formats suitable for submission to market surveillance authorities (Article 13(8)) and for inclusion in Annex VII technical documentation
+
+The SBOM data generated by DevGuard also feeds the vulnerability management pipeline: incoming CVEs are automatically matched against the stored component inventory, triggering immediate analysis of impact.
+
+### 3.3 Continuous Vulnerability Identification and Remediation (Annex I, Part II(1)–(3))
+
+Annex I, Part II obligations (1), (2), and (3) form a continuous cycle: identify, remediate, test. DevGuard implements this cycle through:
+
+- **Continuous monitoring** against updated vulnerability databases; newly published CVEs are matched against all stored SBOMs within hours of publication, ensuring immediate awareness
+- **Risk-based prioritisation** using CVSS v3.1/v4.0 base scores, EPSS (Exploit Prediction Scoring System) probability scores, and CISA Known Exploited Vulnerabilities (KEV) catalogue data—enabling manufacturers to demonstrate a systematic, evidence-based triage methodology
+- **Vulnerability lifecycle states** (detected → triaged → in remediation → resolved / accepted risk) provide the auditable record of "addressing without delay" required by Annex I, Part II(2)
+- **VEX (Vulnerability Exploitability eXchange) document generation** in CycloneDX VEX format documents exploitability assessments at a component-product level, enabling manufacturers to demonstrate that specific vulnerabilities do not affect their product in practice (e.g., vulnerable code path not reachable)
+
+The remediation workflow also addresses Article 13(6): when DevGuard identifies a vulnerability in a third-party FOSS component and a fix is developed, the platform records the upstream contribution obligation, supporting compliance with the CRA's requirement to report and contribute fixes back to component maintainers.
+
+### 3.4 Security Testing and Review Evidence (Annex I, Part II(3))
+
+Annex I, Part II(3) requires "effective and regular tests and reviews." DevGuard contributes to this by:
+
+- **Automated scanning on every commit** provides test frequency evidence—every SBOM and scan result is timestamped and retained, demonstrating regularity
+- **Integration with CI/CD pipelines** (GitHub Actions, GitLab CI) generates a continuous record of security testing as part of the build process
+- **Scan result history** provides the audit evidence that security testing was performed systematically throughout the product's development, supporting Annex VII documentation requirements
+
+### 3.5 Coordinated Vulnerability Disclosure Policy (Annex I, Part II(5)–(6)) (cooming soon)
+
+Annex I, Part II(5) and (6) require a CVD policy with an accessible reporting contact. DevGuard supports this through:
+
+- **Per-repository security contact pages** that provide researchers with a documented, publicly accessible disclosure channel, satisfying Part II(6)'s contact address requirement
+- **CVD workflow integration** that receives incoming vulnerability reports, assigns triage status, and tracks remediation through to disclosure—creating the verifiable "policy in practice" evidence that satisfies Part II(5)
+- **ENISA vulnerability database integration** support, enabling manufacturers to register their CVD contacts as required by Article 12(1)
+
+### 3.6 Public Vulnerability Disclosure and Security Advisories (Annex I, Part II(4) and (8))
+
+Once a security update is available, Annex I, Part II(4) requires public disclosure of fixed vulnerabilities, and Part II(8) requires free, timely dissemination of patches with advisory messages. DevGuard supports this through:
+
+- **CSAF (Common Security Advisory Framework) report generation** in machine-readable JSON format. CSAF is the standard adopted by ENISA and national CSIRTs (including BSI in Germany) for structured security advisory publication. DevGuard auto-populates CSAF documents from its vulnerability data—affected products, severity, description, and remediation guidance
+- **Public VEX document publication** allows manufacturers to communicate exploitability status to users and downstream integrators in a standardised format
+- **Configurable public access** to vulnerability disclosure data per repository, enabling manufacturers to control the timing of disclosure consistent with CVD policy while ensuring timely public access after patch release
+
+### 3.7 Active Exploitation and Incident Reporting (Article 14)
+
+Article 14's time-critical reporting obligations require real-time awareness of active exploitation. DevGuard provides:
+
+- **CISA KEV monitoring**: DevGuard continuously checks matched vulnerabilities against the CISA Known Exploited Vulnerabilities catalogue. When a vulnerability affecting a monitored product appears in KEV, immediate alerts enable manufacturers to trigger the 24-hour early warning process under Article 14(1)
+- **EPSS-based exploitation probability scoring** provides a continuous estimate of exploitation likelihood, enabling manufacturers to identify vulnerabilities likely to become actively exploited before they reach KEV status
+- **Severity classification** aligned with CVSS v3.1 and v4.0 supports identification of "severe incidents" under Article 14(2)
+- **Notification routing** enables security teams to receive real-time alerts suitable for initiating the Article 14 reporting chain to national CSIRTs and ENISA
+
+<Callout type="warning">
+    Article 14 reporting deadlines are strict: 24 hours for early warning, 72 hours for full notification. DevGuard's real-time alerting infrastructure is designed to support these timelines, but manufacturers remain responsible for establishing internal workflows to action alerts and submit reports via the ENISA single reporting platform.
+</Callout>
+
+### 3.8 Technical Documentation and Market Surveillance Cooperation (Articles 13(7)–(9) and Annex VII)
+
+Article 13(7) requires 10-year retention of technical documentation; Article 13(9) requires cooperation with national competent authorities. DevGuard contributes to both through:
+
+- **Immutable audit logs** recording all vulnerability-related actions (detection, triage, risk acceptance, remediation, disclosure) with actor identity, timestamps, and rationale—providing contemporaneous evidence of Annex I, Part II compliance
+- **Compliance dashboards** offering a structured, exportable view of the security posture per product, per release, and per vulnerability—suitable for inclusion in Annex VII technical documentation or presentation to market surveillance authorities
+- **Historical SBOM snapshots** per release provide the component inventory record required for retrospective conformity verification
+
+---
+
+## 4. Complete Requirement Mapping
+
+The following table provides a structured mapping of CRA manufacturer obligations to DevGuard capabilities:
+
+| Obligation | Legal Basis | DevGuard Capability | Coverage |
+|---|---|---|---|
+| Design and produce with appropriate cybersecurity based on risks | Annex I, Part I(1) | Risk assessment workflows, CVSS/EPSS-based risk scoring | 🔵 Supports implementation |
+| Deliver without known exploitable vulnerabilities | Annex I, Part I(2) | SCA, SAST, container scanning, pipeline quality gates | ✅ Covers |
+| Secure by default configuration | Annex I, Part I(2)(a) | Security configuration checks in SAST | 🔵 Supports implementation |
+| Authentication and access management | Annex I, Part I(2)(b) | Authentication flaw detection in SAST | 🔵 Supports implementation |
+| Data confidentiality (encryption) | Annex I, Part I(2)(c) | Weak cryptography detection in SAST | 🔵 Supports implementation |
+| Data integrity protection | Annex I, Part I(2)(d) | Injection flaw detection in SAST | 🔵 Supports implementation |
+| Data minimisation | Annex I, Part I(2)(e) | ❌ Not covered |
+| Availability / DoS resilience | Annex I, Part I(2)(f) | ❌ Not covered |
+| Minimise impact on other devices | Annex I, Part I(2)(g) | ❌ Not covered |
+| Limit attack surfaces | Annex I, Part I(2)(h) | SAST surface analysis, dependency reduction recommendations | 🔵 Supports implementation |
+| Exploitation mitigation mechanisms | Annex I, Part I(2)(i) | SAST CWE detection | 🔵 Supports implementation |
+| Security logging and monitoring | Annex I, Part I(2)(j) | Audit trail generation, activity logging | 🔵 Supports implementation |
+| Security update mechanisms | Annex I, Part I(2)(k) | Update workflow tracking, advisory publication | 🔵 Supports implementation |
+| SBOM generation (top-level dependencies minimum) | Annex I, Part II(1) | CycloneDX and SPDX SBOM generation, auto-updated per build | ✅ Covers |
+| Identify and document vulnerabilities in components | Annex I, Part II(1) | SCA with CVE matching against full dependency tree | ✅ Covers |
+| Address and remediate vulnerabilities without delay | Annex I, Part II(2) | Vulnerability lifecycle tracking, remediation workflows | ✅ Covers |
+| Regular security testing and reviews | Annex I, Part II(3) | Automated scanning on every CI/CD run with timestamped evidence | ✅ Covers |
+| Public disclosure of fixed vulnerabilities | Annex I, Part II(4) | CSAF report generation, public VEX publication | ✅ Covers |
+| CVD policy adoption and enforcement | Annex I, Part II(5) | CVD workflow, policy documentation support | ✅ Covers |
+| Vulnerability reporting contact address | Annex I, Part II(6) | Per-repository public security contact pages | ✅ Covers |
+| Secure update distribution mechanisms | Annex I, Part II(7) | Advisory publication, patch notification workflows | 🔵 Supports implementation |
+| Free and timely security update dissemination | Annex I, Part II(8) | CSAF advisories with remediation guidance | ✅ Covers |
+| Upstream fix contribution for FOSS components | Article 13(6) | Upstream vulnerability tracking and contribution record | 🔵 Supports implementation |
+| Technical documentation (Annex VII) | Article 13(7) | Audit logs, SBOM exports, scan history, compliance dashboards | 🔵 Supports implementation |
+| SBOM availability to authorities and users | Article 13(8) | Machine-readable SBOM export, public access configuration | ✅ Covers |
+| Report actively exploited vulnerabilities — 24h early warning | Article 14(1) | KEV/EPSS monitoring, real-time alerting | 🔵 Supports implementation |
+| Report actively exploited vulnerabilities — 72h notification | Article 14(1) | Vulnerability notification data, CSAF pre-population | 🔵 Supports implementation |
+| Report severe incidents | Article 14(2) | Severity classification, incident notification routing | 🔵 Supports implementation |
+| Inform impacted users of vulnerabilities and incidents | Article 14(8) | CSAF advisories, VEX documents, public disclosure pages | ✅ Covers |
+| CE marking and conformity assessment | Articles 28–34 | ❌ Not covered (conformity assessment is a legal process) |
+| ENISA database registration | Article 29 | ❌ Not covered (registration is a regulatory process) |
+
+| Symbol | Meaning |
+|---|---|
+| ✅ | DevGuard covers this requirement for monitored products |
+| 🔵 | DevGuard supports or partially implements this requirement |
+| ❌ | DevGuard does not cover this requirement |
+
+---
+
+## 5. Supply Chain Security and Third-Party Component Obligations
+
+The CRA places significant obligations on manufacturers regarding the components they integrate. Article 13(5) requires manufacturers to "exercise due diligence when integrating components from third parties, in particular free and open-source software, in order to ensure that the overall product complies with the essential cybersecurity requirements set out in Annex I."
+
+This due-diligence obligation has three practical dimensions:
+
+1. **Pre-integration vetting**: Before adopting a third-party component, manufacturers should assess its known vulnerability status, maintenance activity, and licence compatibility.
+2. **Continuous monitoring**: The ongoing obligation under Annex I, Part II(1)–(2) requires manufacturers to track vulnerabilities in all integrated components throughout the support period, not only at time of integration.
+3. **Upstream contribution**: Where the manufacturer develops or funds a vulnerability fix in an open-source component, Article 13(6) requires disclosure to the maintainer and contribution of the fix upstream.
+
+DevGuard addresses all three dimensions: pre-integration scanning is supported via on-demand analysis; continuous monitoring is embedded in the CI/CD integration; and the vulnerability tracking record provides the documentation trail for upstream contribution obligations.
+
+<Callout type="info">
+    The interplay between manufacturer and open-source steward is particularly significant here. Where a vulnerability is found in an open-source component maintained by a steward (e.g., an Apache Software Foundation library), the manufacturer's Article 13(6) obligation to report and contribute fixes creates a direct legal link between the manufacturer's DevGuard vulnerability workflow and the steward's CVD process.
+</Callout>
+
+---
+
+## 6. Harmonised Standards and Technical Specifications
+
+Manufacturers may demonstrate conformity with Annex I requirements by applying **harmonised European standards** (Article 27(1)) or **European cybersecurity certification schemes** (Article 27(3)). Where harmonised standards exist and are applied, a presumption of conformity arises (Article 27(1)).
+
+Relevant standardisation work underway or expected to support CRA compliance includes:
+
+- **ETSI/CEN/CENELEC** horizontal standards under the CRA standardisation request
+- **ISO/IEC 27001:2022** (information security management) for organisational security controls
+- **ISO/IEC 29147:2018** and **ISO/IEC 30111:2019** (vulnerability disclosure and handling processes) for CVD policy requirements
+- **IEC 62443** series (industrial automation and control systems security)
+- **NIST SSDF** (SP 800-218) for secure software development practices
+- **ECMA-424** (CycloneDX SBOM standard)
+- **ISO/IEC 5962:2021** (SPDX SBOM standard)
+
+Manufacturers should monitor ETSI and CEN-CENELEC standardisation output, as published harmonised standards will define the technical baseline for self-assessment under Articles 32–33.
+
+---
+
+## 7. Timeline and Key Dates
+
+| Date | Event |
+|---|---|
+| 10 December 2024 | CRA entered into force |
+| 11 June 2026 | ENISA vulnerability database operational (Article 12(2)) |
+| 11 September 2026 | Article 14 reporting obligations apply (Article 71(2)) |
+| 11 December 2027 | Full CRA applicability; all manufacturer obligations enforceable |
+
+Manufacturers should treat the September 2026 date as the critical near-term deadline: reporting obligations require real-time monitoring and internal incident response workflows to be operational before that date.
+
+---
+
+## References
+
+1. Regulation (EU) 2024/2847 of the European Parliament and of the Council of 23 October 2024 on horizontal cybersecurity requirements for products with digital elements (Cyber Resilience Act). *OJ L, 2024/2847*. https://eur-lex.europa.eu/eli/reg/2024/2847/oj/eng
+2. European Commission. (2024). *Cyber Resilience Act — Summary*. Digital Strategy. https://digital-strategy.ec.europa.eu/en/policies/cra-summary
+3. ENISA. (2024). *ENISA's Role under the Cyber Resilience Act*. European Union Agency for Cybersecurity. https://www.enisa.europa.eu/topics/cyber-resilience-act
+4. ENISA. (2023). *Good Practices for Supply Chain Cybersecurity*. https://www.enisa.europa.eu/publications/good-practices-for-supply-chain-cybersecurity
+5. European Commission. (2022). *Impact Assessment: Cyber Resilience Act*. SWD(2022) 282 final. https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=SWD:2022:0282:FIN
+6. BSI. (2024). *Umsetzungshilfe zum Cyber Resilience Act*. Bundesamt für Sicherheit in der Informationstechnik. https://www.bsi.bund.de/cra
+7. ISO/IEC 29147:2018. *Information technology — Security techniques — Vulnerability disclosure*. International Organization for Standardization.
+8. ISO/IEC 30111:2019. *Information technology — Security techniques — Vulnerability handling processes*. International Organization for Standardization.
+9. ISO/IEC 5962:2021. *Information technology — SPDX® Specification V2.2.1*. International Organization for Standardization.
+10. ECMA International. (2023). *ECMA-424: CycloneDX Bill of Materials (BOM) Standard*. https://ecma-international.org/publications-and-standards/standards/ecma-424/
+11. NIST. (2022). *Secure Software Development Framework (SSDF), SP 800-218*. National Institute of Standards and Technology. https://doi.org/10.6028/NIST.SP.800-218
+12. Shinde, R., van der Velden, M., Brunt, C., & Smit, N. (2024). EU Cyber Resilience Act: Implications for Software Manufacturers. *Computer Law & Security Review*, 53, 105953. https://doi.org/10.1016/j.clsr.2024.105953
+13. Christl, W. (2024). *CRA Compliance Guide for Software Companies*. cracompliance.eu. https://cracompliance.eu
+14. Open Regulatory Compliance Working Group (ORCWG). (2024). *CRA Compliance for Software Manufacturers*. https://orcwg.org/cra/
+
+---
+
+## Related Documentation
+
+- [CRA: Open Source Steward](/explanations/compliance/cra-open-source-steward) — Lighter obligations for open-source foundations and steward entities
+- [CSAF and VEX Explained](/explanations/compliance/csaf-vex-explained) — Technical standards underpinning vulnerability disclosure obligations
+- [SBOM Standards](/explanations/compliance/sbom-standards) — CycloneDX vs SPDX formats for Annex I, Part II(1) compliance
+- [Audit Logging](/explanations/compliance/audit-trails) — Audit trail capabilities for Annex VII technical documentation
+- [Generate CSAF Reports](/how-to-guides/compliance/generate-csaf-reports) — Step-by-step guide to Article 14(8) advisory publication
+- [Generate VEX Documents](/how-to-guides/compliance/generate-vex-documents) — Communicating exploitability to users and downstream integrators
+- [Export SBOM](/how-to-guides/compliance/export-sbom) — Exporting SBOMs in CRA-compliant machine-readable formats
+- [Compliance Dashboards](/how-to-guides/compliance/compliance-dashboards) — Monitoring overall CRA compliance posture
