@@ -18,70 +18,110 @@ This workflow identifies potential security vulnerabilities in a project's depen
 The `dependency-risk-identification` workflow accepts the following inputs:
 | Name                   | Description                                                                   | Required    | Default Value                                    | 
 |------------------------|--------------------------|-----|----------------------------------|
-| `api-url`               | URL of the DevGuard API                                           | No          | `https://api.devguard.org`                 |  
-| `asset-name`            | Name of the asset to be scanned                                               | Yes         |                                                 |           
-| `sbom-file`              | Path to the SBOM file to be scanned | Yes         |         `sbom.json`                               |
-| `sbom-artifact-name`              | Name of the SBOM artifact to be downloaded | No         |         `''`                               |
+| `asset-name`            | Name of the asset to be scanned                                                | Yes         |                                                |
+| `api-url`               | URL of the DevGuard API                                                        | No          | `https://api.devguard.org`                    |
+| `sbom-file`             | Path to the SBOM file to be scanned                                            | Yes         | `sbom.json`                                    |
+| `sbom-artifact-name`    | Name of the SBOM artifact to be downloaded                                     | No          | `"" (empty string)`                                           |
+| `artifact-name`         | Name of the artifact you are building                                          | No          | `source`                                       |
+| `web-ui`                | URL of the DevGuard Web UI used for links                                     | No          | `https://app.devguard.org`                    |
+| `fail-on-risk`          | Fails if a dependency has this risk level or higher (`none`, `low`, `medium`, `high`, `critical`) | No | `critical` |
+| `fail-on-cvss`          | Fails if a dependency has this CVSS severity or higher (`none`, `low`, `medium`, `high`, `critical`) | No | `critical` |
 
-## Usage Examples:
+Required secret:
+| Name              | Description        | Required |
+|-------------------|--------------------|----------|
+| `devguard-token`  | DevGuard API token | Yes      |
 
-If you have the sbom in the repository:
+## Template Example
 
 ```yaml copy
 name: DevGuard Workflow
 
 on:
-    push
+  push:
 
 jobs:
-    devguard-dependency-risk-identification:
-        uses: l3montree-dev/devguard-action/.github/workflows/dependency-risk-identification.yml@main
-        with:
-          api-url: https://api.devguard.org
-          asset-name: 'myOrganization/projects/myProject/assets/myAsset'
-          sbom-file: "./sbom.json" 
-        secrets:
-          devguard-token: ${{ secrets.DEVGUARD_TOKEN }}    
+  devguard-dependency-risk-identification:
+    uses: l3montree-dev/devguard-action/.github/workflows/dependency-risk-identification.yml@main
+    with:
+      api-url: "<api-url>"
+      asset-name: "<asset-name>"
+      sbom-file: "<sbom-file-path>"
+      artifact-name: "<artifact-name>"
+      web-ui: "<web-ui-url>"
+      fail-on-risk: "<fail-on-risk-threshold>"
+      fail-on-cvss: "<fail-on-cvss-threshold>"
+    secrets:
+      devguard-token: ${{ <devguard-token> }}
+```
+
+## Usage Examples
+
+If you have the SBOM in the repository:
+
+```yaml copy
+name: DevGuard Workflow
+
+on:
+  push:
+
+jobs:
+  devguard-dependency-risk-identification:
+    uses: l3montree-dev/devguard-action/.github/workflows/dependency-risk-identification.yml@main
+    with:
+      api-url: https://api.devguard.org
+      asset-name: "myOrganization/projects/myProject/assets/myAsset"
+      sbom-file: "./sbom.json"
+      artifact-name: "source"
+      web-ui: "https://app.devguard.org"
+      fail-on-risk: "critical"
+      fail-on-cvss: "critical"
+    secrets:
+      devguard-token: ${{ secrets.DEVGUARD_TOKEN }}
 ```    
 
-if you have the sbom in an artifact from a previous job, you need to upload the artifact first:
+If you have the SBOM in an artifact from a previous job, upload it first:
 
 ```yaml copy
 name: DevGuard Workflow
 
 on:
-    push
+  push:
+
 jobs:
-    software-composition-analysis:
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout code
-          uses: actions/checkout@v4
-          with:
-            submodules: recursive
-            fetch-depth: 0
-            persist-credentials: false
+  software-composition-analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
 
       - name: Run Trivy SBOM Scan
         run: |
-          docker run --rm -v $(pwd):/project aquasec/trivy:latest sbom --format cyclonedx /project > sbom.json
+          docker run --rm -v "$(pwd)":/project aquasec/trivy:latest sbom --format cyclonedx /project > sbom.json
         continue-on-error: true
-       
-        - name: Upload Software Composition Analysis Report
-          uses: actions/upload-artifact@v4
-          with:
-            name: sbom-report
-            path: sbom.json
 
-    dependency-risk-identification:
-        needs: software-composition-analysis
-        uses: l3montree-dev/devguard-action/.github/workflows/dependency-risk-identification.yml@main
+      - name: Upload Software Composition Analysis Report
+        uses: actions/upload-artifact@v4
         with:
-          api-url: https://api.devguard.org
-          asset-name: 'myOrganization/projects/myProject/assets/myAsset'
-          sbom-artifact-name: sbom-report
-          sbom-file: sbom.json
-        secrets:
-          devguard-token: ${{ secrets.DEVGUARD_TOKEN }}
+          name: sbom-report
+          path: sbom.json
+
+  dependency-risk-identification:
+    needs: software-composition-analysis
+    uses: l3montree-dev/devguard-action/.github/workflows/dependency-risk-identification.yml@main
+    with:
+      api-url: https://api.devguard.org
+      asset-name: "myOrganization/projects/myProject/assets/myAsset"
+      sbom-artifact-name: sbom-report
+      sbom-file: sbom.json
+      artifact-name: "source"
+      web-ui: "https://app.devguard.org"
+      fail-on-risk: "critical"
+      fail-on-cvss: "critical"
+    secrets:
+      devguard-token: ${{ secrets.DEVGUARD_TOKEN }}
 
 ```
