@@ -9,4 +9,105 @@ import PageContentComingSoon from '@/components/PageContentComingSoon'
 
 # Database Schema
 
-<PageContentComingSoon />
+This page gives an overview of DevGuard's database schema and explains the reasoning behind its structure. You'll find a map of the database layout, how the main table groups relate to each other, and the thinking behind key design decisions.
+
+---
+
+## Components
+
+DevGuard uses a **PostgreSQL** database. The PostgreSQL server runs in the same Docker container as the backend and communicates with it through **GORM** (Go's object-relational mapping library). The backend sends queries to PostgreSQL, which evaluates and executes them and returns the results.
+
+---
+
+## Table Groups
+
+DevGuard's tables fall into three broad categories:
+
+- **Structural Data** — describes your organisation's content hierarchy
+- **Vulnerability Database** — stores imported vulnerability and risk intelligence
+- **Repository Data** — holds vulnerability findings, component inventory, and dependency trees for each repository
+
+---
+
+### Structural Data
+
+This group contains everything needed to describe DevGuard's content hierarchy. It maps directly onto how you structure your work: from your top-level organisation down to individual build artifacts.
+
+<img className="p-4" src="/devguard-structure-tables.png" alt="DevGuard database hierarchy showing the relations between organizations, projects, assets, asset versions and artifacts"/>
+
+- **Organizations** — the top-level container. An organisation holds members, compliance settings, and global configuration such as whether data is shared publicly.
+- **Projects** — logical groupings of related assets (repositories). Projects can be nested inside other projects, and releases are defined and monitored at this level.
+- **Releases** — group multiple artifacts into a named release so you can track vulnerability data across a whole release rather than per artifact. Releases can also contain other releases, allowing hierarchical release structures.
+- **Assets** — mirror your external repositories as closely as possible. Each asset holds repository-wide configuration, such as thresholds for automatic ticket creation and which external issue tracker to use.
+- **Asset Versions** — correspond to branches. Every asset has a default version (usually `main`) where most activity happens. Vulnerability data — dependency risks, license risks, and first-party findings — is attached at this level.
+- **Artifacts** — the smallest unit in the hierarchy. Vulnerability data is linked to artifacts through pivot tables to avoid duplicate entries across the same asset version. Risk history is also tracked at the artifact level.
+
+---
+
+### Vulnerability Database
+
+To detect risks in your repositories, DevGuard needs to compare your components against known vulnerabilities. This database is populated and refreshed multiple times a day from several external data sources that complement each other to provide richer, more accurate data.
+
+For details on how this data is imported and kept up to date, see [External Vulnerability Synchronization](./../vulnerability-management/external-vuln-sync/).
+
+---
+
+### Repository Data
+
+This is where the data specific to each of your repositories lives. It covers two closely related concerns: the vulnerability findings on each branch, and the component inventory that makes those findings — and your SBOMs — possible.
+
+#### Vulnerability Findings
+
+For each asset version, DevGuard stores three types of vulnerability records:
+
+- **Dependency Vulnerabilities** — vulnerabilities found in third-party packages your project depends on
+- **First-Party Vulnerabilities** — security issues found directly in your own source code
+- **License Risks** — cases where a dependency's license is not [OSI-approved](https://opensource.org/licenses)
+
+<img className="p-4" src="/devguard-vulnerability-relations.png" alt="Relations between vulnerability tables in the database schema"/>
+
+All three types share the same basic structure: each record belongs to a specific asset version, can reference a ticket in an external issue tracker (e.g. GitLab or Jira), and carries a state indicating whether the finding has been remediated.
+
+Beyond that shared structure, each type has its own specifics:
+
+**Dependency vulnerabilities** store the [package URL](https://github.com/package-url/purl-spec) of the affected component, the associated CVE, and the dependency path where the vulnerability was found. Tracking by path means each occurrence can be assessed and handled independently — a transitive dependency pulling in a vulnerable package via two different paths can be triaged separately for each.
+
+**First-party vulnerabilities** store the source file URI, the exact location of the affected code snippet (line and column numbers), and the full snippet text. This is what allows DevGuard to display the relevant code directly in the web interface. Each finding also records the commit, author, and timestamp of the change that introduced it.
+
+**License risks** flag licenses that are not OSI-approved. If a user needs to override the detected license — for example, because the detection was incorrect — that override is stored in a separate license overwrite table. Overrides are scoped to the organisation rather than to a single asset, so correcting a license detection once applies it everywhere within the org.
+
+#### Vulnerability Events
+
+Every vulnerability record can have multiple vulnerability events attached to it. Each event captures a state change over time — for example, a finding being triaged, accepted, or remediated. This event log is what powers the remediation history view in the interface. Events can be created manually by a user or automatically by a VEX rule firing.
+
+#### Components and Dependency Trees
+
+Alongside the vulnerability findings, DevGuard also stores a full picture of what each asset version is made of. This is the foundation for both dependency management and SBOM generation.
+
+The **components** table holds an entry for each known package across the entire DevGuard instance, identified primarily by its package URL. Each entry carries metadata such as license, component type, and publication date. Components are shared instance-wide rather than owned by a single repository, so the same package appearing in multiple projects is only stored once.
+
+The **component dependencies** table uses these components to build a dependency tree for each asset version. This serves two purposes: fast lookups to check whether a component is present in a given asset version, and on-the-fly SBOM generation. Rather than storing a static SBOM file on disk, DevGuard assembles it from the dependency tree at request time, so it always reflects the current state of the branch.
+
+---
+
+## Design Choices
+
+Some aspects of DevGuard's schema are worth explaining explicitly, because they look unusual at first glance but follow a deliberate logic.
+
+### Deterministic IDs
+
+Several tables — notably the vulnerability tables — use text primary keys with no auto-generated default. Rather than assigning a random UUID on insert, the application calculates the ID before writing the record by hashing the columns that uniquely identify that finding (the package URL, the CVE, and the dependency path for a dependency vulnerability, for example).
+
+The benefit is that the same logical finding always produces the same ID. When a new scan comes in, DevGuard can check whether a vulnerability already exists simply by computing its ID and looking it up — no full-table scan, no separate deduplication step. If the record exists, it updates it; if it doesn't, it inserts it. This keeps rescanning cheap and predictable.
+
+### Composite Natural Keys
+
+Not every table uses a single-column ID. Asset versions use a composite primary key of `(name, asset_id)` — the branch name together with the asset it belongs to. This reflects a straightforward reality: branch names are only unique within an asset, not globally. A `main` branch in one repository has nothing to do with `main` in another.
+
+Because artifact identity depends on which asset version it belongs to, the key cascades: artifacts carry `(artifact_name, asset_version_name, asset_id)` as their primary key. Any table that references an artifact must include all three columns. This is intentional — it keeps relationships explicit and allows the database to enforce referential integrity directly, rather than relying on application code to do so.
+
+### Pivot Tables for Vulnerability Deduplication
+
+Vulnerability findings are stored at the asset version level, but they also need to be associated with specific artifacts. The naive approach — copying a finding for every artifact that contains it — would create a lot of redundant rows, since most artifacts in a given asset version share the same dependencies.
+
+Instead, DevGuard uses pivot tables (`artifact_dependency_vulns` and `artifact_license_risks`) that store only the relationship between an artifact and a finding, not the finding data itself. A vulnerability is written once, and the pivot table records which artifacts are affected. Rescanning a branch with many similar artifacts therefore doesn't balloon the database — each distinct finding exists exactly once, and the associations are cheap rows in a join table.
