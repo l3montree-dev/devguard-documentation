@@ -8,7 +8,7 @@ const ECOSYSTEMS = [
     { label: 'Crates.io', value: 'crates.io' },
     { label: 'Debian', value: 'debian' },
     { label: 'Git', value: 'git' },
-    { label: 'Go', value: 'go' },
+    { label: 'Go', value: 'golang' },
     { label: 'Hex', value: 'hex' },
     { label: 'Maven', value: 'maven' },
     { label: 'npm', value: 'npm' },
@@ -128,7 +128,7 @@ export default function PackageSearch({
                         <button
                             type="submit"
                             disabled={isSearching}
-                            className="bg-primary text-primary-foreground hover:bg-primary/90 mr-1.5 inline-flex h-9 shrink-0 items-center gap-1.5 rounded-sm px-3 text-sm font-medium transition-colors disabled:opacity-50"
+                            className="hero-button"
                         >
                             {isSearching ? (
                                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -169,14 +169,14 @@ export default function PackageSearch({
                                 setLocalError(null)
                             }}
                             placeholder="pkg:eco/name@version"
-                            className="placeholder:text-muted-foreground h-12 min-w-0 flex-1 rounded-l-md bg-transparent pr-2.5 pl-3 text-base outline-none md:text-lg"
+                            className="placeholder:text-muted-foreground h-12 min-w-0 flex-1 rounded-l-md bg-transparent pr-2.5 pl-3 text-base outline-none"
                             disabled={isSearching}
                             autoFocus={autoFocus}
                         />
                         <button
                             type="submit"
                             disabled={isSearching}
-                            className="bg-primary text-primary-foreground hover:bg-primary/90 mr-1.5 inline-flex h-9 shrink-0 items-center gap-1.5 rounded-sm px-3 text-sm font-medium transition-colors disabled:opacity-50"
+                            className="hero-button"
                         >
                             {isSearching ? (
                                 <Loader2 className="h-4 w-4 animate-spin" />

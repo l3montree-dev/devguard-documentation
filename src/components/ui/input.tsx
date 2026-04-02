@@ -34,7 +34,7 @@ function Input({
                     type="submit"
                     disabled={isLoading}
                     onClick={onSearchClick}
-                    className="bg-primary text-primary-foreground hover:bg-primary/90 absolute top-1/2 right-1.5 inline-flex h-9 -translate-y-1/2 items-center gap-1.5 rounded-sm px-3 text-sm font-medium transition-colors disabled:opacity-50"
+                    className="bg-primary text-primary-foreground hover:bg-primary/90 absolute top-1/2 right-1.5 inline-flex h-9 -translate-y-1/2 items-center gap-1.5 rounded-sm px-3 font-medium transition-colors disabled:opacity-50"
                 >
                     {isLoading ? (
                         <Loader2 className="h-4 w-4 animate-spin" />

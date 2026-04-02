@@ -15,13 +15,15 @@ const config: Partial<KernuxThemeConfig> = {
         link: 'https://github.com/l3montree-dev/devguard-documentation',
     },
     theme: {
-        forcedTheme: "dark",
+        forcedTheme: 'dark',
     },
-    head: <Head>
-        {Boolean(websiteId) && Boolean(umamiUrl) && (
-            <Script defer src={umamiUrl} data-website-id={websiteId} />
-        )}
-    </Head>,
+    head: (
+        <Head>
+            {Boolean(websiteId) && Boolean(umamiUrl) && (
+                <Script defer src={umamiUrl} data-website-id={websiteId} />
+            )}
+        </Head>
+    ),
     logo: (
         <span aria-label="DevGuard - Back to homepage">
             <Image

@@ -139,11 +139,6 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
                         not be retrieved. Please verify the package URL and try
                         again.
                     </p>
-                    <Button asChild>
-                        <Link href="/package-inspector">
-                            Back to Package Inspector
-                        </Link>
-                    </Button>
                 </div>
             </Container>
         )
@@ -235,11 +230,6 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
 
             {/* Bottom buttons */}
             <div className="mt-6 flex flex-col justify-end gap-3 sm:flex-row">
-                <Button asChild>
-                    <Link href="/package-inspector">
-                        Back to Package Inspector
-                    </Link>
-                </Button>
                 <Button asChild className="hidden sm:inline-flex">
                     <a
                         target="_blank"

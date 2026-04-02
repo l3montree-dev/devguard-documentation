@@ -38,7 +38,7 @@ export function PackageInspectorPage() {
     }
 
     return (
-        <Container className="relative py-16 max-sm:py-8">
+        <Container showTopGrid={true} className="section-outer">
             <div className="z-10">
                 <PackageInspectorHero
                     onSearch={handleSearch}

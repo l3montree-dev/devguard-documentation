@@ -34,7 +34,7 @@
     },
     "homepage": "https://github.com/l3montree-dev/devguard-documentation",
     "dependencies": {
-        "@document-writing-tools/kernux-theme": "2.0.0-rc.12",
+        "@document-writing-tools/kernux-theme": "2.0.0-rc.14",
         "@ltonetwork/http-message-signatures": "^0.1.12",
         "@radix-ui/react-dialog": "^1.1.15",
         "@radix-ui/react-separator": "^1.1.8",
