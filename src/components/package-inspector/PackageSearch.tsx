@@ -8,7 +8,7 @@ const ECOSYSTEMS = [
     { label: 'Crates.io', value: 'crates.io' },
     { label: 'Debian', value: 'debian' },
     { label: 'Git', value: 'git' },
-    { label: 'Go', value: 'go' },
+    { label: 'Go', value: 'golang' },
     { label: 'Hex', value: 'hex' },
     { label: 'Maven', value: 'maven' },
     { label: 'npm', value: 'npm' },
