@@ -1,9 +1,208 @@
 ---
+title: DevGuard for Compliance Officers
+description: How DevGuard helps compliance officers prove and maintain security compliance across software projects — covering CRA, NIS2, PCI DSS, and ISO 27001 with automated evidence, audit trails, and shift-left compliance as code.
 seo:
-  robots: "noindex, nofollow"
+  keyword_primary: "DevGuard compliance officers"
+  keywords_secondary:
+    - "CRA compliance software"
+    - "NIS2 compliance DevSecOps"
+    - "ISO 27001 software development"
+    - "PCI DSS vulnerability management"
+    - "compliance as code CI/CD"
+  og:
+    type: "article"
 ---
-import PageContentComingSoon from '@/components/PageContentComingSoon'
 
 # DevGuard for Compliance Officers
 
-<PageContentComingSoon />
+As a compliance officer, your job is to demonstrate that software is developed and operated securely—to auditors, regulators, customers, and management. The challenge is that modern software is complex, changes continuously, and spans dozens of teams and hundreds of dependencies.
+
+DevGuard embeds compliance into the software development lifecycle itself. Rather than collecting evidence after the fact, it generates verifiable proof of every security check, vulnerability decision, and policy evaluation automatically—as part of every build.
+
+---
+
+## What DevGuard gives you
+
+### A continuous compliance evidence base
+
+Every time a developer pushes code or builds a container image, DevGuard automatically generates and stores compliance evidence:
+
+- **Software Bill of Materials (SBOM)** — a machine-readable inventory of every component, version, and dependency, in CycloneDX or SPDX format
+- **Vulnerability scan results** — from SCA, SAST, container scanning, secret scanning, IaC scanning, and DAST
+- **VEX documents** — structured assessments of which vulnerabilities actually affect your product, reducing noise for auditors and customers
+- **CSAF advisories** — machine-readable security advisories aligned to industry standards
+- **Signed attestations** — cryptographically signed records proving which checks ran and what they found, stored alongside your container images
+
+This evidence is version-tracked and immutable. For any release, you can look back and show exactly what was known, what was scanned, and what decisions were made.
+
+### Immutable audit trails
+
+Compliance frameworks require more than running a scan—they require demonstrating how vulnerabilities were handled. DevGuard logs every event in the vulnerability lifecycle:
+
+- When a vulnerability was first detected
+- Risk score evolution over time (with reasoning: new exploit data, EPSS changes, patch availability)
+- Every state transition: under investigation → not affected → fixed → accepted risk
+- Who made each decision, when, and with what justification
+- When components were removed (automatic remediation evidence)
+
+This directly answers the questions auditors ask: *"How did you find out about this CVE? Who decided to accept the risk? When was it fixed?"* No manual reconstruction needed.
+
+### Risk-based prioritization, not CVE counts
+
+Compliance doesn't mean fixing every CVE—it means demonstrating a risk management process. DevGuard calculates a composite risk score per vulnerability that combines:
+
+- **CVSS Base Score** (v2, v3, v4)
+- **EPSS** — the statistical probability of exploitation in the wild
+- **Threat intelligence** — known active exploits, CISA KEV entries, verified public exploits
+- **Environmental context** — confidentiality, integrity, and availability requirements you configure per asset
+- **Transitive depth** — how deep in the dependency tree the vulnerable component sits
+
+This lets you show auditors a prioritized, risk-justified remediation backlog rather than an unmanageable list of raw CVE counts.
+
+---
+
+## Compliance framework coverage
+
+### EU Cyber Resilience Act (CRA)
+
+The CRA mandates cybersecurity requirements for products with digital elements sold in the EU. Key obligations DevGuard addresses:
+
+| CRA Requirement | DevGuard Capability |
+|-----------------|---------------------|
+| SBOM per product | Automatic CycloneDX/SPDX generation on every build |
+| Vulnerability identification and documentation | Continuous SCA, container scanning, SAST, DAST |
+| Handling vulnerabilities without undue delay | Audit-trailed remediation workflow with SLA tracking |
+| Reporting of actively exploited vulnerabilities | EPSS + CISA KEV integration surfaces exploited CVEs immediately |
+| Providing security updates | SBOM and VEX docs updated with every build |
+| Disclosure of fixed vulnerabilities | CSAF advisory generation |
+
+### NIS2 Directive
+
+NIS2 requires organizations in critical sectors to implement risk management measures for their software and supply chains:
+
+| NIS2 Obligation | DevGuard Capability |
+|-----------------|---------------------|
+| Risk management policies | Policy-as-Code with OPA/Rego, enforced in CI/CD |
+| Supply chain security | SBOM generation, dependency vulnerability scanning, SLSA attestations |
+| Vulnerability disclosure and handling | Automated lifecycle tracking with audit trails |
+| Incident response evidence | Timestamped event logs, state-change history |
+| Security testing | SAST, DAST, container scanning integrated into every pipeline |
+
+### PCI DSS
+
+PCI DSS requires organizations handling card data to maintain vulnerability management programs and security testing practices:
+
+| PCI DSS Requirement | DevGuard Capability |
+|--------------------|---------------------|
+| 6.3.3 — Security patches applied in a timely manner | SCA identifies outdated, vulnerable dependencies with patch guidance |
+| 6.4.1 — Web-facing apps protected against known attacks | DAST testing of running applications |
+| 6.4.2 — Automated technical solution for detecting and preventing attacks | Continuous scanning in CI/CD pipelines |
+| 6.3.2 — Inventory of bespoke and custom software | SBOM per build, tracked per asset |
+| 11.3 — Vulnerability scanning | SCA, SAST, container scanning with documented results |
+| 12.3.2 — Targeted risk analysis | Risk scoring with environmental context per asset |
+
+### ISO 27001
+
+DevGuard maps directly to the Annex A.8 technological controls that affect software development:
+
+| ISO 27001 Control | DevGuard Capability |
+|-------------------|---------------------|
+| A.8.8 — Technical vulnerability management | Full lifecycle: discovery, risk scoring, remediation tracking, audit trail |
+| A.8.25 — Secure development lifecycle | OWASP DevSecOps pipeline integration, SLSA threat model coverage |
+| A.8.28 — Secure coding | SAST, secret scanning, SCA, license compliance |
+| A.8.29 — Security testing | SAST, DAST, container scanning, IaC scanning as CI/CD gates |
+| A.8.4 — Access to source code | in-toto integrity attestations on build artifacts |
+| A.8.7 — Protection against malware | Dependency and container vulnerability scanning |
+| A.8.19 — Software installation | SBOM tracks all installed components and versions |
+
+See the full [ISO 27001 controls mapping](/explanations/compliance/iso-27001-mapping) for detailed coverage.
+
+---
+
+## Compliance as Code: shifting left
+
+Traditional compliance is a post-development activity—security reviews happen before releases, audits after incidents. This creates pressure spikes, delays, and expensive rework.
+
+DevGuard flips this model. Compliance checks run automatically inside every CI/CD pipeline, so developers discover and fix violations while they still have context—not weeks later during a review cycle.
+
+### How it works
+
+DevGuard's policy engine is built on [Open Policy Agent (OPA)](https://www.openpolicyagent.org/) and evaluates policies written in Rego against the attestations generated by each pipeline run. Every scan result, SBOM, and build artifact becomes a piece of compliance evidence that policies can reason about.
+
+**What you can enforce as a policy gate:**
+
+- Block container images with critical vulnerabilities from being deployed
+- Require SBOM generation before any release
+- Require signed images and verified build provenance (SLSA)
+- Enforce that SAST scans ran and found no high-severity issues
+- Validate that infrastructure-as-code was scanned for misconfigurations
+- Require secret scanning to pass before merging
+- Check license compliance for all dependencies
+
+**Community policies vs. custom policies:**
+
+DevGuard ships with community-managed policies pre-aligned to ISO 27001, CRA, and SLSA. You can:
+
+- Enable or disable community policies per project
+- Write custom Rego policies for your specific regulatory requirements
+- Map policies to compliance controls for audit evidence
+
+When a policy fails, the pipeline stops and the developer sees exactly which requirement was not met—with a link to the relevant documentation. Compliance feedback happens at the point where it costs the least to fix.
+
+### The shift-left benefit for compliance officers
+
+When developers get compliance feedback in their normal workflow, you stop being the department that blocks releases and start being the team that enabled a compliant delivery process from the beginning. This changes the conversation:
+
+- **Before:** "We found 47 unresolved CVEs during the pre-release audit. Release is blocked."
+- **After:** "Our pipelines have been enforcing the policy continuously. Here is the evidence."
+
+Audit preparation becomes a report export rather than a fire drill.
+
+---
+
+## License compliance
+
+Open-source licenses can create legal exposure if not managed proactively. DevGuard scans all dependencies for license information and flags components whose licenses conflict with your project's model or internal policy.
+
+For each license finding, you can:
+
+- Record a decision with business justification
+- Override the detected license for a specific component
+- Make a final binding decision that becomes part of the audit trail
+
+---
+
+## Reporting and exports
+
+| Report | Format | Use case |
+|--------|--------|----------|
+| **SBOM** | CycloneDX JSON / XML, SPDX | CRA compliance, customer requests, supply chain transparency |
+| **VEX** | CycloneDX JSON / XML | Share exploitability context with customers or regulators |
+| **CSAF advisory** | JSON | Machine-readable vulnerability advisories |
+| **Vulnerability report** | PDF | Audits, executive briefings |
+
+SBOMs and VEX documents are regenerated on every build, ensuring the data you share reflects the current state of each release—not a snapshot from last quarter.
+
+---
+
+## Recommended first steps
+
+1. **Identify your applicable frameworks** — CRA, NIS2, ISO 27001, PCI DSS, or a combination
+2. **Enable relevant community policies** for your compliance framework under Organization settings
+3. **Integrate scanning into your CI/CD pipelines** — the [GitHub integration](/how-to-guides/integrations/github/setup-github-integration) or [GitLab integration](/how-to-guides/integrations/gitlab/setup-gitlab-integration) gets scanning running across all repositories
+4. **Configure asset risk requirements** — set confidentiality, integrity, and availability levels per asset to calibrate risk scoring to your business context
+5. **Run your first compliance dashboard review** — review open vulnerabilities, their risk scores, and current remediation status
+6. **Export an SBOM** for a representative product — verify it meets the format requirements your auditors or customers expect
+7. **Write VEX rules** for confirmed false positives — reduce noise so auditors see only what matters
+
+---
+
+## What's next
+
+- [Compliance as Code](/explanations/compliance/compliance-as-code) — how policies are enforced in CI/CD pipelines
+- [ISO 27001 mapping](/explanations/compliance/iso-27001-mapping) — detailed Annex A control coverage
+- [Why compliance matters](/explanations/compliance/why-compliance-matters) — business case and regulatory context
+- [Audit trails](/explanations/compliance/audit-trails) — what gets logged and how to use it for evidence
+- [SBOM standards](/explanations/compliance/sbom-standards) — CycloneDX vs SPDX and when to use each
+- [Export an SBOM](/how-to-guides/compliance/export-sbom) — generate your first SBOM
+- [Compliance dashboards](/how-to-guides/compliance/compliance-dashboards) — monitoring your compliance posture
