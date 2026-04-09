@@ -7,10 +7,10 @@ on:
 jobs:
   seo-check:
     runs-on: ubuntu-latest
-    container:
-      image: registry.opencode.de/open-code/document-writing-tools/seo-check:main-amd64
+    #container:
+    #  image: registry.opencode.de/open-code/document-writing-tools/seo-check:main-amd64
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Copy ISO data files into workspace
         run: cp /seo-check/ISO-639-1-lang-codes.json /seo-check/ISO-3166-Alpha2-country-codes.csv .
       - name: Run SEO-Check
