@@ -11,5 +11,3 @@ jobs:
       - uses: actions/checkout@v6
       - name: Run SEO-Check
         uses: docker://registry.opencode.de/open-code/document-writing-tools/seo-check:main-amd64
-        with:
-          args: bun run /seo-check/main.ts
