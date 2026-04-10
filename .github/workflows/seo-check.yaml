@@ -7,9 +7,9 @@ on:
 jobs:
   seo-check:
     runs-on: ubuntu-latest
-    container:
-      image: registry.opencode.de/open-code/document-writing-tools/seo-check:main-amd64
     steps:
       - uses: actions/checkout@v6
       - name: Run SEO-Check
-        run: bun run /seo-check/main.ts
+        uses: docker://registry.opencode.de/open-code/document-writing-tools/seo-check:main-amd64
+        with:
+          args: bun run /seo-check/main.ts
