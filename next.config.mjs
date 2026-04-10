@@ -16,6 +16,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 
 const config = withMarkdownWebBook({
+    env: {
+        DWT_DEFAULT_LOCALE: 'en',
+    },
     trailingSlash: true,
     compiler: {
         removeConsole: false,

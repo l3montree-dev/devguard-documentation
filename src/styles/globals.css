@@ -81,6 +81,9 @@
 
   /* ── Shape ───────────────────────────────────── */
   --ring: #262626;
+
+  --color-searchbar-background: var(--secondary);
+  --color-searchbar-border: var(--border);
 }
 
 /* ─── 5. Base layer ──────────────────────────────────────────── */
@@ -142,19 +145,7 @@
   
   /* Code blocks: */
   pre {
-    @apply text-[14px]! leading-8;
-    @apply bg-black!;
-    @apply overflow-x-auto;
-    @apply ring-1 ring-border;
-    /* overflow-wrap: normal !important; */
-    white-space: pre!important;
-    word-break: normal !important;
-    hyphens: none !important;
-    /* 
-     */
-  }
-  pre ::before {
-    @apply inline-block mr-4!; /* TODO: check why it does not applied */
+    @apply ring-1 ring-border rounded-md;
   }
 
   header nav {
