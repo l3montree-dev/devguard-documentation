@@ -1,3 +1,29 @@
+---
+title: "devguard-scanner merge-sboms — DevGuard CLI Reference"
+description: "Reference for devguard-scanner merge-sboms: Merge multiple CycloneDX SBOMs into a single SBOM. The command expects a JSON configuration file with the target."
+seo:
+  keyword_primary: "devguard-scanner merge-sboms"
+  keywords_secondary:
+    - "DevGuard CLI"
+    - "devguard-scanner commands"
+    - "DevGuard security scanner"
+lang: "en-US"
+og:
+  title: "devguard-scanner merge-sboms — DevGuard CLI Reference"
+  description: "Reference for devguard-scanner merge-sboms: Merge multiple CycloneDX SBOMs into a single SBOM. The command expects a JSON configuration file with the target."
+  image: "/og-image.png"
+  type: "article"
+  schema:
+    type: "TechArticle"
+robots: "index,follow"
+ignoreChecks: 
+  - "checkIfKeywordDensityInRange"
+  - "checkIfMinimumInternalLinks"
+  - "checkIfHeadingContainsKeywordPrimary"
+  - "checkIfTitleContainsKeywordPrimary"
+  - "checkIfHeadingOrderCorrect"
+---
+
 ## merge-sboms
 
 Merge multiple SBOMs into one SBOM

@@ -1,3 +1,29 @@
+---
+title: "devguard-scanner sbom — DevGuard CLI Reference"
+description: "Reference for devguard-scanner sbom: Scan a CycloneDX Software Bill of Materials (SBOM) and upload it to DevGuard for vulnerability analysis. Only."
+seo:
+  keyword_primary: "devguard-scanner sbom"
+  keywords_secondary:
+    - "DevGuard CLI"
+    - "devguard-scanner commands"
+    - "DevGuard security scanner"
+lang: "en-US"
+og:
+  title: "devguard-scanner sbom — DevGuard CLI Reference"
+  description: "Reference for devguard-scanner sbom: Scan a CycloneDX Software Bill of Materials (SBOM) and upload it to DevGuard for vulnerability analysis. Only."
+  image: "/og-image.png"
+  type: "article"
+  schema:
+    type: "TechArticle"
+robots: "index,follow"
+ignoreChecks: 
+  - "checkIfKeywordDensityInRange"
+  - "checkIfMinimumInternalLinks"
+  - "checkIfHeadingContainsKeywordPrimary"
+  - "checkIfTitleContainsKeywordPrimary"
+  - "checkIfHeadingOrderCorrect"
+---
+
 ## sbom
 
 Scan a CycloneDX SBOM for vulnerabilities

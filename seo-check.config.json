@@ -1,0 +1,29 @@
+{
+  "staticDir": "public",
+  "ignorePaths": [
+    "src/pages/reference/**",
+    "src/pages/404.mdx",
+    "src/pages/privacy-policy.mdx",
+    "src/pages/terms-of-use.mdx",
+    "src/pages/explanations/advanced-topics/**",
+    "src/pages/explanations/architecture/**",
+    "src/pages/explanations/attestations-provenance/**",
+    "src/pages/explanations/integrations/**",
+    "src/pages/explanations/security/**",
+    "src/pages/getting-started/choose-your-path/**",
+    "src/pages/how-to-guides/api-usage/**",
+    "src/pages/how-to-guides/integrations/create-webhook.mdx",
+    "src/pages/how-to-guides/integrations/custom-webhooks.mdx",
+    "src/pages/how-to-guides/integrations/webhook-security.mdx",
+    "src/pages/how-to-guides/integrations/github/auto-setup.mdx",
+    "src/pages/how-to-guides/integrations/github/permission-sync.mdx",
+    "src/pages/how-to-guides/integrations/github/webhooks.mdx",
+    "src/pages/how-to-guides/integrations/gitlab/**",
+    "src/pages/how-to-guides/integrations/jira/**",
+    "src/pages/how-to-guides/security/dependency-proxy/**",
+    "src/pages/how-to-guides/security/supply-chain/**",
+    "src/pages/other/**",
+    "src/pages/tutorials/**",
+    "src/pages/vulnerability-database/[ID].mdx"
+  ]
+}

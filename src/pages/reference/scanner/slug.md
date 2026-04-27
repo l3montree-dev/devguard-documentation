@@ -1,3 +1,29 @@
+---
+title: "devguard-scanner slug — DevGuard CLI Reference"
+description: "Reference for devguard-scanner slug: Create a URL-friendly slug from the provided text. Useful for generating artifact names or identifiers. The slug is."
+seo:
+  keyword_primary: "devguard-scanner slug"
+  keywords_secondary:
+    - "DevGuard CLI"
+    - "devguard-scanner commands"
+    - "DevGuard security scanner"
+lang: "en-US"
+og:
+  title: "devguard-scanner slug — DevGuard CLI Reference"
+  description: "Reference for devguard-scanner slug: Create a URL-friendly slug from the provided text. Useful for generating artifact names or identifiers. The slug is."
+  image: "/og-image.png"
+  type: "article"
+  schema:
+    type: "TechArticle"
+robots: "index,follow"
+ignoreChecks: 
+  - "checkIfKeywordDensityInRange"
+  - "checkIfMinimumInternalLinks"
+  - "checkIfHeadingContainsKeywordPrimary"
+  - "checkIfTitleContainsKeywordPrimary"
+  - "checkIfHeadingOrderCorrect"
+---
+
 ## slug
 
 Create a URL-friendly slug from text

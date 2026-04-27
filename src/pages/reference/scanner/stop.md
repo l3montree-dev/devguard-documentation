@@ -1,3 +1,29 @@
+---
+title: "devguard-scanner intoto stop — DevGuard CLI Reference"
+description: "Reference for the devguard-scanner intoto stop command — DevGuard CLI tool for SBOM, SARIF, and attestation workflows in DevSecOps pipelines."
+seo:
+  keyword_primary: "devguard-scanner intoto stop"
+  keywords_secondary:
+    - "DevGuard CLI"
+    - "devguard-scanner commands"
+    - "DevGuard security scanner"
+lang: "en-US"
+og:
+  title: "devguard-scanner intoto stop — DevGuard CLI Reference"
+  description: "Reference for the devguard-scanner intoto stop command — DevGuard CLI tool for SBOM, SARIF, and attestation workflows in DevSecOps pipelines."
+  image: "/og-image.png"
+  type: "article"
+  schema:
+    type: "TechArticle"
+robots: "index,follow"
+ignoreChecks: 
+  - "checkIfKeywordDensityInRange"
+  - "checkIfMinimumInternalLinks"
+  - "checkIfHeadingContainsKeywordPrimary"
+  - "checkIfTitleContainsKeywordPrimary"
+  - "checkIfHeadingOrderCorrect"
+---
+
 ## intoto stop
 
 Stop in-toto recording

@@ -4,6 +4,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import js from '@eslint/js'
 import { FlatCompat } from '@eslint/eslintrc'
+import nextVitals from 'eslint-config-next/core-web-vitals'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -14,18 +15,16 @@ const compat = new FlatCompat({
 })
 
 export default defineConfig([
+    ...nextVitals,
     globalIgnores([
         '**/postcss.config.js',
         '**/tailwind.config.js',
         '**/next.config.js',
     ]),
     {
-        extends: compat.extends('next/core-web-vitals'),
-
         plugins: {
             prettier,
         },
-
         rules: {
             'prettier/prettier': 'error',
             'import/no-anonymous-default-export': 'off',

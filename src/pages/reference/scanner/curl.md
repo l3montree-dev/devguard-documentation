@@ -1,3 +1,29 @@
+---
+title: "devguard-scanner curl — DevGuard CLI Reference"
+description: "Reference for devguard-scanner curl: Make HTTP requests with DevGuard Personal Access Token signing. This command provides curl-compatible syntax while."
+seo:
+  keyword_primary: "devguard-scanner curl"
+  keywords_secondary:
+    - "DevGuard CLI"
+    - "devguard-scanner commands"
+    - "DevGuard security scanner"
+lang: "en-US"
+og:
+  title: "devguard-scanner curl — DevGuard CLI Reference"
+  description: "Reference for devguard-scanner curl: Make HTTP requests with DevGuard Personal Access Token signing. This command provides curl-compatible syntax while."
+  image: "/og-image.png"
+  type: "article"
+  schema:
+    type: "TechArticle"
+robots: "index,follow"
+ignoreChecks: 
+  - "checkIfKeywordDensityInRange"
+  - "checkIfMinimumInternalLinks"
+  - "checkIfHeadingContainsKeywordPrimary"
+  - "checkIfTitleContainsKeywordPrimary"
+  - "checkIfHeadingOrderCorrect"
+---
+
 ## curl
 
 Make HTTP requests with DevGuard PAT signing (curl-compatible)

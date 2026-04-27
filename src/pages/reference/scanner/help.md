@@ -1,3 +1,29 @@
+---
+title: "devguard-scanner intoto help — DevGuard CLI Reference"
+description: "Reference for devguard-scanner intoto help: Help provides help for any command in the application. Simply type intoto help [path to command] for full details."
+seo:
+  keyword_primary: "devguard-scanner intoto help"
+  keywords_secondary:
+    - "DevGuard CLI"
+    - "devguard-scanner commands"
+    - "DevGuard security scanner"
+lang: "en-US"
+og:
+  title: "devguard-scanner intoto help — DevGuard CLI Reference"
+  description: "Reference for devguard-scanner intoto help: Help provides help for any command in the application. Simply type intoto help [path to command] for full details."
+  image: "/og-image.png"
+  type: "article"
+  schema:
+    type: "TechArticle"
+robots: "index,follow"
+ignoreChecks: 
+  - "checkIfKeywordDensityInRange"
+  - "checkIfMinimumInternalLinks"
+  - "checkIfHeadingContainsKeywordPrimary"
+  - "checkIfTitleContainsKeywordPrimary"
+  - "checkIfHeadingOrderCorrect"
+---
+
 ## intoto help
 
 Help about any command

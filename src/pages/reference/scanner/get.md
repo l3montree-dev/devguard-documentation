@@ -1,3 +1,29 @@
+---
+title: "devguard-scanner get — DevGuard CLI Reference"
+description: "Reference for devguard-scanner get: Perform a simple authenticated GET request signed with a DevGuard Personal Access Token. This command is deprecated in."
+seo:
+  keyword_primary: "devguard-scanner get"
+  keywords_secondary:
+    - "DevGuard CLI"
+    - "devguard-scanner commands"
+    - "DevGuard security scanner"
+lang: "en-US"
+og:
+  title: "devguard-scanner get — DevGuard CLI Reference"
+  description: "Reference for devguard-scanner get: Perform a simple authenticated GET request signed with a DevGuard Personal Access Token. This command is deprecated in."
+  image: "/og-image.png"
+  type: "article"
+  schema:
+    type: "TechArticle"
+robots: "index,follow"
+ignoreChecks: 
+  - "checkIfKeywordDensityInRange"
+  - "checkIfMinimumInternalLinks"
+  - "checkIfHeadingContainsKeywordPrimary"
+  - "checkIfTitleContainsKeywordPrimary"
+  - "checkIfHeadingOrderCorrect"
+---
+
 ## get
 
 Do a simple authenticated GET request. Deprecated in favor of 'curl' command.

@@ -1,3 +1,29 @@
+---
+title: "devguard-scanner generate-tag — DevGuard CLI Reference"
+description: "Reference for devguard-scanner generate-tag: This command generates a tag, artifact name, and URL-encoded artifact name for a given image based on its."
+seo:
+  keyword_primary: "devguard-scanner generate-tag"
+  keywords_secondary:
+    - "DevGuard CLI"
+    - "devguard-scanner commands"
+    - "DevGuard security scanner"
+lang: "en-US"
+og:
+  title: "devguard-scanner generate-tag — DevGuard CLI Reference"
+  description: "Reference for devguard-scanner generate-tag: This command generates a tag, artifact name, and URL-encoded artifact name for a given image based on its."
+  image: "/og-image.png"
+  type: "article"
+  schema:
+    type: "TechArticle"
+robots: "index,follow"
+ignoreChecks: 
+  - "checkIfKeywordDensityInRange"
+  - "checkIfMinimumInternalLinks"
+  - "checkIfHeadingContainsKeywordPrimary"
+  - "checkIfTitleContainsKeywordPrimary"
+  - "checkIfHeadingOrderCorrect"
+---
+
 ## generate-tag
 
 Generate a tag for an image based on its contents

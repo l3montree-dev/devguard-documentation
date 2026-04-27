@@ -1,3 +1,29 @@
+---
+title: "devguard-scanner inspect — DevGuard CLI Reference"
+description: "Reference for devguard-scanner inspect: Inspects a Package URL (PURL) against the vulnerability database and displays detailed information about matching."
+seo:
+  keyword_primary: "devguard-scanner inspect"
+  keywords_secondary:
+    - "DevGuard CLI"
+    - "devguard-scanner commands"
+    - "DevGuard security scanner"
+lang: "en-US"
+og:
+  title: "devguard-scanner inspect — DevGuard CLI Reference"
+  description: "Reference for devguard-scanner inspect: Inspects a Package URL (PURL) against the vulnerability database and displays detailed information about matching."
+  image: "/og-image.png"
+  type: "article"
+  schema:
+    type: "TechArticle"
+robots: "index,follow"
+ignoreChecks: 
+  - "checkIfKeywordDensityInRange"
+  - "checkIfMinimumInternalLinks"
+  - "checkIfHeadingContainsKeywordPrimary"
+  - "checkIfTitleContainsKeywordPrimary"
+  - "checkIfHeadingOrderCorrect"
+---
+
 ## inspect
 
 Inspect PURL for matching CVEs and vulnerabilities

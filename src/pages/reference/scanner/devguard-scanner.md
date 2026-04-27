@@ -1,3 +1,29 @@
+---
+title: "devguard-scanner devguard-scanner — DevGuard CLI Reference"
+description: "Reference for devguard-scanner devguard-scanner: Secure your Software Supply Chain DevGuard Scanner is a small CLI to help generate, sign and upload SBOMs."
+seo:
+  keyword_primary: "devguard-scanner devguard-scanner"
+  keywords_secondary:
+    - "DevGuard CLI"
+    - "devguard-scanner commands"
+    - "DevGuard security scanner"
+lang: "en-US"
+og:
+  title: "devguard-scanner devguard-scanner — DevGuard CLI Reference"
+  description: "Reference for devguard-scanner devguard-scanner: Secure your Software Supply Chain DevGuard Scanner is a small CLI to help generate, sign and upload SBOMs."
+  image: "/og-image.png"
+  type: "article"
+  schema:
+    type: "TechArticle"
+robots: "index,follow"
+ignoreChecks: 
+  - "checkIfKeywordDensityInRange"
+  - "checkIfMinimumInternalLinks"
+  - "checkIfHeadingContainsKeywordPrimary"
+  - "checkIfTitleContainsKeywordPrimary"
+  - "checkIfHeadingOrderCorrect"
+---
+
 ## devguard-scanner
 
 Secure your Software Supply Chain

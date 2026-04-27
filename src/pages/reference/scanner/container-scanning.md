@@ -1,3 +1,29 @@
+---
+title: "devguard-scanner container-scanning — DevGuard CLI Reference"
+description: "Reference for devguard-scanner container-scanning: Scan a container image for vulnerabilities. The image must either be a tar file (--path) or be available."
+seo:
+  keyword_primary: "devguard-scanner container-scanning"
+  keywords_secondary:
+    - "DevGuard CLI"
+    - "devguard-scanner commands"
+    - "DevGuard security scanner"
+lang: "en-US"
+og:
+  title: "devguard-scanner container-scanning — DevGuard CLI Reference"
+  description: "Reference for devguard-scanner container-scanning: Scan a container image for vulnerabilities. The image must either be a tar file (--path) or be available."
+  image: "/og-image.png"
+  type: "article"
+  schema:
+    type: "TechArticle"
+robots: "index,follow"
+ignoreChecks: 
+  - "checkIfKeywordDensityInRange"
+  - "checkIfMinimumInternalLinks"
+  - "checkIfHeadingContainsKeywordPrimary"
+  - "checkIfTitleContainsKeywordPrimary"
+  - "checkIfHeadingOrderCorrect"
+---
+
 ## container-scanning
 
 Software composition analysis of a container image

@@ -1,3 +1,29 @@
+---
+title: "devguard-scanner attest — DevGuard CLI Reference"
+description: "Reference for devguard-scanner attest: Create and upload an attestation for an OCI image or a local predicate file. The first argument is a path to a local."
+seo:
+  keyword_primary: "devguard-scanner attest"
+  keywords_secondary:
+    - "DevGuard CLI"
+    - "devguard-scanner commands"
+    - "DevGuard security scanner"
+lang: "en-US"
+og:
+  title: "devguard-scanner attest — DevGuard CLI Reference"
+  description: "Reference for devguard-scanner attest: Create and upload an attestation for an OCI image or a local predicate file. The first argument is a path to a local."
+  image: "/og-image.png"
+  type: "article"
+  schema:
+    type: "TechArticle"
+robots: "index,follow"
+ignoreChecks: 
+  - "checkIfKeywordDensityInRange"
+  - "checkIfMinimumInternalLinks"
+  - "checkIfHeadingContainsKeywordPrimary"
+  - "checkIfTitleContainsKeywordPrimary"
+  - "checkIfHeadingOrderCorrect"
+---
+
 ## attest
 
 Create and upload an attestation for an image or artifact

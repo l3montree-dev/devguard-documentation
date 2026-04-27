@@ -1,3 +1,29 @@
+---
+title: "devguard-scanner iac — DevGuard CLI Reference"
+description: "Reference for devguard-scanner iac: Run an Infrastructure-as-Code scan (e.g. checkov) against a repository or path and upload SARIF results to DevGuard."
+seo:
+  keyword_primary: "devguard-scanner iac"
+  keywords_secondary:
+    - "DevGuard CLI"
+    - "devguard-scanner commands"
+    - "DevGuard security scanner"
+lang: "en-US"
+og:
+  title: "devguard-scanner iac — DevGuard CLI Reference"
+  description: "Reference for devguard-scanner iac: Run an Infrastructure-as-Code scan (e.g. checkov) against a repository or path and upload SARIF results to DevGuard."
+  image: "/og-image.png"
+  type: "article"
+  schema:
+    type: "TechArticle"
+robots: "index,follow"
+ignoreChecks: 
+  - "checkIfKeywordDensityInRange"
+  - "checkIfMinimumInternalLinks"
+  - "checkIfHeadingContainsKeywordPrimary"
+  - "checkIfTitleContainsKeywordPrimary"
+  - "checkIfHeadingOrderCorrect"
+---
+
 ## iac
 
 Run an Infrastructure-as-Code (IaC) scan

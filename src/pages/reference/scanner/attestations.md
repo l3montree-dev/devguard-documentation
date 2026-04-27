@@ -1,3 +1,29 @@
+---
+title: "devguard-scanner attestations — DevGuard CLI Reference"
+description: "Reference for devguard-scanner attestations: Retrieve and validate security attestations for container images used in Helm charts or other deployment."
+seo:
+  keyword_primary: "devguard-scanner attestations"
+  keywords_secondary:
+    - "DevGuard CLI"
+    - "devguard-scanner commands"
+    - "DevGuard security scanner"
+lang: "en-US"
+og:
+  title: "devguard-scanner attestations — DevGuard CLI Reference"
+  description: "Reference for devguard-scanner attestations: Retrieve and validate security attestations for container images used in Helm charts or other deployment."
+  image: "/og-image.png"
+  type: "article"
+  schema:
+    type: "TechArticle"
+robots: "index,follow"
+ignoreChecks: 
+  - "checkIfKeywordDensityInRange"
+  - "checkIfMinimumInternalLinks"
+  - "checkIfHeadingContainsKeywordPrimary"
+  - "checkIfTitleContainsKeywordPrimary"
+  - "checkIfHeadingOrderCorrect"
+---
+
 ## attestations
 
 Discover attestations for an image and optionally evaluate a rego policy
