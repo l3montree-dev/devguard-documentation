@@ -1,0 +1,13 @@
+name: "SEO Check"
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  seo-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Run SEO-Check
+        uses: docker://registry.opencode.de/open-code/document-writing-tools/seo-check:main-amd64
