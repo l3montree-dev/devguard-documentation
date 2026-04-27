@@ -1,0 +1,12 @@
+SCA:
+  value: "Software Composition Analysis"
+  type: glossary
+  variants: []
+SAST:
+  value: "Static Application Security Testing"
+  type: glossary
+  variants: []
+IaC:
+  value: "Infrastructure as Code"
+  type: glossary
+  variants: []

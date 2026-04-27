@@ -41,5 +41,7 @@ image.tar
 # Sentry Config File
 .env.sentry-build-plugin
 search-data.json
+search-data-en.json
+search-data-de.json
 pageMap.ts
 sitemap-0.xml

@@ -1,4 +1,4 @@
-FROM node:24.14.0@sha256:3a09aa6354567619221ef6c45a5051b671f953f0a1924d1f819ffb236e520e6b AS builder
+FROM node:24.14.1@sha256:80fc934952c8f1b2b4d39907af7211f8a9fff1a4c2cf673fb49099292c251cec AS builder
 LABEL maintainer="Sebastian Kawelke <sebatian.kawelke@l3montree.com"
 
 # Disable telemetry
@@ -40,7 +40,7 @@ RUN npm run build
 
 RUN mkdir -p /usr/app/.next/cache/images && chown -R 53111:53111 /usr/app/.next/cache/images
 
-FROM registry.opencode.de/open-code/oci/nodejs:24-minimal@sha256:8a5b144301ac2f11e2a10c39218e6cd200a7d90a238c3ace7c43a32dff975c19
+FROM registry.opencode.de/open-code/oci/nodejs:24-minimal@sha256:b2f83cbaa69c62e0b74c967fdc3b2645c932f49d2853dd6fb735b7383fbc2c14
 
 USER 53111
 
