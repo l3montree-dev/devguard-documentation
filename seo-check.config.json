@@ -1,5 +1,6 @@
 {
   "staticDir": "public",
+  "pagesDir": "src/pages",
   "ignorePaths": [
     "src/pages/reference/**",
     "src/pages/404.mdx",
