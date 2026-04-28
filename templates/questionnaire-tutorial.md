@@ -1,3 +1,34 @@
+---
+title: Tutorial Documentation Questionnaire
+description: >-
+  Tutorial Documentation Questionnaire: Questionnaire template for gathering
+  information to create tutorial documentation for DevGuard.
+seo:
+  keyword_primary: tutorial documentation questionnaire
+  robots: 'noindex,nofollow'
+  og:
+    title: Tutorial Documentation Questionnaire
+    description: >-
+      Tutorial Documentation Questionnaire: Questionnaire template for gathering
+      information to create tutorial documentation for DevGuard.
+    image: /og-image.png
+    type: article
+    schema:
+      type: TechArticle
+lang: en-US
+ignoreChecks:
+  - checkIfKeywordDensityInRange
+  - checkIfMinimumInternalLinks
+  - checkIfHeadingContainsKeywordPrimary
+  - checkIfTitleContainsKeywordPrimary
+  - checkIfHeadingOrderCorrect
+  - checkIfHeadingContainsKeywordPrimary
+  - checkIfOGIImageUnder5MB
+  - checkIfOGTitleContainsKeywordPrimary
+  - checkIfOGDescriptionContainsKeywordPrimary
+  - checkIfMetaDescriptionContainsKeywordPrimary
+---
+
 # Tutorial Documentation Questionnaire
 
 Use this questionnaire to gather information for creating a new tutorial. Fill out all sections and provide your questionnaire to an AI agent along with the tutorial-template.mdx to generate an initial draft.

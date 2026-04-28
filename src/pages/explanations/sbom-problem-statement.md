@@ -1,23 +1,29 @@
 ---
-title: "Container SBOM and Security Scanning Workflow"
-description: "Why container SBOM security scanning matters — how DevGuard captures dependencies from custom binaries and OS packages for complete vulnerability coverage."
+title: Container SBOM Security Scanning
+description: >-
+  Why container SBOM security scanning matters — how DevGuard captures
+  dependencies from custom binaries and OS packages for complete vulnerability
+  coverage.
 seo:
-  keyword_primary: "container SBOM security scanning"
+  keyword_primary: container SBOM security scanning
   keywords_secondary: []
-lang: "en-US"
-og:
-  title: "Container SBOM Security Scanning Workflow"
-  description: "Why container SBOM security scanning matters — how DevGuard captures dependencies from custom binaries and OS packages for complete vulnerability coverage."
-  image: "/og-image.png"
-  type: "article"
-  schema:
-    type: "TechArticle"
-robots: "index,follow"
+  robots: 'index,follow'
+  og:
+    title: Container SBOM Security Scanning
+    description: >-
+      Why container SBOM security scanning matters — how DevGuard captures
+      dependencies from custom binaries and OS packages for complete
+      vulnerability coverage.
+    image: /og-image.png
+    type: article
+    schema:
+      type: TechArticle
+lang: en-US
 ignoreChecks:
-  - "checkIfKeywordDensityInRange"
-  - "checkIfMinimumInternalLinks"
-  - "checkIfHeadingContainsKeywordPrimary"
-  - "checkIfHeadingOrderCorrect"
+  - checkIfKeywordDensityInRange
+  - checkIfMinimumInternalLinks
+  - checkIfHeadingContainsKeywordPrimary
+  - checkIfHeadingOrderCorrect
 ---
 
 # Container SBOM & Security Scanning Workflow

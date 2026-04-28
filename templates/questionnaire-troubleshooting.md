@@ -1,3 +1,36 @@
+---
+title: Troubleshooting Documentation Questionnaire
+description: >-
+  Troubleshooting Documentation Questionnaire: Questionnaire template for
+  gathering information to create troubleshooting guide documentation for
+  DevGuard.
+seo:
+  keyword_primary: troubleshooting documentation questionnaire
+  robots: 'noindex,nofollow'
+  og:
+    title: Troubleshooting Documentation Questionnaire
+    description: >-
+      Troubleshooting Documentation Questionnaire: Questionnaire template for
+      gathering information to create troubleshooting guide documentation for
+      DevGuard.
+    image: /og-image.png
+    type: article
+    schema:
+      type: TechArticle
+lang: en-US
+ignoreChecks:
+  - checkIfKeywordDensityInRange
+  - checkIfMinimumInternalLinks
+  - checkIfHeadingContainsKeywordPrimary
+  - checkIfTitleContainsKeywordPrimary
+  - checkIfHeadingOrderCorrect
+  - checkIfHeadingContainsKeywordPrimary
+  - checkIfOGIImageUnder5MB
+  - checkIfOGTitleContainsKeywordPrimary
+  - checkIfOGDescriptionContainsKeywordPrimary
+  - checkIfMetaDescriptionContainsKeywordPrimary
+---
+
 # Troubleshooting Documentation Questionnaire
 
 Use this questionnaire to gather information for creating a troubleshooting guide. Fill out all sections and provide your questionnaire to an AI agent along with the troubleshooting-template.mdx to generate an initial draft.

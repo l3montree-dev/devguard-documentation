@@ -1,27 +1,27 @@
 ---
-title: "devguard-scanner sca — DevGuard CLI Reference"
+title: devguard-scanner sca — DevGuard CLI Reference
 description: "Reference for devguard-scanner sca: Run a Software Composition Analysis (SCA) for a project or container image. This command can accept either an OCI image."
 seo:
-  keyword_primary: "devguard-scanner sca"
+  keyword_primary: devguard-scanner sca
   keywords_secondary:
-    - "DevGuard CLI"
-    - "devguard-scanner commands"
-    - "DevGuard security scanner"
-lang: "en-US"
-og:
-  title: "devguard-scanner sca — DevGuard CLI Reference"
-  description: "Reference for devguard-scanner sca: Run a Software Composition Analysis (SCA) for a project or container image. This command can accept either an OCI image."
-  image: "/og-image.png"
-  type: "article"
-  schema:
-    type: "TechArticle"
-robots: "index,follow"
-ignoreChecks: 
-  - "checkIfKeywordDensityInRange"
-  - "checkIfMinimumInternalLinks"
-  - "checkIfHeadingContainsKeywordPrimary"
-  - "checkIfTitleContainsKeywordPrimary"
-  - "checkIfHeadingOrderCorrect"
+    - DevGuard CLI
+    - devguard-scanner commands
+    - DevGuard security scanner
+  robots: index,follow
+  og:
+    title: devguard-scanner sca — DevGuard CLI Reference
+    description: "Reference for devguard-scanner sca: Run a Software Composition Analysis (SCA) for a project or container image. This command can accept either an OCI image."
+    image: /og-image.png
+    type: article
+    schema:
+      type: TechArticle
+lang: en-US
+ignoreChecks:
+  - checkIfKeywordDensityInRange
+  - checkIfMinimumInternalLinks
+  - checkIfHeadingContainsKeywordPrimary
+  - checkIfTitleContainsKeywordPrimary
+  - checkIfHeadingOrderCorrect
 ---
 
 ## sca

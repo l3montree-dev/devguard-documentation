@@ -1,27 +1,27 @@
 ---
-title: "devguard-scanner sast — DevGuard CLI Reference"
+title: devguard-scanner sast — DevGuard CLI Reference
 description: "Reference for devguard-scanner sast: Run a static application security test using the configured SAST tool. This command executes the configured SAST."
 seo:
-  keyword_primary: "devguard-scanner sast"
+  keyword_primary: devguard-scanner sast
   keywords_secondary:
-    - "DevGuard CLI"
-    - "devguard-scanner commands"
-    - "DevGuard security scanner"
-lang: "en-US"
-og:
-  title: "devguard-scanner sast — DevGuard CLI Reference"
-  description: "Reference for devguard-scanner sast: Run a static application security test using the configured SAST tool. This command executes the configured SAST."
-  image: "/og-image.png"
-  type: "article"
-  schema:
-    type: "TechArticle"
-robots: "index,follow"
-ignoreChecks: 
-  - "checkIfKeywordDensityInRange"
-  - "checkIfMinimumInternalLinks"
-  - "checkIfHeadingContainsKeywordPrimary"
-  - "checkIfTitleContainsKeywordPrimary"
-  - "checkIfHeadingOrderCorrect"
+    - DevGuard CLI
+    - devguard-scanner commands
+    - DevGuard security scanner
+  robots: index,follow
+  og:
+    title: devguard-scanner sast — DevGuard CLI Reference
+    description: "Reference for devguard-scanner sast: Run a static application security test using the configured SAST tool. This command executes the configured SAST."
+    image: /og-image.png
+    type: article
+    schema:
+      type: TechArticle
+lang: en-US
+ignoreChecks:
+  - checkIfKeywordDensityInRange
+  - checkIfMinimumInternalLinks
+  - checkIfHeadingContainsKeywordPrimary
+  - checkIfTitleContainsKeywordPrimary
+  - checkIfHeadingOrderCorrect
 ---
 
 ## sast

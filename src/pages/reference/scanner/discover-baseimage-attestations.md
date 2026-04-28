@@ -1,27 +1,27 @@
 ---
-title: "devguard-scanner discover-baseimage-attestations — CLI Reference"
+title: devguard-scanner discover-baseimage-attestations — CLI Reference
 description: "Reference for devguard-scanner discover-baseimage-attestations: Scan a directory for Dockerfile/Containerfile, extract the base image FROM line and attempt."
 seo:
-  keyword_primary: "devguard-scanner discover-baseimage-attestations"
+  keyword_primary: devguard-scanner discover-baseimage-attestations
   keywords_secondary:
-    - "DevGuard CLI"
-    - "devguard-scanner commands"
-    - "DevGuard security scanner"
-lang: "en-US"
-og:
-  title: "devguard-scanner discover-baseimage-attestations — CLI Reference"
-  description: "Reference for devguard-scanner discover-baseimage-attestations: Scan a directory for Dockerfile/Containerfile, extract the base image FROM line and attempt."
-  image: "/og-image.png"
-  type: "article"
-  schema:
-    type: "TechArticle"
-robots: "index,follow"
-ignoreChecks: 
-  - "checkIfKeywordDensityInRange"
-  - "checkIfMinimumInternalLinks"
-  - "checkIfHeadingContainsKeywordPrimary"
-  - "checkIfTitleContainsKeywordPrimary"
-  - "checkIfHeadingOrderCorrect"
+    - DevGuard CLI
+    - devguard-scanner commands
+    - DevGuard security scanner
+  robots: index,follow
+  og:
+    title: devguard-scanner discover-baseimage-attestations — CLI Reference
+    description: "Reference for devguard-scanner discover-baseimage-attestations: Scan a directory for Dockerfile/Containerfile, extract the base image FROM line and attempt."
+    image: /og-image.png
+    type: article
+    schema:
+      type: TechArticle
+lang: en-US
+ignoreChecks:
+  - checkIfKeywordDensityInRange
+  - checkIfMinimumInternalLinks
+  - checkIfHeadingContainsKeywordPrimary
+  - checkIfTitleContainsKeywordPrimary
+  - checkIfHeadingOrderCorrect
 ---
 
 ## discover-baseimage-attestations

@@ -1,3 +1,35 @@
+---
+title: How-To Guide Questionnaire
+description: >-
+  How-To Guide Questionnaire: Questionnaire template for gathering information
+  to create how-to guide documentation for DevGuard. Learn more about.
+seo:
+  keyword_primary: how-to guide questionnaire
+  robots: 'noindex,nofollow'
+  og:
+    title: How-To Guide Questionnaire
+    description: >-
+      How-To Guide Questionnaire: Questionnaire template for gathering
+      information to create how-to guide documentation for DevGuard. Learn more
+      about.
+    image: /og-image.png
+    type: article
+    schema:
+      type: TechArticle
+lang: en-US
+ignoreChecks:
+  - checkIfKeywordDensityInRange
+  - checkIfMinimumInternalLinks
+  - checkIfHeadingContainsKeywordPrimary
+  - checkIfTitleContainsKeywordPrimary
+  - checkIfHeadingOrderCorrect
+  - checkIfHeadingContainsKeywordPrimary
+  - checkIfOGIImageUnder5MB
+  - checkIfOGTitleContainsKeywordPrimary
+  - checkIfOGDescriptionContainsKeywordPrimary
+  - checkIfMetaDescriptionContainsKeywordPrimary
+---
+
 # How-To Guide Documentation Questionnaire
 
 Use this questionnaire to gather information for creating a new how-to guide. Fill out all sections and provide your questionnaire to an AI agent along with the how-to-template.mdx to generate an initial draft.

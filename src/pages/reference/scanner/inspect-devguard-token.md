@@ -1,27 +1,27 @@
 ---
-title: "devguard-scanner inspect-devguard-token — DevGuard CLI Reference"
+title: devguard-scanner inspect-devguard-token — DevGuard CLI Reference
 description: "Reference for devguard-scanner inspect-devguard-token: Decode a DevGuard hex token and print the corresponding private and public keys in PEM and hex."
 seo:
-  keyword_primary: "devguard-scanner inspect-devguard-token"
+  keyword_primary: devguard-scanner inspect-devguard-token
   keywords_secondary:
-    - "DevGuard CLI"
-    - "devguard-scanner commands"
-    - "DevGuard security scanner"
-lang: "en-US"
-og:
-  title: "devguard-scanner inspect-devguard-token — DevGuard CLI Reference"
-  description: "Reference for devguard-scanner inspect-devguard-token: Decode a DevGuard hex token and print the corresponding private and public keys in PEM and hex."
-  image: "/og-image.png"
-  type: "article"
-  schema:
-    type: "TechArticle"
-robots: "index,follow"
-ignoreChecks: 
-  - "checkIfKeywordDensityInRange"
-  - "checkIfMinimumInternalLinks"
-  - "checkIfHeadingContainsKeywordPrimary"
-  - "checkIfTitleContainsKeywordPrimary"
-  - "checkIfHeadingOrderCorrect"
+    - DevGuard CLI
+    - devguard-scanner commands
+    - DevGuard security scanner
+  robots: index,follow
+  og:
+    title: devguard-scanner inspect-devguard-token — DevGuard CLI Reference
+    description: "Reference for devguard-scanner inspect-devguard-token: Decode a DevGuard hex token and print the corresponding private and public keys in PEM and hex."
+    image: /og-image.png
+    type: article
+    schema:
+      type: TechArticle
+lang: en-US
+ignoreChecks:
+  - checkIfKeywordDensityInRange
+  - checkIfMinimumInternalLinks
+  - checkIfHeadingContainsKeywordPrimary
+  - checkIfTitleContainsKeywordPrimary
+  - checkIfHeadingOrderCorrect
 ---
 
 ## inspect-devguard-token
