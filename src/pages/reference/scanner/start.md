@@ -1,27 +1,27 @@
 ---
-title: "devguard-scanner intoto start — DevGuard CLI Reference"
-description: "Reference for the devguard-scanner intoto start command — DevGuard CLI tool for SBOM, SARIF, and attestation workflows in DevSecOps pipelines."
+title: devguard-scanner intoto start — DevGuard CLI Reference
+description: Reference for the devguard-scanner intoto start command — DevGuard CLI tool for SBOM, SARIF, and attestation workflows in DevSecOps pipelines.
 seo:
-  keyword_primary: "devguard-scanner intoto start"
+  keyword_primary: devguard-scanner intoto start
   keywords_secondary:
-    - "DevGuard CLI"
-    - "devguard-scanner commands"
-    - "DevGuard security scanner"
-lang: "en-US"
-og:
-  title: "devguard-scanner intoto start — DevGuard CLI Reference"
-  description: "Reference for the devguard-scanner intoto start command — DevGuard CLI tool for SBOM, SARIF, and attestation workflows in DevSecOps pipelines."
-  image: "/og-image.png"
-  type: "article"
-  schema:
-    type: "TechArticle"
-robots: "index,follow"
-ignoreChecks: 
-  - "checkIfKeywordDensityInRange"
-  - "checkIfMinimumInternalLinks"
-  - "checkIfHeadingContainsKeywordPrimary"
-  - "checkIfTitleContainsKeywordPrimary"
-  - "checkIfHeadingOrderCorrect"
+    - DevGuard CLI
+    - devguard-scanner commands
+    - DevGuard security scanner
+  robots: index,follow
+  og:
+    title: devguard-scanner intoto start — DevGuard CLI Reference
+    description: Reference for the devguard-scanner intoto start command — DevGuard CLI tool for SBOM, SARIF, and attestation workflows in DevSecOps pipelines.
+    image: /og-image.png
+    type: article
+    schema:
+      type: TechArticle
+lang: en-US
+ignoreChecks:
+  - checkIfKeywordDensityInRange
+  - checkIfMinimumInternalLinks
+  - checkIfHeadingContainsKeywordPrimary
+  - checkIfTitleContainsKeywordPrimary
+  - checkIfHeadingOrderCorrect
 ---
 
 ## intoto start

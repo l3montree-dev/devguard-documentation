@@ -1,27 +1,27 @@
 ---
-title: "devguard-scanner vex — DevGuard CLI Reference"
+title: devguard-scanner vex — DevGuard CLI Reference
 description: "Reference for devguard-scanner vex: Upload a VEX (Vulnerability Exploitability eXchange) document to DevGuard. The VEX document must be provided as a file."
 seo:
-  keyword_primary: "devguard-scanner vex"
+  keyword_primary: devguard-scanner vex
   keywords_secondary:
-    - "DevGuard CLI"
-    - "devguard-scanner commands"
-    - "DevGuard security scanner"
-lang: "en-US"
-og:
-  title: "devguard-scanner vex — DevGuard CLI Reference"
-  description: "Reference for devguard-scanner vex: Upload a VEX (Vulnerability Exploitability eXchange) document to DevGuard. The VEX document must be provided as a file."
-  image: "/og-image.png"
-  type: "article"
-  schema:
-    type: "TechArticle"
-robots: "index,follow"
-ignoreChecks: 
-  - "checkIfKeywordDensityInRange"
-  - "checkIfMinimumInternalLinks"
-  - "checkIfHeadingContainsKeywordPrimary"
-  - "checkIfTitleContainsKeywordPrimary"
-  - "checkIfHeadingOrderCorrect"
+    - DevGuard CLI
+    - devguard-scanner commands
+    - DevGuard security scanner
+  robots: index,follow
+  og:
+    title: devguard-scanner vex — DevGuard CLI Reference
+    description: "Reference for devguard-scanner vex: Upload a VEX (Vulnerability Exploitability eXchange) document to DevGuard. The VEX document must be provided as a file."
+    image: /og-image.png
+    type: article
+    schema:
+      type: TechArticle
+lang: en-US
+ignoreChecks:
+  - checkIfKeywordDensityInRange
+  - checkIfMinimumInternalLinks
+  - checkIfHeadingContainsKeywordPrimary
+  - checkIfTitleContainsKeywordPrimary
+  - checkIfHeadingOrderCorrect
 ---
 
 ## vex

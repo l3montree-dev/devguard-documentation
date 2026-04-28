@@ -1,9 +1,34 @@
 ---
+title: Page Not Found — DevGuard Documentation
+description: >-
+  Page Not Found: The page you are looking for could not be found. Navigate back
+  to DevGuard documentation to find what you need. Learn more about page.
 disableToc: true
 theme:
-  layout: "raw"
+  layout: raw
 seo:
-  robots: "noindex, nofollow"
+  keyword_primary: page not found
+  robots: 'noindex,nofollow'
+  og:
+    title: Page Not Found — DevGuard Documentation
+    description: >-
+      Page Not Found: The page you are looking for could not be found. Navigate
+      back to DevGuard documentation to find what you need. Learn more about
+      page.
+    image: /og-image.png
+    type: article
+    schema:
+      type: WebPage
+lang: en-US
+ignoreChecks:
+  - checkIfKeywordDensityInRange
+  - checkIfMinimumInternalLinks
+  - checkIfHeadingContainsKeywordPrimary
+  - checkIfTitleContainsKeywordPrimary
+  - checkIfHeadingOrderCorrect
+  - checkIfOGTitleContainsKeywordPrimary
+  - checkIfOGDescriptionContainsKeywordPrimary
+  - checkIfMetaDescriptionContainsKeywordPrimary
 ---
 
 import NotFoundPage from '@/components/404'

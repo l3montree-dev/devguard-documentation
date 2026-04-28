@@ -1,27 +1,27 @@
 ---
-title: "devguard-scanner sarif — DevGuard CLI Reference"
+title: devguard-scanner sarif — DevGuard CLI Reference
 description: "Reference for devguard-scanner sarif: Upload a SARIF-formatted static analysis report to DevGuard for processing and result comparison. The command signs."
 seo:
-  keyword_primary: "devguard-scanner sarif"
+  keyword_primary: devguard-scanner sarif
   keywords_secondary:
-    - "DevGuard CLI"
-    - "devguard-scanner commands"
-    - "DevGuard security scanner"
-lang: "en-US"
-og:
-  title: "devguard-scanner sarif — DevGuard CLI Reference"
-  description: "Reference for devguard-scanner sarif: Upload a SARIF-formatted static analysis report to DevGuard for processing and result comparison. The command signs."
-  image: "/og-image.png"
-  type: "article"
-  schema:
-    type: "TechArticle"
-robots: "index,follow"
-ignoreChecks: 
-  - "checkIfKeywordDensityInRange"
-  - "checkIfMinimumInternalLinks"
-  - "checkIfHeadingContainsKeywordPrimary"
-  - "checkIfTitleContainsKeywordPrimary"
-  - "checkIfHeadingOrderCorrect"
+    - DevGuard CLI
+    - devguard-scanner commands
+    - DevGuard security scanner
+  robots: index,follow
+  og:
+    title: devguard-scanner sarif — DevGuard CLI Reference
+    description: "Reference for devguard-scanner sarif: Upload a SARIF-formatted static analysis report to DevGuard for processing and result comparison. The command signs."
+    image: /og-image.png
+    type: article
+    schema:
+      type: TechArticle
+lang: en-US
+ignoreChecks:
+  - checkIfKeywordDensityInRange
+  - checkIfMinimumInternalLinks
+  - checkIfHeadingContainsKeywordPrimary
+  - checkIfTitleContainsKeywordPrimary
+  - checkIfHeadingOrderCorrect
 ---
 
 ## sarif

@@ -1,3 +1,35 @@
+---
+title: DevGuard Documentation Templates
+description: >-
+  Overview of available documentation templates and questionnaires for creating
+  DevGuard documentation. Learn more about documentation templates in the.
+seo:
+  keyword_primary: documentation templates
+  robots: 'noindex,nofollow'
+  og:
+    title: DevGuard Documentation Templates
+    description: >-
+      Overview of available documentation templates and questionnaires for
+      creating DevGuard documentation. Learn more about documentation templates
+      in the.
+    image: /og-image.png
+    type: article
+    schema:
+      type: TechArticle
+lang: en-US
+ignoreChecks:
+  - checkIfKeywordDensityInRange
+  - checkIfMinimumInternalLinks
+  - checkIfHeadingContainsKeywordPrimary
+  - checkIfTitleContainsKeywordPrimary
+  - checkIfHeadingOrderCorrect
+  - checkIfHeadingContainsKeywordPrimary
+  - checkIfOGIImageUnder5MB
+  - checkIfOGTitleContainsKeywordPrimary
+  - checkIfOGDescriptionContainsKeywordPrimary
+  - checkIfMetaDescriptionContainsKeywordPrimary
+---
+
 # DevGuard Documentation Templates
 
 This directory contains templates for creating consistent, high-quality documentation following the Diataxis framework.

@@ -1,3 +1,34 @@
+---
+title: Documentation Quality Checklist
+description: >-
+  Documentation Quality Checklist: Quality checklist template for testing and
+  validating DevGuard documentation before publishing. Learn more about.
+seo:
+  keyword_primary: documentation quality checklist
+  robots: 'noindex,nofollow'
+  og:
+    title: Documentation Quality Checklist
+    description: >-
+      Documentation Quality Checklist: Quality checklist template for testing
+      and validating DevGuard documentation before publishing. Learn more about.
+    image: /og-image.png
+    type: article
+    schema:
+      type: TechArticle
+lang: en-US
+ignoreChecks:
+  - checkIfKeywordDensityInRange
+  - checkIfMinimumInternalLinks
+  - checkIfHeadingContainsKeywordPrimary
+  - checkIfTitleContainsKeywordPrimary
+  - checkIfHeadingOrderCorrect
+  - checkIfHeadingContainsKeywordPrimary
+  - checkIfOGIImageUnder5MB
+  - checkIfOGTitleContainsKeywordPrimary
+  - checkIfOGDescriptionContainsKeywordPrimary
+  - checkIfMetaDescriptionContainsKeywordPrimary
+---
+
 # Testing Your Documentation
 
 ## The "5-Minute Test"

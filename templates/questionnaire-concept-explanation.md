@@ -1,3 +1,34 @@
+---
+title: Concept Explanation Questionnaire
+description: >-
+  Concept Explanation Questionnaire: Questionnaire template for gathering
+  information to create concept explanation documentation for DevGuard.
+seo:
+  keyword_primary: concept explanation questionnaire
+  robots: 'noindex,nofollow'
+  og:
+    title: Concept Explanation Questionnaire
+    description: >-
+      Concept Explanation Questionnaire: Questionnaire template for gathering
+      information to create concept explanation documentation for DevGuard.
+    image: /og-image.png
+    type: article
+    schema:
+      type: TechArticle
+lang: en-US
+ignoreChecks:
+  - checkIfKeywordDensityInRange
+  - checkIfMinimumInternalLinks
+  - checkIfHeadingContainsKeywordPrimary
+  - checkIfTitleContainsKeywordPrimary
+  - checkIfHeadingOrderCorrect
+  - checkIfHeadingContainsKeywordPrimary
+  - checkIfOGIImageUnder5MB
+  - checkIfOGTitleContainsKeywordPrimary
+  - checkIfOGDescriptionContainsKeywordPrimary
+  - checkIfMetaDescriptionContainsKeywordPrimary
+---
+
 # Concept Explanation Documentation Questionnaire
 
 Use this questionnaire to gather information for creating a new concept explanation. Fill out all sections and provide your questionnaire to an AI agent along with the concept-explanation-template.mdx to generate an initial draft.

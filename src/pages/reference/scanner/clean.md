@@ -1,27 +1,27 @@
 ---
-title: "devguard-scanner clean — DevGuard CLI Reference"
+title: devguard-scanner clean — DevGuard CLI Reference
 description: "Reference for devguard-scanner clean: Run cosign remove on an image or signature object to clean attestations/signatures. This command wraps the cosign CLI."
 seo:
-  keyword_primary: "devguard-scanner clean"
+  keyword_primary: devguard-scanner clean
   keywords_secondary:
-    - "DevGuard CLI"
-    - "devguard-scanner commands"
-    - "DevGuard security scanner"
-lang: "en-US"
-og:
-  title: "devguard-scanner clean — DevGuard CLI Reference"
-  description: "Reference for devguard-scanner clean: Run cosign remove on an image or signature object to clean attestations/signatures. This command wraps the cosign CLI."
-  image: "/og-image.png"
-  type: "article"
-  schema:
-    type: "TechArticle"
-robots: "index,follow"
-ignoreChecks: 
-  - "checkIfKeywordDensityInRange"
-  - "checkIfMinimumInternalLinks"
-  - "checkIfHeadingContainsKeywordPrimary"
-  - "checkIfTitleContainsKeywordPrimary"
-  - "checkIfHeadingOrderCorrect"
+    - DevGuard CLI
+    - devguard-scanner commands
+    - DevGuard security scanner
+  robots: index,follow
+  og:
+    title: devguard-scanner clean — DevGuard CLI Reference
+    description: "Reference for devguard-scanner clean: Run cosign remove on an image or signature object to clean attestations/signatures. This command wraps the cosign CLI."
+    image: /og-image.png
+    type: article
+    schema:
+      type: TechArticle
+lang: en-US
+ignoreChecks:
+  - checkIfKeywordDensityInRange
+  - checkIfMinimumInternalLinks
+  - checkIfHeadingContainsKeywordPrimary
+  - checkIfTitleContainsKeywordPrimary
+  - checkIfHeadingOrderCorrect
 ---
 
 ## clean
