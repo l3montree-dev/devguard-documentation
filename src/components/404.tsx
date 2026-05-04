@@ -17,7 +17,7 @@ export default function NotFoundPage() {
                     <h1 className="mt-4 text-4xl font-semibold tracking-tight text-balance text-white sm:text-5xl">
                         Page not found
                     </h1>
-                    <p className="mt-6 text-lg text-muted-foreground font-medium">
+                    <p className="text-muted-foreground mt-6 text-lg font-medium">
                         Sorry, we couldn&apos;t find the page you&apos;re
                         looking for.
                     </p>

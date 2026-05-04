@@ -143,7 +143,7 @@
   }
 
   .hero-inner {
-    @apply grid grid-cols-1 gap-y-12 lg:grid-cols-2 lg:items-start lg:gap-x-20;
+    @apply grid grid-cols-1 gap-y-12 lg:grid-cols-2 lg:items-center lg:gap-x-20;
   }
   .section-outer {
     @apply relative py-8 max-sm:py-8;

@@ -9,7 +9,16 @@ import '../styles/globals.css'
 
 export default function MyApp({ Component, pageProps }: any) {
     const router = useRouter()
-    const page = findPage(pageMap, router.pathname)
+    const page =
+        findPage(pageMap, router.pathname) ??
+        pageMap
+            .filter(
+                (p: any) =>
+                    p.kind === 'folder' &&
+                    p.indexPage?.route === router.pathname,
+            )
+            .map((p: any) => p.indexPage)[0] ??
+        null
     const frontMatter = page?.frontMatter ?? {}
     const toc = page?.toc ?? []
     const title = frontMatter.title ?? pageProps.title ?? ''
