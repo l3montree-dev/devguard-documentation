@@ -31,7 +31,7 @@ export default function FAQSection({
                         <dt>
                             <button
                                 type="button"
-                                className="text-foreground flex w-full items-start justify-between text-left"
+                                className="text-foreground flex w-full cursor-pointer items-start justify-between text-left"
                                 onClick={() => setOpen(open === i ? null : i)}
                                 aria-expanded={open === i}
                             >

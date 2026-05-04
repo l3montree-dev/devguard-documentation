@@ -9,7 +9,7 @@ import CTASection from '@/components/sections/Cta'
 const packageInspectorFaqs: FAQ[] = [
     {
         question: 'What is a Package URL (PURL)?',
-        answer: 'A Package URL (PURL) is a standardized string that uniquely identifies a software package across ecosystems. It encodes the package type, namespace, name, and version — for example: pkg:npm/%40angular/core@17.0.0 or pkg:pypi/requests@2.31.0.',
+        answer: 'A Package URL (PURL) is a standardized string that uniquely identifies a software package across ecosystems. It encodes the package type, namespace, name, and version — for example: pkg:npm/next@16.0.1',
     },
     {
         question: 'Which ecosystems are supported?',
@@ -29,7 +29,7 @@ const packageInspectorFaqs: FAQ[] = [
     },
     {
         question: 'Can I inspect a specific version of a package?',
-        answer: 'Yes — include the version in your PURL query (e.g. pkg:npm/lodash@4.17.20). Without a version, the inspector returns aggregated data for the package across all known versions.',
+        answer: 'Yes — include the version in your PURL query (e.g. pkg:npm/next@16.0.1).',
     },
 ]
 

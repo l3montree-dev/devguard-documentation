@@ -157,7 +157,7 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
         <Container
             showTopGrid={false}
             showBottomGrid={false}
-            className="card-blue py-5"
+            className="card-blue mx-auto max-w-[1280px] py-5"
         >
             <Head>
                 <title>{packageName} | Package Inspector</title>
