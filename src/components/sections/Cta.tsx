@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 
-interface VulnDBCTAProps {
+interface CTAProps {
     heading?: string
     description?: string
     primaryLabel?: string
@@ -9,14 +9,14 @@ interface VulnDBCTAProps {
     secondaryHref?: string
 }
 
-export default function VulnDBCTA({
+export default function CTASection({
     heading = 'Know your risk before it knows you.',
     description = 'Connect your repositories and let DevGuard continuously match your dependencies against this database — with EPSS-weighted prioritization and reachability analysis.',
     primaryLabel = 'Get started for free',
     primaryHref = 'https://app.devguard.org',
     secondaryLabel = 'Read the docs',
     secondaryHref = '/docs',
-}: VulnDBCTAProps) {
+}: CTAProps) {
     return (
         <div className="relative isolate overflow-hidden py-24 sm:py-42">
             <svg

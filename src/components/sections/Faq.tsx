@@ -6,39 +6,15 @@ export interface FAQ {
     answer: string
 }
 
-const defaultFaqs: FAQ[] = [
-    {
-        question: 'What is a CVE?',
-        answer: 'A Common Vulnerability and Exposure (CVE) is a standardized identifier for a publicly known security vulnerability. Each CVE entry includes a description, affected software, and references. CVEs are assigned by CVE Numbering Authorities (CNAs).',
-    },
-    {
-        question: 'What is EPSS, and how does it differ from CVSS?',
-        answer: 'CVSS (Common Vulnerability Scoring System) measures the inherent severity of a vulnerability — how bad it could be if exploited. EPSS (Exploit Prediction Scoring System) measures the probability that a vulnerability will actually be exploited in the wild within the next 30 days. CVSS tells you impact; EPSS tells you likelihood. Using both together gives a far more actionable risk picture.',
-    },
-    {
-        question: 'What are GHSAs?',
-        answer: 'GitHub Security Advisories (GHSAs) are vulnerability reports published directly by maintainers or the GitHub Security Lab for packages hosted on GitHub. They are often more granular than CVEs — especially for the npm, PyPI, Go, and Maven ecosystems.',
-    },
-    {
-        question: 'Which ecosystems does this database cover?',
-        answer: 'The database aggregates advisories across major package ecosystems including npm, PyPI, Maven, Go, RubyGems, NuGet, and more. Coverage comes especially from OSV.',
-    },
-    {
-        question: 'How does DevGuard use this vulnerability database?',
-        answer: "DevGuard continuously matches your project's software bill of materials (SBOM) against this database. When a new advisory is published that affects a dependency you use, DevGuard surfaces it in your project's risk view — enriched with CVSS, EPSS, and exploit context so you can prioritize what actually matters.",
-    },
-    {
-        question: 'How current is the data?',
-        answer: 'The vulnerability database is updated every six hours to ensure you have access to the latest security information. When a new CVE or GHSA is published, it typically appears in the database within a few hours.',
-    },
-]
-
-interface VulnDBFAQProps {
-    faqs?: FAQ[]
+interface FAQProps {
+    faqs: FAQ[]
     title?: string
 }
 
-export default function VulnDBFAQ({ faqs = defaultFaqs, title = 'Frequently asked questions' }: VulnDBFAQProps) {
+export default function FAQSection({
+    faqs,
+    title = 'Frequently asked questions',
+}: FAQProps) {
     const [open, setOpen] = useState<number | null>(null)
 
     return (

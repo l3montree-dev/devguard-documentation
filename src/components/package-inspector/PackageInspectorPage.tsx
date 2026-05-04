@@ -3,8 +3,8 @@ import { useRouter } from 'next/router'
 import { PackageInspectorHero } from './Hero'
 import { Container } from '../ui/container'
 import Particles from './particels'
-import VulnDBFAQ, { type FAQ } from '@/components/vulnerability-database/faq'
-import VulnDBCTA from '@/components/vulnerability-database/cta'
+import FAQSection, { type FAQ } from '@/components/sections/Faq'
+import CTASection from '@/components/sections/Cta'
 
 const packageInspectorFaqs: FAQ[] = [
     {
@@ -90,13 +90,10 @@ export function PackageInspectorPage() {
                 </div>
             </Container>
             <Container showTopGrid={true} showBottomGrid={true}>
-                <VulnDBFAQ
-                    faqs={packageInspectorFaqs}
-                    title="Frequently asked questions"
-                />
+                <FAQSection faqs={packageInspectorFaqs} />
             </Container>
             <Container showBottomGrid={true}>
-                <VulnDBCTA
+                <CTASection
                     heading="Understand your supply chain risk — automatically."
                     description="Connect your repositories and let DevGuard continuously scan your dependencies for known vulnerabilities, malicious packages, and weak scorecard signals — so you can fix what matters."
                     primaryLabel="Get started for free"
