@@ -5,26 +5,32 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 
 const buttonVariants = cva(
-    'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+    'cursor-pointer inline-flex items-center hover:no-underline justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:grayscale-[50%]',
     {
         variants: {
             variant: {
                 default:
-                    'bg-primary text-primary-foreground hover:bg-primary/80',
+                    'bg-primary text-primary-foreground hover:bg-primary/90',
                 destructive:
-                    'bg-destructive text-destructive-foreground hover:bg-destructive/90',
+                    'bg-secondary text-destructive dark:border-destructive/50 border hover:bg-destructive/90 hover:text-destructive-foreground',
+                destructiveOutline:
+                    'border-destructive border text-destructive hover:bg-destructive/10',
                 outline:
-                    'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
+                    'border dark:border-foreground/20 !text-foreground hover:no-underline bg-transparent hover:bg-accent hover:text-accent-foreground',
                 secondary:
-                    'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+                    'bg-secondary !text-secondary-foreground hover:bg-secondary/80 border',
                 ghost: 'hover:bg-accent hover:text-accent-foreground',
                 link: 'text-primary underline-offset-4 hover:underline',
+                green: 'bg-green-500 text-white hover:bg-green-600',
+                devguard: 'bg-[#f9bd25] text-black hover:bg-[#f9bd25]/90',
             },
             size: {
                 default: 'h-10 px-4 py-2',
                 sm: 'h-9 rounded-md px-3',
+                xs: 'h-7 rounded-md px-2 text-xs',
                 lg: 'h-11 rounded-md px-8',
                 icon: 'h-10 w-10',
+                xsicon: 'h-8 w-8',
             },
         },
         defaultVariants: {

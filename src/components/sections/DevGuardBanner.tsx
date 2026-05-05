@@ -11,17 +11,17 @@ interface VulnDbBannerProps {
     secondaryHref?: string
 }
 
-export default function VulnDbBanner({
-    heading = 'Know every vulnerability',
-    subheading = 'before it knows you.',
-    description = 'DevGuard continuously monitors your dependencies and alerts you when CVEs like this one affect your stack — with real-time threat intelligence built for developers.',
-    primaryLabel = 'Checkout DevGuard',
-    primaryHref = 'https://devguard.org/',
-    secondaryLabel = 'View on GitHub',
-    secondaryHref = 'https://github.com/l3montree-dev/devguard',
+export default function DevGuardBanner({
+    heading,
+    subheading,
+    description,
+    primaryLabel,
+    primaryHref,
+    secondaryLabel,
+    secondaryHref,
 }: VulnDbBannerProps) {
     return (
-        <div className="border-border/50 from-background via-muted/20 to-background overflow-hidden px-4 py-6 sm:px-6 sm:py-8 md:px-10 md:py-10">
+        <div className="border-border/50 from-background via-muted/20 to-background overflow-hidden px-10 py-10 sm:px-10 sm:py-10 md:px-20 md:py-12">
             <div className="flex flex-col gap-6 sm:gap-8 md:flex-row md:items-center md:justify-between">
                 <div className="min-w-0 flex-1">
                     <div className="mb-3 flex items-center gap-2">
@@ -45,6 +45,7 @@ export default function VulnDbBanner({
                 <div className="flex flex-col gap-2 sm:w-full sm:flex-row sm:gap-3 md:w-auto md:shrink-0 md:flex-col md:items-end">
                     <Button
                         asChild
+                        variant="devguard"
                         size="default"
                         className="w-full gap-2 sm:flex-1 md:w-auto"
                     >
@@ -53,7 +54,6 @@ export default function VulnDbBanner({
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            <SquareArrowOutUpRight className="h-3.5 w-3.5 flex-shrink-0" />
                             <span className="truncate">{primaryLabel}</span>
                         </a>
                     </Button>
