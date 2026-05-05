@@ -45,3 +45,7 @@ search-data-en.json
 search-data-de.json
 pageMap.ts
 sitemap-0.xml
+
+# Claude Code
+.claude/
+CLAUDE.md
