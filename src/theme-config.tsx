@@ -73,12 +73,6 @@ const config: Partial<KernuxThemeConfig> = {
         labels: [],
         requiredText: "Fields marked with * are required",
         fields: {
-            // TODO: remove email field after DWT update, as email is currently required in DWT, but not used by Github provider on backend
-            email: {
-                label: "Your Email",
-                placeholder: "Enter your email",
-                required: false
-            },
             message: {
                 label: "Your Feedback",
                 placeholder: "Enter your feedback",
