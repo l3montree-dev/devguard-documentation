@@ -53,14 +53,14 @@
 
 [data-kern-theme="dark"] {
   /* ── Colors ─────────────────────────────────── */
-  --primary:            #d8ba1a;
+  --primary:            #f9bd25;
   --primary-foreground: #171717;
   --background: hsl(213 27% 6%);
   --foreground:         #fafafa;
   --muted: hsl(213 15% 15%);
   --muted-foreground: hsl(212 9% 59%);
   --border:             #262626;  
-  --link-color:         #d8ba1a;
+  --link-color:         #f9bd25;
   --accent-foreground:  #040202;
   --sidebar-accent-foreground: #a3a3a3;
   --sidebar-accent:     #ffffff0d;

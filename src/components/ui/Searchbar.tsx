@@ -23,21 +23,21 @@ export function Searchbar({
     }
 
     return (
-        <div className="relative left-1/2 right-1/2 -mx-[50vw] w-screen px-4">
+        <div className="relative right-1/2 left-1/2 -mx-[50vw] w-screen px-4">
             <div className="mx-auto max-w-2xl">
                 <form onSubmit={handleSubmit}>
                     <div className="relative">
-                        <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+                        <Search className="absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-gray-400" />
                         <input
                             type="text"
                             value={value}
                             onChange={(e) => onChange(e.target.value)}
-                            className="w-full rounded-xl border border-gray-300 bg-white py-4 pl-12 pr-32 text-gray-900 placeholder-gray-500 focus:border-primary focus:outline-none focus:ring-primary dark:border-gray-800 dark:bg-gray-950 dark:text-white dark:focus:border-primary"
+                            className="focus:border-primary focus:ring-primary dark:focus:border-primary w-full rounded-xl border border-gray-300 bg-white py-4 pr-32 pl-12 text-gray-900 placeholder-gray-500 focus:outline-none dark:border-gray-800 dark:bg-gray-950 dark:text-white"
                             placeholder={placeholder}
                         />
                         <Button
                             type="submit"
-                            className="absolute right-2 top-1/2 -translate-y-1/2"
+                            className="absolute top-1/2 right-2 -translate-y-1/2"
                             disabled={isLoading}
                         >
                             {isLoading ? 'Searching...' : 'Inspect'}

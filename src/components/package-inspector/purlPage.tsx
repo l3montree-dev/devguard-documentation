@@ -6,8 +6,12 @@ import {
     ExternalLink,
     ShieldOff,
     ChevronLeft,
-    ChevronRight,
-    SquareArrowOutUpRight,
+    Star,
+    GitFork,
+    Scale,
+    Package,
+    Calendar,
+    Hash,
 } from 'lucide-react'
 import { fetcher } from '@/lib/fetcher'
 import { extractPackageName } from '@/lib/utils'
@@ -63,20 +67,29 @@ function Shell({
     mobileTopContent?: React.ReactNode
 }) {
     return (
-        <div className="mx-4">
+        <div>
             <HatchBar />
-            <DevGuardBanner
-                heading="Know every package"
-                subheading="before it ships."
-                description="DevGuard continuously monitors your dependencies for vulnerabilities, malicious packages, and scorecard regressions — with real-time threat intelligence built for developers."
-                primaryLabel="Checkout DevGuard"
-                primaryHref="https://devguard.org/"
-                secondaryLabel="View on GitHub"
-                secondaryHref="https://github.com/l3montree-dev/devguard"
-            />
-            {mobileTopContent}
-            <HatchBar />
-            {children}
+            <div className="relative mx-auto w-full max-w-[1390px]">
+                {/* Left vertical stripe */}
+                <div className="pointer-events-none absolute inset-y-0 left-0 w-8 border-r border-l border-r-(--grid-line-color) border-l-(--grid-line-color) bg-[repeating-linear-gradient(315deg,var(--grid-line-color)_0,var(--grid-line-color)_1px,transparent_0,transparent_50%)] bg-size-[10px_10px] bg-fixed opacity-80" />
+
+                {/* Right vertical stripe */}
+                <div className="pointer-events-none absolute inset-y-0 right-0 w-8 border-r border-l border-r-(--grid-line-color) border-l-(--grid-line-color) bg-[repeating-linear-gradient(315deg,var(--grid-line-color)_0,var(--grid-line-color)_1px,transparent_0,transparent_50%)] bg-size-[10px_10px] bg-fixed opacity-80" />
+
+                <DevGuardBanner
+                    heading="Know every package"
+                    subheading="before it ships."
+                    description="DevGuard continuously monitors your dependencies for vulnerabilities, malicious packages, and scorecard regressions — with real-time threat intelligence built for developers."
+                    primaryLabel="Checkout DevGuard"
+                    primaryHref="https://devguard.org/"
+                    secondaryLabel="View on GitHub"
+                    secondaryHref="https://github.com/l3montree-dev/devguard"
+                />
+                {mobileTopContent}
+
+                <HatchBar />
+                {children}
+            </div>
             <HatchBar />
         </div>
     )
@@ -90,10 +103,15 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
 
     const [searchError, setSearchError] = useState<string | null>(null)
     const [isSearching, setIsSearching] = useState(false)
+    const [vulnFilter, setVulnFilter] = useState('')
 
     useEffect(() => {
-        setSearchError(null)
-        setIsSearching(false)
+        const t = setTimeout(() => {
+            setSearchError(null)
+            setIsSearching(false)
+            setVulnFilter('')
+        }, 0)
+        return () => clearTimeout(t)
     }, [purl])
 
     const navigateToPurl = async (newPurl: string) => {
@@ -132,67 +150,99 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
 
     const resolvedError = error || (result && !result.component.published)
 
+    // ─── Loading state ────────────────────────────────────────────────────────
     if (isLoading) {
         return (
-            <Container
-                showTopGrid={false}
-                showBottomGrid={false}
-                className="card-blue py-5"
-            >
-                <div className="mb-6">
-                    <Skeleton className="mb-1 h-4 w-32" />
-                </div>
-
-                {/* Hero card skeleton */}
-                <Card className="mb-4">
-                    <CardContent className="p-6">
-                        <div className="flex items-center gap-4">
-                            <Skeleton className="h-12 w-12 rounded-full" />
-                            <div className="flex-1 space-y-2">
-                                <Skeleton className="h-6 w-3/4 max-w-48" />
-                                <Skeleton className="h-4 w-1/2 max-w-32" />
+            <Shell>
+                <div className="flex flex-col lg:flex-row">
+                    {/* Left skeleton (2/3) */}
+                    <div className="flex-1 pt-6 pr-12 pb-10 pl-12 sm:px-8 lg:w-2/3 lg:pr-12 lg:pl-20">
+                        {/* Hero skeleton */}
+                        <div className="mb-6">
+                            <div className="mb-2 flex flex-wrap items-center gap-3">
+                                <Skeleton className="h-9 w-48" />
+                                <Skeleton className="h-6 w-20 rounded-md" />
+                                <Skeleton className="h-6 w-16 rounded-md" />
                             </div>
+                            <Skeleton className="h-4 w-28" />
                         </div>
-                        <div className="mt-4 space-y-2">
-                            <Skeleton className="h-4 w-full" />
-                            <Skeleton className="h-4 w-3/4" />
-                        </div>
-                    </CardContent>
-                </Card>
 
-                {/* Two-column skeleton */}
-                <div className="grid items-stretch gap-4 lg:grid-cols-2">
-                    <Card>
-                        <CardContent className="p-6">
-                            <Skeleton className="mb-4 h-5 w-24" />
-                            <Skeleton className="h-48 w-full rounded-lg" />
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardContent className="p-6">
-                            <Skeleton className="mb-4 h-5 w-3/4 max-w-40" />
-                            <div className="space-y-3">
-                                <Skeleton className="h-10 w-full" />
-                                <Skeleton className="h-10 w-full" />
-                                <Skeleton className="h-10 w-full" />
-                            </div>
-                        </CardContent>
-                    </Card>
-                </div>
+                        {/* Scorecard skeleton */}
+                        <Card className="mb-4 bg-transparent">
+                            <CardHeader>
+                                <Skeleton className="h-3 w-32" />
+                            </CardHeader>
+                            <CardContent>
+                                <Skeleton className="h-48 w-full rounded-lg" />
+                            </CardContent>
+                        </Card>
 
-                {/* Bottom buttons skeleton */}
-                <div className="mt-6 flex justify-end gap-3">
-                    <Skeleton className="h-10 w-24 rounded-md" />
-                    <Skeleton className="hidden h-10 w-32 rounded-md sm:block" />
+                        {/* Vulnerability list skeleton */}
+                        <Card className="mb-4 bg-transparent">
+                            <CardHeader>
+                                <Skeleton className="h-3 w-52" />
+                            </CardHeader>
+                            <CardContent className="space-y-2">
+                                <Skeleton className="h-10 w-full rounded-lg" />
+                                <Skeleton className="h-10 w-full rounded-lg" />
+                                <Skeleton className="h-10 w-full rounded-lg" />
+                            </CardContent>
+                        </Card>
+                    </div>
+
+                    {/* Divider skeleton */}
+                    <div className="hidden lg:block">
+                        <div className="pointer-events-none h-full w-8 border-r border-l border-r-(--grid-line-color) border-l-(--grid-line-color) bg-[repeating-linear-gradient(315deg,var(--grid-line-color)_0,var(--grid-line-color)_1px,transparent_0,transparent_50%)] bg-size-[10px_10px] bg-fixed opacity-80" />
+                    </div>
+
+                    {/* Right skeleton (1/3) */}
+                    <div className="flex flex-col gap-4 pt-6 pr-12 pb-10 pl-12 sm:px-8 lg:w-1/3 lg:pr-20 lg:pl-12">
+                        <Card className="bg-transparent">
+                            <CardHeader className="pb-3">
+                                <Skeleton className="h-3 w-16" />
+                            </CardHeader>
+                            <CardContent className="space-y-2">
+                                <Skeleton className="h-10 w-full rounded-md" />
+                                <Skeleton className="h-10 w-full rounded-md" />
+                                <Skeleton className="h-9 w-full rounded-md" />
+                            </CardContent>
+                        </Card>
+                        <Card className="bg-transparent">
+                            <CardHeader className="pb-3">
+                                <Skeleton className="h-3 w-20" />
+                            </CardHeader>
+                            <CardContent className="space-y-4">
+                                {[1, 2, 3, 4, 5].map((i) => (
+                                    <div
+                                        key={i}
+                                        className="flex items-center justify-between"
+                                    >
+                                        <Skeleton className="h-3 w-20" />
+                                        <Skeleton className="h-3 w-24" />
+                                    </div>
+                                ))}
+                            </CardContent>
+                        </Card>
+                        <Card className="bg-transparent">
+                            <CardHeader className="pb-3">
+                                <Skeleton className="h-4 w-40" />
+                            </CardHeader>
+                            <CardContent className="space-y-4">
+                                <Skeleton className="h-4 w-full" />
+                                <Skeleton className="h-4 w-5/6" />
+                                <Skeleton className="h-9 w-full rounded-md" />
+                            </CardContent>
+                        </Card>
+                    </div>
                 </div>
-            </Container>
+            </Shell>
         )
     }
 
     // ─── Error ────────────────────────────────────────────────────────────────
     if (resolvedError) {
         return (
-            <div className="mx-4">
+            <div>
                 <HatchBar />
                 <div className="flex min-h-[30vh] flex-col items-center justify-center py-24 text-center">
                     <p className="text-muted-foreground/20 font-mono text-8xl font-bold select-none">
@@ -233,153 +283,313 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
         )
     }
 
+    // ─── No data ──────────────────────────────────────────────────────────────
     if (!result) {
         return (
-            <Container
-                showTopGrid={false}
-                showBottomGrid={false}
-                className="card-blue py-5"
-            >
-                <div className="mb-6">
-                    <Skeleton className="mb-1 h-4 w-32" />
+            <Shell>
+                <div className="flex flex-col items-center justify-center px-4 py-24 text-center sm:px-8">
+                    <p className="text-muted-foreground mt-3 max-w-sm text-sm leading-relaxed">
+                        Enter a valid package URL to inspect security details.
+                    </p>
                 </div>
-
-                {/* Hero card skeleton */}
-                <Card className="mb-4">
-                    <CardContent className="p-6">
-                        <div className="flex items-center gap-4">
-                            <Skeleton className="h-12 w-12 rounded-full" />
-                            <div className="flex-1 space-y-2">
-                                <Skeleton className="h-6 w-3/4 max-w-48" />
-                                <Skeleton className="h-4 w-1/2 max-w-32" />
-                            </div>
-                        </div>
-                        <div className="mt-4 space-y-2">
-                            <Skeleton className="h-4 w-full" />
-                            <Skeleton className="h-4 w-3/4" />
-                        </div>
-                    </CardContent>
-                </Card>
-
-                {/* Two-column skeleton */}
-                <div className="grid items-stretch gap-4 lg:grid-cols-2">
-                    <Card>
-                        <CardContent className="p-6">
-                            <Skeleton className="mb-4 h-5 w-24" />
-                            <Skeleton className="h-48 w-full rounded-lg" />
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardContent className="p-6">
-                            <Skeleton className="mb-4 h-5 w-3/4 max-w-40" />
-                            <div className="space-y-3">
-                                <Skeleton className="h-10 w-full" />
-                                <Skeleton className="h-10 w-full" />
-                                <Skeleton className="h-10 w-full" />
-                            </div>
-                        </CardContent>
-                    </Card>
-                </div>
-
-                {/* Bottom buttons skeleton */}
-                <div className="mt-6 flex justify-end gap-3">
-                    <Skeleton className="h-10 w-24 rounded-md" />
-                    <Skeleton className="hidden h-10 w-32 rounded-md sm:block" />
-                </div>
-            </Container>
+            </Shell>
         )
     }
 
+    // ─── Computed values ──────────────────────────────────────────────────────
     const { component, affectedComponents, vulns } = result
     const { project } = component
     const packageManager = result.purl.replace(/^pkg:/, '').split('/')[0]
     const isMalicious = result.maliciousPackage != null
 
+    // Vuln counts for header (mirrors deduplication in VulnerabilityList)
+    const uniqueVulns = Array.from(
+        new Map(vulns.map((v) => [v.cveId, v])).values(),
+    )
+    const totalVulnCount = uniqueVulns.length
+    const showVulnFilter = totalVulnCount > 3
+    const filteredVulnCount =
+        showVulnFilter && vulnFilter.trim()
+            ? uniqueVulns.filter(
+                  (v) =>
+                      v.cveId
+                          .toLowerCase()
+                          .includes(vulnFilter.toLowerCase()) ||
+                      (v.fixedVersion ?? '')
+                          .toLowerCase()
+                          .includes(vulnFilter.toLowerCase()),
+              ).length
+            : totalVulnCount
+
+    const seoTitle = `${packageName} | Package Inspector – DevGuard`
+    const seoDescription = `Inspect ${packageName} — view OpenSSF scorecard, known vulnerabilities, and security insights for this open-source package.`
+
+    const facts = [
+        {
+            label: 'Ecosystem',
+            value: packageManager,
+            icon: Package,
+        },
+        project?.license
+            ? { label: 'License', value: project.license, icon: Scale }
+            : null,
+        project?.starsCount != null
+            ? {
+                  label: 'Stars',
+                  value: project.starsCount.toLocaleString(),
+                  icon: Star,
+              }
+            : null,
+        project?.forksCount != null
+            ? {
+                  label: 'Forks',
+                  value: project.forksCount.toLocaleString(),
+                  icon: GitFork,
+              }
+            : null,
+        component.version
+            ? { label: 'Version', value: `v${component.version}`, icon: Hash }
+            : null,
+        component.published
+            ? {
+                  label: 'Published',
+                  value: new Date(component.published).toLocaleDateString(
+                      'en-US',
+                      { year: 'numeric', month: 'short', day: 'numeric' },
+                  ),
+                  icon: Calendar,
+              }
+            : null,
+    ].filter(Boolean) as {
+        label: string
+        value: string
+        icon: React.ComponentType<{ className?: string }>
+    }[]
+
+    // ─── Main render ──────────────────────────────────────────────────────────
     return (
-        <div>
+        <Shell
+            mobileTopContent={
+                <div className="pt-4 sm:px-8 lg:hidden">
+                    <Card className="bg-transparent">
+                        <CardHeader className="pb-3">
+                            <CardTitle className="text-muted-foreground font-mono text-[10px] tracking-wider uppercase">
+                                Search Package
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <PackageSearch
+                                onSubmit={navigateToPurl}
+                                error={searchError}
+                                isSearching={isSearching}
+                            />
+                        </CardContent>
+                    </Card>
+                </div>
+            }
+        >
             <Head>
-                <title>{packageName} | Package Inspector</title>
+                <title key="title">{seoTitle}</title>
                 <meta
                     name="description"
-                    content={`Inspect ${packageName} — view OpenSSF scorecard, known vulnerabilities, and security insights for this open-source package.`}
+                    key="description"
+                    content={seoDescription}
                 />
+                <meta property="og:title" key="og:title" content={seoTitle} />
+                <meta
+                    property="og:description"
+                    key="og:description"
+                    content={seoDescription}
+                />
+                <meta property="og:type" key="og:type" content="article" />
             </Head>
 
-            {/* Header */}
-            <p className="text-muted-foreground mb-2 text-base font-medium tracking-wider uppercase">
-                Package Inspector
-            </p>
+            {/* Main layout: left 2/3 | divider | right 1/3 */}
+            <div className="flex flex-col lg:flex-row">
+                {/* ── Left column (2/3) ── */}
+                <div className="flex-1 pt-10 pr-12 pb-10 pl-12 sm:px-8 lg:w-2/3 lg:pr-12 lg:pl-20">
+                    {/* Hero */}
+                    <PackageHeroCard
+                        packageName={packageName}
+                        packageManager={packageManager}
+                        component={component}
+                        project={project}
+                        isMalicious={isMalicious}
+                    />
 
-            {/* Search — matches Hero styling */}
-            <PackageSearch
-                onSubmit={navigateToPurl}
-                error={searchError}
-                isSearching={isSearching}
-                className="mb-6"
-            />
+                    {/* OpenSSF Scorecard */}
+                    <Card className="mb-4 bg-transparent">
+                        <CardContent className="flex h-full flex-col p-6">
+                            {project?.scoreCard ? (
+                                <ScoreCardChart
+                                    checks={project.scoreCard.checks}
+                                    score={project.scoreCardScore}
+                                    updatedAt={project.updatedAt}
+                                />
+                            ) : (
+                                <div className="flex flex-1 flex-col items-center justify-center py-12 text-center">
+                                    <ShieldOff className="text-muted-foreground/30 mb-3 h-10 w-10" />
+                                    <h3 className="text-foreground text-base font-semibold">
+                                        OpenSSF Scorecard
+                                    </h3>
+                                    <p className="text-muted-foreground mt-1 max-w-[220px] text-sm">
+                                        No scorecard data available for this
+                                        package.
+                                    </p>
+                                </div>
+                            )}
+                        </CardContent>
+                    </Card>
 
-            <PackageHeroCard
-                packageName={packageName}
-                packageManager={packageManager}
-                component={component}
-                project={project}
-                isMalicious={isMalicious}
-            />
-
-            {/* Two-column: Scorecard + Vulnerabilities */}
-            <div className="grid items-stretch gap-4 lg:grid-cols-2">
-                <Card>
-                    <CardContent className="flex h-full flex-col p-6">
-                        {project?.scoreCard ? (
-                            <ScoreCardChart
-                                checks={project.scoreCard.checks}
-                                score={project.scoreCardScore}
-                                updatedAt={project.updatedAt}
-                            />
-                        ) : (
-                            <div className="flex flex-1 flex-col items-center justify-center py-12 text-center">
-                                <ShieldOff className="text-muted-foreground/30 mb-3 h-10 w-10" />
-                                <h3 className="text-foreground text-base font-semibold">
-                                    OpenSSF Scorecard
-                                </h3>
-                                <p className="text-muted-foreground mt-1 max-w-[220px] text-sm">
-                                    No scorecard data available for this
-                                    package.
-                                </p>
+                    {/* Vulnerabilities in later releases */}
+                    <Card className="mb-4 flex flex-col bg-transparent">
+                        <CardHeader>
+                            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                                <CardTitle className="text-muted-foreground font-mono text-[10px] tracking-wider uppercase">
+                                    Vulnerabilities fixed in later releases
+                                    <span className="ml-2 font-normal">
+                                        (
+                                        {showVulnFilter && vulnFilter.trim()
+                                            ? `${filteredVulnCount} out `
+                                            : ''}
+                                        {totalVulnCount})
+                                    </span>
+                                </CardTitle>
+                                {showVulnFilter && (
+                                    <input
+                                        value={vulnFilter}
+                                        onChange={(e) =>
+                                            setVulnFilter(e.target.value)
+                                        }
+                                        placeholder="CVE…"
+                                        className="border-border text-foreground placeholder:text-muted-foreground focus:ring-ring h-10 w-32 rounded border bg-transparent px-2 text-[11px] outline-none focus:ring-1"
+                                    />
+                                )}
                             </div>
-                        )}
-                    </CardContent>
-                </Card>
+                        </CardHeader>
+                        <CardContent>
+                            <VulnerabilityList
+                                vulns={vulns}
+                                affectedComponents={affectedComponents}
+                                filter={vulnFilter}
+                                setFilter={setVulnFilter}
+                            />
+                        </CardContent>
+                    </Card>
+                </div>
 
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="text-base">
-                            Vulnerabilities fixed in later releases
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <VulnerabilityList
-                            vulns={vulns}
-                            affectedComponents={affectedComponents}
-                        />
-                    </CardContent>
-                </Card>
-            </div>
+                {/* ── Divider ── */}
+                <div className="hidden lg:block">
+                    <div className="pointer-events-none h-full w-8 border-r border-l border-r-(--grid-line-color) border-l-(--grid-line-color) bg-[repeating-linear-gradient(315deg,var(--grid-line-color)_0,var(--grid-line-color)_1px,transparent_0,transparent_50%)] bg-size-[10px_10px] bg-fixed opacity-80" />
+                </div>
 
-            {/* Bottom buttons */}
-            <div className="mt-6 flex flex-col justify-end gap-3 sm:flex-row">
-                <Button asChild className="hidden sm:inline-flex">
-                    <a
-                        target="_blank"
-                        href="https://app.devguard.org/"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2"
-                    >
-                        Try DevGuard
-                        <ExternalLink size={16} />
-                    </a>
-                </Button>
+                {/* ── Right column (1/3) ── */}
+                <div className="flex flex-col gap-4 pt-10 pr-12 pb-10 pl-12 sm:px-8 lg:w-1/3 lg:pr-20 lg:pl-12">
+                    {/* Search */}
+                    <Card className="hidden bg-transparent lg:block">
+                        <CardHeader className="pb-3">
+                            <CardTitle className="text-muted-foreground font-mono text-[10px] tracking-wider uppercase">
+                                Search Package
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <PackageSearch
+                                onSubmit={navigateToPurl}
+                                error={searchError}
+                                isSearching={isSearching}
+                            />
+                        </CardContent>
+                    </Card>
+
+                    {/* Package Facts */}
+                    <Card className="bg-transparent">
+                        <CardHeader className="pb-3">
+                            <CardTitle className="text-muted-foreground font-mono text-[10px] tracking-wider uppercase">
+                                Package Facts
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="flex flex-col gap-3">
+                                {facts.map((fact) => {
+                                    const Icon = fact.icon
+                                    return (
+                                        <div
+                                            key={fact.label}
+                                            className="flex items-center justify-between"
+                                        >
+                                            <div className="text-muted-foreground flex items-center gap-1.5 text-xs">
+                                                <Icon className="h-3.5 w-3.5 opacity-60" />
+                                                {fact.label}
+                                            </div>
+                                            <span className="text-foreground/80 font-mono text-xs font-medium">
+                                                {fact.value}
+                                            </span>
+                                        </div>
+                                    )
+                                })}
+                                {project && (
+                                    <div className="mt-1 flex flex-col gap-1.5">
+                                        <a
+                                            href={
+                                                'https://' + project.projectKey
+                                            }
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-muted-foreground hover:text-foreground flex items-center gap-1.5 font-mono text-xs transition-colors"
+                                        >
+                                            <ExternalLink className="h-3 w-3" />
+                                            GitHub Repository
+                                        </a>
+                                        {project.homepage && (
+                                            <a
+                                                href={project.homepage}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-muted-foreground hover:text-foreground flex items-center gap-1.5 font-mono text-xs transition-colors"
+                                            >
+                                                <ExternalLink className="h-3 w-3" />
+                                                Homepage
+                                            </a>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                    {/* Scan your project */}
+                    <Card className="bg-transparent">
+                        <CardHeader className="pb-3">
+                            <CardTitle className="text-sm font-semibold">
+                                Scan your project for vulnerabilities
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <p className="text-muted-foreground mb-4 text-xs leading-relaxed">
+                                Continuously monitor your dependencies and get
+                                alerted when packages like this one introduce
+                                security risks into your stack.
+                            </p>
+                            <Button
+                                asChild
+                                variant="default"
+                                size="default"
+                                className="w-full gap-2 sm:flex-1 md:w-full"
+                            >
+                                <a
+                                    href="https://devguard.org/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <span className="truncate">
+                                        Checkout DevGuard
+                                    </span>
+                                </a>
+                            </Button>
+                        </CardContent>
+                    </Card>
+                </div>
             </div>
-        </div>
+        </Shell>
     )
 }

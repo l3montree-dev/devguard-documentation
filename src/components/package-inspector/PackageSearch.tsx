@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ChevronDown, Loader2, Search } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const ECOSYSTEMS = [
@@ -77,6 +77,7 @@ export default function PackageSearch({
             }}
             className={className}
         >
+            <button type="submit" className="hidden" aria-hidden="true" />
             {mode === 'structured' && (
                 <>
                     <div
@@ -125,18 +126,6 @@ export default function PackageSearch({
                             className="placeholder:text-muted-foreground h-12 w-20 bg-transparent px-3 text-base outline-none sm:w-28 md:text-lg"
                             disabled={isSearching}
                         />
-                        <button
-                            type="submit"
-                            disabled={isSearching}
-                            className="hero-button"
-                        >
-                            {isSearching ? (
-                                <Loader2 className="h-4 w-4 animate-spin" />
-                            ) : (
-                                <Search className="h-4 w-4" />
-                            )}
-                            <span className="hidden sm:inline">Inspect</span>
-                        </button>
                     </div>
                     <button
                         type="button"
@@ -144,7 +133,7 @@ export default function PackageSearch({
                             setMode('direct')
                             setLocalError(null)
                         }}
-                        className="text-muted-foreground hover:text-foreground mt-2 pl-1 text-sm transition-colors"
+                        className="text-muted-foreground hover:text-foreground mt-2 cursor-pointer pl-1 text-sm transition-colors"
                     >
                         Search via full purl
                     </button>
@@ -173,18 +162,6 @@ export default function PackageSearch({
                             disabled={isSearching}
                             autoFocus={autoFocus}
                         />
-                        <button
-                            type="submit"
-                            disabled={isSearching}
-                            className="hero-button"
-                        >
-                            {isSearching ? (
-                                <Loader2 className="h-4 w-4 animate-spin" />
-                            ) : (
-                                <Search className="h-4 w-4" />
-                            )}
-                            <span className="hidden sm:inline">Inspect</span>
-                        </button>
                     </div>
                     <button
                         type="button"
@@ -192,7 +169,7 @@ export default function PackageSearch({
                             setMode('structured')
                             setLocalError(null)
                         }}
-                        className="text-muted-foreground hover:text-foreground mt-2 pl-1 text-sm transition-colors"
+                        className="text-muted-foreground hover:text-foreground mt-2 cursor-pointer pl-1 text-sm transition-colors"
                     >
                         Guided Search
                     </button>

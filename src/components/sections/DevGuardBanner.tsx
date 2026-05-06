@@ -45,7 +45,7 @@ export default function DevGuardBanner({
                 <div className="flex flex-col gap-2 sm:w-full sm:flex-row sm:gap-3 md:w-auto md:shrink-0 md:flex-col md:items-end">
                     <Button
                         asChild
-                        variant="devguard"
+                        variant="default"
                         size="default"
                         className="w-full gap-2 sm:flex-1 md:w-auto"
                     >
