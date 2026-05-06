@@ -47,7 +47,7 @@ export default function DevGuardBanner({
                         asChild
                         variant="default"
                         size="default"
-                        className="w-full gap-2 sm:flex-1 md:w-auto"
+                        className="w-full gap-2 sm:flex-1 md:w-auto md:flex-none"
                     >
                         <a
                             href={primaryHref}
