@@ -2,9 +2,6 @@ export default {
     index: {
         title: 'Introduction',
     },
-    'terms-of-use': {
-        display: 'hidden',
-    },
     'privacy-policy': {
         display: 'hidden',
     },
