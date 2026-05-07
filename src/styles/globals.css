@@ -206,7 +206,6 @@
   }
   div:has(> #feedback-section) {
     @apply pl-0;
-    @apply mt-12;
   }
   #feedback-section button[role="checkbox"] {
     @apply mt-1;
