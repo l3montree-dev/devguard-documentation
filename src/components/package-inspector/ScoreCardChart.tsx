@@ -52,18 +52,12 @@ const checkDescriptions: Record<string, string> = {
 }
 
 function getScoreBadgeClasses(score: number): string {
-    if (score < 0) return 'bg-muted text-muted-foreground'
-    if (score === 0) return 'bg-destructive/15 text-destructive'
-    if (score < 5) return 'bg-warning/15 text-warning'
-    if (score < 8) return 'bg-warning/15 text-warning'
-    return 'bg-success/15 text-success'
+    if (score < 0) return 'bg-muted text-muted-foreground border border-border'
+    if (score === 0) return 'bg-muted text-muted-foreground border border-destructive/60'
+    if (score < 8) return 'bg-muted text-muted-foreground border border-warning/60'
+    return 'bg-muted text-muted-foreground border border-success/60'
 }
 
-function getScoreBarColor(score: number): string {
-    if (score < 5) return 'bg-warning'
-    if (score < 8) return 'bg-warning'
-    return 'bg-success'
-}
 
 function getScoreLabel(score: number): string {
     if (score < 0) return 'N/A'
@@ -87,17 +81,14 @@ export default function ScoreCardChart({
     return (
         <TooltipProvider delayDuration={200}>
             <div>
-                <div className="mb-5 flex items-center justify-between">
+                <div className="mb-5 flex flex-wrap items-start justify-between gap-2">
                     <div>
-                        <h4 className="text-foreground text-base font-semibold">
-                            Open SSF Scorecard
-                        </h4>
-                        <p className="text-muted-foreground mt-0.5 text-sm">
+                        <p className="text-muted-foreground text-sm">
                             Supply chain security checks
                         </p>
                         {updatedAt && (
-                            <span className="text-muted-foreground mt-1 block font-mono text-sm">
-                                Scorecard:{' '}
+                            <span className="text-muted-foreground font-mono text-xs">
+                                Updated{' '}
                                 {new Date(updatedAt).toLocaleDateString(
                                     'en-US',
                                     {
@@ -153,7 +144,7 @@ export default function ScoreCardChart({
                                 {failing.map((check) => (
                                     <Tooltip key={check.name}>
                                         <TooltipTrigger asChild>
-                                            <div className="hover:bg-accent/50 flex cursor-default items-center justify-between rounded-lg px-3.5 py-2 transition-colors">
+                                            <div className="hover:bg-muted/60 flex cursor-default items-center justify-between rounded-lg px-3.5 py-2 transition-colors">
                                                 <span className="text-foreground/80 text-base">
                                                     {check.name}
                                                 </span>
@@ -223,37 +214,20 @@ export default function ScoreCardChart({
                             {[...passing, ...na].map((check) => (
                                 <Tooltip key={check.name}>
                                     <TooltipTrigger asChild>
-                                        <div className="hover:bg-accent/50 flex cursor-default items-center justify-between rounded-lg px-3.5 py-2 transition-colors">
+                                        <div className="hover:bg-muted/60 flex cursor-default items-center justify-between rounded-lg px-3.5 py-2 transition-colors">
                                             <span className="text-foreground/80 text-base">
                                                 {check.name}
                                             </span>
-                                            <div className="flex items-center gap-2.5">
-                                                {check.score > 0 && (
-                                                    <div className="bg-secondary h-1 w-20 overflow-hidden rounded-sm">
-                                                        <div
-                                                            className={cn(
-                                                                'h-full',
-                                                                getScoreBarColor(
-                                                                    check.score,
-                                                                ),
-                                                            )}
-                                                            style={{
-                                                                width: `${check.score * 10}%`,
-                                                            }}
-                                                        />
-                                                    </div>
+                                            <span
+                                                className={cn(
+                                                    'inline-flex items-center rounded-md px-2.5 py-1 font-mono text-sm font-medium',
+                                                    getScoreBadgeClasses(
+                                                        check.score,
+                                                    ),
                                                 )}
-                                                <span
-                                                    className={cn(
-                                                        'inline-flex items-center rounded-md px-2.5 py-1 font-mono text-sm font-medium',
-                                                        getScoreBadgeClasses(
-                                                            check.score,
-                                                        ),
-                                                    )}
-                                                >
-                                                    {getScoreLabel(check.score)}
-                                                </span>
-                                            </div>
+                                            >
+                                                {getScoreLabel(check.score)}
+                                            </span>
                                         </div>
                                     </TooltipTrigger>
                                     <TooltipContent

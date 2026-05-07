@@ -13,6 +13,7 @@ import {
     Calendar,
     Hash,
 } from 'lucide-react'
+import { Input } from '@/components/ui/input'
 import { fetcher } from '@/lib/fetcher'
 import { extractPackageName } from '@/lib/utils'
 import { PackageInspectResult } from '@/components/package-inspector/types'
@@ -54,6 +55,9 @@ const packageInspectorFAQ: FAQ[] = [
         answer: 'The vulnerability database is updated every six hours to ensure you have access to the latest security information. When a new CVE or GHSA is published, it typically appears in the database within a few hours.',
     },
 ]
+
+const LABEL_CLASS =
+    'text-muted-foreground font-mono text-xs tracking-wider uppercase'
 
 const HatchBar = () => (
     <div className="pointer-events-none inset-x-0 top-0 z-50 block h-8 border-t border-b border-t-(--grid-line-color) border-b-(--grid-line-color) bg-[repeating-linear-gradient(315deg,var(--grid-line-color)_0,var(--grid-line-color)_1px,transparent_0,transparent_50%)] bg-size-[10px_10px] bg-fixed opacity-80" />
@@ -156,33 +160,35 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
             <Shell>
                 <div className="flex flex-col lg:flex-row">
                     {/* Left skeleton (2/3) */}
-                    <div className="flex-1 pt-6 pr-12 pb-10 pl-12 sm:px-8 lg:w-2/3 lg:pr-12 lg:pl-20">
+                    <div className="flex-1 pt-10 pr-12 pb-10 pl-12 sm:px-8 lg:w-2/3 lg:pr-12 lg:pl-20">
                         {/* Hero skeleton */}
-                        <div className="mb-6">
-                            <div className="mb-2 flex flex-wrap items-center gap-3">
+                        <div className="mb-8">
+                            <div className="flex flex-wrap items-center gap-3">
                                 <Skeleton className="h-9 w-48" />
                                 <Skeleton className="h-6 w-20 rounded-md" />
                                 <Skeleton className="h-6 w-16 rounded-md" />
                             </div>
-                            <Skeleton className="h-4 w-28" />
+                            <div className="mt-3 flex gap-2">
+                                <Skeleton className="h-4 w-28" />
+                            </div>
                         </div>
 
                         {/* Scorecard skeleton */}
                         <Card className="mb-4 bg-transparent">
-                            <CardHeader>
+                            <CardHeader className="px-5 pt-5 pb-3">
                                 <Skeleton className="h-3 w-32" />
                             </CardHeader>
-                            <CardContent>
+                            <CardContent className="px-5 pb-5">
                                 <Skeleton className="h-48 w-full rounded-lg" />
                             </CardContent>
                         </Card>
 
                         {/* Vulnerability list skeleton */}
                         <Card className="mb-4 bg-transparent">
-                            <CardHeader>
+                            <CardHeader className="px-5 pt-5 pb-3">
                                 <Skeleton className="h-3 w-52" />
                             </CardHeader>
-                            <CardContent className="space-y-2">
+                            <CardContent className="space-y-2 px-5 pb-5">
                                 <Skeleton className="h-10 w-full rounded-lg" />
                                 <Skeleton className="h-10 w-full rounded-lg" />
                                 <Skeleton className="h-10 w-full rounded-lg" />
@@ -196,38 +202,40 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
                     </div>
 
                     {/* Right skeleton (1/3) */}
-                    <div className="flex flex-col gap-4 pt-6 pr-12 pb-10 pl-12 sm:px-8 lg:w-1/3 lg:pr-20 lg:pl-12">
-                        <Card className="bg-transparent">
-                            <CardHeader className="pb-3">
+                    <div className="flex flex-col gap-4 pt-10 pr-12 pb-10 pl-12 sm:px-8 lg:w-1/3 lg:pr-20 lg:pl-12">
+                        <Card className="hidden bg-transparent lg:block">
+                            <CardHeader className="px-5 pt-5 pb-3">
                                 <Skeleton className="h-3 w-16" />
                             </CardHeader>
-                            <CardContent className="space-y-2">
+                            <CardContent className="space-y-2 px-5 pb-5">
                                 <Skeleton className="h-10 w-full rounded-md" />
                                 <Skeleton className="h-10 w-full rounded-md" />
                                 <Skeleton className="h-9 w-full rounded-md" />
                             </CardContent>
                         </Card>
                         <Card className="bg-transparent">
-                            <CardHeader className="pb-3">
+                            <CardHeader className="px-5 pt-5 pb-3">
                                 <Skeleton className="h-3 w-20" />
                             </CardHeader>
-                            <CardContent className="space-y-4">
-                                {[1, 2, 3, 4, 5].map((i) => (
-                                    <div
-                                        key={i}
-                                        className="flex items-center justify-between"
-                                    >
-                                        <Skeleton className="h-3 w-20" />
-                                        <Skeleton className="h-3 w-24" />
-                                    </div>
-                                ))}
+                            <CardContent className="px-5 pb-5">
+                                <div className="flex flex-col gap-4">
+                                    {[1, 2, 3, 4, 5].map((i) => (
+                                        <div
+                                            key={i}
+                                            className="flex items-center justify-between"
+                                        >
+                                            <Skeleton className="h-3 w-20" />
+                                            <Skeleton className="h-3 w-24" />
+                                        </div>
+                                    ))}
+                                </div>
                             </CardContent>
                         </Card>
                         <Card className="bg-transparent">
-                            <CardHeader className="pb-3">
-                                <Skeleton className="h-4 w-40" />
+                            <CardHeader className="px-5 pt-5 pb-3">
+                                <Skeleton className="h-3 w-28" />
                             </CardHeader>
-                            <CardContent className="space-y-4">
+                            <CardContent className="space-y-4 px-5 pb-5">
                                 <Skeleton className="h-4 w-full" />
                                 <Skeleton className="h-4 w-5/6" />
                                 <Skeleton className="h-9 w-full rounded-md" />
@@ -370,14 +378,14 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
     return (
         <Shell
             mobileTopContent={
-                <div className="pt-4 sm:px-8 lg:hidden">
+                <div className="px-4 pt-4 sm:px-8 lg:hidden">
                     <Card className="bg-transparent">
-                        <CardHeader className="pb-3">
-                            <CardTitle className="text-muted-foreground font-mono text-[10px] tracking-wider uppercase">
+                        <CardHeader className="px-5 pt-5 pb-3">
+                            <CardTitle className={LABEL_CLASS}>
                                 Search Package
                             </CardTitle>
                         </CardHeader>
-                        <CardContent>
+                        <CardContent className="px-5 pb-5">
                             <PackageSearch
                                 onSubmit={navigateToPurl}
                                 error={searchError}
@@ -419,7 +427,12 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
 
                     {/* OpenSSF Scorecard */}
                     <Card className="mb-4 bg-transparent">
-                        <CardContent className="flex h-full flex-col p-6">
+                        <CardHeader className="px-5 pt-5 pb-3">
+                            <CardTitle className={LABEL_CLASS}>
+                                OpenSSF Scorecard
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="px-5 pb-5">
                             {project?.scoreCard ? (
                                 <ScoreCardChart
                                     checks={project.scoreCard.checks}
@@ -427,11 +440,8 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
                                     updatedAt={project.updatedAt}
                                 />
                             ) : (
-                                <div className="flex flex-1 flex-col items-center justify-center py-12 text-center">
+                                <div className="flex flex-col items-center justify-center py-12 text-center">
                                     <ShieldOff className="text-muted-foreground/30 mb-3 h-10 w-10" />
-                                    <h3 className="text-foreground text-base font-semibold">
-                                        OpenSSF Scorecard
-                                    </h3>
                                     <p className="text-muted-foreground mt-1 max-w-[220px] text-sm">
                                         No scorecard data available for this
                                         package.
@@ -443,31 +453,32 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
 
                     {/* Vulnerabilities in later releases */}
                     <Card className="mb-4 flex flex-col bg-transparent">
-                        <CardHeader>
-                            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                                <CardTitle className="text-muted-foreground font-mono text-[10px] tracking-wider uppercase">
+                        <CardHeader className="px-5 pt-5 pb-3">
+                            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                <CardTitle className={LABEL_CLASS}>
                                     Vulnerabilities fixed in later releases
                                     <span className="ml-2 font-normal">
                                         (
                                         {showVulnFilter && vulnFilter.trim()
-                                            ? `${filteredVulnCount} out `
+                                            ? `${filteredVulnCount} of `
                                             : ''}
                                         {totalVulnCount})
                                     </span>
                                 </CardTitle>
                                 {showVulnFilter && (
-                                    <input
-                                        value={vulnFilter}
-                                        onChange={(e) =>
-                                            setVulnFilter(e.target.value)
-                                        }
-                                        placeholder="CVE…"
-                                        className="border-border text-foreground placeholder:text-muted-foreground focus:ring-ring h-10 w-32 rounded border bg-transparent px-2 text-[11px] outline-none focus:ring-1"
-                                    />
+                                    <div className="relative w-32">
+                                        <Input
+                                            value={vulnFilter}
+                                            onChange={(e) =>
+                                                setVulnFilter(e.target.value)
+                                            }
+                                            placeholder="CVE…"
+                                        />
+                                    </div>
                                 )}
                             </div>
                         </CardHeader>
-                        <CardContent>
+                        <CardContent className="px-5 pb-5">
                             <VulnerabilityList
                                 vulns={vulns}
                                 affectedComponents={affectedComponents}
@@ -487,12 +498,12 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
                 <div className="flex flex-col gap-4 pt-10 pr-12 pb-10 pl-12 sm:px-8 lg:w-1/3 lg:pr-20 lg:pl-12">
                     {/* Search */}
                     <Card className="hidden bg-transparent lg:block">
-                        <CardHeader className="pb-3">
-                            <CardTitle className="text-muted-foreground font-mono text-[10px] tracking-wider uppercase">
+                        <CardHeader className="px-5 pt-5 pb-3">
+                            <CardTitle className={LABEL_CLASS}>
                                 Search Package
                             </CardTitle>
                         </CardHeader>
-                        <CardContent>
+                        <CardContent className="px-5 pb-5">
                             <PackageSearch
                                 onSubmit={navigateToPurl}
                                 error={searchError}
@@ -503,12 +514,12 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
 
                     {/* Package Facts */}
                     <Card className="bg-transparent">
-                        <CardHeader className="pb-3">
-                            <CardTitle className="text-muted-foreground font-mono text-[10px] tracking-wider uppercase">
+                        <CardHeader className="px-5 pt-5 pb-3">
+                            <CardTitle className={LABEL_CLASS}>
                                 Package Facts
                             </CardTitle>
                         </CardHeader>
-                        <CardContent>
+                        <CardContent className="px-5 pb-5">
                             <div className="flex flex-col gap-3">
                                 {facts.map((fact) => {
                                     const Icon = fact.icon
@@ -559,13 +570,13 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
 
                     {/* Scan your project */}
                     <Card className="bg-transparent">
-                        <CardHeader className="pb-3">
-                            <CardTitle className="text-sm font-semibold">
-                                Scan your project for vulnerabilities
+                        <CardHeader className="px-5 pt-5 pb-3">
+                            <CardTitle className={LABEL_CLASS}>
+                                Scan your project
                             </CardTitle>
                         </CardHeader>
-                        <CardContent>
-                            <p className="text-muted-foreground mb-4 text-xs leading-relaxed">
+                        <CardContent className="px-5 pb-5">
+                            <p className="text-muted-foreground mb-4 text-sm leading-relaxed">
                                 Continuously monitor your dependencies and get
                                 alerted when packages like this one introduce
                                 security risks into your stack.
@@ -574,7 +585,7 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
                                 asChild
                                 variant="default"
                                 size="default"
-                                className="w-full gap-2 sm:flex-1 md:w-full"
+                                className="w-full gap-2"
                             >
                                 <a
                                     href="https://devguard.org/"

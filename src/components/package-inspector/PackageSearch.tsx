@@ -82,7 +82,7 @@ export default function PackageSearch({
                 <>
                     <div
                         className={cn(
-                            'border-input focus-within:border-ring focus-within:ring-ring/50 dark:bg-input/30 flex items-center rounded-md border bg-transparent transition-colors focus-within:ring-[3px]',
+                            'border-searchbar-border bg-searchbar-background focus-within:border-ring focus-within:ring-ring/50 flex h-[40px] items-center rounded-md border transition-colors focus-within:ring-[3px]',
                             displayError
                                 ? 'border-destructive focus-within:border-destructive focus-within:ring-destructive/50'
                                 : '',
@@ -92,7 +92,7 @@ export default function PackageSearch({
                             <select
                                 value={ecosystem}
                                 onChange={(e) => setEcosystem(e.target.value)}
-                                className="h-12 cursor-pointer appearance-none rounded-l-md bg-transparent pr-7 pl-3 text-base outline-none md:text-lg"
+                                className="h-9 cursor-pointer appearance-none rounded-l-md bg-transparent pr-7 pl-3 text-sm outline-none"
                                 disabled={isSearching}
                                 aria-label="Ecosystem"
                             >
@@ -104,17 +104,17 @@ export default function PackageSearch({
                             </select>
                             <ChevronDown className="text-muted-foreground pointer-events-none absolute right-1.5 h-4 w-4" />
                         </div>
-                        <div className="bg-input h-8 w-px" />
+                        <div className="h-7 w-px bg-white/20" />
                         <input
                             type="text"
                             value={packageName}
                             onChange={(e) => setPackageName(e.target.value)}
                             placeholder="name"
-                            className="placeholder:text-muted-foreground h-12 min-w-0 flex-1 bg-transparent px-3 text-base outline-none md:text-lg"
+                            className="placeholder:text-muted-foreground h-9 min-w-0 flex-1 bg-transparent px-3 text-sm outline-none"
                             disabled={isSearching}
                             autoFocus={autoFocus}
                         />
-                        <div className="bg-input h-8 w-px" />
+                        <div className="h-7 w-px bg-white/20" />
                         <input
                             type="text"
                             value={version}
@@ -123,7 +123,7 @@ export default function PackageSearch({
                                 setLocalError(null)
                             }}
                             placeholder="version"
-                            className="placeholder:text-muted-foreground h-12 w-20 bg-transparent px-3 text-base outline-none sm:w-28 md:text-lg"
+                            className="placeholder:text-muted-foreground h-9 w-20 bg-transparent px-3 text-sm outline-none sm:w-24"
                             disabled={isSearching}
                         />
                     </div>
@@ -144,7 +144,7 @@ export default function PackageSearch({
                 <>
                     <div
                         className={cn(
-                            'border-input focus-within:border-ring focus-within:ring-ring/50 dark:bg-input/30 flex items-center rounded-md border bg-transparent transition-colors focus-within:ring-[3px]',
+                            'border-searchbar-border bg-searchbar-background focus-within:border-ring focus-within:ring-ring/50 flex items-center rounded-md border transition-colors focus-within:ring-[3px]',
                             displayError
                                 ? 'border-destructive focus-within:border-destructive focus-within:ring-destructive/50'
                                 : '',
@@ -158,7 +158,7 @@ export default function PackageSearch({
                                 setLocalError(null)
                             }}
                             placeholder="pkg:eco/name@version"
-                            className="placeholder:text-muted-foreground h-12 min-w-0 flex-1 rounded-l-md bg-transparent pr-2.5 pl-3 text-base outline-none"
+                            className="placeholder:text-muted-foreground h-9 min-w-0 flex-1 rounded-l-md bg-transparent pr-2.5 pl-3 text-sm outline-none"
                             disabled={isSearching}
                             autoFocus={autoFocus}
                         />
