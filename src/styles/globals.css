@@ -195,6 +195,24 @@
   #toc-footer .kern-link {
     @apply text-[12px]!;
   }
+  #feedback-section form {
+    @apply mt-3;
+  }
+  #feedback-section h2 {
+    @apply text-start;
+  }
+  #feedback-section > div {
+    @apply pl-0;
+  }
+  div:has(> #feedback-section) {
+    @apply pl-0;
+  }
+  #feedback-section button[role="checkbox"] {
+    @apply mt-1;
+  }
+  #feedback-section .kern-link {
+    @apply text-sm!
+  }
 }
 
 p>code,
