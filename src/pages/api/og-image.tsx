@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og'
 import type { NextRequest } from 'next/server'
 
-export const runtime = 'edge'
+export const config = { runtime: 'edge' }
 
 export default async function handler(req: NextRequest) {
     const { searchParams, origin } = new URL(req.url)

@@ -42,7 +42,6 @@ export default async function handler(
             )
             return res.status(upstream.status).json({
                 message: `Upstream API error: ${upstream.status} ${upstream.statusText}`,
-                details: errorText,
             })
         }
         const contentType = upstream.headers.get('content-type')
