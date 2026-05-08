@@ -120,6 +120,10 @@
     margin-top: 0px !important;
   }
 
+  div[id="toc-title"] > h2 {
+    @apply text-lg!;
+  }
+
   /* 3rd-party nav shadow resets */
   nav > div > p,
   nav > div > div {
@@ -183,7 +187,7 @@
 
   /* TOC */
   #toc .kern-link {
-    @apply text-[14px]! no-underline! font-semibold!;
+    @apply text-[13px]! no-underline! font-semibold!;
     @apply text-(--sidebar-accent-foreground)! visited:text-(--sidebar-accent-foreground)! hover:text-(--foreground)!;
   }
   #toc .kern-link[data-active="true"] {
@@ -194,6 +198,24 @@
   }
   #toc-footer .kern-link {
     @apply text-[12px]!;
+  }
+  #feedback-section form {
+    @apply mt-3;
+  }
+  #feedback-section h2 {
+    @apply text-start;
+  }
+  #feedback-section > div {
+    @apply pl-0;
+  }
+  div:has(> #feedback-section) {
+    @apply pl-0;
+  }
+  #feedback-section button[role="checkbox"] {
+    @apply mt-1;
+  }
+  #feedback-section .kern-link {
+    @apply text-sm!
   }
 }
 

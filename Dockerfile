@@ -1,4 +1,4 @@
-FROM node:24.14.1@sha256:80fc934952c8f1b2b4d39907af7211f8a9fff1a4c2cf673fb49099292c251cec AS builder
+FROM node:24.15.0@sha256:e9891237dfbb1de60ce19e9ff9fac5d73ad9c37da303ad72ff2a425ad1057e71 AS builder
 LABEL maintainer="Sebastian Kawelke <sebatian.kawelke@l3montree.com"
 
 # Disable telemetry
@@ -35,12 +35,18 @@ ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
 ARG NEXT_PUBLIC_DEVGUARD_API_URL
 ENV NEXT_PUBLIC_DEVGUARD_API_URL=$NEXT_PUBLIC_DEVGUARD_API_URL
 
+ARG NEXT_PUBLIC_FEEDBACK_SERVER_URL
+ENV NEXT_PUBLIC_FEEDBACK_SERVER_URL=$NEXT_PUBLIC_FEEDBACK_SERVER_URL
+
+ARG NEXT_PUBLIC_PROJECT_ID
+ENV NEXT_PUBLIC_PROJECT_ID=$NEXT_PUBLIC_PROJECT_ID
+
 # Build
 RUN npm run build
 
 RUN mkdir -p /usr/app/.next/cache/images && chown -R 53111:53111 /usr/app/.next/cache/images
 
-FROM registry.opencode.de/open-code/oci/nodejs:24-minimal@sha256:b2f83cbaa69c62e0b74c967fdc3b2645c932f49d2853dd6fb735b7383fbc2c14
+FROM registry.opencode.de/oci-community/images/zendis/nodejs:24-main-minimal@sha256:b2f83cbaa69c62e0b74c967fdc3b2645c932f49d2853dd6fb735b7383fbc2c14
 
 USER 53111
 

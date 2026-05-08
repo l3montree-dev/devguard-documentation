@@ -65,6 +65,34 @@ const config: Partial<KernuxThemeConfig> = {
             'https://github.com/l3montree-dev/devguard-documentation/tree/main',
         icon: 'none',
     },
+    feedback: {
+        feedbackServerUrl: process.env.NEXT_PUBLIC_FEEDBACK_SERVER_URL || '',
+        gitlabProjectId: process.env.NEXT_PUBLIC_PROJECT_ID || '',
+        headline: "Have feedback? We want to hear from you!",
+        buttonText: "Submit Feedback",
+        labels: [],
+        requiredText: "Fields marked with * are required",
+        fields: {
+            message: {
+                label: "Your Feedback",
+                placeholder: "Enter your feedback",
+                required: true
+        }
+  },
+  privacyConsent: {
+    textBeforeLink: "By submitting this form, I confirm that I have read the ",
+    link: {
+      label: 'Privacy Policy',
+      href: 'https://docs.devguard.org/privacy-policy/',
+    },
+    textAfterLink: ' and agree to its terms.',
+  },
+  afterSubmit: {
+    successText: 'Your feedback has been successfully submitted. Thank you!',
+    errorText: 'An error occurred while sending your feedback. Please try again.',
+    buttonLabel: 'See submitted feedback',
+  },
+    },
 }
 
 export default config
