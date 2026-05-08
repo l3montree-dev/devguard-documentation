@@ -27,8 +27,24 @@ export default async function handler(
         }
 
         const qs = params.toString()
-        const targetUrl = `${API_BASE_URL}/vulndb/${id}${qs ? `?${qs}` : ''}`
+        const targetUrl = `${API_BASE_URL}/vulndb/${id.toUpperCase()}${qs ? `?${qs}` : ''}`
         const upstream = await fetch(targetUrl)
+        if (!upstream.ok) {
+            const errorText = await upstream.text()
+            console.error(
+                `Upstream API error: ${upstream.status} ${upstream.statusText}`,
+                {
+                    url: targetUrl,
+                    status: upstream.status,
+                    statusText: upstream.statusText,
+                    body: errorText,
+                },
+            )
+            return res.status(upstream.status).json({
+                message: `Upstream API error: ${upstream.status} ${upstream.statusText}`,
+                details: errorText,
+            })
+        }
         const contentType = upstream.headers.get('content-type')
         const bodyText = await upstream.text()
 

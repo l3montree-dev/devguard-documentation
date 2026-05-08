@@ -155,7 +155,7 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
     const resolvedError = error || (result && !result.component.published)
 
     // ─── Loading state ────────────────────────────────────────────────────────
-    if (isLoading) {
+    if (isLoading || !result) {
         return (
             <Shell>
                 <div className="flex flex-col lg:flex-row">
@@ -288,19 +288,6 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
                     <CTASection />
                 </Container>
             </div>
-        )
-    }
-
-    // ─── No data ──────────────────────────────────────────────────────────────
-    if (!result) {
-        return (
-            <Shell>
-                <div className="flex flex-col items-center justify-center px-4 py-24 text-center sm:px-8">
-                    <p className="text-muted-foreground mt-3 max-w-sm text-sm leading-relaxed">
-                        Enter a valid package URL to inspect security details.
-                    </p>
-                </div>
-            </Shell>
         )
     }
 
