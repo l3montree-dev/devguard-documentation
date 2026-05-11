@@ -8,7 +8,7 @@ seo:
     type: "article"
   schema:
     type: "TechArticle"
-  keyword_primary: "SBOM standards CycloneDX SPDX"
+  keyword_primary: "sbom standards"
 lang: "en-US"
 ignoreChecks: 
   - "checkIfTitleContainsKeywordPrimary"
@@ -24,7 +24,7 @@ import { Badge } from '@/components/ui/badge'
 
 # SBOM Standards: CycloneDX & SPDX
 
-A Software Bill of Materials (<Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">SBOM</span></TooltipTrigger><TooltipContent><p>Software Bill of Materials - Comprehensive inventory of software components</p></TooltipContent></Tooltip>) is a comprehensive inventory of all components in software. Two standards dominate: CycloneDX and SPDX. Both serve the same purpose but differ in approach and use cases.
+A Software Bill of Materials (<Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">SBOM</span></TooltipTrigger><TooltipContent><p>Software Bill of Materials - Comprehensive inventory of software components</p></TooltipContent></Tooltip>) is a comprehensive inventory of all components in software. Two SBOM standards dominate: CycloneDX and SPDX. Both serve the same purpose but differ in approach and use cases. Choosing the right SBOM standard depends on your team's primary goal — security or license compliance.
 
 ## Why SBOMs Matter
 
@@ -32,7 +32,7 @@ A Software Bill of Materials (<Tooltip><TooltipTrigger asChild><span className="
 
 **Vulnerability Management**: When new <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">CVEs</span></TooltipTrigger><TooltipContent><p>Common Vulnerabilities and Exposures - Standardized vulnerability identifiers</p></TooltipContent></Tooltip> are disclosed, SBOMs enable instant identification of affected applications.
 
-**Compliance**: Regulations like the EU Cyber Resilience Act require machine-readable SBOMs demonstrating supply chain transparency.
+**Compliance**: Regulations like the EU Cyber Resilience Act require machine-readable SBOMs demonstrating supply chain transparency. Adopting a recognized SBOM standard ensures your inventory meets regulatory expectations.
 
 <Callout type="info" emoji="📦">
     SBOMs answer: "What's actually in my software?" Without this inventory,
@@ -82,7 +82,7 @@ SPDX (Software Package Data Exchange) is a mature standard maintained by the Lin
 | **Adoption**      | Growing DevSecOps          | Automotive/embedded   |
 
 <Callout type="info" emoji="🔄">
-    Both standards are valid—choice depends on use case. Security teams prefer
+    Both SBOM standards are valid—choice depends on use case. Security teams prefer
     CycloneDX; legal/compliance teams prefer SPDX. Some organizations generate
     both.
 </Callout>
@@ -103,9 +103,9 @@ SPDX (Software Package Data Exchange) is a mature standard maintained by the Lin
 
 ## Related Documentation
 
-- [CSAF & VEX Standards](csaf-vex-explained) - Vulnerability communication formats
+- [CSAF & VEX Standards](/explanations/compliance/csaf-vex-explained) - Vulnerability communication formats
 - [External Vulnerability Sync](/explanations/vulnerability-management/external-vuln-sync) - Importing/exporting SBOMs
-- [Why Compliance Matters](why-compliance-matters) - Business case for SBOMs
+- [Why Compliance Matters](/explanations/compliance/why-compliance-matters) - Business case for SBOMs
 
 ## References
 

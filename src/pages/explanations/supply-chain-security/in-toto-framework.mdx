@@ -1,23 +1,22 @@
 ---
-title: "In-Toto Supply Chain Framework Explained"
-description: "How the in-toto supply chain framework secures software builds by linking each build step with cryptographic guarantees to prevent tampering and ensure integrity"
+title: "In-Toto Supply Chain Security Framework Documentation"
+description: "In-toto supply chain security framework documentation: learn how cryptographic step-linking prevents tampering from source code to production."
 seo:
   robots: "index,follow"
+  keyword_primary: "in-toto supply chain security framework documentation"
   og:
     image: "/og-image.png"
-    type: "article"
   schema:
     type: "TechArticle"
-  keyword_primary: "in-toto supply chain framework"
 lang: "en-US"
 ignoreChecks: 
   - "checkIfTitleContainsKeywordPrimary"
 ---
 import { AttributedImage } from '@/components/AttributedImage'
 
-# The In-Toto Framework
+# In-Toto Supply Chain Security Framework Documentation
 
-Securing individual components of a software supply chain—like signing a commit or scanning a docker image—is essential, but it is not sufficient. A sophisticated attacker doesn't need to compromise the source code or forge the final signature. They can strike in the gaps between steps: tampering with artifacts after they're built but before they're tested, modifying binaries between testing and packaging, or substituting images during registry uploads. Traditional security tools validate individual stages but cannot prove that the output of one step became the unmodified input to the next.
+This in-toto supply chain security framework documentation covers the full scope of the framework. Securing individual components of a software supply chain—like signing a commit or scanning a docker image—is essential, but it is not sufficient. A sophisticated attacker doesn't need to compromise the source code or forge the final signature. They can strike in the gaps between steps: tampering with artifacts after they're built but before they're tested, modifying binaries between testing and packaging, or substituting images during registry uploads. Traditional security tools validate individual stages but cannot prove that the output of one step became the unmodified input to the next.
 
 **In-toto** (Latin for "in whole" or "in total") is an open-source framework designed to solve this specific problem. It provides a mechanism to verify the integrity of the **entire** software supply chain, ensuring that not only are the ingredients safe, but the "recipe" was followed exactly as intended.
 
@@ -49,7 +48,7 @@ and step 3 used the output from step 2, without any unauthorized tampering in be
 
 ## How In-Toto Solves This
 
-In-toto closes these gaps by creating a cryptographically signed chain of custody. Each step records:
+In-toto closes these gaps by creating a cryptographically signed chain of custody. For background on what supply chain attacks look like in practice, see [What is Supply Chain Security](/explanations/supply-chain-security/what-is-supply-chain-security). Each step records:
 
 - The exact hash of every input file (Materials)
 - The exact hash of every output file (Products)
@@ -87,7 +86,7 @@ The **Layout** is the policy or the "contract" for the supply chain. It is a fil
 > "I expect the user 'Bob' to perform the 'build' step. He must take the source code files (Materials) and produce a binary file (Product).
 > I expect the 'test' step to run on exactly that binary."
 
-#### Layout File Structure
+### Layout File Structure
 
 A layout file is typically a JSON document that includes:
 
@@ -141,7 +140,7 @@ When a step is performed, the in-toto client records:
 > "I am the CI Runner. I ran the command `make build`. I started with source file `main.go` (Hash: abc...) and I produced `app.bin` (Hash: xyz...)."
 
 
-#### Link File Structure
+### Link File Structure
 
 ```json
 {
@@ -261,7 +260,7 @@ The key distinction:
 
 ### In-Toto Attestation Framework
 
-The in-toto team developed a general-purpose **Attestation Framework** that extends beyond supply chain metadata. An attestation is a signed statement about a software artifact, consisting of:
+The in-toto team developed a general-purpose **Attestation Framework** that extends beyond supply chain metadata. See the [Attestations](/explanations/supply-chain-security/attestations) chapter for a deeper look at the attestation format. An attestation is a signed statement about a software artifact, consisting of:
 
 1. **Envelope** (DSSE): Provides cryptographic signatures
 2. **Statement**: Contains subject (the artifact) and predicate type
@@ -336,7 +335,7 @@ Besides that, the verification can be done manually by downloading the links and
 
 ## Conclusion
 
-The in-toto framework shifts security from trusting the _person_ to trusting the _process_. By cryptographically chaining every step
+As covered throughout this in-toto supply chain security framework documentation, the framework shifts security from trusting the _person_ to trusting the _process_. By cryptographically chaining every step
 of the software delivery pipeline—from the developer's laptop to the final production server—it eliminates the "black box" of software building.
 
 It provides the mathematical proof that the software running in production is exactly what the developers intended, with no unauthorized modifications along the way.
