@@ -33,7 +33,7 @@
         "url": "https://github.com/l3montree-dev/devguard-documentation/issues"
     },
     "engines": {
-        "node": ">=v25.9.0",
+        "node": ">=v24.15.0",
         "npm": ">=11.12.1"
     },
     "homepage": "https://github.com/l3montree-dev/devguard-documentation",
