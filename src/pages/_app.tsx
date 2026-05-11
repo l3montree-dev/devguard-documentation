@@ -3,9 +3,9 @@ import { cn } from '@/lib/utils'
 import Layout, { findPage } from '@document-writing-tools/kernux-theme'
 import { useRouter } from 'next/router'
 import { pageMap } from '../../pageMap'
-import themeConfig from '../theme-config'
 import { inter, lexend } from '../fonts'
 import '../styles/globals.css'
+import themeConfig from '../theme-config'
 
 export default function MyApp({ Component, pageProps }: any) {
     const router = useRouter()
