@@ -2,6 +2,7 @@ export default {
     'what-is-supply-chain-security': {
         title: 'What is Supply Chain Security?',
     },
+    'supply-chain-attack': { title: 'Supply Chain Attack' },
     'in-toto-framework': { title: 'in-toto Framework' },
     attestations: { title: 'Attestations' },
     'supply-chain-verification': { title: 'Supply Chain Verification' },
