@@ -82,7 +82,7 @@ export default function PackageSearch({
                 <>
                     <div
                         className={cn(
-                            'border-searchbar-border bg-searchbar-background focus-within:border-ring focus-within:ring-ring/50 flex h-[40px] items-center rounded-md border transition-colors focus-within:ring-[3px]',
+                            'border-searchbar-border bg-searchbar-background focus-within:border-ring focus-within:ring-ring/50 flex h-12 items-center rounded-md border transition-colors focus-within:ring-[3px]',
                             displayError
                                 ? 'border-destructive focus-within:border-destructive focus-within:ring-destructive/50'
                                 : '',
@@ -110,7 +110,7 @@ export default function PackageSearch({
                             value={packageName}
                             onChange={(e) => setPackageName(e.target.value)}
                             placeholder="name"
-                            className="placeholder:text-muted-foreground h-9 min-w-0 flex-1 bg-transparent px-3 text-sm outline-none"
+                            className="placeholder:text-muted-foreground h-12 min-w-0 flex-1 bg-transparent px-3 text-sm outline-none"
                             disabled={isSearching}
                             autoFocus={autoFocus}
                         />
@@ -123,7 +123,7 @@ export default function PackageSearch({
                                 setLocalError(null)
                             }}
                             placeholder="version"
-                            className="placeholder:text-muted-foreground h-9 w-20 bg-transparent px-3 text-sm outline-none sm:w-24"
+                            className="placeholder:text-muted-foreground h-12 w-20 bg-transparent px-3 text-sm outline-none sm:w-30"
                             disabled={isSearching}
                         />
                     </div>
@@ -144,7 +144,7 @@ export default function PackageSearch({
                 <>
                     <div
                         className={cn(
-                            'border-searchbar-border bg-searchbar-background focus-within:border-ring focus-within:ring-ring/50 flex items-center rounded-md border transition-colors focus-within:ring-[3px]',
+                            'border-searchbar-border bg-searchbar-background focus-within:border-ring focus-within:ring-ring/50 flex h-12 items-center rounded-md border transition-colors focus-within:ring-[3px]',
                             displayError
                                 ? 'border-destructive focus-within:border-destructive focus-within:ring-destructive/50'
                                 : '',
@@ -158,7 +158,7 @@ export default function PackageSearch({
                                 setLocalError(null)
                             }}
                             placeholder="pkg:eco/name@version"
-                            className="placeholder:text-muted-foreground h-9 min-w-0 flex-1 rounded-l-md bg-transparent pr-2.5 pl-3 text-sm outline-none"
+                            className="placeholder:text-muted-foreground h-12 min-w-0 flex-1 bg-transparent px-3 text-sm outline-none"
                             disabled={isSearching}
                             autoFocus={autoFocus}
                         />

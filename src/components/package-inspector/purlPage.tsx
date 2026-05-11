@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import Head from 'next/head'
-import useSWR from 'swr'
 import { useRouter } from 'next/router'
 import {
     ExternalLink,
@@ -14,7 +13,6 @@ import {
     Hash,
 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
-import { fetcher } from '@/lib/fetcher'
 import { extractPackageName } from '@/lib/utils'
 import { PackageInspectResult } from '@/components/package-inspector/types'
 import PackageHeroCard from '@/components/package-inspector/PackageHeroCard'
@@ -99,7 +97,13 @@ function Shell({
     )
 }
 
-export default function PurlPageComponent({ purl }: { purl?: string }) {
+export default function PurlPageComponent({
+    purl,
+    initialData,
+}: {
+    purl?: string
+    initialData?: PackageInspectResult
+}) {
     const router = useRouter()
     const purlString = typeof purl === 'string' ? purl : ''
     const decodedPurl = purlString ? decodeURIComponent(purlString) : ''
@@ -142,20 +146,10 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
         }
     }
 
-    const url = decodedPurl
-        ? `/api/vulndb/purl-inspect/${encodeURIComponent(decodedPurl)}`
-        : null
-
-    const {
-        data: result,
-        error,
-        isLoading,
-    } = useSWR<PackageInspectResult>(url, fetcher)
-
-    const resolvedError = error || (result && !result.component.published)
+    const result = initialData
 
     // ─── Loading state ────────────────────────────────────────────────────────
-    if (isLoading || !result) {
+    if (!result) {
         return (
             <Shell>
                 <div className="flex flex-col lg:flex-row">
@@ -248,7 +242,7 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
     }
 
     // ─── Error ────────────────────────────────────────────────────────────────
-    if (resolvedError) {
+    if (!result.component.published) {
         return (
             <div>
                 <HatchBar />
@@ -331,14 +325,14 @@ export default function PurlPageComponent({ purl }: { purl?: string }) {
         project?.starsCount != null
             ? {
                   label: 'Stars',
-                  value: project.starsCount.toLocaleString(),
+                  value: project.starsCount.toLocaleString('en-US'),
                   icon: Star,
               }
             : null,
         project?.forksCount != null
             ? {
                   label: 'Forks',
-                  value: project.forksCount.toLocaleString(),
+                  value: project.forksCount.toLocaleString('en-US'),
                   icon: GitFork,
               }
             : null,
