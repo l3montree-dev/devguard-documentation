@@ -4,6 +4,9 @@ export default function Document() {
     const chatWidgetSrc = process.env.NEXT_PUBLIC_CHAT_WIDGET_SRC
     const chatWidgetIntegrity = process.env.NEXT_PUBLIC_CHAT_WIDGET_INTEGRITY
 
+    const websiteId = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID
+    const umamiUrl = process.env.NEXT_PUBLIC_UMAMI_URL
+
     return (
         <Html data-kern-theme="dark" lang="en" style={{ colorScheme: 'dark' }}>
             <Head>
@@ -17,6 +20,13 @@ export default function Document() {
                             crossOrigin: 'anonymous',
                         })}
                     />
+                )}
+                {Boolean(websiteId) && Boolean(umamiUrl) && (
+                    <script
+                        defer
+                        src={umamiUrl}
+                        data-website-id={websiteId}
+                    ></script>
                 )}
             </Head>
             <body>
