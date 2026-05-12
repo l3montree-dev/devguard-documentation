@@ -199,6 +199,12 @@
   #toc-footer .kern-link {
     @apply text-[12px]!;
   }
+
+  /* hide arrows from external links: */
+  a[href^="http"]::after {
+    @apply hidden!;
+  }
+  
   #feedback-section {
     @apply mt-12;
   }
@@ -214,6 +220,10 @@
   #feedback-section .kern-link {
     @apply text-sm!
   }
+  #feedback-section .kern-label {
+    @apply text-[14px]! font-medium!
+  }
+
 }
 
 p>code,
