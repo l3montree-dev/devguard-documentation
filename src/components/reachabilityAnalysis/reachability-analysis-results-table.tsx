@@ -1,7 +1,7 @@
 
-import { Button } from 'src/components/ui/button'
-import { Skeleton } from 'src/components/ui/skeleton'
-import {Table,TableBody,TableCell,TableHead,TableHeader,TableRow} from 'src/components/ui/table'
+import { Button } from '@/components/ui/button'
+import { Skeleton } from '@/components/ui/skeleton'
+import {Table,TableBody,TableCell,TableHead,TableHeader,TableRow} from '@/components/ui/table'
 import {ColumnDef,SortingState,flexRender,getCoreRowModel,getSortedRowModel,useReactTable} from '@tanstack/react-table'
 
 import * as React from 'react'
