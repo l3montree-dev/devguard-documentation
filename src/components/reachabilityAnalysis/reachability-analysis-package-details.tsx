@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import { ReachabilityAnalysisResponse } from 'src/components/reachabilityAnalysis/reachability-types'
+import { ReachabilityAnalysisResponse } from '@/components/reachabilityAnalysis/reachability-types'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { ExternalLink } from 'lucide-react'
-import { fetcher } from 'src/lib/fetcher'
+import { fetcher } from '@/lib/fetcher'
 import useSWR from 'swr'
 import { Container } from '../ui/container'
 

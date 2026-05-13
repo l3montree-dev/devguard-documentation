@@ -12,7 +12,7 @@ import {
     DialogTitle,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Callout } from '@document-writing-tools/kernux-theme'
 import { Textarea } from './ui/textarea'
 import { uniq } from 'lodash'
 
@@ -147,19 +147,17 @@ const SwaggerReference: React.FC = () => {
         <>
             <div className="mt-6">
                 {/* PAT Configuration Banner */}
-                <Alert
-                    className={`mb-5 ${isConfigured ? 'border-success/30 bg-success/10' : ''}`}
-                >
+                <Callout type={isConfigured ? 'success' : 'info'}>
                     <div className="flex items-center justify-between">
                         <div>
                             <h3 className="mb-1 text-sm font-semibold">
                                 Personal Access Token (PAT) Authentication
                             </h3>
-                            <AlertDescription>
+                            <p>
                                 {isConfigured
                                     ? 'Private key configured. Requests will be signed automatically.'
                                     : 'Configure your private key to enable automatic request signing.'}
-                            </AlertDescription>
+                            </p>
                         </div>
                         <div className="flex gap-2">
                             {isConfigured && (
@@ -179,7 +177,7 @@ const SwaggerReference: React.FC = () => {
                             </Button>
                         </div>
                     </div>
-                </Alert>
+                </Callout>
 
                 {/* PAT Configuration Dialog */}
                 <Dialog open={showDialog} onOpenChange={setShowDialog}>

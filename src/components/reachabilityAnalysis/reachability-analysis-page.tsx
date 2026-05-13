@@ -1,14 +1,14 @@
-import ReachabilityAnalysisHero from 'src/components/reachabilityAnalysis/reachability-analysis-hero'
+import ReachabilityAnalysisHero from '@/components/reachabilityAnalysis/reachability-analysis-hero'
 
-import { DataTable } from 'src/components/reachabilityAnalysis/reachability-analysis-results-table'
-import { columns } from 'src/components/reachabilityAnalysis/columns'
+import { DataTable } from '@/components/reachabilityAnalysis/reachability-analysis-results-table'
+import { columns } from '@/components/reachabilityAnalysis/columns'
 
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/router'
-import { fetcher, API_BASE_URL } from 'src/lib/fetcher'
+import { fetcher, API_BASE_URL } from '@/lib/fetcher'
 import useSWR from 'swr'
 import { Container } from '../ui/container'
-import type { Package } from 'src/components/reachabilityAnalysis/columns'
+import type { Package } from '@/components/reachabilityAnalysis/columns'
 
 interface ReachabilityResponse {
     data: Package[]
