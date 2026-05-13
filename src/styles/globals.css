@@ -200,6 +200,7 @@
     @apply text-[12px]!;
   }
 
+  /* TODO: this should be changed after DWT fix */
   /* hide arrows from external links: */
   a[href^="http"]::after {
     @apply hidden!;
