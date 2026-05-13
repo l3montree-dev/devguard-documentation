@@ -78,15 +78,20 @@ docker compose up -d
 
 <Callout type="info">Keep this running in a separate terminal.</Callout>
 
-<h3>Step 4: Start the application</h3>
+<h3>Step 4: Run database migrations</h3>
+```bash 
+  make migrate
+```
+
+<h3>Step 5: Start the application</h3>
 
 Run this command to start the backend:
 
 ```bash 
-make
+make run
 ```
 
-<Callout type="info">`make` will only work sequentially after `docker compose up -d`.</Callout>
+<Callout type="info">Run "make run" only after "docker compose up -d" and "make migrate" have both completed, in that order.</Callout>
 
 </Steps>
 
