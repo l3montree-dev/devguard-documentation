@@ -21,7 +21,7 @@ export default function DevGuardBanner({
     secondaryHref,
 }: VulnDbBannerProps) {
     return (
-        <div className="border-border/50 from-background via-muted/20 to-background overflow-hidden px-10 py-10 sm:px-10 sm:py-10 md:px-20 md:py-12">
+        <div className="border-border/50 from-background via-muted/20 to-background overflow-hidden px-6 py-10 sm:px-8 sm:py-10 md:px-8 lg:px-20 md:py-12">
             <div className="flex flex-col gap-6 sm:gap-8 md:flex-row md:items-center md:justify-between">
                 <div className="min-w-0 flex-1">
                     <div className="mb-3 flex items-center gap-2">
@@ -61,7 +61,7 @@ export default function DevGuardBanner({
                         href={secondaryHref}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-muted-foreground hover:text-foreground flex items-center justify-center gap-1.5 text-xs transition-colors sm:justify-start md:justify-end"
+                        className="max-sm:pt-6 text-muted-foreground hover:text-foreground flex items-center justify-center gap-1.5 text-xs transition-colors sm:justify-start md:justify-end"
                     >
                         <ExternalLink className="h-3 w-3 flex-shrink-0" />
                         <span className="truncate">{secondaryLabel}</span>

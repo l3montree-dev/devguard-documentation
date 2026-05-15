@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { API_BASE_URL } from '@/lib/fetcher'
+import { VULN_ID_PATTERN, normalizeVulnId } from '@/lib/vulndb'
 
 export default async function handler(
     req: NextApiRequest,
@@ -11,7 +12,7 @@ export default async function handler(
     }
 
     const { id } = req.query
-    if (typeof id !== 'string') {
+    if (typeof id !== 'string' || !VULN_ID_PATTERN.test(id)) {
         return res.status(400).json({ message: 'Invalid id parameter' })
     }
 
@@ -27,7 +28,7 @@ export default async function handler(
         }
 
         const qs = params.toString()
-        const targetUrl = `${API_BASE_URL}/vulndb/${id.toUpperCase()}${qs ? `?${qs}` : ''}`
+        const targetUrl = `${API_BASE_URL}/vulndb/${normalizeVulnId(id)}${qs ? `?${qs}` : ''}`
         const upstream = await fetch(targetUrl)
         if (!upstream.ok) {
             const errorText = await upstream.text()

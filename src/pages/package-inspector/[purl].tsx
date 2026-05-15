@@ -23,6 +23,9 @@ export default function PurlDetailPage({ result, purl }: Props) {
                 .min-h-svh {
                     min-height: fit-content !important;
                 }
+                body {
+                    overflow-x: clip;
+                }
             `}</style>
             <PurlPageComponent purl={purl} initialData={result} />
         </>

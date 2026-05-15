@@ -24,6 +24,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Container } from '../ui/container'
 import DevGuardBanner from '@/components/sections/DevGuardBanner'
+import HatchBar from '@/components/common/HatchBar'
 import FAQSection, { type FAQ } from '@/components/sections/Faq'
 import CTASection from '@/components/sections/Cta'
 
@@ -57,10 +58,6 @@ const packageInspectorFAQ: FAQ[] = [
 const LABEL_CLASS =
     'text-muted-foreground font-mono text-xs tracking-wider uppercase'
 
-const HatchBar = () => (
-    <div className="pointer-events-none inset-x-0 top-0 z-50 block h-8 border-t border-b border-t-(--grid-line-color) border-b-(--grid-line-color) bg-[repeating-linear-gradient(315deg,var(--grid-line-color)_0,var(--grid-line-color)_1px,transparent_0,transparent_50%)] bg-size-[10px_10px] bg-fixed opacity-80" />
-)
-
 function Shell({
     children,
     mobileTopContent,
@@ -70,13 +67,10 @@ function Shell({
 }) {
     return (
         <div>
-            <HatchBar />
+            <HatchBar fullWidth />
             <div className="relative mx-auto w-full max-w-[1390px]">
-                {/* Left vertical stripe */}
-                <div className="pointer-events-none absolute inset-y-0 left-0 w-8 border-r border-l border-r-(--grid-line-color) border-l-(--grid-line-color) bg-[repeating-linear-gradient(315deg,var(--grid-line-color)_0,var(--grid-line-color)_1px,transparent_0,transparent_50%)] bg-size-[10px_10px] bg-fixed opacity-80" />
-
-                {/* Right vertical stripe */}
-                <div className="pointer-events-none absolute inset-y-0 right-0 w-8 border-r border-l border-r-(--grid-line-color) border-l-(--grid-line-color) bg-[repeating-linear-gradient(315deg,var(--grid-line-color)_0,var(--grid-line-color)_1px,transparent_0,transparent_50%)] bg-size-[10px_10px] bg-fixed opacity-80" />
+                <div className="pointer-events-none absolute inset-y-0 left-0 hidden w-8 border-r border-l border-r-(--grid-line-color) border-l-(--grid-line-color) bg-[repeating-linear-gradient(315deg,var(--grid-line-color)_0,var(--grid-line-color)_1px,transparent_0,transparent_50%)] bg-size-[10px_10px] bg-fixed opacity-80 lg:block" />
+                <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-8 border-r border-l border-r-(--grid-line-color) border-l-(--grid-line-color) bg-[repeating-linear-gradient(315deg,var(--grid-line-color)_0,var(--grid-line-color)_1px,transparent_0,transparent_50%)] bg-size-[10px_10px] bg-fixed opacity-80 lg:block" />
 
                 <DevGuardBanner
                     heading="Know every package"
@@ -89,10 +83,10 @@ function Shell({
                 />
                 {mobileTopContent}
 
-                <HatchBar />
+                <HatchBar fullWidthMobileOnly />
                 {children}
             </div>
-            <HatchBar />
+            <HatchBar fullWidth />
         </div>
     )
 }
@@ -154,7 +148,7 @@ export default function PurlPageComponent({
             <Shell>
                 <div className="flex flex-col lg:flex-row">
                     {/* Left skeleton (2/3) */}
-                    <div className="flex-1 pt-10 pr-12 pb-10 pl-12 sm:px-8 lg:w-2/3 lg:pr-12 lg:pl-20">
+                    <div className="flex-1 pt-10 pr-6 pb-10 pl-6 sm:px-8 lg:w-2/3 lg:pr-12 lg:pl-20">
                         {/* Hero skeleton */}
                         <div className="mb-8">
                             <div className="flex flex-wrap items-center gap-3">
@@ -190,13 +184,15 @@ export default function PurlPageComponent({
                         </Card>
                     </div>
 
+                    <HatchBar fullWidth className="lg:hidden" />
+
                     {/* Divider skeleton */}
                     <div className="hidden lg:block">
                         <div className="pointer-events-none h-full w-8 border-r border-l border-r-(--grid-line-color) border-l-(--grid-line-color) bg-[repeating-linear-gradient(315deg,var(--grid-line-color)_0,var(--grid-line-color)_1px,transparent_0,transparent_50%)] bg-size-[10px_10px] bg-fixed opacity-80" />
                     </div>
 
                     {/* Right skeleton (1/3) */}
-                    <div className="flex flex-col gap-4 pt-10 pr-12 pb-10 pl-12 sm:px-8 lg:w-1/3 lg:pr-20 lg:pl-12">
+                    <div className="flex flex-col gap-4 pt-10 pr-6 pb-10 pl-6 sm:px-8 lg:w-1/3 lg:pr-20 lg:pl-12">
                         <Card className="hidden bg-transparent lg:block">
                             <CardHeader className="px-5 pt-5 pb-3">
                                 <Skeleton className="h-3 w-16" />
@@ -245,7 +241,7 @@ export default function PurlPageComponent({
     if (!result.component.published) {
         return (
             <div>
-                <HatchBar />
+                <HatchBar fullWidth />
                 <div className="flex min-h-[30vh] flex-col items-center justify-center py-24 text-center">
                     <p className="text-muted-foreground/20 font-mono text-8xl font-bold select-none">
                         404
@@ -359,7 +355,7 @@ export default function PurlPageComponent({
     return (
         <Shell
             mobileTopContent={
-                <div className="px-4 pt-4 sm:px-8 lg:hidden">
+                <div className="px-4 pt-4 pb-12 sm:px-8 lg:hidden">
                     <Card className="bg-transparent">
                         <CardHeader className="px-5 pt-5 pb-3">
                             <CardTitle className={LABEL_CLASS}>
@@ -396,7 +392,7 @@ export default function PurlPageComponent({
             {/* Main layout: left 2/3 | divider | right 1/3 */}
             <div className="flex flex-col lg:flex-row">
                 {/* ── Left column (2/3) ── */}
-                <div className="flex-1 pt-10 pr-12 pb-10 pl-12 sm:px-8 lg:w-2/3 lg:pr-12 lg:pl-20">
+                <div className="flex-1 pt-10 pr-6 pb-10 pl-6 sm:px-8 lg:w-2/3 lg:pr-12 lg:pl-20">
                     {/* Hero */}
                     <PackageHeroCard
                         packageName={packageName}
@@ -470,13 +466,15 @@ export default function PurlPageComponent({
                     </Card>
                 </div>
 
+                <HatchBar fullWidth className="lg:hidden" />
+
                 {/* ── Divider ── */}
                 <div className="hidden lg:block">
                     <div className="pointer-events-none h-full w-8 border-r border-l border-r-(--grid-line-color) border-l-(--grid-line-color) bg-[repeating-linear-gradient(315deg,var(--grid-line-color)_0,var(--grid-line-color)_1px,transparent_0,transparent_50%)] bg-size-[10px_10px] bg-fixed opacity-80" />
                 </div>
 
                 {/* ── Right column (1/3) ── */}
-                <div className="flex flex-col gap-4 pt-10 pr-12 pb-10 pl-12 sm:px-8 lg:w-1/3 lg:pr-20 lg:pl-12">
+                <div className="flex flex-col gap-4 pt-10 pr-6 pb-10 pl-6 sm:px-8 lg:w-1/3 lg:pr-20 lg:pl-12">
                     {/* Search */}
                     <Card className="hidden bg-transparent lg:block">
                         <CardHeader className="px-5 pt-5 pb-3">
