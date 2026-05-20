@@ -2,22 +2,15 @@
 title: "DevGuard Comparison Security Tools Overview"
 description: "DevGuard comparison security tools — see how DevGuard stacks up against Snyk, Semgrep, Dependency-Track, Aikido, and others feature by feature."
 seo:
-  keyword_primary: "DevGuard comparison security tools"
-  keywords_secondary: []
-lang: "en-US"
-og:
-  title: "DevGuard Comparison Security Tools Overview"
-  description: "DevGuard comparison security tools — see how DevGuard stacks up against Snyk, Semgrep, Dependency-Track, Aikido, and others feature by feature."
-  image: "/og-image.png"
-  type: "article"
+  robots: "index,follow"
+  og:
+    image: "/og-image.png"
+    type: "article"
   schema:
     type: "TechArticle"
-robots: "index,follow"
+  keyword_primary: "DevGuard comparison security tools"
+lang: "en-US"
 ignoreChecks:
-  - "checkIfKeywordDensityInRange"
-  - "checkIfMinimumInternalLinks"
-  - "checkIfHeadingContainsKeywordPrimary"
-  - "checkIfHeadingOrderCorrect"
 ---
 
 # Tool Comparison Overview

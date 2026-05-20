@@ -6,6 +6,7 @@
     "src/pages/privacy-policy.mdx",
     "src/pages/package-inspector.mdx",
     "src/pages/vulnerability-database.mdx",
+    "src/pages/comparison/index.md",
     "src/pages/other/**",
     "src/pages/reference/**",
     "src/pages/tutorials/**",

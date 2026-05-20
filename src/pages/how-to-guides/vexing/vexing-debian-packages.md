@@ -2,22 +2,15 @@
 title: "Vexing Debian Packages: CVE Investigation Playbook"
 description: "A repeatable playbook for vexing Debian packages CVE investigation — determine if a finding is a false positive or requires an accept-risk justification."
 seo:
-  keyword_primary: "vexing Debian packages CVE investigation"
-  keywords_secondary: []
-lang: "en-US"
-og:
-  title: "Vexing Debian Packages CVE Investigation Guide"
-  description: "A repeatable playbook for vexing Debian packages CVE investigation — determine if a finding is a false positive or requires an accept-risk justification."
-  image: "/og-image.png"
-  type: "article"
+  robots: "index,follow"
+  og:
+    image: "/og-image.png"
+    type: "article"
   schema:
     type: "TechArticle"
-robots: "index,follow"
+  keyword_primary: "CVE findings in debian"
+lang: "en-US"
 ignoreChecks:
-  - "checkIfKeywordDensityInRange"
-  - "checkIfMinimumInternalLinks"
-  - "checkIfHeadingContainsKeywordPrimary"
-  - "checkIfHeadingOrderCorrect"
 ---
 
 # How to Investigate CVE Findings in Debian Packages (False Positive vs. Accept Risk)
