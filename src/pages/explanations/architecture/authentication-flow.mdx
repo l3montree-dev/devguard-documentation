@@ -1,17 +1,17 @@
 ---
-title: "Authentication Flow"
-description: "How DevGuard handles authentication using Ory Kratos for session management, Personal Access Tokens for API access, and Casbin for role-based authorization."
+title: DevGuard Authentication Flow
+description: Explore the authentication flow documentation. Learn about supply chain
+  security, vulnerability management, and compliance with DevGuard open-source platform.
 seo:
-  robots: "index,follow"
+  robots: index,follow
   og:
-    image: "/og-image.png"
-    type: "article"
+    image: /og-image.png
+    type: article
   schema:
-    type: "TechArticle"
-  keyword_primary: "DevGuard authentication architecture"
-lang: "en-US"
-ignoreChecks: 
-  - "checkIfTitleContainsKeywordPrimary"
+    type: TechArticle
+  keyword_primary: authentication flow
+lang: en-US
+ignoreChecks: null
 ---
 import Image from 'next/image';
 import { Callout } from '@document-writing-tools/kernux-theme'
@@ -111,3 +111,9 @@ Users can authenticate via OAuth2 providers. Tokens are stored encrypted and ref
 ### External Entity Provider RBAC
 
 For projects/assets linked to GitLab/GitHub repositories, DevGuard delegates permission checks to the external provider's API to verify repository access.
+
+## Related Documentation
+
+- [DevGuard Explanations](/explanations)
+- [Getting Started with DevGuard](/getting-started)
+- [DevGuard Reference](/reference)

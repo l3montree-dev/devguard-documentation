@@ -1,11 +1,18 @@
 ---
 seo:
-  robots: "noindex, nofollow"
+  robots: noindex,nofollow
+  keyword_primary: malicious package blocking
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+title: DevGuard Malicious Package Blocking
+description: Explore the DevGuard Malicious Package Blocking documentation. Learn
+  about vulnerability scanning, supply chain security, and DevSecOps compliance monitoring.
+lang: en-US
+ignoreChecks: null
 ---
-import Image from 'next/image';
-import { Callout } from '@document-writing-tools/kernux-theme'
-import { Tooltip, TooltipTrigger, TooltipContent } from "@document-writing-tools/kernux-theme";
-import PageContentComingSoon from '@/components/PageContentComingSoon'
 
 # Malicious Package Blocking
 
@@ -19,3 +26,9 @@ The proxy uses the [OSSF Malicious Packages dataset](https://github.com/ossf/mal
 - Compromised package versions
 
 The database is automatically updated every 2 hours to ensure the latest threat intelligence.
+
+## Related Documentation
+
+- [Dependency Proxy Security](/explanations/security/dependency-proxy-security)
+- [DevGuard Dependency Proxy How-To Guide](/how-to-guides/security/dependency-proxy)
+- [How to Setup the proxy for npm](/how-to-guides/security/dependency-proxy/setup-npm-proxy)

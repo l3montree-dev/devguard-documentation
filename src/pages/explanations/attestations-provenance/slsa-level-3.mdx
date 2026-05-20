@@ -1,17 +1,17 @@
 ---
-title: "Achieving SLSA Level 3 on GitLab"
-description: "Step-by-step guide to achieving SLSA Level 3 on GitLab — creating tamper-resistant build attestations using DevGuard and GitLab CI protected runners."
+title: Achieving SLSA Level 3 on GitLab
+description: Explore the achieving slsa level 3 on documentation. Learn about vulnerability
+  management and compliance with DevGuard open-source platform.
 seo:
-  robots: "index,follow"
+  robots: index,follow
   og:
-    image: "/og-image.png"
-    type: "article"
+    image: /og-image.png
+    type: article
   schema:
-    type: "TechArticle"
-  keyword_primary: "SLSA level 3 GitLab attestation"
-lang: "en-US"
-ignoreChecks: 
-  - "checkIfTitleContainsKeywordPrimary"
+    type: TechArticle
+  keyword_primary: achieving slsa level 3 on
+lang: en-US
+ignoreChecks: null
 ---
 import { Callout } from '@document-writing-tools/kernux-theme'
 
@@ -51,3 +51,9 @@ Prior to implementing this configuration, it is essential to create a `DEPLOY_TO
 Crucially, DevGuard will utilize its own key for signing the attestations, a key that remains unknown to the maintainer. This measure effectively eliminates the possibility for the maintainer to tamper with the attestations, thereby enhancing the integrity and authenticity of the software supply chain.
 
 In conclusion, the adoption of these practices within GitLab can significantly contribute to achieving SLSA Level 3, establishing a more secure and trustworthy software development environment.
+
+## Related Documentation
+
+- [DevGuard Explanations](/explanations)
+- [Supply Chain Security Explanations](/explanations/supply-chain-security)
+- [Getting Started with DevGuard](/getting-started)

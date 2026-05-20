@@ -1,17 +1,17 @@
 ---
-title: "Discovering Base Image Attestations"
-description: "Automatically discover and extract attestations from container base images to inherit security metadata and verify provenance in your DevGuard workflow."
+title: Discovering Base Image Attestations
+description: Explore the discovering base image attestations documentation. Learn
+  about vulnerability management and compliance with DevGuard open-source platform.
 seo:
-  robots: "index,follow"
+  robots: index,follow
   og:
-    image: "/og-image.png"
-    type: "article"
+    image: /og-image.png
+    type: article
   schema:
-    type: "TechArticle"
-  keyword_primary: "base image attestation discovery"
-lang: "en-US"
-ignoreChecks: 
-  - "checkIfTitleContainsKeywordPrimary"
+    type: TechArticle
+  keyword_primary: discovering base image attestations
+lang: en-US
+ignoreChecks: null
 ---
 
 # Discovering Base Image Attestations
@@ -107,3 +107,9 @@ jq '.predicate' vex > vex-document.json
 # Upload the extracted VEX document
 devguard-scanner vex --token xyz --apiUrl https://api.devguard.org/ --assetName my-org/projects/my-group/assets/my-repo vex-document.json
 ```
+
+## Related Documentation
+
+- [DevGuard Tutorials](/tutorials)
+- [DevGuard Explanations](/explanations)
+- [DevGuard How-To Guides](/how-to-guides)
