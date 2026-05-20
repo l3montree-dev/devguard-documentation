@@ -8,7 +8,7 @@ seo:
     type: "article"
   schema:
     type: "TechArticle"
-  keyword_primary: "container SBOM security scanning"
+  keyword_primary: "Container SBOM Security Scanning"
 lang: "en-US"
 ignoreChecks:
 ---
