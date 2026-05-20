@@ -1,17 +1,17 @@
 ---
-title: "Audit Trails"
-description: "Track and review all security events and actions in DevGuard's immutable audit trail — generating compliance reports and evidence for regulatory requirements."
+title: DevGuard Audit Trails
+description: Explore the DevGuard audit trails documentation. Learn about supply chain
+  security, vulnerability scanning, and compliance monitoring with DevGuard platform.
 seo:
-  robots: "index,follow"
+  robots: index,follow
   og:
-    image: "/og-image.png"
-    type: "article"
+    image: /og-image.png
+    type: article
   schema:
-    type: "TechArticle"
-  keyword_primary: "DevGuard audit trails"
-lang: "en-US"
-ignoreChecks: 
-  - "checkIfTitleContainsKeywordPrimary"
+    type: TechArticle
+  keyword_primary: audit trails
+lang: en-US
+ignoreChecks: null
 ---
 
 import Image from 'next/image';
@@ -155,13 +155,13 @@ GET /api/v1/organizations/{org}/projects/{project}/assets/{asset}/refs/{version}
 GET /api/v1/organizations/{org}/projects/{project}/assets/{asset}/refs/{version}/dependency-vulns/{vulnId}/events/
 ```
 
-Both endpoints return paginated JSON and support filtering by event type, date range, and vulnerability ID. Use a [Personal Access Token](/how-to-guides/personal-access-tokens) for authentication.
+Both endpoints return paginated JSON and support filtering by event type, date range, and vulnerability ID. Use a [Personal Access Token](/explanations/personal-access-token) for authentication.
 
 ---
 
 ## Related documentation
 
 - [Vulnerability Event System](/explanations/vulnerability-management/vulnerability-events) — conceptual explanation of all event types and when to use them
-- [VEX: Vulnerability Exploitability eXchange](/explanations/devsecops/csaf-vex-explained) — how DevGuard generates VEX documents from your audit trail
+- [VEX: Vulnerability Exploitability eXchange](/explanations/compliance/csaf-vex-explained) — how DevGuard generates VEX documents from your audit trail
 - [ISO 27001 Mapping](/explanations/compliance/iso-27001-mapping) — how DevGuard controls map to ISO 27001 requirements
 - [Cyber Resilience Act](/explanations/compliance/cyber-resilience-act) — CRA compliance with DevGuard

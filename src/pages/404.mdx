@@ -1,12 +1,32 @@
 ---
 disableToc: true
 theme:
-  layout: "raw"
+  layout: raw
 seo:
-  robots: "noindex, nofollow"
+  robots: noindex,nofollow
+  keyword_primary: DevGuard documentation
+  og:
+    image: /og-image.png
+    type: website
+  schema:
+    type: WebPage
+title: Page Not Found - DevGuard Documentation
+description: The page you are looking for does not exist on the DevGuard documentation
+  site. Return to the DevGuard homepage or use the search to find what you need.
+lang: en-US
+ignoreChecks:
+- checkIfHeadingContainsKeywordPrimary
+- checkIfHeadingOrderCorrect
 ---
 
 import NotFoundPage from '@/components/404'
 
 
+
 <NotFoundPage />
+
+## Related Documentation
+
+- [Getting Started with DevGuard](/getting-started)
+- [DevGuard How-To Guides](/how-to-guides)
+- [DevGuard Explanations](/explanations)

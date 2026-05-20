@@ -1,11 +1,18 @@
 ---
 seo:
-  robots: "noindex, nofollow"
+  robots: noindex,nofollow
+  keyword_primary: database schema
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+title: DevGuard Database Schema
+description: Explore the DevGuard Database Schema documentation. Explore supply chain
+  security, vulnerability scanning, and compliance monitoring using DevGuard.
+lang: en-US
+ignoreChecks: null
 ---
-import Image from 'next/image';
-import { Callout } from '@document-writing-tools/kernux-theme'
-import { Tooltip, TooltipTrigger, TooltipContent } from "@document-writing-tools/kernux-theme";
-import PageContentComingSoon from '@/components/PageContentComingSoon'
 
 # Database Schema
 
@@ -111,3 +118,9 @@ Because artifact identity depends on which asset version it belongs to, the key 
 Vulnerability findings are stored at the asset version level, but they also need to be associated with specific artifacts. The naive approach — copying a finding for every artifact that contains it — would create a lot of redundant rows, since most artifacts in a given asset version share the same dependencies.
 
 Instead, DevGuard uses pivot tables (`artifact_dependency_vulns` and `artifact_license_risks`) that store only the relationship between an artifact and a finding, not the finding data itself. A vulnerability is written once, and the pivot table records which artifacts are affected. Rescanning a branch with many similar artifacts therefore doesn't balloon the database — each distinct finding exists exactly once, and the associations are cheap rows in a join table.
+
+## Related Documentation
+
+- [DevGuard Explanations](/explanations)
+- [Getting Started with DevGuard](/getting-started)
+- [DevGuard Reference](/reference)
