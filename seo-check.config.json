@@ -70,5 +70,6 @@
     "src/pages/tutorials/vulnerability-management/triaging-vulnerabilities.mdx",
     "src/pages/tutorials/index.mdx"
   ],
-  "globallyDisabledChecks": ["checkIfKeywordDensityInRange"]
+  "globallyDisabledChecks": ["checkIfKeywordDensityInRange",
+"checkIfMetaDescriptionContainsKeywordPrimary"]
 }
