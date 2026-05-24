@@ -1,0 +1,182 @@
+---
+title: DevGuard MCP Server – Model Context Protocol Integration
+description: "Connect Claude and other MCP-compatible AI assistants to DevGuard — scan repositories, manage vulnerabilities, and triage risks directly from chat."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: devguard mcp server
+lang: en-US
+ignoreChecks: null
+---
+
+import { Callout } from '@document-writing-tools/kernux-theme'
+import { DocTabs as Tabs } from '@document-writing-tools/kernux-theme'
+
+# DevGuard MCP Server
+
+<Callout type="warning">
+  **Proof of Concept** This integration is not yet production-ready. It is intended for experimentation and feedback only. Share your thoughts in the [GitHub Discussion](https://github.com/l3montree-dev/devguard/discussions/1906).
+</Callout>
+
+The DevGuard MCP Server is a [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server that connects any MCP-compatible AI assistants directly to the DevGuard security platform. It lets your AI assistant scan repositories for vulnerabilities, manage security findings, and triage risks without leaving the chat.
+
+---
+
+## What it can do
+
+| Capability | Details |
+|------------|---------|
+| Browse your workspace | List organizations, projects, and assets in DevGuard |
+| Run security scans | Dependency (SCA), secrets, SAST, IaC, and container image scans |
+| Upload documents | SBOM, SARIF, and VEX files |
+| Manage findings | List and assess vulnerabilities with CVE/CVSS/EPSS data |
+| Triage risks | Accept risks or mark findings as false positives with justification |
+
+<Callout type="warning">
+  **Use with caution in production projects.** AI assistants can make mistakes  especially when assessing vulnerabilities. Any risk acceptance, false-positive marking, or finding management done through the MCP server should be reviewed by a human before it is treated as final. We strongly recommend against letting an AI assistant make security decisions in production environments without human review.
+</Callout>
+
+---
+
+## Requirements
+
+- A [DevGuard](https://devguard.org) account
+- A Personal Access Token (PAT) — see [Personal Access Tokens](/explanations/personal-access-token) for how to create one
+- Any MCP-compatible AI client: Claude Desktop, Claude Code (VS Code), Cursor, GitHub Copilot, Windsurf, or similar
+
+---
+
+## Installation
+
+Download the latest binary for your platform from the [Releases page](https://github.com/l3montree-dev/devguard-mcp-server/releases):
+
+| Platform | File |
+|----------|------|
+| Linux amd64 | `devguard-mcp-linux-amd64` |
+| Linux arm64 | `devguard-mcp-linux-arm64` |
+| macOS amd64 | `devguard-mcp-darwin-amd64` |
+| macOS arm64 | `devguard-mcp-darwin-arm64` |
+| Windows amd64 | `devguard-mcp-windows-amd64.exe` |
+| Windows arm64 | `devguard-mcp-windows-arm64.exe` |
+
+Make the binary executable on Linux and macOS:
+
+```bash
+chmod +x devguard-mcp-linux-amd64
+```
+
+### Build from source
+
+```bash
+git clone https://github.com/l3montree-dev/devguard/mcp-server
+cd mcp-server
+go build -o devguard-mcp ./cmd/mcp-server
+```
+
+---
+
+## Configuration
+
+The server is configured via environment variables:
+
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `DEVGUARD_PAT` | Yes | — | Your DevGuard Personal Access Token |
+| `DEVGUARD_API_URL` | No | `https://api.devguard.org/api/v1` | Custom API URL for self-hosted instances |
+
+You can pass these as environment variables directly in your client config.
+
+---
+
+## Setup
+
+<Tabs items={['Claude Desktop', 'Claude Code (VS Code)']}>
+  <Tabs.Tab>
+    ### Claude Desktop
+
+    Add the following to your Claude Desktop config file:
+
+    - **macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
+    - **Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
+
+    ```json
+    {
+      "mcpServers": {
+        "devguard": {
+          "command": "/path/to/devguard-mcp",
+          "env": {
+            "DEVGUARD_PAT": "your-pat-here"
+          }
+        }
+      }
+    }
+    ```
+
+    For a self-hosted DevGuard instance, also add `DEVGUARD_API_URL`:
+
+    ```json
+    {
+      "mcpServers": {
+        "devguard": {
+          "command": "/path/to/devguard-mcp",
+          "env": {
+            "DEVGUARD_PAT": "your-pat-here",
+            "DEVGUARD_API_URL": "https://your-instance/api/v1"
+          }
+        }
+      }
+    }
+    ```
+
+    Restart Claude Desktop — the DevGuard tools will be available in your next conversation.
+  </Tabs.Tab>
+
+  <Tabs.Tab>
+    ### Claude Code (VS Code)
+
+    Add the server via the Claude Code CLI:
+
+    ```bash
+    claude mcp add devguard /path/to/devguard-mcp -e DEVGUARD_PAT=your-pat-here
+    ```
+
+    Or add it manually to `~/.claude.json`:
+
+    ```json
+    {
+      "mcpServers": {
+        "devguard": {
+          "command": "/path/to/devguard-mcp",
+          "env": {
+            "DEVGUARD_PAT": "your-pat-here"
+          }
+        }
+      }
+    }
+    ```
+
+    Verify the server was registered:
+
+    ```bash
+    claude mcp list
+    ```
+
+    You should see `devguard` in the list. The tools will be available in your next Claude Code session.
+  </Tabs.Tab>
+</Tabs>
+
+<Callout type="default">
+  The same approach works for Cursor, GitHub Copilot, Windsurf, and any other MCP-compatible client refer to your client's MCP documentation for the exact config location.
+</Callout>
+
+---
+
+## Related
+
+- [Personal Access Tokens](/explanations/personal-access-token) — how to create and manage PATs
+- [GitHub Discussion](https://github.com/l3montree-dev/devguard/discussions/1906) — share feedback on the MCP server
+- [Installation](/getting-started/installation/) — how to install DevGuard

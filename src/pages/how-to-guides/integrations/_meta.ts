@@ -6,4 +6,5 @@ export default {
     github: { title: 'GitHub Integration' },
     gitlab: { title: 'GitLab Integration' },
     jira: { title: 'Jira Integration' },
+    'mcp-server': { title: 'MCP Server' },
 }
