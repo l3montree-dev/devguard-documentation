@@ -12,7 +12,7 @@ export const getServerSideCVEs = async (): Promise<CVEList> => {
     if (cachedTotal && Date.now() < cachedTotal.expiresAt) {
         return { total: cachedTotal.value }
     }
-    const res = await fetch(`${API_BASE_URL}/vulndb/list-ids-by-creation-date`)
+    const res = await fetch(`${API_BASE_URL}/vulndb/list-ids-by-creation-date/`)
     if (!res.ok) {
         throw new Error(`Upstream API error: ${res.status} ${res.statusText}`)
     }
@@ -31,7 +31,7 @@ export default async function handler(
         const data = await getServerSideCVEs()
         TOTAL_CVES = data?.total ?? 0
     } catch (e) {
-        console.log(e)
+        console.error(e)
     }
     const CVES_PER_SITEMAP = 50000
     const numberOfCveSitemaps = Math.ceil(TOTAL_CVES / CVES_PER_SITEMAP)

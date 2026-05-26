@@ -2,10 +2,14 @@ const fs = require('fs')
 const path = require('path')
 const { spawnSync } = require('child_process')
 const grayMatter = require('gray-matter')
+const { loadEnvConfig } = require('@next/env')
+
+loadEnvConfig(process.cwd())
 
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
     siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'https://docs.devguard.org',
+    trailingSlash: true,
     generateRobotsTxt: true,
     robotsTxtOptions: {
         additionalSitemaps: [
