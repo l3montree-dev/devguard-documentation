@@ -5,7 +5,7 @@
     "scripts": {
         "dev": "next dev --turbopack",
         "build": "next build --webpack",
-        "postbuild": "next-sitemap && cp sitemap.xml public/sitemap.xml",
+        "postbuild": "next-sitemap",
         "start": "next start",
         "lint": "next lint"
     },
