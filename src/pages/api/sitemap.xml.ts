@@ -31,7 +31,7 @@ export default async function handler(
         const data = await getServerSideCVEs()
         TOTAL_CVES = data?.total ?? 0
     } catch (e) {
-        console.error(e)
+        console.log(e)
     }
     const CVES_PER_SITEMAP = 50000
     const numberOfCveSitemaps = Math.ceil(TOTAL_CVES / CVES_PER_SITEMAP)
