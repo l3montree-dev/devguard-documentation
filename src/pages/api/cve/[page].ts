@@ -57,7 +57,7 @@ export default async function handler(
     }
 
     const cveUrls = data.data.map(
-        (item) => `${baseUrl}/vulnerability-database/${item.CVEID}`,
+        (item) => `${baseUrl}/vulnerability-database/${item.CVEID}/`,
     )
 
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>

@@ -3,7 +3,7 @@
     "version": "2.1.0-rc.0",
     "description": "Devguard documentation",
     "scripts": {
-        "dev": "next dev --webpack",
+        "dev": "next dev --turbopack",
         "build": "next build --webpack",
         "postbuild": "next-sitemap && cp sitemap.xml public/sitemap.xml",
         "start": "next start",
