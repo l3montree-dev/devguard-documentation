@@ -15,7 +15,7 @@ export default function CTASection({
     primaryLabel = 'Get started for free',
     primaryHref = 'https://app.devguard.org',
     secondaryLabel = 'Read the docs',
-    secondaryHref = '/docs',
+    secondaryHref = '/',
 }: CTAProps) {
     return (
         <div className="relative isolate overflow-hidden py-24 sm:py-42">
