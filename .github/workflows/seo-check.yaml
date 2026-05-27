@@ -9,7 +9,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check registry reachability
-        run: curl -I https://registry.opencode.de/v2/
+        run: |
+          echo "=== DNS lookup ==="
+          dig registry.opencode.de || nslookup registry.opencode.de
+          echo "=== Trace route ==="
+          traceroute -m 10 registry.opencode.de || true
+          echo "=== curl ==="
+          curl -vI https://registry.opencode.de/v2/ 2>&1 || true
 
   seo-check:
     runs-on: ubuntu-latest
