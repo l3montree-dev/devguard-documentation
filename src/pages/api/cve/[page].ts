@@ -46,7 +46,7 @@ export default async function handler(
         return res.status(400).send('Invalid page number')
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://devguard.org'
+    const baseUrl = 'https://docs.devguard.org'
     const CVES_PER_SITEMAP = 50000
     const offset = pageNum * CVES_PER_SITEMAP
 
