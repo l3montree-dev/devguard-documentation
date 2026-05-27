@@ -21,7 +21,7 @@ export const getServerSideCVEs = async (
     }
     try {
         const res = await fetch(
-            `${API_BASE_URL}/vulndb/list-ids-by-creation-date/?offset=${encodeURIComponent(String(offset))}&limit=${encodeURIComponent(String(CVES_PER_SITEMAP))}`,
+            `https://api.main.devguard.org/api/v1/vulndb/list-ids-by-creation-date/?offset=${encodeURIComponent(String(offset))}&limit=${encodeURIComponent(String(CVES_PER_SITEMAP))}`,
         )
         if (!res.ok) {
             console.error(`Upstream API error: ${res.status} ${res.statusText}`)
