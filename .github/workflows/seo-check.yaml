@@ -5,6 +5,12 @@ on:
   workflow_dispatch:
 
 jobs:
+  registry-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check registry reachability
+        run: curl -I https://registry.opencode.de/v2/
+
   seo-check:
     runs-on: ubuntu-latest
     steps:
