@@ -10,8 +10,12 @@ jobs:
     steps:
       - name: Check registry reachability
         run: |
-          echo "=== DNS lookup ==="
-          dig registry.opencode.de || nslookup registry.opencode.de
+          echo "=== DNS lookup (default resolver) ==="
+          dig registry.opencode.de || true
+          echo "=== DNS lookup (Google 8.8.8.8) ==="
+          dig @8.8.8.8 registry.opencode.de || true
+          echo "=== DNSSEC check ==="
+          dig @8.8.8.8 registry.opencode.de +dnssec || true
           echo "=== Trace route ==="
           traceroute -m 10 registry.opencode.de || true
           echo "=== curl ==="
