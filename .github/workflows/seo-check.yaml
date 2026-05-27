@@ -25,11 +25,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - name: Fix DNS if broken
-        run: |
-          if ! dig +short registry.opencode.de | grep -q .; then
-            echo "DNS resolution failed, falling back to hardcoded IP"
-            echo "141.95.36.242 registry.opencode.de" | sudo tee -a /etc/hosts
-          fi
       - name: Run SEO-Check
-        run: docker run --rm -v ${{ github.workspace }}:/workspace -w /workspace registry.opencode.de/open-code/document-writing-tools/seo-check:main-amd64
+        run: docker run --rm -v ${{ github.workspace }}:/workspace -w /workspace ghcr.io/l3montree-dev/seo-check:main-amd64
