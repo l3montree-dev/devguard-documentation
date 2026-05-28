@@ -5,6 +5,7 @@ type CVEList = {
     data: {
         CVEID: string
         CreatedAt: string
+        DatePublished?: string
     }[]
 }
 
@@ -56,16 +57,18 @@ export default async function handler(
         return res.status(500).send('Failed to fetch CVE data')
     }
 
-    const cveUrls = data.data.map(
-        (item) => `${baseUrl}/vulnerability-database/${item.CVEID}/`,
-    )
+    const cveUrls = data.data.map((item) => ({
+        loc: `${baseUrl}/vulnerability-database/${item.CVEID}/`,
+        lastmod: new Date(item.DatePublished ?? item.CreatedAt).toISOString(),
+    }))
 
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${cveUrls
     .map(
         (cve) => `  <url>
-    <loc>${cve}</loc>
+    <loc>${cve.loc}</loc>
+    <lastmod>${cve.lastmod}</lastmod>
   </url>`,
     )
     .join('\n')}
