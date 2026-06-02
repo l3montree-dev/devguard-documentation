@@ -12,7 +12,9 @@ export const getServerSideCVEs = async (): Promise<CVEList> => {
     if (cachedTotal && Date.now() < cachedTotal.expiresAt) {
         return { total: cachedTotal.value }
     }
-    const res = await fetch(`https://api.main.devguard.org/api/v1/vulndb/list-ids-by-creation-date/`)
+    const res = await fetch(
+        `https://api.main.devguard.org/api/v1/vulndb/list-ids-by-creation-date/`,
+    )
     if (!res.ok) {
         throw new Error(`Upstream API error: ${res.status} ${res.statusText}`)
     }
