@@ -38,13 +38,18 @@ export default async function handler(
     const CVES_PER_SITEMAP = 50000
     const numberOfCveSitemaps = Math.ceil(TOTAL_CVES / CVES_PER_SITEMAP)
 
+    const now = new Date().toISOString()
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap>
+    <loc>${baseUrl}/api/vuln-filters.xml</loc>
+    <lastmod>${now}</lastmod>
+  </sitemap>
 ${Array.from(
     { length: numberOfCveSitemaps },
     (_, i) => `  <sitemap>
     <loc>${baseUrl}/api/cve/${i}.xml</loc>
-    <lastmod>${new Date().toISOString()}</lastmod>
+    <lastmod>${now}</lastmod>
   </sitemap>`,
 ).join('\n')}
 </sitemapindex>`
