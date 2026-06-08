@@ -49,6 +49,7 @@
 
   --color-card: #161B23 !important;
   --color-border: hsl(215 22% 15%) !important; 
+  --accent-foreground: hsl(0 0% 5%);
 }
 
 [data-kern-theme="dark"] {
