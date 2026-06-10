@@ -20,6 +20,22 @@
 
 # DevGuard Documentation
 
+## SEO Check
+
+SEO checks are enforced in CI. To run them locally against a specific file:
+
+```sh
+npm run seo-check src/pages/your-file.mdx
+```
+
+To check all files:
+
+```sh
+npm run seo-check
+```
+
+The check runs via Docker using the `registry.opencode.de/open-code/document-writing-tools/seo-check` image. It exits with code `1` when any check fails.
+
 ## Link Checking
 
 Broken links are checked automatically on every push via the [Link Check](.github/workflows/link-check.yaml) workflow. The build continues even when broken links are found — results appear in the GitHub Actions job summary.
