@@ -234,3 +234,7 @@ li>code,
 strong>code {
   @apply bg-black!;
 }
+
+.c7-bubble svg {
+  stroke: black;
+}
