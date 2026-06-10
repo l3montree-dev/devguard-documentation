@@ -1,0 +1,122 @@
+---
+title: Transitive Dependency Risks and Vulnerabilities Explained
+description: "What is a transitive dependency? Learn how a transitive dependency introduces hidden vulnerabilities and how DevGuard surfaces them per node."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: transitive dependency
+lang: en-US
+ignoreChecks: null
+---
+
+import { Callout } from '@document-writing-tools/kernux-theme'
+
+# What Is a Transitive Dependency — and Why It Creates Hidden Vulnerabilities
+
+Modern software rarely builds on just the packages you explicitly install. Behind every direct dependency lies a tree of further packages — and vulnerabilities anywhere in that tree can put your application at risk. Understanding transitive dependencies is the first step to controlling that risk.
+
+---
+
+## What is a transitive dependency?
+
+When your application declares a dependency on a package, that package may itself depend on other packages. Those indirect packages are called **transitive dependencies** (also known as indirect dependencies).
+
+**Example:**
+
+```
+Your App
+└── openssl          ← direct dependency
+    └── libcrypto    ← transitive dependency (depth 2)
+        └── zlib     ← transitive dependency (depth 3)
+```
+
+You declared a dependency on `openssl`. You did not explicitly choose `libcrypto` or `zlib` — but they are pulled into your build and run as part of your application.
+
+The deeper the dependency tree, the less visibility teams typically have into what is actually running in their software.
+
+---
+
+## What is a transitive vulnerability?
+
+A **transitive vulnerability** is a security flaw in a transitive dependency that can affect your application, even though the vulnerable package is not one you directly depend on.
+
+**Concrete example:**
+
+Your application uses `openssl`. `openssl` depends on `libcrypto`. A CVE is published against `libcrypto`. Even though you never listed `libcrypto` in your dependency file, your application is affected — because `openssl` ships `libcrypto` as part of its own dependency chain.
+
+<Callout type="warning">
+  Transitive vulnerabilities are often overlooked in manual reviews because they do not appear in top-level dependency files like `package.json`, `go.mod`, or `requirements.txt`. A full software composition analysis (SCA) scan is required to surface them.
+</Callout>
+
+---
+
+## Why transitive dependencies are a significant risk
+
+### They are invisible by default
+
+Most developers only see the packages they directly install. The full dependency tree — which can contain hundreds or thousands of packages in a typical application — is hidden unless you actively inspect it.
+
+### They are harder to remediate
+
+Fixing a direct dependency is straightforward: update the version in your manifest. Fixing a transitive vulnerability often requires the maintainer of your direct dependency to release an update first. Until then, you must find workarounds or accept the risk.
+
+### They account for the majority of vulnerable packages
+
+In practice, the vast majority of vulnerable packages found in a typical application are transitive — not direct — dependencies. Ignoring them leaves most of your attack surface unaddressed.
+
+---
+
+## Depth in the dependency graph
+
+The **depth** of a dependency describes how many steps removed it is from your application:
+
+| Depth | Description | Example |
+|-------|-------------|---------|
+| 1 | Direct dependency — you declared it | `openssl` in your `go.mod` |
+| 2 | Your direct dependency depends on it | `libcrypto` pulled in by `openssl` |
+| 3+ | Further indirect dependencies | `zlib` pulled in by `libcrypto` |
+
+Greater depth does not necessarily mean lower risk. A critical vulnerability in a depth-5 package is just as exploitable as one in a direct dependency — if your application exercises the code path that reaches it.
+
+---
+
+## How DevGuard handles transitive dependencies
+
+When you connect a repository to DevGuard and run a scan, DevGuard performs a full **Software Composition Analysis (SCA)** that resolves the complete dependency graph — not just your top-level packages.
+
+### The Dependency Risks table
+
+After a scan, the **Dependency Risks** table in DevGuard shows every vulnerability found across your entire dependency tree. For each finding, DevGuard displays:
+
+- **The vulnerable package** — the exact component that contains the CVE
+- **The dependency path** — the full chain from your application down to the vulnerable package, node by node
+- **The depth** — how many hops the vulnerable package is away from your code
+- **Severity and exploitability data** — aggregated from NVD, EPSS, OSV, and other sources
+
+This means you can see not only *that* a vulnerability exists, but *how* your application reaches it — which packages form the chain, and at which node the vulnerable code lives.
+
+### Per-node remediation
+
+DevGuard lets you act on each node in the dependency path individually. For every transitive vulnerability, you can:
+
+- **Accept the risk** on a specific node — record that you have assessed the vulnerability in its context and consider it acceptable, with a reason and expiry date
+- **Mark as false positive** — if the vulnerable code path is not reachable from your application
+- **Track remediation** — open an issue directly from the finding and follow the fix through to completion
+
+This granularity matters because the right action often depends on *where* in the chain the vulnerability lives. A depth-3 vulnerability in a package used only in test code requires a different response than the same CVE in a package invoked on every request.
+
+<Callout type="info">
+  DevGuard generates the dependency graph from the SBOM produced during the scan. The SBOM captures the full component inventory including transitive packages, their versions, and their relationships — giving DevGuard the data it needs to build the complete path from your application to each vulnerability.
+</Callout>
+
+---
+
+## Related
+
+- [Explaining SBOMs](/explanations/explaining-sboms) — what an SBOM is and why it is the foundation for transitive dependency analysis
+- [Vulnerability Management](/explanations/vulnerability-management) — how to prioritize and remediate vulnerabilities found in your dependency tree
+- [Run your first scan](/getting-started) — connect your repository and surface transitive vulnerabilities in minutes
