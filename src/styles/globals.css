@@ -101,6 +101,12 @@
   h1 { @apply text-[36px]!; line-height: normal !important; }
   h2 { @apply text-[30px]!; }
   h3 { @apply text-[24px]!; }
+
+  .doc-steps {
+    h2, h3, h4 {
+      font-size: 24px !important;
+    }
+  }
   
 
   /* Heading font — Lexend */
