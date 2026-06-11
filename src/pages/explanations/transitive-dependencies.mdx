@@ -68,11 +68,27 @@ Fixing a direct dependency is straightforward: update the version in your manife
 
 In practice, the vast majority of vulnerable packages found in a typical application are transitive — not direct — dependencies. Ignoring them leaves most of your attack surface unaddressed.
 
+### Triage is harder for transitive vulnerabilities
+
+When a vulnerability appears in one of your direct dependencies, you can read its code and understand exactly how your application calls it. With a transitive dependency, that visibility is gone: you only know that *some* intermediate package depends on it — you do not know which functions it calls, under what conditions, or whether the vulnerable code path is ever exercised at all.
+
+This makes it genuinely difficult to answer the question every security team needs to answer: *Is my application actually affected?*
+
+Research on npm packages confirms this. A [call-graph analysis study on transitive vulnerabilities](https://devguard.org/research-development/vexing-npm-Callgraph-Analyse%20f%C3%BCr%20die%20Reduzierung%20von%20False-positives-bei-der-schwachstellenidentifikation-in-javascript.pdf) found that a vulnerability propagates across a package boundary with roughly **26.3 % probability**. Across two hops the probability drops to about **6.9 %** — following a conditional probability model where each additional hop multiplies the chance of actual exposure:
+
+```
+P(A affected | C vulnerable) = P(A | B) · P(B | C) = 0.263 · 0.263 ≈ 0.069
+```
+
+In absolute numbers the study observed 2,360 directly affected packages — after one inheritance step 1,487 remained (63 %), after two steps only 512. The pattern is consistent exponential decay.
+
+The practical implication: deeper transitive vulnerabilities are statistically *less likely* to affect your application, but they are also the hardest to verify manually. Tooling that surfaces the full dependency path — and lets you reason per node — is therefore more valuable the deeper the chain goes.
+
 ---
 
 ## Depth in the dependency graph
 
-The **depth** of a dependency describes how many steps removed it is from your application:
+**Depth** describes how many hops a dependency is away from your application:
 
 | Depth | Description | Example |
 |-------|-------------|---------|
@@ -80,7 +96,7 @@ The **depth** of a dependency describes how many steps removed it is from your a
 | 2 | Your direct dependency depends on it | `libcrypto` pulled in by `openssl` |
 | 3+ | Further indirect dependencies | `zlib` pulled in by `libcrypto` |
 
-Greater depth does not necessarily mean lower risk. A critical vulnerability in a depth-5 package is just as exploitable as one in a direct dependency — if your application exercises the code path that reaches it.
+Greater depth generally correlates with lower probability of actual impact — but does not eliminate risk. A critical vulnerability in a depth-5 package is just as exploitable as one in a direct dependency if your application exercises the code path that reaches it. Depth is a useful signal for prioritisation, not a reason to ignore a finding.
 
 ---
 
@@ -93,18 +109,18 @@ When you connect a repository to DevGuard and run a scan, DevGuard performs a fu
 After a scan, the **Dependency Risks** table in DevGuard shows every vulnerability found across your entire dependency tree. For each finding, DevGuard displays:
 
 - **The vulnerable package** — the exact component that contains the CVE
-- **The dependency path** — the full chain from your application down to the vulnerable package, node by node
+- **The dependency path** — the full chain from your application down to the vulnerable package, node by node. DevGuard supports [path pattern matching](/explanations/vulnerability-management/mitigation-strategies#path-pattern-matching) so you can write VEX rules that target specific chains rather than blanket-dismissing a CVE.
 - **The depth** — how many hops the vulnerable package is away from your code
 - **Severity and exploitability data** — aggregated from NVD, EPSS, OSV, and other sources
 
-This means you can see not only *that* a vulnerability exists, but *how* your application reaches it — which packages form the chain, and at which node the vulnerable code lives.
+This means you can see not only *that* a vulnerability exists, but *how* your application reaches it — which packages form the chain, and at which node the vulnerable code lives. For a deeper look at how DevGuard resolves these chains, see [Transitive Vulnerability Path Analysis](/explanations/supply-chain-security/transitive-vulnerability-path-analysis).
 
 ### Per-node remediation
 
 DevGuard lets you act on each node in the dependency path individually. For every transitive vulnerability, you can:
 
 - **Accept the risk** on a specific node — record that you have assessed the vulnerability in its context and consider it acceptable, with a reason and expiry date
-- **Mark as false positive** — if the vulnerable code path is not reachable from your application
+- **Mark as false positive** — if the vulnerable code path is not reachable from your application. See [False Positive Detection](/explanations/vulnerability-management/false-positive-detection) for how DevGuard helps identify these cases.
 - **Track remediation** — open an issue directly from the finding and follow the fix through to completion
 
 This granularity matters because the right action often depends on *where* in the chain the vulnerability lives. A depth-3 vulnerability in a package used only in test code requires a different response than the same CVE in a package invoked on every request.
