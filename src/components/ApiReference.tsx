@@ -40,7 +40,7 @@ const ApiReference: React.FC = () => {
     return (
         <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
             {Object.entries(groups).sort(([a], [b]) => a.localeCompare(b)).map(([tag, ops]) => (
-                <Link key={tag} href={`/reference/api/${encodeURIComponent(tag)}`}>
+                <Link key={tag} href={`/reference/api/${tag.toLowerCase().replace(/\s+/g, '-')}`}>
                     <Card className="h-full transition-colors hover:bg-muted/40">
                         <CardContent className="px-4 py-3">
                             <p className="font-medium">{tag}</p>

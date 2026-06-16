@@ -117,8 +117,8 @@ const OperationSection: React.FC<{ path: string; method: string; op: OpenAPIV3.O
                             <thead>
                                 <tr className="border-b border-border text-left text-muted-foreground">
                                     <th className="pb-2 pl-2 pr-6 font-medium">Name</th>
-                                    <th className="pb-2 pl-2 pr-6 font-medium">In</th>
-                                    <th className="pb-2 pl-2 pr-6 font-medium">Type</th>
+                                    <th className="pb-2 pl-2 pr-6 font-medium whitespace-nowrap">In</th>
+                                    <th className="pb-2 pl-2 pr-6 font-medium whitespace-nowrap">Type</th>
                                     <th className="pb-2 font-medium">Description</th>
                                 </tr>
                             </thead>
@@ -128,8 +128,8 @@ const OperationSection: React.FC<{ path: string; method: string; op: OpenAPIV3.O
                                     return (
                                         <tr key={i} className="border-b border-border/40 odd:bg-muted last:border-0">
                                             <td className="p-2 pr-6 align-top font-mono">{p.name}{p.required && <span className="text-destructive">*</span>}</td>
-                                            <td className="p-2 pr-6 align-top text-muted-foreground">{p.in}</td>
-                                            <td className="p-2 pr-6 align-top font-mono text-muted-foreground">{s?.type ?? '—'}</td>
+                                            <td className="p-2 pr-6 align-top text-muted-foreground whitespace-nowrap">{p.in}</td>
+                                            <td className="p-2 pr-6 align-top font-mono text-muted-foreground whitespace-nowrap">{s?.type ?? '—'}</td>
                                             <td className="p-2 align-top text-muted-foreground">{p.description ?? '—'}</td>
                                         </tr>
                                     )
