@@ -1,0 +1,59 @@
+---
+title: Setup Go Proxy with DevGuard Dependency Proxy
+description: "Configure Go modules to route package downloads through the DevGuard dependency proxy for malicious package detection and supply chain security."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: setup go proxy with devguard
+lang: en-US
+ignoreChecks: null
+---
+
+import { Callout } from '@document-writing-tools/kernux-theme'
+
+# Setup Go Proxy with DevGuard Dependency Proxy
+
+The XZ Utils backdoor discovered in 2024 (CVE-2024-3094) was a stark reminder that supply chain attacks are not limited to dynamic language ecosystems — a malicious contributor spent years gaining trust before inserting a backdoor into a widely deployed compression library. While the Go module proxy protocol provides strong integrity guarantees through checksums, it does not protect against modules that are malicious by design. The DevGuard dependency proxy adds that missing layer, checking every module against the [OSV dataset](https://osv.dev) before it is written to your module cache.
+
+- **Registry URL**: `<your-devguard-url>/api/v1/dependency-proxy/go`
+
+## Configuration
+
+Set the `GOPROXY` environment variable to point at DevGuard. Go will use it for all subsequent module downloads in that shell session:
+
+```bash
+export GOPROXY="https://<your-devguard-url>/api/v1/dependency-proxy/go"
+```
+
+To make this permanent, add it to your CI environment or shell profile. For project-scoped configuration, set it in your CI/CD platform's environment variable configuration alongside your other build variables. Then use `go get` as usual:
+
+```bash
+go get github.com/example/package
+```
+
+<Callout type="info">
+  On startup, the proxy blocks all requests until the malicious package database is fully loaded. This initialization period prevents cache poisoning. See [Cache Management](/how-to-guides/dependency-proxy/cache-management) for details.
+</Callout>
+
+## Testing
+
+DevGuard ships a test module that is permanently flagged as malicious:
+
+```bash
+go get github.com/fake-org/malicious-package
+# Expected: 403 Forbidden
+```
+
+If the request is blocked, the proxy is working correctly. Legitimate modules in the same session will resolve normally.
+
+## Further Reading
+
+- [Dependency Proxy Overview](/how-to-guides/dependency-proxy)
+- [Cache Management](/how-to-guides/dependency-proxy/cache-management)
+- [Setup npm Proxy](/how-to-guides/dependency-proxy/setup-npm-proxy)
+- [Setup PyPI Proxy](/how-to-guides/dependency-proxy/setup-pypi-proxy)
+- [OSV (Open Source Vulnerabilities)](https://osv.dev)

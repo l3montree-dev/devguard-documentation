@@ -1,0 +1,48 @@
+---
+title: Dependency Proxy with Malicious Package Firewall
+description: "DevGuard dependency proxy malicious packages firewall — blocks risky packages on download, scans dependencies, and enforces supply chain security policies."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: dependency proxy with malicious package
+lang: en-US
+ignoreChecks: null
+---
+
+# Dependency Proxy with Malicious Package Firewall
+
+DevGuard includes a built-in dependency proxy that acts as a protective layer between your development environment and public package registries. It helps prevent supply chain attacks by blocking malicious packages before they reach your systems.
+
+## How It Works
+
+1. **Request Interception**: When you install a package, the proxy intercepts the request
+2. **Database Check**: The package is checked against the [OSV dataset](https://osv.dev), which includes GitHub malware advisories — kept current via the [vulndb sync](/reference/vulnerability-database/update-schedule)
+3. **Blocking**: If flagged as malicious, the request is blocked and logged
+4. **Caching**: Safe packages are cached with SHA256 integrity verification
+5. **Metrics**: All blocked attempts are recorded in Prometheus metrics
+
+## Supported Ecosystems
+
+| Ecosystem | Registry URL |
+|-----------|-------------|
+| npm | `/api/v1/dependency-proxy/npm` |
+| Go modules | `/api/v1/dependency-proxy/go` |
+| PyPI | `/api/v1/dependency-proxy/pypi/simple` |
+
+For setup instructions, see the ecosystem-specific guides:
+
+- [Setup npm Proxy](/how-to-guides/dependency-proxy/setup-npm-proxy)
+- [Setup Go Proxy](/how-to-guides/dependency-proxy/setup-go-proxy)
+- [Setup PyPI Proxy](/how-to-guides/dependency-proxy/setup-pypi-proxy)
+
+## Minimum Package Age
+
+The proxy can be configured to refuse any package version published more recently than a specified number of days. This gives the security community time to detect and flag malicious releases before they reach your teams — a simple but effective defense against attacks that rely on packages being downloaded within hours of publication.
+
+## Cache & Security
+
+The proxy enforces security at the caching layer — malicious packages are never cached, and the database must be fully loaded before any requests are served. See [Cache Management](/how-to-guides/dependency-proxy/cache-management) for details.

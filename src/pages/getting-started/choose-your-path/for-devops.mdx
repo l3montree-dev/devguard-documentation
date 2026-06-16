@@ -110,7 +110,7 @@ DevGuard includes a dependency proxy that sits between your build environment an
 
 Downloaded packages are cached with SHA256 integrity verification, speeding up subsequent builds while preventing cache poisoning. The malicious package database updates automatically several times a day.
 
-See [Dependency Proxy setup](/how-to-guides/security/dependency-proxy) for per-ecosystem configuration.
+See [Dependency Proxy setup](/how-to-guides/dependency-proxy) for per-ecosystem configuration.
 
 ---
 
@@ -139,7 +139,7 @@ If your team also operates the DevGuard platform, the [administration guides](/h
 3. **Add the `full-scan` workflow or component** to one repository as a pilot — verify results in the DevGuard UI before rolling out
 4. **Retrieve the DevGuard public key** with `devguard-scanner inspect-devguard-token` and add it to a Kyverno policy for deployment-time verification
 5. **Adjust `--failOnRisk` thresholds** per asset — the default is `critical`; tune based on exposure
-6. **Configure the [dependency proxy](/how-to-guides/security/dependency-proxy)** for your build environments to block malicious packages
+6. **Configure the [dependency proxy](/how-to-guides/dependency-proxy)** for your build environments to block malicious packages
 
 ---
 

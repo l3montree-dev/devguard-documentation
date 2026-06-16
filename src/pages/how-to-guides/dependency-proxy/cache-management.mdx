@@ -44,8 +44,13 @@ The proxy checks packages for malicious content **before** caching:
 2. If a package becomes flagged after being cached, it's automatically removed
 3. Each request is checked against the latest database
 
-## Related Documentation
+## Minimum Package Age
 
-- [Dependency Proxy How-To Guides](/how-to-guides/security/dependency-proxy)
-- [DevGuard How-To Guides](/how-to-guides)
-- [Security Explanations](/explanations/security)
+The proxy can be configured to refuse any package version published more recently than a specified number of days. This gives the security community time to detect and flag malicious releases before they reach your teams.
+
+## Further Reading
+
+- [Dependency Proxy Overview](/how-to-guides/dependency-proxy)
+- [Setup npm Proxy](/how-to-guides/dependency-proxy/setup-npm-proxy)
+- [Setup Go Proxy](/how-to-guides/dependency-proxy/setup-go-proxy)
+- [Setup PyPI Proxy](/how-to-guides/dependency-proxy/setup-pypi-proxy)
