@@ -19,7 +19,7 @@ export default function PageContentComingSoon() {
 
                 <span className="mt-2 block text-sm font-semibold text-gray-400">
                     Sorry, the content is coming soon. <br />
-                    Work in is progress! <br />
+                    Work in progress! <br />
                     ✂️
                 </span>
             </div>
