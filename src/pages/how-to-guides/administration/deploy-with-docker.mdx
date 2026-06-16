@@ -1,6 +1,6 @@
 ---
 title: Deploy DevGuard with Docker Compose
-description: "How to deploy DevGuard Docker Compose setup locally or in production — configuration, environment variables, and getting started with docker-compose."
+description: "How to deploy DevGuard with Docker Compose for testing, evaluation, or production — configuration, environment variables, and getting started."
 seo:
   robots: index,follow
   og:
@@ -16,11 +16,11 @@ import { Callout, DocSteps as Steps } from '@document-writing-tools/kernux-theme
 
 # Deploy DevGuard with Docker Compose
 
-Run DevGuard locally using Docker Compose for testing and evaluation.
+Run DevGuard using Docker Compose — suitable for evaluation, self-hosted setups, or production when Kubernetes is not available.
 
-> [!WARNING]
-> This setup is for **testing and evaluation only**. For production
-> deployments, use the [Helm chart](/how-to-guides/administration/deploy-with-helm).
+<Callout type="info">
+  For large-scale or cloud-native production deployments, the [Helm chart](/how-to-guides/administration/deploy-with-helm) is the recommended path.
+</Callout>
 
 ## Prerequisites
 
@@ -30,23 +30,24 @@ Run DevGuard locally using Docker Compose for testing and evaluation.
 
 <Steps>
 
-### Download required files
+### Download the Compose file
 
 ```bash
-curl -LO https://raw.githubusercontent.com/l3montree-dev/devguard/refs/heads/main/docker-compose-try-it.yaml \
-&& curl -LO https://raw.githubusercontent.com/l3montree-dev/devguard/refs/heads/main/initdb.sql \
-&& curl -LO https://raw.githubusercontent.com/l3montree-dev/devguard/refs/heads/main/.kratos/identity.schema.json \
-&& curl -L -o kratos.yml https://raw.githubusercontent.com/l3montree-dev/devguard/refs/heads/main/.kratos/kratos.example.yml \
-&& mkdir -p kratos \
-&& mv kratos.yml kratos/kratos.yml \
-&& mv identity.schema.json kratos/identity.schema.json
+curl -LO https://raw.githubusercontent.com/l3montree-dev/devguard/refs/heads/main/docker-compose-try-it.yaml
 ```
 
 ### Start the containers
 
 ```bash
-docker-compose -f docker-compose-try-it.yaml up
+docker compose -f docker-compose-try-it.yaml up
 ```
+
+On first start, a `devguard-setup` service runs automatically to:
+- generate a random AES-256 encryption key
+- download the Kratos identity config
+- download the database init script
+
+All files are stored in Docker named volumes — no manual file setup required.
 
 ### Access DevGuard
 
@@ -58,63 +59,36 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 **Email verification**: No SMTP server is configured by default. During registration, skip email verification by clicking "Back".
 
-To enable email delivery, you can additionally append the `COURIER_SMTP_CONNECTION_URI` environment-variable to the `kratos` service:
+To enable email delivery, append `COURIER_SMTP_CONNECTION_URI` to the `kratos` service in the Compose file:
 
 ```yaml
 services:
-    kratos:
-        environment:
-            # Add your username and password in the url
-            - COURIER_SMTP_CONNECTION_URI=smtp://user:password@smtp.example.com:587/?skip_ssl_verify=false
+  kratos:
+    environment:
+      - COURIER_SMTP_CONNECTION_URI=smtp://user:password@smtp.example.com:587/?skip_ssl_verify=false
 ```
 
 **Vulnerability database**: The API downloads the latest vulnerability database on first start. This may take several minutes. Vulnerability data and scan results won't be complete until the download finishes.
 
-## Adapting for Production
+## Hardening for Production
 
-If you must use Docker Compose in production, **change all default passwords**:
+The `docker-compose-try-it.yaml` file contains inline `[PRODUCTION]` comments on every value that must change before going live. The key items are:
 
-1. `POSTGRES_PASSWORD` in the `postgresql` service
-2. Database password in `initdb.sql`
-3. `DSN` in both `kratos` and `kratos-migrate` services
-4. Remove `--dev` flag from the kratos command
+| What | Where | Action |
+|---|---|---|
+| DevGuard DB password | `postgresql`, `devguard-api`, `devguard-migrate` | Set a strong random `POSTGRES_PASSWORD` |
+| Kratos DB password | `kratos`, `kratos-migrate` DSN | Set a separate strong password for the `kratos` DB user |
+| Kratos config | `kratos`, `kratos-migrate` volumes | Replace the auto-downloaded config with a bind-mounted, customised `kratos.yml` (configure SMTP, disable `--dev`, set OIDC providers) |
+| Public URLs | `devguard-api`, `devguard-web` | Set `INSTANCE_DOMAIN`, `FRONTEND_URL`, and `ORY_SDK_PUBLIC_URL` to your `https://` domains |
+| TLS | `devguard-api`, `devguard-web` ports | Place a TLS-terminating reverse proxy (nginx, Caddy, Traefik) in front — do not expose ports 8080/3000 directly |
+| Log level | `kratos`, `devguard-api` | Change `LOG_LEVEL` from `debug` to `info` or `warn` |
 
-```yaml
-# Example password locations in docker-compose-try-it.yaml
-services:
-    postgresql:
-        environment:
-            # Change to your password
-            POSTGRES_PASSWORD: change-me-definitely-when-not-testing 
-
-    #...
-
-    kratos-migrate:
-        environment:
-            # Add your password in url
-            - DSN=postgres://kratos:change-me-definitely-when-not-testing@postgresql:5432/kratos?sslmode=disable # Change to your password
-
-    #...
-
-    kratos:
-        environment:
-            # Add your password in url
-            - DSN=postgres://kratos:change-me-definitely-when-not-testing@postgresql:5432/kratos?sslmode=disable
-        # Remove --dev flag from command
-        command: serve -c /etc/config/kratos/kratos.yml --dev --watch-courier 
-```
-
-<Callout type="error">
-    Never run the default `docker-compose-try-it.yaml` in production. The
-    default passwords are publicly known.
+<Callout type="warning">
+  The encryption key is auto-generated into a Docker named volume on first start. Back up the `encryption-key` volume — losing it makes all stored integration secrets unrecoverable.
 </Callout>
 
 ## Next Steps
 
 - Run your first scan: [Getting Started Guide](/getting-started/first-scan)
-
-## Related Documentation
-
-- [Getting Started with DevGuard](/getting-started)
-- [DevGuard How-To Guides](/how-to-guides)
-- [DevGuard Explanations](/explanations)
+- [Configure monitoring](/how-to-guides/administration/monitoring-metrics)
+- [Set up backups](/how-to-guides/administration/backup-restore)
