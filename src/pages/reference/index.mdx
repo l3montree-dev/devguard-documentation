@@ -13,7 +13,7 @@ lang: en-US
 ignoreChecks: null
 ---
 
-import SwaggerReference from "../../components/SwaggerReference"
+import ApiReference from "../../components/ApiReference"
 import { Callout } from '@document-writing-tools/kernux-theme'
 
 <style>{`
@@ -29,11 +29,13 @@ The DevGuard API allows developers to integrate DevGuard's security features int
 
 The OpenAPI 3.1 specification for the DevGuard API is available right here: [DevGuard API Specification](https://raw.githubusercontent.com/l3montree-dev/devguard/refs/heads/main/docs/swagger.json)
 
-<Callout type="warning" emoji="⚠️">
-  DevGuard uses Request-Signing for API authentication. This is implemented using HTTP Message Signatures ([RFC 9421](https://www.rfc-editor.org/rfc/rfc9421.pdf)). The DevGuard-Scanner provides a CLI Command based on the cURL DevUX for easy interaction with the DevGuard API. See here for more docs: [DevGuard-Scanner CLI Reference](/reference/scanner/curl)
+<Callout type="info">
+  The interactive API explorer below authenticates using **Bearer tokens** only. Enter your `dvg_…` token to try requests directly in the browser.
+
+  DevGuard also supports ECDSA request signing for stronger security guarantees — see [Use the DevGuard API](/getting-started/use-devguard-api) for details.
 </Callout>
 
-<SwaggerReference />
+<ApiReference />
 
 ## Related Documentation
 

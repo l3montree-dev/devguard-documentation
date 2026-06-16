@@ -22,16 +22,6 @@
     margin: 0 !important;
 }
 
-/* Hide built-in auth — we use custom PAT dialog */
-.swagger-ui .auth-wrapper,
-.swagger-ui .authorization__btn {
-    display: none !important;
-}
-
-/* Hide padlock icons */
-.swagger-ui .opblock-summary .opblock-summary-control svg[aria-label] {
-    display: none !important;
-}
 
 .swagger-ui {
     font-family: var(--font-inter), Inter, sans-serif;
