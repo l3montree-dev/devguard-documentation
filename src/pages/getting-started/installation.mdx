@@ -179,17 +179,20 @@ The CLI tool provides additional management capabilities for vulnerability datab
     go install github.com/l3montree-dev/devguard/cmd/devguard-cli@latest
     
     # Verify
-    devguard-cli --version
+    devguard-cli --help
     ```
   </Tabs.Tab>
 
   <Tabs.Tab>
     ```bash
     # Pull image
-    docker pull ghcr.io/l3montree-dev/devguard-cli:latest
+    docker pull ghcr.io/l3montree-dev/devguard:main
     
     # Create alias
-    alias devguard-cli='docker run --rm -v $(pwd):/work ghcr.io/l3montree-dev/devguard-cli:latest'
+    alias devguard-cli='docker run --rm -v $(pwd):/work ghcr.io/l3montree-dev/devguard:main devguard-cli'
+
+    #Verify
+    devguard-cli --help
     ```
   </Tabs.Tab>
 
