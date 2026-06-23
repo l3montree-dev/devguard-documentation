@@ -227,6 +227,26 @@ See the [Docker Compose Deployment Guide](/how-to-guides/administration/deploy-w
 
 ***
 
+## Versioning and Compatibility
+
+All DevGuard components share the same **minor version**. Any `vX.Y.*` release of one component is compatible with any `vX.Y.*` release of any other component. Patch versions are released independently — you can upgrade one component without upgrading others, as long as the minor version matches.
+
+| Component | Compatible example |
+|-----------|--------------------|
+| DevGuard (API/backend) | `v1.7.5` |
+| DevGuard Web (frontend) | `v1.7.2` |
+| Helm chart | `v1.7.0` |
+
+All three above are compatible — they share minor version `1.7`.
+
+<Callout type="warning">
+  Mixing components with different minor versions (e.g. `devguard v1.7.x` with `devguard-web v1.8.x`) is **not supported**.
+</Callout>
+
+See the full [Versioning Policy](https://github.com/l3montree-dev/devguard/blob/main/VERSIONING.md) for details.
+
+***
+
 ## Next Steps
 
 - [Quick Start Guide](/getting-started) - Run your first scan
