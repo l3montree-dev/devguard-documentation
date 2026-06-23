@@ -6,6 +6,10 @@ on:
   push:
   workflow_dispatch:
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   devguard-scanner:
     uses: l3montree-dev/devguard-ci-components/.github/workflows/full.yml@main
@@ -13,6 +17,7 @@ jobs:
         devguard-asset-name: "l3montree-cybersecurity/projects/devguard/assets/devguard-documentation"
         devguard-api-url: https://api.main.devguard.org
         fetch-depth: 0
+
     secrets:
         devguard-token: ${{ secrets.DEVGUARD_TOKEN }}
         build-args: --build-arg=NEXT_PUBLIC_CHAT_WIDGET_INTEGRITY=${{ vars.NEXT_PUBLIC_CHAT_WIDGET_INTEGRITY }} --build-arg=NEXT_PUBLIC_CHAT_WIDGET_SRC=${{ vars.NEXT_PUBLIC_CHAT_WIDGET_SRC }} --build-arg=NEXT_PUBLIC_PROJECT_ID=${{ vars.NEXT_PUBLIC_PROJECT_ID }} --build-arg=NEXT_PUBLIC_FEEDBACK_SERVER_URL=${{ vars.NEXT_PUBLIC_FEEDBACK_SERVER_URL }} --build-arg=NEXT_PUBLIC_DEVGUARD_API_URL=${{ vars.NEXT_PUBLIC_DEVGUARD_API_URL }} --build-arg=NEXT_PUBLIC_SITE_URL=${{ vars.NEXT_PUBLIC_SITE_URL }} --build-arg=NEXT_PUBLIC_UMAMI_WEBSITE_ID=${{ secrets.NEXT_PUBLIC_UMAMI_WEBSITE_ID }} --build-arg=NEXT_PUBLIC_UMAMI_URL=${{ secrets.NEXT_PUBLIC_UMAMI_URL }} --context=. --dockerfile=Dockerfile
