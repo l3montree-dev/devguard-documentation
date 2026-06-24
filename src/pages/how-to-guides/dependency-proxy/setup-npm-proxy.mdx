@@ -1,0 +1,65 @@
+---
+title: Setup npm Proxy with DevGuard Dependency Proxy
+description: "Configure npm to route package downloads through the DevGuard dependency proxy for malicious package detection and supply chain security."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: setup npm proxy with devguard
+lang: en-US
+ignoreChecks: null
+---
+
+import { Callout } from '@document-writing-tools/kernux-theme'
+
+# Setup npm Proxy with DevGuard Dependency Proxy
+
+Supply chain attacks through npm are a growing threat. In 2025, attackers published malicious packages impersonating the popular TanStack library, targeting developers who mistyped the package name or were misled by search results. Incidents like this — where a single `npm install` can silently compromise a developer machine or CI environment — highlight why every package download should be screened before it executes on your systems.
+
+The DevGuard dependency proxy sits between your developers and the public npm registry. Every package request is checked against the [OSV dataset](https://osv.dev) before it reaches your machine, blocking known malicious packages automatically.
+
+- **Registry URL**: `<your-devguard-url>/api/v1/dependency-proxy/npm`
+
+## Configuration
+
+Point npm at the DevGuard proxy by adding a registry entry to your `.npmrc`. This file can live at the project level (`./.npmrc`) to scope only that project, or at the user level (`~/.npmrc`) to apply globally.
+
+```ini
+registry=https://<your-devguard-url>/api/v1/dependency-proxy/npm
+```
+
+Once set, all `npm install` and `npm ci` invocations route through DevGuard transparently. No changes to your `package.json` or CI scripts are required.
+
+<Callout type="warning">
+  Set `strict-ssl=false` only for local testing against a self-signed certificate. Always use `true` in production.
+</Callout>
+
+<Callout type="info">
+  On startup, the proxy blocks all requests until the malicious package database is fully loaded. This initialization period prevents cache poisoning. See [Cache Management](/how-to-guides/dependency-proxy/cache-management) for details.
+</Callout>
+
+## Testing
+
+DevGuard ships a test package that is permanently flagged as malicious. Use it to verify the proxy is working before relying on it in production:
+
+```json
+{
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "fake-malicious-npm-package": "1.0.0"
+  }
+}
+```
+
+Run `npm install`. `lodash` installs successfully while `fake-malicious-npm-package` is rejected with a `403 Forbidden`. If you see both results, your proxy is configured correctly.
+
+## Further Reading
+
+- [Dependency Proxy Overview](/how-to-guides/dependency-proxy)
+- [Cache Management](/how-to-guides/dependency-proxy/cache-management)
+- [Setup Go Proxy](/how-to-guides/dependency-proxy/setup-go-proxy)
+- [Setup PyPI Proxy](/how-to-guides/dependency-proxy/setup-pypi-proxy)
+- [OSV (Open Source Vulnerabilities)](https://osv.dev)

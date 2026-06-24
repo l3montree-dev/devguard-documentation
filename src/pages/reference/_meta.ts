@@ -19,6 +19,9 @@ export default {
             toc: false,
         },
     },
+    api: {
+        title: 'API Resources',
+    },
     scanner: {
         title: 'DevGuard Scanner CLI-Commands',
     },

@@ -4,26 +4,13 @@ on:
   push:
   workflow_dispatch:
 
-jobs:
-  registry-check:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check registry reachability
-        run: |
-          echo "=== DNS lookup (default resolver) ==="
-          dig registry.opencode.de || true
-          echo "=== DNS lookup (Google 8.8.8.8) ==="
-          dig @8.8.8.8 registry.opencode.de || true
-          echo "=== DNSSEC check ==="
-          dig @8.8.8.8 registry.opencode.de +dnssec || true
-          echo "=== Trace route ==="
-          traceroute -m 10 registry.opencode.de || true
-          echo "=== curl ==="
-          curl -vI https://registry.opencode.de/v2/ 2>&1 || true
+permissions:
+  contents: read
 
+jobs:
   seo-check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
       - name: Run SEO-Check
-        run: docker run --rm -v ${{ github.workspace }}:/workspace -w /workspace ghcr.io/l3montree-dev/seo-check:main-amd64
+        run: docker run --rm -v ${{ github.workspace }}:/workspace -w /workspace ghcr.io/l3montree-dev/devguard-documentation/seo-check:main-amd64

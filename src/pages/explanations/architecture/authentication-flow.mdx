@@ -29,9 +29,11 @@ Users authenticate via Ory Kratos, which issues an `ory_kratos_session` cookie. 
 
 ### Personal Access Token (CLI/API)
 
-For programmatic access, DevGuard uses ECDSA P-256 signed HTTP requests.
+For programmatic access DevGuard supports two PAT modes. Both grant the same API access; they differ in authentication mechanism.
 
-**Required Headers**:
+**Asymmetric (ECDSA request signing)** — the private key never leaves the client. Every request is individually signed; signatures cover the HTTP method and a SHA-256 digest of the full request body, preventing replay and tampering.
+
+Required headers:
 ```
 X-Fingerprint: <sha256-of-public-key>
 Signature-Input: sig77=(...)
@@ -39,17 +41,35 @@ Signature: :base64-signature:
 Content-Digest: sha-256=:base64-hash:
 ```
 
-**Create Token**:
+Create an asymmetric token:
 ```bash
 POST /api/v1/pats
 {
   "description": "CI/CD Token",
   "scopes": "scan manage",
-  "pubKey": "<hex-encoded-ecdsa-p256-public-key>"
+  "pubKey": "<hex-encoded-ecdsa-p256-public-key>",
+  "expiryDateUnix": 1780000000
 }
 ```
 
-The system verifies signatures using the stored public key and creates sessions with the token's scopes (`scan`, `manage`).
+**Symmetric Bearer token** *(v1.6.0+)* — an opaque `dvg_`-prefixed secret. DevGuard stores only the SHA-256 hash; the cleartext is shown once at creation.
+
+Required header:
+```
+Authorization: Bearer dvg_<token>
+```
+
+Create a symmetric token (omit `pubKey`):
+```bash
+POST /api/v1/pats
+{
+  "description": "Webhook Token",
+  "scopes": "scan",
+  "expiryDateUnix": 1780000000
+}
+```
+
+The session middleware tries cookie auth first, then Bearer token, then request signature verification. On success it creates a session scoped to the token's `scan`/`manage` scopes.
 
 ## Authorization (RBAC)
 

@@ -1,6 +1,6 @@
 ---
 title: Personal Access Tokens
-description: "Learn how DevGuard personal access tokens (PATs) work — creating, scoping, and using tokens for API authentication and CI/CD pipeline integration."
+description: "How DevGuard personal access tokens work — asymmetric ECDSA request signing and symmetric Bearer tokens, including scopes, expiry, and security properties."
 seo:
   robots: index,follow
   og:
@@ -17,20 +17,41 @@ import { Callout } from '@document-writing-tools/kernux-theme'
 
 # Personal Access Tokens
 
-Personal Access Tokens (PATs) are how you authenticate non-interactive clients — CI/CD pipelines, the DevGuard scanner, and API scripts — against DevGuard. They use public-key cryptography so the private key never leaves the machine that created it, and every request is individually signed rather than replayed.
+Personal Access Tokens (PATs) authenticate non-interactive clients — CI/CD pipelines, the DevGuard scanner, and API scripts — against DevGuard. DevGuard supports two token types with different security properties. Use asymmetric request signing whenever possible.
 
 ---
 
-## How PATs work
+## Token Types
 
-Unlike a traditional bearer token, a DevGuard PAT is not a shared secret you present on each request. Instead:
+### Asymmetric Token (ECDSA Request Signing)
 
-1. **Your browser generates an ECDSA P-256 key pair** entirely client-side using the Web Crypto API.
-2. **Only the public key is sent to DevGuard.** The private key is shown to you once and never transmitted to or stored by the server.
-3. **Each API request is signed** with the private key. The signature covers the HTTP method and a digest of the request body, so it cannot be replayed or tampered with.
-4. **DevGuard verifies the signature** by looking up the stored public key via a fingerprint included in the request header.
+The asymmetric PAT uses public-key cryptography so the private key never leaves the machine that created it.
 
-This means that even if the DevGuard database were compromised, no private keys could be extracted from it.
+1. **Generate an ECDSA P-256 key pair** client-side (browser or CLI).
+2. **Register only the public key** with DevGuard. The private key is shown once and never transmitted to or stored by the server.
+3. **Sign every API request** with the private key. The signature covers the HTTP method and a SHA-256 digest of the full request body.
+4. **DevGuard verifies the signature** using the stored public key, looked up via a fingerprint header.
+
+Security properties:
+- **No secret on the wire** — only a signature travels; the private key never leaves your environment
+- **Request integrity** — the full body is included in the signature; tampering invalidates it
+- **Replay protection** — captured requests are useless without the matching private key
+- **Server compromise safe** — even if the DevGuard database were exfiltrated, no private keys could be extracted
+
+### Symmetric Bearer Token
+
+<Callout type="info">
+  Available since **v1.6.0**
+</Callout>
+
+A symmetric PAT is an opaque secret prefixed with `dvg_` generated server-side and shown to you once. Send it as an `Authorization: Bearer <token>` header. DevGuard stores only a SHA-256 hash — the cleartext is never persisted.
+
+Security properties:
+- **Zero server-side cleartext** — only the hash is stored; database leaks do not expose the token
+- **Simpler integration** — no signing library required; any HTTP client works
+- **Higher interception risk** — a captured token can be replayed until it expires, unlike a per-request signature
+
+Both token types provide access to the same API actions. Choose based on the security requirements and tooling constraints of your environment.
 
 ---
 
@@ -47,39 +68,56 @@ Both scopes can be combined on a single token. If a request requires a scope the
 
 ---
 
+## Expiry
+
+All tokens have a mandatory expiry date set at creation. The maximum lifetime is **one year**. Expired tokens are rejected immediately at authentication time. Set the shortest expiry that fits your workflow and rotate tokens regularly.
+
+---
+
 ## Creating a token
 
 1. Go to **User Settings → Personal Access Tokens**
 2. Enter a description (e.g., `gitlab-ci-main-repo`) and select the required scopes
-3. Click **Create** — the private key is displayed **once**
-4. Copy the private key immediately and store it securely (e.g., as a CI/CD secret variable)
+3. Choose the token type:
+   - **Asymmetric**: paste an ECDSA P-256 public key (generate one with `devguard-cli key generate`)
+   - **Symmetric**: leave the public key field empty — DevGuard generates the Bearer token
+4. Set an expiry date (required, max 1 year)
+5. Click **Create** — the private key or Bearer token is displayed **once**
+6. Copy it immediately and store it securely (e.g., as a CI/CD secret variable)
 
 <Callout type="warning">
-  The private key is shown only once and is never stored by DevGuard. If you lose it, you must delete the token and create a new one.
+  The token cleartext is shown only once and is never stored by DevGuard. If you lose it, you must delete the token and create a new one.
 </Callout>
 
 ---
 
 ## Using a token
 
-Pass the private key to the DevGuard scanner via the `--token` flag. The scanner handles request signing automatically:
+Pass the token to the DevGuard scanner via `--token`. The scanner detects the token type automatically and handles signing or Bearer auth accordingly:
 
 ```bash
-devguard-scanner sca --token <private-key>
+devguard-scanner sca --token <private-key-or-dvg_token>
 ```
 
-The scanner also accepts the token via the `DEVGUARD_TOKEN` environment variable (useful in CI where you store the key as a secret):
+Or via environment variable:
 
 ```bash
-DEVGUARD_TOKEN=<private-key> devguard-scanner sca
+DEVGUARD_TOKEN=<token> devguard-scanner sca
 ```
 
-For direct API calls, the request must be signed using the private key. The scanner and the official client libraries handle this for you. The signed request includes:
+For direct API calls with **asymmetric tokens**, the request must be signed. The signed request includes:
 
 - `X-Fingerprint` — identifies which public key to verify against
 - `Signature-Input` — describes what was signed
 - `Signature` — the ECDSA-P256 signature
 - `Content-Digest` — SHA-256 digest of the request body
+
+For direct API calls with **Bearer tokens**:
+
+```bash
+curl -H "Authorization: Bearer dvg_<token>" \
+  https://app.devguard.org/api/v1/organizations/my-org/projects/
+```
 
 ---
 
@@ -91,13 +129,14 @@ All active tokens are listed under **User Settings → Personal Access Tokens**.
 - Description
 - Scopes
 - Creation date
+- Expiry date
 - Last used timestamp — useful for spotting tokens that are no longer in use
 
 ### Revoking a token
 
 **From the UI**: Find the token in the list and click the delete button. You must be logged in.
 
-**By private key** (useful if you can no longer log in, or for scripted revocation):
+**By private key** (for asymmetric tokens — useful for scripted revocation):
 
 ```bash
 curl -X POST https://api.devguard.org/api/v1/pats/revoke-by-private-key \
@@ -109,17 +148,8 @@ This derives the fingerprint from the private key and deletes the matching token
 
 ---
 
-## Security properties
-
-- **Private key never stored server-side** — the server only stores the public key and a SHA-256 fingerprint of it
-- **Per-request signatures** — each request carries a fresh signature; stolen headers cannot be replayed
-- **Scope isolation** — a `scan`-only token cannot perform management operations even if compromised
-- **Last-used tracking** — you can see when each token was last authenticated and remove stale ones
-
----
-
 ## Related
 
-- [Authenticate with the API](/how-to-guides/api-usage/authenticate-with-api) — step-by-step guide to creating a token and making signed API requests
-- [Scan with GitLab CI](/how-to-guides/scanning/scan-with-gitlab-ci) — how to pass a token to the scanner in a pipeline
-- [Scan with GitHub Actions](/how-to-guides/scanning/scan-with-github-actions) — the equivalent for GitHub
+- [Create and Manage API Tokens](/getting-started/use-devguard-api) — step-by-step guide to creating tokens
+- [Authenticate with the API](/reference) — making API requests with a token
+- [Scan with GitLab CI](/how-to-guides/scanning/scan-with-gitlab-ci) — passing a token to the scanner in a pipeline

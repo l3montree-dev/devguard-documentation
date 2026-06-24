@@ -4,9 +4,8 @@ export default {
     'vulnerability-management': { title: 'Vulnerability Management' },
     'dependency-management': { title: 'Dependency Management' },
     integrations: { title: 'Integrations' },
-    security: { title: 'Security' },
+    "dependency-proxy": { title: 'Dependency Proxy' },
     compliance: { title: 'Compliance' },
-    'api-usage': { title: 'API Usage' },
     administration: { title: 'Administration' },
     vexing: { title: 'Vexing Vulnerabilities' },
 }

@@ -13,6 +13,7 @@ export default {
     comparison: { title: 'Comparison' },
     contributing: { title: 'Contributing' },
     other: { title: 'Other' },
+    faq: { title: 'FAQ' },
     'vulnerability-database': {
         theme: {
             layout: 'raw',

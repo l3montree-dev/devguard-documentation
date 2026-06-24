@@ -1,0 +1,73 @@
+---
+title: Setup PyPI Proxy with DevGuard Dependency Proxy
+description: "Configure pip and Python tools to route package downloads through the DevGuard dependency proxy for malicious package blocking and supply chain security."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: setup pypi proxy with devguard
+lang: en-US
+ignoreChecks: null
+---
+
+import { Callout } from '@document-writing-tools/kernux-theme'
+
+# Setup PyPI Proxy with DevGuard Dependency Proxy
+
+PyPI is one of the most actively abused package registries for supply chain attacks. The 2022 PyTorch supply chain attack saw attackers publish a malicious `torchtriton` package on PyPI that exfiltrated sensitive data from machines where PyTorch nightly builds were installed — a package that was installed automatically as a dependency. Thousands of similar attacks have followed, exploiting the fact that `pip install` executes code on download by default.
+
+The DevGuard dependency proxy sits between your Python tooling and the upstream PyPI registry, checking every package against the [OSV dataset](https://osv.dev) before it reaches your environment.
+
+- **Registry URL**: `<your-devguard-url>/api/v1/dependency-proxy/pypi/simple`
+
+## Configuration
+
+### Using a configuration file
+
+Create or edit `pip.conf` (Linux/macOS: `~/.config/pip/pip.conf`, Windows: `%APPDATA%\pip\pip.ini`) to permanently redirect all pip installs through DevGuard:
+
+```ini
+[global]
+index-url = https://<your-devguard-url>/api/v1/dependency-proxy/pypi/simple
+trusted-host = <your-devguard-host>
+```
+
+### Using environment variables
+
+For CI/CD pipelines or ephemeral environments, set the proxy via environment variables instead:
+
+```bash
+export PIP_INDEX_URL="https://<your-devguard-url>/api/v1/dependency-proxy/pypi/simple"
+export PIP_TRUSTED_HOST="<your-devguard-host>"
+pip install requests
+```
+
+<Callout type="warning">
+  Only set `trusted-host` when connecting to a DevGuard instance with a self-signed certificate. Remove it when using a properly signed TLS certificate in production.
+</Callout>
+
+<Callout type="info">
+  On startup, the proxy blocks all requests until the malicious package database is fully loaded. This initialization period prevents cache poisoning. See [Cache Management](/how-to-guides/dependency-proxy/cache-management) for details.
+</Callout>
+
+## Testing
+
+DevGuard ships a test package that is permanently flagged as malicious:
+
+```bash
+pip install fake-malicious-pypi-package
+# Expected: blocked with a 403 Forbidden error
+```
+
+If the install is blocked, the proxy is working correctly. All other packages in the same environment will resolve normally from the upstream PyPI registry.
+
+## Further Reading
+
+- [Dependency Proxy Overview](/how-to-guides/dependency-proxy)
+- [Cache Management](/how-to-guides/dependency-proxy/cache-management)
+- [Setup npm Proxy](/how-to-guides/dependency-proxy/setup-npm-proxy)
+- [Setup Go Proxy](/how-to-guides/dependency-proxy/setup-go-proxy)
+- [OSV (Open Source Vulnerabilities)](https://osv.dev)

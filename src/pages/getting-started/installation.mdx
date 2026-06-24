@@ -179,17 +179,20 @@ The CLI tool provides additional management capabilities for vulnerability datab
     go install github.com/l3montree-dev/devguard/cmd/devguard-cli@latest
     
     # Verify
-    devguard-cli --version
+    devguard-cli --help
     ```
   </Tabs.Tab>
 
   <Tabs.Tab>
     ```bash
     # Pull image
-    docker pull ghcr.io/l3montree-dev/devguard-cli:latest
+    docker pull ghcr.io/l3montree-dev/devguard:main
     
     # Create alias
-    alias devguard-cli='docker run --rm -v $(pwd):/work ghcr.io/l3montree-dev/devguard-cli:latest'
+    alias devguard-cli='docker run --rm -v $(pwd):/work ghcr.io/l3montree-dev/devguard:main devguard-cli'
+
+    #Verify
+    devguard-cli --help
     ```
   </Tabs.Tab>
 
@@ -221,6 +224,26 @@ See the [Docker Compose Deployment Guide](/how-to-guides/administration/deploy-w
 </Tabs.Tab>
 </Tabs>
 
+
+***
+
+## Versioning and Compatibility
+
+All DevGuard components share the same **minor version**. Any `vX.Y.*` release of one component is compatible with any `vX.Y.*` release of any other component. Patch versions are released independently — you can upgrade one component without upgrading others, as long as the minor version matches.
+
+| Component | Compatible example |
+|-----------|--------------------|
+| DevGuard (API/backend) | `v1.7.5` |
+| DevGuard Web (frontend) | `v1.7.2` |
+| Helm chart | `v1.7.0` |
+
+All three above are compatible — they share minor version `1.7`.
+
+<Callout type="warning">
+  Mixing components with different minor versions (e.g. `devguard v1.7.x` with `devguard-web v1.8.x`) is **not supported**.
+</Callout>
+
+See the full [Versioning Policy](https://github.com/l3montree-dev/devguard/blob/main/VERSIONING.md) for details. For a full history of changes see the [DevGuard CHANGELOG](https://github.com/l3montree-dev/devguard/blob/main/CHANGELOG.md) and the [Helm Chart CHANGELOG](https://github.com/l3montree-dev/devguard-helm-chart/blob/main/CHANGELOG.md).
 
 ***
 

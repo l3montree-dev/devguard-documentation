@@ -115,3 +115,4 @@ trivy sbom container-sbom.json
 * [Trivy Documentation](https://aquasecurity.github.io/trivy/)
 * [Syft SBOM Tool](https://github.com/anchore/syft)
 * [CycloneDX SBOM Specification](https://cyclonedx.org/)
+* [DevGuard Issue #2122 — Automatic SBOM merging from embedded image SBOMs](https://github.com/l3montree-dev/devguard/issues/2122)

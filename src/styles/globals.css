@@ -49,6 +49,7 @@
 
   --color-card: #161B23 !important;
   --color-border: hsl(215 22% 15%) !important; 
+  --accent-foreground: hsl(0 0% 5%);
 }
 
 [data-kern-theme="dark"] {
@@ -100,6 +101,12 @@
   h1 { @apply text-[36px]!; line-height: normal !important; }
   h2 { @apply text-[30px]!; }
   h3 { @apply text-[24px]!; }
+
+  .doc-steps {
+    h2, h3, h4 {
+      font-size: 24px !important;
+    }
+  }
   
 
   /* Heading font — Lexend */
@@ -232,4 +239,8 @@ ul>code,
 li>code,
 strong>code {
   @apply bg-black!;
+}
+
+.c7-bubble svg {
+  stroke: black;
 }
