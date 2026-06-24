@@ -32,15 +32,12 @@ export default async function handler(
         const upstream = await fetch(targetUrl)
         if (!upstream.ok) {
             const errorText = await upstream.text()
-            console.error(
-                `Upstream API error: ${upstream.status} ${upstream.statusText}`,
-                {
-                    url: targetUrl,
-                    status: upstream.status,
-                    statusText: upstream.statusText,
-                    body: errorText,
-                },
-            )
+            console.error('Upstream API error', {
+                url: targetUrl,
+                status: upstream.status,
+                statusText: upstream.statusText,
+                body: errorText,
+            })
             return res.status(upstream.status).json({
                 message: `Upstream API error: ${upstream.status} ${upstream.statusText}`,
             })
