@@ -67,33 +67,22 @@ The scanner is the primary tool for running security scans. It's a standalone bi
 
     ```bash
     # Pull latest image
-    docker pull ghcr.io/l3montree-dev/devguard-scanner:latest
+    docker pull ghcr.io/l3montree-dev/devguard/scanner:v1.7.3
     
     # Run scanner (mount current directory)
     docker run --rm \
       -v $(pwd):/app \
-      ghcr.io/l3montree-dev/devguard-scanner:latest \
+      ghcr.io/l3montree-dev/devguard/scanner:v1.7.3 \
       sca
     ```
 
     **Create convenient alias:**
     ```bash
     # Add to ~/.bashrc or ~/.zshrc
-    alias devguard-scanner='docker run --rm -v $(pwd):/app ghcr.io/l3montree-dev/devguard-scanner:latest'
+    alias devguard-scanner='docker run --rm -v $(pwd):/app ghcr.io/l3montree-dev/devguard/scanner:v1.7.3'
     
     # Now use like normal CLI
     devguard-scanner sca
-    ```
-
-    **Docker Compose example:**
-    ```yaml
-    services:
-      scanner:
-        image: ghcr.io/l3montree-dev/devguard-scanner:latest
-        volumes:
-          - ./:/app
-        working_dir: /app
-        command: sca
     ```
   </Tabs.Tab>
 
