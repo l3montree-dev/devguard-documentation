@@ -1,4 +1,5 @@
 export default {
+    'external-entity': { title: 'External Entity (SBOM Ingestion)' },
     'artifacts': { title: 'Artifacts' },
     'asset-versions': { title: 'Asset Versions' },
     'assets': { title: 'Assets' },
