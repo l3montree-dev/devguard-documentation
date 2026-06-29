@@ -44,6 +44,11 @@ const config = withMarkdownWebBook({
                 permanent: true,
             },
             {
+                source: '/explanations/vulnerability-management/false-positive-detection',
+                destination: '/explanations/vulnerability-management/reduce-false-positives',
+                permanent: true,
+            },
+            {
                 source: '/concept-guides/container-hardening/process',
                 destination: '/tutorials/container-hardening/process',
                 permanent: true,

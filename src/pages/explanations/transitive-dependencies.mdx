@@ -120,7 +120,7 @@ This means you can see not only *that* a vulnerability exists, but *how* your ap
 DevGuard lets you act on each node in the dependency path individually. For every transitive vulnerability, you can:
 
 - **Accept the risk** on a specific node — record that you have assessed the vulnerability in its context and consider it acceptable, with a reason and expiry date
-- **Mark as false positive** — if the vulnerable code path is not reachable from your application. See [False Positive Detection](/explanations/vulnerability-management/false-positive-detection) for how DevGuard helps identify these cases.
+- **Mark as false positive** — if the vulnerable code path is not reachable from your application. See [Reduce False Positives](/explanations/vulnerability-management/reduce-false-positives) for how DevGuard helps identify these cases.
 - **Track remediation** — open an issue directly from the finding and follow the fix through to completion
 
 This granularity matters because the right action often depends on *where* in the chain the vulnerability lives. A depth-3 vulnerability in a package used only in test code requires a different response than the same CVE in a package invoked on every request.
