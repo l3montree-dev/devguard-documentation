@@ -99,7 +99,7 @@ export function PackageInspectorPage() {
                     primaryLabel="Get started for free"
                     primaryHref="https://app.devguard.org"
                     secondaryLabel="Read the docs"
-                    secondaryHref="/docs"
+                    secondaryHref="../"
                 />
             </Container>
         </>
