@@ -125,6 +125,43 @@ All options are read from environment variables (or a YAML config file).
 
 ---
 
+## Trivy Configuration
+
+The container image sets `TRIVY_CONFIG=/etc/devguard/trivy.yaml`. Mount a ConfigMap to that path to customize Trivy's behavior — for example to restrict severity levels or disable database updates in air-gapped environments:
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: trivy-config
+  namespace: devguard
+data:
+  trivy.yaml: |
+    severity:
+      - HIGH
+      - CRITICAL
+    skip-update: true
+```
+
+Then mount it in the deployment alongside the token secret:
+
+```yaml
+volumeMounts:
+  - name: trivy-config
+    mountPath: /etc/devguard
+    readOnly: true
+volumes:
+  - name: trivy-config
+    configMap:
+      name: trivy-config
+```
+
+<Callout type="info">
+  The `--format` and `--output` flags are always passed explicitly by the daemon and cannot be overridden via the config file.
+</Callout>
+
+---
+
 ## Security
 
 - Runs as non-root (`UID 53111`) on a read-only root filesystem
