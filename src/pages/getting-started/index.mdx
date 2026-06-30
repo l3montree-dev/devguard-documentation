@@ -174,7 +174,7 @@ Next, create a personal access token by clicking the token generation button in 
 Copy the command from the dialog, which automatically includes your personal access token and the correct DevGuard API URL:
 
 ```bash
-docker run -v "$(PWD):/app" ghcr.io/l3montree-dev/devguard/scanner:main-latest \
+docker run -v "$(PWD):/app" ghcr.io/l3montree-dev/devguard/scanner:main \
 devguard-scanner sca \
     --path=/app \
     --assetName="myorg/projects/newgroup/assets/newrepository" \
