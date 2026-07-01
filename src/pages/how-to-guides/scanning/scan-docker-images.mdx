@@ -35,7 +35,7 @@ Before you begin, ensure you have:
     Scan a container image directly from a public registry:
 
     ```bash copy
-    docker run ghcr.io/l3montree-dev/devguard/scanner:main-latest \
+    docker run ghcr.io/l3montree-dev/devguard/scanner:main \
       devguard-scanner container-scanning \
         --image ghcr.io/org/image:tag \
         --assetName="myorg/projects/myproject/assets/myrepo" \
@@ -48,7 +48,7 @@ Before you begin, ensure you have:
     If you have saved your container image as a tar file:
 
     ```bash copy
-    docker run -v "$(PWD):/app" ghcr.io/l3montree-dev/devguard/scanner:main-latest \
+    docker run -v "$(PWD):/app" ghcr.io/l3montree-dev/devguard/scanner:main \
       devguard-scanner container-scanning \
         --path /app/image.tar \
         --assetName="myorg/projects/myproject/assets/myrepo" \
@@ -61,7 +61,7 @@ Before you begin, ensure you have:
     To scan images from a private registry, authenticate first using the `login` command:
 
     ```bash copy
-    docker run ghcr.io/l3montree-dev/devguard/scanner:main-latest \
+    docker run ghcr.io/l3montree-dev/devguard/scanner:main \
       sh -c "devguard-scanner login -u USERNAME -p PASSWORD registry.example.com && \
       devguard-scanner container-scanning \
         --image registry.example.com/org/image:tag \

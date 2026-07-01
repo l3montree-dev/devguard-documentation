@@ -1,42 +1,34 @@
----
-title: "devguard-scanner intoto stop — DevGuard CLI Reference"
-description: "Reference for the devguard-scanner intoto stop command — DevGuard CLI tool for SBOM, SARIF, and attestation workflows in DevSecOps pipelines."
-seo:
-  keyword_primary: "devguard-scanner intoto stop"
-  keywords_secondary:
-    - "DevGuard CLI"
-    - "devguard-scanner commands"
-    - "DevGuard security scanner"
-lang: "en-US"
-og:
-  title: "devguard-scanner intoto stop — DevGuard CLI Reference"
-  description: "Reference for the devguard-scanner intoto stop command — DevGuard CLI tool for SBOM, SARIF, and attestation workflows in DevSecOps pipelines."
-  image: "/og-image.png"
-  type: "article"
-  schema:
-    type: "TechArticle"
-robots: "index,follow"
-ignoreChecks: 
-  - "checkIfKeywordDensityInRange"
-  - "checkIfMinimumInternalLinks"
-  - "checkIfHeadingContainsKeywordPrimary"
-  - "checkIfTitleContainsKeywordPrimary"
-  - "checkIfHeadingOrderCorrect"
----
-
 ## intoto stop
 
-Stop in-toto recording
+Snapshot output files at the end of a pipeline step and upload the signed link
+
+### Synopsis
+
+Record the cryptographic hashes of all output files (products) after a pipeline step finishes,
+sign the link with the DevGuard token, and upload it to DevGuard.
+
+This is the second half of the start/stop pair. The signed link proves which files existed before
+and after this step, and that this specific token (CI identity) performed it.
 
 ```shell
 devguard-scanner intoto stop [flags]
 ```
 
+### Examples
+
+```shell
+  # In a CI job: snapshot outputs and upload after the build
+  devguard-scanner intoto stop --step build --apiUrl https://api.devguard.org --assetName org/project/app --token $TOKEN
+```
+
 ### Options
 
 ```shell
-  -h, --help            help for stop
-      --output string   The output file name. Default is the <step>.link.json name
+      --defaultRef string   The default git reference to use. This can be a branch, tag, or commit hash. If not specified, it will check, if the current directory is a git repo. If it isn't, --ref will be used.
+  -h, --help                help for stop
+      --isTag               If the current git reference is a tag. If not specified, it will check if the current directory is a git repo. If it isn't, it will be set to false.
+      --output string       The output file name. Default is the <step>.link.json name
+      --ref string          The git reference to use. This can be a branch, tag, or commit hash. If not specified, it will first check for a git repository in the current directory. If not found, it will just use main.
 ```
 
 ### Options inherited from parent commands

@@ -39,7 +39,7 @@ Before you begin, ensure you have:
     No installation needed — run the scanner directly via Docker:
 
     ```bash copy
-    docker run ghcr.io/l3montree-dev/devguard/scanner:main-latest devguard-scanner --help
+    docker run ghcr.io/l3montree-dev/devguard/scanner:main devguard-scanner --help
     ```
   </Tabs.Tab>
   <Tabs.Tab>
@@ -59,7 +59,7 @@ Before you begin, ensure you have:
 <Tabs items={["Docker", "Binary"]}>
   <Tabs.Tab>
     ```bash copy
-    docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main-latest \
+    docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main \
       devguard-scanner sca \
         --path /dev/app/ \
         --assetName="myorg/projects/myproject/assets/myrepo" \
@@ -116,7 +116,7 @@ The output shows each affected library with its vulnerabilities, the contextual 
 You can run the scanner without a token or asset name to get vulnerability results without saving them to DevGuard. This is useful for a quick local scan or for trying out the scanner.
 
 ```bash copy
-docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main-latest \
+docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main \
   devguard-scanner sca \
     --path /dev/app/
 ```

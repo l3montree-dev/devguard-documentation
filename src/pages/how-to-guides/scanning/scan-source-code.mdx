@@ -35,7 +35,7 @@ Before you begin, ensure you have:
     Run Static Application Security Testing (SAST) to identify security vulnerabilities and bad practices in your source code:
 
     ```bash copy
-    docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main-latest \
+    docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main \
       devguard-scanner sast \
         --path /dev/app/ \
         --assetName="myorg/projects/myproject/assets/myrepo" \
@@ -52,7 +52,7 @@ Before you begin, ensure you have:
     Scan your repository for accidentally committed secrets like API keys, passwords, and tokens:
 
     ```bash copy
-    docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main-latest \
+    docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main \
       devguard-scanner secret-scanning \
         --path /dev/app/ \
         --assetName="myorg/projects/myproject/assets/myrepo" \
@@ -69,7 +69,7 @@ Before you begin, ensure you have:
     Scan Infrastructure as Code (IaC) files for misconfigurations and security issues:
 
     ```bash copy
-    docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main-latest \
+    docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main \
       devguard-scanner iac \
         --path /dev/app/ \
         --assetName="myorg/projects/myproject/assets/myrepo" \

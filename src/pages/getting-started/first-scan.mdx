@@ -68,7 +68,7 @@ Then your asset name is `myorg/projects/myproject/assets/myrepo`.
 Navigate to the root of your project directory and run:
 
 ```bash copy
-docker run -v "$(pwd):/app" ghcr.io/l3montree-dev/devguard/scanner:main-latest \
+docker run -v "$(pwd):/app" ghcr.io/l3montree-dev/devguard/scanner:main \
   devguard-scanner sca \
     --path /app/ \
     --assetName="myorg/projects/myproject/assets/myrepo" \

@@ -1,29 +1,3 @@
----
-title: "devguard-scanner iac — DevGuard CLI Reference"
-description: "Reference for devguard-scanner iac: Run an Infrastructure-as-Code scan (e.g. checkov) against a repository or path and upload SARIF results to DevGuard."
-seo:
-  keyword_primary: "devguard-scanner iac"
-  keywords_secondary:
-    - "DevGuard CLI"
-    - "devguard-scanner commands"
-    - "DevGuard security scanner"
-lang: "en-US"
-og:
-  title: "devguard-scanner iac — DevGuard CLI Reference"
-  description: "Reference for devguard-scanner iac: Run an Infrastructure-as-Code scan (e.g. checkov) against a repository or path and upload SARIF results to DevGuard."
-  image: "/og-image.png"
-  type: "article"
-  schema:
-    type: "TechArticle"
-robots: "index,follow"
-ignoreChecks: 
-  - "checkIfKeywordDensityInRange"
-  - "checkIfMinimumInternalLinks"
-  - "checkIfHeadingContainsKeywordPrimary"
-  - "checkIfTitleContainsKeywordPrimary"
-  - "checkIfHeadingOrderCorrect"
----
-
 ## iac
 
 Run an Infrastructure-as-Code (IaC) scan
@@ -60,6 +34,8 @@ devguard-scanner iac [path] [flags]
       --defaultRef string   The default git reference to use. This can be a branch, tag, or commit hash. If not specified, it will check, if the current directory is a git repo. If it isn't, --ref will be used.
   -h, --help                help for iac
       --isTag               If the current git reference is a tag. If not specified, it will check if the current directory is a git repo. If it isn't, it will be set to false.
+      --noWrite             Run the scan and display results without persisting anything to DevGuard.
+      --output string       Output format for scan results. Options: 'table' (default), 'sarif' (enriched SARIF JSON). (default "table")
       --outputPath string   Path to save the SARIF report. If not specified, the report will only be uploaded to DevGuard.
       --path string         The path to the project to scan. Defaults to the current directory. (default ".")
       --ref string          The git reference to use. This can be a branch, tag, or commit hash. If not specified, it will first check for a git repository in the current directory. If not found, it will just use main.

@@ -34,7 +34,7 @@ Before you begin, ensure you have:
 Upload a CycloneDX SBOM file for vulnerability analysis:
 
 ```bash copy
-docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main-latest \
+docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main \
   devguard-scanner sbom \
     /dev/app/sbom.json \
     --assetName="myorg/projects/myproject/assets/myrepo" \
@@ -65,7 +65,7 @@ docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main-late
 You can upload an SBOM and scan it without a token or asset name to get vulnerability results without saving them to DevGuard.
 
 ```bash copy
-docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main-latest \
+docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main \
   devguard-scanner sbom /dev/app/sbom.json
 ```
 

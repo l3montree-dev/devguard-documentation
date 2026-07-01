@@ -1,0 +1,131 @@
+---
+title: DevGuard External Entity API — REST API Reference
+description: "Ingest SBOMs from external inventory providers into DevGuard. Upsert and delete dynamically managed project hierarchies keyed by your own external entity IDs."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: DevGuard External Entity API
+lang: en-US
+ignoreChecks: null
+---
+
+import ApiTagPage from '@/components/ApiTagPage'
+import { Callout } from '@document-writing-tools/kernux-theme'
+
+# DevGuard External Entity API
+
+The External Entity API lets any system push software inventory data into DevGuard — without requiring you to manually create projects, assets, or asset versions in the UI. You call the API with your own IDs, a CycloneDX SBOM, and a human-readable name. DevGuard handles the rest: it creates (or updates) the project hierarchy, imports the SBOM, and triggers a vulnerability scan.
+
+When the external entity no longer exists — e.g. a container image is no longer running — you send a `verb=delete` request. DevGuard automatically removes the artifact and cascades the deletion upward: if the asset version has no remaining artifacts it is deleted, if the asset has no remaining versions it is deleted, and so on up to the project level.
+
+---
+
+## Concepts
+
+### Provider ID
+
+Every call is scoped to a **provider ID** — a free-form string you choose that identifies the external system pushing data. For example, a Kubernetes cluster agent might use `k8s-prod-cluster`. All projects, assets, and artifacts created through a given provider ID are namespaced under that provider, so multiple providers can coexist under the same DevGuard root project without conflict.
+
+```
+POST /api/v1/organizations/{org}/projects/{project}/external/k8s-prod-cluster
+```
+
+### External entity IDs
+
+You identify projects and assets using **your own IDs** — whatever makes sense in your system (a namespace name, a repository path, a UUID). DevGuard stores these as `externalEntityId` and uses them to find and update the right record on subsequent calls. You never need to know DevGuard's internal UUIDs.
+
+### The hierarchy
+
+Each call can describe up to four levels of hierarchy:
+
+```
+Root project (the DevGuard project you route the call to)
+└── Project          ← identified by projectExternalEntityId
+    └── Sub-project  ← optional, identified by subProjectExternalEntityId
+        └── Asset    ← identified by assetExternalEntityId
+            └── Asset version  ← identified by assetVersionName
+                └── Artifact   ← identified by artifact (e.g. image name)
+```
+
+If you omit the sub-project fields, the asset is created directly under the project.
+
+---
+
+## Example: reporting a container image
+
+A CI pipeline or cluster agent has discovered that `nginx:1.27` is running in the `production` namespace. It generates a CycloneDX SBOM and calls:
+
+```http
+POST /api/v1/organizations/my-org/projects/my-cluster/external/k8s-prod-cluster
+Content-Type: application/json
+
+{
+  "verb": "update",
+  "projectExternalEntityId": "production",
+  "projectName": "production",
+  "assetExternalEntityId": "nginx",
+  "assetName": "nginx",
+  "assetVersionName": "1.27",
+  "artifact": "nginx:1.27",
+  "sbom": { ... }
+}
+```
+
+DevGuard will:
+1. Find or create a sub-project called `production` under `my-cluster`
+2. Find or create an asset called `nginx` inside `production`
+3. Find or create an asset version `1.27`
+4. Register `nginx:1.27` as an artifact
+5. Import the SBOM and trigger a vulnerability scan
+
+Calling the same endpoint again with the same IDs is safe — DevGuard upserts rather than duplicating.
+
+## Example: removing a container image
+
+When `nginx:1.25` is no longer running:
+
+```http
+POST /api/v1/organizations/my-org/projects/my-cluster/external/k8s-prod-cluster
+Content-Type: application/json
+
+{
+  "verb": "delete",
+  "projectExternalEntityId": "production",
+  "assetExternalEntityId": "nginx",
+  "assetVersionName": "1.25",
+  "artifact": "nginx:1.25"
+}
+```
+
+DevGuard removes the artifact. If `1.25` was the last artifact on that version, the version is deleted too. If `nginx` has no remaining versions, the asset is deleted. If `production` has no remaining assets, the sub-project is deleted. The root project is never touched.
+
+## Example: reading the current inventory
+
+To reconcile what an external system knows against what DevGuard has recorded, fetch the full tree:
+
+```http
+GET /api/v1/organizations/my-org/projects/my-cluster/external/k8s-prod-cluster
+```
+
+The response contains every project, sub-project, asset, asset version, and artifact that was registered by `k8s-prod-cluster`, including all external entity IDs you originally provided.
+
+---
+
+<Callout type="info">
+  Looking for a ready-made integration? [devguard-k8s-image-inventory](https://github.com/l3montree-dev/devguard-k8s-image-inventory) is a reference implementation that uses this API to continuously sync all running container images from a Kubernetes cluster into DevGuard.
+</Callout>
+
+---
+
+<ApiTagPage tag="External Entity" />
+
+---
+
+- [DevGuard API Reference](/reference)
+- [Kubernetes DevGuard Integration](/how-to-guides/integrations/kubernetes-devguard-integration)
+- [Use the DevGuard API](/getting-started/use-devguard-api)
+- [Projects API](/reference/api/projects)

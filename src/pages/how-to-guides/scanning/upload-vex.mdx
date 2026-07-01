@@ -33,7 +33,7 @@ Before you begin, ensure you have:
 Upload a VEX document to update vulnerability statuses:
 
 ```bash copy
-docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main-latest \
+docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main \
   devguard-scanner vex \
     /dev/app/vex.json \
     --assetName="myorg/projects/myproject/assets/myrepo" \

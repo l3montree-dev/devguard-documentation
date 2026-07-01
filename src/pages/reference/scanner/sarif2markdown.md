@@ -1,29 +1,3 @@
----
-title: "devguard-scanner sarif2markdown — DevGuard CLI Reference"
-description: "Reference for devguard-scanner sarif2markdown: Convert a SARIF JSON file into a human-readable markdown report. Supports both summary and detailed output."
-seo:
-  keyword_primary: "devguard-scanner sarif2markdown"
-  keywords_secondary:
-    - "DevGuard CLI"
-    - "devguard-scanner commands"
-    - "DevGuard security scanner"
-lang: "en-US"
-og:
-  title: "devguard-scanner sarif2markdown — DevGuard CLI Reference"
-  description: "Reference for devguard-scanner sarif2markdown: Convert a SARIF JSON file into a human-readable markdown report. Supports both summary and detailed output."
-  image: "/og-image.png"
-  type: "article"
-  schema:
-    type: "TechArticle"
-robots: "index,follow"
-ignoreChecks: 
-  - "checkIfKeywordDensityInRange"
-  - "checkIfMinimumInternalLinks"
-  - "checkIfHeadingContainsKeywordPrimary"
-  - "checkIfTitleContainsKeywordPrimary"
-  - "checkIfHeadingOrderCorrect"
----
-
 ## sarif2markdown
 
 Convert a SARIF JSON file into a markdown report
@@ -32,7 +6,14 @@ Convert a SARIF JSON file into a markdown report
 
 Convert a SARIF JSON file into a human-readable markdown report.
 
-Supports both summary and detailed output formats.
+SARIF is a machine-readable format. This command turns it into markdown so you can paste the
+results into a pull request description, a wiki page, or a GitHub/GitLab comment. This is
+particularly useful for Kyverno or IaC scan results where you want a readable summary for
+reviewers who do not have access to the DevGuard UI.
+
+Two output modes are available:
+  - Summary (default): one row per policy rule with pass/fail/skip counts
+  - Detailed (--detailed): one row per affected resource, grouped by severity
 
 ```shell
 devguard-scanner sarif2markdown [flags]

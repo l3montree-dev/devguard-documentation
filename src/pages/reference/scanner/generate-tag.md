@@ -1,36 +1,22 @@
----
-title: "devguard-scanner generate-tag — DevGuard CLI Reference"
-description: "Reference for devguard-scanner generate-tag: This command generates a tag, artifact name, and URL-encoded artifact name for a given image based on its."
-seo:
-  keyword_primary: "devguard-scanner generate-tag"
-  keywords_secondary:
-    - "DevGuard CLI"
-    - "devguard-scanner commands"
-    - "DevGuard security scanner"
-lang: "en-US"
-og:
-  title: "devguard-scanner generate-tag — DevGuard CLI Reference"
-  description: "Reference for devguard-scanner generate-tag: This command generates a tag, artifact name, and URL-encoded artifact name for a given image based on its."
-  image: "/og-image.png"
-  type: "article"
-  schema:
-    type: "TechArticle"
-robots: "index,follow"
-ignoreChecks: 
-  - "checkIfKeywordDensityInRange"
-  - "checkIfMinimumInternalLinks"
-  - "checkIfHeadingContainsKeywordPrimary"
-  - "checkIfTitleContainsKeywordPrimary"
-  - "checkIfHeadingOrderCorrect"
----
-
 ## generate-tag
 
 Generate a tag for an image based on its contents
 
 ### Synopsis
 
-This command generates a tag, artifact name, and URL-encoded artifact name for a given image based on its contents and the provided parameters such as upstream version, architecture, and image type.
+Generate a container image tag, artifact name, and URL-encoded artifact name.
+
+The tag is assembled from the provided parameters in the following order:
+  [<upstreamVersion>-][<ref>-][<imageVariant>-][<architecture>]
+
+All parts are optional. Omit --architecture to get a plain version tag (e.g. "21" instead of "21-amd64").
+Use --imageSuffix to produce multiple images from a single build (e.g. java-base and java-debian).
+The ref flag is typically set from $CI_COMMIT_REF_SLUG; forward slashes are replaced with hyphens.
+
+The command prints three lines to stdout:
+  IMAGE_TAG=<full image reference including tag>
+  ARTIFACT_NAME=<purl>
+  ARTIFACT_URL_ENCODED=<url-encoded purl>
 
 ```shell
 devguard-scanner generate-tag [flags]
@@ -39,11 +25,24 @@ devguard-scanner generate-tag [flags]
 ### Examples
 
 ```shell
-  # Generate tag with upstream version and architecture
-  devguard-scanner generate-tag --upstreamVersion 1.2.3 --architecture amd64 --imagePath registry.io/my-image
+  # If you want to tag an image with its upstream version and the target architecture:
+  devguard-scanner generate-tag --upstreamVersion 1.2.3 --architecture amd64 --imagePath registry.io/org/app
+  # → registry.io/org/app:1.2.3-amd64
 
-  # Generate tag with variant
-  devguard-scanner generate-tag --upstreamVersion 2.0.0 --architecture arm64 --imageVariant alpine --imagePath registry.io/app
+  # If you want the current branch or ref included in the tag (e.g. to distinguish nightly builds):
+  devguard-scanner generate-tag --upstreamVersion 1.2.3 --architecture amd64 --imagePath registry.io/org/app --ref main
+  # → registry.io/org/app:1.2.3-main-amd64
+
+  # If you are building multiple images in a single repository (e.g. different base OS flavours),
+  # call generate-tag once per image and vary --imageSuffix to give each image a unique name:
+  devguard-scanner generate-tag --upstreamVersion 21 --imagePath registry.io/org --imageSuffix java-base
+  devguard-scanner generate-tag --upstreamVersion 21 --imagePath registry.io/org --imageSuffix java-debian
+  # → registry.io/org/java-base:21
+  # → registry.io/org/java-debian:21
+
+  # If you want to distinguish image flavours within the same image (e.g. alpine vs. full):
+  devguard-scanner generate-tag --upstreamVersion 2.0.0 --architecture arm64 --imageVariant alpine --imagePath registry.io/org/app
+  # → registry.io/org/app:2.0.0-alpine-arm64
 ```
 
 ### Options

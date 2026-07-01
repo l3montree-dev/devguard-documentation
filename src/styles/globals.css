@@ -183,11 +183,17 @@
   }
 
   /* Sidebar: */
-  a[data-sidebar], button[data-sidebar] {
+  /* Regular menu links carry data-sidebar on the <a> itself; collapsible
+     parent items wrap the <a> in a div[data-sidebar="menu-button"], so the
+     anchor has no data-sidebar attribute — match both shapes. */
+  a[data-sidebar], button[data-sidebar],
+  [data-sidebar="menu-button"] a,
+  [data-sidebar="menu-button"] > button {
     @apply text-(--sidebar-accent-foreground) hover:text-(--foreground)!;
     @apply text-[14px]!;
   }
-  a[data-active="true"][data-sidebar] {
+  a[data-active="true"][data-sidebar],
+  [data-sidebar="menu-button"] a[data-active="true"] {
     @apply bg-(--sidebar-accent-active) text-(--link-color)!;
     @apply font-semibold;
   }
