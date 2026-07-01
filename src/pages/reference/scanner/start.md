@@ -1,35 +1,26 @@
----
-title: "devguard-scanner intoto start — DevGuard CLI Reference"
-description: "Reference for the devguard-scanner intoto start command — DevGuard CLI tool for SBOM, SARIF, and attestation workflows in DevSecOps pipelines."
-seo:
-  keyword_primary: "devguard-scanner intoto start"
-  keywords_secondary:
-    - "DevGuard CLI"
-    - "devguard-scanner commands"
-    - "DevGuard security scanner"
-lang: "en-US"
-og:
-  title: "devguard-scanner intoto start — DevGuard CLI Reference"
-  description: "Reference for the devguard-scanner intoto start command — DevGuard CLI tool for SBOM, SARIF, and attestation workflows in DevSecOps pipelines."
-  image: "/og-image.png"
-  type: "article"
-  schema:
-    type: "TechArticle"
-robots: "index,follow"
-ignoreChecks: 
-  - "checkIfKeywordDensityInRange"
-  - "checkIfMinimumInternalLinks"
-  - "checkIfHeadingContainsKeywordPrimary"
-  - "checkIfTitleContainsKeywordPrimary"
-  - "checkIfHeadingOrderCorrect"
----
-
 ## intoto start
 
-Start in-toto recording
+Snapshot input files at the beginning of a pipeline step
+
+### Synopsis
+
+Record the cryptographic hashes of all input files (materials) before a pipeline step runs.
+
+Use this when your step is not a single command — for example, a multi-line build script. Call
+'intoto start' before the step and 'intoto stop' after it. The pair together produce a signed
+in-toto link that proves which files went in and which came out.
+
+If your entire step is a single command, use 'intoto run' instead.
 
 ```shell
 devguard-scanner intoto start [flags]
+```
+
+### Examples
+
+```shell
+  # In a CI job: snapshot inputs before the build
+  devguard-scanner intoto start --step build --apiUrl https://api.devguard.org --assetName org/project/app --token $TOKEN
 ```
 
 ### Options

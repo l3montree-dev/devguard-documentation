@@ -1,29 +1,3 @@
----
-title: "devguard-scanner vex — DevGuard CLI Reference"
-description: "Reference for devguard-scanner vex: Upload a VEX (Vulnerability Exploitability eXchange) document to DevGuard. The VEX document must be provided as a file."
-seo:
-  keyword_primary: "devguard-scanner vex"
-  keywords_secondary:
-    - "DevGuard CLI"
-    - "devguard-scanner commands"
-    - "DevGuard security scanner"
-lang: "en-US"
-og:
-  title: "devguard-scanner vex — DevGuard CLI Reference"
-  description: "Reference for devguard-scanner vex: Upload a VEX (Vulnerability Exploitability eXchange) document to DevGuard. The VEX document must be provided as a file."
-  image: "/og-image.png"
-  type: "article"
-  schema:
-    type: "TechArticle"
-robots: "index,follow"
-ignoreChecks: 
-  - "checkIfKeywordDensityInRange"
-  - "checkIfMinimumInternalLinks"
-  - "checkIfHeadingContainsKeywordPrimary"
-  - "checkIfTitleContainsKeywordPrimary"
-  - "checkIfHeadingOrderCorrect"
----
-
 ## vex
 
 Upload a VEX document to DevGuard
@@ -31,8 +5,16 @@ Upload a VEX document to DevGuard
 ### Synopsis
 
 Upload a VEX (Vulnerability Exploitability eXchange) document to DevGuard.
-The VEX document must be provided as a file argument. The request is signed using the
-configured token before upload.
+
+A VEX document lets you tell DevGuard that a known CVE in one of your dependencies is not
+actually exploitable in your specific application — for example because you do not call the
+vulnerable code path, or because the affected feature is disabled.
+
+Without a VEX document, DevGuard will report all CVEs found in your SBOM as open findings.
+With a VEX document, suppressed findings are hidden from the dashboard and do not count against
+your risk score.
+
+VEX documents use the CycloneDX format. Most tools that generate SBOMs can also generate VEX.
 
 ```shell
 devguard-scanner vex <vex-file> [flags]
@@ -61,7 +43,9 @@ devguard-scanner vex <vex-file> [flags]
       --ignoreExternalReferences        If an attestation does contain a external reference to an sbom or vex, this will be ignored. Useful when scanning your own image from the registry where your own attestations are attached.
       --isTag                           If the current git reference is a tag. If not specified, it will check if the current directory is a git repo. If it isn't, it will be set to false.
       --keepOriginalSbomRootComponent   Use this flag if you get software from a supplier and you want to identify vulnerabilities in the root component itself, not only in the dependencies
+      --noWrite                         Run the scan and display results (including VEX/false-positive assessments) without persisting anything to DevGuard.
       --origin string                   Origin of the SBOM (how it was generated). Examples: 'source-scanning', 'container-scanning', 'base-image'. Default: 'container-scanning'. (default "DEFAULT")
+      --output string                   Output format for scan results. Options: 'table' (default), 'cyclonedx' (CycloneDX VEX JSON). (default "table")
       --ref string                      The git reference to use. This can be a branch, tag, or commit hash. If not specified, it will first check for a git repository in the current directory. If not found, it will just use main.
       --timeout int                     Set the timeout for scanner operations in seconds (default 300)
       --token string                    The personal access token to authenticate the request

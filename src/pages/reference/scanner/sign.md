@@ -1,29 +1,3 @@
----
-title: "devguard-scanner sign — DevGuard CLI Reference"
-description: "Reference for devguard-scanner sign: Sign a file or OCI image using cosign. When not run with --offline the command will upload the public key to DevGuard."
-seo:
-  keyword_primary: "devguard-scanner sign"
-  keywords_secondary:
-    - "DevGuard CLI"
-    - "devguard-scanner commands"
-    - "DevGuard security scanner"
-lang: "en-US"
-og:
-  title: "devguard-scanner sign — DevGuard CLI Reference"
-  description: "Reference for devguard-scanner sign: Sign a file or OCI image using cosign. When not run with --offline the command will upload the public key to DevGuard."
-  image: "/og-image.png"
-  type: "article"
-  schema:
-    type: "TechArticle"
-robots: "index,follow"
-ignoreChecks: 
-  - "checkIfKeywordDensityInRange"
-  - "checkIfMinimumInternalLinks"
-  - "checkIfHeadingContainsKeywordPrimary"
-  - "checkIfTitleContainsKeywordPrimary"
-  - "checkIfHeadingOrderCorrect"
----
-
 ## sign
 
 Sign a file or image
@@ -34,7 +8,7 @@ Sign a file or OCI image using cosign.
 
 When not run with --offline the command will upload the public key to DevGuard
 before creating the signature. The public key upload is signed using the
-configured token. The actual signing is performed by the cosign CLI.
+configured token.
 
 ```shell
 devguard-scanner sign <file | image> [flags]

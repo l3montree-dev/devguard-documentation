@@ -1,42 +1,34 @@
----
-title: "devguard-scanner intoto run — DevGuard CLI Reference"
-description: "Reference for the devguard-scanner intoto run command — DevGuard CLI tool for SBOM, SARIF, and attestation workflows in DevSecOps pipelines."
-seo:
-  keyword_primary: "devguard-scanner intoto run"
-  keywords_secondary:
-    - "DevGuard CLI"
-    - "devguard-scanner commands"
-    - "DevGuard security scanner"
-lang: "en-US"
-og:
-  title: "devguard-scanner intoto run — DevGuard CLI Reference"
-  description: "Reference for the devguard-scanner intoto run command — DevGuard CLI tool for SBOM, SARIF, and attestation workflows in DevSecOps pipelines."
-  image: "/og-image.png"
-  type: "article"
-  schema:
-    type: "TechArticle"
-robots: "index,follow"
-ignoreChecks: 
-  - "checkIfKeywordDensityInRange"
-  - "checkIfMinimumInternalLinks"
-  - "checkIfHeadingContainsKeywordPrimary"
-  - "checkIfTitleContainsKeywordPrimary"
-  - "checkIfHeadingOrderCorrect"
----
-
 ## intoto run
 
+Record a single-command pipeline step and upload the signed link
 
+### Synopsis
+
+Run a pipeline step as a single command, snapshot input and output file hashes around it,
+sign the resulting link with the DevGuard token, and upload it to DevGuard.
+
+Use this when your entire step is one command (e.g. 'make build'). If your step involves
+multiple commands, use 'intoto start' + 'intoto stop' instead.
 
 ```shell
 devguard-scanner intoto run [flags]
+```
+
+### Examples
+
+```shell
+  # Record a build step that runs 'make build'
+  devguard-scanner intoto run --step build --apiUrl https://api.devguard.org --assetName org/project/app --token $TOKEN
 ```
 
 ### Options
 
 ```shell
       --apiUrl string                    The URL of the devguard API
+      --defaultRef string                The default git reference to use. This can be a branch, tag, or commit hash. If not specified, it will check, if the current directory is a git repo. If it isn't, --ref will be used.
   -h, --help                             help for run
+      --isTag                            If the current git reference is a tag. If not specified, it will check if the current directory is a git repo. If it isn't, it will be set to false.
+      --ref string                       The git reference to use. This can be a branch, tag, or commit hash. If not specified, it will first check for a git repository in the current directory. If not found, it will just use main.
       --step string                      The step to run
       --supplyChainOutputDigest string   If defined, sends this digest to devguard. This should be the digest of the whole supply chain.
 ```

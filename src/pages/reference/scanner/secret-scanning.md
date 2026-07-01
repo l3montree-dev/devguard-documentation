@@ -1,29 +1,3 @@
----
-title: "devguard-scanner secret-scanning — DevGuard CLI Reference"
-description: "Reference for devguard-scanner secret-scanning: Scan a repository or directory for accidentally committed secrets and produce a SARIF report. This command."
-seo:
-  keyword_primary: "devguard-scanner secret-scanning"
-  keywords_secondary:
-    - "DevGuard CLI"
-    - "devguard-scanner commands"
-    - "DevGuard security scanner"
-lang: "en-US"
-og:
-  title: "devguard-scanner secret-scanning — DevGuard CLI Reference"
-  description: "Reference for devguard-scanner secret-scanning: Scan a repository or directory for accidentally committed secrets and produce a SARIF report. This command."
-  image: "/og-image.png"
-  type: "article"
-  schema:
-    type: "TechArticle"
-robots: "index,follow"
-ignoreChecks: 
-  - "checkIfKeywordDensityInRange"
-  - "checkIfMinimumInternalLinks"
-  - "checkIfHeadingContainsKeywordPrimary"
-  - "checkIfTitleContainsKeywordPrimary"
-  - "checkIfHeadingOrderCorrect"
----
-
 ## secret-scanning
 
 Detect leaked secrets in source code
@@ -61,8 +35,11 @@ devguard-scanner secret-scanning [path] [flags]
       --apiUrl string       The url of the API to send the scan request to (default "https://api.devguard.org")
       --assetName string    The id of the asset which is scanned
       --defaultRef string   The default git reference to use. This can be a branch, tag, or commit hash. If not specified, it will check, if the current directory is a git repo. If it isn't, --ref will be used.
+      --dir                 Scan a directory instead of the git history.
   -h, --help                help for secret-scanning
       --isTag               If the current git reference is a tag. If not specified, it will check if the current directory is a git repo. If it isn't, it will be set to false.
+      --noWrite             Run the scan and display results without persisting anything to DevGuard.
+      --output string       Output format for scan results. Options: 'table' (default), 'sarif' (enriched SARIF JSON). (default "table")
       --outputPath string   Path to save the SARIF report. If not specified, the report will only be uploaded to DevGuard.
       --path string         The path to the project to scan. Defaults to the current directory. (default ".")
       --ref string          The git reference to use. This can be a branch, tag, or commit hash. If not specified, it will first check for a git repository in the current directory. If not found, it will just use main.

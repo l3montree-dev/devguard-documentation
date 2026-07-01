@@ -1,44 +1,16 @@
----
-title: "devguard-scanner clean — DevGuard CLI Reference"
-description: "Reference for devguard-scanner clean: Run cosign remove on an image or signature object to clean attestations/signatures. This command wraps the cosign CLI."
-seo:
-  keyword_primary: "devguard-scanner clean"
-  keywords_secondary:
-    - "DevGuard CLI"
-    - "devguard-scanner commands"
-    - "DevGuard security scanner"
-lang: "en-US"
-og:
-  title: "devguard-scanner clean — DevGuard CLI Reference"
-  description: "Reference for devguard-scanner clean: Run cosign remove on an image or signature object to clean attestations/signatures. This command wraps the cosign CLI."
-  image: "/og-image.png"
-  type: "article"
-  schema:
-    type: "TechArticle"
-robots: "index,follow"
-ignoreChecks: 
-  - "checkIfKeywordDensityInRange"
-  - "checkIfMinimumInternalLinks"
-  - "checkIfHeadingContainsKeywordPrimary"
-  - "checkIfTitleContainsKeywordPrimary"
-  - "checkIfHeadingOrderCorrect"
----
-
 ## clean
 
-Remove attestations or signatures using cosign
+Remove attestations or signatures from an OCI image
 
 ### Synopsis
 
-Run cosign remove on an image or signature object to clean attestations/signatures.
+Remove attestations and/or signatures from an OCI image.
 
-This command wraps the cosign CLI. If registry credentials are provided they will
-be used for authentication. The command converts your configured token into a key
-and uses it where appropriate. Use --type to limit the cleanup to signatures,
-attestations, SBOMs, or all.
+If registry credentials are provided they will be used for authentication.
+Use --type to limit the cleanup to signatures, attestations, SBOMs, or all.
 
 ```shell
-devguard-scanner clean <image | signature-file> [flags]
+devguard-scanner clean <image> [flags]
 ```
 
 ### Examples
