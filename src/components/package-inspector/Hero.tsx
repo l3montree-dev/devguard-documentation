@@ -13,7 +13,7 @@ const ECOSYSTEM_NODES = [
         src: '/icons/eco-logos/python-programming-language-icon.svg',
         alt: 'Python',
     },
-    { src: '/icons/eco-logos/Red_Hat_logo.svg', alt: 'Red Hat' },
+    { src: '/logos/Red_Hat_logo.svg', alt: 'Red Hat' },
     { src: '/icons/eco-logos/Apache_Maven_logo.svg', alt: 'Maven' },
     { src: '/icons/eco-logos/Alpine_logo.svg', alt: 'Alpine' },
     { src: '/icons/eco-logos/Git_icon.svg', alt: 'Git' },
