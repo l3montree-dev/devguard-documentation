@@ -7,5 +7,5 @@ export default {
     gitlab: { title: 'GitLab Integration' },
     jira: { title: 'Jira Integration' },
     'mcp-server': { title: 'MCP Server' },
-    'k8s-image-inventory': { title: 'Kubernetes Image Inventory' },
+    'kubernetes-devguard-integration': { title: 'Kubernetes DevGuard Integration' },
 }
