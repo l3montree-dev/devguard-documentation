@@ -15,9 +15,13 @@ spec:
       labels:
         app: honeypot
     spec:
+      securityContext:
+        runAsNonRoot: true
       containers:
         - name: oh-my-honeypot
           image: ghcr.io/l3montree-dev/oh-my-honeypot:main-c8c45b74-1741875691
           imagePullPolicy: Always
+          securityContext:
+            allowPrivilegeEscalation: false
           ports:
             - containerPort: 80  # Adjust if your app runs on a different port
