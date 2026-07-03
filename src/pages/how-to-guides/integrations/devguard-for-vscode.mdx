@@ -1,5 +1,5 @@
 ---
-title: DevGuard for VS Code
+title: 'DevGuard VSCode Extension: Inline Dependency Risk in Your Editor'
 description: 'Introduce the DevGuard VS Code extension — inline dependency risk badges, asset-aware hovers, SBOM actions, dependency proxy setup, and git hook automation.'
 seo:
     robots: index,follow
@@ -15,7 +15,7 @@ ignoreChecks: null
 
 import { Callout } from '@document-writing-tools/kernux-theme'
 
-# DevGuard for VS Code
+# DevGuard VSCode Extension
 
 <Callout type="warning">
     **Proof of Concept** This extension is a proof of concept. It is built
@@ -24,7 +24,7 @@ import { Callout } from '@document-writing-tools/kernux-theme'
     discussion](https://github.com/l3montree-dev/devguard/discussions/2207).
 </Callout>
 
-DevGuard for VS Code brings a focused DevGuard workflow straight into your editor. It helps you inspect dependency risk, connect the workspace to a DevGuard asset, export SBOMs, and run a few common security actions without switching tools.
+The DevGuard VS Code extension brings a focused DevGuard workflow straight into your editor. It helps you inspect dependency risk, connect the workspace to a DevGuard asset with a [personal access token](/explanations/personal-access-token), [export SBOMs](/how-to-guides/compliance/export-sbom), and run a few common security actions without switching tools.
 
 ---
 
@@ -62,7 +62,7 @@ After connecting with a personal access token, you can pick an organization, pro
 
 ### SBOM Generation
 
-After connecting to your DevGuard instance you can run a SCA scan to generate an SBOM for your project.
+After connecting to your DevGuard instance you can run a [software composition analysis (SCA) scan](/how-to-guides/scanning/scan-dependencies) to generate an SBOM for your project.
 
 ![vs-code-extension-generate-sbom.png](../../../assets/vs-code-extension-generate-sbom.png)
 
@@ -72,7 +72,7 @@ It will be uploaded to your DevGuard instance, but you can also view it directly
 
 ### Dependency proxy setup
 
-If you want npm installs to go through DevGuard's proxy, the extension can setup your `.npmrc` for you in one step. Optionally, you can provide a dependency proxy secret when you are prompted, if your organization uses one.
+If you want npm installs to go through [DevGuard's dependency proxy](/how-to-guides/dependency-proxy/setup-npm-proxy), the extension can setup your `.npmrc` for you in one step. Optionally, you can provide a dependency proxy secret when you are prompted, if your organization uses one.
 
 ![vs-code-extension-dependency-proxy-setup.png](../../../assets/vs-code-extension-dependency-proxy-setup.png)
 
@@ -84,7 +84,7 @@ Your `.nmprc` will then contain:
 
 The DevGuard VS Code extension provides you with commands that will bootstrap or remove DevGuard git hooks for local commit-time checks. The hooks call the DevGuard scanner from Docker, so you get a lightweight local safety net before commits land.
 
-So far, DevGuard provides you with a secret-scan setup as a pre-commit hook to prevent secrets from ending up in your commits permanently.
+So far, DevGuard provides you with a [secret-scanning](/explanations/devsecops/secret-scanning) setup as a pre-commit hook to prevent secrets from ending up in your commits permanently.
 
 ![vs-code-extension-githooks-setup.png](../../../assets/vs-code-extension-githooks-setup.png)
 
@@ -100,7 +100,7 @@ The statusbar will reflect if the DevGuard git hooks are present in your `.git/h
 
 ### SAST scanning on save
 
-When enabled through the `{devguard.sast.enabled}` setting (`default` is `true`), the extension runs a Docker-based DevGuard SAST scan on save for supported files, so issues surface as you work instead of only after a manual scan. Resulting issues will be displayed in the `PROBLEMS` Tab of VS Code.
+When enabled through the `{devguard.sast.enabled}` setting (`default` is `true`), the extension runs a Docker-based DevGuard [static application security testing (SAST)](/explanations/devsecops/sast) scan on save for supported files, so issues surface as you work instead of only after a manual scan. Resulting issues will be displayed in the `PROBLEMS` Tab of VS Code.
 
 ![vs-code-extension-sast-onsave.png](../../../assets/vs-code-extension-sast-onsave.png)
 
