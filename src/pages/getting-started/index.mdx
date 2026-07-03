@@ -51,12 +51,6 @@ First, download the necessary configuration files and start DevGuard using docke
 
 ```bash
 curl -LO https://raw.githubusercontent.com/l3montree-dev/devguard/refs/heads/main/docker-compose-try-it.yaml \
-&& curl -LO https://raw.githubusercontent.com/l3montree-dev/devguard/refs/heads/main/initdb.sql \
-&& curl -LO https://raw.githubusercontent.com/l3montree-dev/devguard/refs/heads/main/.kratos/identity.schema.json \
-&& curl -L -o kratos.yml https://raw.githubusercontent.com/l3montree-dev/devguard/refs/heads/main/.kratos/kratos.example.yml \
-&& mkdir -p kratos \
-&& mv kratos.yml kratos/kratos.yml \
-&& mv identity.schema.json kratos/identity.schema.json \
 && docker-compose -f docker-compose-try-it.yaml up
 ```
 
