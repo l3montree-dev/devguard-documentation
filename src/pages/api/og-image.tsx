@@ -1,13 +1,14 @@
 import { ImageResponse } from 'next/og'
 import type { NextRequest } from 'next/server'
+import { OG_LOGO_SVG } from '@/lib/og-logo'
 
 export const config = { runtime: 'edge' }
 
 export default async function handler(req: NextRequest) {
-    const { searchParams, origin } = new URL(req.url)
+    const { searchParams } = new URL(req.url)
     const cveId = searchParams.get('cve') ?? 'CVE-XXXX-XXXXX'
 
-    const logoUrl = `${origin}/logo-inverse-horizontal.svg`
+    const logoUrl = `data:image/svg+xml,${encodeURIComponent(OG_LOGO_SVG)}`
 
     return new ImageResponse(
         <div
