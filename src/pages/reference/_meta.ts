@@ -15,9 +15,6 @@
 export default {
     index: {
         title: 'API Reference',
-        theme: {
-            toc: false,
-        },
     },
     api: {
         title: 'API Resources',

@@ -4,6 +4,7 @@ import type { ParsedUrlQuery } from 'querystring'
 
 export const PAGE_SIZE = 100
 const MIN_ECOSYSTEM_CVE_COUNT = 100
+const API_TIMEOUT_MS = 20000
 
 const SORT_FIELD_MAP: Record<string, string> = {
     cve: 'cve',
@@ -50,7 +51,7 @@ export async function fetchIndexCVEs(
     const sortField = SORT_FIELD_MAP[sort] ?? 'cvss'
     url.searchParams.set(`sort[${sortField}]`, dir)
 
-    const res = await fetch(url.toString())
+    const res = await fetch(url.toString(), { signal: AbortSignal.timeout(API_TIMEOUT_MS) })
     if (!res.ok) throw new Error(`API error: ${res.status}`)
 
     const data = await res.json()
@@ -65,7 +66,29 @@ export async function fetchIndexCVEs(
     return { cves, total: data.total ?? 0, page, search, sort, dir }
 }
 
-export async function fetchYearLinks(exclude?: string): Promise<RelatedLink[]> {
+// The upstream endpoints backing these two functions are slow
+// and their results barely change
+const RELATED_LINKS_CACHE_TTL_MS = 15 * 60 * 1000
+
+function createCachedFetcher<T>(fetchFresh: () => Promise<T>) {
+    let cache: { value: T; expires: number } | null = null
+    let inflight: Promise<T> | null = null
+
+    return async (): Promise<T> => {
+        if (cache && cache.expires > Date.now()) return cache.value
+        if (inflight) return inflight
+
+        inflight = fetchFresh().finally(() => {
+            inflight = null
+        })
+
+        const value = await inflight
+        cache = { value, expires: Date.now() + RELATED_LINKS_CACHE_TTL_MS }
+        return value
+    }
+}
+
+const fetchAllYearLinks = createCachedFetcher(async (): Promise<RelatedLink[]> => {
     const currentYear = new Date().getFullYear()
     const years = Array.from({ length: 10 }, (_, i) => currentYear - i)
     const results = await Promise.allSettled(
@@ -75,7 +98,7 @@ export async function fetchYearLinks(exclude?: string): Promise<RelatedLink[]> {
             url.searchParams.set('filterQuery[date_published][is before]', `${year + 1}-01-01`)
             url.searchParams.set('page', '1')
             url.searchParams.set('pageSize', '1')
-            const r = await fetch(url.toString())
+            const r = await fetch(url.toString(), { signal: AbortSignal.timeout(API_TIMEOUT_MS) })
             const d = await r.json()
             return { year, total: d.total as number }
         }),
@@ -83,12 +106,17 @@ export async function fetchYearLinks(exclude?: string): Promise<RelatedLink[]> {
     return results
         .filter(
             (r): r is PromiseFulfilledResult<{ year: number; total: number }> =>
-                r.status === 'fulfilled' && r.value.total > 0 && String(r.value.year) !== exclude,
+                r.status === 'fulfilled' && r.value.total > 0,
         )
         .map(({ value: { year } }) => ({
             label: String(year),
             href: `/vulnerability-database/year/${year}/`,
         }))
+})
+
+export async function fetchYearLinks(exclude?: string): Promise<RelatedLink[]> {
+    const links = await fetchAllYearLinks()
+    return exclude ? links.filter((l) => l.label !== exclude) : links
 }
 
 // Canonical display order for ecosystem links — stable regardless of CVE counts
@@ -98,9 +126,11 @@ const ECOSYSTEM_ORDER = [
     'git', 'red hat', 'bitnami',
 ]
 
-export async function fetchEcosystemLinks(exclude?: string): Promise<RelatedLink[]> {
+const fetchAllEcosystemLinks = createCachedFetcher(async (): Promise<RelatedLink[]> => {
     try {
-        const res = await fetch(`${API_BASE_URL}/vulndb/cve-ecosystem-distribution/`)
+        const res = await fetch(`${API_BASE_URL}/vulndb/cve-ecosystem-distribution/`, {
+            signal: AbortSignal.timeout(API_TIMEOUT_MS),
+        })
         if (!res.ok) return []
         const dist: Record<string, number> = await res.json()
 
@@ -112,9 +142,9 @@ export async function fetchEcosystemLinks(exclude?: string): Promise<RelatedLink
 
         // Ecosystems in canonical order first, then any others sorted by count
         const ordered = [
-            ...ECOSYSTEM_ORDER.filter((k) => present.has(k) && k !== exclude),
+            ...ECOSYSTEM_ORDER.filter((k) => present.has(k)),
             ...Object.entries(dist)
-                .filter(([key, count]) => key && count >= MIN_ECOSYSTEM_CVE_COUNT && key !== exclude && !ECOSYSTEM_ORDER.includes(key))
+                .filter(([key, count]) => key && count >= MIN_ECOSYSTEM_CVE_COUNT && !ECOSYSTEM_ORDER.includes(key))
                 .sort((a, b) => b[1] - a[1])
                 .map(([key]) => key),
         ]
@@ -126,4 +156,9 @@ export async function fetchEcosystemLinks(exclude?: string): Promise<RelatedLink
     } catch {
         return []
     }
+})
+
+export async function fetchEcosystemLinks(exclude?: string): Promise<RelatedLink[]> {
+    const links = await fetchAllEcosystemLinks()
+    return exclude ? links.filter((l) => l.label !== exclude) : links
 }
