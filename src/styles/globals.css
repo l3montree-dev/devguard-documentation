@@ -250,3 +250,7 @@ strong>code {
 .c7-bubble svg {
   stroke: black;
 }
+
+[data-kern-theme="dark"] .kern-table-responsive {
+    --dwt-table-scroll-shadow: var(--input) !important;
+}
