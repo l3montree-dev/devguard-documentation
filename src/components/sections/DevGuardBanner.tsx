@@ -52,7 +52,7 @@ export default function DevGuardBanner({
                         <a
                             href={primaryHref}
                             target="_blank"
-                            rel="noopener noreferrer"
+                            data-umami-event="Forward to Devguard"
                         >
                             <span className="truncate">{primaryLabel}</span>
                         </a>
@@ -60,7 +60,7 @@ export default function DevGuardBanner({
                     <a
                         href={secondaryHref}
                         target="_blank"
-                        rel="noopener noreferrer"
+                        data-umami-event="Forward to GitHub"
                         className="max-sm:pt-6 text-muted-foreground hover:text-foreground flex items-center justify-center gap-1.5 text-xs transition-colors sm:justify-start md:justify-end"
                     >
                         <ExternalLink className="h-3 w-3 flex-shrink-0" />
