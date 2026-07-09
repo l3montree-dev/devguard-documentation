@@ -569,7 +569,7 @@ export default function PurlPageComponent({
                                 <a
                                     href="https://devguard.org/"
                                     target="_blank"
-                                    rel="noopener noreferrer"
+                                    data-umami-event="Forward to Devguard"
                                 >
                                     <span className="truncate">
                                         Checkout DevGuard
