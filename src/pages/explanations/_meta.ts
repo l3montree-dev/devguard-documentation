@@ -16,6 +16,7 @@ export default {
     },
     'personal-access-token': { title: 'Personal Access Tokens' },
     'sbom-problem-statement': { title: 'SBOM Problem Statement' },
+    'supplementary-sboms': { title: 'Supplementary SBOMs' },
     'explaining-sboms': { title: 'Explaining SBOMs' },
     'transitive-dependencies': { title: 'Transitive Dependencies' },
     security: { title: 'Security' },
