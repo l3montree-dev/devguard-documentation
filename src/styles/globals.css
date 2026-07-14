@@ -34,7 +34,7 @@
 
 /* ─── 4. CSS variable overrides (unlayered — intentional DWT override) ── */
 :root {
-  /* font-size: 13.3333px; */
+  font-size: 13.3333px;
   --sidebar-background: var(--background);
 
   /* ── Typography (consumed by DWT theme-bridge) ── */
