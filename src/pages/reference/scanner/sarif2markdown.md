@@ -1,3 +1,18 @@
+---
+title: DevGuard-Scanner sarif2markdown — Convert SARIF to Markdown
+description: "Turn a SARIF report into a readable markdown summary or detailed table with devguard-scanner sarif2markdown for pull request comments and wiki pages."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: devguard-scanner sarif2markdown
+lang: en-US
+ignoreChecks: null
+---
+
 ## sarif2markdown
 
 Convert a SARIF JSON file into a markdown report

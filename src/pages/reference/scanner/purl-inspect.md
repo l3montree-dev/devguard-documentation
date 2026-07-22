@@ -1,3 +1,18 @@
+---
+title: DevGuard-Scanner purl-inspect — Look Up Package Vulnerabilities
+description: "Look up a package version in the DevGuard vulnerability database with devguard-scanner purl-inspect to see CVEs, CVSS scores, EPSS values and fixes."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: devguard-scanner purl-inspect
+lang: en-US
+ignoreChecks: null
+---
+
 ## purl-inspect
 
 Inspect PURL for matching CVEs and vulnerabilities

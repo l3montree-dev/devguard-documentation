@@ -1,3 +1,18 @@
+---
+title: DevGuard-Scanner sca — Software Composition Analysis
+description: "Run Software Composition Analysis with devguard-scanner sca on a container image or local project, generate an SBOM and get vulnerability results from DevGuard."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: devguard-scanner sca
+lang: en-US
+ignoreChecks: null
+---
+
 ## sca
 
 Run Software Composition Analysis (SCA)

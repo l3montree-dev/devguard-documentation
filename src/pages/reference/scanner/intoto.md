@@ -1,3 +1,18 @@
+---
+title: DevGuard-Scanner intoto — In-toto Supply Chain Steps
+description: "Record and verify software supply chain steps with in-toto. Signed links for each pipeline step are uploaded to DevGuard and checked by deployment gates."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: devguard-scanner intoto
+lang: en-US
+ignoreChecks: null
+---
+
 ## intoto
 
 Record and verify software supply chain steps using in-toto

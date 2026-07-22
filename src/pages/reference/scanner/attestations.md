@@ -1,3 +1,18 @@
+---
+title: DevGuard-Scanner attestations — Discover and Verify Attestations
+description: "Retrieve all attestations attached to a container image with devguard-scanner attestations and evaluate them against a Rego policy."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: devguard-scanner attestations
+lang: en-US
+ignoreChecks: null
+---
+
 ## attestations
 
 Discover attestations for an image and optionally evaluate a rego policy

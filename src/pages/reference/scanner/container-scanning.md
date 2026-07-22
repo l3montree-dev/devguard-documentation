@@ -1,3 +1,18 @@
+---
+title: DevGuard-Scanner container-scanning — Scan Container Images
+description: "Scan a container image or image tar file for vulnerabilities with devguard-scanner container-scanning, generating and uploading an SBOM to DevGuard."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: devguard-scanner container-scanning
+lang: en-US
+ignoreChecks: null
+---
+
 ## container-scanning
 
 Software composition analysis of a container image

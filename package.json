@@ -6,7 +6,7 @@
         "dev": "next dev --webpack",
         "build": "next build --webpack",
         "start": "next start",
-        "postbuild": "next-sitemap && cp sitemap.xml public/sitemap.xml && node utilities/copy-pages-to-public.mjs",
+        "postbuild": "next-sitemap && cp sitemap.xml public/sitemap.xml && node utilities/copy-pages-to-public.mjs && node utilities/create-llmstxt.mjs",
         "lint": "next lint",
         "seo-check": "docker run --rm -w /app -v $(pwd):/app registry.opencode.de/open-code/document-writing-tools/seo-check:main-amd64"
     },
