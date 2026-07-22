@@ -34,8 +34,8 @@
         "url": "https://github.com/l3montree-dev/devguard-documentation/issues"
     },
     "engines": {
-        "node": ">=v24.15.0",
-        "npm": ">=11.12.1"
+        "node": ">=v26.5.0",
+        "npm": ">=11.17.0"
     },
     "homepage": "https://github.com/l3montree-dev/devguard-documentation",
     "dependencies": {
