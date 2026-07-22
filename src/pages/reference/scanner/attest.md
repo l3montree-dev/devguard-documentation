@@ -1,3 +1,18 @@
+---
+title: DevGuard-Scanner attest — Create and Upload Attestations
+description: "Attach a signed predicate such as an SBOM, VEX or SLSA provenance to a container image or artifact with devguard-scanner attest."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: devguard-scanner attest
+lang: en-US
+ignoreChecks: null
+---
+
 ## attest
 
 Create and upload an attestation for an image or artifact

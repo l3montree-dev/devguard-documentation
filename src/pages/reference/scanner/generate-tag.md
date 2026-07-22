@@ -1,3 +1,18 @@
+---
+title: DevGuard-Scanner generate-tag — Generate Image Tags
+description: "Assemble a container image tag, artifact name and URL-encoded PURL from version, ref, variant and architecture with devguard-scanner generate-tag."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: devguard-scanner generate-tag
+lang: en-US
+ignoreChecks: null
+---
+
 ## generate-tag
 
 Generate a tag for an image based on its contents

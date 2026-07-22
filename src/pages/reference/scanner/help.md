@@ -1,3 +1,18 @@
+---
+title: DevGuard-Scanner intoto help — Command Help
+description: "Show help for any devguard-scanner intoto command, including the available flags inherited from the parent commands."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: devguard-scanner intoto help
+lang: en-US
+ignoreChecks: null
+---
+
 ## intoto help
 
 Help about any command
