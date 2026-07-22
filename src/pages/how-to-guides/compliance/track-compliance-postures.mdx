@@ -1,0 +1,127 @@
+---
+title: Track Compliance Posture in DevGuard
+description: "Monitor security-control implementation across your organization, projects and repositories, attach real components as evidence and export an OSCAL System Security Plan."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: track compliance posture
+lang: en-US
+ignoreChecks: null
+---
+
+import { Callout } from '@document-writing-tools/kernux-theme'
+
+# Track Compliance Posture
+
+A customer, an auditor, or a regulation like the **[EU Cyber Resilience Act (CRA)](/explanations/compliance/cyber-resilience-act)** asks your organization to prove that abstract security controls are in place — things like "are strong access permissions to source code enforced" or "are vulnerabilities handled before releasing a new version of the software." Traditionally that proof gets assembled by whoever owns the audit, often far from the codebase, into a spreadsheet that's stale the moment it's saved. The engineers who'd actually know the answer — because they're the ones who configured the branch protection rule or wired up the SBOM job — are rarely the ones filling it in, and rarely even see it.
+
+## What Compliance Actually Is
+
+Strip away the audits and paperwork, and compliance reduces to a simple claim: "here is evidence that our development and operational practices meet a set of security expectations someone else defined." Those expectations might come from a regulator, a customer's security team, or an industry standard — but underneath, they describe the same practices software teams already do or should be doing: restricting who can push code, scanning for vulnerabilities, generating an SBOM, reviewing changes before release.
+
+So compliance isn't a separate discipline bolted onto secure development — it's the proof layer on top of it. What went wrong in the scenario above wasn't the practices themselves; it's that the proof-gathering happened somewhere organizationally disconnected from where those practices actually live. Compliance Posture closes that gap by putting the tracking directly where the technical decisions are made.
+
+## What Compliance Posture Is
+
+**Compliance Posture** is DevGuard's control-tracking dashboard. For every control in a supported catalog, it tracks one thing per organization, project, or repository: is this control **Implemented**, **Not Applicable**, or still **Open**? You back that status up by pointing at things that already exist in your stack — a branch protection rule, a CI job, an SBOM export — instead of writing a paragraph of prose. The result is a living, exportable record instead of a document that's stale the day after you write it.
+
+These decisions also inherit down the hierarchy: mark a control Implemented at the organization level and it applies to every project and repository underneath by default, until one of them decides to record its own, more specific status. That mirrors how these controls actually get satisfied in practice — most are set once centrally (an org-wide branch-protection policy, say) and only a handful of repositories ever need to say something different.
+
+## How It's Structured
+
+Four terms, introduced in the order you'll actually run into them, using one example throughout: the requirement "restrict who can change source code," satisfied in practice by a GitLab or GitHub branch-protection rule.
+
+- **Framework** — a named, versioned catalog of controls, such as BSI IT-Grundschutz++ or the Secure Controls Framework (SCF).
+- **Control** — one requirement from that catalog, e.g. "restrict who can change source code." A control is deliberately abstract: it doesn't say *how*, no mention of GitHub, GitLab, or any specific tool, because the same wording has to hold for every organization the framework applies to, regardless of what they actually run.
+- **Posture** — the status *your* organization, project, or repository has recorded against one control: Implemented, Not Applicable, or Open. This is the thing the Compliance Posture list and detail page revolve around.
+- **Component** — the concrete counterpart to a control: a real capability such as "GitLab branch protection" or "an SBOM generated on every build," which declares which controls it helps satisfy. **Attaching** a component to a posture is how you back an Implemented status with actual evidence instead of a comment.
+
+DevGuard ships with a set of these components already defined and already mapped to controls in the supported catalogs — so for common capabilities like branch protection, the "does this satisfy that control" work is done before you open the dashboard. You can still define your own components for anything specific to your stack.
+
+## What OSCAL Is, and Why DevGuard Uses It
+
+**OSCAL** (the Open Security Controls Assessment Language) is a specification published by NIST for describing controls, components, and security plans as structured JSON/XML data — think "OpenAPI, but for compliance controls" rather than HTTP APIs.
+
+DevGuard uses it because every framework otherwise defines controls in its own words, at its own level of detail, in its own document format. OSCAL gives DevGuard one shape to import any framework's catalog into and one shape to export evidence back out of, instead of building bespoke support per framework. In practice that means: catalogs like BSI IT-Grundschutz++ and SCF are imported as OSCAL, components are defined as OSCAL, and **Download OSCAL** on the posture list exports a standard OSCAL System Security Plan — a document any auditor's tooling can parse, not a DevGuard-proprietary report. You never need to read the spec or write OSCAL JSON by hand to use this feature.
+
+## Compliance Is a Community Effort, Not a Private Chore
+
+The branch-protection component from the example above isn't specific to your organization. Once the mapping from "GitLab branch protection" to a given control exists, it's reusable by every organization running GitLab — nobody else has to rediscover or re-argue it. Connecting a real capability to an abstract control is exactly the kind of work that's tedious to do once and wasteful to redo per company, which is why DevGuard ships common mappings out of the box rather than starting every organization from a blank catalog — and why we're working toward a shared community repository where these component-to-control mappings can be consolidated and improved across organizations, not just shipped once and left to go stale.
+
+This mirrors DevGuard's broader philosophy on [crowdsourced vulnerability assessment](/explanations/vulnerability-management/mitigation-strategies): the same way one team's VEX statement about a vulnerability's exploitability can generalize to every other consumer of that component, one team's work mapping a technical capability to a compliance control generalizes to every other organization with the same setup. The more organizations that attach and refine components, the less redundant interpretation work is left for the next team.
+
+## Prerequisites
+
+- Access to a DevGuard organization, project or repository (asset).
+- Admin or maintain permissions to mark a posture as implemented, not applicable, or to attach a component (read access is enough to view postures).
+
+## Where to Find Compliance Postures
+
+The **Compliance Postures** entry sits in the sidebar menu at three levels, and each level shows the same list scoped narrower:
+
+- **Organization** → **Compliance Postures** — every control across all supported frameworks, for the whole organization.
+- **Project** → **Compliance Postures** — the same controls, scoped to the repositories inside that project.
+- **Repository (asset)** → **Compliance Postures** — the same controls, scoped to a single repository version.
+
+A control's status can be decided at any of these levels — see [inheritance](#what-compliance-posture-is) above. If a repository hasn't made its own decision, it shows the status inherited from its project or organization, flagged with an "inherited" banner so you always know where a decision actually came from and can tell at a glance whether it needs a decision of its own.
+
+## Supported Frameworks
+
+DevGuard ships two control catalogs out of the box:
+
+- **BSI IT-Grundschutz++** — the German Federal Office for Information Security's baseline protection catalog.
+- **Secure Controls Framework (SCF)** — a broad, cross-mapped catalog spanning most common security frameworks.
+
+## The Compliance Posture List
+
+Open **Compliance Postures** at any level to see a paginated table of controls with their title, framework, control ID, importance, whether a DevGuard component can help satisfy them, and any mapped controls.
+
+- **Open** and **Resolved** tabs separate controls that still need a decision from the ones you've already addressed.
+- A stats strip at the top counts **Open**, **Implemented** and **Not Applicable** postures — click a number to filter the table to it.
+- Filter by title, framework, control ID, importance, or "solvable by component."
+- **Download OSCAL** exports the current posture as an OSCAL System Security Plan.
+- **See all components** links to the organization-wide catalog of reusable compliance components — the same components described in [How It's Structured](#how-its-structured) above.
+
+## The Control Detail Page
+
+Opening a control shows its full text — description, guidance and assessment objective — with a glossary tooltip on unfamiliar terms, plus a sidebar with its group, class, security level, importance, effort level, tags, source documentation link and mapped controls.
+
+From here you can:
+
+- **Mark Implemented** — record that this control is satisfied, with a comment.
+- **Mark Not Applicable** — record that this control doesn't apply to this scope, with a reason.
+- **Comment** — leave a note without changing the status.
+- **Reopen** — move a resolved control back to Open.
+- **Attach Component** — link a concrete capability as evidence; covered next.
+
+Every action is recorded in the control's event feed, giving you a full audit trail of who changed the status and when — the same event history component used for vulnerability triage.
+
+## Attach Components as Evidence
+
+Attaching a component to a control in your scope is *your* statement that you actually rely on that capability — plus how far along it is:
+
+- **Implemented** — fully enabled and configured for this scope.
+- **Partial** — enabled, but doesn't cover the full control.
+- **Planned** — not enabled yet, but on the roadmap.
+- **Alternative** — satisfies the control a different way than the component's own description assumes.
+- **Not Applicable** — doesn't apply to your setup.
+
+To attach one:
+
+1. Open the control's detail page and choose **Attach Component**.
+2. Pick a component from the catalog, set its status from the list above, and describe how it's configured for this scope — e.g. "enforced via GitHub branch protection on `main`, required reviewers: 2."
+3. Save. The component now appears on the control both as supporting evidence.
+
+<Callout type="warning">
+  Compliance Posture tracks *decisions and evidence you record* — it does not automatically derive a control's status from scan results. Attaching a component documents that a concrete capability exists; you still confirm and mark the control yourself. DevGuard itself always shows up as one component on every control it's relevant to, representing DevGuard's own direct assessment — any component you attach on top of that is additional, real-world evidence.
+</Callout>
+
+## Related Documentation
+
+- [View Compliance Dashboards](/how-to-guides/compliance/compliance-dashboards) — the older policy/attestation-based compliance view
+- [Cyber Resilience Act](/explanations/compliance/cyber-resilience-act) — what the CRA requires and how DevGuard maps to it
+- [Why Compliance Matters](/explanations/compliance/why-compliance-matters) — the business case for compliance
