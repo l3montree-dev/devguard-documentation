@@ -1,18 +1,3 @@
----
-title: DevGuard-Scanner discover-baseimage-attestations — Base Image Metadata
-description: "Read the FROM line of a Dockerfile and download the attestations of the base image with devguard-scanner discover-baseimage-attestations."
-seo:
-  robots: index,follow
-  og:
-    image: /og-image.png
-    type: article
-  schema:
-    type: TechArticle
-  keyword_primary: devguard-scanner discover-baseimage-attestations
-lang: en-US
-ignoreChecks: null
----
-
 ## discover-baseimage-attestations
 
 Download attestations (SBOM, VEX, …) for the base image used in a Dockerfile

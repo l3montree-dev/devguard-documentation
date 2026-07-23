@@ -1,18 +1,3 @@
----
-title: DevGuard-Scanner kyverno2sarif — Convert Kyverno Output to SARIF
-description: "Convert the JSON output of 'kyverno test' into SARIF with devguard-scanner kyverno2sarif so Kubernetes policy results can be uploaded to DevGuard."
-seo:
-  robots: index,follow
-  og:
-    image: /og-image.png
-    type: article
-  schema:
-    type: TechArticle
-  keyword_primary: devguard-scanner kyverno2sarif
-lang: en-US
-ignoreChecks: null
----
-
 ## kyverno2sarif
 
 Convert Kyverno test output to SARIF

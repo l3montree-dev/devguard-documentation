@@ -1,18 +1,3 @@
----
-title: DevGuard-Scanner intoto fetch-links — Fetch Supply Chain Links
-description: "Download all in-toto links recorded for a given supply chain ID from DevGuard with devguard-scanner intoto fetch-links."
-seo:
-  robots: index,follow
-  og:
-    image: /og-image.png
-    type: article
-  schema:
-    type: TechArticle
-  keyword_primary: devguard-scanner intoto fetch-links
-lang: en-US
-ignoreChecks: null
----
-
 ## intoto fetch-links
 
 Fetch links for a given supply chain

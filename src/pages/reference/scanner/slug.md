@@ -1,18 +1,3 @@
----
-title: DevGuard-Scanner slug — Create URL-Friendly Slugs
-description: "Turn arbitrary text into a URL-friendly slug with devguard-scanner slug, useful for generating artifact names and identifiers in CI pipelines."
-seo:
-  robots: index,follow
-  og:
-    image: /og-image.png
-    type: article
-  schema:
-    type: TechArticle
-  keyword_primary: devguard-scanner slug
-lang: en-US
-ignoreChecks: null
----
-
 ## slug
 
 Create a URL-friendly slug from text
