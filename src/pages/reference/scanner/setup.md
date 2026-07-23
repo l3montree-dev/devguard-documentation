@@ -1,18 +1,3 @@
----
-title: DevGuard-Scanner intoto setup — Set Up In-toto
-description: "Set up in-toto for an asset with devguard-scanner intoto setup before recording signed links in your CI pipeline."
-seo:
-  robots: index,follow
-  og:
-    image: /og-image.png
-    type: article
-  schema:
-    type: TechArticle
-  keyword_primary: devguard-scanner intoto setup
-lang: en-US
-ignoreChecks: null
----
-
 ## intoto setup
 
 Setup in-toto

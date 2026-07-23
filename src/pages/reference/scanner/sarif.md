@@ -1,18 +1,3 @@
----
-title: DevGuard-Scanner sarif — Upload SARIF Reports
-description: "Upload SARIF reports from CodeQL, Semgrep, Trivy or any SARIF-producing tool to DevGuard with devguard-scanner sarif to track new and resolved findings."
-seo:
-  robots: index,follow
-  og:
-    image: /og-image.png
-    type: article
-  schema:
-    type: TechArticle
-  keyword_primary: devguard-scanner sarif
-lang: en-US
-ignoreChecks: null
----
-
 ## sarif
 
 Scan a SARIF report and upload results to DevGuard

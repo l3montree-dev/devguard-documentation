@@ -1,18 +1,3 @@
----
-title: DevGuard-Scanner intoto start — Snapshot Step Inputs
-description: "Record the hashes of all input files before a pipeline step runs with devguard-scanner intoto start, the first half of the start/stop link pair."
-seo:
-  robots: index,follow
-  og:
-    image: /og-image.png
-    type: article
-  schema:
-    type: TechArticle
-  keyword_primary: devguard-scanner intoto start
-lang: en-US
-ignoreChecks: null
----
-
 ## intoto start
 
 Snapshot input files at the beginning of a pipeline step

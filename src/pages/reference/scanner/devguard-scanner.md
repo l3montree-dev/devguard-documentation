@@ -1,18 +1,3 @@
----
-title: DevGuard-Scanner CLI Reference
-description: "Reference for the devguard-scanner CLI — generate, sign and upload SBOMs, SARIF reports and attestations to DevGuard to secure your software supply chain."
-seo:
-  robots: index,follow
-  og:
-    image: /og-image.png
-    type: article
-  schema:
-    type: TechArticle
-  keyword_primary: devguard-scanner cli
-lang: en-US
-ignoreChecks: null
----
-
 ## devguard-scanner
 
 Secure your Software Supply Chain

@@ -1,18 +1,3 @@
----
-title: DevGuard-Scanner inspect-devguard-token — Decode Token Keys
-description: "Decode a DevGuard hex token with devguard-scanner inspect-devguard-token and print the corresponding private and public keys in PEM and hex format."
-seo:
-  robots: index,follow
-  og:
-    image: /og-image.png
-    type: article
-  schema:
-    type: TechArticle
-  keyword_primary: devguard-scanner inspect-devguard-token
-lang: en-US
-ignoreChecks: null
----
-
 ## inspect-devguard-token
 
 Decode and display a DevGuard token's keys

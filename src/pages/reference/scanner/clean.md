@@ -1,18 +1,3 @@
----
-title: DevGuard-Scanner clean — Remove Attestations and Signatures
-description: "Remove signatures, attestations or SBOMs from an OCI image with devguard-scanner clean, optionally authenticating against your container registry."
-seo:
-  robots: index,follow
-  og:
-    image: /og-image.png
-    type: article
-  schema:
-    type: TechArticle
-  keyword_primary: devguard-scanner clean
-lang: en-US
-ignoreChecks: null
----
-
 ## clean
 
 Remove attestations or signatures from an OCI image

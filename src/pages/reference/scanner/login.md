@@ -1,18 +1,3 @@
----
-title: DevGuard-Scanner login — Authenticate With a Registry
-description: "Log in to a container registry such as ghcr.io or Docker Hub with devguard-scanner login to pull and push images during scanning and signing."
-seo:
-  robots: index,follow
-  og:
-    image: /og-image.png
-    type: article
-  schema:
-    type: TechArticle
-  keyword_primary: devguard-scanner login
-lang: en-US
-ignoreChecks: null
----
-
 ## login
 
 Log in to a remote registry

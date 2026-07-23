@@ -1,18 +1,3 @@
----
-title: DevGuard-Scanner inspect — Inspect a PURL for CVEs
-description: "Inspect a Package URL against the DevGuard vulnerability database with devguard-scanner inspect to see matching CVEs and affected components."
-seo:
-  robots: index,follow
-  og:
-    image: /og-image.png
-    type: article
-  schema:
-    type: TechArticle
-  keyword_primary: devguard-scanner inspect
-lang: en-US
-ignoreChecks: null
----
-
 ## inspect
 
 Inspect PURL for matching CVEs and vulnerabilities
