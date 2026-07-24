@@ -47,6 +47,11 @@
 
   --grid-line-color: rgba(255, 255, 255, 0.08);
 
+  /* Workaround: kernux-theme's styles.css references
+     --kern-typography-font-size-static-small (for --text-xs/--text-sm) but
+     theme-bridge.css never defines it, leaving both variables invalid. */
+  --kern-typography-font-size-static-small: 14px;
+
   --color-card: #161B23 !important;
   --color-border: hsl(215 22% 15%) !important; 
   --accent-foreground: hsl(0 0% 5%);
