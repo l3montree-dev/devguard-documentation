@@ -36,7 +36,7 @@ on:
 
 jobs:
     devguard-code-risk-identification:
-        uses: l3montree-dev/devguard-action/.github/workflows/code-risk-identification.yml@main
+        uses: l3montree-dev/devguard-ci-components/.github/workflows/code-risk-identification.yml@main
         with:
           api-url: https://api.devguard.org
           asset-name: 'myOrganization/projects/myProject/assets/myAsset'
@@ -75,7 +75,7 @@ jobs:
 
     code-risk-identification:
         needs: secret-scanning
-        uses: l3montree-dev/devguard-action/.github/workflows/code-risk-identification.yml@feautre/sarif-sbom-upload-actions
+        uses: l3montree-dev/devguard-ci-components/.github/workflows/code-risk-identification.yml@feautre/sarif-sbom-upload-actions
         with:
           api-url: https://api.devguard.org
           asset-name: 'myOrganization/projects/myProject/assets/myAsset'
