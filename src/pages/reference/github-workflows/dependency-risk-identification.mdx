@@ -44,7 +44,7 @@ on:
 
 jobs:
   devguard-dependency-risk-identification:
-    uses: l3montree-dev/devguard-action/.github/workflows/dependency-risk-identification.yml@main
+    uses: l3montree-dev/devguard-ci-components/.github/workflows/dependency-risk-identification.yml@main
     with:
       api-url: "<api-url>"
       asset-name: "<asset-name>"
@@ -69,7 +69,7 @@ on:
 
 jobs:
   devguard-dependency-risk-identification:
-    uses: l3montree-dev/devguard-action/.github/workflows/dependency-risk-identification.yml@main
+    uses: l3montree-dev/devguard-ci-components/.github/workflows/dependency-risk-identification.yml@main
     with:
       api-url: https://api.devguard.org
       asset-name: "myOrganization/projects/myProject/assets/myAsset"
@@ -113,7 +113,7 @@ jobs:
 
   dependency-risk-identification:
     needs: software-composition-analysis
-    uses: l3montree-dev/devguard-action/.github/workflows/dependency-risk-identification.yml@main
+    uses: l3montree-dev/devguard-ci-components/.github/workflows/dependency-risk-identification.yml@main
     with:
       api-url: https://api.devguard.org
       asset-name: "myOrganization/projects/myProject/assets/myAsset"
