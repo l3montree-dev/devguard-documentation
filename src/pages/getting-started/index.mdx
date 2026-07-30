@@ -159,7 +159,7 @@ For this tutorial, we'll use the DevGuard CLI approach.
 
 First, pull the DevGuard scanner Docker image:
 
-```bash {test}
+```bash
 docker pull ghcr.io/l3montree-dev/devguard/scanner:main
 ```
 
@@ -167,7 +167,7 @@ Next, create a personal access token by clicking the token generation button in 
 
 Copy the command from the dialog, which automatically includes your personal access token and the correct DevGuard API URL:
 
-```bash {test}
+```bash
 docker run -v "$(pwd):/app" ghcr.io/l3montree-dev/devguard/scanner:main \
 devguard-scanner sca \
     --path=/app \
@@ -183,7 +183,7 @@ Navigate to a directory containing code you want to scan and run the command. Th
 
 **Example output:**
 
-```bash
+```bash {ignore}
 11:48AM INF scanning directory dir=/app
 11:49AM INF Scan completed successfully dependencyVulnAmount=7 openedByThisScan=7 closedByThisScan=0
 +--------------------------------------------+----------------+------+------+---------------------+---------+--------+

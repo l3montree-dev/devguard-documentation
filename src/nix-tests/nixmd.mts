@@ -1,9 +1,10 @@
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
-import { relative, join, dirname } from 'node:path'
+import { readFileSync, writeFileSync, mkdirSync, readdirSync, rmSync } from 'node:fs'
+import { relative, join, sep } from 'node:path'
 
 const OUT_DIR = 'src/nix-tests/tmp'
 const PAGES_DIR = 'src/pages'
 const CODE_FENCE = /^[ \t]*```(\w*)[ \t]*([^\r\n]*)\r?\n([\s\S]*?)^[ \t]*```/gm
+const SHELL_LANGS = new Set(['bash', 'sh', 'shell'])
 
 const TEST_VALUES: Record<string, string> = {
     assetName: "testorg/projects/testgroup/assets/testrepo",
@@ -50,15 +51,17 @@ function extractBlocks(source: string) : CodeBlock[] {
 
 function outputPathFor(mdxPath: string): string {
     const relativePath = relative(PAGES_DIR, mdxPath)
-    const shellPath = relativePath.replace(/\.mdx$/, '.sh')
+    const fileName = relativePath.replace(/\.mdx$/, '').split(sep).join('-') + '.sh'
 
-    return join(OUT_DIR, shellPath)
+    return join(OUT_DIR, fileName)
 }
 
 function convert(mdxPath: string): void {
     const source = readFileSync(mdxPath, 'utf8')
     const blocks = extractBlocks(source)
-    const testBlocks = blocks.filter((block) => block.meta.includes('{test}'))
+    const testBlocks = blocks.filter(
+        (block) => SHELL_LANGS.has(block.lang) && !block.meta.includes('{ignore}'),
+    )
 
     if (testBlocks.length === 0) {
         console.log("No codeblocks found for testing.") 
@@ -69,10 +72,22 @@ function convert(mdxPath: string): void {
 
     const outPath = outputPathFor(mdxPath)
 
-    mkdirSync(dirname(outPath), { recursive: true })
+    mkdirSync(OUT_DIR, { recursive: true })
     writeFileSync(outPath, header + declarationsFor(body) + body)
             
     console.log(`${testBlocks.length} Blöcke → ${outPath}`)
 }
 
-convert(process.argv[2])
+function collectMdxFiles(): string[] {
+    const entries = readdirSync(PAGES_DIR, { recursive : true })
+    rmSync(OUT_DIR, { recursive: true, force: true })
+
+    return entries
+        .map((entry) => String(entry))
+        .filter((entry) => entry.endsWith('.mdx'))
+        .map((entry) => join(PAGES_DIR, entry))
+}
+
+for (const mdxPath of collectMdxFiles()) {
+    convert(mdxPath)
+}
