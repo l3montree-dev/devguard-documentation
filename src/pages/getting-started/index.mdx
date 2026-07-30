@@ -49,7 +49,7 @@ If you don't have Docker installed, follow the [Docker installation guide](https
 
 First, download the necessary configuration files and start DevGuard using docker-compose:
 
-```bash {test}
+```bash
 curl -LO https://raw.githubusercontent.com/l3montree-dev/devguard/refs/heads/main/docker-compose-try-it.yaml \
 && docker-compose -f docker-compose-try-it.yaml up
 ```
@@ -159,7 +159,7 @@ For this tutorial, we'll use the DevGuard CLI approach.
 
 First, pull the DevGuard scanner Docker image:
 
-```bash
+```bash {test}
 docker pull ghcr.io/l3montree-dev/devguard/scanner:main
 ```
 
@@ -167,8 +167,8 @@ Next, create a personal access token by clicking the token generation button in 
 
 Copy the command from the dialog, which automatically includes your personal access token and the correct DevGuard API URL:
 
-```bash
-docker run -v "$(PWD):/app" ghcr.io/l3montree-dev/devguard/scanner:main \
+```bash {test}
+docker run -v "$(pwd):/app" ghcr.io/l3montree-dev/devguard/scanner:main \
 devguard-scanner sca \
     --path=/app \
     --assetName="myorg/projects/newgroup/assets/newrepository" \

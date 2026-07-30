@@ -1,14 +1,37 @@
-import { readFileSync, writeFileSync, mkdirSync, readdirSync, rmSync } from 'node:fs'
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { relative, join, dirname } from 'node:path'
 
 const OUT_DIR = 'src/nix-tests/tmp'
 const PAGES_DIR = 'src/pages'
 const CODE_FENCE = /^[ \t]*```(\w*)[ \t]*([^\r\n]*)\r?\n([\s\S]*?)^[ \t]*```/gm
 
+const TEST_VALUES: Record<string, string> = {
+    assetName: "testorg/projects/testgroup/assets/testrepo",
+    apiUrl: "http://host.docker.internal:8080",
+    token: "df8f06f63639f161bf00f04566308aa88580b894c2798e5168ba9a89b572866a",
+    webUI: "http://localhost:3000",
+}
+
 interface CodeBlock {
     lang: string
     meta: string
     code: string
+}
+
+function changeToTestVariables(code: string): string {
+    return Object.keys(TEST_VALUES).reduce(
+        (result, flag) =>
+            result.replace(new RegExp(`(--${flag}=)("[^"]*"|'[^']*'|[^\\s\\\\]*)`, 'g'), `$1"\${${flag}}"`),
+        code,
+    )
+}
+
+function declarationsFor(body: string): string {
+    const declarations = Object.entries(TEST_VALUES)
+        .filter(([flag]) => body.includes(`\${${flag}}`))
+        .map(([flag, value]) => `${flag}="\${${flag}:-${value}}"`)
+
+    return declarations.length === 0 ? '' : declarations.join('\n') + '\n\n'
 }
 
 function extractBlocks(source: string) : CodeBlock[] {
@@ -42,26 +65,14 @@ function convert(mdxPath: string): void {
         return
     }
     const header = '#!/usr/bin/env bash\nset -euo pipefail\n\n'
-    const body = testBlocks.map((block) => block.code).join('\n')
-            
+    const body = testBlocks.map((block) => changeToTestVariables(block.code)).join('\n')
+
     const outPath = outputPathFor(mdxPath)
-            
+
     mkdirSync(dirname(outPath), { recursive: true })
-    writeFileSync(outPath, header + body)
+    writeFileSync(outPath, header + declarationsFor(body) + body)
             
     console.log(`${testBlocks.length} Blöcke → ${outPath}`)
 }
 
-function collectMdxFiles(): string[] {
-    const entries = readdirSync(PAGES_DIR, { recursive : true })
-    rmSync(OUT_DIR, { recursive: true, force: true })
-
-    return entries
-        .map((entry) => String(entry))
-        .filter((entry) => entry.endsWith('.mdx'))
-        .map((entry) => join(PAGES_DIR, entry))
-}
-
-for (const mdxPath of collectMdxFiles()) {
-    convert(mdxPath)
-}
+convert(process.argv[2])
