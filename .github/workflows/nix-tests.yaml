@@ -22,14 +22,6 @@ jobs:
         working-directory: .github/e2e
         run: docker compose up -d
 
-      - name: Wait for database migrations
-        working-directory: .github/e2e
-        run: docker compose wait devguard-migrate
-
-      - name: Wait for vulnerability database import
-        working-directory: .github/e2e
-        run: docker compose wait devguard-vulndb-import
-
       - name: Wait for backend to be ready
         run: |
           echo "Waiting for devguard-api..."
