@@ -1,7 +1,7 @@
 # Runs every shell code block of the documentation against a real DevGuard instance.
 # The backend stack is identical to the devguard-web E2E setup (migrate + vulndb import),
 # afterwards the documentation seed data is loaded and run-test.sh is executed.
-name: Documentation Code Block Tests
+name: Documentation Code Block testing
 
 on:
   workflow_dispatch:
@@ -12,11 +12,16 @@ permissions: read-all
 jobs:
   nix-tests:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 60
 
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #v7.0.1
+
+      # not in git: .gitignore excludes *.pem
+      - name: Create test encryption key
+        working-directory: .github/e2e
+        run: openssl rand -hex 32 > test-secret.pem
 
       - name: Start backend services
         working-directory: .github/e2e
@@ -25,7 +30,7 @@ jobs:
       - name: Wait for backend to be ready
         run: |
           echo "Waiting for devguard-api..."
-          timeout 300 bash -c 'until curl -sf http://localhost:8080/api/v1/health/ > /dev/null 2>&1; do sleep 3; done'
+          timeout 600 bash -c 'until curl -sf http://localhost:8080/api/v1/health/ > /dev/null 2>&1; do sleep 3; done'
           echo "Backend ready."
 
       - name: Load documentation seed data
