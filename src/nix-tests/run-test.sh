@@ -4,6 +4,9 @@ set -euo pipefail
 TMP_DIR="src/nix-tests/tmp"
 SHELL_NIX="src/nix-tests/shell.nix"
 SCRIPT_TIMEOUT="${SCRIPT_TIMEOUT:-300}"
+NIXPKGS_URL="https://github.com/NixOS/nixpkgs/tarball/nixos-26.05"
+
+export NIX_PATH="nixpkgs=$NIXPKGS_URL"
 
 cleanup() {
     rm -rf "$TMP_DIR"
