@@ -48,9 +48,11 @@ View update progress in the API logs:
 
 ```bash
 # Kubernetes
+# hint: this command will block your shell. Append "&" to run it in the background and keep your shell usable
 kubectl logs -f deployment/devguard-api-deployment -n devguard | grep -i vulndb
 
 # Docker
+# hint: this command will block your shell. Append "&" to run it in the background and keep your shell usable
 docker logs -f devguard-api | grep -i vulndb
 ```
 

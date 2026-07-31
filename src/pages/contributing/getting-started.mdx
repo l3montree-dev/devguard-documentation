@@ -88,10 +88,11 @@ docker compose up -d
 Run this command to start the backend:
 
 ```bash 
-make run
+# hint: this command will block your shell. Append "&" to run it in the background and keep your shell usable
+make
 ```
 
-<Callout type="info">Run "make run" only after "docker compose up -d" and "make migrate" have both completed, in that order.</Callout>
+<Callout type="info">Run "make" only after "docker compose up -d" and "make migrate" have both completed, in that order.</Callout>
 
 </Steps>
 
@@ -130,6 +131,7 @@ npm install
 Run this command to start the frontend:
 
 ```bash copy
+# hint: this command will block your shell. Append "&" to run it in the background and keep your shell usable
 npm run dev
 ```
 

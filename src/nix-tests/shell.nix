@@ -8,5 +8,8 @@ pkgs.mkShellNoCC {
     git
     curl
     docker-compose
+    trivy
+    cosign
+    openssl
   ];
 }

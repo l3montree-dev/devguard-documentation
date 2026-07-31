@@ -154,9 +154,11 @@ For operational visibility without a full observability stack, check the API log
 
 ```bash
 # Kubernetes
+# hint: this command will block your shell. Append "&" to run it in the background and keep your shell usable
 kubectl logs -f deployment/devguard-api-deployment -n devguard
 
 # Docker Compose
+# hint: this command will block your shell. Append "&" to run it in the background and keep your shell usable
 docker logs -f devguard-api
 ```
 

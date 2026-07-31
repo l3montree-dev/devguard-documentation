@@ -5,6 +5,9 @@ const OUT_DIR = 'src/nix-tests/tmp'
 const PAGES_DIR = 'src/pages'
 const CODE_FENCE = /^[ \t]*```(\w*)[ \t]*([^\r\n]*)\r?\n([\s\S]*?)^[ \t]*```/gm
 const SHELL_LANGS = new Set(['bash', 'sh', 'shell'])
+const BLOCKING_HINT = /^[ \t]*#[ \t]*hint:.*\bblock/i
+const BLANK_OR_COMMENT = /^[ \t]*(#|$)/
+const LINE_CONTINUATION = /\\[ \t]*$/
 
 const TEST_VALUES: Record<string, string> = {
     assetName: "testorg/projects/testgroup/assets/testrepo",
@@ -33,6 +36,53 @@ function declarationsFor(body: string): string {
         .map(([flag, value]) => `${flag}="\${${flag}:-${value}}"`)
 
     return declarations.length === 0 ? '' : declarations.join('\n') + '\n\n'
+}
+
+function endOfCommand(lines: string[], start: number): number {
+    let end = start
+
+    while (end < lines.length - 1 && LINE_CONTINUATION.test(lines[end])) {
+        end++
+    }
+
+    return end
+}
+
+function startOfCommand(lines: string[], afterHint: number): number {
+    let start = afterHint
+
+    while (start < lines.length && BLANK_OR_COMMENT.test(lines[start])) {
+        start++
+    }
+
+    return start
+}
+
+function backgroundHintedCommands(code: string): string {
+    const lines = code.split('\n')
+
+    for (let index = 0; index < lines.length; index++) {
+        if (!BLOCKING_HINT.test(lines[index])) {
+            continue
+        }
+
+        const start = startOfCommand(lines, index + 1)
+
+        if (start >= lines.length) {
+            break
+        }
+
+        const end = endOfCommand(lines, start)
+        const command = lines[end].trimEnd()
+
+        if (!command.endsWith('&')) {
+            lines[end] = `${command} &`
+        }
+
+        index = end
+    }
+
+    return lines.join('\n')
 }
 
 function extractBlocks(source: string) : CodeBlock[] {
@@ -64,11 +114,12 @@ function convert(mdxPath: string): void {
     )
 
     if (testBlocks.length === 0) {
-        console.log("No codeblocks found for testing.") 
         return
     }
     const header = '#!/usr/bin/env bash\nset -euo pipefail\n\n'
-    const body = testBlocks.map((block) => changeToTestVariables(block.code)).join('\n')
+    const body = testBlocks
+        .map((block) => backgroundHintedCommands(changeToTestVariables(block.code)))
+        .join('\n')
 
     const outPath = outputPathFor(mdxPath)
 
