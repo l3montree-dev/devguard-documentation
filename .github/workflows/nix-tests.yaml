@@ -1,0 +1,83 @@
+# Runs every shell code block of the documentation against a real DevGuard instance.
+# The backend stack is identical to the devguard-web E2E setup (migrate + vulndb import),
+# afterwards the documentation seed data is loaded and run-test.sh is executed.
+name: Documentation Code Block Tests
+
+on:
+  workflow_dispatch:
+  push:
+
+permissions: read-all
+
+jobs:
+  nix-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #v7.0.1
+
+      - name: Start backend services
+        working-directory: .github/e2e
+        run: docker compose up -d
+
+      - name: Wait for database migrations
+        working-directory: .github/e2e
+        run: docker compose wait devguard-migrate
+
+      - name: Wait for vulnerability database import
+        working-directory: .github/e2e
+        run: docker compose wait devguard-vulndb-import
+
+      - name: Wait for backend to be ready
+        run: |
+          echo "Waiting for devguard-api..."
+          timeout 300 bash -c 'until curl -sf http://localhost:8080/api/v1/health/ > /dev/null 2>&1; do sleep 3; done'
+          echo "Backend ready."
+
+      - name: Load documentation seed data
+        working-directory: .github/e2e
+        run: |
+          docker compose exec -T postgresql \
+            psql -U postgres -d devguard \
+            < ../../src/nix-tests/devguard-seed-data.sql
+
+      - name: Verify seed data
+        working-directory: .github/e2e
+        run: |
+          expected="testorg/projects/testgroup/assets/testrepo"
+          actual=$(docker compose exec -T postgresql psql -U postgres -d devguard -tAc "
+            SELECT o.slug || '/projects/' || p.slug || '/assets/' || a.slug
+            FROM assets a
+            JOIN projects p ON p.id = a.project_id
+            JOIN organizations o ON o.id = p.organization_id
+          ")
+          if [ "$actual" != "$expected" ]; then
+            echo "Seed data missing: expected '$expected', got '$actual'" >&2
+            exit 1
+          fi
+          echo "Seed data loaded: $actual"
+
+      - name: Setup Go
+        uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 #v5.5.0
+        with:
+          go-version: '1.26'
+          cache: false
+
+      - name: Install DevGuard CLI and scanner
+        run: |
+          go install github.com/l3montree-dev/devguard/cmd/devguard-scanner@main
+          go install github.com/l3montree-dev/devguard/cmd/devguard-cli@main
+          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+
+      - name: Setup Nix
+        uses: cachix/install-nix-action@8aa03977d8d733052d78f4e008a241fd1dbf36b3 #v31.10.6
+
+      - name: Run documentation tests
+        env:
+          assetName: testorg/projects/testgroup/assets/testrepo
+          apiUrl: http://localhost:8080
+          webUI: http://localhost:3000
+          token: df8f06f63639f161bf00f04566308aa88580b894c2798e5168ba9a89b572866a
+        run: bash src/nix-tests/run-test.sh

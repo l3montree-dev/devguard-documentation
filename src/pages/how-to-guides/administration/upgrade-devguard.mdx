@@ -40,7 +40,7 @@ The DevGuard API and Web images share the same version tags. The Helm chart vers
 
 ### Upgrade
 
-```bash
+```bash {ignore}
 helm upgrade devguard oci://ghcr.io/l3montree-dev/devguard-helm-chart/devguard \
   --version <version> \
   --namespace devguard \
@@ -49,7 +49,7 @@ helm upgrade devguard oci://ghcr.io/l3montree-dev/devguard-helm-chart/devguard \
 
 ### Verify deployment
 
-```bash
+```bash {ignore}
 kubectl rollout status deployment/devguard-api-deployment -n devguard
 kubectl rollout status deployment/devguard-web-deployment -n devguard
 ```
@@ -60,7 +60,7 @@ kubectl rollout status deployment/devguard-web-deployment -n devguard
 
 If issues occur:
 
-```bash
+```bash {ignore}
 helm rollback devguard -n devguard
 ```
 
@@ -98,19 +98,19 @@ services:
 
 ### Pull new images
 
-```bash
+```bash {ignore}
 docker-compose -f docker-compose-try-it.yaml pull
 ```
 
 ### Restart containers
 
-```bash
+```bash {ignore}
 docker-compose -f docker-compose-try-it.yaml up -d
 ```
 
 ### Verify
 
-```bash
+```bash {ignore}
 docker-compose -f docker-compose-try-it.yaml ps
 ```
 

@@ -72,7 +72,7 @@ oidc:
 
 Create the required secret:
 
-```bash
+```bash {ignore}
 kubectl create secret generic github-client-secret \
   --from-literal=secret="your-github-oauth-app-secret" \
   -n devguard
@@ -107,7 +107,7 @@ oidc:
 
 Create the required secrets:
 
-```bash
+```bash {ignore}
 # OAuth client secret (required)
 kubectl create secret generic my-gitlab-client-secret \
   --from-literal=secret="your-gitlab-oauth-secret" \
@@ -145,7 +145,7 @@ oidc:
 
 Create the auto-setup secret:
 
-```bash
+```bash {ignore}
 kubectl create secret generic opencodeautosetup-appsecret \
   --from-literal=secret="your-autosetup-oauth-secret" \
   -n devguard
@@ -159,7 +159,7 @@ To disable new user registration and restrict access to existing users or OIDC-a
 
 Edit the `kratos-config` ConfigMap:
 
-```bash
+```bash {ignore}
 kubectl edit configmap kratos-config -n devguard
 ```
 
@@ -176,7 +176,7 @@ selfservice:
 
 Restart the Kratos deployment for changes to take effect:
 
-```bash
+```bash {ignore}
 kubectl rollout restart deployment kratos -n devguard
 ```
 

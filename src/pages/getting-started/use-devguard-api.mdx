@@ -82,7 +82,7 @@ Fill in:
 
 For asymmetric tokens, generate a key pair first with the DevGuard CLI:
 
-```sh
+```sh {ignore}
 devguard-cli key generate
 ```
 
@@ -94,7 +94,7 @@ This outputs your private key (keep it secret) and the public key to paste durin
   <Tabs.Tab>
     Add the token to the `Authorization` header:
 
-    ```sh
+    ```sh {ignore}
     curl -H "Authorization: Bearer dvg_<your-token>" \
       https://app.devguard.org/api/v1/organizations/my-org/projects/
     ```
@@ -108,7 +108,7 @@ This outputs your private key (keep it secret) and the public key to paste durin
   <Tabs.Tab>
     The DevGuard scanner and CLI handle signing automatically when you provide the private key:
 
-    ```sh
+    ```sh {ignore}
     devguard-scanner scan \
       --token <hex-private-key> \
       --asset my-org/my-project/my-asset
@@ -124,7 +124,7 @@ This outputs your private key (keep it secret) and the public key to paste durin
 
 Revoked tokens are immediately rejected. For asymmetric tokens you can also revoke by private key from the CLI:
 
-```sh
+```sh {ignore}
 devguard-cli pat revoke --private-key <hex-private-key>
 ```
 

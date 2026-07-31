@@ -31,7 +31,7 @@ export GOPROXY="https://<your-devguard-url>/api/v1/dependency-proxy/go"
 
 To make this permanent, add it to your CI environment or shell profile. For project-scoped configuration, set it in your CI/CD platform's environment variable configuration alongside your other build variables. Then use `go get` as usual:
 
-```bash
+```bash {ignore}
 go get github.com/example/package
 ```
 
@@ -43,7 +43,7 @@ go get github.com/example/package
 
 DevGuard ships a test module that is permanently flagged as malicious:
 
-```bash
+```bash {ignore}
 go get github.com/fake-org/malicious-package
 # Expected: 403 Forbidden
 ```

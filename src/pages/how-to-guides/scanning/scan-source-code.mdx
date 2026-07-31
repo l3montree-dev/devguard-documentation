@@ -35,7 +35,7 @@ Before you begin, ensure you have:
     Run Static Application Security Testing (SAST) to identify security vulnerabilities and bad practices in your source code:
 
     ```bash copy
-    docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main \
+    docker run -v "$(pwd):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main \
       devguard-scanner sast \
         --path /dev/app/ \
         --assetName="myorg/projects/myproject/assets/myrepo" \
@@ -52,7 +52,7 @@ Before you begin, ensure you have:
     Scan your repository for accidentally committed secrets like API keys, passwords, and tokens:
 
     ```bash copy
-    docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main \
+    docker run -v "$(pwd):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main \
       devguard-scanner secret-scanning \
         --path /dev/app/ \
         --assetName="myorg/projects/myproject/assets/myrepo" \
@@ -69,7 +69,7 @@ Before you begin, ensure you have:
     Scan Infrastructure as Code (IaC) files for misconfigurations and security issues:
 
     ```bash copy
-    docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main \
+    docker run -v "$(pwd):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main \
       devguard-scanner iac \
         --path /dev/app/ \
         --assetName="myorg/projects/myproject/assets/myrepo" \
@@ -106,20 +106,20 @@ For automated source code scanning in CI/CD pipelines, DevGuard provides ready-t
 
 Fail the command based on risk level:
 
-```bash copy
+```bash copy {ignore}
 --failOnRisk=critical  # Options: low, medium, high, critical (default: critical)
 --failOnCVSS=critical  # Options: low, medium, high, critical (default: critical)
 ```
 
 Set a custom origin to track scan source:
 
-```bash copy
+```bash copy {ignore}
 --origin="my-custom-origin"  # Default is "DEFAULT"
 ```
 
 Specify Git reference information:
 
-```bash copy
+```bash copy {ignore}
 --ref="feature-branch"         # Git reference (branch, tag, or commit). Default is "main"
 --defaultRef="main"            # Default Git reference to use. Default is "main"
 --isTag=true                   # Indicates if the reference is a tag. Default is false

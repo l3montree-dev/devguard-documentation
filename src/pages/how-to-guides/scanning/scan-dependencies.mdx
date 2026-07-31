@@ -59,7 +59,7 @@ Before you begin, ensure you have:
 <Tabs items={["Docker", "Binary"]}>
   <Tabs.Tab>
     ```bash copy
-    docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main \
+    docker run -v "$(pwd):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main \
       devguard-scanner sca \
         --path /dev/app/ \
         --assetName="myorg/projects/myproject/assets/myrepo" \
@@ -116,7 +116,7 @@ The output shows each affected library with its vulnerabilities, the contextual 
 You can run the scanner without a token or asset name to get vulnerability results without saving them to DevGuard. This is useful for a quick local scan or for trying out the scanner.
 
 ```bash copy
-docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main \
+docker run -v "$(pwd):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main \
   devguard-scanner sca \
     --path /dev/app/
 ```
@@ -143,7 +143,7 @@ For automated dependency scanning in CI/CD pipelines, DevGuard provides ready-to
 
 Configure the scanner to exit with a non-zero code based on the severity of detected vulnerabilities. This is useful for blocking CI/CD pipelines when critical issues are found.
 
-```bash copy
+```bash copy {ignore}
 --failOnRisk=critical
 --failOnCVSS=critical
 ```
@@ -161,7 +161,7 @@ Configure the scanner to exit with a non-zero code based on the severity of dete
 
 Specify an artifact name to track multiple artifacts per repository:
 
-```bash copy
+```bash copy {ignore}
 --artifactName="pkg:devguard/orgSlug/projectSlug/repoSlug"
 ```
 
@@ -169,7 +169,7 @@ Specify an artifact name to track multiple artifacts per repository:
 
 Set a custom origin to track where the scan was triggered from:
 
-```bash copy
+```bash copy {ignore}
 --origin="my-custom-origin"  # Default is "DEFAULT"
 ```
 
@@ -177,7 +177,7 @@ Set a custom origin to track where the scan was triggered from:
 
 Specify Git reference information to associate scans with branches or tags:
 
-```bash copy
+```bash copy {ignore}
 --ref="feature-branch"         # Git reference (branch, tag, or commit). Default is "main"
 --defaultRef="main"            # Default Git reference to use. Default is "main"
 --isTag=true                   # Indicates if the reference is a tag. Default is false

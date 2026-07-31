@@ -9,12 +9,14 @@ const BLOCKING_HINT = /^[ \t]*#[ \t]*hint:.*\bblock/i
 const BLANK_OR_COMMENT = /^[ \t]*(#|$)/
 const LINE_CONTINUATION = /\\[ \t]*$/
 
-const TEST_VALUES: Record<string, string> = {
-    assetName: "testorg/projects/testgroup/assets/testrepo",
-    apiUrl: "http://host.docker.internal:8080",
-    token: "df8f06f63639f161bf00f04566308aa88580b894c2798e5168ba9a89b572866a",
-    webUI: "http://localhost:3000",
-}
+const VARIABLE_FLAGS = ['assetName', 'apiUrl', 'token', 'webUI']
+
+const VARIABLE_PATTERNS: [RegExp, string][] = [
+    [/https:\/\/(?:api|app)\.devguard\.org/g, '${apiUrl}'],
+    [/https:\/\/<your-devguard-url>/g, '${apiUrl}'],
+    [/\b(DEVGUARD_TOKEN|DEVGUARD_PAT|devguard-token)=("[^"]*"|'[^']*'|[^\s\\]*)/g, '$1="${token}"'],
+    [/Bearer +[^"'\s]+/g, 'Bearer ${token}'],
+]
 
 interface CodeBlock {
     lang: string
@@ -23,19 +25,23 @@ interface CodeBlock {
 }
 
 function changeToTestVariables(code: string): string {
-    return Object.keys(TEST_VALUES).reduce(
+    const withFlagValues = VARIABLE_FLAGS.reduce(
         (result, flag) =>
-            result.replace(new RegExp(`(--${flag}=)("[^"]*"|'[^']*'|[^\\s\\\\]*)`, 'g'), `$1"\${${flag}}"`),
+            result.replace(
+                new RegExp(`(--${flag})[= ]("[^"]*"|'[^']*'|[^\\s\\\\]*)`, 'g'),
+                (_, flagName: string, value: string) => {
+                    const quote = value.startsWith("'") ? "'" : '"'
+
+                    return `${flagName}=${quote}\${${flag}}${quote}`
+                },
+            ),
         code,
     )
-}
 
-function declarationsFor(body: string): string {
-    const declarations = Object.entries(TEST_VALUES)
-        .filter(([flag]) => body.includes(`\${${flag}}`))
-        .map(([flag, value]) => `${flag}="\${${flag}:-${value}}"`)
-
-    return declarations.length === 0 ? '' : declarations.join('\n') + '\n\n'
+    return VARIABLE_PATTERNS.reduce(
+        (result, [pattern, replacement]) => result.replace(pattern, replacement),
+        withFlagValues,
+    )
 }
 
 function endOfCommand(lines: string[], start: number): number {
@@ -124,7 +130,7 @@ function convert(mdxPath: string): void {
     const outPath = outputPathFor(mdxPath)
 
     mkdirSync(OUT_DIR, { recursive: true })
-    writeFileSync(outPath, header + declarationsFor(body) + body)
+    writeFileSync(outPath, header + body)
             
     console.log(`${testBlocks.length} Blöcke → ${outPath}`)
 }

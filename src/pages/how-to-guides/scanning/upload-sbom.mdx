@@ -34,7 +34,7 @@ Before you begin, ensure you have:
 Upload a CycloneDX SBOM file for vulnerability analysis:
 
 ```bash copy
-docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main \
+docker run -v "$(pwd):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main \
   devguard-scanner sbom \
     /dev/app/sbom.json \
     --assetName="myorg/projects/myproject/assets/myrepo" \
@@ -64,8 +64,8 @@ docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main \
 
 You can upload an SBOM and scan it without a token or asset name to get vulnerability results without saving them to DevGuard.
 
-```bash copy
-docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main \
+```bash copy {ignore}
+docker run -v "$(pwd):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main \
   devguard-scanner sbom /dev/app/sbom.json
 ```
 
@@ -83,7 +83,7 @@ Warning: You are scanning without saving the results. Provide --token and --asse
 
 Use `merge-sboms` to combine multiple CycloneDX SBOMs and pipe the result directly into the `sbom` command for scanning. Pass `-` as the file argument to read from stdin:
 
-```bash copy
+```bash copy {ignore}
 devguard-scanner merge-sboms config.json | devguard-scanner sbom -
 ```
 
@@ -95,7 +95,7 @@ The merge config file specifies the target purl and the list of SBOM files to me
 
 To save the merged scan results to DevGuard, add authentication flags:
 
-```bash copy
+```bash copy {ignore}
 devguard-scanner merge-sboms config.json | devguard-scanner sbom - \
   --assetName="myorg/projects/myproject/assets/myrepo" \
   --token="YOUR_TOKEN"
@@ -110,20 +110,20 @@ For automated SBOM uploads in CI/CD pipelines, DevGuard provides ready-to-use in
 
 Fail the command based on risk level:
 
-```bash copy
+```bash copy {ignore}
 --failOnRisk=critical  # Options: low, medium, high, critical (default: critical)
 --failOnCVSS=critical  # Options: low, medium, high, critical (default: critical)
 ```
 
 Specify which artifact this SBOM represents:
 
-```bash copy
+```bash copy {ignore}
 --artifactName="pkg:devguard/orgSlug/projectSlug/repoSlug"  # Default is based on your asset
 ```
 
 Set a custom origin to track where the SBOM came from:
 
-```bash copy
+```bash copy {ignore}
 --origin="sbom-file-upload"  # Default is "sbom-file-upload"
 ```
 
@@ -134,7 +134,7 @@ Set a custom origin to track where the SBOM came from:
 
 Specify Git reference information:
 
-```bash copy
+```bash copy {ignore}
 --ref="v1.2.3"                 # Git reference (branch, tag, or commit)
 --defaultRef="main"            # Default Git reference to use
 --isTag=true                   # Indicates if the reference is a tag
