@@ -29,7 +29,7 @@ A Software Bill of Materials (SBOM) is a structured inventory of all components 
 
 
 
-## 📌How to create a SBOM 
+## 📌 How to create a SBOM 
 
 
 <div className='mt-8'>
@@ -41,22 +41,32 @@ A Software Bill of Materials (SBOM) is a structured inventory of all components 
   <TabsContent  value="trivy"> 
 
 ```bash
-trivy fs /path/to/your/project --format cyclonedx --output trivy-results.json
+trivy fs . --format cyclonedx --output trivy-sbom.json
 ```
 </TabsContent>
   <TabsContent value="devguard">
   
 ```bash
-devguard-scanner sbom --output-format json --output-file sbom.json /path/to/your/project
+docker run -v "$(pwd):/app" ghcr.io/l3montree-dev/devguard/scanner:main \
+  devguard-scanner sca \
+    --path /app/ \
+    --sbomOutputPath /app/devguard-sbom.json \
+    --assetName="your-asset-name" \
+    --apiUrl="https://api.devguard.org" \
+    --token="YOUR_TOKEN"
 ```
   </TabsContent>
 </Tabs>
 </div>
 
- ## 📌How to upload a SBOM to Devguard
+ ## 📌 How to upload a SBOM to Devguard
 
 ```bash
-devguard-scanner sbom --token YOUR_TOKEN --assetName your-asset-name --path /path/to/sbom.json
+docker run -v "$(pwd):/app" ghcr.io/l3montree-dev/devguard/scanner:main \
+  devguard-scanner sbom /app/devguard-sbom.json \
+    --assetName="your-asset-name" \
+    --apiUrl="https://api.devguard.org" \
+    --token="YOUR_TOKEN"
 ```
 ## 📌 SBOM Example
 
