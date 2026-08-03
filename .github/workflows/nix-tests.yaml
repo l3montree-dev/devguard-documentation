@@ -73,7 +73,7 @@ jobs:
       - name: Run documentation tests
         env:
           assetName: testorg/projects/testgroup/assets/testrepo
-          apiUrl: http://localhost:8080
+          apiUrl: http://host.docker.internal:8080
           webUI: http://localhost:3000
           token: df8f06f63639f161bf00f04566308aa88580b894c2798e5168ba9a89b572866a
         run: bash src/nix-tests/run-test.sh

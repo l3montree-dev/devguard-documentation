@@ -5,7 +5,7 @@ TMP_DIR="src/nix-tests/tmp"
 SHELL_NIX="src/nix-tests/shell.nix"
 SCRIPT_TIMEOUT="${SCRIPT_TIMEOUT:-300}"
 NIXPKGS_URL="https://github.com/NixOS/nixpkgs/tarball/nixos-26.05"
-EXAMPLE_REPO_URL="git@github.com:l3montree-dev/devguard-example-repository.git"
+EXAMPLE_REPO_URL="${EXAMPLE_REPO_URL:-https://github.com/l3montree-dev/devguard-example-repository.git}"
 EXAMPLE_REPO_DIR="$TMP_DIR/example-repository"
 
 MDX_FILES=(
