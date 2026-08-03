@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync, mkdirSync, readdirSync, rmSync } from 'node:fs'
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { relative, join, sep } from 'node:path'
 
 const OUT_DIR = 'src/nix-tests/tmp'
@@ -135,16 +135,4 @@ function convert(mdxPath: string): void {
     console.log(`${testBlocks.length} Blöcke → ${outPath}`)
 }
 
-function collectMdxFiles(): string[] {
-    const entries = readdirSync(PAGES_DIR, { recursive : true })
-    rmSync(OUT_DIR, { recursive: true, force: true })
-
-    return entries
-        .map((entry) => String(entry))
-        .filter((entry) => entry.endsWith('.mdx'))
-        .map((entry) => join(PAGES_DIR, entry))
-}
-
-for (const mdxPath of collectMdxFiles()) {
-    convert(mdxPath)
-}
+convert(process.argv[2])
