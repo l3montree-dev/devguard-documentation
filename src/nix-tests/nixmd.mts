@@ -9,6 +9,8 @@ const BLOCKING_HINT = /^[ \t]*#[ \t]*hint:.*\bblock/i
 const BLANK_OR_COMMENT = /^[ \t]*(#|$)/
 const LINE_CONTINUATION = /\\[ \t]*$/
 
+const SSH_REMOTE = /git@([A-Za-z0-9.-]+):([A-Za-z0-9._\/-]+)/g
+
 const VARIABLE_FLAGS = ['assetName', 'apiUrl', 'token', 'webUI']
 
 const VARIABLE_PATTERNS: [RegExp, string][] = [
@@ -42,6 +44,10 @@ function changeToTestVariables(code: string): string {
         (result, [pattern, replacement]) => result.replace(pattern, replacement),
         withFlagValues,
     )
+}
+
+function httpsRemotes(code: string): string {
+    return code.replace(SSH_REMOTE, 'https://$1/$2')
 }
 
 function endOfCommand(lines: string[], start: number): number {
@@ -124,7 +130,7 @@ function convert(mdxPath: string): void {
     }
     const header = '#!/usr/bin/env bash\nset -euo pipefail\n\n'
     const body = testBlocks
-        .map((block) => backgroundHintedCommands(changeToTestVariables(block.code)))
+        .map((block) => backgroundHintedCommands(httpsRemotes(changeToTestVariables(block.code))))
         .join('\n')
 
     const outPath = outputPathFor(mdxPath)
