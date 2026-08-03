@@ -46,6 +46,7 @@ for script in "$TMP_DIR"/*.sh; do
     mkdir -p "$TMP_DIR/work"
     rm -rf "$work_dir"
     cp -R "$EXAMPLE_REPO_DIR" "$work_dir"
+    chmod -R a+rwX "$work_dir"
 
     if nix-shell "$SHELL_NIX" --run "cd '$work_dir' && timeout $SCRIPT_TIMEOUT bash '$PWD/$script'" < /dev/null; then
         echo "OK: $script"
