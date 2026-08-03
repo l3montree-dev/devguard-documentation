@@ -10,6 +10,7 @@ EXAMPLE_REPO_DIR="$TMP_DIR/example-repository"
 
 MDX_FILES=(
     "src/pages/getting-started/first-scan.mdx"
+    "src/pages/contributing/getting-started.mdx"
 )
 
 export NIX_PATH="nixpkgs=$NIXPKGS_URL"
