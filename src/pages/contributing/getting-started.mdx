@@ -72,14 +72,14 @@ Adjust the values in the `.env` file according to your needs.
 
 Run the following command:
 
-```bash copy
+```bash {ignore} copy
 docker compose up -d
 ```
 
 <Callout type="info">Keep this running in a separate terminal.</Callout>
 
 <h3>Step 4: Run database migrations</h3>
-```bash 
+```bash {ignore}
   make migrate
 ```
 
@@ -87,7 +87,7 @@ docker compose up -d
 
 Run this command to start the backend:
 
-```bash 
+```bash {ignore}
 # hint: this command will block your shell. Append "&" to run it in the background and keep your shell usable
 make
 ```
