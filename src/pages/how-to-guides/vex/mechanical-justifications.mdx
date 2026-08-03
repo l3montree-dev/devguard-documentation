@@ -1,0 +1,144 @@
+---
+title: Choose a Mechanical Justification
+description: "Pick the right VEX mechanical justification in DevGuard — what each of the five standardized reasons means and when it actually applies."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: mechanical justification
+lang: en-US
+ignoreChecks: null
+---
+
+import { Callout } from '@document-writing-tools/kernux-theme'
+
+# Choose a Mechanical Justification
+
+When you mark a vulnerability as a **false positive**, DevGuard requires a **mechanical justification** — a
+machine-readable reason from a fixed vocabulary of five values. Unlike your free-text justification, this
+value is what other organizations' tooling actually reads. Picking the right one is the difference between a
+claim that can be audited and one that merely looks tidy.
+
+The vocabulary is defined by the VEX standard, not by DevGuard, and is identical across CSAF and OpenVEX.
+
+<Callout type="info">
+  **Accept risk** takes no mechanical justification. You are stating the vulnerability *is* real and you carry
+  it knowingly — only the free-text justification applies.
+</Callout>
+
+## The five justifications
+
+They are ordered here as they appear in the DevGuard dropdown.
+
+### Component Not Present
+
+*The vulnerable component is not part of the product.*
+
+The component appears in the SBOM but not in what you actually ship. Typical causes: a build-time-only or
+test-only dependency, a package that a multi-stage container build discards, or a stale SBOM.
+
+Use this when you can show the artifact does not contain the component at all.
+
+<Callout type="warning">
+  If the component is genuinely absent from the shipped artifact, the better fix is usually to correct the
+  SBOM generation rather than to VEX the finding — otherwise every future version repeats the problem.
+</Callout>
+
+### Vulnerable Code Not Present
+
+*The component exists, but the vulnerable code was excluded.*
+
+The library ships, but the specific vulnerable function does not — because of a build flag, a compile-time
+feature toggle, tree-shaking, or a distribution's **backported patch** that fixes the flaw without changing
+the upstream version number.
+
+Backports are the most common reason for this justification in practice: Debian's
+`openssl 1.1.1n-0+deb11u4` carries the fix while still reporting a version a scanner reads as vulnerable. See
+[Reduce False Positives](/explanations/vulnerability-management/reduce-false-positives).
+
+### Vulnerable Code Not In Execute Path
+
+*The vulnerable code exists but is never executed.*
+
+The vulnerable function is present in the binary but nothing in your product ever calls it. This is
+DevGuard's **default** selection, and the one the dependency path graph generates when you cut an edge — it
+is exactly the claim "this edge does not call the vulnerable function".
+
+It is also the justification you can prove most rigorously: symbol-level binary analysis shows whether a
+call exists at all. See [Prove a Finding Is Not Exploitable](/how-to-guides/vex/prove-not-affected).
+
+### Vulnerable Code Cannot Be Controlled By Adversary
+
+*The attacker cannot control the vulnerable code.*
+
+The vulnerable code does run, but no attacker-controlled input reaches it. For example, a parser flaw
+triggered only by a configuration file you write yourself, or a function called exclusively with constants.
+
+This is the hardest justification to defend, because it rests on an argument about your whole trust boundary
+rather than on a single observable fact. State the boundary explicitly in your free-text justification, and
+revisit the decision whenever the input surface changes.
+
+### Inline Mitigations Already Exist
+
+*Built-in defenses prevent known exploitation paths.*
+
+The vulnerable code is reachable with attacker-controlled input, but a compensating control neutralizes the
+exploit: an input filter, a WAF rule, a seccomp profile, a hardened compiler flag, a network policy that
+blocks the required access.
+
+Name the specific control and where it is configured. A mitigation nobody can locate is not auditable — and
+if it is later removed, the justification silently becomes false.
+
+## Choosing quickly
+
+| Question | If yes |
+|---|---|
+| Is the component actually shipped? | No → **Component Not Present** |
+| Is the vulnerable function in the shipped binary? | No → **Vulnerable Code Not Present** |
+| Does anything in the product call it? | No → **Vulnerable Code Not In Execute Path** |
+| Can an attacker influence its input? | No → **Vulnerable Code Cannot Be Controlled By Adversary** |
+| Is there a control that blocks exploitation? | Yes → **Inline Mitigations Already Exist** |
+| None of the above | Not a false positive — **remediate**, or **accept the risk** |
+
+Work down the list in order: the earlier justifications are stronger claims and easier to verify.
+
+<Callout type="warning">
+  Do not reach for a false-positive justification to silence a finding you simply do not intend to fix. That
+  is what **Accept risk** is for, and it exports honestly as `affected` with a `no_fix_planned` remediation.
+  Mislabelling it as `not_affected` misleads everyone downstream, including your auditors.
+</Callout>
+
+## How the values are exported
+
+DevGuard shows you a readable label and exports the standardized value behind it. The two are mechanically
+related: lowercase the label and join the words with underscores, so *Vulnerable Code Not In Execute Path*
+becomes `vulnerable_code_not_in_execute_path`.
+
+Where that value ends up depends on the format:
+
+| Format | Status for a false positive | Mechanical justification | Your free text |
+|---|---|---|---|
+| **CSAF** | `product_status.known_not_affected` | A `flags` entry with the value as its `label`, stamped with the decision date | The `remediation` details |
+| **OpenVEX** | `status: not_affected` | The statement's `justification` field | `impact_statement` |
+| **CycloneDX VEX** | `analysis.state: false_positive` | **not carried** | `analysis.detail` |
+
+So CSAF and OpenVEX both convey a claim a recipient's tooling can act on automatically. CycloneDX VEX conveys
+only that you consider the finding a false positive, plus whatever you wrote — the reasoning is there for a
+human, not for a machine. If the standardized justification matters to your recipients, hand them CSAF or
+OpenVEX.
+
+Importing works less symmetrically: a CSAF `known_not_affected` product does become a false-positive rule, but
+the `flags` label is **not** read back. Rules created from a supplier's document therefore carry only that
+supplier's free-text justification, with no mechanical justification of their own.
+
+
+## Related Documentation
+
+- [Create & Manage VEX Rules](/how-to-guides/vex/vex-rules) — applying a justification to many findings at once
+- [Prove a Finding Is Not Exploitable](/how-to-guides/vex/prove-not-affected) — evidence for *Vulnerable Code Not In Execute Path*
+- [What is a VEX Report](/explanations/vulnerability-management/what-is-vex) — why the standard demands a justification
+- [Export & Publish VEX](/how-to-guides/vex/export-vex) — what downstream consumers receive
+- [Create Vulnerability Events](/how-to-guides/vulnerability-management/create-vuln-events) — assessing one finding at a time

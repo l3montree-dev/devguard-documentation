@@ -1,0 +1,202 @@
+---
+title: CEL Expression Reference for VEX Rules
+description: "Complete CEL expression reference for DevGuard VEX rules — the vuln fields, the matchesPattern and matchesPurl helpers, and a cookbook."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: cel expression reference
+lang: en-US
+ignoreChecks: null
+---
+
+import { Callout } from '@document-writing-tools/kernux-theme'
+
+# CEL Expression Reference for VEX Rules
+
+A [VEX rule](/how-to-guides/vex/vex-rules) matches vulnerabilities using
+[CEL (Common Expression Language)](https://github.com/google/cel-spec). An expression must evaluate to a
+**boolean**: `true` means the rule applies to that vulnerability. This page documents everything the
+expression environment provides.
+
+<Callout type="info">
+  Use the **Expression playground** on the VEX Rules page to try an expression against your real data before
+  saving it. It reports the match count and any syntax error live.
+</Callout>
+
+## The environment at a glance
+
+The environment is deliberately small:
+
+- exactly one variable: **`vuln`**
+- exactly two DevGuard-specific functions: **`matchesPattern`** and **`matchesPurl`** — the only two that
+  return a boolean on their own
+- the standard CEL operators: `==`, `!=`, `<`, `<=`, `>`, `>=`, `&&`, `||`, `!`, `in`, `?:`
+
+The editor checks two things as you type. First, that the expression parses. Second, that it **evaluates to a
+boolean** — a bare field access like `vuln.cveId` is a string and is rejected with *Expression must evaluate to
+a bool, e.g. via ==, !=, matchesPattern(...) or matchesPurl(...)*. Wrap it in a comparison.
+
+Lines beginning with `//` are comments and are skipped. Every other line is checked as an expression in its own
+right, which is why the rules DevGuard pre-fills for you put their explanatory comment on a separate line above
+the expression.
+
+## The `vuln` variable
+
+`vuln` is the dependency vulnerability being evaluated. The editor's autocomplete offers these fields — type
+`vuln.` to see them:
+
+| Field | Type | Description |
+|---|---|---|
+| `vuln.id` | string | The finding's own identifier. |
+| `vuln.cveId` | string | The advisory id, e.g. `"CVE-2021-1234"`. Empty for findings without a CVE. |
+| `vuln.cve` | map | The nested CVE object — type `.` again for its fields. |
+| `vuln.componentPurl` | string | Package URL of the vulnerable component, e.g. `"pkg:npm/lodash@4.17.21"`. |
+| `vuln.rawRiskAssessment` | number | DevGuard's risk score for the finding. |
+| `vuln.assetVersionName` | string | The branch or tag the finding belongs to. |
+
+
+### CVE details: `vuln.cve`
+
+Type `vuln.cve.` for these:
+
+| Field | Type | Description |
+|---|---|---|
+| `vuln.cve.cve` | string | The CVE identifier, e.g. `"CVE-2021-1234"`. |
+| `vuln.cve.cvss` | number | CVSS base score. |
+| `vuln.cve.vector` | string | The CVSS vector string. |
+| `vuln.cve.epss` | number | EPSS exploitation probability. |
+
+
+## `matchesPattern(vuln, pattern)`
+
+Matches the vulnerability's **dependency path**. This is the function you want whenever the decision depends
+on *how* a package enters your product rather than *which* package it is.
+
+```javascript
+matchesPattern(vuln, ["*", "pkg:npm/lodash@4.17.21"])
+```
+
+The first argument is always `vuln` itself (the function reads `vulnerabilityPath` and `artifactPurls` from
+it). The second is a list of strings, each being either a purl or one of two special tokens.
+
+| Token | Meaning |
+|---|---|
+| `*` | Zero or more path elements — any ancestors above the next named element. |
+| `ROOT` | Anchors the pattern at the repository root, i.e. the element after it must be a **direct** dependency. Matches all artifacts and branches. |
+
+### Matching semantics
+
+By default a pattern is matched as a **suffix** of the dependency path. The pattern
+`["pkg:npm/a@1.0.0", "pkg:npm/b@2.0.0"]` matches any path that *ends* with `a → b`, regardless of what comes
+before.
+
+If the pattern's first element identifies one of the repository's artifacts, that element is consumed and the
+remainder is matched **anchored from the start** of the path instead. This is what lets DevGuard's own CSAF
+and CycloneDX exports round-trip cleanly back into rules.
+
+Individual elements match by exact purl string first; failing that, the pattern element's version is
+interpreted as a semver constraint (see the caveat below).
+
+## `matchesPurl(purl, constraint)`
+
+Matches a purl against a **version constraint** — for dismissing a whole version range rather than one exact
+version.
+
+```javascript
+matchesPurl(vuln.componentPurl, "pkg:npm/undici@>=6.0.0")
+```
+
+The type, namespace and name must be **exactly** equal. Only the version part is treated as a constraint,
+using [Masterminds semver](https://github.com/Masterminds/semver) syntax:
+
+| Constraint | Matches |
+|---|---|
+| `pkg:npm/undici@>=6.0.0` | 6.0.0 and above |
+| `pkg:npm/undici@6.26.*` | any 6.26.z |
+| `pkg:npm/undici@6.x` | any 6.y.z |
+| `pkg:npm/undici@~6.26.0` | 6.26.0 up to but excluding 6.27.0 |
+| `pkg:npm/undici@^6.0.0` | 6.0.0 up to but excluding 7.0.0 |
+| `pkg:npm/undici@>=6.0.0 <6.27.0` | a bounded range |
+
+<Callout type="warning">
+  `matchesPurl` requires **semver-parsable versions on both sides**. Distribution package versions —
+  `pkg:deb/debian/git@1:2.47.3-0+deb13u1`, `pkg:apk/...` — generally do not parse, and the comparison fails
+  rather than matching loosely. For system packages, compare the purl directly with `==`, or use
+  `matchesPattern` with the exact purl string.
+</Callout>
+
+## Cookbook
+
+### Dismiss one advisory everywhere
+
+```javascript
+vuln.cveId == "CVE-2021-1234"
+```
+
+### Dismiss one exact component version
+
+```javascript
+vuln.componentPurl == "pkg:npm/lodash@4.17.21"
+```
+
+Use this form — not `matchesPurl` — for Debian, Alpine and other non-semver ecosystems:
+
+```javascript
+vuln.componentPurl == "pkg:deb/debian/libtasn1-6@4.19.0-3+deb12u1"
+```
+
+### Dismiss a version range
+
+```javascript
+matchesPurl(vuln.componentPurl, "pkg:npm/undici@>=6.0.0 <6.27.0")
+```
+
+### Dismiss one advisory only along one dependency path
+
+The most precise form, and the one the path graph generates for you:
+
+```javascript
+vuln.cveId == "CVE-2021-1234" && matchesPattern(vuln, ["*", "pkg:npm/web@1.0.0", "pkg:npm/brace-expansion@1.1.11"])
+```
+
+### Dismiss an advisory only when it arrives through a direct dependency
+
+```javascript
+vuln.cveId == "CVE-2021-1234" && matchesPattern(vuln, ["ROOT", "pkg:npm/web@1.0.0"])
+```
+
+### Accept everything below a CVSS threshold
+
+```javascript
+vuln.cve.cvss < 4.0
+```
+
+### Accept low-severity findings that are also unlikely to be exploited
+
+```javascript
+vuln.cve.cvss < 4.0 && vuln.cve.epss < 0.01
+```
+
+### Scope a rule to one branch
+
+```javascript
+vuln.cveId == "CVE-2021-1234" && vuln.assetVersionName == "main"
+```
+
+### Dismiss any of several advisories in the same component
+
+```javascript
+vuln.cveId in ["CVE-2021-1234", "CVE-2021-5678"] && vuln.componentPurl == "pkg:npm/lodash@4.17.21"
+```
+
+## Related Documentation
+
+- [Create & Manage VEX Rules](/how-to-guides/vex/vex-rules) — where these expressions are used
+- [Choose a Mechanical Justification](/how-to-guides/vex/mechanical-justifications) — the decision that accompanies the match
+- [Transitive Dependencies](/explanations/transitive-dependencies) — how DevGuard builds the dependency paths that `matchesPattern` matches
+- [Vulnerability Matching](/explanations/vulnerability-management/vulnerability-matching) — how purls are normalized before matching
+- [Risk Assessment Methodology](/explanations/vulnerability-management/risk-assessment-methodology) — what the risk and priority fields mean

@@ -17,14 +17,19 @@ import ApiTagPage from '@/components/ApiTagPage'
 
 # DevGuard CSAF API
 
-The DevGuard CSAF API enables you to generate and retrieve Common Security Advisory Framework (CSAF) documents, providing machine-readable security advisories for your software products.
+The DevGuard CSAF API serves Common Security Advisory Framework (CSAF) documents for your assets. Reports are generated on demand from your current assessments rather than stored, so a request always reflects the present state.
 
+Beyond the endpoints below, DevGuard serves the full CSAF distribution structure — `provider-metadata.json`, the aggregator listing, per-year indexes, `changes.csv`, and each advisory alongside its OpenPGP signature and checksums. Those paths and how to consume another vendor's provider are documented in [CSAF Reports in DevGuard](/how-to-guides/vulnerability-management/csaf-common-security-advisory-framework).
 
 ---
 
 <ApiTagPage tag="CSAF" />
 
+## Related Documentation
+
+- [CSAF Reports in DevGuard](/how-to-guides/vulnerability-management/csaf-common-security-advisory-framework) — the distribution endpoints and upstream consumption
+- [CSAF & VEX Standards](/explanations/compliance/csaf-vex-explained) — what a CSAF document contains and how it differs from CycloneDX VEX
+- [Export & Publish VEX](/how-to-guides/vex/export-vex) — enabling public access and publishing as a trusted provider
+- [VEX Rules API](/reference/api/vexrules) — the decisions these documents report
+- [Use the DevGuard API](/getting-started/use-devguard-api) — authentication and conventions
 - [DevGuard API Reference](/reference)
-- [Use the DevGuard API](/getting-started/use-devguard-api)
-- [Vulnerabilities API](/reference/api/vulnerabilities)
-- [VEX Rules API](/reference/api/vexrules)

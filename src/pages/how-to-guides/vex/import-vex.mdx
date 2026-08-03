@@ -1,0 +1,137 @@
+---
+title: Import VEX from Files & Suppliers
+description: "Import VEX into DevGuard — upload a CycloneDX file, add a CycloneDX or CSAF supplier URL, and control the sync with Paranoid Mode."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: import vex
+lang: en-US
+ignoreChecks: null
+---
+
+import { Callout } from '@document-writing-tools/kernux-theme'
+
+# Import VEX from Files & Suppliers
+
+Your suppliers already assess the vulnerabilities in the components you consume. Importing their VEX
+documents means you do not repeat that analysis — DevGuard turns every incoming statement into a
+[VEX rule](/how-to-guides/vex/vex-rules) scoped to your repository.
+
+
+## Upload a VEX file
+
+Use this for a one-off document, or for VEX your own build pipeline produces.
+
+1. Navigate to **Dependency Risks → VEX Rules**.
+2. Click **Add a VEX-File or VEX-URL**.
+3. Choose **Upload a VEX File**.
+4. Drop or select a single `.json` file.
+5. Click **Upload VEX**.
+
+
+## Add an upstream source URL
+
+Use this when a supplier publishes VEX continuously. You configure the URL once and DevGuard re-syncs it.
+
+1. On the **VEX Rules** page, expand **Upstream VEX sources** and click **Add source** (or use
+   **Add a VEX-File or VEX-URL** → **Supply a source URL**).
+2. Pick the tab matching the document type:
+   - **CycloneDX VEX** — e.g. `https://supplier.example.com/vex.json`
+   - **CSAF** — e.g. `https://supplier.example.com/csaf.json`
+3. Click **Add VEX source**.
+
+The source appears in the list with a type badge and its URL. **Sync all sources** triggers an immediate
+fetch of everything configured; otherwise DevGuard re-syncs on its own schedule as part of the repository's
+regular processing.
+
+<Callout type="info">
+  A source whose URL cannot be fetched is kept with an error rather than silently dropped, so a temporarily
+  unavailable supplier does not lose your configuration.
+</Callout>
+
+## What DevGuard does with an incoming document
+
+1. **Detects the format** from the document's structure — CycloneDX, CSAF or OpenVEX.
+2. **Identifies the affected products** and reconstructs the dependency path each statement refers to. CSAF's
+   product relationships yield an exact path; CycloneDX and OpenVEX statements produce a wildcard path
+   ending in the affected component.
+3. **Translates the status** into a DevGuard decision:
+
+| Format | Incoming status | Becomes |
+|---|---|---|
+| **CSAF** | `known_not_affected` | False positive |
+| **CSAF** | `known_affected` with a `no_fix_planned` remediation | Accepted risk |
+| **CSAF** | `known_affected` without that remediation, `fixed`, `under_investigation` | *ignored* |
+| **CycloneDX** | `false_positive`, `not_affected` | False positive |
+| **CycloneDX** | `exploitable` + response `will_not_fix` | Accepted risk |
+| **CycloneDX** | `exploitable` + response `update`, `in_triage` | *ignored* |
+| **OpenVEX** | `not_affected` | False positive |
+| **OpenVEX** | `affected` | Accepted risk |
+| **OpenVEX** | `fixed`, `under_investigation` | *ignored* |
+
+4. **Creates one rule per statement**, with the supplier's URL (or `vex-upload`) as the rule's source, and the
+   supplier's textual justification as the rule's justification.
+5. **Applies the rules** to matching vulnerabilities and recalculates risk.
+
+<Callout type="info">
+  Statuses that say nothing actionable — `under_investigation`, or a `fixed` status you have not yet picked up
+  — are deliberately ignored rather than turned into rules.
+</Callout>
+
+## How re-syncing behaves
+
+Each sync reconciles the rules for that specific source against the document as it stands now:
+
+- A statement that is unchanged produces no change — rule identity is derived from the expression, so imports
+  are idempotent.
+- A **new** statement creates a new rule and is applied immediately.
+- A statement that **disappears** from the document causes its rule to be **deleted**. The vulnerabilities it
+  handled revert — see [Delete a rule](/how-to-guides/vex/vex-rules#delete-a-rule).
+
+Rules from other sources, and your own rules, are never touched by another source's sync.
+
+<Callout type="warning">
+  Because a withdrawn upstream statement deletes its rule, a supplier revising their assessment can reopen
+  vulnerabilities in your repository.
+</Callout>
+
+## Take ownership of a synced rule
+
+Editing a synced rule converts it into your own rule, detaching it from the upstream source. Later syncs no
+longer overwrite or remove it. Use this when a supplier's assessment is right in substance but you want to
+record your own reasoning, or narrow the expression.
+
+## Paranoid Mode
+
+If you do not fully trust an upstream supplier, enable **Paranoid Mode** in **Repository Settings**:
+
+> *Do you trust your upstream supplier? If not, enable this mode so you need to accept the statement
+> vulnerability assessment in the VEX reports from your supplier manually.*
+
+With Paranoid Mode on, rules created from uploads and upstream sources are stored **inactive** — they do not
+change any vulnerability's state until you approve them. Rules you write yourself are always active,
+regardless of the setting.
+
+## Working from the CLI
+
+The DevGuard scanner can upload a VEX document from a pipeline:
+
+```bash
+devguard-scanner vex --assetName "my-org/projects/my-project/assets/my-repo" --path bom.json
+```
+
+Use `--origin` to label where the document came from, so its rules are distinguishable in the rules table.
+See the [scanner VEX command reference](/reference/scanner/vex) for the full flag list and
+[Upload VEX](/how-to-guides/scanning/upload-vex) for the container-based invocation.
+
+## Related Documentation
+
+- [Create & Manage VEX Rules](/how-to-guides/vex/vex-rules) — what imported rules become
+- [Sync External Vulnerability Data](/how-to-guides/vulnerability-management/sync-external-data) — SBOM ingestion, source precedence and the full lifecycle
+- [Export & Publish VEX](/how-to-guides/vex/export-vex) — the other direction, for your own consumers
+- [CSAF & VEX Standards](/explanations/compliance/csaf-vex-explained) — how the three formats differ
+- [Upload VEX](/how-to-guides/scanning/upload-vex) — the scanner-based upload in a CI pipeline

@@ -59,6 +59,44 @@ const config = withMarkdownWebBook({
                 permanent: true,
             },
             {
+                source: '/how-to-guides/vulnerability-management/vex-rules',
+                destination: '/how-to-guides/vex/vex-rules',
+                permanent: true,
+            },
+            {
+                source: '/how-to-guides/vexing/vexing-debian-packages',
+                destination: '/how-to-guides/vex/prove-not-affected',
+                permanent: true,
+            },
+            {
+                source: '/how-to-guides/vexing',
+                destination: '/how-to-guides/vex',
+                permanent: true,
+            },
+            {
+                source: '/how-to-guides/compliance/generate-vex-documents',
+                destination: '/how-to-guides/vex/export-vex',
+                permanent: true,
+            },
+            {
+                source: '/how-to-guides/compliance/generate-csaf-reports',
+                destination:
+                    '/how-to-guides/vulnerability-management/csaf-common-security-advisory-framework',
+                permanent: true,
+            },
+            {
+                source: '/tutorials/compliance/generating-csaf-reports',
+                destination:
+                    '/how-to-guides/vulnerability-management/csaf-common-security-advisory-framework',
+                permanent: true,
+            },
+            {
+                source: '/explanations/vulnerability-management/external-vuln-sync',
+                destination:
+                    '/how-to-guides/vulnerability-management/sync-external-data',
+                permanent: true,
+            },
+            {
                 source: '/imprint',
                 destination: 'https://l3montree.com/impressum',
                 permanent: false,

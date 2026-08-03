@@ -1,0 +1,94 @@
+---
+title: Working with VEX in DevGuard
+description: "Record, automate, import and publish VEX in DevGuard — choose between a vulnerability event, an automated VEX rule, or your own advisory."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: vex in devguard
+lang: en-US
+ignoreChecks: null
+---
+
+import { Callout } from '@document-writing-tools/kernux-theme'
+
+# Working with VEX in DevGuard
+
+Every scan produces findings, and a large share of them do not actually affect your product. **VEX
+(Vulnerability Exploitability eXchange)** is the standard for saying so in a way that machines — your own
+dashboard, your auditors' tooling, your customers' scanners — can read. This section covers everything you
+do with VEX in DevGuard: recording a decision, automating it, importing decisions from suppliers, and
+publishing your own.
+
+If you first want to understand the standard itself rather than the workflow, read
+[What is a VEX Report](/explanations/vulnerability-management/what-is-vex).
+
+## Pick the right tool
+
+DevGuard offers two ways to state something about a vulnerability, and the difference is reach.
+
+A **vulnerability event** — `Accept` or `False Positive` — assesses one specific finding, once. It is the right
+choice when the reasoning genuinely applies to this finding alone. See
+[Create Vulnerability Events](/how-to-guides/vulnerability-management/create-vuln-events).
+
+A **VEX rule** pairs a CEL expression with the same decision and applies it to every finding that matches —
+those already in the repository and any that later scans turn up. See
+[Create & Manage VEX Rules](/how-to-guides/vex/vex-rules).
+
+<Callout type="info">
+  A vulnerability handled by a VEX rule is **locked** — you cannot change its state by hand while the rule
+  exists. To reopen it, delete or edit the rule.
+</Callout>
+
+## The typical workflow
+
+1. **Triage a finding.** Open a dependency vulnerability and look at the *Path to component* graph — it
+   shows exactly how the vulnerable package enters your product.
+2. **Decide whether it is exploitable.** Is the vulnerable code shipped, reached, and reachable by an
+   attacker?
+3. **Record the decision.** Click the graph edge that is not actually traversed; DevGuard pre-fills a VEX
+   rule for you. Or write your own expression in the playground — see the
+   [CEL Expression Reference](/how-to-guides/vex/cel-reference).
+4. **Pick a justification.** A false positive requires one of five standardized reasons. See
+   [Choose a Mechanical Justification](/how-to-guides/vex/mechanical-justifications).
+5. **Publish it.** Your decisions become machine-readable CycloneDX VEX, OpenVEX and CSAF documents. See
+   [Export & Publish VEX](/how-to-guides/vex/export-vex).
+
+<Callout type="info">
+  **VEX rules themselves are never published.** What you hand out are the VEX statements they produce — the
+  decision on each finding, not the CEL expression that made it. To share them, enable public access to
+  vulnerability data in **Repository Settings** and pass on the public VEX, OpenVEX or CSAF URL.
+</Callout>
+
+
+Symmetrically, your suppliers publish their own VEX documents — DevGuard consumes them and turns each
+statement into a rule for your asset. See
+[Import VEX from Files & Suppliers](/how-to-guides/vex/import-vex).
+
+Beyond suppliers, DevGuard also pools rules **across DevGuard organizations**: if enough independent
+organizations have already written the same rule for a vulnerability you're triaging, it appears as a
+crowdsourced recommendation you can adopt with one click, weighted by an organization trust score so a single
+account can't manufacture consensus. See
+[Create & Manage VEX Rules](/how-to-guides/vex/vex-rules#from-a-crowdsourced-vex-recommendation).
+
+## Where to find VEX in the web UI
+
+| What | Where |
+|---|---|
+| VEX rules, playground, upstream sources, recommendations | **Dependency Risks → VEX Rules** (asset level) |
+| Assessing a single finding, path graph, rule pre-fill | **Dependency Risks → \<a vulnerability\>** |
+| Public SBOM / VEX / CSAF URLs, Paranoid Mode | **Repository Settings** |
+
+
+
+
+## Related Documentation
+
+- [What is a VEX Report](/explanations/vulnerability-management/what-is-vex) — the standard, its statuses and justifications
+- [CSAF & VEX Standards](/explanations/compliance/csaf-vex-explained) — how CSAF, CycloneDX VEX and OpenVEX differ
+- [Reduce False Positives](/explanations/vulnerability-management/reduce-false-positives) — why scanners over-report in the first place
+- [Vulnerability Lifecycle](/explanations/vulnerability-management/vulnerability-lifecycle) — the states a finding moves through
+- [CVE Decision Guide](/tutorials/container-hardening/cve-decision) — remediate first, VEX last

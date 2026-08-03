@@ -1,0 +1,116 @@
+---
+title: Export & Publish VEX
+description: "Publish VEX from DevGuard — download CycloneDX and OpenVEX documents, serve always-current public URLs, and act as a CSAF trusted provider."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: publish vex
+lang: en-US
+ignoreChecks: null
+---
+
+import { Callout } from '@document-writing-tools/kernux-theme'
+
+# Export & Publish VEX
+
+Your assessments are only useful to others if they can read them. DevGuard turns the decisions recorded in
+your repository into machine-readable documents — either downloaded on demand, or served from a stable URL
+that always reflects the current state.
+
+
+## Download a VEX document
+
+1. Navigate to **Dependency Risks → VEX Rules**.
+2. Click **Share your VEX**.
+3. Select the **Branch / Tag** and the **Artifact** — VEX is always published per reference and per artifact.
+4. Choose **Download in JSON-Format** or **Download in XML-Format**.
+
+<Callout type="info">
+  The export contains **VEX statements**, not VEX rules. Your rules are what produce the statements, but they
+  are not themselves part of the document — a recipient sees your conclusions, not your matching logic.
+</Callout>
+
+## Publish always-current URLs
+
+A downloaded file goes stale the moment it is written. For consumers who should always see your current
+posture, publish the endpoints instead.
+
+1. Open **Repository Settings**.
+2. Enable **Enable public access to vulnerability data**.
+3. Select the **Branch / Tag** and **Artifact** to publish.
+4. Expand **Public SBOM / VEX / CSAF URLs** and copy the URL you need:
+
+| Row | Serves |
+|---|---|
+| **VeX-URL** | CycloneDX VEX, always current |
+| **OpenVex-URL** | OpenVEX, always current |
+| **CSAF-URL** | CSAF, always current |
+| **SBOM-URL** | The component inventory |
+
+<Callout type="warning">
+  Enabling public access makes this data readable **without authentication**. Publish deliberately — and keep
+  the URLs stable once you have handed them to customers.
+</Callout>
+
+Published CycloneDX documents reference each other: the VEX links to the SBOM and to the dashboard, so a
+consumer who finds one can discover the rest.
+
+## What the formats carry
+
+DevGuard writes all three, from the same underlying decisions. They are not equivalent.
+
+| Your decision | CycloneDX VEX | OpenVEX | CSAF |
+|---|---|---|---|
+| Open / untriaged | `in_triage` | `under_investigation` | `under_investigation` |
+| False positive | `false_positive` | `not_affected` | `known_not_affected` + a `flags` label |
+| Accepted risk | `exploitable` + `will_not_fix` | `affected` | `known_affected` + `no_fix_planned` |
+| Fixed | `exploitable` + `update` | `fixed` | `fixed` |
+
+
+## Publish CSAF as a trusted provider
+
+CSAF defines how a vendor's advisories are discovered and validated. DevGuard serves the full provider
+structure once public access is enabled:
+
+| Endpoint | Purpose |
+|---|---|
+| `/.well-known/csaf-aggregator/aggregator.json` | Lists the providers on this DevGuard instance |
+| `/api/v1/organizations/{org}/csaf/provider-metadata.json` | Your organization's provider metadata |
+| `…/assets/{asset}/csaf/white/index.txt` | Index of all advisory files |
+| `…/assets/{asset}/csaf/white/changes.csv` | Advisories with their last change date |
+| `…/assets/{asset}/csaf/white/{year}/{cve}.json` | A single advisory |
+
+Every advisory is also served as `.asc` (detached OpenPGP signature), `.sha256` and `.sha512`, so consumers
+can verify integrity and authorship.
+
+<Callout type="info">
+  DevGuard currently publishes at **TLP:WHITE** only, and reports are generated on demand rather than stored.
+  Publisher name, namespace, contact details and the signing key are configured on the DevGuard instance, not
+  in the web UI.
+</Callout>
+
+For the endpoint details and how to consume another vendor's CSAF, see
+[CSAF Reports in DevGuard](/how-to-guides/vulnerability-management/csaf-common-security-advisory-framework).
+
+## Why this matters for compliance
+
+Publishing VEX and CSAF is what turns your internal triage into evidence:
+
+- **Cyber Resilience Act** — machine-readable vulnerability disclosure to downstream users
+- **ISO 27001 / audits** — a signed, timestamped record of every assessment and who made it
+- **Customer due diligence** — a URL replaces the recurring "does CVE-X affect you?" email
+
+See [Why Compliance Matters](/explanations/compliance/why-compliance-matters) and
+[Audit Trails](/explanations/compliance/audit-trails).
+
+## Related Documentation
+
+- [Import VEX from Files & Suppliers](/how-to-guides/vex/import-vex) — the same flow in the other direction
+- [CSAF Reports in DevGuard](/how-to-guides/vulnerability-management/csaf-common-security-advisory-framework) — CSAF endpoints and consuming upstream providers
+- [Create Security Advisories](/how-to-guides/vulnerability-management/create-security-advisories) — disclosing your own vulnerabilities
+- [Export SBOM](/how-to-guides/compliance/export-sbom) — the component inventory that accompanies VEX
+- [CSAF & VEX Standards](/explanations/compliance/csaf-vex-explained) — the standards behind these documents

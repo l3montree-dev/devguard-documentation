@@ -33,7 +33,7 @@ Before you begin, ensure you have:
 Upload a VEX document to update vulnerability statuses:
 
 ```bash copy
-docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main \
+docker run -v "$(pwd):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main \
   devguard-scanner vex \
     /dev/app/vex.json \
     --assetName="myorg/projects/myproject/assets/myrepo" \
@@ -42,7 +42,7 @@ docker run -v "$(PWD):/dev/app" ghcr.io/l3montree-dev/devguard/scanner:main \
 ```
 
 <Callout type="info">
-  Replace `vex.json` with the path to your VEX document. Only CycloneDX-formatted VEX documents (JSON or XML) are supported.
+  Replace `vex.json` with the path to your VEX document. The scanner accepts CycloneDX VEX (JSON or XML). To import CSAF or OpenVEX, add the document as an upstream source URL instead — see [Import VEX from Files & Suppliers](/how-to-guides/vex/import-vex).
 </Callout>
 
 <Callout type="info">

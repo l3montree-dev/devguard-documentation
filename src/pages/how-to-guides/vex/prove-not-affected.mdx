@@ -1,0 +1,304 @@
+---
+title: Prove a Finding Is Not Exploitable
+description: "Prove a finding is not exploitable with binary symbol analysis — investigate Debian packages with nm, then record the result in DevGuard."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: prove a finding is not exploitable
+lang: en-US
+ignoreChecks: null
+---
+
+import { Callout } from '@document-writing-tools/kernux-theme'
+
+# Prove a Finding Is Not Exploitable
+
+Marking a finding as *Vulnerable Code Not In Execute Path* is a claim about your binaries. This guide shows
+how to substantiate it: symbol-level analysis of the shipped packages, which for dynamically linked code
+answers the question "is this function ever called?" directly rather than by argument.
+
+The examples use Debian packages, because system packages in container images are where this situation arises
+most often. The method applies to any dynamically linked ELF binary.
+
+<Callout type="warning">
+  Investigate only after remediation is off the table. A smaller base image or an updated package removes the
+  finding permanently; a VEX decision has to be maintained. Work through the
+  [CVE Decision Guide](/tutorials/container-hardening/cve-decision) first.
+</Callout>
+
+## What you are deciding between
+
+| Outcome | Meaning | Records as |
+|---|---|---|
+| **False positive** | The vulnerable function is never called. The code path is structurally unreachable. | *Vulnerable Code Not In Execute Path* |
+| **Accept risk** | The function could be called, but the risk is acceptable — deprecated feature, DoS only, no patch planned. | Accept risk with a written rationale |
+
+## Prerequisites
+
+- `curl` — download `.deb` packages
+- `ar` and `tar` — extract them
+- `nm` and `objdump` — inspect symbols (from `binutils`)
+- `dpkg` — inspect package metadata
+
+### A reproducible environment with Nix
+
+All the tools are packaged as a Nix flake, which is the recommended way to run the analysis — especially on
+macOS or in CI.
+
+[Download flake.nix](/labs/binary-analysis/flake.nix)
+
+```bash
+# Enter the dev shell (installs all tools automatically)
+nix develop
+
+# Or run a single command without entering the shell
+nix develop --command nm -D <binary>
+```
+
+<Callout type="info">
+  The flake targets `x86_64-linux`. On Apple Silicon, use a Linux VM, container, or a remote builder — the
+  analysis must run against the amd64 Debian binaries, not your host architecture.
+</Callout>
+
+## Step 1 — Read the dependency path
+
+DevGuard's **Path to component** graph on the vulnerability's detail page gives you exactly what you need:
+
+```
+Your application → debian/wget → debian/libgnutls30t64 → debian/libtasn1-6
+```
+
+- The **last** node is the vulnerable package.
+- The **second-to-last** node pulls it in.
+- Your task is to determine whether that intermediate package actually calls the vulnerable function.
+
+Note the exact versions — you will analyze those specific builds, not the latest ones.
+
+## Step 2 — Research the CVE
+
+Before touching a binary, know what you are looking for.
+
+Search for the vulnerable function name and the Debian tracker entry:
+
+```
+CVE-XXXX-XXXXX <library-name> vulnerable function
+CVE-XXXX-XXXXX debian security tracker
+```
+
+Answer three questions:
+
+1. **What is the exact vulnerable function?** e.g. `asn1_expand_octet_string`
+2. **What triggers it?** Does exploitation require a specific call pattern or input?
+3. **How does Debian classify it?** Check `https://security-tracker.debian.org/tracker/CVE-XXXX-XXXXX`.
+   A `<no-dsa>` marking means Debian considers it minor and plans no security update — supporting evidence for
+   *accept risk*, though never proof of non-exploitability on its own.
+
+## Step 3 — Obtain the exact package build
+
+You need the precise version present in your image.
+[Debian's snapshot archive](https://snapshot.debian.org) preserves every historical build and is the canonical
+source.
+
+Verify the version on the system if your scanner's report is not enough:
+
+```bash
+dpkg -l | grep <package-name>
+# ii  libgnutls30t64  3.8.6-2  amd64  GNU TLS library ...
+```
+
+Then browse to `https://snapshot.debian.org/binary/<package-name>/`, which lists every version with direct
+download links. The URLs follow this pattern:
+
+```
+https://snapshot.debian.org/archive/debian/<timestamp>/pool/<section>/<letter>/<source-package>/<package>_<version>_amd64.deb
+```
+
+For `libgnutls30t64` version `3.8.6-2`:
+
+```
+https://snapshot.debian.org/archive/debian/20240831T204032Z/pool/main/g/gnutls28/libgnutls30t64_3.8.6-2_amd64.deb
+```
+
+<Callout type="info">
+  The source package in the path is often not the binary package name — `libgnutls30t64` lives under
+  `gnutls28`. The snapshot listing page resolves this for you.
+</Callout>
+
+## Step 4 — Extract the packages
+
+Run inside `nix develop`:
+
+```bash
+curl -L "<snapshot-url>" -o <package>.deb
+
+mkdir <package>-extracted && cd <package>-extracted
+ar x ../<package>.deb
+tar xf data.tar.xz
+cd ..
+```
+
+Repeat for each package in the chain you need to examine.
+
+## Step 5 — Analyze the symbols
+
+`nm -D` lists the dynamic symbol table. A `U` (undefined) entry means the binary **calls** that function from
+an external library. If a function does not appear, that binary never calls it through dynamic linking.
+
+### Is the vulnerable library linked at all?
+
+```bash
+nm -D usr/bin/git | grep -i "xml"
+```
+
+No output means this binary is not linked against the library — a strong false-positive signal.
+
+### Is the specific vulnerable function called?
+
+```bash
+nm -D usr/lib/x86_64-linux-gnu/libgnutls.so.30* | grep -i "expand_octet"
+```
+
+No output means this library never calls the vulnerable function.
+
+### Packages that ship many binaries
+
+Some packages install a whole directory of executables. Check them all, and record which one is responsible:
+
+```bash
+for f in usr/lib/git-core/*; do
+  result=$(nm -D "$f" 2>/dev/null | grep -i "<keyword>")
+  if [ -n "$result" ]; then
+    echo "=== $f ==="
+    echo "$result"
+  fi
+done
+```
+
+<Callout type="warning">
+  **The limits of this method.** An absent symbol is strong evidence, not absolute proof. It does not cover
+  calls made through `dlopen` at runtime, indirect dispatch via ifuncs or function pointers, statically linked
+  or vendored copies of the library, or code reached through an interpreter or plugin. `nm -D` also only
+  applies to dynamically linked binaries — use `nm` without `-D` for static ones. State in your justification
+  what you checked, so a reviewer can judge the residual uncertainty.
+</Callout>
+
+## Step 6 — Decide
+
+| Situation | Decision |
+|---|---|
+| The vulnerable function appears in no binary's symbol table | **False positive** → *Vulnerable Code Not In Execute Path* |
+| It is used only by a legacy binary that is never invoked in your workload | **False positive** → *Vulnerable Code Not In Execute Path*, naming the binary |
+| It is called, but the trigger condition can never be met | **False positive** → *Vulnerable Code Cannot Be Controlled By Adversary* |
+| It is reachable and the risk is low (DoS only, `<no-dsa>`, mitigated elsewhere) | **Accept risk** |
+
+See [Choose a Mechanical Justification](/how-to-guides/vex/mechanical-justifications) for the full decision
+table.
+
+## Step 7 — Write the justification
+
+A defensible justification has three parts: what the vulnerability is, what your analysis showed, and any
+supporting evidence. Keep it under 4000 characters — DevGuard's limit.
+
+**False positive:**
+
+```text
+CVE-XXXX-XXXXX is assessed as a false positive.
+
+The vulnerability is a <type> in the <function_name> function of <library>.
+According to the advisory, exploitation requires that the target program
+explicitly calls <function_name>.
+
+Symbol analysis of the extracted Debian package <package>_<version>_amd64.deb
+via `nm -D` shows that <intermediate_library> does not reference
+<function_name>. Since <top_level_package> accesses <library> exclusively
+through <intermediate_library>, the vulnerable code path is not reached.
+
+Checked: dynamic symbol tables of all binaries shipped by <package>. Not
+covered: runtime dlopen and statically linked copies, of which none are
+present in this image.
+
+[Optional: Debian's security team classifies this CVE as a minor issue
+(<no-dsa>) for <suite> and plans no dedicated security update.]
+```
+
+**Accept risk:**
+
+```text
+CVE-XXXX-XXXXX is assessed as accepted risk.
+
+The vulnerability affects <library> <version>, present as a <direct|transitive>
+dependency of <package>. The vulnerable function <function_name> is called by
+<binary>, which implements <feature>.
+
+The risk is acceptable because:
+1. <e.g. the feature is deprecated and unused in this workload>
+2. <e.g. the vulnerability class is DoS only, no RCE>
+3. <e.g. Debian classifies it as <no-dsa> and plans no patch>
+
+To be re-evaluated once a patched version ships.
+```
+
+## Step 8 — Record it in DevGuard
+
+Turn the conclusion into a decision that also covers future scans:
+
+- **The intermediate package does not call the function** — click that edge in the **Path to component**
+  graph. DevGuard pre-fills a [VEX rule](/how-to-guides/vex/vex-rules) pinning the CVE and that dependency
+  path, so every finding arriving the same way is dismissed too.
+- **The whole component version is unaffected** — write a rule matching the purl directly. Note that
+  `matchesPurl` version constraints do **not** work for Debian versions; compare the purl with `==`. See the
+  [CEL Expression Reference](/how-to-guides/vex/cel-reference).
+- **This one finding only** — record it as a
+  [vulnerability event](/how-to-guides/vulnerability-management/create-vuln-events).
+
+Paste your justification text into the rule or event. It is exported in the VEX and CSAF documents your
+consumers read, and it is what makes the claim auditable.
+
+## Worked examples
+
+### CVE-2025-59375 — libexpat via git
+
+**Path:** `Your application → debian/git → debian/libexpat1`
+
+Stack overflow in libexpat through recursive XML entity expansion (DoS), fixed in 2.7.2.
+
+```bash
+nm -D usr/bin/git | grep -i xml
+# → no output — the git binary is not linked against libexpat
+
+for f in usr/lib/git-core/*; do
+  result=$(nm -D "$f" 2>/dev/null | grep -i xml)
+  if [ -n "$result" ]; then echo "=== $f ==="; echo "$result"; fi
+done
+# → only git-http-push references XML symbols
+```
+
+**Decision:** false positive. libexpat is reachable only through `git-http-push`, a deprecated binary
+implementing WebDAV-based HTTP push, which this workload never invokes.
+
+### CVE-2025-13151 — libtasn1 via libgnutls via wget
+
+**Path:** `Your application → debian/wget → debian/libgnutls30t64 → debian/libtasn1-6`
+
+Stack-based buffer overflow in `asn1_expand_octet_string`; exploitation requires the program to call that
+function explicitly.
+
+```bash
+nm -D usr/lib/x86_64-linux-gnu/libgnutls.so.30* | grep -i "expand_octet"
+# → no output
+```
+
+**Decision:** false positive. libgnutls never calls `asn1_expand_octet_string`, and wget reaches libtasn1
+exclusively through libgnutls, so the vulnerable function is unreachable.
+
+## Related Documentation
+
+- [Choose a Mechanical Justification](/how-to-guides/vex/mechanical-justifications) — which justification your evidence supports
+- [Create & Manage VEX Rules](/how-to-guides/vex/vex-rules) — turning the result into an automated decision
+- [Reduce False Positives](/explanations/vulnerability-management/reduce-false-positives) — why these findings appear, including backported patches
+- [CVE Decision Guide](/tutorials/container-hardening/cve-decision) — remediation options to exhaust first
+- [Container Hardening Checklist](/tutorials/container-hardening/container-hardening-checklist) — reducing the attack surface structurally
