@@ -12,6 +12,7 @@ MDX_FILES=(
     "src/pages/getting-started/first-scan.mdx"
     "src/pages/contributing/getting-started.mdx"
     "src/pages/explanations/explaining-sboms.mdx"
+    "src/pages/how-to-guides/scanning/upload-vex.mdx"
 )
 
 export NIX_PATH="nixpkgs=$NIXPKGS_URL"
@@ -46,6 +47,7 @@ for script in "$TMP_DIR"/*.sh; do
     mkdir -p "$TMP_DIR/work"
     rm -rf "$work_dir"
     cp -R "$EXAMPLE_REPO_DIR" "$work_dir"
+    cp public/example-files/ingesting/vex-accepted.json "$work_dir/vex.json"
     chmod -R a+rwX "$work_dir"
 
     if nix-shell "$SHELL_NIX" --run "cd '$work_dir' && timeout $SCRIPT_TIMEOUT bash '$PWD/$script'" < /dev/null; then
