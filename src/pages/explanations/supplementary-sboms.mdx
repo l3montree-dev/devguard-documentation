@@ -17,6 +17,8 @@ import { Callout } from '@document-writing-tools/kernux-theme'
 
 # Supplementary SBOMs — Filling the Gaps Trivy Can't
 
+A Software Bill of Materials (SBOM) is a structured inventory of every component that makes up a piece of software — libraries, their versions, and how they depend on one another — typically encoded as CycloneDX or SPDX. It's the artifact that [Software Composition Analysis](/explanations/devsecops/software-composition-analysis) feeds into [vulnerability matching](/explanations/vulnerability-management/vulnerability-matching) against vulnerability databases, so how complete and accurate that inventory is directly determines how much of your real dependency tree gets checked. That completeness is exactly what breaks down for the class of components described below.
+
 Scanners such as Trivy identify components by reading metadata that already exists on disk: a `go.sum`, a `package-lock.json`, an RPM/DPKG database, a Python `dist-info` folder. When a component was built without leaving this metadata behind — the normal case for compiled, self-built, or vendored binaries — the scanner has no basis for identifying it.
 
 DevGuard addresses this by allowing a component to carry its own SBOM, which is merged into the scan's dependency graph at scan time. This page describes the failure mode this addresses, how the merge is implemented, and why DevGuard does not attempt to automatically resolve disagreements between two sources describing the same package's dependency tree.
@@ -145,6 +147,5 @@ DevGuard's merge policy is therefore intentionally simple: last source wins, by 
 
 ## Related
 
-- [SBOM Problem Statement](/explanations/sbom-problem-statement) — the original `gitleaks` investigation that led here
-- [Explaining SBOMs](/explanations/explaining-sboms) — what an SBOM is and why it's the foundation for dependency analysis
 - [Transitive Dependencies](/explanations/transitive-dependencies) — why depth in the dependency graph matters for triage
+- [Vulnerability Matching](/explanations/vulnerability-management/vulnerability-matching) — how DevGuard matches SBOM components against vulnerability databases
