@@ -29,4 +29,11 @@ exclude = [
     # gnu.org consistently times out from CI/sandboxed network environments rather than actually
     # being down — not something a link checker running in such an environment can verify either way.
     "^https://www\\.gnu\\.org/",
+    # Cloudflare-fronted; blocks/resets connections from GitHub Actions' shared runner IP ranges.
+    # Verified reachable (200) from outside CI.
+    "^https://slsa\\.dev/",
+    "^https://tekton\\.dev/",
+    # Blogspot-hosted; rate-limits (429) automated requests from CI datacenter IPs.
+    # Verified reachable (200) from outside CI.
+    "^https://security\\.googleblog\\.com/",
 ]
