@@ -57,7 +57,10 @@ posture, publish the endpoints instead.
 </Callout>
 
 Published CycloneDX documents reference each other: the VEX links to the SBOM and to the dashboard, so a
-consumer who finds one can discover the rest.
+consumer who finds one can discover the rest. Once you enable public access, this cross-referencing also
+applies to documents you download directly — a downloaded VEX or SBOM includes the same published URLs as
+external references, so a consumer holding only the file you handed them can still reach the always-current
+versions.
 
 ## What the formats carry
 
@@ -68,7 +71,6 @@ DevGuard writes all three, from the same underlying decisions. They are not equi
 | Open / untriaged | `in_triage` | `under_investigation` | `under_investigation` |
 | False positive | `false_positive` | `not_affected` | `known_not_affected` + a `flags` label |
 | Accepted risk | `exploitable` + `will_not_fix` | `affected` | `known_affected` + `no_fix_planned` |
-| Fixed | `exploitable` + `update` | `fixed` | `fixed` |
 
 
 ## Publish CSAF as a trusted provider

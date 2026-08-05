@@ -195,7 +195,7 @@ done
 | It is called, but the trigger condition can never be met | **False positive** → *Vulnerable Code Cannot Be Controlled By Adversary* |
 | It is reachable and the risk is low (DoS only, `<no-dsa>`, mitigated elsewhere) | **Accept risk** |
 
-See [Choose a Mechanical Justification](/how-to-guides/vex/mechanical-justifications) for the full decision
+See [Choose a Mechanical Justification](/how-to-guides/vex) for the full decision
 table.
 
 ## Step 7 — Write the justification
@@ -251,7 +251,7 @@ Turn the conclusion into a decision that also covers future scans:
   path, so every finding arriving the same way is dismissed too.
 - **The whole component version is unaffected** — write a rule matching the purl directly. Note that
   `matchesPurl` version constraints do **not** work for Debian versions; compare the purl with `==`. See the
-  [CEL Expression Reference](/how-to-guides/vex/cel-reference).
+  [CEL Expression Reference](/reference/vex-cel-reference).
 - **This one finding only** — record it as a
   [vulnerability event](/how-to-guides/vulnerability-management/create-vuln-events).
 
@@ -297,7 +297,7 @@ exclusively through libgnutls, so the vulnerable function is unreachable.
 
 ## Related Documentation
 
-- [Choose a Mechanical Justification](/how-to-guides/vex/mechanical-justifications) — which justification your evidence supports
+- [Choose a Mechanical Justification](/how-to-guides/vex) — which justification your evidence supports
 - [Create & Manage VEX Rules](/how-to-guides/vex/vex-rules) — turning the result into an automated decision
 - [Reduce False Positives](/explanations/vulnerability-management/reduce-false-positives) — why these findings appear, including backported patches
 - [CVE Decision Guide](/tutorials/container-hardening/cve-decision) — remediation options to exhaust first

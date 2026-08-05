@@ -64,6 +64,16 @@ const config = withMarkdownWebBook({
                 permanent: true,
             },
             {
+                source: '/how-to-guides/vex/cel-reference',
+                destination: '/reference/vex-cel-reference',
+                permanent: true,
+            },
+            {
+                source: '/how-to-guides/vex/mechanical-justifications',
+                destination: '/how-to-guides/vex#choose-a-mechanical-justification',
+                permanent: true,
+            },
+            {
                 source: '/how-to-guides/vexing/vexing-debian-packages',
                 destination: '/how-to-guides/vex/prove-not-affected',
                 permanent: true,

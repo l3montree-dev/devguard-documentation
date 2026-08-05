@@ -163,6 +163,9 @@ The most precise form, and the one the path graph generates for you:
 vuln.cveId == "CVE-2021-1234" && matchesPattern(vuln, ["*", "pkg:npm/web@1.0.0", "pkg:npm/brace-expansion@1.1.11"])
 ```
 
+The leading `"*"` is here only for readability — it makes the pattern read as "any ancestors, then this
+path". Since matching is suffix-based by default, omitting it matches exactly the same vulnerabilities.
+
 ### Dismiss an advisory only when it arrives through a direct dependency
 
 ```javascript
@@ -181,6 +184,9 @@ vuln.cve.cvss < 4.0
 vuln.cve.cvss < 4.0 && vuln.cve.epss < 0.01
 ```
 
+DevGuard only re-evaluates rules against **open** vulnerabilities. A rule like this dismisses a finding once,
+but it will not reopen it later if the EPSS score subsequently rises above the threshold. This is a current limitation of DevGuard's rule engine, and is why the "accept" rules are less common than "dismiss" rules.
+
 ### Scope a rule to one branch
 
 ```javascript
@@ -196,7 +202,7 @@ vuln.cveId in ["CVE-2021-1234", "CVE-2021-5678"] && vuln.componentPurl == "pkg:n
 ## Related Documentation
 
 - [Create & Manage VEX Rules](/how-to-guides/vex/vex-rules) — where these expressions are used
-- [Choose a Mechanical Justification](/how-to-guides/vex/mechanical-justifications) — the decision that accompanies the match
+- [Choose a Mechanical Justification](/how-to-guides/vex) — the decision that accompanies the match
 - [Transitive Dependencies](/explanations/transitive-dependencies) — how DevGuard builds the dependency paths that `matchesPattern` matches
 - [Vulnerability Matching](/explanations/vulnerability-management/vulnerability-matching) — how purls are normalized before matching
 - [Risk Assessment Methodology](/explanations/vulnerability-management/risk-assessment-methodology) — what the risk and priority fields mean

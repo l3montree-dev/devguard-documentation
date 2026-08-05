@@ -14,7 +14,6 @@ ignoreChecks: null
 ---
 import Image from 'next/image';
 import { Callout } from '@document-writing-tools/kernux-theme'
-import { Tooltip, TooltipTrigger, TooltipContent } from "@document-writing-tools/kernux-theme";
 
 # Open Standards First
 
@@ -56,13 +55,13 @@ Machine-readable assessments communicating which vulnerabilities affect your pro
 
 **Use Cases**: Reduce false positives, communicate actual exploitability, eliminate redundant analysis.
 
-**DevGuard**: Document Not Affected assessments, publish all three formats from the same decisions, consume supplier VEX and CSAF as rules.
+**DevGuard**: Document Not Affected assessments, publish all three formats from the same decisions, consume supplier VEX and CSAF as [VEX rules](/how-to-guides/vex/vex-rules).
 
 [Learn more →](/explanations/vulnerability-management/what-is-vex)
 
 ### SARIF (Static Analysis Results Interchange Format)
 
-Standardized format for static analysis findings including <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">SAST</span></TooltipTrigger><TooltipContent><p>Static Application Security Testing - Code vulnerability analysis</p></TooltipContent></Tooltip>, secret scanning, and code quality issues.
+Standardized format for static analysis findings including SAST, secret scanning, and code quality issues.
 
 **Format**: JSON
 

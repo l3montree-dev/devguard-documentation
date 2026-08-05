@@ -8,6 +8,7 @@ const websiteId = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID
 const umamiUrl = process.env.NEXT_PUBLIC_UMAMI_URL
 
 const config: Partial<KernuxThemeConfig> = {
+    glossaryPage: '/glossary',
     umbrellaHeader: false,
     umbrellaFooter: false,
     project: {

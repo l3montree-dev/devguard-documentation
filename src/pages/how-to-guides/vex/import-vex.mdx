@@ -67,8 +67,7 @@ regular processing.
 | **CSAF** | `known_affected` with a `no_fix_planned` remediation | Accepted risk |
 | **CSAF** | `known_affected` without that remediation, `fixed`, `under_investigation` | *ignored* |
 | **CycloneDX** | `false_positive`, `not_affected` | False positive |
-| **CycloneDX** | `exploitable` + response `will_not_fix` | Accepted risk |
-| **CycloneDX** | `exploitable` + response `update`, `in_triage` | *ignored* |
+| **CycloneDX** | `exploitable` + response `update`, `in_triage`, `will_not_fix` | *ignored* |
 | **OpenVEX** | `not_affected` | False positive |
 | **OpenVEX** | `affected` | Accepted risk |
 | **OpenVEX** | `fixed`, `under_investigation` | *ignored* |

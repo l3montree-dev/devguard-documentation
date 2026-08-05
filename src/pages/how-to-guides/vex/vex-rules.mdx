@@ -18,7 +18,7 @@ import { Callout } from '@document-writing-tools/kernux-theme'
 # Create & Manage VEX Rules
 
 A **VEX rule** automates a VEX decision for a repository. Instead of assessing vulnerabilities one at a
-time, you write a [CEL](/how-to-guides/vex/cel-reference) expression that matches a set of dependency
+time, you write a [CEL](/reference/vex-cel-reference) expression that matches a set of dependency
 vulnerabilities, and DevGuard applies your decision to every match — immediately, and to every future
 finding that matches the same expression.
 
@@ -32,7 +32,7 @@ A rule is always scoped to a single repository.
 | **CEL expression** | yes | Must be syntactically valid; checked live as you type |
 | **Justification** | yes | Markdown, **maximum 4000 characters** |
 | **Effect** | yes | **Accept risk** or **False positive** |
-| **Mechanical justification** | only for false positives | One of [five standardized reasons](/how-to-guides/vex/mechanical-justifications) |
+| **Mechanical justification** | only for false positives | One of [five standardized reasons](/how-to-guides/vex) |
 
 A rule's identity is derived from **(repository, CEL expression, source)**. Two consequences follow, and both
 matter in practice:
@@ -177,8 +177,8 @@ state before the rule was applied. If there was no previous state, the vulnerabi
 
 ## Related Documentation
 
-- [CEL Expression Reference](/how-to-guides/vex/cel-reference) — every available field, function and token
-- [Choose a Mechanical Justification](/how-to-guides/vex/mechanical-justifications) — which of the five reasons applies
+- [CEL Expression Reference](/reference/vex-cel-reference) — every available field, function and token
+- [Choose a Mechanical Justification](/how-to-guides/vex) — which of the five reasons applies
 - [Import VEX from Files & Suppliers](/how-to-guides/vex/import-vex) — rules created from uploads and upstream sources
 - [Prove a Finding Is Not Exploitable](/how-to-guides/vex/prove-not-affected) — evidence for a false-positive claim
 - [Create Vulnerability Events](/how-to-guides/vulnerability-management/create-vuln-events) — the manual, single-finding equivalent

@@ -14,6 +14,7 @@ export default {
     contributing: { title: 'Contributing' },
     other: { title: 'Other' },
     faq: { title: 'FAQ' },
+    glossary: { title: 'Glossary' },
     'vulnerability-database': {
         theme: {
             layout: 'raw',

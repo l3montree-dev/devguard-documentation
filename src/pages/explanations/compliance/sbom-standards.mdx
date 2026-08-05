@@ -14,22 +14,17 @@ ignoreChecks: null
 ---
 import Image from 'next/image'
 import { Callout } from '@document-writing-tools/kernux-theme'
-import {
-    Tooltip,
-    TooltipTrigger,
-    TooltipContent,
-} from '@document-writing-tools/kernux-theme'
 import { Badge } from '@/components/ui/badge'
 
 # SBOM Standards: CycloneDX & SPDX
 
-A Software Bill of Materials (<Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">SBOM</span></TooltipTrigger><TooltipContent><p>Software Bill of Materials - Comprehensive inventory of software components</p></TooltipContent></Tooltip>) is a comprehensive inventory of all components in software. Two SBOM standards dominate: CycloneDX and SPDX. Both serve the same purpose but differ in approach and use cases. Choosing the right SBOM standard depends on your team's primary goal — security or license compliance.
+A Software Bill of Materials (SBOM) is a comprehensive inventory of all components in software. Two SBOM standards dominate: CycloneDX and SPDX. Both serve the same purpose but differ in approach and use cases. Choosing the right SBOM standard depends on your team's primary goal — security or license compliance.
 
 ## Why SBOMs Matter
 
 **Supply Chain Visibility**: Know exactly what's in your software—every dependency, version, and license.
 
-**Vulnerability Management**: When new <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">CVEs</span></TooltipTrigger><TooltipContent><p>Common Vulnerabilities and Exposures - Standardized vulnerability identifiers</p></TooltipContent></Tooltip> are disclosed, SBOMs enable instant identification of affected applications.
+**Vulnerability Management**: When new CVEs are disclosed, SBOMs enable instant identification of affected applications.
 
 **Compliance**: Regulations like the EU Cyber Resilience Act require machine-readable SBOMs demonstrating supply chain transparency. Adopting a recognized SBOM standard ensures your inventory meets regulatory expectations.
 
@@ -45,8 +40,8 @@ CycloneDX is a lightweight standard designed specifically for application securi
 **Key Features**:
 
 - Security-first design for vulnerability management
-- Native <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">VEX</span></TooltipTrigger><TooltipContent><p>Vulnerability Exploitability eXchange - Vulnerability impact assessments</p></TooltipContent></Tooltip> integration within SBOM documents
-- Rich metadata: licenses, <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">PURL</span></TooltipTrigger><TooltipContent><p>Package URL - Standardized package identifier</p></TooltipContent></Tooltip> identifiers, component hashes
+- Native VEX integration within SBOM documents
+- Rich metadata: licenses, PURL identifiers, component hashes
 - Service/API documentation support
 - Lightweight: smaller files, faster processing
 

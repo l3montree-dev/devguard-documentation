@@ -22,6 +22,9 @@ export default {
     scanner: {
         title: 'DevGuard Scanner CLI-Commands',
     },
+    'vex-cel-reference': {
+        title: 'CEL Expression Reference for VEX Rules',
+    },
     'gitlab-components': {
         title: 'GitLab Components',
     },

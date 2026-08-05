@@ -59,6 +59,7 @@
 
 [data-kern-theme="dark"] {
   /* ── Colors ─────────────────────────────────── */
+  --info: #fff;
   --primary:            #f9bd25;
   --primary-foreground: #171717;
   --background: hsl(213 27% 6%);

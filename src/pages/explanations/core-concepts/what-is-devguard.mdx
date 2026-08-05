@@ -14,7 +14,6 @@ ignoreChecks: []
 ---
 import Image from 'next/image';
 import { Callout } from '@document-writing-tools/kernux-theme'
-import { Tooltip, TooltipTrigger, TooltipContent } from "@document-writing-tools/kernux-theme";
 
 # What is DevGuard?
 
@@ -24,14 +23,14 @@ DevGuard is an open-source vulnerability management platform built by developers
 
 **Developer-Centric Security**: Security tools shouldn't disrupt development workflows. DevGuard fits naturally into existing CI/CD pipelines, providing vulnerability intelligence where developers already work.
 
-**Transparency over Obscurity**: Modern software development demands full visibility into dependencies and vulnerabilities. DevGuard provides complete transparency through automated <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">SBOM</span></TooltipTrigger><TooltipContent><p>Software Bill of Materials - Comprehensive inventory of software components</p></TooltipContent></Tooltip> generation and dependency graphs.
+**Transparency over Obscurity**: Modern software development demands full visibility into dependencies and vulnerabilities. DevGuard provides complete transparency through automated SBOM generation and dependency graphs.
 
-**Risk-Based Prioritization**: Not all vulnerabilities are equally impactful. DevGuard enhances existing <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">CVSS</span></TooltipTrigger><TooltipContent><p>Common Vulnerability Scoring System - Technical severity rating</p></TooltipContent></Tooltip> scores with exploitability data, organizational context, and attack surface analysis—ensuring the most important vulnerabilities are handled first.
+**Risk-Based Prioritization**: Not all vulnerabilities are equally impactful. DevGuard enhances existing CVSS scores with exploitability data, organizational context, and attack surface analysis—ensuring the most important vulnerabilities are handled first.
 
 **Compliance Made Manageable**: Technical compliance with security frameworks (ISO 27001, CRA, BSI IT-Grundschutz) shouldn't be a burden. DevGuard automates compliance documentation, audit trails, and evidence generation.
 
 <Callout type="info" emoji="🎯">
-  DevGuard practices what it preaches—the platform scans and manages its own vulnerabilities, publicly sharing SBOM and <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">VEX</span></TooltipTrigger><TooltipContent><p>Vulnerability Exploitability eXchange - Vulnerability impact assessments</p></TooltipContent></Tooltip> documents as an example of transparent security practices.
+  DevGuard practices what it preaches—the platform scans and manages its own vulnerabilities, publicly sharing SBOM and VEX documents as an example of transparent security practices.
 </Callout>
 
 ## The Challenge
@@ -46,7 +45,7 @@ DevGuard bridges this gap through:
 
 **Seamless Integration**: One-click setup for CI/CD pipelines (GitHub Actions, GitLab CI, Jenkins). Scanner CLI integrates into existing workflows without disrupting development velocity.
 
-**Intelligent Risk Assessment**: Multi-dimensional risk scoring combining CVSS technical severity, <Tooltip><TooltipTrigger asChild><span className="underline decoration-dotted decoration-yellow-400 decoration-1 underline-offset-4 cursor-pointer">EPSS</span></TooltipTrigger><TooltipContent><p>Exploit Prediction Scoring System - Exploitation probability estimate</p></TooltipContent></Tooltip> exploitation probability, organizational security requirements, and component depth analysis.
+**Intelligent Risk Assessment**: Multi-dimensional risk scoring combining CVSS technical severity, EPSS exploitation probability, organizational security requirements, and component depth analysis.
 
 **Supply Chain Transparency**: Automated SBOM and VEX generation providing complete dependency visibility. Dependency graphs visualize complex relationships, enabling informed decisions about component risks.
 

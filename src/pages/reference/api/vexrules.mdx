@@ -17,7 +17,7 @@ import ApiTagPage from '@/components/ApiTagPage'
 
 # DevGuard VEX Rules API
 
-The DevGuard VEX Rules API lets you define and manage Vulnerability Exploitability eXchange (VEX) rules. A rule pairs a [CEL expression](/how-to-guides/vex/cel-reference) with a decision — **accept risk** or **false positive** with a mechanical justification — and DevGuard applies it to every matching dependency vulnerability in the asset.
+The DevGuard VEX Rules API lets you define and manage Vulnerability Exploitability eXchange (VEX) rules. A rule pairs a [CEL expression](/reference/vex-cel-reference) with a decision — **accept risk** or **false positive** with a mechanical justification — and DevGuard applies it to every matching dependency vulnerability in the asset.
 
 Rules are identified by the combination of asset, CEL expression and source, so there is no update operation: change an expression by deleting the rule and creating a new one. The `test` endpoint evaluates expressions against the asset's open vulnerabilities without creating anything.
 
@@ -30,7 +30,7 @@ For the concepts and the equivalent web UI flows, see [Create & Manage VEX Rules
 ## Related Documentation
 
 - [Create & Manage VEX Rules](/how-to-guides/vex/vex-rules) — the same operations in the web UI
-- [CEL Expression Reference](/how-to-guides/vex/cel-reference) — every field, function and token available in an expression
+- [CEL Expression Reference](/reference/vex-cel-reference) — every field, function and token available in an expression
 - [Vulnerabilities API](/reference/api/vulnerabilities) — the findings rules are applied to
 - [CSAF API](/reference/api/csaf) — retrieving the documents your decisions produce
 - [Use the DevGuard API](/getting-started/use-devguard-api) — authentication and conventions

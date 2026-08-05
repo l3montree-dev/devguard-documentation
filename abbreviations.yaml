@@ -1,0 +1,34 @@
+CSAF:
+  value: Common Security Advisory Framework - Machine-readable security advisories
+VEX:
+  value: Vulnerability Exploitability eXchange - Vulnerability impact assessments
+CVE:
+  value: Common Vulnerabilities and Exposures - Standardized identifiers for publicly known cybersecurity vulnerabilities. Each CVE ID uniquely identifies a specific vulnerability.
+  variants:
+    - CVEs
+CVSS:
+  value: Common Vulnerability Scoring System - A standardized framework for assessing vulnerability severity from 0.0 to 10.0
+EPSS:
+  value: Exploit Prediction Scoring System - Machine learning-based probability estimate (0-100%) that a vulnerability will be exploited in the next 30 days
+SBOM:
+  value: Software Bill of Materials - A comprehensive inventory of all components, libraries, and dependencies that make up a software application
+PURL:
+  value: Package URL - Standardized package identifier
+  variants:
+    - PURLs
+SAST:
+  value: Static Application Security Testing - Code vulnerability analysis
+SARIF:
+  value: Static Analysis Results Interchange Format - Security findings format
+CRA:
+  value: EU Cyber Resilience Act - Mandatory cybersecurity requirements for products with digital elements
+CIA Triad:
+  value: Confidentiality, Integrity, Availability - The three fundamental security objectives that define what we protect
+compensating controls:
+  value: Security measures that reduce vulnerability risk without fixing the code—like WAF rules or network restrictions
+call graph analysis:
+  value: A static analysis technique that builds a directed graph of function calls to determine if vulnerable code can actually be reached at runtime
+transitive dependencies:
+  value: Indirect dependencies pulled in by your direct dependencies. For example, if your application depends on Library A, and Library A depends on Library B, then Library B is a transitive dependency.
+transitive:
+  value: Indirect dependencies pulled in by your direct dependencies. For example, if your application depends on Library A, and Library A depends on Library B, then Library B is a transitive dependency.
