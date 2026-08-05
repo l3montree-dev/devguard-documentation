@@ -56,7 +56,7 @@ Secrets such as Personal Access Token key fingerprints are **hashed** before sto
 
 ## Supply Chain Integrity
 
-A core principle of DevGuard is ensuring the integrity and authenticity of security scan results. Every scan submission uses **HTTP Message Signing** (based on [RFC 9421](https://www.rfc-editor.org/rfc/rfc9421)):
+A core principle of DevGuard is ensuring the integrity and authenticity of security scan results. Every scan submission uses **HTTP Message Signing** (based on [RFC 9421](https://www.rfc-editor.org/info/rfc9421/)):
 
 1. The scanner (CLI or CI integration) signs each HTTP request using its ECDSA P-256 private key.
 2. DevGuard verifies the signature against the registered public key before accepting the results.
@@ -66,7 +66,7 @@ This guarantees that scan results originate from an authorized source and have n
 
 ## Multi-Tenancy and Data Isolation
 
-DevGuard uses **organization-scoped data isolation**. All resources — projects, assets, vulnerabilities, and scan results — are scoped to an organization and enforced at the application layer through [Casbin](https://casbin.org/) RBAC policies.
+DevGuard uses **organization-scoped data isolation**. All resources — projects, assets, vulnerabilities, and scan results — are scoped to an organization and enforced at the application layer through [Casbin](https://casbin.apache.org/) RBAC policies.
 
 The access hierarchy follows:
 
@@ -85,7 +85,7 @@ Since DevGuard is self-hosted, the security of the deployment environment is the
 - **TLS termination**: Always deploy behind a reverse proxy (e.g., Nginx, Traefik) with valid TLS certificates.
 - **Network policies**: Use the Helm chart's built-in network policies to restrict pod-to-pod communication.
 - **Database encryption**: Enable encryption at rest for the PostgreSQL instance via your infrastructure provider.
-- **Ory Kratos configuration**: Follow the [Ory Kratos security best practices](https://www.ory.sh/docs/kratos/guides/production) for session management and identity configuration.
+- **Ory Kratos configuration**: Follow the [Ory Kratos security best practices](https://www.ory.com/docs/kratos/guides/production) for session management and identity configuration.
 
 ## Compliance Alignment
 

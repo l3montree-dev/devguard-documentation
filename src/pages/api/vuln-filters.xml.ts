@@ -6,7 +6,9 @@ const MIN_ECOSYSTEM_CVE_COUNT = 100
 
 async function fetchEcosystems(): Promise<string[]> {
     try {
-        const res = await fetch(`${API_BASE_URL}/vulndb/cve-ecosystem-distribution/`)
+        const res = await fetch(
+            `${API_BASE_URL}/vulndb/cve-ecosystem-distribution/`,
+        )
         if (!res.ok) return []
         const dist: Record<string, number> = await res.json()
         return Object.entries(dist)
@@ -23,8 +25,14 @@ async function fetchActiveYears(): Promise<string[]> {
     const results = await Promise.allSettled(
         years.map(async (year) => {
             const url = new URL(`${API_BASE_URL}/vulndb/`)
-            url.searchParams.set('filterQuery[date_published][is after]', `${year - 1}-12-31`)
-            url.searchParams.set('filterQuery[date_published][is before]', `${year + 1}-01-01`)
+            url.searchParams.set(
+                'filterQuery[date_published][is after]',
+                `${year - 1}-12-31`,
+            )
+            url.searchParams.set(
+                'filterQuery[date_published][is before]',
+                `${year + 1}-01-01`,
+            )
             url.searchParams.set('page', '1')
             url.searchParams.set('pageSize', '1')
             const r = await fetch(url.toString())
@@ -40,16 +48,28 @@ async function fetchActiveYears(): Promise<string[]> {
         .map(({ value: { year } }) => String(year))
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://docs.devguard.org'
+export default async function handler(
+    req: NextApiRequest,
+    res: NextApiResponse,
+) {
+    const baseUrl =
+        process.env.NEXT_PUBLIC_SITE_URL || 'https://docs.devguard.org'
     const now = new Date().toISOString()
 
-    const [ecosystems, years] = await Promise.all([fetchEcosystems(), fetchActiveYears()])
+    const [ecosystems, years] = await Promise.all([
+        fetchEcosystems(),
+        fetchActiveYears(),
+    ])
 
     const urls: string[] = [
-        ...SEVERITY_VALUES.map((s) => `${baseUrl}/vulnerability-database/severity/${s}/`),
+        ...SEVERITY_VALUES.map(
+            (s) => `${baseUrl}/vulnerability-database/severity/${s}/`,
+        ),
         ...years.map((y) => `${baseUrl}/vulnerability-database/year/${y}/`),
-        ...ecosystems.map((e) => `${baseUrl}/vulnerability-database/ecosystem/${encodeURIComponent(e)}/`),
+        ...ecosystems.map(
+            (e) =>
+                `${baseUrl}/vulnerability-database/ecosystem/${encodeURIComponent(e)}/`,
+        ),
     ]
 
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
@@ -58,6 +78,9 @@ ${urls.map((loc) => `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${now}</lastmo
 </urlset>`
 
     res.setHeader('Content-Type', 'application/xml')
-    res.setHeader('Cache-Control', 'public, s-maxage=43200, stale-while-revalidate')
+    res.setHeader(
+        'Cache-Control',
+        'public, s-maxage=43200, stale-while-revalidate',
+    )
     res.status(200).send(sitemap)
 }

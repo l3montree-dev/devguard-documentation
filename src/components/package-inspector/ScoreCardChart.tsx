@@ -53,11 +53,12 @@ const checkDescriptions: Record<string, string> = {
 
 function getScoreBadgeClasses(score: number): string {
     if (score < 0) return 'bg-muted text-muted-foreground border border-border'
-    if (score === 0) return 'bg-muted text-muted-foreground border border-destructive/60'
-    if (score < 8) return 'bg-muted text-muted-foreground border border-warning/60'
+    if (score === 0)
+        return 'bg-muted text-muted-foreground border border-destructive/60'
+    if (score < 8)
+        return 'bg-muted text-muted-foreground border border-warning/60'
     return 'bg-muted text-muted-foreground border border-success/60'
 }
-
 
 function getScoreLabel(score: number): string {
     if (score < 0) return 'N/A'

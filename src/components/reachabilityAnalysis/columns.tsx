@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 export type Package = {
     purl: string
-    type: string 
+    type: string
     name: string
 }
 
@@ -16,10 +16,12 @@ export const columns: ColumnDef<Package>[] = [
         cell: ({ row }) => {
             const purl = row.getValue('purl') as string
             return (
-            <Link href={`/reachability-analysis/${encodeURIComponent(purl)}`}>
-                <div className="w-32">{purl}</div>
-            </Link>
-            ) 
+                <Link
+                    href={`/reachability-analysis/${encodeURIComponent(purl)}`}
+                >
+                    <div className="w-32">{purl}</div>
+                </Link>
+            )
         },
     },
     {

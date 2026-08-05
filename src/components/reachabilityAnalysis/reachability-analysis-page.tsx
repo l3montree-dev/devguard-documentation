@@ -33,7 +33,11 @@ export default function ReachabilityAnalysisPage() {
         }
     }
 
-    const { data: apiResponse, error, isLoading } = useSWR<ReachabilityResponse>(url, fetcher)
+    const {
+        data: apiResponse,
+        error,
+        isLoading,
+    } = useSWR<ReachabilityResponse>(url, fetcher)
 
     const data = apiResponse?.data ?? []
     const total = apiResponse?.total ?? 0
@@ -60,8 +64,17 @@ export default function ReachabilityAnalysisPage() {
 
     return (
         <Container>
-            <ReachabilityAnalysisHero searchTerm={searchTerm} setSearchTerm={setSearchTerm} onSearch={handleSearch}/>
-            <div ref={tableRef} style={{ scrollMarginTop: `${Math.max(80,520 - data.length * APPROX_ROW_HEIGHT)}px`}}>
+            <ReachabilityAnalysisHero
+                searchTerm={searchTerm}
+                setSearchTerm={setSearchTerm}
+                onSearch={handleSearch}
+            />
+            <div
+                ref={tableRef}
+                style={{
+                    scrollMarginTop: `${Math.max(80, 520 - data.length * APPROX_ROW_HEIGHT)}px`,
+                }}
+            >
                 <DataTable
                     columns={columns}
                     data={data}

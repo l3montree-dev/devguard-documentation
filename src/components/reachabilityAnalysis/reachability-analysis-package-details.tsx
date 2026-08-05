@@ -8,11 +8,15 @@ import { fetcher } from '@/lib/fetcher'
 import useSWR from 'swr'
 import { Container } from '../ui/container'
 
-
-
-export default function ReachabilityAnalysisPackageDetails({ purl }: { purl?: string }) {
+export default function ReachabilityAnalysisPackageDetails({
+    purl,
+}: {
+    purl?: string
+}) {
     const { data, error, isLoading } = useSWR<ReachabilityAnalysisResponse>(
-        purl ? `http://localhost:8080/api/v1/vulndb/reachability/${purl}` : null,
+        purl
+            ? `http://localhost:8080/api/v1/vulndb/reachability/${purl}`
+            : null,
         fetcher,
     )
 
@@ -45,7 +49,7 @@ export default function ReachabilityAnalysisPackageDetails({ purl }: { purl?: st
                 <div className="relative mb-4">
                     <div className="absolute inset-px rounded-lg bg-white dark:bg-gray-800" />
                     <div className="relative flex flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] p-7">
-                        <Skeleton className="h-6 w-48"/>
+                        <Skeleton className="h-6 w-48" />
                     </div>
                 </div>
             </Container>
@@ -80,8 +84,7 @@ export default function ReachabilityAnalysisPackageDetails({ purl }: { purl?: st
                         className="flex w-full items-center justify-between p-6 text-left transition-colors hover:bg-gray-50 dark:hover:bg-gray-700/50"
                     >
                         <h2 className="text-lg font-medium text-gray-950 dark:text-white">
-                            Components (
-                            {data.components.length})
+                            Components ({data.components.length})
                         </h2>
                         <svg
                             className={`h-5 w-5 transition-transform ${isComponentsOpen ? 'rotate-180' : ''}`}
@@ -101,9 +104,13 @@ export default function ReachabilityAnalysisPackageDetails({ purl }: { purl?: st
                         <div className="px-8 pb-8">
                             <div>
                                 {data.components.map((comp) => (
-                                    <div className='flex'>
-                                        <p className='px-4 mx-8 my-4 py-4 rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-900/50'>{comp.name}</p>
-                                        <p className='px-4 mx-8 my-4 py-4 rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-900/50'>{comp.type}</p>
+                                    <div className="flex">
+                                        <p className="px-4 mx-8 my-4 py-4 rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-900/50">
+                                            {comp.name}
+                                        </p>
+                                        <p className="px-4 mx-8 my-4 py-4 rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-900/50">
+                                            {comp.type}
+                                        </p>
                                     </div>
                                 ))}
                             </div>
@@ -116,12 +123,13 @@ export default function ReachabilityAnalysisPackageDetails({ purl }: { purl?: st
                 <div className="absolute inset-px rounded-lg bg-white dark:bg-gray-800" />
                 <div className="relative flex flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)]">
                     <button
-                        onClick={() => setIsVulnerabilitiesOpen(!isVulnerabilitiesOpen)}
+                        onClick={() =>
+                            setIsVulnerabilitiesOpen(!isVulnerabilitiesOpen)
+                        }
                         className="flex w-full items-center justify-between p-6 text-left transition-colors hover:bg-gray-50 dark:hover:bg-gray-700/50"
                     >
                         <h2 className="text-lg font-medium text-gray-950 dark:text-white">
-                            Vulnerabilities (
-                            {data.vulnerabilities.length})
+                            Vulnerabilities ({data.vulnerabilities.length})
                         </h2>
                         <svg
                             className={`h-5 w-5 transition-transform ${isVulnerabilitiesOpen ? 'rotate-180' : ''}`}
@@ -141,9 +149,13 @@ export default function ReachabilityAnalysisPackageDetails({ purl }: { purl?: st
                         <div className="px-8 pb-8">
                             <div>
                                 {data.vulnerabilities.map((vuln) => (
-                                    <div className='flex'>
-                                        <p className='px-4 mx-8 my-4 py-4 rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-900/50'>{vuln.id}</p>
-                                        <p className='px-4 mx-8 my-4 py-4 rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-900/50'>{vuln['bom-ref']}</p>
+                                    <div className="flex">
+                                        <p className="px-4 mx-8 my-4 py-4 rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-900/50">
+                                            {vuln.id}
+                                        </p>
+                                        <p className="px-4 mx-8 my-4 py-4 rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-900/50">
+                                            {vuln['bom-ref']}
+                                        </p>
                                     </div>
                                 ))}
                             </div>

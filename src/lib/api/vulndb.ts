@@ -25,7 +25,11 @@ export function useRadarData() {
                     ecosystem,
                     count: Number(count),
                 }))
-                .sort((a, b) => b.count - a.count || a.ecosystem.localeCompare(b.ecosystem))
+                .sort(
+                    (a, b) =>
+                        b.count - a.count ||
+                        a.ecosystem.localeCompare(b.ecosystem),
+                )
                 .slice(0, 7),
         [data],
     )

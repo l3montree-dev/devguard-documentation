@@ -21,4 +21,12 @@ exclude = [
     "api\\.main\\.devguard\\.org",
     # DoD media server blocks automated crawlers
     "media\\.defense\\.gov",
+    # in-toto attestation predicateType identifiers — namespace-style URIs (like an XML namespace),
+    # never meant to be dereferenced as web pages, so a 404 here is expected and not a broken link.
+    # https://cyclonedx.org/bom is the officially registered CycloneDX predicate type; see
+    # https://github.com/in-toto/attestation/blob/main/spec/predicates/cyclonedx.md
+    "^https://cyclonedx\\.org/(bom|vex)$",
+    # gnu.org consistently times out from CI/sandboxed network environments rather than actually
+    # being down — not something a link checker running in such an environment can verify either way.
+    "^https://www\\.gnu\\.org/",
 ]

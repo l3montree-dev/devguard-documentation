@@ -1,13 +1,16 @@
 import { Input } from '@/components/ui/input'
 
-
 interface HeroProps {
     searchTerm: string
     setSearchTerm: (value: string) => void
     onSearch: () => void
 }
 
-export default function ReachabilityAnalysisHero({searchTerm,setSearchTerm,onSearch}: HeroProps){
+export default function ReachabilityAnalysisHero({
+    searchTerm,
+    setSearchTerm,
+    onSearch,
+}: HeroProps) {
     return (
         <>
             <div className="mx-auto max-w-7xl ml-16 pb-40 pt-32">

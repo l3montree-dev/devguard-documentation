@@ -1,8 +1,21 @@
-
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
-import {Table,TableBody,TableCell,TableHead,TableHeader,TableRow} from '@/components/ui/table'
-import {ColumnDef,SortingState,flexRender,getCoreRowModel,getSortedRowModel,useReactTable} from '@tanstack/react-table'
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table'
+import {
+    ColumnDef,
+    SortingState,
+    flexRender,
+    getCoreRowModel,
+    getSortedRowModel,
+    useReactTable,
+} from '@tanstack/react-table'
 
 import * as React from 'react'
 import { useRouter } from 'next/router'
@@ -48,10 +61,7 @@ export function DataTable<TData, TValue>({
     })
 
     if (!isLoading && data.length == 0) {
-        return (
-            <div className='my-40'>
-            </div>
-        )
+        return <div className="my-40"></div>
     }
 
     return (

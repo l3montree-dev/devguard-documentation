@@ -42,7 +42,10 @@ export async function fetchIndexCVEs(
     }
 
     if (search) {
-        url.searchParams.set('filterQuery[cve][ilike]', `%${search.toUpperCase()}%`)
+        url.searchParams.set(
+            'filterQuery[cve][ilike]',
+            `%${search.toUpperCase()}%`,
+        )
     }
 
     url.searchParams.set('page', String(page))
@@ -51,7 +54,9 @@ export async function fetchIndexCVEs(
     const sortField = SORT_FIELD_MAP[sort] ?? 'cvss'
     url.searchParams.set(`sort[${sortField}]`, dir)
 
-    const res = await fetch(url.toString(), { signal: AbortSignal.timeout(API_TIMEOUT_MS) })
+    const res = await fetch(url.toString(), {
+        signal: AbortSignal.timeout(API_TIMEOUT_MS),
+    })
     if (!res.ok) throw new Error(`API error: ${res.status}`)
 
     const data = await res.json()
@@ -88,31 +93,45 @@ function createCachedFetcher<T>(fetchFresh: () => Promise<T>) {
     }
 }
 
-const fetchAllYearLinks = createCachedFetcher(async (): Promise<RelatedLink[]> => {
-    const currentYear = new Date().getFullYear()
-    const years = Array.from({ length: 10 }, (_, i) => currentYear - i)
-    const results = await Promise.allSettled(
-        years.map(async (year) => {
-            const url = new URL(`${API_BASE_URL}/vulndb/`)
-            url.searchParams.set('filterQuery[date_published][is after]', `${year - 1}-12-31`)
-            url.searchParams.set('filterQuery[date_published][is before]', `${year + 1}-01-01`)
-            url.searchParams.set('page', '1')
-            url.searchParams.set('pageSize', '1')
-            const r = await fetch(url.toString(), { signal: AbortSignal.timeout(API_TIMEOUT_MS) })
-            const d = await r.json()
-            return { year, total: d.total as number }
-        }),
-    )
-    return results
-        .filter(
-            (r): r is PromiseFulfilledResult<{ year: number; total: number }> =>
-                r.status === 'fulfilled' && r.value.total > 0,
+const fetchAllYearLinks = createCachedFetcher(
+    async (): Promise<RelatedLink[]> => {
+        const currentYear = new Date().getFullYear()
+        const years = Array.from({ length: 10 }, (_, i) => currentYear - i)
+        const results = await Promise.allSettled(
+            years.map(async (year) => {
+                const url = new URL(`${API_BASE_URL}/vulndb/`)
+                url.searchParams.set(
+                    'filterQuery[date_published][is after]',
+                    `${year - 1}-12-31`,
+                )
+                url.searchParams.set(
+                    'filterQuery[date_published][is before]',
+                    `${year + 1}-01-01`,
+                )
+                url.searchParams.set('page', '1')
+                url.searchParams.set('pageSize', '1')
+                const r = await fetch(url.toString(), {
+                    signal: AbortSignal.timeout(API_TIMEOUT_MS),
+                })
+                const d = await r.json()
+                return { year, total: d.total as number }
+            }),
         )
-        .map(({ value: { year } }) => ({
-            label: String(year),
-            href: `/vulnerability-database/year/${year}/`,
-        }))
-})
+        return results
+            .filter(
+                (
+                    r,
+                ): r is PromiseFulfilledResult<{
+                    year: number
+                    total: number
+                }> => r.status === 'fulfilled' && r.value.total > 0,
+            )
+            .map(({ value: { year } }) => ({
+                label: String(year),
+                href: `/vulnerability-database/year/${year}/`,
+            }))
+    },
+)
 
 export async function fetchYearLinks(exclude?: string): Promise<RelatedLink[]> {
     const links = await fetchAllYearLinks()
@@ -121,44 +140,69 @@ export async function fetchYearLinks(exclude?: string): Promise<RelatedLink[]> {
 
 // Canonical display order for ecosystem links — stable regardless of CVE counts
 const ECOSYSTEM_ORDER = [
-    'npm', 'pypi', 'maven', 'go', 'debian', 'alpine',
-    'nuget', 'rubygems', 'packagist', 'crates.io',
-    'git', 'red hat', 'bitnami',
+    'npm',
+    'pypi',
+    'maven',
+    'go',
+    'debian',
+    'alpine',
+    'nuget',
+    'rubygems',
+    'packagist',
+    'crates.io',
+    'git',
+    'red hat',
+    'bitnami',
 ]
 
-const fetchAllEcosystemLinks = createCachedFetcher(async (): Promise<RelatedLink[]> => {
-    try {
-        const res = await fetch(`${API_BASE_URL}/vulndb/cve-ecosystem-distribution/`, {
-            signal: AbortSignal.timeout(API_TIMEOUT_MS),
-        })
-        if (!res.ok) return []
-        const dist: Record<string, number> = await res.json()
+const fetchAllEcosystemLinks = createCachedFetcher(
+    async (): Promise<RelatedLink[]> => {
+        try {
+            const res = await fetch(
+                `${API_BASE_URL}/vulndb/cve-ecosystem-distribution/`,
+                {
+                    signal: AbortSignal.timeout(API_TIMEOUT_MS),
+                },
+            )
+            if (!res.ok) return []
+            const dist: Record<string, number> = await res.json()
 
-        const present = new Set(
-            Object.entries(dist)
-                .filter(([key, count]) => key && count >= MIN_ECOSYSTEM_CVE_COUNT)
-                .map(([key]) => key),
-        )
+            const present = new Set(
+                Object.entries(dist)
+                    .filter(
+                        ([key, count]) =>
+                            key && count >= MIN_ECOSYSTEM_CVE_COUNT,
+                    )
+                    .map(([key]) => key),
+            )
 
-        // Ecosystems in canonical order first, then any others sorted by count
-        const ordered = [
-            ...ECOSYSTEM_ORDER.filter((k) => present.has(k)),
-            ...Object.entries(dist)
-                .filter(([key, count]) => key && count >= MIN_ECOSYSTEM_CVE_COUNT && !ECOSYSTEM_ORDER.includes(key))
-                .sort((a, b) => b[1] - a[1])
-                .map(([key]) => key),
-        ]
+            // Ecosystems in canonical order first, then any others sorted by count
+            const ordered = [
+                ...ECOSYSTEM_ORDER.filter((k) => present.has(k)),
+                ...Object.entries(dist)
+                    .filter(
+                        ([key, count]) =>
+                            key &&
+                            count >= MIN_ECOSYSTEM_CVE_COUNT &&
+                            !ECOSYSTEM_ORDER.includes(key),
+                    )
+                    .sort((a, b) => b[1] - a[1])
+                    .map(([key]) => key),
+            ]
 
-        return ordered.map((key) => ({
-            label: key,
-            href: `/vulnerability-database/ecosystem/${encodeURIComponent(key)}/`,
-        }))
-    } catch {
-        return []
-    }
-})
+            return ordered.map((key) => ({
+                label: key,
+                href: `/vulnerability-database/ecosystem/${encodeURIComponent(key)}/`,
+            }))
+        } catch {
+            return []
+        }
+    },
+)
 
-export async function fetchEcosystemLinks(exclude?: string): Promise<RelatedLink[]> {
+export async function fetchEcosystemLinks(
+    exclude?: string,
+): Promise<RelatedLink[]> {
     const links = await fetchAllEcosystemLinks()
     return exclude ? links.filter((l) => l.label !== exclude) : links
 }

@@ -5,7 +5,7 @@ export default {
     vex: { title: 'VEX & Exploitability' },
     'dependency-management': { title: 'Dependency Management' },
     integrations: { title: 'Integrations' },
-    "dependency-proxy": { title: 'Dependency Proxy' },
+    'dependency-proxy': { title: 'Dependency Proxy' },
     compliance: { title: 'Compliance' },
     administration: { title: 'Administration' },
 }

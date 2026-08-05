@@ -18,7 +18,10 @@ export function CalendarDownloadButton() {
     return (
         <span id="download-calendar" className="block mt-3 mb-5">
             <Button asChild variant="outline" size="lg" className="gap-2">
-                <a href="/devguard-community-call.ics" download="devguard-community-call.ics">
+                <a
+                    href="/devguard-community-call.ics"
+                    download="devguard-community-call.ics"
+                >
                     <CalendarArrowDown size={18} />
                     Download Calendar File (.ics)
                 </a>

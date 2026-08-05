@@ -110,7 +110,9 @@ const ChartTooltipContent = React.forwardRef<
             nameKey?: string
             labelKey?: string
             label?: React.ReactNode
-            payload?: ReadonlyArray<RechartsPrimitive.TooltipPayloadEntry<any, any>>
+            payload?: ReadonlyArray<
+                RechartsPrimitive.TooltipPayloadEntry<any, any>
+            >
         }
 >(
     (
@@ -293,11 +295,11 @@ const ChartLegend = RechartsPrimitive.Legend
 const ChartLegendContent = React.forwardRef<
     HTMLDivElement,
     React.ComponentProps<'div'> & {
-            payload?: ReadonlyArray<RechartsPrimitive.LegendPayload>
-            verticalAlign?: 'top' | 'bottom' | 'middle'
-            hideIcon?: boolean
-            nameKey?: string
-        }
+        payload?: ReadonlyArray<RechartsPrimitive.LegendPayload>
+        verticalAlign?: 'top' | 'bottom' | 'middle'
+        hideIcon?: boolean
+        nameKey?: string
+    }
 >(
     (
         {
