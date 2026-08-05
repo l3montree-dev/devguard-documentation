@@ -36,4 +36,7 @@ exclude = [
     # Blogspot-hosted; rate-limits (429) automated requests from CI datacenter IPs.
     # Verified reachable (200) from outside CI.
     "^https://security\\.googleblog\\.com/",
+    # iso.org returns 403 to automated clients even outside CI, regardless of User-Agent —
+    # a bot-protection layer, not a broken link. Loads fine in a real browser.
+    "^https://www\\.iso\\.org/",
 ]
