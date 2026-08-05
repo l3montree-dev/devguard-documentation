@@ -17,4 +17,4 @@ jobs:
         with:
           args: src/pages --root-dir ${{ github.workspace }}/src/pages
           # Report broken links in the job summary but do not fail the build
-        continue-on-error: true
+        continue-on-error: false
