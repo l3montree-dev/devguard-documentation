@@ -8,7 +8,6 @@
     "src/pages/vulnerability-database.mdx",
     "src/pages/comparison/index.md",
     "src/pages/how-to-guides/vexing/vexing-debian-packages.md",
-    "src/pages/explanations/sbom-problem-statement.md",
     "src/pages/other/**",
     "src/pages/reference/scanner/**",
     "src/pages/reference/gitlab-components/**",
