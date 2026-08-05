@@ -18,7 +18,7 @@ import { DocTabs as Tabs } from '@document-writing-tools/kernux-theme'
 
 # How the DevGuard CI Scanner Handles Branches, Tags & Artifacts
 
-The `devguard-scanner` tool generates an SBOM (or SARIF report) for your project, signs it, and uploads it to DevGuard, where it is matched against the vulnerability database. Every scan is filed under three coordinates: **which repository**, **which branch or tag**, and **which artifact**.
+The `devguard-scanner` tool generates an SBOM (or SARIF report) for your project, signs it, and uploads it to DevGuard, where it is [matched](/explanations/vulnerability-management/vulnerability-matching) against the vulnerability database. Every scan is filed under three coordinates: **which repository**, **which branch or tag**, and **which artifact**.
 
 Getting these three coordinates right is what lets DevGuard track vulnerabilities independently per branch and per build target. This guide explains how the scanner determines them, a common pitfall when naming artifacts, and why scanning every branch and tag is useful.
 
@@ -155,7 +155,7 @@ docker run -v "$(pwd):/app" ghcr.io/l3montree-dev/devguard/scanner:main \
 
 ## Next Steps
 
-- [Scan Dependencies](/how-to-guides/scanning/scan-dependencies) — full SCA scanner reference and flags
-- [Scan OCI Images](/how-to-guides/scanning/scan-docker-images) — scan container images per artifact
+- [Scan Dependencies](/how-to-guides/scanning/scan-your-project#scan-dependencies) — full SCA scanner reference and flags
+- [Scan OCI Images](/how-to-guides/scanning/scan-your-project#scan-docker-images) — scan container images per artifact
 - [Artifact Concept](/explanations/core-concepts/artifacts) — tracking multiple build targets from one branch
 - [Branching Models](/explanations/core-concepts/repository-versions) — independent tracking per branch and tag

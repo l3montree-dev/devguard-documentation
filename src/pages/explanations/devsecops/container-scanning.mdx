@@ -59,11 +59,11 @@ DevGuard uses [Trivy](https://github.com/aquasecurity/trivy) to analyze the imag
 
 The result is a CycloneDX-formatted SBOM that captures not just what is installed, but where it is installed, what package manager manages it, and what version constraints apply. This granularity matters: many CVEs are fixed in a specific patch release, and an SBOM without precise version data cannot be matched against those advisories reliably.
 
-One challenge worth understanding: standard SBOM generation tools detect OS packages and language dependencies well, but custom or in-house binaries bundled into an image often go undetected unless additional metadata is provided. DevGuard addresses this with a `merge-sboms` command that combines multiple CycloneDX SBOMs into a single unified inventory — so if a binary ships with its own SBOM, it can be merged into the full image SBOM before scanning. See [Container SBOM Security Scanning Workflow](/explanations/sbom-problem-statement) for a detailed walkthrough of this approach, including how to leverage release attestations to capture dependencies that Trivy would otherwise miss. Automatic merging of embedded image SBOMs is tracked in [issue #2122](https://github.com/l3montree-dev/devguard/issues/2122).
+One challenge worth understanding: standard SBOM generation tools detect OS packages and language dependencies well, but custom or in-house binaries bundled into an image often go undetected unless additional metadata is provided. DevGuard addresses this with a `merge-sboms` command that combines multiple CycloneDX SBOMs into a single unified inventory — so if a binary ships with its own SBOM, it can be merged into the full image SBOM before scanning. See [Supplementary SBOMs](/explanations/supplementary-sboms) for a detailed walkthrough of this approach, including how to leverage release attestations to capture dependencies that Trivy would otherwise miss.
 
 ### Stage 2 — Vulnerability Matching
 
-With the SBOM in hand, DevGuard cross-references every component against its vulnerability database. This database aggregates data from multiple upstream sources — including the National Vulnerability Database (NVD), GitHub Security Advisories, and distribution-specific advisories from Debian, Red Hat, Alpine, and others.
+With the SBOM in hand, DevGuard [cross-references](/explanations/vulnerability-management/vulnerability-matching) every component against its vulnerability database. This database aggregates data from multiple upstream sources — including the National Vulnerability Database (NVD), GitHub Security Advisories, and distribution-specific advisories from Debian, Red Hat, Alpine, and others.
 
 For each identified vulnerability, DevGuard records:
 

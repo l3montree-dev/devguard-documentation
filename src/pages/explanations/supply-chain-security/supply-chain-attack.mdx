@@ -116,7 +116,7 @@ A build that reaches SLSA Level 3 makes compromise dramatically harder, because 
 
 ### Practical Controls You Can Adopt Today
 
-- **Generate an [SBOM](/explanations/explaining-sboms)** for every build and store it next to the artifact. You cannot react to the next Log4Shell if you don't know which of your services contain the vulnerable library.
+- **Generate an [SBOM](/explanations/supplementary-sboms)** for every build and store it next to the artifact. You cannot react to the next Log4Shell if you don't know which of your services contain the vulnerable library.
 - **Pin dependencies by hash**, not by version range, so a hijacked maintainer cannot silently push a malicious patch release into your build.
 - **Require signed provenance** for any artifact deployed to production (verify with Cosign / Sigstore or a Kubernetes admission controller).
 - **Isolate build environments** — no developer laptops, no shared runners, ephemeral and reproducible CI jobs.

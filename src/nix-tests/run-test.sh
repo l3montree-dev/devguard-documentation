@@ -11,7 +11,6 @@ EXAMPLE_REPO_DIR="$TMP_DIR/example-repository"
 MDX_FILES=(
     "src/pages/getting-started/first-scan.mdx"
     "src/pages/contributing/getting-started.mdx"
-    "src/pages/explanations/explaining-sboms.mdx"
     "src/pages/how-to-guides/scanning/upload-vex.mdx"
 )
 

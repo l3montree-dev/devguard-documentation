@@ -24,7 +24,7 @@ Software Composition Analysis (SCA) identifies and assesses open-source and thir
 ## How DevGuard SCA Works
 
 1.	SBOM Generation: DevGuard uses [Trivy](https://github.com/aquasecurity/trivy) to scan the application’s dependencies and generate a Software Bill of Materials (SBOM). The SBOM contains all detected components and their metadata.
-2.	Vulnerability Matching:
+2.	[Vulnerability Matching](/explanations/vulnerability-management/vulnerability-matching):
     The SBOM is cross-referenced with:
     - Public vulnerability databases like CVE.
     - DevGuard’s extended database for enhanced coverage.
