@@ -146,7 +146,7 @@ function convert(mdxPath: string): string | null {
         return null
     }
 
-    const header = '#!/usr/bin/env bash\nset -euo pipefail\n\n'
+    const header = "#!/usr/bin/env bash\nset -euo pipefail\ntrap 'kill $(jobs -p) 2>/dev/null || true' EXIT\n\n"
     const body = testBlocks
         .map((block) => backgroundHintedCommands(httpsRemotes(changeToTestVariables(block.code))))
         .join('\n')
@@ -205,7 +205,7 @@ function main(): void {
             console.log(`==> ${script}`)
 
             const workDir = join(workRoot, basename(script, '.sh'))
-            rmSync(workDir, { recursive: true, force: true })
+            rmSync(workDir, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 })
             cpSync(EXAMPLE_REPO_DIR, workDir, { recursive: true })
             copyFileSync(VEX_SOURCE, join(workDir, 'vex.json'))
             execFileSync('chmod', ['-R', 'a+rwX', workDir], { stdio: 'inherit' })
@@ -227,7 +227,7 @@ function main(): void {
         }
         process.exitCode = failed ? 1 : 0
     } finally {
-        rmSync(TMP_DIR, { recursive: true, force: true })
+        rmSync(TMP_DIR, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 })
     }
 }
 
