@@ -15,6 +15,7 @@ ENV NEXT_PUBLIC_ENVIRONMENT=production
 
 COPY package-lock.json .
 COPY package.json .
+COPY patches ./patches
 
 RUN npm ci
 
