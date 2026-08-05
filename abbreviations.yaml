@@ -24,11 +24,117 @@ CRA:
   value: EU Cyber Resilience Act - Mandatory cybersecurity requirements for products with digital elements
 CIA Triad:
   value: Confidentiality, Integrity, Availability - The three fundamental security objectives that define what we protect
-compensating controls:
+Compensating Controls:
   value: Security measures that reduce vulnerability risk without fixing the code—like WAF rules or network restrictions
-call graph analysis:
+  variants:
+    - compensating controls
+    - Compensating controls
+Call Graph Analysis:
   value: A static analysis technique that builds a directed graph of function calls to determine if vulnerable code can actually be reached at runtime
-transitive dependencies:
+  variants:
+    - call graph analysis
+Transitive Dependencies:
   value: Indirect dependencies pulled in by your direct dependencies. For example, if your application depends on Library A, and Library A depends on Library B, then Library B is a transitive dependency.
-transitive:
+  variants:
+    - transitive dependencies
+    - Transitive dependencies
+Transitive:
   value: Indirect dependencies pulled in by your direct dependencies. For example, if your application depends on Library A, and Library A depends on Library B, then Library B is a transitive dependency.
+  variants:
+    - transitive
+SLSA:
+  value: Supply-chain Levels for Software Artifacts - A framework of increasing maturity levels for securing the build process against tampering, from basic provenance to fully verified, isolated builds.
+SPDX:
+  value: Software Package Data Exchange - An SBOM standard for describing software components, licenses, and dependencies in a machine-readable format.
+OSV:
+  value: Open Source Vulnerabilities - A distributed vulnerability database that aggregates advisories from ecosystem-specific sources and links related identifiers (e.g., GHSA, CVE) as aliases.
+NVD:
+  value: National Vulnerability Database - The U.S. government's repository of CVE records, enriched with CVSS scores and other metadata.
+GHSA:
+  value: GitHub Security Advisory - A vulnerability identifier and advisory format published in the GitHub Advisory Database.
+In-toto:
+  value: A framework for cryptographically linking each step of a software supply chain (source, build, test, package) so tampering between steps can be detected.
+  variants:
+    - in-toto
+    - In-Toto
+TLP:
+  value: Traffic Light Protocol - A classification scheme (e.g., TLP:WHITE) that indicates how widely a piece of security information may be shared.
+RBAC:
+  value: Role-Based Access Control - An authorization model that grants permissions based on a user's assigned role rather than individually.
+OIDC:
+  value: OpenID Connect - An identity layer built on OAuth 2.0 used for authenticating users or workloads, including keyless signing via short-lived identity tokens.
+WAF:
+  value: Web Application Firewall - A network security control that filters and blocks malicious HTTP traffic before it reaches an application.
+DSSE:
+  value: Dead Simple Signing Envelope - A standard format for signing arbitrary payloads (such as attestations) so they can be verified independently of their content type.
+Sigstore:
+  value: An open-source project (including tools like Cosign, Fulcio, and Rekor) for signing, verifying, and recording software artifacts, supporting both key-based and keyless signing.
+  variants:
+    - sigstore
+Cosign:
+  value: A Sigstore tool for signing and verifying container images and other OCI artifacts, and for attaching signed attestations to them.
+  variants:
+    - cosign
+    - COSIGN
+OpenPGP:
+  value: An open standard for encrypting and digitally signing data, commonly used to sign documents like CSAF security advisories.
+  variants:
+    - PGP
+NTIA:
+  value: National Telecommunications and Information Administration - The U.S. agency whose Software Component Transparency working group defined the minimum elements of an SBOM.
+Attestation:
+  value: A signed piece of metadata attached to a software artifact that makes a verifiable claim about it, such as how it was built, tested, or scanned.
+  variants:
+    - attestation
+Provenance:
+  value: Verifiable metadata describing where and how a software artifact was produced, including the source, build process, and inputs involved.
+  variants:
+    - provenance
+Reachability Analysis:
+  value: A technique that determines whether vulnerable code in a dependency is actually invoked by the application, distinguishing exploitable issues from unreachable ones.
+  variants:
+    - reachability analysis
+Dependency Path:
+  value: The specific chain of components from an application down to a vulnerable package, tracked node by node so risk assessments can apply to one path without affecting others.
+  variants:
+    - dependency path
+mTLS:
+  value: Mutual TLS - A variant of TLS in which both client and server present certificates, so each side authenticates the other's identity.
+OCI:
+  value: Open Container Initiative - The industry standard defining container image and runtime formats, so images built by one tool run in any compliant registry or runtime.
+SCA:
+  value: Software Composition Analysis - Scanning an application's declared dependencies (e.g. package.json, go.mod) to find known vulnerabilities, distinct from container or source-code scanning.
+CISA:
+  value: Cybersecurity and Infrastructure Security Agency - The U.S. agency that stewards the VEX standard and maintains the KEV catalog.
+KEV:
+  value: Known Exploited Vulnerabilities - CISA's catalog of vulnerabilities with confirmed evidence of active exploitation in the wild.
+ECDSA:
+  value: Elliptic Curve Digital Signature Algorithm - An asymmetric cryptographic algorithm used to sign and verify data, such as API requests or software artifacts.
+RCE:
+  value: Remote Code Execution - A vulnerability class that lets an attacker run arbitrary code on a target system, typically without prior access.
+CWE:
+  value: Common Weakness Enumeration - A taxonomy of software and hardware weakness types (e.g. buffer overflow, SQL injection) that a CVE can be classified under.
+OSSF:
+  value: Open Source Security Foundation - A cross-industry initiative that publishes open-source security tooling and datasets, including the malicious packages database.
+SSDF:
+  value: Secure Software Development Framework - NIST's set of high-level practices (NIST SP 800-218) for reducing vulnerabilities throughout the software development lifecycle.
+ISMS:
+  value: Information Security Management System - The overall system of policies and controls an organization runs to manage information security risk, as certified under ISO 27001.
+ENISA:
+  value: European Union Agency for Cybersecurity - The EU body that publishes cybersecurity guidance and receives mandatory vulnerability disclosures under the Cyber Resilience Act.
+OSCAL:
+  value: Open Security Controls Assessment Language - A NIST specification for describing security controls, components and system security plans as structured, machine-readable data.
+SIEM:
+  value: Security Information and Event Management - A system that aggregates and correlates security event data from across an organization's infrastructure for monitoring and alerting.
+DORA:
+  value: Digital Operational Resilience Act - An EU regulation requiring financial entities and their ICT providers to manage ICT risk, including vulnerability handling and SBOMs.
+BSI:
+  value: Bundesamt für Sicherheit in der Informationstechnik - Germany's federal cybersecurity agency, publisher of the IT-Grundschutz standard.
+NIST:
+  value: National Institute of Standards and Technology - The U.S. agency behind standards such as the NVD, SSDF, and numerous cybersecurity Special Publications (SP).
+OWASP:
+  value: Open Worldwide Application Security Project - A nonprofit foundation behind widely used open-source security standards and tools, including the CycloneDX specification and the DevSecOps pipeline.
+DAST:
+  value: Dynamic Application Security Testing - Testing a running application from the outside to find vulnerabilities, as opposed to analyzing its source code (SAST).
+CEL:
+  value: Common Expression Language - The expression language DevGuard VEX rules use to match vulnerabilities; must evaluate to a boolean.
