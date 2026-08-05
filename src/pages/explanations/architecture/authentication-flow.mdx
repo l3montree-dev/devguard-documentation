@@ -42,7 +42,7 @@ Content-Digest: sha-256=:base64-hash:
 ```
 
 Create an asymmetric token:
-```bash
+```bash 
 POST /api/v1/pats
 {
   "description": "CI/CD Token",
@@ -60,7 +60,7 @@ Authorization: Bearer dvg_<token>
 ```
 
 Create a symmetric token (omit `pubKey`):
-```bash
+```bash 
 POST /api/v1/pats
 {
   "description": "Webhook Token",

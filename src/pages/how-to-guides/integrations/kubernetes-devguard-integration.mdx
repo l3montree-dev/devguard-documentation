@@ -106,7 +106,7 @@ The integration covers the full vulnerability management workflow, not just disc
 
 ### 1. Create the namespace and token secret
 
-```bash
+```bash 
 kubectl create namespace devguard
 
 kubectl create secret generic devguard-k8s-image-inventory \
@@ -116,7 +116,7 @@ kubectl create secret generic devguard-k8s-image-inventory \
 
 ### 2. Apply the RBAC manifests
 
-```bash
+```bash 
 kubectl apply -f deploy/rbac.yaml
 ```
 
@@ -136,7 +136,7 @@ The daemon appends its own provider ID to this URL. You can choose any provider 
 
 Then apply:
 
-```bash
+```bash 
 kubectl apply -f deploy/deployment.yaml
 ```
 

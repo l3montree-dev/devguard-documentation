@@ -27,6 +27,7 @@
   "include": [
     "next-env.d.ts",
     "**/*.ts",
+    "**/*.mts",
     "**/*.tsx",
     "src/pages/form.msx"
   ],

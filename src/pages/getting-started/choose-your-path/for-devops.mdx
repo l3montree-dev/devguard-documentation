@@ -39,7 +39,7 @@ For background on how these stages fit together, see [Understanding the OWASP De
 
 After a successful pipeline run, DevGuard signs the container image using cosign with the private key derived from your PAT. Retrieve the corresponding public key at any time:
 
-```sh
+```sh 
 devguard-scanner inspect-devguard-token --token $DEVGUARD_TOKEN
 ```
 

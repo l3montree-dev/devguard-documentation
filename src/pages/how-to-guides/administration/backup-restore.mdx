@@ -31,7 +31,7 @@ DevGuard stores all data in PostgreSQL. Use `pg_dump` to back up your databases.
 We recommend using a tool like `pg_dump` to back up the databases. You may want to schedule regular backups using
 cron jobs or other scheduling tools. 
 
-```bash
+```bash 
 pg_dump --dbname=devguard --file="/{data_source}-{timestamp}-dump.sql"
 ```
 
@@ -62,7 +62,7 @@ kubectl scale deployment devguard-api-deployment devguard-web-deployment kratos 
 </Tabs.Tab>
 <Tabs.Tab>
 
-```bash
+```bash 
 # Stop services
 docker-compose -f docker-compose-try-it.yaml stop devguard-api devguard-web kratos
 

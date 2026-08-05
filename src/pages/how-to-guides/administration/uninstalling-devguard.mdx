@@ -36,7 +36,7 @@ DevGuard consists of multiple components. Precisely, it includes:
 
 Before uninstalling the server infrastructure, make sure to backup the data if you want to keep it for future use. DevGuard stores its data in a PostgreSQL database. You can backup the database using the following command:
 
-```bash
+```bash 
 # exec into the pod to dump the database
 kubectl exec --namespace <NAMESPACE> -it <POSTGRES POD NAME> -- bash -c "pg_dump -U <POSTGRES USER> <POSTGRES DATABASE> > /tmp/backup.sql"
 # copy the backup to your local machine
@@ -48,7 +48,7 @@ Usually your deployment infrastructure already provides a backup mechanism for t
 
 Uninstalling the DevGuard Server Infrastructure is as simple as deleting the Helm-Chart or the manually installed components. If you have deployed the DevGuard Server Infrastructure using a Helm-Chart, you can delete the Helm-Chart using the following command:
 
-```bash
+```bash 
 helm delete <RELEASE NAME> --namespace <NAMESPACE>
 ```
 
@@ -63,7 +63,7 @@ which devguard-scanner
 
 Once you have found the path to the binary, you can delete it using the following command:
 
-```bash
+```bash 
 rm /usr/local/bin/devguard-scanner
 ```
 

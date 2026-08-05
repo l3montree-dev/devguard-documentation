@@ -138,7 +138,7 @@ All active tokens are listed under **User Settings → Personal Access Tokens**.
 
 **By private key** (for asymmetric tokens — useful for scripted revocation):
 
-```bash
+```bash 
 curl -X POST https://api.devguard.org/api/v1/pats/revoke-by-private-key \
   -H "Content-Type: application/json" \
   -d '{"privkey": "<private-key>"}'

@@ -82,7 +82,7 @@ Fill in:
 
 For asymmetric tokens, generate a key pair first with the DevGuard CLI:
 
-```sh
+```sh 
 devguard-cli key generate
 ```
 
@@ -94,7 +94,7 @@ This outputs your private key (keep it secret) and the public key to paste durin
   <Tabs.Tab>
     Add the token to the `Authorization` header:
 
-    ```sh
+    ```sh 
     curl -H "Authorization: Bearer dvg_<your-token>" \
       https://app.devguard.org/api/v1/organizations/my-org/projects/
     ```

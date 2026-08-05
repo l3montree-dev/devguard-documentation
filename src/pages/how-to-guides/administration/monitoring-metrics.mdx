@@ -71,7 +71,7 @@ api:
 
 Create the secret:
 
-```bash
+```bash 
 kubectl create secret generic otlp-basic-auth \
   --from-literal=username="your-username" \
   --from-literal=password="your-password" \
@@ -152,11 +152,13 @@ observability:
 
 For operational visibility without a full observability stack, check the API logs directly:
 
-```bash
+```bash 
 # Kubernetes
+# hint: this command will block your shell. Append "&" to run it in the background and keep your shell usable
 kubectl logs -f deployment/devguard-api-deployment -n devguard
 
 # Docker Compose
+# hint: this command will block your shell. Append "&" to run it in the background and keep your shell usable
 docker logs -f devguard-api
 ```
 

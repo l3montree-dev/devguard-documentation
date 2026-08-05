@@ -50,6 +50,7 @@ If you don't have Docker installed, follow the [Docker installation guide](https
 First, download the necessary configuration files and start DevGuard using docker-compose:
 
 ```bash
+# hint: this command will block your shell. Append "&" to run it in the background and keep your shell usable
 curl -LO https://raw.githubusercontent.com/l3montree-dev/devguard/refs/heads/main/docker-compose-try-it.yaml \
 && docker-compose -f docker-compose-try-it.yaml up
 ```
@@ -168,7 +169,7 @@ Next, create a personal access token by clicking the token generation button in 
 Copy the command from the dialog, which automatically includes your personal access token and the correct DevGuard API URL:
 
 ```bash
-docker run -v "$(PWD):/app" ghcr.io/l3montree-dev/devguard/scanner:main \
+docker run -v "$(pwd):/app" ghcr.io/l3montree-dev/devguard/scanner:main \
 devguard-scanner sca \
     --path=/app \
     --assetName="myorg/projects/newgroup/assets/newrepository" \
@@ -183,7 +184,7 @@ Navigate to a directory containing code you want to scan and run the command. Th
 
 **Example output:**
 
-```bash
+```bash 
 11:48AM INF scanning directory dir=/app
 11:49AM INF Scan completed successfully dependencyVulnAmount=7 openedByThisScan=7 closedByThisScan=0
 +--------------------------------------------+----------------+------+------+---------------------+---------+--------+

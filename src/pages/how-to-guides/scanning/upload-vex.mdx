@@ -69,28 +69,28 @@ For automated VEX uploads in CI/CD pipelines, DevGuard provides ready-to-use int
 
 {/* Fail the command based on risk or CVSS level:
 
-```bash copy
+```bash copy {ignore}
 --failOnRisk=critical  # Options: low, medium, high, critical (default: critical)
 --failOnCVSS=critical  # Options: low, medium, high, critical (default: critical)
 ``` */}
 
 Specify which artifact this VEX applies to (you can find your artifacts in your DevGuard repository):
 
-```bash copy
+```bash copy {ignore}
 --artifactName="pkg:devguard/orgSlug/projectSlug/repoSlug"  # Default is "pkg:oci/{orgSlug}/{projectSlug}/{repoSlug}"
 ```
 
 
 Set a custom origin to track where the VEX came from:
 
-```bash copy
+```bash copy {ignore}
 --origin="vex-upload"  # Default is "vex-upload"
 ```
 
 
 Specify Git reference information:
 
-```bash copy
+```bash copy {ignore}
 --ref="v1.2.3"                 # Git reference (branch, tag, or commit)
 --defaultRef="main"            # Default Git reference to use
 --isTag=true                   # Indicates if the reference is a tag

@@ -35,9 +35,9 @@ The scanner analyzes your Dockerfile to identify base images and attempts to ret
 
 To use the discovered attestations with DevGuard:
 
-1. **Extract the predicate:** The VEX document is nested within the `predicate` field of the in-toto statement
-2. **Save the predicate content:** Extract the JSON from the `predicate` field to a separate file
-3. **Upload to DevGuard:** Use the standard VEX upload process (UI or CLI) with the extracted predicate content
+1. **Discover the attestations:** The scanner writes one file per attestation, named after the predicate type — a `https://cyclonedx.org/vex` predicate ends up in `attestation-vex.json`
+2. **No manual extraction needed:** The scanner already unwraps the in-toto statement, so the file contains the `predicate` content itself, not the surrounding statement
+3. **Upload to DevGuard:** Use the standard VEX upload process (UI or CLI) with that file
 
 ### Example Dockerfile
 
@@ -97,14 +97,11 @@ COPY --chown=53111:53111 /go/src/app/build-output /app/build-output
 
 **Example extraction workflow:**
 ```bash
-# Discover attestations
+# Discover attestations — each one is written to attestation-<predicate-type>.json
 devguard-scanner discover-baseimage-attestations Dockerfile
 
-# Extract the predicate from the in-toto statement
-jq '.predicate' vex > vex-document.json
-
-# Upload the extracted VEX document
-devguard-scanner vex --token xyz --apiUrl https://api.devguard.org/ --assetName my-org/projects/my-group/assets/my-repo vex-document.json
+# Upload the VEX document, e.g. for the predicate type https://cyclonedx.org/vex
+devguard-scanner vex --token xyz --apiUrl https://api.devguard.org/ --assetName my-org/projects/my-group/assets/my-repo attestation-vex.json
 ```
 
 ## Related Documentation
