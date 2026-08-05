@@ -65,13 +65,13 @@ Download the latest binary for your platform from the [Releases page](https://gi
 
 Make the binary executable on Linux and macOS:
 
-```bash {ignore}
+```bash 
 chmod +x devguard-mcp-linux-amd64
 ```
 
 ### Build from source
 
-```bash {ignore}
+```bash 
 git clone https://github.com/l3montree-dev/devguard/mcp-server
 cd mcp-server
 go build -o devguard-mcp ./cmd/mcp-server
@@ -140,7 +140,7 @@ You can pass these as environment variables directly in your client config.
 
     Add the server via the Claude Code CLI:
 
-    ```bash {ignore}
+    ```bash 
     claude mcp add devguard /path/to/devguard-mcp -e DEVGUARD_PAT=your-pat-here
     ```
 
@@ -161,7 +161,7 @@ You can pass these as environment variables directly in your client config.
 
     Verify the server was registered:
 
-    ```bash {ignore}
+    ```bash 
     claude mcp list
     ```
 

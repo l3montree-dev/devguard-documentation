@@ -43,7 +43,7 @@ If you do not pass `--ref`, the scanner tries to auto-detect it:
 1. If the current directory is a Git repository, it uses the current branch or tag name.
 2. If no Git repository is found, it falls back to `main`.
 
-```bash copy {ignore}
+```bash copy 
 --ref="feature/login"    # Git reference (branch, tag, or commit). Auto-detected if omitted.
 --defaultRef="main"      # The repository's default branch.
 --isTag=true             # Set when the ref is a tag rather than a branch.

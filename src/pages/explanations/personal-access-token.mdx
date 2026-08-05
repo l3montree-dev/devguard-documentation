@@ -114,7 +114,7 @@ For direct API calls with **asymmetric tokens**, the request must be signed. The
 
 For direct API calls with **Bearer tokens**:
 
-```bash {ignore}
+```bash
 curl -H "Authorization: Bearer dvg_<token>" \
   https://app.devguard.org/api/v1/organizations/my-org/projects/
 ```
@@ -138,7 +138,7 @@ All active tokens are listed under **User Settings → Personal Access Tokens**.
 
 **By private key** (for asymmetric tokens — useful for scripted revocation):
 
-```bash {ignore}
+```bash 
 curl -X POST https://api.devguard.org/api/v1/pats/revoke-by-private-key \
   -H "Content-Type: application/json" \
   -d '{"privkey": "<private-key>"}'

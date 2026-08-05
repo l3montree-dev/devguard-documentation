@@ -46,7 +46,7 @@ Check the `devguard_daemon_vulndb_update_duration_minutes` Prometheus metric to 
 
 View update progress in the API logs:
 
-```bash {ignore}
+```bash 
 # Kubernetes
 # hint: this command will block your shell. Append "&" to run it in the background and keep your shell usable
 kubectl logs -f deployment/devguard-api-deployment -n devguard | grep -i vulndb
@@ -83,7 +83,7 @@ devguard-cli vulndb import
 
 **Kubernetes:**
 
-```bash {ignore}
+```bash 
 kubectl exec -it deployment/devguard-api-deployment -n devguard -- devguard-cli vulndb import
 ```
 

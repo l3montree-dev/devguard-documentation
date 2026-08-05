@@ -28,7 +28,7 @@ Deploy DevGuard to a Kubernetes cluster using the [official Helm chart](https://
 
 ### Create namespace
 
-```bash {ignore}
+```bash 
 kubectl create namespace devguard
 ```
 
@@ -36,7 +36,7 @@ kubectl create namespace devguard
 
 DevGuard requires an EC private key for signing In-Toto attestations:
 
-```bash {ignore}
+```bash 
 openssl ecparam -name prime256v1 -genkey -noout -out private.ec.key
 kubectl create secret generic ec-private-key \
   --from-file=privateKey=private.ec.key \
@@ -81,7 +81,7 @@ mail:
 
 <Callout type="info">
 See the full [values.yaml](https://github.com/l3montree-dev/devguard-helm-chart/blob/main/values.yaml) for all configuration options. To inspect the chart locally:
-```bash {ignore}
+```bash 
 helm pull oci://ghcr.io/l3montree-dev/devguard-helm-chart/devguard --version <version>
 tar -xzf devguard-<version>.tgz
 cd devguard
@@ -90,7 +90,7 @@ cd devguard
 
 ### Install the chart
 
-```bash {ignore}
+```bash 
 helm install devguard oci://ghcr.io/l3montree-dev/devguard-helm-chart/devguard \
   --version <version> \
   --namespace devguard \
@@ -99,7 +99,7 @@ helm install devguard oci://ghcr.io/l3montree-dev/devguard-helm-chart/devguard \
 
 ### Verify deployment
 
-```bash {ignore}
+```bash 
 kubectl get pods -n devguard
 ```
 
@@ -111,7 +111,7 @@ All pods should reach `Running` status within a few minutes. You will find the p
 
 For CSAF advisory generation, create a PGP key pair:
 
-```bash {ignore}
+```bash 
 gpg --full-generate-key
 KEY_ID=$(gpg --list-secret-keys --keyid-format LONG | grep sec | head -1 | awk '{print $2}' | cut -d'/' -f2)
 gpg --armor --export "$KEY_ID" > public.asc
@@ -139,7 +139,7 @@ api:
 
 Then upgrade the release:
 
-```bash {ignore}
+```bash 
 helm upgrade devguard oci://ghcr.io/l3montree-dev/devguard-helm-chart/devguard \
   --version {version} \
   --namespace devguard \

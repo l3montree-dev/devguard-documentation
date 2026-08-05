@@ -39,7 +39,7 @@ trusted-host = <your-devguard-host>
 
 For CI/CD pipelines or ephemeral environments, set the proxy via environment variables instead:
 
-```bash {ignore}
+```bash 
 export PIP_INDEX_URL="https://<your-devguard-url>/api/v1/dependency-proxy/pypi/simple"
 export PIP_TRUSTED_HOST="<your-devguard-host>"
 pip install requests
@@ -57,7 +57,7 @@ pip install requests
 
 DevGuard ships a test package that is permanently flagged as malicious:
 
-```bash {ignore}
+```bash 
 pip install fake-malicious-pypi-package
 # Expected: blocked with a 403 Forbidden error
 ```
