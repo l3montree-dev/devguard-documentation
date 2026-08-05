@@ -8,7 +8,8 @@
         "start": "next start",
         "postbuild": "next-sitemap && cp sitemap.xml public/sitemap.xml && node utilities/copy-pages-to-public.mjs && node utilities/create-llmstxt.mjs",
         "lint": "next lint",
-        "seo-check": "docker run --rm -w /app -v $(pwd):/app registry.opencode.de/open-code/document-writing-tools/seo-check:main-amd64"
+        "seo-check": "docker run --rm -w /app -v $(pwd):/app registry.opencode.de/open-code/document-writing-tools/seo-check:main-amd64",
+        "lychee": "lychee --config lychee.toml src/pages --root-dir $(pwd)/src/pages"
     },
     "repository": {
         "type": "git",
@@ -82,7 +83,8 @@
         "eslint-config-next": "16.3.0",
         "eslint-config-prettier": "10.1.8",
         "eslint-plugin-prettier": "5.5.6",
-        "typescript": "^7.0.2"
+        "typescript": "npm:@typescript/typescript6@^6.0.2",
+        "@typescript/native": "npm:typescript@^7.0.2"
     },
     "overrides": {
         "sharp": "0.35.3",
