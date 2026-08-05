@@ -32,8 +32,8 @@ Official predicate types are maintained at:
 Common ones used with DevGuard:
   https://cyclonedx.org/bom                         CycloneDX SBOM
   https://cyclonedx.org/vex                         CycloneDX VEX (vulnerability exceptions)
-  https://slsa.dev/spec/v1.1/provenance                    SLSA build provenance
-  https://github.com/in-toto/attestation/blob/main/spec/predicates/release.md       DevGuard release attestation
+  https://slsa.dev/provenance/v1                    SLSA build provenance
+  https://in-toto.io/attestation/release/v0.1       DevGuard release attestation
 
 The first argument is a path to a local predicate JSON file. Pass "-" to read from stdin.
 Optionally provide a container image reference as the second argument to also attach the
@@ -50,7 +50,7 @@ devguard-scanner attest <predicate> [container-image] [flags]
   devguard-scanner attest vex.json ghcr.io/org/image:tag --predicateType https://cyclonedx.org/vex/1.0
 
   # Attest with SLSA provenance
-  devguard-scanner attest provenance.json ghcr.io/org/image:tag --predicateType https://slsa.dev/spec/v1.1/provenance
+  devguard-scanner attest provenance.json ghcr.io/org/image:tag --predicateType https://slsa.dev/provenance/v1
 
   # Pipe curl output directly into attest (no shell needed)
   devguard-scanner curl https://api.example.com/sbom.json --token=... | devguard-scanner attest - ghcr.io/org/image:tag --predicateType https://cyclonedx.org/bom
@@ -69,7 +69,7 @@ devguard-scanner attest <predicate> [container-image] [flags]
   -h, --help                   help for attest
       --isTag                  If the current git reference is a tag. If not specified, it will check if the current directory is a git repo. If it isn't, it will be set to false.
   -p, --password string        The password to authenticate to the container registry (if required)
-  -a, --predicateType string   The predicate type (URI) for the attestation, e.g. https://slsa.dev/spec/v1.1/provenance or https://cyclonedx.org/vex/1.0
+  -a, --predicateType string   The predicate type (URI) for the attestation, e.g. https://slsa.dev/provenance/v1 or https://cyclonedx.org/vex/1.0
       --ref string             The git reference to use. This can be a branch, tag, or commit hash. If not specified, it will first check for a git repository in the current directory. If not found, it will just use main.
   -r, --registry string        The registry to authenticate to (optional)
       --token string           The personal access token to authenticate the request

@@ -29,7 +29,7 @@ token before upload.
 You may pass the target as the first positional argument instead of using --path.
 
 Any flags after a "--" separator are forwarded verbatim to the underlying semgrep invocation.
-See the semgrep CLI reference for available flags: https://docs.semgrep.dev/cli-reference
+See the semgrep CLI reference for available flags: https://semgrep.dev/docs/cli-reference
 
 ```shell
 devguard-scanner sast [path] [flags]
