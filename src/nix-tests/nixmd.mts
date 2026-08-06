@@ -28,6 +28,7 @@ const MDX_FILES = [
     'src/pages/getting-started/first-scan.mdx',
     'src/pages/contributing/getting-started.mdx',
     'src/pages/how-to-guides/scanning/upload-vex.mdx',
+    'src/pages/how-to-guides/scanning/scan-your-project.mdx',
 ]
 
 const VARIABLE_PATTERNS: [RegExp, string][] = [
