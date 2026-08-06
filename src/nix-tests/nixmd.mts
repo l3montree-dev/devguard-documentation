@@ -21,21 +21,39 @@ const EXAMPLE_REPO_URL =
     process.env.EXAMPLE_REPO_URL ?? 'https://github.com/l3montree-dev/devguard-example-repository.git'
 const EXAMPLE_REPO_DIR = join(TMP_DIR, 'example-repository')
 const VEX_SOURCE = 'public/example-files/ingesting/vex-accepted.json'
+const SBOM_SOURCE = 'public/example-files/ingesting/sbom.json'
+const MERGE_CONFIG_SOURCE = 'public/example-files/ingesting/merge-config.json'
+const IMAGE_TAR = join(TMP_DIR, 'image.tar')
+const TEST_IMAGE = process.env.TEST_IMAGE ?? 'gcr.io/distroless/static:nonroot'
+
+const FIXTURES: [string, string][] = [
+    [VEX_SOURCE, 'vex.json'],
+    [SBOM_SOURCE, 'sbom.json'],
+    [SBOM_SOURCE, 'a.json'],
+    [SBOM_SOURCE, 'b.json'],
+    [MERGE_CONFIG_SOURCE, 'config.json'],
+    [IMAGE_TAR, 'image.tar'],
+]
 
 const REQUIRED_ENV = ['assetName', 'apiUrl', 'token', 'webUI'] as const
 
-const MDX_FILES = [
+const DEFAULT_MDX_FILES = [
     'src/pages/getting-started/first-scan.mdx',
     'src/pages/contributing/getting-started.mdx',
     'src/pages/how-to-guides/scanning/upload-vex.mdx',
     'src/pages/how-to-guides/scanning/scan-your-project.mdx',
 ]
 
+const MDX_FILES = process.argv.length > 2 ? process.argv.slice(2) : DEFAULT_MDX_FILES
+
 const VARIABLE_PATTERNS: [RegExp, string][] = [
     [/https:\/\/(?:api|app)\.devguard\.org/g, '${apiUrl}'],
     [/https:\/\/<your-devguard-url>/g, '${apiUrl}'],
     [/\b(DEVGUARD_TOKEN|DEVGUARD_PAT|devguard-token)=("[^"]*"|'[^']*'|[^\s\\]*)/g, '$1="${token}"'],
     [/Bearer +[^"'\s]+/g, 'Bearer ${token}'],
+    [/(X-Asset-Name:[ \t]*)[^"'\s]+/g, '$1${assetName}'],
+    [/ghcr\.io\/org\/image:tag/g, TEST_IMAGE],
+    [/registry\.example\.com\/org\/image:tag/g, TEST_IMAGE],
 ]
 
 interface CodeBlock {
@@ -49,11 +67,7 @@ function changeToTestVariables(code: string): string {
         (result, flag) =>
             result.replace(
                 new RegExp(`(--${flag})[= ]("[^"]*"|'[^']*'|[^\\s\\\\]*)`, 'g'),
-                (_, flagName: string, value: string) => {
-                    const quote = value.startsWith("'") ? "'" : '"'
-
-                    return `${flagName}=${quote}\${${flag}}${quote}`
-                },
+                (_, flagName: string) => `${flagName}="\${${flag}}"`,
             ),
         code,
     )
@@ -181,7 +195,6 @@ function main(): void {
         ...process.env,
         NIX_PATH: `nixpkgs=${NIXPKGS_URL}`,
         DEVGUARD_APIURL: process.env.apiUrl,
-        DEVGUARD_TOKEN: process.env.token,
     }
 
     rmSync(TMP_DIR, { recursive: true, force: true })
@@ -193,6 +206,10 @@ function main(): void {
             stdio: 'inherit',
             env,
         })
+
+        console.log(`Saving ${TEST_IMAGE} to ${IMAGE_TAR} ..`)
+        execFileSync('docker', ['pull', TEST_IMAGE], { stdio: 'inherit', env })
+        execFileSync('docker', ['save', '-o', IMAGE_TAR, TEST_IMAGE], { stdio: 'inherit', env })
 
         console.log('Getting all the code blocks together..')
         const scripts = MDX_FILES.map(convert).filter((path): path is string => path !== null)
@@ -208,7 +225,9 @@ function main(): void {
             const workDir = join(workRoot, basename(script, '.sh'))
             rmSync(workDir, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 })
             cpSync(EXAMPLE_REPO_DIR, workDir, { recursive: true })
-            copyFileSync(VEX_SOURCE, join(workDir, 'vex.json'))
+            for (const [source, name] of FIXTURES) {
+                copyFileSync(source, join(workDir, name))
+            }
             execFileSync('chmod', ['-R', 'a+rwX', workDir], { stdio: 'inherit' })
 
             const inner =
@@ -228,7 +247,11 @@ function main(): void {
         }
         process.exitCode = failed ? 1 : 0
     } finally {
-        rmSync(TMP_DIR, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 })
+        if (!process.env.KEEP_TMP) {
+            rmSync(TMP_DIR, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 })
+        } else {
+            console.log(`Kept ${TMP_DIR}`)
+        }
     }
 }
 
