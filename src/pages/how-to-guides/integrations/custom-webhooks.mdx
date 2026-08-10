@@ -1,23 +1,800 @@
 ---
 seo:
-  robots: noindex,nofollow
-  keyword_primary: custom webhooks
-  og:
-    image: /og-image.png
-    type: article
-  schema:
-    type: TechArticle
-title: DevGuard Custom Webhooks
-description: Explore the DevGuard Custom Webhooks documentation. Explore supply chain
-  security, vulnerability scanning, and compliance monitoring using DevGuard.
+    robots: index,follow
+    keyword_primary: webhooks
+    og:
+        image: /og-image.png
+        type: article
+    schema:
+        type: TechArticle
+title: DevGuard Custom Webhooks Reference Guide
+description: "Complete reference for DevGuard's outbound custom webhooks — scope, supported event types, every management action with curl examples, full delivery payload formats, and how to verify and troubleshoot deliveries."
 lang: en-US
 ignoreChecks: null
 ---
-import Image from 'next/image';
+
 import { Callout } from '@document-writing-tools/kernux-theme'
-import { Tooltip, TooltipTrigger, TooltipContent } from "@document-writing-tools/kernux-theme";
-import PageContentComingSoon from '@/components/PageContentComingSoon'
 
 # Custom Webhooks
 
-<PageContentComingSoon />
+DevGuard can send an HTTP `POST` request to a URL of your choice whenever a security-relevant event occurs — a new SBOM is generated, or new dependency or first-party vulnerabilities are found. Use custom webhooks to forward these events to your own custom endpoint.
+
+<Callout type="info">
+    This page covers DevGuard's own **outbound** webhooks
+    (`WebhookIntegration`). It does not cover the **inbound** webhooks DevGuard
+    receives from GitHub, GitLab, or Jira to power those integrations — those
+    are configured as part of
+    [GitHub](/how-to-guides/integrations/github/setup-github-integration),
+    [GitLab](/how-to-guides/integrations/gitlab/setup-gitlab-integration), and
+    [Jira](/how-to-guides/integrations/jira/connect-jira) setup and use a
+    separate mechanism.
+</Callout>
+
+## Scope
+
+A webhook belongs to exactly one organization, and optionally one project within it:
+
+- **Organization-scoped** — created via the organization endpoint. Fires for **every project and asset** in the organization.
+- **Project-scoped** — created via the project endpoint. Fires only for assets **within that specific project**.
+
+When an event fires for a project, DevGuard delivers it to that project's own webhooks **and** to every organization-scoped webhook on the parent org. There is no asset-level scope — you can't register a webhook for a single asset.
+
+<Callout type="warning">
+    Update and delete requests are scoped to the same level they were created
+    at. Manage an organization-scoped webhook through the organization
+    endpoints, and a project-scoped webhook through that project's endpoints —
+    calling the wrong scope for a given webhook ID returns `404`.
+</Callout>
+
+## Supported Event Types
+
+| Type                        | Enabled by    | Fires when                                                                                                        |
+| --------------------------- | ------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `sbom`                      | `sbomEnabled` | A new SBOM is generated for an artifact, on the asset's default branch or a tag (not on other branches)           |
+| `dependencyVulnerabilities` | `vulnEnabled` | A scan finds one or more **newly opened** dependency vulnerabilities (SCA), on the default branch or a tag        |
+| `firstPartyVulnerabilities` | `vulnEnabled` | A scan finds first-party findings (SAST/secrets) that are new across all branches, on the default branch or a tag |
+| `test`                      | —             | Sent on demand via the [test endpoint](#sending-a-test-webhook); never fires from real scan activity              |
+
+There's no separate toggle for dependency vs. first-party findings — `vulnEnabled` controls both. Non-default branches never trigger deliveries, even if they introduce new findings.
+
+## Managing Webhooks
+
+You can manage your custom webhooks by sending requests directly to the according endpoints in DevGuard.
+
+<Callout type="info">
+  Talking to the endpoints requires authorization. If you authorize the access by using the `Authorization` Header in your request, you will need a `symmetric` token of form `dvg_<token_identifier>`. The token requires at least `manage` scope.
+</Callout>
+
+### Creating a Webhook
+
+**Organization-scoped**
+
+**Endpoint:**
+
+```bash
+POST /api/v1/organizations/{organization}/integrations/webhook/test-and-save/
+```
+
+**Request:**
+
+```sh
+curl -X POST https://app.devguard.org/api/v1/organizations/my-org/integrations/webhook/test-and-save/ \
+  -H "Authorization: Bearer dvg_<your-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "My SIEM Integration",
+    "description": "Forward vulnerability events to our SIEM",
+    "url": "https://example.com/devguard-webhook",
+    "secret": "my-shared-secret", # include if configured
+    "sbomEnabled": true,
+    "vulnEnabled": true
+  }'
+```
+
+**Project-scoped**
+
+**Endpoint:**
+
+```bash
+POST /api/v1/organizations/{organization}/projects/{projectSlug}/integrations/webhook/test-and-save/
+```
+
+**Request:**
+
+```sh
+curl -X POST https://app.devguard.org/api/v1/organizations/my-org/projects/my-project/integrations/webhook/test-and-save/ \
+  -H "Authorization: Bearer dvg_<your-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "My SIEM Integration",
+    "description": "Forward vulnerability events to our SIEM",
+    "url": "https://example.com/devguard-webhook",
+    "secret": "my-shared-secret", # include if configured
+    "sbomEnabled": true,
+    "vulnEnabled": true
+  }'
+```
+
+**Request body** (same shape for both scopes):
+
+| Field         | Type    | Required | Description                                                                                                                                                                                      |
+| ------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `name`        | string  | no       | Display name for the webhook                                                                                                                                                                     |
+| `description` | string  | no       | Free-text description of the webhook's purpose                                                                                                                                                   |
+| `url`         | string  | **yes**  | The endpoint DevGuard sends `POST` requests to                                                                                                                                                   |
+| `secret`      | string  | no       | Shared secret DevGuard echoes back on every delivery in the `X-Webhook-Secret` header, so your endpoint can verify the sender. Encrypted at rest; never returned by any endpoint after creation. |
+| `sbomEnabled` | boolean | no       | Deliver `sbom` events                                                                                                                                                                            |
+| `vulnEnabled` | boolean | no       | Deliver `dependencyVulnerabilities` and `firstPartyVulnerabilities` events                                                                                                                       |
+
+<Callout type="warning">
+    Despite the `test-and-save` path name, this call does **not** send a live
+    test request to `url` before saving — it persists the row unconditionally as
+    long as `url` is non-empty. Use the [test endpoint](#sending-a-test-webhook)
+    yourself, before or after creating the webhook, to confirm your receiver
+    actually works.
+</Callout>
+
+**Response — `200 OK`:**
+
+```json
+{
+    "id": "a1b2c3d4-e5f6-4789-a012-b3c4d5e6f789",
+    "name": "My SIEM Integration",
+    "description": "Forward vulnerability events to our SIEM",
+    "url": "https://example.com/devguard-webhook",
+    "sbomEnabled": true,
+    "vulnEnabled": true
+}
+```
+
+The response never includes `secret`, `orgId`, `projectId`, or timestamps.
+
+### Listing Webhooks
+
+There is **no dedicated** "list webhooks" endpoint. Webhooks are returned as a nested field on two existing read endpoints instead:
+
+**Organization-scoped webhooks** (nested in org settings; `project_id` is null)
+
+**Endpoint:**
+
+```bash
+GET /api/v1/organizations/{organization}/settings/
+```
+
+**Request:**
+
+```sh
+curl https://app.devguard.org/api/v1/organizations/my-org/settings/ \
+  -H "Authorization: Bearer dvg_<your-token>"
+```
+
+**Project-scoped webhooks** (this project's own webhooks only — NOT the inherited org-level ones)
+
+**Endpoint:**
+
+```bash
+GET /api/v1/organizations/{organization}/projects/{projectSlug}/
+```
+
+**Request:**
+
+```sh
+curl https://app.devguard.org/api/v1/organizations/my-org/projects/my-project/ \
+  -H "Authorization: Bearer dvg_<your-token>"
+```
+
+Both responses include a `webhooks` array of the same object shown in [Creating a Webhook](#creating-a-webhook) (secret omitted). To see the full set of webhooks that will fire for a given project, combine the `webhooks` array from `.../settings/` (org-wide) with the `webhooks` array from `.../projects/{project}/` (project-specific) — the project endpoint alone does not include inherited org-level webhooks.
+
+### Updating a Webhook
+
+**Organization-scoped**
+
+**Endpoint:**
+
+```bash
+PUT /api/v1/organizations/{organization}/integrations/webhook/{id}/
+```
+
+**Request:**
+
+```sh
+curl -X PUT https://app.devguard.org/api/v1/organizations/my-org/integrations/webhook/a1b2c3d4-e5f6-4789-a012-b3c4d5e6f789/ \
+  -H "Authorization: Bearer dvg_<your-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "id": "a1b2c3d4-e5f6-4789-a012-b3c4d5e6f789",
+    "name": "My SIEM Integration",
+    "description": "Forward vulnerability events to our SIEM",
+    "url": "https://example.com/devguard-webhook-v2",
+    "secret": "my-shared-secret", # include if configured
+    "sbomEnabled": true,
+    "vulnEnabled": false
+  }'
+```
+
+**Project-scoped**
+
+**Endpoint:**
+
+```bash
+PUT /api/v1/organizations/{organization}/projects/{projectSlug}/integrations/webhook/{id}/
+```
+
+**Request:**
+
+```sh
+curl -X PUT https://app.devguard.org/api/v1/organizations/my-org/projects/my-project/integrations/webhook/a1b2c3d4-e5f6-4789-a012-b3c4d5e6f789/ \
+  -H "Authorization: Bearer dvg_<your-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "id": "a1b2c3d4-e5f6-4789-a012-b3c4d5e6f789",
+    "name": "My SIEM Integration",
+    "description": "Forward vulnerability events to our SIEM",
+    "url": "https://example.com/devguard-webhook-v2",
+    "secret": "my-shared-secret", # include if configured
+    "sbomEnabled": true,
+    "vulnEnabled": false
+  }'
+```
+
+The request body is the same shape as create, plus `id`, for both scopes.
+
+<Callout type="warning">
+    - **The `id` must also appear in the JSON body, not just the URL**. 
+    - **Omitting `secret` from an update clears any secret you previously
+    configured** — always resend it if you want to keep it, since no endpoint
+    ever returns it to you to read back.
+</Callout>
+
+**Response — `200 OK`:**
+
+```json
+{
+    "id": "a1b2c3d4-e5f6-4789-a012-b3c4d5e6f789",
+    "name": "My SIEM Integration",
+    "description": "Forward vulnerability events to our SIEM",
+    "url": "https://example.com/devguard-webhook-v2",
+    "sbomEnabled": true,
+    "vulnEnabled": false
+}
+```
+
+### Deleting a Webhook
+
+**Organization-scoped**
+
+**Endpoint:**
+
+```bash
+DELETE /api/v1/organizations/{organization}/integrations/webhook/{id}/
+```
+
+**Request:**
+
+```sh
+curl -X DELETE https://app.devguard.org/api/v1/organizations/my-org/integrations/webhook/a1b2c3d4-e5f6-4789-a012-b3c4d5e6f789/ \
+  -H "Authorization: Bearer dvg_<your-token>"
+```
+
+**Project-scoped**
+
+**Endpoint:**
+
+```bash
+DELETE /api/v1/organizations/{organization}/projects/{projectSlug}/integrations/webhook/{id}/
+```
+
+**Request:**
+
+```sh
+curl -X DELETE https://app.devguard.org/api/v1/organizations/my-org/projects/my-project/integrations/webhook/a1b2c3d4-e5f6-4789-a012-b3c4d5e6f789/ \
+  -H "Authorization: Bearer dvg_<your-token>"
+```
+
+**Response — `200 OK`:**
+
+```json
+"Webhook integration deleted successfully"
+```
+
+The response body is a bare JSON string, not an object.
+
+### Sending a Test Webhook
+
+Send a real delivery to any URL without creating a saved webhook:
+
+**Organization-scoped**
+
+**Endpoint:**
+
+```bash
+POST /api/v1/organizations/{organization}/integrations/webhook/test/
+```
+
+**Request:**
+
+```sh
+curl -X POST https://app.devguard.org/api/v1/organizations/my-org/integrations/webhook/test/ \
+  -H "Authorization: Bearer dvg_<your-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://example.com/devguard-webhook",
+    "secret": "my-shared-secret", # include if configured
+    "payloadType": "sampleDependencyVulns"
+  }'
+```
+
+**Project-scoped**
+
+**Endpoint:**
+
+```bash
+POST /api/v1/organizations/{organization}/projects/{projectSlug}/integrations/webhook/test/
+```
+
+**Request:**
+
+```sh
+curl -X POST https://app.devguard.org/api/v1/organizations/my-org/projects/my-project/integrations/webhook/test/ \
+  -H "Authorization: Bearer dvg_<your-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://example.com/devguard-webhook",
+    "secret": "my-shared-secret", # include if configured
+    "payloadType": "sampleDependencyVulns"
+  }'
+```
+
+**Request body:**
+
+| Field         | Type   | Required | Description                                                             |
+| ------------- | ------ | -------- | ----------------------------------------------------------------------- |
+| `url`         | string | **yes**  | Where to send the test delivery                                         |
+| `secret`      | string | no       | Sent as `X-Webhook-Secret` on this test delivery only; nothing is saved |
+| `payloadType` | string | no       | Shape of the sample payload. Defaults to `empty`.                       |
+
+Supported `payloadType` values:
+
+| Value                   | Wire `type` sent            | Description                                                                                                                                      |
+| ----------------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `empty`                 | `test`                      | `{"message": "This is a test webhook from DevGuard", "timestamp": "<RFC3339>"}`                                                                  |
+| `sampleSbom`            | `sbom`                      | A sample CycloneDX **1.4** SBOM for a fictional `example-web-app` — real `sbom` deliveries are CycloneDX **1.6**, see [below](#payload-for-sbom) |
+| `sampleDependencyVulns` | `dependencyVulnerabilities` | A sample Log4Shell finding (`CVE-2021-44228`)                                                                                                    |
+| `sampleFirstPartyVulns` | `firstPartyVulnerabilities` | A sample SQL-injection finding                                                                                                                   |
+
+Note that for the three sample types, the `type` field in the delivered envelope is the **real** event type (e.g. `sbom`), not `test` — only `empty` produces the literal `test` type.
+
+**Response — `200 OK`** (this is the response to _your_ curl call, not what gets delivered to `url`):
+
+```json
+{
+    "message": "Test webhook sent successfully",
+    "payloadType": "sampleDependencyVulns"
+}
+```
+
+If the delivery to `url` fails, this call returns `400` instead:
+
+```json
+{
+    "error": "Webhook test failed: webhook dependencyVulnerabilities failed, status: 500 Internal Server Error"
+}
+```
+
+<Callout type="info">
+    The test endpoint always uses fabricated example data for `asset` and
+    `assetVersion` (`example-asset` / `example-version`). `organization` is
+    always your real org. `project` is your real project only when you call the
+    project-scoped test path — the organization-scoped path fabricates an
+    `example-project` too.
+</Callout>
+
+## Delivery Payload Format
+
+Every delivery is an HTTP `POST` with `Content-Type: application/json` and this envelope:
+
+```json
+{
+    "type": "dependencyVulnerabilities",
+    "organization": {
+        "id": "example-org-uuid",
+        "name": "DevGuard Example Org",
+        "slug": "devguard-example-org"
+    },
+    "project": {
+        "id": "example-project-uuid",
+        "name": "DevGuard Example Project",
+        "slug": "devguard-example-project"
+    },
+    "asset": {
+        "id": "example-asset-uuid",
+        "name": "DevGuard Example Asset",
+        "slug": "devguard-example-asset"
+    },
+    "assetVersion": {
+        "name": "main",
+        "slug": "main",
+        "defaultBranch": true,
+        "type": "branch"
+    },
+    "artifact": { "artifactName": "devguard-example-app:latest" },
+    "payload": [{ "cveID": "CVE-0000-00000", "state": "open" }]
+}
+```
+
+| Field          | Description                                                                                                                                                                                                |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `type`         | The event type — one of the four values in [Supported Event Types](#supported-event-types)                                                                                                                 |
+| `organization` | The org the event belongs to                                                                                                                                                                               |
+| `project`      | The project the event belongs to                                                                                                                                                                           |
+| `asset`        | The asset the event belongs to                                                                                                                                                                             |
+| `assetVersion` | The branch or tag the event was detected on                                                                                                                                                                |
+| `artifact`     | The scanned artifact (e.g. container image or build output). Always an empty object (`{"artifactName": ""}`) for `firstPartyVulnerabilities`, since first-party findings aren't scoped to a scan artifact. |
+| `payload`      | The event-specific data — shape depends on `type`, detailed below                                                                                                                                          |
+
+### `organization` object
+
+| Field                      | Type              | Description                                            |
+| -------------------------- | ----------------- | ------------------------------------------------------ |
+| `id`                       | uuid              | Organization ID                                        |
+| `name`                     | string            | Organization name                                      |
+| `slug`                     | string            | URL slug                                               |
+| `description`              | string            | Organization description                               |
+| `isPublic`                 | boolean           | Whether the org is publicly visible                    |
+| `language`                 | string            | Org's configured language                              |
+| `contactPhoneNumber`       | string \| null    | Contact phone number, if set                           |
+| `numberOfEmployees`        | number \| null    | Company size, if set                                   |
+| `country`                  | string \| null    | Country, if set                                        |
+| `industry`                 | string \| null    | Industry, if set                                       |
+| `criticalInfrastructure`   | boolean           | Whether the org is flagged as critical infrastructure  |
+| `iso27001`                 | boolean           | ISO 27001 compliance flag                              |
+| `nist`                     | boolean           | NIST compliance flag                                   |
+| `grundschutz`              | boolean           | BSI IT-Grundschutz compliance flag                     |
+| `externalEntityProviderId` | string \| omitted | Present only for orgs synced from an external provider |
+
+### `project` object
+
+| Field                                           | Type              | Description                                                                      |
+| ----------------------------------------------- | ----------------- | -------------------------------------------------------------------------------- |
+| `id`                                            | uuid              | Project ID                                                                       |
+| `name`                                          | string            | Project name                                                                     |
+| `slug`                                          | string            | URL slug                                                                         |
+| `description`                                   | string            | Project description                                                              |
+| `isPublic`                                      | boolean           | Whether the project is publicly visible                                          |
+| `type`                                          | string            | Project type (e.g. `application`)                                                |
+| `parentId`                                      | uuid \| omitted   | Parent project ID, for sub-projects                                              |
+| `parent`                                        | object \| omitted | Reserved for a nested parent object; currently always omitted/null in deliveries |
+| `repositoryId`                                  | string \| null    | Linked repository ID                                                             |
+| `repositoryName`                                | string \| null    | Linked repository name                                                           |
+| `externalEntityProviderId` / `externalEntityId` | string \| omitted | Present only for projects synced from an external provider                       |
+
+### `asset` object
+
+| Field                                                                             | Type              | Description                                                     |
+| --------------------------------------------------------------------------------- | ----------------- | --------------------------------------------------------------- |
+| `id`                                                                              | uuid              | Asset ID                                                        |
+| `name`                                                                            | string            | Asset name                                                      |
+| `slug`                                                                            | string            | URL slug                                                        |
+| `description`                                                                     | string            | Asset description                                               |
+| `projectId`                                                                       | uuid              | Parent project ID                                               |
+| `availabilityRequirement` / `integrityRequirement` / `confidentialityRequirement` | string            | Configured CIA requirement level (e.g. `low`, `medium`, `high`) |
+| `reachableFromInternet`                                                           | boolean           | Whether the asset is marked as internet-reachable               |
+| `repositoryId` / `repositoryName`                                                 | string \| null    | Linked repository                                               |
+| `signingPubKey`                                                                   | string \| null    | Asset's configured signing public key                           |
+| `cvssAutomaticTicketThreshold` / `riskAutomaticTicketThreshold`                   | number \| null    | Auto-ticketing thresholds, if configured                        |
+| `externalEntityProviderId` / `externalEntityId`                                   | string \| omitted | Present only for externally-synced assets                       |
+
+<Callout type="info">
+    `lastSecretScan`, `lastSastScan`, `lastScaScan`, `lastIacScan`,
+    `lastContainerScan`, `lastDastScan`, and `enableTicketRange` are also
+    defined on this object but are **not currently populated** by the webhook
+    sender — expect `null` / `false` for them in every delivery today.
+</Callout>
+
+### `assetVersion` object
+
+| Field           | Type           | Description                                           |
+| --------------- | -------------- | ----------------------------------------------------- |
+| `name`          | string         | Branch or tag name                                    |
+| `assetId`       | uuid           | Parent asset ID                                       |
+| `slug`          | string         | URL slug                                              |
+| `defaultBranch` | boolean        | Whether this is the asset's default branch            |
+| `type`          | string         | `branch` or `tag`                                     |
+| `signingPubKey` | string \| null | Version-specific signing key override, if set         |
+| `metadata`      | object         | Arbitrary key/value metadata attached to this version |
+
+### `artifact` object
+
+| Field          | Type   | Description                                                                                          |
+| -------------- | ------ | ---------------------------------------------------------------------------------------------------- |
+| `artifactName` | string | Name of the scanned artifact (e.g. `my-image:latest`). Empty string for `firstPartyVulnerabilities`. |
+
+### `payload` for `sbom`
+
+The full [CycloneDX](https://cyclonedx.org/) 1.6 BOM for the artifact, as generated by DevGuard — components, licenses, and metadata:
+
+```json
+{
+    "bomFormat": "CycloneDX",
+    "specVersion": "1.6",
+    "serialNumber": "urn:uuid:3e671687-395b-41f5-a30f-a58921a69b79",
+    "version": 1,
+    "metadata": {
+        "timestamp": "2026-08-10T12:00:00Z",
+        "component": {
+            "type": "application",
+            "name": "example-web-app",
+            "version": "1.2.3",
+            "purl": "pkg:docker/example/web-app@1.2.3"
+        }
+    },
+    "components": [
+        {
+            "type": "library",
+            "name": "express",
+            "version": "4.18.2",
+            "purl": "pkg:npm/express@4.18.2",
+            "licenses": [{ "license": { "id": "MIT" } }]
+        },
+        {
+            "type": "library",
+            "name": "log4j-core",
+            "version": "2.14.1",
+            "purl": "pkg:maven/org.apache.logging.log4j/log4j-core@2.14.1",
+            "licenses": [{ "license": { "id": "Apache-2.0" } }]
+        }
+    ]
+}
+```
+
+### `payload` for `dependencyVulnerabilities`
+
+An array of dependency vulnerability objects:
+
+| Field                          | Type           | Description                                                                                              |
+| ------------------------------ | -------------- | -------------------------------------------------------------------------------------------------------- |
+| `id`                           | uuid           | Vulnerability ID                                                                                         |
+| `message`                      | string \| null | Human-readable summary                                                                                   |
+| `assetVersionId`               | string         | Branch/tag name (despite the key name, this is the version's _name_, not a UUID)                         |
+| `assetId`                      | string         | Asset ID                                                                                                 |
+| `state`                        | string         | One of `open`, `fixed`, `accepted`, `falsePositive`, `markedForTransfer`, `implemented`, `notApplicable` |
+| `cve`                          | object \| null | Full CVE record — see below                                                                              |
+| `cveID`                        | string         | CVE identifier                                                                                           |
+| `componentPurl`                | string         | Affected component, as a [package URL](https://github.com/package-url/purl-spec)                         |
+| `componentFixedVersion`        | string \| null | Version that fixes this component, if known                                                              |
+| `vulnerabilityPath`            | string[]       | Dependency chain from the direct dependency to the vulnerable component                                  |
+| `directDependencyFixedVersion` | string \| null | Fixed version of the direct (top-level) dependency, if different from the component itself               |
+| `effort`                       | number \| null | Estimated remediation effort                                                                             |
+| `riskAssessment`               | number \| null | DevGuard's calculated risk score (0–100)                                                                 |
+| `rawRiskAssessment`            | number \| null | Underlying raw risk value before normalization                                                           |
+| `priority`                     | number \| null | Remediation priority ranking                                                                             |
+| `lastDetected`                 | timestamp      | When this vulnerability was last seen in a scan                                                          |
+| `createdAt`                    | timestamp      | When this vulnerability was first detected                                                               |
+| `riskRecalculatedAt`           | timestamp      | When the risk score was last recalculated                                                                |
+| `ticketId` / `ticketUrl`       | string \| null | Linked ticket, if one was created                                                                        |
+| `manualTicketCreation`         | boolean        | Whether ticket creation was triggered manually rather than automatically                                 |
+| `artifacts`                    | array          | Artifacts this finding appears in — each `{ artifactName, assetVersionName, assetId }`                   |
+| `exploits`                     | array          | Known exploits for this specific finding — see `ExploitDTO` below                                        |
+
+**`cve` object:**
+
+| Field                                          | Type           | Description                                                                                                                          |
+| ---------------------------------------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `cve`                                          | string         | CVE identifier                                                                                                                       |
+| `description`                                  | string         | Vulnerability description                                                                                                            |
+| `cvss`                                         | number         | Base CVSS score                                                                                                                      |
+| `vector`                                       | string         | CVSS vector string                                                                                                                   |
+| `references`                                   | string         | Reference links                                                                                                                      |
+| `datePublished` / `dateLastModified`           | timestamp      | NVD publish/update dates                                                                                                             |
+| `cisaExploitAdd` / `cisaActionDue`             | date \| null   | CISA KEV catalog dates, if listed                                                                                                    |
+| `cisaRequiredAction` / `cisaVulnerabilityName` | string \| null | CISA KEV metadata, if listed                                                                                                         |
+| `epss`                                         | number \| null | EPSS exploitation probability score                                                                                                  |
+| `percentile`                                   | number \| null | EPSS percentile                                                                                                                      |
+| `risk`                                         | object         | `{ baseScore, withEnvironment, withThreatIntelligence, withEnvironmentAndThreatIntelligence }` — DevGuard's layered risk calculation |
+| `exploits`                                     | array          | Known public exploits for this CVE in general (see below)                                                                            |
+| `relationships`                                | array          | Related CVEs, each `{ relationshipType, targetCve }`                                                                                 |
+
+**Example:**
+
+```json
+{
+    "type": "dependencyVulnerabilities",
+    "organization": {
+        "id": "example-org-uuid",
+        "name": "DevGuard Example Org",
+        "slug": "devguard-example-org"
+    },
+    "project": {
+        "id": "example-project-uuid",
+        "name": "DevGuard Example Project",
+        "slug": "devguard-example-project"
+    },
+    "asset": {
+        "id": "example-asset-uuid",
+        "name": "DevGuard Example Asset",
+        "slug": "devguard-example-asset"
+    },
+    "assetVersion": {
+        "name": "main",
+        "slug": "main",
+        "defaultBranch": true,
+        "type": "branch"
+    },
+    "artifact": { "artifactName": "devguard-example-app:latest" },
+    "payload": [
+        {
+            "id": "1b836526-8448-4408-8344-b6279eb07abc",
+            "assetVersionId": "main",
+            "assetId": "example-asset-uuid",
+            "state": "open",
+            "cveID": "CVE-2021-44228",
+            "cve": {
+                "cve": "CVE-2021-44228",
+                "description": "Apache Log4j2 <=2.14.1 JNDI features used in configuration, log messages, and parameters do not protect against attacker controlled LDAP and other JNDI related endpoints.",
+                "cvss": 10.0,
+                "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+                "epss": 0.97,
+                "risk": {
+                    "baseScore": 9.8,
+                    "withEnvironment": 9.8,
+                    "withThreatIntelligence": 10.0,
+                    "withEnvironmentAndThreatIntelligence": 10.0
+                },
+                "exploits": [],
+                "relationships": []
+            },
+            "componentPurl": "pkg:maven/org.apache.logging.log4j/log4j-core@2.14.1",
+            "componentFixedVersion": "2.15.0",
+            "effort": 4,
+            "riskAssessment": 95,
+            "rawRiskAssessment": 9.8,
+            "priority": 1,
+            "manualTicketCreation": false,
+            "artifacts": [],
+            "exploits": []
+        }
+    ]
+}
+```
+
+### `payload` for `firstPartyVulnerabilities`
+
+An array of first-party (SAST/secrets) finding objects:
+
+| Field                                                       | Type           | Description                                                                             |
+| ----------------------------------------------------------- | -------------- | --------------------------------------------------------------------------------------- |
+| `id`                                                        | uuid           | Finding ID                                                                              |
+| `scannerIds`                                                | string         | Scanner(s) that reported this finding (e.g. `semgrep`)                                  |
+| `message`                                                   | string \| null | Human-readable summary                                                                  |
+| `assetVersionName`                                          | string         | Branch/tag name                                                                         |
+| `assetId`                                                   | string         | Asset ID                                                                                |
+| `state`                                                     | string         | Same `VulnState` values as dependency vulnerabilities                                   |
+| `ruleId`                                                    | string         | Scanner rule identifier                                                                 |
+| `ruleName` / `ruleHelp` / `ruleHelpURI` / `ruleDescription` | string         | Human-readable rule metadata                                                            |
+| `ruleProperties`                                            | object         | Arbitrary scanner-provided rule metadata (e.g. `{"severity": "HIGH", "cwe": "CWE-89"}`) |
+| `uri`                                                       | string         | File path where the finding was detected                                                |
+| `snippetContents`                                           | array          | Code snippets — each `{ startLine, endLine, startColumn, endColumn, snippet }`          |
+| `commit`                                                    | string         | Commit SHA the finding was detected on                                                  |
+| `author` / `email` / `date`                                 | string         | Commit author metadata                                                                  |
+| `createdAt`                                                 | timestamp      | When the finding was first detected                                                     |
+| `ticketId` / `ticketUrl`                                    | string \| null | Linked ticket, if one was created                                                       |
+| `manualTicketCreation`                                      | boolean        | Whether ticket creation was triggered manually                                          |
+
+**Example:**
+
+```json
+{
+    "type": "firstPartyVulnerabilities",
+    "organization": {
+        "id": "example-org-uuid",
+        "name": "DevGuard Example Org",
+        "slug": "devguard-example-org"
+    },
+    "project": {
+        "id": "example-project-uuid",
+        "name": "DevGuard Example Project",
+        "slug": "devguard-example-project"
+    },
+    "asset": {
+        "id": "example-asset-uuid",
+        "name": "DevGuard Example Asset",
+        "slug": "devguard-example-asset"
+    },
+    "assetVersion": {
+        "name": "main",
+        "slug": "main",
+        "defaultBranch": true,
+        "type": "branch"
+    },
+    "artifact": { "artifactName": "" },
+    "payload": [
+        {
+            "id": "1b836526-8448-4408-8344-b6279eb07abd",
+            "scannerIds": "semgrep",
+            "message": "SQL injection vulnerability detected",
+            "assetVersionName": "main",
+            "assetId": "example-asset-uuid",
+            "state": "open",
+            "ruleId": "javascript.lang.security.audit.sqli",
+            "ruleName": "SQL Injection Detection",
+            "ruleDescription": "Detects SQL injection vulnerabilities",
+            "ruleProperties": { "severity": "HIGH", "cwe": "CWE-89" },
+            "uri": "src/auth/login.js",
+            "snippetContents": [
+                {
+                    "startLine": 42,
+                    "endLine": 45,
+                    "snippet": "const query = \"SELECT * FROM users WHERE username = '\" + username + \"'\";"
+                }
+            ],
+            "commit": "abc123",
+            "author": "Developer",
+            "manualTicketCreation": false
+        }
+    ]
+}
+```
+
+### `payload` for `test`
+
+Only when `payloadType` is `empty` (the default):
+
+```json
+{
+    "message": "This is a test webhook from DevGuard",
+    "timestamp": "2026-08-10T12:00:00Z"
+}
+```
+
+## Verifying Webhook Deliveries with Webhook-Secrets
+
+If you configured a `secret`, every delivery includes it verbatim in a header:
+
+```
+X-Webhook-Secret: <your-secret>
+```
+
+<Callout type="warning">
+    This is a plain shared-secret comparison, **not** an HMAC signature.
+    DevGuard does not sign the request body — it just echoes the configured
+    secret back in the header. Compare it using a constant-time comparison on
+    your end, and treat the URL itself as sensitive if it's hard to guess.
+</Callout>
+
+**Example (Node.js / Express):**
+
+```js
+app.post('/devguard-webhook', (req, res) => {
+    const secret = req.headers['x-webhook-secret']
+    if (secret !== process.env.DEVGUARD_WEBHOOK_SECRET) {
+        return res.status(401).send('Unauthorized')
+    }
+
+    const event = req.body
+    console.log(`Received ${event.type} event for ${event.asset.name}`)
+
+    // Process the event...
+    res.status(200).send('OK')
+})
+```
+
+## Retry Behavior & Delivery Constraints
+
+DevGuard attempts each delivery **up to 3 times total**:
+
+1. **Attempt 1** fires immediately. Like every attempt, it can take up to **30 seconds** to time out before being counted as failed.
+2. If attempt 1 failed with a retryable error, DevGuard waits **1 second**, then fires **attempt 2** (also capped at 30 seconds).
+3. If attempt 2 also failed, DevGuard waits **5 seconds**, then fires **attempt 3** — the last one. If this fails too, DevGuard gives up.
+
+Retries only happen on `5xx` responses, `408`, `429`, and network-level errors (timeouts, connection failures). Any other `4xx` response (e.g. `401`, `404`) is treated as permanent and is **not** retried — DevGuard gives up after attempt 1.
+
+Two more constraints apply regardless of retries:
+
+- Outbound requests are rate-limited to **10 requests/second (burst 20)** per destination host.
+- DevGuard refuses to deliver to `localhost` or any IP that resolves to a loopback address or the cloud-metadata address `169.254.169.254` — you can't point a webhook at an address on the DevGuard host itself.
+
+## Related Documentation
+
+- [Use the DevGuard API with Personal Access Tokens](/getting-started/use-devguard-api)
+- [DevGuard How-To Guides](/how-to-guides)
+- [Getting Started with DevGuard](/getting-started)
