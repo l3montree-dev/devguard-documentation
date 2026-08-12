@@ -78,14 +78,14 @@ POST /api/v1/organizations/{organization}/integrations/webhook/test-and-save/
 **Request:**
 
 ```sh
-curl -X POST https://app.devguard.org/api/v1/organizations/my-org/integrations/webhook/test-and-save/ \
+curl -X POST {your-devguard-domain}/api/v1/organizations/{organziation}/integrations/webhook/test-and-save/ \
   -H "Authorization: Bearer dvg_<your-token>" \
   -H "Content-Type: application/json" \
   -d '{
     "name": "My SIEM Integration",
     "description": "Forward vulnerability events to our SIEM",
-    "url": "https://example.com/devguard-webhook",
-    "secret": "my-shared-secret", # include if configured
+    "url": "{your-webhook-domain}",
+    "secret": "{your-webhook-secret}",
     "sbomEnabled": true,
     "vulnEnabled": true
   }'
@@ -102,14 +102,14 @@ POST /api/v1/organizations/{organization}/projects/{projectSlug}/integrations/we
 **Request:**
 
 ```sh
-curl -X POST https://app.devguard.org/api/v1/organizations/my-org/projects/my-project/integrations/webhook/test-and-save/ \
+curl -X POST {your-devguard-domain}/api/v1/organizations/{organziation}/projects/{project}/integrations/webhook/test-and-save/ \
   -H "Authorization: Bearer dvg_<your-token>" \
   -H "Content-Type: application/json" \
   -d '{
     "name": "My SIEM Integration",
     "description": "Forward vulnerability events to our SIEM",
-    "url": "https://example.com/devguard-webhook",
-    "secret": "my-shared-secret", # include if configured
+    "url": "{your-webhook-domain}",
+    "secret": "{your-webhook-secret}",
     "sbomEnabled": true,
     "vulnEnabled": true
   }'
@@ -138,10 +138,10 @@ curl -X POST https://app.devguard.org/api/v1/organizations/my-org/projects/my-pr
 
 ```json
 {
-    "id": "a1b2c3d4-e5f6-4789-a012-b3c4d5e6f789",
+    "id": "{webhook-id}",
     "name": "My SIEM Integration",
     "description": "Forward vulnerability events to our SIEM",
-    "url": "https://example.com/devguard-webhook",
+    "url": "{your-webhook-domain}",
     "sbomEnabled": true,
     "vulnEnabled": true
 }
@@ -164,7 +164,7 @@ GET /api/v1/organizations/{organization}/settings/
 **Request:**
 
 ```sh
-curl https://app.devguard.org/api/v1/organizations/my-org/settings/ \
+curl {your-devguard-domain}/api/v1/organizations/{organziation}/settings/ \
   -H "Authorization: Bearer dvg_<your-token>"
 ```
 
@@ -179,7 +179,7 @@ GET /api/v1/organizations/{organization}/projects/{projectSlug}/
 **Request:**
 
 ```sh
-curl https://app.devguard.org/api/v1/organizations/my-org/projects/my-project/ \
+curl {your-devguard-domain}/api/v1/organizations/{organziation}/projects/{project}/ \
   -H "Authorization: Bearer dvg_<your-token>"
 ```
 
@@ -198,15 +198,15 @@ PUT /api/v1/organizations/{organization}/integrations/webhook/{id}/
 **Request:**
 
 ```sh
-curl -X PUT https://app.devguard.org/api/v1/organizations/my-org/integrations/webhook/a1b2c3d4-e5f6-4789-a012-b3c4d5e6f789/ \
+curl -X PUT {your-devguard-domain}/api/v1/organizations/{organziation}/integrations/webhook/{webhook-id}/ \
   -H "Authorization: Bearer dvg_<your-token>" \
   -H "Content-Type: application/json" \
   -d '{
-    "id": "a1b2c3d4-e5f6-4789-a012-b3c4d5e6f789",
+    "id": "{webhook-id}",
     "name": "My SIEM Integration",
     "description": "Forward vulnerability events to our SIEM",
     "url": "https://example.com/devguard-webhook-v2",
-    "secret": "my-shared-secret", # include if configured
+    "secret": "{your-webhook-secret}",
     "sbomEnabled": true,
     "vulnEnabled": false
   }'
@@ -223,15 +223,15 @@ PUT /api/v1/organizations/{organization}/projects/{projectSlug}/integrations/web
 **Request:**
 
 ```sh
-curl -X PUT https://app.devguard.org/api/v1/organizations/my-org/projects/my-project/integrations/webhook/a1b2c3d4-e5f6-4789-a012-b3c4d5e6f789/ \
+curl -X PUT {your-devguard-domain}/api/v1/organizations/{organziation}/projects/{project}/integrations/webhook/{webhook-id}/ \
   -H "Authorization: Bearer dvg_<your-token>" \
   -H "Content-Type: application/json" \
   -d '{
-    "id": "a1b2c3d4-e5f6-4789-a012-b3c4d5e6f789",
+    "id": "{webhook-id}",
     "name": "My SIEM Integration",
     "description": "Forward vulnerability events to our SIEM",
     "url": "https://example.com/devguard-webhook-v2",
-    "secret": "my-shared-secret", # include if configured
+    "secret": "{your-webhook-secret}",
     "sbomEnabled": true,
     "vulnEnabled": false
   }'
@@ -250,7 +250,7 @@ The request body is the same shape as create, plus `id`, for both scopes.
 
 ```json
 {
-    "id": "a1b2c3d4-e5f6-4789-a012-b3c4d5e6f789",
+    "id": "{webhook-id}",
     "name": "My SIEM Integration",
     "description": "Forward vulnerability events to our SIEM",
     "url": "https://example.com/devguard-webhook-v2",
@@ -272,7 +272,7 @@ DELETE /api/v1/organizations/{organization}/integrations/webhook/{id}/
 **Request:**
 
 ```sh
-curl -X DELETE https://app.devguard.org/api/v1/organizations/my-org/integrations/webhook/a1b2c3d4-e5f6-4789-a012-b3c4d5e6f789/ \
+curl -X DELETE {your-devguard-domain}/api/v1/organizations/{organziation}/integrations/webhook/{webhook-id}/ \
   -H "Authorization: Bearer dvg_<your-token>"
 ```
 
@@ -287,7 +287,7 @@ DELETE /api/v1/organizations/{organization}/projects/{projectSlug}/integrations/
 **Request:**
 
 ```sh
-curl -X DELETE https://app.devguard.org/api/v1/organizations/my-org/projects/my-project/integrations/webhook/a1b2c3d4-e5f6-4789-a012-b3c4d5e6f789/ \
+curl -X DELETE {your-devguard-domain}/api/v1/organizations/{organziation}/projects/{project}/integrations/webhook/{webhook-id}/ \
   -H "Authorization: Bearer dvg_<your-token>"
 ```
 
@@ -314,12 +314,12 @@ POST /api/v1/organizations/{organization}/integrations/webhook/test/
 **Request:**
 
 ```sh
-curl -X POST https://app.devguard.org/api/v1/organizations/my-org/integrations/webhook/test/ \
+curl -X POST {your-devguard-domain}/api/v1/organizations/{organziation}/integrations/webhook/test/ \
   -H "Authorization: Bearer dvg_<your-token>" \
   -H "Content-Type: application/json" \
   -d '{
-    "url": "https://example.com/devguard-webhook",
-    "secret": "my-shared-secret", # include if configured
+    "url": "{your-webhook-domain}",
+    "secret": "{your-webhook-secret}",
     "payloadType": "sampleDependencyVulns"
   }'
 ```
@@ -335,12 +335,12 @@ POST /api/v1/organizations/{organization}/projects/{projectSlug}/integrations/we
 **Request:**
 
 ```sh
-curl -X POST https://app.devguard.org/api/v1/organizations/my-org/projects/my-project/integrations/webhook/test/ \
+curl -X POST {your-devguard-domain}/api/v1/organizations/{organziation}/projects/{project}/integrations/webhook/test/ \
   -H "Authorization: Bearer dvg_<your-token>" \
   -H "Content-Type: application/json" \
   -d '{
-    "url": "https://example.com/devguard-webhook",
-    "secret": "my-shared-secret", # include if configured
+    "url": "{your-webhook-domain}",
+    "secret": "{your-webhook-secret}",
     "payloadType": "sampleDependencyVulns"
   }'
 ```
