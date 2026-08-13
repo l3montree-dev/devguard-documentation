@@ -71,7 +71,7 @@ Navigate to the registration page at http://localhost:3000/registration and crea
 2. Choose a secure password
 3. Click the **Sign up** button
 
-![Registration page](../../assets/getting-started/registration.png)
+![Registration page](https://raw.githubusercontent.com/l3montree-dev/devguard-web/refs/heads/main/e2e/docs-screenshots/sign-up-screen.png)
 
 <Callout type="info">
 The local instance doesn't send emails until you configure an SMTP server. If you see an email verification screen, simply use the back button to continue.
@@ -86,11 +86,7 @@ Organizations help you structure your security scanning projects:
 1. Choose a name for your organization (for example, "MyOrg")
 2. Click the **Create Organization** button
 
-![Create organization](../../assets/getting-started/create-organization.png)
-
-**Verify it worked:** You should be redirected to the group overview page.
-
-![Organization overview](../../assets/getting-started/group-overview.png)
+![Create organization](https://raw.githubusercontent.com/l3montree-dev/devguard-web/refs/heads/main/e2e/docs-screenshots/org-creation-screen.png)
 
 ### Create a new group
 
@@ -104,7 +100,7 @@ You can create unlimited groups in an organization and change these values later
 
 **Verify it worked:** You should be redirected to the group overview page of your newly created group.
 
-![Group overview](../../assets/getting-started/group-overview.png)
+![Group overview](https://raw.githubusercontent.com/l3montree-dev/devguard-web/refs/heads/main/e2e/docs-screenshots/group-creation-screen.png)
 
 ### Create a new repository
 
@@ -116,21 +112,9 @@ Repositories represent the actual software projects you want to scan for vulnera
 4. Select a provider (GitLab or GitHub) - this helps DevGuard optimize configuration options and CI/CD integration
 5. Click the **Create Repository** button
 
-![Create repository](../../assets/getting-started/create-repository.png)
+![Create repository](https://raw.githubusercontent.com/l3montree-dev/devguard-web/refs/heads/main/e2e/docs-screenshots/repo-creation-dialog.png)
 
 **Verify it worked:** You should be redirected to the onboarding page of your newly created repository.
-
-### Open the risk scanning setup
-
-Click the **Setup Risk Scanning** button to configure how you'll scan your code. For this tutorial, we'll use the Custom Setup option to perform a single scan.
-
-<Callout type="default">
-If you're using GitLab, the Auto Setup option can automatically configure DevGuard CI/CD integration for your repository.
-</Callout>
-
-Click the **Custom Setup** button to open the custom setup dialog.
-
-![Custom setup](../../assets/getting-started/custom-setup.png)
 
 ### Choose your scanning method
 
@@ -178,7 +162,7 @@ devguard-scanner sca \
     --webUI="https://main.devguard.org"
 ```
 
-![DevGuard scanner command](../../assets/getting-started/devguard-cli.png)
+![DevGuard scanner command](https://raw.githubusercontent.com/l3montree-dev/devguard-web/refs/heads/main/e2e/docs-screenshots/devguard-cli-screen.png)
 
 Navigate to a directory containing code you want to scan and run the command. The scanner will analyze your dependencies and identify known vulnerabilities.
 
@@ -214,7 +198,7 @@ Return to the DevGuard web frontend in your browser and navigate to your reposit
 
 The repository page now displays a comprehensive summary of the scan results, including the total number of vulnerabilities, their risk distribution, and details about affected dependencies.
 
-![Dependency scan results](../../assets/getting-started/dependency-scan-results.png)
+![Dependency scan results](https://raw.githubusercontent.com/l3montree-dev/devguard-web/refs/heads/main/e2e/docs-screenshots/dependency-risk-table.png)
 
 ### Explore DevGuard features
 
@@ -226,7 +210,7 @@ Take some time to explore additional features:
 - Check the dashboard for an overview of your security posture across all repositories
 - Explore the risk scoring methodology and how DevGuard prioritizes vulnerabilities
 
-![Dashboard](../../assets/getting-started/dashboard.png)
+![Dashboard](https://raw.githubusercontent.com/l3montree-dev/devguard-web/refs/heads/main/e2e/docs-screenshots/asset-overview.png)
 
 </Steps>
 
