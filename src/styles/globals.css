@@ -1,7 +1,7 @@
 /* ─── 1. Imports ─────────────────────────────────────────────── */
-@import "@document-writing-tools/kernux-theme/src/styles.css";
+@import '@document-writing-tools/kernux-theme/src/styles.css';
 @import 'swagger-ui-react/swagger-ui.css';
-@import "./swagger-ui-custom.css";
+@import './swagger-ui-custom.css';
 
 /* ─── 2. Tailwind source scanning ───────────────────────────── */
 /* Tell Tailwind to scan landing-page source files for used classes */
@@ -11,252 +11,277 @@
 
 /* ─── 3. Design tokens ───────────────────────────────────────── */
 @theme {
-  /* semantic status colors */
-  --color-success: #22c55e;
-  --color-warning: #d8ba1a;
+    /* semantic status colors */
+    --color-success: #22c55e;
+    --color-warning: #d8ba1a;
 
-  /* l3 brand colors */
-  --color-l3-50:  #fbfcea;
-  --color-l3-100: #f9f9c8;
-  --color-l3-200: #f5f193;
-  --color-l3-300: #efe355;
-  --color-l3-400: #e9d432;
-  --color-l3-500: #d8ba1a;
-  --color-l3-600: #ba9214;
-  --color-l3-700: #956b13;
-  --color-l3-800: #7c5517;
-  --color-l3-900: #69461a;
-  --color-l3-950: #3d250b;
+    /* l3 brand colors */
+    --color-l3-50: #fbfcea;
+    --color-l3-100: #f9f9c8;
+    --color-l3-200: #f5f193;
+    --color-l3-300: #efe355;
+    --color-l3-400: #e9d432;
+    --color-l3-500: #d8ba1a;
+    --color-l3-600: #ba9214;
+    --color-l3-700: #956b13;
+    --color-l3-800: #7c5517;
+    --color-l3-900: #69461a;
+    --color-l3-950: #3d250b;
 
-  /* devguard colors */
-  --color-dg-300: #161b23;
+    /* devguard colors */
+    --color-dg-300: #161b23;
 }
 
 /* ─── 4. CSS variable overrides (unlayered — intentional DWT override) ── */
 :root {
-  font-size: 13.3333px;
-  --sidebar-background: var(--background);
+    font-size: 13.3333px;
+    --sidebar-background: var(--background);
 
-  /* ── Typography (consumed by DWT theme-bridge) ── */
-  --font-family: Inter, sans-serif;
-  --font-display: Lexend, sans-serif;
-  --font-weight-heading: 600;
+    /* ── Typography (consumed by DWT theme-bridge) ── */
+    --font-family: Inter, sans-serif;
+    --font-display: Lexend, sans-serif;
+    --font-weight-heading: 600;
 
-  /* ── Swagger UI extras ───────────────────────── */
-  --blue: hsl(204 86% 53%);
+    /* ── Swagger UI extras ───────────────────────── */
+    --blue: hsl(204 86% 53%);
 
-  --grid-line-color: rgba(255, 255, 255, 0.08);
+    --grid-line-color: rgba(255, 255, 255, 0.08);
 
-  /* Workaround: kernux-theme's styles.css references
+    /* Workaround: kernux-theme's styles.css references
      --kern-typography-font-size-static-small (for --text-xs/--text-sm) but
      theme-bridge.css never defines it, leaving both variables invalid. */
-  --kern-typography-font-size-static-small: 14px;
+    --kern-typography-font-size-static-small: 14px;
 
-  --color-card: #161B23 !important;
-  --color-border: hsl(215 22% 15%) !important; 
-  --accent-foreground: hsl(0 0% 5%);
+    --color-card: #161b23 !important;
+    --color-border: hsl(215 22% 15%) !important;
+    --accent-foreground: hsl(0 0% 5%);
 }
 
-[data-kern-theme="dark"] {
-  /* ── Colors ─────────────────────────────────── */
-  --info: #fff;
-  --primary:            #f9bd25;
-  --primary-foreground: #171717;
-  --background: hsl(213 27% 6%);
-  --foreground:         #fafafa;
-  --muted: hsl(213 15% 15%);
-  --muted-foreground: hsl(212 9% 59%);
-  --border:             #262626;  
-  --link-color:         #f9bd25;
-  --accent-foreground:  #040202;
-  --sidebar-accent-foreground: #a3a3a3;
-  --sidebar-accent:     #ffffff0d;
-  --sidebar-accent-active:    #fddd8c1a; /*TODO: add this to DWT theme */
-  --destructive:        #ef4444;
-  --destructive-foreground: #fafafa;
+[data-kern-theme='dark'] {
+    /* ── Colors ─────────────────────────────────── */
+    --info: #fff;
+    --primary: #f9bd25;
+    --primary-foreground: #171717;
+    --background: hsl(213 27% 6%);
+    --foreground: #fafafa;
+    --muted: hsl(213 15% 15%);
+    --muted-foreground: hsl(212 9% 59%);
+    --border: #262626;
+    --link-color: #f9bd25;
+    --accent-foreground: #040202;
+    --sidebar-accent-foreground: #a3a3a3;
+    --sidebar-accent: #ffffff0d;
+    --sidebar-accent-active: #fddd8c1a; /*TODO: add this to DWT theme */
+    --destructive: #ef4444;
+    --destructive-foreground: #fafafa;
 
-  --accent: hsl(0 0% 96%);
-  --accent-foreground: hsl(0 0% 5%);
+    --accent: hsl(0 0% 96%);
+    --accent-foreground: hsl(0 0% 5%);
 
-  /* ── Optional surfaces ───────────────────────── */
-  --card:               #0a0a0a;
-  --secondary:          #24252a;
-  --secondary-foreground: #fafafa;
-  --popover:            #0a0a0a;
-  --popover-foreground: #fafafa;
-  --input:              #262626;
+    /* ── Optional surfaces ───────────────────────── */
+    --card: #0a0a0a;
+    --secondary: #24252a;
+    --secondary-foreground: #fafafa;
+    --popover: #0a0a0a;
+    --popover-foreground: #fafafa;
+    --input: #262626;
 
-  /* ── Shape ───────────────────────────────────── */
-  --ring: #262626;
+    /* ── Shape ───────────────────────────────────── */
+    --ring: #262626;
 
-  --color-searchbar-background: var(--secondary);
-  --color-searchbar-border: var(--border);
+    --color-searchbar-background: var(--secondary);
+    --color-searchbar-border: var(--border);
 }
 
 /* ─── 5. Base layer ──────────────────────────────────────────── */
 @layer base {
-  * {
-    @apply border-border;
-  }
-
-  body {
-    @apply bg-background text-foreground;
-  }
-
-  /* Heading sizes */
-  h1 { @apply text-[36px]!; line-height: normal !important; }
-  h2 { @apply text-[30px]!; }
-  h3 { @apply text-[24px]!; }
-
-  .doc-steps {
-    h2, h3, h4 {
-      font-size: 24px !important;
+    * {
+        @apply border-border;
     }
-  }
-  
 
-  /* Heading font — Lexend */
-  h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-lexend), Lexend, sans-serif !important;
-  }
+    body {
+        @apply bg-background text-foreground;
+    }
 
-  footer h3 {
-    @apply text-xs!;
-  }
+    /* Heading sizes */
+    h1 {
+        @apply text-[36px]!;
+        line-height: normal !important;
+    }
+    h2 {
+        @apply text-[30px]!;
+    }
+    h3 {
+        @apply text-[24px]!;
+    }
 
-  pre,
-  pre * {
-    font-family: var(--default-mono-font-family, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace) !important;
-  }
+    .doc-steps {
+        h2,
+        h3,
+        h4 {
+            font-size: 24px !important;
+        }
+    }
 
-  summary h4 {
-    margin-top: 0px !important;
-  }
+    /* Heading font — Lexend */
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: var(--font-lexend), Lexend, sans-serif !important;
+    }
 
-  div[id="toc-title"] > h2 {
-    @apply text-lg!;
-  }
+    footer h3 {
+        @apply text-xs!;
+    }
 
-  /* 3rd-party nav shadow resets */
-  nav > div > p,
-  nav > div > div {
-    box-shadow: none !important;
-  }
+    pre,
+    pre * {
+        font-family: var(
+            --default-mono-font-family,
+            ui-monospace,
+            SFMono-Regular,
+            Menlo,
+            Monaco,
+            Consolas,
+            monospace
+        ) !important;
+    }
+
+    summary h4 {
+        margin-top: 0px !important;
+    }
+
+    div[id='toc-title'] > h2 {
+        @apply text-lg!;
+    }
+
+    /* 3rd-party nav shadow resets */
+    nav > div > p,
+    nav > div > div {
+        box-shadow: none !important;
+    }
 }
 
 /* ─── 6. Unlayered overrides (beats all layers) ─────────────── */
 .kern-form-input__input {
-  @apply h-10;
-  @apply border-none
+    @apply h-10;
+    @apply border-none;
 }
 
 .content-wrapper {
-  @apply max-w-[1440px] mx-auto px-4;
+    @apply max-w-[1440px] mx-auto px-4;
 }
 /* ─── 7. Component layer ─────────────────────────────────────── */
 @layer components {
-  .hero-outer {
-    @apply isolate pt-10 pb-24 sm:pb-32 lg:py-40;
-  }
+    .hero-outer {
+        @apply isolate pt-10 pb-24 sm:pb-32 lg:py-40;
+    }
 
-  .hero-inner {
-    @apply grid grid-cols-1 gap-y-12 lg:grid-cols-2 lg:items-center lg:gap-x-20;
-  }
-  .section-outer {
-    @apply relative py-8 max-sm:py-8;
-  }
-  .hero-button {
-    @apply bg-primary text-primary-foreground hover:bg-primary/90 mr-1.5 inline-flex h-9 shrink-0 items-center gap-1.5 rounded-sm px-3 font-medium transition-colors disabled:opacity-50;
-  }
+    .hero-inner {
+        @apply grid grid-cols-1 gap-y-12 lg:grid-cols-2 lg:items-center lg:gap-x-20;
+    }
+    .section-outer {
+        @apply relative py-8 max-sm:py-8;
+    }
+    .hero-button {
+        @apply bg-primary text-primary-foreground hover:bg-primary/90 mr-1.5 inline-flex h-9 shrink-0 items-center gap-1.5 rounded-sm px-3 font-medium transition-colors disabled:opacity-50;
+    }
 }
 
 /* ─── 8. Utility layer ───────────────────────────────────────── */
 @layer utilities {
-  
-  /* Code blocks: */
-  pre {
-    @apply ring-1 ring-border rounded-md;
-  }
+    /* Code blocks: */
+    pre {
+        @apply ring-1 ring-border rounded-md;
+    }
 
-  header nav {
-    @apply max-w-[1440px]! mx-auto!;
-  }
+    header nav {
+        @apply max-w-[1440px]! mx-auto!;
+    }
 
-  /* Breadcrumb */
-  #breadcrumb .kern-link {
-    @apply text-[14px]! no-underline! font-semibold!;
-    @apply text-(--sidebar-accent-foreground)! visited:text-(--sidebar-accent-foreground)! hover:text-(--foreground)!;
-  }
+    /* Breadcrumb */
+    #breadcrumb .kern-link {
+        @apply text-[14px]! no-underline! font-semibold!;
+        @apply text-(--sidebar-accent-foreground)! visited:text-(--sidebar-accent-foreground)! hover:text-(--foreground)!;
+    }
 
-  /* Sidebar: */
-  /* Regular menu links carry data-sidebar on the <a> itself; collapsible
+    /* Sidebar: */
+    /* Regular menu links carry data-sidebar on the <a> itself; collapsible
      parent items wrap the <a> in a div[data-sidebar="menu-button"], so the
      anchor has no data-sidebar attribute — match both shapes. */
-  a[data-sidebar], button[data-sidebar],
-  [data-sidebar="menu-button"] a,
-  [data-sidebar="menu-button"] > button {
-    @apply text-(--sidebar-accent-foreground) hover:text-(--foreground)!;
-    @apply text-[14px]!;
-  }
-  a[data-active="true"][data-sidebar],
-  [data-sidebar="menu-button"] a[data-active="true"] {
-    @apply bg-(--sidebar-accent-active) text-(--link-color)!;
-    @apply font-semibold;
-  }
+    a[data-sidebar],
+    button[data-sidebar],
+    [data-sidebar='menu-button'] a,
+    [data-sidebar='menu-button'] > button {
+        @apply text-(--sidebar-accent-foreground) hover:text-(--foreground)!;
+        @apply text-[14px]!;
+    }
+    a[data-active='true'][data-sidebar],
+    [data-sidebar='menu-button'] a[data-active='true'] {
+        @apply bg-(--sidebar-accent-active) text-(--link-color)!;
+        @apply font-semibold;
+    }
 
-  /* TOC */
-  #toc .kern-link {
-    @apply text-[13px]! no-underline! font-semibold!;
-    @apply text-(--sidebar-accent-foreground)! visited:text-(--sidebar-accent-foreground)! hover:text-(--foreground)!;
-  }
-  #toc .kern-link[data-active="true"] {
-    @apply text-(--link-color)!;
-  }
-  #toc .kern-heading-medium {
-    @apply text-[14px]! font-semibold!;
-  }
-  #toc-footer .kern-link {
-    @apply text-[12px]!;
-  }
+    /* TOC */
+    #toc .kern-link {
+        @apply text-[13px]! no-underline! font-semibold!;
+        @apply text-(--sidebar-accent-foreground)! visited:text-(--sidebar-accent-foreground)! hover:text-(--foreground)!;
+    }
+    #toc .kern-link[data-active='true'] {
+        @apply text-(--link-color)!;
+    }
+    #toc .kern-heading-medium {
+        @apply text-[14px]! font-semibold!;
+    }
+    #toc-footer .kern-link {
+        @apply text-[12px]!;
+    }
 
-  /* TODO: this should be changed after DWT fix */
-  /* hide arrows from external links: */
-  a[href^="http"]::after {
-    @apply hidden!;
-  }
-  
-  #feedback-section {
-    @apply mt-12;
-  }
-  #feedback-section form {
-    @apply mt-3;
-  }
-  #feedback-section h2 {
-    @apply text-left;
-  }
-  #feedback-section button[role="checkbox"] {
-    @apply mt-1;
-  }
-  #feedback-section .kern-link {
-    @apply text-sm!
-  }
-  #feedback-section .kern-label {
-    @apply text-[14px]! font-medium!
-  }
+    /* TODO: this should be changed after DWT fix */
+    /* hide arrows from external links: */
+    a[href^='http']::after {
+        @apply hidden!;
+    }
 
+    #feedback-section {
+        @apply mt-12;
+    }
+    #feedback-section form {
+        @apply mt-3;
+    }
+    #feedback-section h2 {
+        @apply text-left;
+    }
+    #feedback-section button[role='checkbox'] {
+        @apply mt-1;
+    }
+    #feedback-section .kern-link {
+        @apply text-sm!;
+    }
+    #feedback-section .kern-label {
+        @apply text-[14px]! font-medium!;
+    }
 }
 
-p>code,
-ul>code,
-li>code,
-strong>code {
-  @apply bg-black!;
+p > code,
+ul > code,
+li > code,
+strong > code {
+    @apply bg-black!;
 }
 
 .c7-bubble svg {
-  stroke: black;
+    stroke: black;
 }
 
-[data-kern-theme="dark"] .kern-table-responsive {
+[data-kern-theme='dark'] .kern-table-responsive {
     --dwt-table-scroll-shadow: var(--input) !important;
+}
+
+[tabindex]:not([tabindex='-1']):focus {
+    border-radius: 0.25rem 0.25rem 0 0;
+    box-shadow: none;
 }
