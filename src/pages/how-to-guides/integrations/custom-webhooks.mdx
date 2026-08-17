@@ -8,7 +8,7 @@ seo:
     schema:
         type: TechArticle
 title: DevGuard Custom Webhooks Reference Guide
-description: "Complete reference for DevGuard's outbound custom webhooks — scope, supported event types, every management action with curl examples, full delivery payload formats, and how to verify and troubleshoot deliveries."
+description: "Complete guide to DevGuard's outbound custom webhooks — scope, supported event types, managing webhooks from the UI, full delivery payload formats, and how to verify and troubleshoot deliveries."
 lang: en-US
 ignoreChecks: null
 ---
@@ -59,339 +59,135 @@ There's no separate toggle for dependency vs. first-party findings — `vulnEnab
 
 ## Managing Webhooks
 
-You can manage your custom webhooks by sending requests directly to the according endpoints in DevGuard.
+You can manage custom webhooks either from the DevGuard web UI or by talking to the API directly.
 
 <Callout type="info">
-  Talking to the endpoints requires authorization. If you authorize the access by using the `Authorization` Header in your request, you will need a `symmetric` token of form `dvg_<token_identifier>`. The token requires at least `manage` scope.
+    This section walks through the UI. For every endpoint, request/response
+    schema, and curl examples, see the
+    [Webhooks API Reference](/reference/api/webhooks) — talking to the API
+    directly requires an `Authorization` header with a `symmetric` token of
+    form `dvg_<token_identifier>` that has at least `manage` scope.
+</Callout>
+
+Webhook settings live in one of two places, depending on the scope you want:
+
+- **Organization-scoped** — **Organization Settings → Webhooks**. Fires for every project and asset in the organization.
+- **Project-scoped** — **Project Settings → Webhooks**. Fires only for assets within that specific project.
+
+<Callout type="warning">
+    Update and delete actions apply to the same scope a webhook was created at.
+    Manage an organization-scoped webhook from Organization Settings, and a
+    project-scoped webhook from that project's Settings — the two lists are
+    independent, and a webhook only ever appears in one of them.
 </Callout>
 
 ### Creating a Webhook
 
-**Organization-scoped**
+1. Open the **Webhooks** panel (Organization Settings or Project Settings, depending on the scope you want).
 
-**Endpoint:**
+**Example on Organization Level:**
+![Screenshot placeholder: create webhook before](https://raw.githubusercontent.com/l3montree-dev/devguard-web/refs/heads/main/e2e/docs-screenshots/webhook-section-org.png)
 
-```bash
-POST /api/v1/organizations/{organization}/integrations/webhook/test-and-save/
-```
+2. Click **Add Webhook**.
 
-**Request:**
+3. Fill in the fields:
 
-```sh
-curl -X POST {your-devguard-domain}/api/v1/organizations/{organziation}/integrations/webhook/test-and-save/ \
-  -H "Authorization: Bearer dvg_<your-token>" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "My SIEM Integration",
-    "description": "Forward vulnerability events to our SIEM",
-    "url": "{your-webhook-domain}",
-    "secret": "{your-webhook-secret}",
-    "sbomEnabled": true,
-    "vulnEnabled": true
-  }'
-```
+![Screenshot placeholder: create webhook fill](https://raw.githubusercontent.com/l3montree-dev/devguard-web/refs/heads/main/e2e/docs-screenshots/webhook-creation-form-org.png)
 
-**Project-scoped**
+| Field         | Required | Description                                                                                                                                                                               |
+| ------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `name`        | no       | Display name for the webhook                                                                                                                                                              |
+| `description` | no       | Free-text description of the webhook's purpose                                                                                                                                            |
+| `url`         | **yes**  | The endpoint DevGuard sends `POST` requests to                                                                                                                                            |
+| `secret`      | no       | Shared secret DevGuard echoes back on every delivery in the `X-Webhook-Secret` header, so your endpoint can verify the sender. Encrypted at rest; never shown back to you after creation. |
+| SBOM events   | no       | Deliver `sbom` events                                                                                                                                                                     |
+| Vuln events   | no       | Deliver `dependencyVulnerabilities` and `firstPartyVulnerabilities` events                                                                                                                |
 
-**Endpoint:**
+4. Click **Save**.
 
-```bash
-POST /api/v1/organizations/{organization}/projects/{projectSlug}/integrations/webhook/test-and-save/
-```
-
-**Request:**
-
-```sh
-curl -X POST {your-devguard-domain}/api/v1/organizations/{organziation}/projects/{project}/integrations/webhook/test-and-save/ \
-  -H "Authorization: Bearer dvg_<your-token>" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "My SIEM Integration",
-    "description": "Forward vulnerability events to our SIEM",
-    "url": "{your-webhook-domain}",
-    "secret": "{your-webhook-secret}",
-    "sbomEnabled": true,
-    "vulnEnabled": true
-  }'
-```
-
-**Request body** (same shape for both scopes):
-
-| Field         | Type    | Required | Description                                                                                                                                                                                      |
-| ------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `name`        | string  | no       | Display name for the webhook                                                                                                                                                                     |
-| `description` | string  | no       | Free-text description of the webhook's purpose                                                                                                                                                   |
-| `url`         | string  | **yes**  | The endpoint DevGuard sends `POST` requests to                                                                                                                                                   |
-| `secret`      | string  | no       | Shared secret DevGuard echoes back on every delivery in the `X-Webhook-Secret` header, so your endpoint can verify the sender. Encrypted at rest; never returned by any endpoint after creation. |
-| `sbomEnabled` | boolean | no       | Deliver `sbom` events                                                                                                                                                                            |
-| `vulnEnabled` | boolean | no       | Deliver `dependencyVulnerabilities` and `firstPartyVulnerabilities` events                                                                                                                       |
+![Screenshot placeholder: create webhook after](https://raw.githubusercontent.com/l3montree-dev/devguard-web/refs/heads/main/e2e/docs-screenshots/webhook-created-org.png)
 
 <Callout type="warning">
-    Despite the `test-and-save` path name, this call does **not** send a live
-    test request to `url` before saving — it persists the row unconditionally as
-    long as `url` is non-empty. Use the [test endpoint](#sending-a-test-webhook)
-    yourself, before or after creating the webhook, to confirm your receiver
-    actually works.
+    Saving a webhook does **not** send a live test request to `url` first — it's
+    saved as long as `url` is non-empty. Use [Send
+    Test](#sending-a-test-webhook), before or after saving, to confirm your
+    receiver actually works.
 </Callout>
-
-**Response — `200 OK`:**
-
-```json
-{
-    "id": "{webhook-id}",
-    "name": "My SIEM Integration",
-    "description": "Forward vulnerability events to our SIEM",
-    "url": "{your-webhook-domain}",
-    "sbomEnabled": true,
-    "vulnEnabled": true
-}
-```
-
-The response never includes `secret`, `orgId`, `projectId`, or timestamps.
-
-### Listing Webhooks
-
-There is **no dedicated** "list webhooks" endpoint. Webhooks are returned as a nested field on two existing read endpoints instead:
-
-**Organization-scoped webhooks** (nested in org settings; `project_id` is null)
-
-**Endpoint:**
-
-```bash
-GET /api/v1/organizations/{organization}/settings/
-```
-
-**Request:**
-
-```sh
-curl {your-devguard-domain}/api/v1/organizations/{organziation}/settings/ \
-  -H "Authorization: Bearer dvg_<your-token>"
-```
-
-**Project-scoped webhooks** (this project's own webhooks only — NOT the inherited org-level ones)
-
-**Endpoint:**
-
-```bash
-GET /api/v1/organizations/{organization}/projects/{projectSlug}/
-```
-
-**Request:**
-
-```sh
-curl {your-devguard-domain}/api/v1/organizations/{organziation}/projects/{project}/ \
-  -H "Authorization: Bearer dvg_<your-token>"
-```
-
-Both responses include a `webhooks` array of the same object shown in [Creating a Webhook](#creating-a-webhook) (secret omitted). To see the full set of webhooks that will fire for a given project, combine the `webhooks` array from `.../settings/` (org-wide) with the `webhooks` array from `.../projects/{project}/` (project-specific) — the project endpoint alone does not include inherited org-level webhooks.
 
 ### Updating a Webhook
 
-**Organization-scoped**
+1. In the Webhooks panel, open the webhook you want to change.
 
-**Endpoint:**
+**Example on Organization Level:**
+![Screenshot placeholder: edit webhook before](https://raw.githubusercontent.com/l3montree-dev/devguard-web/refs/heads/main/e2e/docs-screenshots/webhook-edit-action-org.png)
 
-```bash
-PUT /api/v1/organizations/{organization}/integrations/webhook/{id}/
-```
+2. Edit any field — name, description, URL, secret, or which event types are enabled.
 
-**Request:**
+![Screenshot placeholder: edit webhook confirm](https://raw.githubusercontent.com/l3montree-dev/devguard-web/refs/heads/main/e2e/docs-screenshots/webhook-edit-form-org.png)
 
-```sh
-curl -X PUT {your-devguard-domain}/api/v1/organizations/{organziation}/integrations/webhook/{webhook-id}/ \
-  -H "Authorization: Bearer dvg_<your-token>" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "id": "{webhook-id}",
-    "name": "My SIEM Integration",
-    "description": "Forward vulnerability events to our SIEM",
-    "url": "https://example.com/devguard-webhook-v2",
-    "secret": "{your-webhook-secret}",
-    "sbomEnabled": true,
-    "vulnEnabled": false
-  }'
-```
+3. Click **Save**.
 
-**Project-scoped**
-
-**Endpoint:**
-
-```bash
-PUT /api/v1/organizations/{organization}/projects/{projectSlug}/integrations/webhook/{id}/
-```
-
-**Request:**
-
-```sh
-curl -X PUT {your-devguard-domain}/api/v1/organizations/{organziation}/projects/{project}/integrations/webhook/{webhook-id}/ \
-  -H "Authorization: Bearer dvg_<your-token>" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "id": "{webhook-id}",
-    "name": "My SIEM Integration",
-    "description": "Forward vulnerability events to our SIEM",
-    "url": "https://example.com/devguard-webhook-v2",
-    "secret": "{your-webhook-secret}",
-    "sbomEnabled": true,
-    "vulnEnabled": false
-  }'
-```
-
-The request body is the same shape as create, plus `id`, for both scopes.
+![Screenshot placeholder: edit webhook after](https://raw.githubusercontent.com/l3montree-dev/devguard-web/refs/heads/main/e2e/docs-screenshots/webhook-after-update-org.png)
 
 <Callout type="warning">
-    - **The `id` must also appear in the JSON body, not just the URL**. 
-    - **Omitting `secret` from an update clears any secret you previously
-    configured** — always resend it if you want to keep it, since no endpoint
-    ever returns it to you to read back.
+    Clearing the **Secret** field and saving removes any secret you previously
+    configured — DevGuard never displays a saved secret back to you, so re-enter
+    it if you want to keep it.
 </Callout>
-
-**Response — `200 OK`:**
-
-```json
-{
-    "id": "{webhook-id}",
-    "name": "My SIEM Integration",
-    "description": "Forward vulnerability events to our SIEM",
-    "url": "https://example.com/devguard-webhook-v2",
-    "sbomEnabled": true,
-    "vulnEnabled": false
-}
-```
 
 ### Deleting a Webhook
 
-**Organization-scoped**
+1. In the Webhooks panel, find the webhook.
 
-**Endpoint:**
+**Example on Organization Level:**
+![Screenshot placeholder: delete webhook before](https://raw.githubusercontent.com/l3montree-dev/devguard-web/refs/heads/main/e2e/docs-screenshots/webhook-before-deletion-org.png)
 
-```bash
-DELETE /api/v1/organizations/{organization}/integrations/webhook/{id}/
-```
+2. Choose **Delete**
 
-**Request:**
+![Screenshot placeholder: delete webhook before](https://raw.githubusercontent.com/l3montree-dev/devguard-web/refs/heads/main/e2e/docs-screenshots/webhook-before-deletion-confirm-org.png)
 
-```sh
-curl -X DELETE {your-devguard-domain}/api/v1/organizations/{organziation}/integrations/webhook/{webhook-id}/ \
-  -H "Authorization: Bearer dvg_<your-token>"
-```
+3. Confirm the deletion.
 
-**Project-scoped**
+![Screenshot placeholder: delete webhook after](https://raw.githubusercontent.com/l3montree-dev/devguard-web/refs/heads/main/e2e/docs-screenshots/webhook-after-deletion-org.png)
 
-**Endpoint:**
-
-```bash
-DELETE /api/v1/organizations/{organization}/projects/{projectSlug}/integrations/webhook/{id}/
-```
-
-**Request:**
-
-```sh
-curl -X DELETE {your-devguard-domain}/api/v1/organizations/{organziation}/projects/{project}/integrations/webhook/{webhook-id}/ \
-  -H "Authorization: Bearer dvg_<your-token>"
-```
-
-**Response — `200 OK`:**
-
-```json
-"Webhook integration deleted successfully"
-```
-
-The response body is a bare JSON string, not an object.
+This immediately stops all future deliveries to that webhook.
 
 ### Sending a Test Webhook
 
-Send a real delivery to any URL without creating a saved webhook:
+Send a real delivery to any URL, whether or not you've already saved a webhook:
 
-**Organization-scoped**
+1. In the Webhooks panel, click **Send Test**.
 
-**Endpoint:**
+![Screenshot placeholder: create webhook form](https://raw.githubusercontent.com/l3montree-dev/devguard-web/refs/heads/main/e2e/docs-screenshots/webhook-before-confirm-test-payload.png)
 
-```bash
-POST /api/v1/organizations/{organization}/integrations/webhook/test/
-```
+![Screenshot placeholder: create webhook form](https://raw.githubusercontent.com/l3montree-dev/devguard-web/refs/heads/main/e2e/docs-screenshots/webhook-before-send-test-payload.png)
 
-**Request:**
-
-```sh
-curl -X POST {your-devguard-domain}/api/v1/organizations/{organziation}/integrations/webhook/test/ \
-  -H "Authorization: Bearer dvg_<your-token>" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "url": "{your-webhook-domain}",
-    "secret": "{your-webhook-secret}",
-    "payloadType": "sampleDependencyVulns"
-  }'
-```
-
-**Project-scoped**
-
-**Endpoint:**
-
-```bash
-POST /api/v1/organizations/{organization}/projects/{projectSlug}/integrations/webhook/test/
-```
-
-**Request:**
-
-```sh
-curl -X POST {your-devguard-domain}/api/v1/organizations/{organziation}/projects/{project}/integrations/webhook/test/ \
-  -H "Authorization: Bearer dvg_<your-token>" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "url": "{your-webhook-domain}",
-    "secret": "{your-webhook-secret}",
-    "payloadType": "sampleDependencyVulns"
-  }'
-```
-
-**Request body:**
-
-| Field         | Type   | Required | Description                                                             |
-| ------------- | ------ | -------- | ----------------------------------------------------------------------- |
-| `url`         | string | **yes**  | Where to send the test delivery                                         |
-| `secret`      | string | no       | Sent as `X-Webhook-Secret` on this test delivery only; nothing is saved |
-| `payloadType` | string | no       | Shape of the sample payload. Defaults to `empty`.                       |
-
-Supported `payloadType` values:
+2. Choose a **Payload Type** to control the shape of the sample event:
 
 | Value                   | Wire `type` sent            | Description                                                                                                                                      |
 | ----------------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `empty`                 | `test`                      | `{"message": "This is a test webhook from DevGuard", "timestamp": "<RFC3339>"}`                                                                  |
+| `empty`                 | `test`                      | `{"message": "This is a test webhook from DevGuard", "timestamp": "<RFC3339>"}` (the default)                                                    |
 | `sampleSbom`            | `sbom`                      | A sample CycloneDX **1.4** SBOM for a fictional `example-web-app` — real `sbom` deliveries are CycloneDX **1.6**, see [below](#payload-for-sbom) |
 | `sampleDependencyVulns` | `dependencyVulnerabilities` | A sample Log4Shell finding (`CVE-2021-44228`)                                                                                                    |
 | `sampleFirstPartyVulns` | `firstPartyVulnerabilities` | A sample SQL-injection finding                                                                                                                   |
 
-Note that for the three sample types, the `type` field in the delivered envelope is the **real** event type (e.g. `sbom`), not `test` — only `empty` produces the literal `test` type.
+Note that for the three sample types, the `type` field in the delivered envelope is the **real** event type (e.g. `sbom`), not `test` — only the default `empty` payload produces the literal `test` type.
 
-**Response — `200 OK`** (this is the response to _your_ curl call, not what gets delivered to `url`):
+3. Click **Send**. The UI reports whether the delivery to `url` succeeded or failed (In our example it fails, due to an invalid URL).
 
-```json
-{
-    "message": "Test webhook sent successfully",
-    "payloadType": "sampleDependencyVulns"
-}
-```
-
-If the delivery to `url` fails, this call returns `400` instead:
-
-```json
-{
-    "error": "Webhook test failed: webhook dependencyVulnerabilities failed, status: 500 Internal Server Error"
-}
-```
+![Screenshot placeholder: create webhook form](https://raw.githubusercontent.com/l3montree-dev/devguard-web/refs/heads/main/e2e/docs-screenshots/webhook-after-send-test-payload.png)
 
 <Callout type="info">
-    The test endpoint always uses fabricated example data for `asset` and
+    Test deliveries always use fabricated example data for `asset` and
     `assetVersion` (`example-asset` / `example-version`). `organization` is
-    always your real org. `project` is your real project only when you call the
-    project-scoped test path — the organization-scoped path fabricates an
-    `example-project` too.
+    always your real org. `project` is your real project only when you send the
+    test from a project-scoped Webhooks panel — sending from the
+    organization-scoped panel fabricates an `example-project` too.
 </Callout>
 
 ## Delivery Payload Format
 
-Every delivery is an HTTP `POST` with `Content-Type: application/json` and this envelope:
+Every delivery payload sent by DevGuard is an HTTP `POST` with `Content-Type: application/json` and this envelope:
 
 ```json
 {
@@ -795,6 +591,7 @@ Two more constraints apply regardless of retries:
 
 ## Related Documentation
 
+- [Webhooks API Reference](/reference/api/webhooks)
 - [Use the DevGuard API with Personal Access Tokens](/getting-started/use-devguard-api)
 - [DevGuard How-To Guides](/how-to-guides)
 - [Getting Started with DevGuard](/getting-started)
