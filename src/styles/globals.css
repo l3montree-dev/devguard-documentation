@@ -212,6 +212,10 @@
     @apply top-0 opacity-70;
   }
 
+  #breadcrumb svg {
+    @apply top-0 opacity-70;
+  }
+
   /* Sidebar: */
   /* Regular menu links carry data-sidebar on the <a> itself; collapsible
      parent items wrap the <a> in a div[data-sidebar="menu-button"], so the
