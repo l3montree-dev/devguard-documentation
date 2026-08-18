@@ -182,6 +182,26 @@
     @apply max-w-[1440px]! mx-auto!;
   }
 
+  /* Top nav links — the desktop header plus the copies the mobile drawer
+     renders outside of it. .kern-link clobbers the utilities in both places;
+     the :not() keeps this off the drawer's actual menu rows. */
+  header nav .kern-link,
+  [data-sidebar="sidebar"] .kern-link:not([data-sidebar="menu"] *) {
+    @apply no-underline!;
+    @apply text-(--foreground)! visited:text-(--foreground)! hover:text-primary!;
+  }
+  header nav .kern-link {
+    @apply p-sm!;
+  }
+  [data-sidebar="sidebar"] .kern-link:not([data-sidebar="menu"] *) {
+    @apply block! p-3!;
+  }
+  /* .kern-link's margin reset also cancels the container's space-y-2, which
+     would otherwise fuse the two link pills into one block. */
+  [data-sidebar="sidebar"] .kern-link:not([data-sidebar="menu"] *) + .kern-link {
+    @apply mt-2!;
+  }
+
   /* Breadcrumb */
   #breadcrumb .kern-link {
     @apply text-[14px]! no-underline! font-semibold!;
@@ -199,8 +219,13 @@
   a[data-sidebar], button[data-sidebar],
   [data-sidebar="menu-button"] a,
   [data-sidebar="menu-button"] > button {
-    @apply text-(--sidebar-accent-foreground) hover:text-(--foreground)!;
-    @apply text-[14px]!;
+    @apply text-(--sidebar-accent-foreground)! visited:text-(--sidebar-accent-foreground)! hover:text-(--foreground)!;
+    @apply text-[14px]! no-underline!;
+  }
+  /* .kern-link resets display/padding — restore the row box on anchors that are
+     the row themselves, so the label stays centered and inset like the others. */
+  a[data-sidebar="menu-button"] {
+    @apply flex! p-2!;
   }
   a[data-active="true"][data-sidebar],
   [data-sidebar="menu-button"] a[data-active="true"] {
@@ -231,6 +256,16 @@
   
   #feedback-section {
     @apply mt-12;
+  }
+  /* Span the full content column: drop the theme's wrapper padding and the
+     nested max-widths that inset the form from the surrounding prose. */
+  :has(> #feedback-section),
+  #feedback-section > div {
+    @apply px-0!;
+  }
+  #feedback-section > div,
+  #feedback-section > div > div {
+    @apply max-w-none!;
   }
   #feedback-section form {
     @apply mt-3;

@@ -14,7 +14,6 @@ import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-
 const config = withMarkdownWebBook({
     env: {
         DWT_DEFAULT_LOCALE: 'en',
@@ -26,12 +25,12 @@ const config = withMarkdownWebBook({
     webpack: (config) => {
         config.resolve.fallback = { fs: false }
         config.resolve.alias['react'] = path.resolve(
-        __dirname,
-        'node_modules/react',
+            __dirname,
+            'node_modules/react',
         )
         config.resolve.alias['react-dom'] = path.resolve(
-        __dirname,
-        'node_modules/react-dom',
+            __dirname,
+            'node_modules/react-dom',
         )
         return config
     },
@@ -45,7 +44,8 @@ const config = withMarkdownWebBook({
             },
             {
                 source: '/explanations/vulnerability-management/false-positive-detection',
-                destination: '/explanations/vulnerability-management/reduce-false-positives',
+                destination:
+                    '/explanations/vulnerability-management/reduce-false-positives',
                 permanent: true,
             },
             {
@@ -70,7 +70,8 @@ const config = withMarkdownWebBook({
             },
             {
                 source: '/how-to-guides/vex/mechanical-justifications',
-                destination: '/how-to-guides/vex#choose-a-mechanical-justification',
+                destination:
+                    '/how-to-guides/vex#choose-a-mechanical-justification',
                 permanent: true,
             },
             {
