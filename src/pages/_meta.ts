@@ -31,10 +31,4 @@ export default {
         type: 'page',
         href: '/package-inspector',
     },
-    '404': {
-        theme: {
-            layout: 'raw',
-        },
-        display: 'hidden',
-    },
 }
