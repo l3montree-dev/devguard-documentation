@@ -1,0 +1,41 @@
+---
+title: DevGuard Dependency Firewall API — REST API Reference
+description: "Proxy npm, Go and PyPI package requests through the DevGuard dependency firewall. Reference for the dependency proxy endpoints your package manager talks to."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: DevGuard Dependency Firewall API
+lang: en-US
+ignoreChecks: null
+---
+
+import ApiTagPage from '@/components/ApiTagPage'
+
+# DevGuard Dependency Firewall API
+
+The dependency firewall sits between your build and the public package registries. Instead of fetching straight from npm, the Go module proxy or PyPI, your package manager talks to DevGuard, which fetches upstream, inspects what came back, caches it, and serves it on — blocking packages that violate your policy before they ever reach a build.
+
+These endpoints are the proxy surface itself. In normal use you do not call them by hand: you point `npm`, `go` or `pip` at the proxy once and the tooling drives the rest. They are documented here because knowing the exact shape is useful when debugging a failing install or configuring a client that is not one of the three officially supported package managers.
+
+The paths mirror each registry's native protocol, which is what allows unmodified clients to work: metadata and tarball routes for npm, module and version routes for Go, and the simple index plus package downloads for PyPI. Variants carrying a `{secret}` segment let a client authenticate through the URL where the package manager offers no other way to pass a token.
+
+---
+
+<ApiTagPage tag="Dependency Firewall" />
+
+## Related Documentation
+
+- [Dependency Proxy Setup](/tutorials/advanced/dependency-proxy-setup) — an end-to-end walkthrough
+- [Set up the npm Proxy](/how-to-guides/dependency-proxy/setup-npm-proxy) — client configuration for npm
+- [Set up the Go Proxy](/how-to-guides/dependency-proxy/setup-go-proxy) — client configuration for Go
+- [Set up the PyPI Proxy](/how-to-guides/dependency-proxy/setup-pypi-proxy) — client configuration for Python
+- [Cache Management](/how-to-guides/dependency-proxy/cache-management) — how cached artifacts are retained
+- [Dependency Proxy Security](/explanations/security/dependency-proxy-security) — the threat model
+- [Malicious Package Detection](/explanations/security/malicious-package-detection) — what the firewall blocks
+- [Cache Integrity](/explanations/security/cache-integrity) — how cached content is verified
+- [Use the DevGuard API](/getting-started/use-devguard-api) — authentication and conventions
+- [DevGuard API Reference](/reference)

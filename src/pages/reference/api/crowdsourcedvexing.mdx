@@ -1,0 +1,38 @@
+---
+title: DevGuard Crowdsourced VEX API — REST API Reference
+description: "Retrieve crowdsourced VEX recommendations for the vulnerabilities of a DevGuard asset, for all findings at once or for a single dependency vulnerability."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: DevGuard Crowdsourced VEX API
+lang: en-US
+ignoreChecks: null
+---
+
+import ApiTagPage from '@/components/ApiTagPage'
+
+# DevGuard Crowdsourced VEX API
+
+Most VEX decisions are not unique. If a vulnerability in a widely used library is unreachable in your configuration, it is probably unreachable for everyone else using it the same way. Crowdsourced vexing surfaces the assessments other DevGuard users have already made so you do not have to repeat the analysis.
+
+This API returns those recommendations for an asset — either across all of its vulnerabilities in one call, or for a single dependency vulnerability when you are triaging one finding.
+
+Recommendations are advisory. They tell you how others assessed the same vulnerability in the same component; they do not change your own state. Applying one is a separate, deliberate step through the [VEX Rules API](/reference/api/vexrules), and the judgement of whether a recommendation fits your context remains yours.
+
+---
+
+<ApiTagPage tag="CrowdsourcedVexing" />
+
+## Related Documentation
+
+- [VEX Rules API](/reference/api/vexrules) — recording the decision you settle on
+- [VEX Rules](/how-to-guides/vex/vex-rules) — how rules are written and applied
+- [What is VEX](/explanations/vulnerability-management/what-is-vex) — the concept behind these recommendations
+- [Prove Not Affected](/how-to-guides/vex/prove-not-affected) — justifying a not-affected decision
+- [Reduce False Positives](/explanations/vulnerability-management/reduce-false-positives) — where this fits in triage
+- [Use the DevGuard API](/getting-started/use-devguard-api) — authentication and conventions
+- [DevGuard API Reference](/reference)

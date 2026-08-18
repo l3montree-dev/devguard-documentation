@@ -1,0 +1,36 @@
+---
+title: DevGuard Admin API — REST API Reference
+description: "Administer a DevGuard instance over REST. Manage instance settings and external organization admins, and read instance-wide usage and vulnerability stats."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: DevGuard Admin API
+lang: en-US
+ignoreChecks: null
+---
+
+import ApiTagPage from '@/components/ApiTagPage'
+
+# DevGuard Admin API
+
+The DevGuard Admin API covers instance-level administration: reading and updating instance settings, managing which users hold the admin role in externally managed organizations, and reading statistics aggregated across every organization on the instance.
+
+These endpoints sit outside the usual organization scope. They require instance administrator rights rather than a role within a single organization, so a token that works for the rest of the API will not necessarily be accepted here. `GET /admin` exists to confirm up front that your credentials carry those rights.
+
+---
+
+<ApiTagPage tag="Admin" />
+
+## Related Documentation
+
+- [Instance Admin Dashboard](/how-to-guides/administration/instance-admin-dashboard) — the same administration surface in the UI
+- [Restricting Access](/how-to-guides/administration/restricting-access) — who can reach these endpoints
+- [Admin Daemons API](/reference/api/admin-daemons) — triggering background jobs on the instance
+- [RBAC Model](/explanations/security/rbac-model) — how roles and permissions are evaluated
+- [Multi-Tenancy](/explanations/advanced-topics/multi-tenancy) — how organizations are isolated from one another
+- [Use the DevGuard API](/getting-started/use-devguard-api) — authentication and conventions
+- [DevGuard API Reference](/reference)

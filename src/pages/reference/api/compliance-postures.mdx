@@ -1,0 +1,41 @@
+---
+title: DevGuard Compliance Postures API — REST API Reference
+description: "Read and record DevGuard compliance postures per framework control, retrieve posture statistics and export an OSCAL system security plan via the REST API."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: DevGuard Compliance Postures API
+lang: en-US
+ignoreChecks: null
+---
+
+import ApiTagPage from '@/components/ApiTagPage'
+
+# DevGuard Compliance Postures API
+
+A compliance posture is your standing position on a single framework control: whether it is met, how, and what evidence supports that. This API lists postures for a scope, reads the posture for one control, and records posture events that move it forward.
+
+Posture history is event-based. Rather than overwriting the current state, you append an event, which keeps an auditable trail of how a control reached its present position and who moved it there.
+
+Two endpoints stand out. `stats` returns the aggregate counts you would put on a dashboard. `oscal` exports the whole posture as an OSCAL system security plan, which is the format auditors and other GRC tooling expect.
+
+Every operation is available at organization, project, and asset-version scope, so a control can be answered once centrally or per product where the answer genuinely differs.
+
+---
+
+<ApiTagPage tag="Compliance Postures" />
+
+## Related Documentation
+
+- [Track Compliance Postures](/how-to-guides/compliance/track-compliance-postures) — the same workflow in the UI
+- [Compliance Components API](/reference/api/compliance-components) — the statements a posture draws on
+- [Compliance API](/reference/api/compliance) — automated policy results
+- [ISO 27001 Mapping](/explanations/compliance/iso-27001-mapping) — mapping controls to DevGuard
+- [Cyber Resilience Act](/explanations/compliance/cyber-resilience-act) — a regulation these postures support
+- [Audit Trails](/explanations/compliance/audit-trails) — why posture history is append-only
+- [Use the DevGuard API](/getting-started/use-devguard-api) — authentication and conventions
+- [DevGuard API Reference](/reference)

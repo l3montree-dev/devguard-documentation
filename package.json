@@ -4,6 +4,8 @@
     "description": "Devguard documentation",
     "scripts": {
         "dev": "next dev --webpack",
+        "check:api-pages": "node utilities/check-api-reference-pages.mjs",
+        "prebuild": "npm run check:api-pages",
         "build": "next build --webpack",
         "start": "next start",
         "postbuild": "next-sitemap && cp sitemap.xml public/sitemap.xml && node utilities/copy-pages-to-public.mjs && node utilities/create-llmstxt.mjs",

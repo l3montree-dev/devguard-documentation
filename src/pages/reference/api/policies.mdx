@@ -1,0 +1,38 @@
+---
+title: DevGuard Policies API — REST API Reference
+description: "Create, read, update and delete DevGuard organization policies, then enable or disable them for individual projects, through the DevGuard REST API."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: DevGuard Policies API
+lang: en-US
+ignoreChecks: null
+---
+
+import ApiTagPage from '@/components/ApiTagPage'
+
+# DevGuard Policies API
+
+Policies are the rules your software has to satisfy — no critical vulnerabilities in a release, a required attestation present, a license category disallowed. This API manages them.
+
+Policies are defined once at organization level and then switched on per project. That split matters: creating a policy does not enforce it anywhere, and deleting one removes it everywhere. The project-level endpoints only enable or disable an existing organization policy for that project, which lets a stricter rule roll out gradually instead of breaking every pipeline at once.
+
+Policy definitions themselves are written in CEL. The [VEX CEL Reference](/reference/vex-cel-reference) documents the expression language and the fields available to it.
+
+---
+
+<ApiTagPage tag="Policies" />
+
+## Related Documentation
+
+- [Attestation Policies](/how-to-guides/compliance/attestation-policies) — writing and applying a policy
+- [VEX CEL Reference](/reference/vex-cel-reference) — the expression language
+- [Compliance API](/reference/api/compliance) — the results of evaluating these policies
+- [Compliance as Code](/explanations/compliance/compliance-as-code) — the model behind policies
+- [Projects API](/reference/api/projects) — the scope policies are enabled for
+- [Use the DevGuard API](/getting-started/use-devguard-api) — authentication and conventions
+- [DevGuard API Reference](/reference)

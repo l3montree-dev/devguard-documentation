@@ -1,0 +1,38 @@
+---
+title: DevGuard Admin Daemons API — REST API Reference
+description: "Trigger DevGuard background daemons on demand. Run the asset pipeline, fixed-version detection, Open Source Insights and VulnDB import jobs via the REST API."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: DevGuard Admin Daemons API
+lang: en-US
+ignoreChecks: null
+---
+
+import ApiTagPage from '@/components/ApiTagPage'
+
+# DevGuard Admin Daemons API
+
+DevGuard runs several background daemons on a schedule — importing vulnerability data, recalculating fixed versions, enriching components with Open Source Insights, and running the asset pipeline. The Admin Daemons API lets an instance administrator trigger any of them immediately instead of waiting for the next scheduled run.
+
+Each endpoint starts the job and returns once it has been accepted, not once it has finished. The work continues in the background, so treat a successful response as "queued" rather than "complete". This is mostly useful after a configuration change, when restoring an instance, or when debugging why data looks stale.
+
+The asset pipeline can be triggered for every asset at once or for a single asset, which is the safer option on a large instance.
+
+---
+
+<ApiTagPage tag="Admin Daemons" />
+
+## Related Documentation
+
+- [Daemon Pipeline](/explanations/advanced-topics/daemon-pipeline) — what each daemon does and when it normally runs
+- [Fixed Version Detection](/explanations/advanced-topics/fixed-version-detection) — the job behind the fixed-versions daemon
+- [Open Source Insights](/explanations/advanced-topics/open-source-insights) — the enrichment this daemon performs
+- [Admin API](/reference/api/admin) — instance settings and statistics
+- [Monitoring & Metrics](/how-to-guides/administration/monitoring-metrics) — observing daemon runs
+- [Use the DevGuard API](/getting-started/use-devguard-api) — authentication and conventions
+- [DevGuard API Reference](/reference)

@@ -108,6 +108,11 @@ const config = withMarkdownWebBook({
                 permanent: true,
             },
             {
+                source: '/reference/api/cve',
+                destination: '/reference/api/cve-database',
+                permanent: true,
+            },
+            {
                 source: '/imprint',
                 destination: 'https://l3montree.com/impressum',
                 permanent: false,

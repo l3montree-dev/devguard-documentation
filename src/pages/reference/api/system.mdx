@@ -1,0 +1,40 @@
+---
+title: DevGuard System API — REST API Reference
+description: "Check DevGuard liveness and readiness and read runtime, build and database diagnostics through the unauthenticated system endpoints."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: DevGuard System API
+lang: en-US
+ignoreChecks: null
+---
+
+import ApiTagPage from '@/components/ApiTagPage'
+
+# DevGuard System API
+
+Two endpoints for operating the instance rather than using it.
+
+`GET /health` is the liveness and readiness check. It is what a container orchestrator, load balancer or uptime monitor should poll: cheap, frequent, and answering only whether this instance is able to serve traffic right now.
+
+`GET /info` returns diagnostics — runtime details, build information and database status. It is the first thing to look at when confirming which version an environment is actually running, or when a deployment behaves differently from the one next to it.
+
+Because they are used by infrastructure that has no credentials, these endpoints sit outside the normal authentication scheme. Keep that in mind when exposing an instance publicly: `/info` reveals version and build detail, so restrict it at the ingress if that matters to you.
+
+---
+
+<ApiTagPage tag="System" />
+
+## Related Documentation
+
+- [Monitoring & Metrics](/how-to-guides/administration/monitoring-metrics) — wiring these into your monitoring
+- [Deploy with Helm](/how-to-guides/administration/deploy-with-helm) — where the probes are configured
+- [Deploy with Docker](/how-to-guides/administration/deploy-with-docker) — the equivalent for Compose
+- [Upgrade DevGuard](/how-to-guides/administration/upgrade-devguard) — confirming a version after upgrade
+- [Restricting Access](/how-to-guides/administration/restricting-access) — limiting who can reach `/info`
+- [Use the DevGuard API](/getting-started/use-devguard-api) — authentication and conventions
+- [DevGuard API Reference](/reference)

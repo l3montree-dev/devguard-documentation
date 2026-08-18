@@ -1,0 +1,39 @@
+---
+title: DevGuard In-toto API — REST API Reference
+description: "Create in-toto links, fetch the root layout, download the links for a supply chain and verify a supply chain attestation through the DevGuard REST API."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: DevGuard In-toto API
+lang: en-US
+ignoreChecks: null
+---
+
+import ApiTagPage from '@/components/ApiTagPage'
+
+# DevGuard In-toto API
+
+in-toto records what actually happened while your software was built. Every step in the pipeline emits a signed **link** describing its inputs and outputs, and a **layout** declares the sequence those steps were supposed to follow. Verification checks the links against the layout, which catches a build that skipped a step or ran somewhere it should not have.
+
+This API covers all four parts of that loop: submitting a link as a pipeline step completes, fetching the root layout that defines the expected chain, downloading the collected links for one supply chain run, and verifying a supply chain end to end.
+
+Most link creation happens automatically from CI through the DevGuard scanner, so these endpoints matter most when integrating a build system the scanner does not cover, or when verifying an artifact outside the pipeline that produced it.
+
+---
+
+<ApiTagPage tag="In-toto" />
+
+## Related Documentation
+
+- [in-toto Framework](/explanations/supply-chain-security/in-toto-framework) — the model these endpoints implement
+- [Supply Chain Security](/tutorials/advanced/supply-chain-security) — a full walkthrough
+- [Supply Chain Verification](/explanations/supply-chain-security/supply-chain-verification) — what verification proves
+- [Provenance Tracking](/explanations/supply-chain-security/provenance-tracking) — how build history is retained
+- [SLSA Framework](/explanations/supply-chain-security/slsa-framework) — the levels this supports
+- [Attestations API](/reference/api/attestations) — the related attestation surface
+- [Use the DevGuard API](/getting-started/use-devguard-api) — authentication and conventions
+- [DevGuard API Reference](/reference)
