@@ -1,0 +1,38 @@
+---
+title: DevGuard Compliance Components API — REST API Reference
+description: "Browse DevGuard compliance components and manage the compliance statements that link them to framework controls at organization, project or asset-version level."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: DevGuard Compliance Components API
+lang: en-US
+ignoreChecks: null
+---
+
+import ApiTagPage from '@/components/ApiTagPage'
+
+# DevGuard Compliance Components API
+
+A compliance component is a reusable building block that describes one way of satisfying part of a framework control — a control implementation you can point at rather than describe from scratch every time. This API lists the components available on the instance and reads the detail of a single one.
+
+The rest of the endpoints manage **compliance statements**: the link between a framework control and the component that satisfies it. Creating a statement asserts "this control is addressed by this component here"; updating one revises that claim; deleting one withdraws it.
+
+Statements can be recorded at three levels — organization, project, or asset version — and the same set of operations is available at each. Pick the level the claim genuinely holds at, since a statement made against an organization applies to everything beneath it.
+
+---
+
+<ApiTagPage tag="Compliance Components" />
+
+## Related Documentation
+
+- [Compliance Postures API](/reference/api/compliance-postures) — the posture these statements contribute to
+- [Track Compliance Postures](/how-to-guides/compliance/track-compliance-postures) — the workflow in the UI
+- [Compliance API](/reference/api/compliance) — policy results
+- [Compliance as Code](/explanations/compliance/compliance-as-code) — the underlying model
+- [ISO 27001 Mapping](/explanations/compliance/iso-27001-mapping) — a worked framework mapping
+- [Use the DevGuard API](/getting-started/use-devguard-api) — authentication and conventions
+- [DevGuard API Reference](/reference)

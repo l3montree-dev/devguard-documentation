@@ -4,7 +4,8 @@
 .swagger-ui pre,
 .swagger-ui pre *,
 .swagger-ui code {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+    font-family:
+        ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
     white-space: pre !important;
     word-break: normal !important;
     hyphens: none !important;
@@ -21,7 +22,6 @@
     content: none !important;
     margin: 0 !important;
 }
-
 
 .swagger-ui {
     font-family: var(--font-inter), Inter, sans-serif;
@@ -106,24 +106,40 @@
         letter-spacing: 0.04em;
     }
 
-    .opblock.opblock-get    .opblock-summary-method { background: hsl(168 100% 41%) !important; color: #000 !important; }
-    .opblock.opblock-post   .opblock-summary-method { background: var(--blue) !important;        color: #000 !important; }
-    .opblock.opblock-put    .opblock-summary-method { background: hsl(43 74% 66%)  !important;   color: #000 !important; }
-    .opblock.opblock-patch  .opblock-summary-method { background: hsl(27 87% 67%)  !important;   color: #000 !important; }
-    .opblock.opblock-delete .opblock-summary-method { background: var(--destructive) !important; color: #fff !important; }
+    .opblock.opblock-get .opblock-summary-method {
+        background: hsl(168 100% 41%) !important;
+        color: #000 !important;
+    }
+    .opblock.opblock-post .opblock-summary-method {
+        background: var(--blue) !important;
+        color: #000 !important;
+    }
+    .opblock.opblock-put .opblock-summary-method {
+        background: hsl(43 74% 66%) !important;
+        color: #000 !important;
+    }
+    .opblock.opblock-patch .opblock-summary-method {
+        background: hsl(27 87% 67%) !important;
+        color: #000 !important;
+    }
+    .opblock.opblock-delete .opblock-summary-method {
+        background: var(--destructive) !important;
+        color: #fff !important;
+    }
 
     /* Tab underline accent */
-    .opblock.opblock-get    .tab-header .tab-item.active h4 span:after,
-    .opblock.opblock-post   .tab-header .tab-item.active h4 span:after,
-    .opblock.opblock-put    .tab-header .tab-item.active h4 span:after,
-    .opblock.opblock-patch  .tab-header .tab-item.active h4 span:after,
+    .opblock.opblock-get .tab-header .tab-item.active h4 span:after,
+    .opblock.opblock-post .tab-header .tab-item.active h4 span:after,
+    .opblock.opblock-put .tab-header .tab-item.active h4 span:after,
+    .opblock.opblock-patch .tab-header .tab-item.active h4 span:after,
     .opblock.opblock-delete .tab-header .tab-item.active h4 span:after {
         @apply bg-primary;
     }
 
     /* Summary text */
     .opblock-summary-path {
-        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+        font-family:
+            ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
         @apply text-sm text-foreground;
     }
 
@@ -159,8 +175,13 @@
     /* Collapse arrow */
     .opblock-control-arrow {
         padding-left: 8px;
-        svg { width: 14px; height: 14px; }
-        path { fill: var(--muted-foreground) !important; }
+        svg {
+            width: 14px;
+            height: 14px;
+        }
+        path {
+            fill: var(--muted-foreground) !important;
+        }
     }
 
     /* ── Parameters ──────────────────────────────── */
@@ -322,8 +343,10 @@
     .json-schema-2020-12-keyword__name--primary,
     .json-schema-2020-12-keyword--enum .json-schema-2020-12-json-viewer__name,
     .json-schema-2020-12-keyword--enum .json-schema-2020-12-json-viewer__value,
-    .json-schema-2020-12-keyword--examples .json-schema-2020-12-json-viewer__name,
-    .json-schema-2020-12-keyword--examples .json-schema-2020-12-json-viewer__value {
+    .json-schema-2020-12-keyword--examples
+        .json-schema-2020-12-json-viewer__name,
+    .json-schema-2020-12-keyword--examples
+        .json-schema-2020-12-json-viewer__value {
         @apply text-xs text-muted-foreground;
     }
 
@@ -393,9 +416,9 @@
     }
 
     /* ── Inputs ──────────────────────────────────── */
-    input[type=text],
-    input[type=password],
-    input[type=email],
+    input[type='text'],
+    input[type='password'],
+    input[type='email'],
     textarea,
     select {
         background: var(--input) !important;
@@ -404,9 +427,9 @@
         @apply rounded-md text-xs;
     }
 
-    input[type=text]:focus,
-    input[type=password]:focus,
-    input[type=email]:focus,
+    input[type='text']:focus,
+    input[type='password']:focus,
+    input[type='email']:focus,
     textarea:focus,
     select:focus {
         border-color: var(--ring) !important;

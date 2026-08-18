@@ -71,7 +71,8 @@
     --accent-foreground: #040202;
     --sidebar-accent-foreground: #a3a3a3;
     --sidebar-accent: #ffffff0d;
-    --sidebar-accent-active: #fddd8c1a; /*TODO: add this to DWT theme */
+    --sidebar-accent-active: #fddd8c1a;
+    /*TODO: add this to DWT theme */
     --destructive: #ef4444;
     --destructive-foreground: #fafafa;
 
@@ -108,9 +109,11 @@
         @apply text-[36px]!;
         line-height: normal !important;
     }
+
     h2 {
         @apply text-[30px]!;
     }
+
     h3 {
         @apply text-[24px]!;
     }
@@ -174,6 +177,7 @@
 .content-wrapper {
     @apply max-w-[1440px] mx-auto px-4;
 }
+
 /* ─── 7. Component layer ─────────────────────────────────────── */
 @layer components {
     .hero-outer {
@@ -183,9 +187,11 @@
     .hero-inner {
         @apply grid grid-cols-1 gap-y-12 lg:grid-cols-2 lg:items-center lg:gap-x-20;
     }
+
     .section-outer {
         @apply relative py-8 max-sm:py-8;
     }
+
     .hero-button {
         @apply bg-primary text-primary-foreground hover:bg-primary/90 mr-1.5 inline-flex h-9 shrink-0 items-center gap-1.5 rounded-sm px-3 font-medium transition-colors disabled:opacity-50;
     }
@@ -202,10 +208,43 @@
         @apply max-w-[1440px]! mx-auto!;
     }
 
+    /* Top nav links — the desktop header plus the copies the mobile drawer
+     renders outside of it. .kern-link clobbers the utilities in both places;
+     the :not() keeps this off the drawer's actual menu rows. */
+    header nav .kern-link,
+    [data-sidebar='sidebar'] .kern-link:not([data-sidebar='menu'] *) {
+        @apply no-underline!;
+        @apply text-(--foreground)! visited:text-(--foreground)! hover:text-primary!;
+    }
+
+    header nav .kern-link {
+        @apply p-sm!;
+    }
+
+    [data-sidebar='sidebar'] .kern-link:not([data-sidebar='menu'] *) {
+        @apply block! p-3!;
+    }
+
+    /* .kern-link's margin reset also cancels the container's space-y-2, which
+     would otherwise fuse the two link pills into one block. */
+    [data-sidebar='sidebar']
+        .kern-link:not([data-sidebar='menu'] *)
+        + .kern-link {
+        @apply mt-2!;
+    }
+
     /* Breadcrumb */
     #breadcrumb .kern-link {
         @apply text-[14px]! no-underline! font-semibold!;
         @apply text-(--sidebar-accent-foreground)! visited:text-(--sidebar-accent-foreground)! hover:text-(--foreground)!;
+    }
+
+    #breadcrumb span {
+        @apply top-0 opacity-70;
+    }
+
+    #breadcrumb svg {
+        @apply top-0 opacity-70;
     }
 
     /* Sidebar: */
@@ -216,9 +255,16 @@
     button[data-sidebar],
     [data-sidebar='menu-button'] a,
     [data-sidebar='menu-button'] > button {
-        @apply text-(--sidebar-accent-foreground) hover:text-(--foreground)!;
-        @apply text-[14px]!;
+        @apply text-(--sidebar-accent-foreground)! visited:text-(--sidebar-accent-foreground)! hover:text-(--foreground)!;
+        @apply text-[14px]! no-underline!;
     }
+
+    /* .kern-link resets display/padding — restore the row box on anchors that are
+     the row themselves, so the label stays centered and inset like the others. */
+    a[data-sidebar='menu-button'] {
+        @apply flex! p-2!;
+    }
+
     a[data-active='true'][data-sidebar],
     [data-sidebar='menu-button'] a[data-active='true'] {
         @apply bg-(--sidebar-accent-active) text-(--link-color)!;
@@ -230,12 +276,15 @@
         @apply text-[13px]! no-underline! font-semibold!;
         @apply text-(--sidebar-accent-foreground)! visited:text-(--sidebar-accent-foreground)! hover:text-(--foreground)!;
     }
+
     #toc .kern-link[data-active='true'] {
         @apply text-(--link-color)!;
     }
+
     #toc .kern-heading-medium {
         @apply text-[14px]! font-semibold!;
     }
+
     #toc-footer .kern-link {
         @apply text-[12px]!;
     }
@@ -249,18 +298,35 @@
     #feedback-section {
         @apply mt-12;
     }
+
+    /* Span the full content column: drop the theme's wrapper padding and the
+     nested max-widths that inset the form from the surrounding prose. */
+    :has(> #feedback-section),
+    #feedback-section > div {
+        @apply px-0!;
+    }
+
+    #feedback-section > div,
+    #feedback-section > div > div {
+        @apply max-w-none!;
+    }
+
     #feedback-section form {
         @apply mt-3;
     }
+
     #feedback-section h2 {
         @apply text-left;
     }
+
     #feedback-section button[role='checkbox'] {
         @apply mt-1;
     }
+
     #feedback-section .kern-link {
         @apply text-sm!;
     }
+
     #feedback-section .kern-label {
         @apply text-[14px]! font-medium!;
     }
@@ -281,7 +347,14 @@ strong > code {
     --dwt-table-scroll-shadow: var(--input) !important;
 }
 
-[tabindex]:not([tabindex='-1']):focus {
-    border-radius: 0.25rem 0.25rem 0 0;
-    box-shadow: none;
+/* Tabs */
+.doc-tabs-list[tabindex]:not([tabindex='-1']):focus,
+.doc-tabs-trigger[tabindex]:not([tabindex='-1']):focus {
+    outline: none;
+}
+
+.doc-tabs-list[tabindex]:not([tabindex='-1']):focus-visible,
+.doc-tabs-trigger[tabindex]:not([tabindex='-1']):focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
 }

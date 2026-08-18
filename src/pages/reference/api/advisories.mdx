@@ -1,0 +1,36 @@
+---
+title: DevGuard Advisories API — REST API Reference
+description: "Create and manage security advisories for an asset version in DevGuard. List, read, update and delete advisories through the REST API."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: DevGuard Advisories API
+lang: en-US
+ignoreChecks: null
+---
+
+import ApiTagPage from '@/components/ApiTagPage'
+
+# DevGuard Advisories API
+
+The Advisories API manages the security advisories you publish for your own software. An advisory records a vulnerability that affects your product — as opposed to a vulnerability DevGuard found in one of your dependencies — so that downstream consumers can be told about it.
+
+Advisories are scoped to a single asset version, which means the same product can carry different advisories per branch or tag. Once created, they feed the CSAF documents DevGuard generates, so an advisory written here is what your consumers eventually retrieve.
+
+---
+
+<ApiTagPage tag="Advisories" />
+
+## Related Documentation
+
+- [Create Security Advisories](/how-to-guides/vulnerability-management/create-security-advisories) — the same workflow in the UI
+- [CSAF API](/reference/api/csaf) — how advisories are published to consumers
+- [CSAF Reports in DevGuard](/how-to-guides/vulnerability-management/csaf-common-security-advisory-framework) — the distribution structure
+- [CSAF & VEX Standards](/explanations/compliance/csaf-vex-explained) — what belongs in an advisory
+- [Asset Versions API](/reference/api/asset-versions) — the scope advisories attach to
+- [Use the DevGuard API](/getting-started/use-devguard-api) — authentication and conventions
+- [DevGuard API Reference](/reference)
