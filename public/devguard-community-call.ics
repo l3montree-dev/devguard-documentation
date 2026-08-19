@@ -4,10 +4,10 @@ PRODID:-//DevGuard//Open Community Call//DE
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
 BEGIN:VEVENT
-UID:devguard-community-call-20260730@l3montree-dev
+UID:devguard-community-call-20260827@l3montree-dev
 DTSTAMP:20260630T120000Z
 DTSTART;TZID=Europe/Berlin:20260827T170000
-DTEND;TZID=Europe/Berlin:20260730T180000
+DTEND;TZID=Europe/Berlin:20260827T180000
 RRULE:FREQ=MONTHLY;BYDAY=-1TH
 SUMMARY:DevGuard Monthly Open Community Call
 DESCRIPTION:Join the monthly DevGuard Open Community Call â always at 17:00 (UTC+2) on the last Thursday of the month.\n\nMeeting-Link: https://meet.mailbox.org/room/4f25135b-1e6d-4387-be5c-45531e4a687b?invite=b5cc67e0-03df-45a5-83dd-cc0f7f769da6\n\nAgenda & Details: https://github.com/l3montree-dev/devguard/discussions/2203\n\nCommunity Matrix Space: https://matrix.to/#/#devguard:matrix.org
