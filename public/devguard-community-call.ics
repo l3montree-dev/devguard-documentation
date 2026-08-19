@@ -6,12 +6,12 @@ METHOD:PUBLISH
 BEGIN:VEVENT
 UID:devguard-community-call-20260730@l3montree-dev
 DTSTAMP:20260630T120000Z
-DTSTART;TZID=Europe/Berlin:20260730T170000
+DTSTART;TZID=Europe/Berlin:20260827T170000
 DTEND;TZID=Europe/Berlin:20260730T180000
 RRULE:FREQ=MONTHLY;BYDAY=-1TH
 SUMMARY:DevGuard Monthly Open Community Call
-DESCRIPTION:Join the monthly DevGuard Open Community Call â always at 17:00 (UTC+2) on the last Thursday of the month.\n\nMeeting-Link: https://meet.mailbox.org/room/dad9052b-7b28-40c8-bf6c-462798a88827?invite=1b3e44cc-2e46-4050-8359-bee002d8bbfe\n\nAgenda & Details: https://github.com/l3montree-dev/devguard/discussions/2203\n\nCommunity Matrix Space: https://matrix.to/#/#devguard:matrix.org
-LOCATION:https://meet.mailbox.org/room/dad9052b-7b28-40c8-bf6c-462798a88827?invite=1b3e44cc-2e46-4050-8359-bee002d8bbfe
+DESCRIPTION:Join the monthly DevGuard Open Community Call â always at 17:00 (UTC+2) on the last Thursday of the month.\n\nMeeting-Link: https://meet.mailbox.org/room/4f25135b-1e6d-4387-be5c-45531e4a687b?invite=b5cc67e0-03df-45a5-83dd-cc0f7f769da6\n\nAgenda & Details: https://github.com/l3montree-dev/devguard/discussions/2203\n\nCommunity Matrix Space: https://matrix.to/#/#devguard:matrix.org
+LOCATION:https://meet.mailbox.org/room/4f25135b-1e6d-4387-be5c-45531e4a687b?invite=b5cc67e0-03df-45a5-83dd-cc0f7f769da6
 URL:https://github.com/l3montree-dev/devguard/discussions/2203
 STATUS:CONFIRMED
 BEGIN:VALARM
@@ -21,3 +21,4 @@ DESCRIPTION:DevGuard Community Call in 15 Minuten
 END:VALARM
 END:VEVENT
 END:VCALENDAR
+
