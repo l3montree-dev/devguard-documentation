@@ -31,7 +31,7 @@ A rule is always scoped to a single repository.
 | **Title** | yes | Short, human-readable name |
 | **CEL expression** | yes | Must be syntactically valid; checked live as you type |
 | **Justification** | yes | Markdown, **maximum 4000 characters** |
-| **Effect** | yes | **Accept risk** or **False positive** |
+| **Effect** | yes | **False positive**, **Accept risk**, or **Reopen** |
 | **Mechanical justification** | only for false positives | One of [five standardized reasons](/how-to-guides/vex) |
 
 A rule's identity is derived from **(repository, CEL expression, source)**. Two consequences follow, and both
@@ -53,18 +53,20 @@ vulnerabilities an expression matches before you commit to it.
    the syntax error if the expression is malformed.
 4. Click **Create rule from this expression**.
 5. In the **Add VEX rule** dialog, fill in **Title** and **Justification**.
-6. Choose the effect:
+6. Choose the effect, using the tabs at the top of the dialog:
+   - **False positive** — the **primary split button** marks matches as a false positive. Its label *is* the
+     currently selected mechanical justification (default: *Vulnerable Code Not In Execute Path*). Use the
+     chevron to pick a different one.
    - **Accept risk** — the vulnerability is real, you knowingly carry the risk.
-   - The **primary split button** marks matches as a false positive. Its label *is* the currently selected
-     mechanical justification (default: *Vulnerable Code Not In Execute Path*). Use the chevron to pick a
-     different one.
+   - **Reopen** — see [Reopen once a fix is available](#reopen-once-a-fix-is-available) below.
 
 DevGuard evaluates the expression against the repository's dependency vulnerabilities right away, writes an
 event on every match, and recalculates the risk aggregation.
 
 <Callout type="info">
   The match count comes from a cached list of open vulnerabilities that is refreshed roughly every two
-  minutes, so a count may briefly lag behind a fresh scan.
+  minutes, so a count may briefly lag behind a fresh scan. **Reopen** rules are the exception — they're
+  matched against **closed** vulnerabilities instead; see below.
 </Callout>
 
 ## Create a rule from a vulnerability
@@ -134,6 +136,49 @@ recommendations are derived.
 The **Create VEX Rule** button (keyboard: `⌘R`) opens the dialog with an empty expression, for when you want
 to write the match condition yourself.
 
+## Reopen once a fix is available
+
+A **Reopen** rule matches vulnerabilities currently **accepted** as a known risk and reopens them — for
+example, once a fixed version is published for something you'd accepted only because there was nothing to
+fix yet.
+
+1. Navigate to **Dependency Risks → VEX Rules**.
+2. Write an expression in the **Expression playground**, this time matching on the fixed-version fields, e.g.:
+
+   ```javascript
+   vuln.cveId == "CVE-2021-1234" && vuln.componentFixedVersion != null
+   ```
+
+3. Click **Create rule from this expression**.
+4. In the **Add VEX rule** dialog, switch to the **Reopen** tab, then fill in **Title** and **Justification**.
+
+![Reopen VEX rule dialog](https://raw.githubusercontent.com/l3montree-dev/devguard-web/refs/heads/main/e2e/docs-screenshots/vex-rule-reopen-dialog.png)
+
+5. Click **Reopen** to save the rule.
+
+<Callout type="info">
+  Unlike **Accept risk** and **False positive** rules, a **Reopen** rule is matched against vulnerabilities
+  that are currently **accepted**, not open ones — and only twice a day, so a matching vulnerability can take
+  up to 12 hours to reopen.
+</Callout>
+
+<Callout type="warning">
+  DevGuard applies matching rules mechanically — it does not try to detect or resolve conflicting intent
+  between rules. If an **Accept risk** rule and a **Reopen** rule both match the same vulnerability (e.g. the
+  same CVE), the vulnerability will **toggle** between accepted and open on every evaluation cycle instead of
+  settling anywhere. Scope your expressions so accept and reopen rules for the same finding are mutually
+  exclusive — for instance, keep the fixed-version check only on the reopen side.
+</Callout>
+
+Open the rule's row afterwards to confirm it resolves against the vulnerability you expected — the details
+dialog reports **Matches N closed vulnerabilities** for a reopen rule, mirroring the open-vulnerability count
+shown for accept/false-positive rules:
+
+![Reopen VEX rule details, showing the closed-vulnerability match count](https://raw.githubusercontent.com/l3montree-dev/devguard-web/refs/heads/main/e2e/docs-screenshots/vex-rule-reopened-details.png)
+
+See the [CEL Expression Reference](/reference/vex-cel-reference#reopen-once-a-fix-is-available) for the
+`componentFixedVersion` / `directDependencyFixedVersion` fields this pattern relies on.
+
 ## Edit a rule
 
 Click any row in the **Active VEX rules** table to open the details dialog, change the title, expression or
@@ -151,12 +196,14 @@ follow:
 |---|---|
 | **Rule** | Title (or the CVE id, or `Untitled rule`) plus a truncated justification |
 | **Source** | `Own rule` for rules you wrote, or a `Synced` badge with the upstream URL on hover |
-| **Result** | `Accepted` or `False Positive`; the raw mechanical justification appears on hover |
+| **Result** | `Accepted`, `False Positive`, or `Reopened`; the raw mechanical justification appears on hover |
 | **Effect** | How many vulnerabilities this rule currently handles |
 
-A finding handled by a rule shows a **Handled by a VEX rule** card with the matching expression, and its
-assessment controls are locked: *A VEX rule is handling this vulnerability, so it's locked. To reopen it,
-delete the VEX rule — you can still comment.*
+A finding handled by an **Accept risk** or **False positive** rule shows a **Handled by a VEX rule** card with
+the matching expression, and its assessment controls are locked: *A VEX rule is handling this vulnerability,
+so it's locked. To reopen it, delete the VEX rule — you can still comment.* Writing a matching
+[**Reopen** rule](#reopen-once-a-fix-is-available) reopens it too, without deleting anything — but see the
+conflict warning above before you do.
 
 ## Delete a rule
 

@@ -52,11 +52,22 @@ the expression.
 | Field | Type | Description |
 |---|---|---|
 | `vuln.id` | string | The finding's own identifier. |
+| `vuln.state` | string | The finding's current state, e.g. `"open"`, `"accepted"`, `"falsePositive"`. |
 | `vuln.cveId` | string | The advisory id, e.g. `"CVE-2021-1234"`. Empty for findings without a CVE. |
-| `vuln.cve` | map | The nested CVE object — type `.` again for its fields. |
+| `vuln.cve` | map or null | The nested CVE object — type `.` again for its fields. |
 | `vuln.componentPurl` | string | Package URL of the vulnerable component, e.g. `"pkg:npm/lodash@4.17.21"`. |
-| `vuln.rawRiskAssessment` | number | DevGuard's risk score for the finding. |
+| `vuln.componentFixedVersion` | string or null | The bare version of the vulnerable component itself that resolves this finding, e.g. `"4.17.21"` — `null` while no fix has been published. |
+| `vuln.directDependencyFixedVersion` | string or null | A purl for the **direct** dependency you'd need to bump instead, e.g. `"pkg:npm/web@1.2.0"`, resolved by walking the dependency path — `null` while unresolved, even if `componentFixedVersion` is set. |
+| `vuln.vulnerabilityPath` | list\<string\> | The dependency path purls; read via `matchesPattern`, not usually compared directly. |
 | `vuln.assetVersionName` | string | The branch or tag the finding belongs to. |
+| `vuln.rawRiskAssessment` | number or null | DevGuard's raw risk score for the finding. |
+| `vuln.riskAssessment` | number or null | The rounded, displayed risk score. |
+| `vuln.effort` | number or null | The manually recorded remediation effort, if set. |
+| `vuln.priority` | number or null | The manually recorded priority, if set. |
+| `vuln.message` | string or null | The scanner-reported message for this finding. |
+| `vuln.ticketId` / `vuln.ticketUrl` | string or null | The linked ticket, if one was created. |
+| `vuln.lastDetected` / `vuln.createdAt` / `vuln.updatedAt` / `vuln.riskRecalculatedAt` | string (RFC3339) | Timestamps on the finding. |
+| `vuln.manualTicketCreation` | bool | Whether ticket creation for this finding was triggered manually. |
 
 
 ### CVE details: `vuln.cve`
@@ -68,7 +79,27 @@ Type `vuln.cve.` for these:
 | `vuln.cve.cve` | string | The CVE identifier, e.g. `"CVE-2021-1234"`. |
 | `vuln.cve.cvss` | number | CVSS base score. |
 | `vuln.cve.vector` | string | The CVSS vector string. |
-| `vuln.cve.epss` | number | EPSS exploitation probability. |
+| `vuln.cve.epss` | number or null | EPSS exploitation probability. |
+| `vuln.cve.percentile` | number or null | EPSS percentile. |
+| `vuln.cve.description` | string | The advisory description text. |
+| `vuln.cve.references` | string | Reference links for the advisory. |
+| `vuln.cve.datePublished` / `vuln.cve.dateLastModified` | string (RFC3339) | Advisory publish/update timestamps. |
+| `vuln.cve.risk` | map | Nested risk metrics — type `.` again for its fields. |
+| `vuln.cve.cisaExploitAdd` / `vuln.cve.cisaActionDue` | string (date) or null | CISA KEV catalog dates, if listed. |
+| `vuln.cve.cisaRequiredAction` / `vuln.cve.cisaVulnerabilityName` | string or null | CISA KEV catalog metadata, if listed. |
+| `vuln.cve.euvdExploitAdd` | string (date) or null | EUVD exploited-in-the-wild date, if listed. |
+| `vuln.cve.weaknesses` / `vuln.cve.exploits` | list\<map\> | Associated CWEs and known exploits. |
+
+#### Risk metrics: `vuln.cve.risk`
+
+Type `vuln.cve.risk.` for these:
+
+| Field | Type | Description |
+|---|---|---|
+| `vuln.cve.risk.baseScore` | number | Risk score before environment/threat-intel adjustments. |
+| `vuln.cve.risk.withEnvironment` | number | Risk score adjusted for your environment. |
+| `vuln.cve.risk.withThreatIntelligence` | number | Risk score adjusted for threat intelligence. |
+| `vuln.cve.risk.withEnvironmentAndThreatIntelligence` | number | Risk score adjusted for both. |
 
 
 ## `matchesPattern(vuln, pattern)`
@@ -184,8 +215,27 @@ vuln.cve.cvss < 4.0
 vuln.cve.cvss < 4.0 && vuln.cve.epss < 0.01
 ```
 
-DevGuard only re-evaluates rules against **open** vulnerabilities. A rule like this dismisses a finding once,
-but it will not reopen it later if the EPSS score subsequently rises above the threshold. This is a current limitation of DevGuard's rule engine, and is why the "accept" rules are less common than "dismiss" rules.
+**Accept risk** and **False positive** rules only re-evaluate against **open** vulnerabilities. A rule like
+this dismisses a finding once, but it will not reopen it later if the EPSS score subsequently rises above the
+threshold — you'd need a matching **Reopen** rule for that (see below) and is why "accept" rules are less common
+than "dismiss" rules.
+
+### Reopen once a fix is available
+
+A **Reopen** rule is the mirror image: it only re-evaluates against vulnerabilities currently **accepted** as
+a known risk, twice a day, and reopens the ones it matches. Combine it with the fixed-version fields to
+reopen a risk you accepted only because there was nothing to fix yet:
+
+```javascript
+vuln.cveId == "CVE-2021-1234" && vuln.componentFixedVersion != null
+```
+
+`componentFixedVersion` and `directDependencyFixedVersion` are populated by the same analysis behind the
+finding's **Quickfix** suggestion — see
+[Transitive Vulnerability Path Analysis: The Quickfix Algorithm](/explanations/supply-chain-security/transitive-vulnerability-path-analysis)
+for how DevGuard resolves them.
+
+See [Reopen a VEX Rule](/how-to-guides/vex/vex-rules#reopen-once-a-fix-is-available) for how to create one.
 
 ### Scope a rule to one branch
 
@@ -206,3 +256,4 @@ vuln.cveId in ["CVE-2021-1234", "CVE-2021-5678"] && vuln.componentPurl == "pkg:n
 - [Transitive Dependencies](/explanations/transitive-dependencies) — how DevGuard builds the dependency paths that `matchesPattern` matches
 - [Vulnerability Matching](/explanations/vulnerability-management/vulnerability-matching) — how purls are normalized before matching
 - [Risk Assessment Methodology](/explanations/vulnerability-management/risk-assessment-methodology) — what the risk and priority fields mean
+- [Transitive Vulnerability Path Analysis: The Quickfix Algorithm](/explanations/supply-chain-security/transitive-vulnerability-path-analysis) — how `componentFixedVersion` and `directDependencyFixedVersion` are resolved
