@@ -1,0 +1,1 @@
+{ "purl": "pkg:foo/bar@1.2.3", "sboms": ["a.json", "b.json"] }

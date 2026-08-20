@@ -1,0 +1,38 @@
+---
+title: DevGuard License Risk API — REST API Reference
+description: "List and manage license risks for a DevGuard asset version. Create risks and events, mitigate them and record a final license decision via the REST API."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: DevGuard License Risk API
+lang: en-US
+ignoreChecks: null
+---
+
+import ApiTagPage from '@/components/ApiTagPage'
+
+# DevGuard License Risk API
+
+Not every dependency problem is a vulnerability. A component under a copyleft license, or under no clearly detected license at all, can be just as blocking at release time. DevGuard tracks those separately as license risks, and this API manages them for an asset version.
+
+License risks follow the same lifecycle as vulnerabilities: list what is open, read one in detail, append events as the assessment develops, and mitigate when the problem is resolved — by replacing the dependency, obtaining a license, or accepting the risk deliberately.
+
+The final license decision endpoint is the one that settles the matter. Where automatic detection is wrong or ambiguous — a common outcome with dual-licensed or poorly declared packages — it records the license that actually applies, and that decision is what downstream SBOM and compliance output then reports.
+
+---
+
+<ApiTagPage tag="License Risk" />
+
+## Related Documentation
+
+- [License Compliance](/how-to-guides/dependency-management/license-compliance) — the workflow in the UI
+- [Override License Decisions](/how-to-guides/dependency-management/override-license-decisions) — when detection gets it wrong
+- [License Detection](/explanations/license-management/license-detection) — how a license is determined
+- [License Compliance Explained](/explanations/license-management/license-compliance) — obligations to manage
+- [Components API](/reference/api/components) — the license distribution these risks come from
+- [Use the DevGuard API](/getting-started/use-devguard-api) — authentication and conventions
+- [DevGuard API Reference](/reference)

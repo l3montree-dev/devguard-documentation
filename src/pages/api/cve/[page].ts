@@ -11,25 +11,53 @@ type CVEList = {
 
 const cache = new Map<number, { data: CVEList; expiresAt: number }>()
 const CACHE_TTL_MS = 12 * 60 * 60 * 1000 // 12 hours
+const CACHE_MAX_ENTRIES = 50
+
+const setCached = (offset: number, data: CVEList) => {
+    const now = Date.now()
+    cache.delete(offset)
+    for (const [key, entry] of cache) {
+        if (now >= entry.expiresAt) {
+            cache.delete(key)
+        }
+    }
+    // evict least-recently-used entries until there is room for the new one
+    while (cache.size >= CACHE_MAX_ENTRIES) {
+        const oldest = cache.keys().next()
+        if (oldest.done) {
+            break
+        }
+        cache.delete(oldest.value)
+    }
+    cache.set(offset, { data, expiresAt: now + CACHE_TTL_MS })
+}
 
 export const getServerSideCVEs = async (
     offset: number,
     CVES_PER_SITEMAP: number,
 ): Promise<CVEList | undefined> => {
     const cached = cache.get(offset)
-    if (cached && Date.now() < cached.expiresAt) {
-        return cached.data
+    if (cached) {
+        if (Date.now() < cached.expiresAt) {
+            // re-insert so the entry becomes the most-recently-used one
+            cache.delete(offset)
+            cache.set(offset, cached)
+            return cached.data
+        }
+        cache.delete(offset)
     }
     try {
         const res = await fetch(
-            `https://api.main.devguard.org/api/v1/vulndb/list-ids-by-creation-date/?offset=${encodeURIComponent(String(offset))}&limit=${encodeURIComponent(String(CVES_PER_SITEMAP))}`,
+            `${API_BASE_URL}/vulndb/list-ids-by-creation-date/?offset=${encodeURIComponent(String(offset))}&limit=${encodeURIComponent(String(CVES_PER_SITEMAP))}`,
         )
         if (!res.ok) {
             console.error(`Upstream API error: ${res.status} ${res.statusText}`)
+            // release the connection instead of waiting for GC
+            await res.body?.cancel().catch(() => {})
             return undefined
         }
         const repo: CVEList = await res.json()
-        cache.set(offset, { data: repo, expiresAt: Date.now() + CACHE_TTL_MS })
+        setCached(offset, repo)
         return repo
     } catch (error) {
         console.error('Failed API Fetch: ', error)

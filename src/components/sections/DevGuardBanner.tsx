@@ -7,6 +7,7 @@ interface VulnDbBannerProps {
     description?: string
     primaryLabel?: string
     primaryHref?: string
+    primarySize?: 'default' | 'sm' | 'lg' | 'xl' | 'icon'
     secondaryLabel?: string
     secondaryHref?: string
 }
@@ -17,6 +18,7 @@ export default function DevGuardBanner({
     description,
     primaryLabel,
     primaryHref,
+    primarySize = 'default',
     secondaryLabel,
     secondaryHref,
 }: VulnDbBannerProps) {
@@ -46,7 +48,7 @@ export default function DevGuardBanner({
                     <Button
                         asChild
                         variant="default"
-                        size="default"
+                        size={primarySize}
                         className="w-full gap-2 sm:flex-1 md:w-auto md:flex-none"
                     >
                         <a

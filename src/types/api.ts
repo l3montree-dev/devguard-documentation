@@ -1,19 +1,18 @@
 export type AffectedComponent = {
-    id: string
-    Source: string
+    id: number
     purl: string
     ecosystem: string
-    scheme: string
-    type: string
-    name: string
-    namespace: string
+    version: string | null
+    semverStart?: string | null
+    semverEnd?: string | null
+    versionIntroduced?: string | null
+    versionFixed?: string | null
+    Source?: string
+    scheme?: string
+    type?: string
+    name?: string
+    namespace?: string
     subpath?: string
-    version: string
-    semverStart?: string
-    semverEnd?: string
-    versionIntroduced?: string
-    versionFixed?: string
-    cves?: string
 }
 
 export type AffectedComponents = AffectedComponent[]

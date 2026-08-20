@@ -1,0 +1,39 @@
+---
+title: DevGuard Components API — REST API Reference
+description: "List the components in a DevGuard asset version, read its license distribution, and search component occurrences across a project through the REST API."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: DevGuard Components API
+lang: en-US
+ignoreChecks: null
+---
+
+import ApiTagPage from '@/components/ApiTagPage'
+
+# DevGuard Components API
+
+Components are the individual packages that make up your software — everything DevGuard discovered while building the SBOM for an asset version. This API reads that inventory.
+
+Listing components for an asset version is paged, since a real dependency tree runs to thousands of entries. The license distribution endpoint summarises the same inventory by license, which is the quickest way to see what you are shipping without walking every package.
+
+The project-level search answers the opposite question: given a component, where does it occur? That is the endpoint to reach for when a new CVE lands and you need to know which of your projects actually pull the affected package in.
+
+---
+
+<ApiTagPage tag="Components" />
+
+## Related Documentation
+
+- [Component Search](/how-to-guides/dependency-management/component-search) — the same search in the UI
+- [View Dependency Tree](/how-to-guides/dependency-management/view-dependency-tree) — how components relate to each other
+- [License Risk API](/reference/api/license-risk) — acting on the licenses found here
+- [Transitive Dependencies](/explanations/transitive-dependencies) — why the inventory is larger than your manifest
+- [Software Composition Analysis](/explanations/devsecops/software-composition-analysis) — how the inventory is built
+- [Artifacts API](/reference/api/artifacts) — the artifacts these components come from
+- [Use the DevGuard API](/getting-started/use-devguard-api) — authentication and conventions
+- [DevGuard API Reference](/reference)

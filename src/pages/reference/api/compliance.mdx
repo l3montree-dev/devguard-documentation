@@ -1,0 +1,38 @@
+---
+title: DevGuard Compliance API — REST API Reference
+description: "Read compliance results for an organization, project, asset or asset version in DevGuard, including per-policy detail, through the REST API."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: DevGuard Compliance API
+lang: en-US
+ignoreChecks: null
+---
+
+import ApiTagPage from '@/components/ApiTagPage'
+
+# DevGuard Compliance API
+
+The Compliance API reports how your software measures up against the policies attached to it. It answers two questions: whether something is compliant overall, and — for a named policy — exactly which checks passed or failed.
+
+The endpoints mirror the DevGuard hierarchy. Ask at project level for a roll-up across every asset, at asset level for the default branch, or at asset-version level to evaluate one specific branch or tag. Results are computed from the current state rather than stored, so they always reflect the latest scan.
+
+These endpoints are read-only. Creating and enabling the policies they evaluate is done through the [Policies API](/reference/api/policies).
+
+---
+
+<ApiTagPage tag="Compliance" />
+
+## Related Documentation
+
+- [Policies API](/reference/api/policies) — defining the policies evaluated here
+- [Compliance Postures API](/reference/api/compliance-postures) — mapping results onto a framework control
+- [Compliance as Code](/explanations/compliance/compliance-as-code) — the model behind these checks
+- [Attestation Policies](/how-to-guides/compliance/attestation-policies) — writing a policy
+- [Why Compliance Matters](/explanations/compliance/why-compliance-matters) — background
+- [Use the DevGuard API](/getting-started/use-devguard-api) — authentication and conventions
+- [DevGuard API Reference](/reference)

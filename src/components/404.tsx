@@ -5,7 +5,7 @@ import { Button } from './ui/button'
 export default function NotFoundPage() {
     return (
         <>
-            <main className="grid place-items-center px-6 sm:py-32 lg:px-8">
+            <main className="grid place-items-center px-6 sm:py-32 lg:px-8 min-h-[80svh]">
                 <div className="text-center">
                     <Image
                         src="/404-gopher.png"
@@ -22,7 +22,7 @@ export default function NotFoundPage() {
                         looking for.
                     </p>
                     <div className="mt-10 flex items-center justify-center gap-x-6">
-                        <Link href="/introduction">
+                        <Link href="/">
                             <Button
                                 variant="default"
                                 className="rounded-sm !text-black"
