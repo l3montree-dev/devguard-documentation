@@ -12,9 +12,16 @@ export default function Document() {
             <Head>
                 {chatWidgetSrc && (
                     <script
+                        dangerouslySetInnerHTML={{
+                            __html: `Element.prototype.attachShadow=(f=>function(i){const r=f.call(this,{...i,mode:'open'});r.appendChild(document.createElement('style')).textContent='.c7-bubble svg{stroke:#1c1917!important}';return r})(Element.prototype.attachShadow)`,
+                        }}
+                    />
+                )}
+                {chatWidgetSrc && (
+                    <script
                         src={chatWidgetSrc}
                         data-library="/websites/devguard"
-                        async
+                        defer
                         {...(chatWidgetIntegrity && {
                             integrity: chatWidgetIntegrity,
                             crossOrigin: 'anonymous',
