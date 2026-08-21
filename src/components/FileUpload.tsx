@@ -13,7 +13,8 @@ export default function FileUpload({ dropzone, files, id }: Props) {
         >
             <div
                 {...dropzone.getRootProps()}
-                className="flex h-10 bg-transparent cursor-pointer items-center justify-center rounded outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                style={{ outline: 'none', boxShadow: 'none' }}
+                className="flex h-10 bg-transparent cursor-pointer items-center justify-center rounded"
             >
                 <input
                     {...dropzone.getInputProps()}
