@@ -32,9 +32,11 @@ expression environment provides.
 The environment is deliberately small:
 
 - exactly one variable: **`vuln`**
-- exactly two DevGuard-specific functions: **`matchesPattern`** and **`matchesPurl`** — the only two that
-  return a boolean on their own
+- three DevGuard-specific functions: **`matchesPattern`**, **`matchesPurl`**, and **`now`** — only the first
+  two return a boolean on their own
 - the standard CEL operators: `==`, `!=`, `<`, `<=`, `>`, `>=`, `&&`, `||`, `!`, `in`, `?:`
+- CEL's built-in date/time support: `timestamp(string)`, `duration(string)`, and arithmetic/comparison between
+  the two — see [Working with timestamps](#working-with-timestamps) below
 
 The editor checks two things as you type. First, that the expression parses. Second, that it **evaluates to a
 boolean** — a bare field access like `vuln.cveId` is a string and is rejected with *Expression must evaluate to
@@ -60,13 +62,9 @@ the expression.
 | `vuln.directDependencyFixedVersion` | string or null | A purl for the **direct** dependency you'd need to bump instead, e.g. `"pkg:npm/web@1.2.0"`, resolved by walking the dependency path — `null` while unresolved, even if `componentFixedVersion` is set. |
 | `vuln.vulnerabilityPath` | list\<string\> | The dependency path purls; read via `matchesPattern`, not usually compared directly. |
 | `vuln.assetVersionName` | string | The branch or tag the finding belongs to. |
-| `vuln.rawRiskAssessment` | number or null | DevGuard's raw risk score for the finding. |
-| `vuln.riskAssessment` | number or null | The rounded, displayed risk score. |
-| `vuln.effort` | number or null | The manually recorded remediation effort, if set. |
-| `vuln.priority` | number or null | The manually recorded priority, if set. |
-| `vuln.message` | string or null | The scanner-reported message for this finding. |
+| `vuln.riskAssessment` | number or null | DevGuard's computed risk score for the finding. |
 | `vuln.ticketId` / `vuln.ticketUrl` | string or null | The linked ticket, if one was created. |
-| `vuln.lastDetected` / `vuln.createdAt` / `vuln.updatedAt` / `vuln.riskRecalculatedAt` | string (RFC3339) | Timestamps on the finding. |
+| `vuln.lastStateChange` / `vuln.createdAt` / `vuln.updatedAt` / `vuln.riskRecalculatedAt` | string (RFC3339) | Timestamps on the finding — see [Working with timestamps](#working-with-timestamps) to compare them. `lastStateChange` updates whenever `vuln.state` changes (open → accepted, accepted → reopened, etc.), not on every rescan. |
 | `vuln.manualTicketCreation` | bool | Whether ticket creation for this finding was triggered manually. |
 
 
@@ -160,6 +158,31 @@ using [Masterminds semver](https://github.com/Masterminds/semver) syntax:
   `matchesPattern` with the exact purl string.
 </Callout>
 
+## Working with timestamps
+
+Timestamp fields such as `vuln.lastStateChange` are exposed as RFC3339 strings, not CEL's native timestamp
+type. Wrap a field in `timestamp(...)` to compare it, and use `now()` to get the current time:
+
+```javascript
+now() - timestamp(vuln.lastStateChange) > duration("720h")
+```
+
+| Function | Returns | Notes |
+|---|---|---|
+| `now()` | timestamp | The time the expression is evaluated, not when the rule was saved. |
+| `timestamp(string)` | timestamp | Parses an RFC3339 string, e.g. a `vuln.*` timestamp field. |
+| `duration(string)` | duration | Parses a Go-style duration string — `"24h"`, `"720h"`. CEL has no built-in unit larger than hours, so express days as multiples of `24h`. |
+
+Subtracting one timestamp from another yields a duration, which is what makes the age check above possible.
+Timestamps and durations also support `<`, `<=`, `>`, `>=`, `==` directly against each other, and `+`/`-`
+between a timestamp and a duration.
+
+<Callout type="warning">
+  `now()` makes a rule's match set change over time without the expression itself changing — a vulnerability
+  that doesn't match today may match tomorrow purely because it aged past your threshold. That's expected for
+  staleness rules, but keep it in mind if a match count looks like it drifted for no reason.
+</Callout>
+
 ## Cookbook
 
 ### Dismiss one advisory everywhere
@@ -248,6 +271,15 @@ vuln.cveId == "CVE-2021-1234" && vuln.assetVersionName == "main"
 ```javascript
 vuln.cveId in ["CVE-2021-1234", "CVE-2021-5678"] && vuln.componentPurl == "pkg:npm/lodash@4.17.21"
 ```
+
+### Reopen a finding accepted more than 30 days ago
+
+```javascript
+now() - timestamp(vuln.lastStateChange) > duration("720h")
+```
+
+See [Reopen a stale accepted risk](/how-to-guides/vex/vex-rules#reopen-a-stale-accepted-risk) for how to turn
+this into a **Reopen** rule.
 
 ## Related Documentation
 

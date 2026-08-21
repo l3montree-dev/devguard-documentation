@@ -179,6 +179,32 @@ shown for accept/false-positive rules:
 See the [CEL Expression Reference](/reference/vex-cel-reference#reopen-once-a-fix-is-available) for the
 `componentFixedVersion` / `directDependencyFixedVersion` fields this pattern relies on.
 
+## Reopen a stale accepted risk
+
+A **Reopen** rule can also key off *how long ago* a finding's state last changed, rather than off a fixed
+version becoming available — useful for revisiting an accepted risk periodically instead of leaving it
+accepted indefinitely.
+
+1. Navigate to **Dependency Risks → VEX Rules**.
+2. Write an expression comparing `vuln.lastStateChange` against the current time:
+
+   ```javascript
+   now() - timestamp(vuln.lastStateChange) > duration("720h")
+   ```
+
+   `720h` is 30 days — CEL durations have no unit larger than hours, so express days as a multiple of `24h`.
+3. Click **Create rule from this expression**.
+4. In the **Add VEX rule** dialog, switch to the **Reopen** tab, then fill in **Title** and **Justification**.
+
+<Callout type="info">
+  `vuln.lastStateChange` updates whenever the finding's state changes, so the 30-day clock resets each time
+  the rule (or a person) touches it — an accepted risk reopened by this rule and then re-accepted starts a
+  fresh 30-day window, it does not reopen again on every cycle.
+</Callout>
+
+See [Working with timestamps](/reference/vex-cel-reference#working-with-timestamps) for the full `now()` /
+`timestamp()` / `duration()` reference.
+
 ## Edit a rule
 
 Click any row in the **Active VEX rules** table to open the details dialog, change the title, expression or
