@@ -29,25 +29,32 @@ const config: Partial<KernuxThemeConfig> = {
     ),
     logoLink: false,
     logo: (
-        <span className="flex items-center gap-x-3">
-            <a
-                href="https://devguard.org"
-                className="flex hover:text-primary px-0 text-sm"
-            >
-                <ChevronLeft />
-                DevGuard.org
-            </a>
-            <Separator orientation="vertical" className="border-white opacity-80 border h-12" />
+        <span className="flex shrink-0 items-center gap-x-3">
+            <span className="hidden shrink-0 items-center gap-x-3 lg:flex">
+                <Link
+                    href="https://devguard.org"
+                    aria-label="To devguard.org landing page"
+                    className="flex items-center gap-x-1 whitespace-nowrap hover:text-primary px-0 text-sm"
+                >
+                    <ChevronLeft className="size-4 shrink-0" />
+                    DevGuard.org
+                </Link>
+                <Separator
+                    orientation="vertical"
+                    className="border-white opacity-80 border h-8"
+                />
+            </span>
             <Link
                 href="/"
                 aria-label="DevGuard - Back to homepage"
-                className="flex items-center"
+                className="flex shrink-0 items-center hover:opacity-80"
             >
                 <Image
                     src="/logo-inverse-horizontal.svg"
                     alt="DevGuard Logo"
                     width={130}
                     height={47}
+                    className="h-auto w-27.5 md:w-32.5"
                 />
             </Link>
         </span>

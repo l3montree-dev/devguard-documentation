@@ -208,6 +208,14 @@
         @apply max-w-[1440px]! mx-auto!;
     }
 
+    header nav > div:first-child {
+        @apply min-w-fit;
+    }
+
+    header nav div:has(> nav[aria-label='Main']) {
+        @apply max-lg:hidden!;
+    }
+
     /* Top nav links — the desktop header plus the copies the mobile drawer
      renders outside of it. .kern-link clobbers the utilities in both places;
      the :not() keeps this off the drawer's actual menu rows. */
