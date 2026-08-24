@@ -13,6 +13,9 @@ import { Separator } from './ui/separator'
 import { Skeleton } from './ui/skeleton'
 import CopyButton from './CopyButton'
 import { Button } from './ui/button'
+import ReactMarkdown from 'react-markdown'
+import { markdownComponents } from './markdownComponents'
+import ShikiHighlighter from 'react-shiki/web'
 
 const HTTP_METHODS = [
     'get',
@@ -122,7 +125,7 @@ function buildCurl(
         )
         lines[lines.length - 1] += ' \\'
         lines.push(`  --header 'Content-Type: application/json' \\`)
-        lines.push(`  --data '${JSON.stringify(example)}'`)
+        lines.push(`  --data '${JSON.stringify(example, null, 4)}'`)
     }
 
     return lines.join('\n')
@@ -137,10 +140,27 @@ const OperationSection: React.FC<{
     const params = (op.parameters ?? []).filter(
         (p): p is OpenAPIV3.ParameterObject => !('$ref' in p),
     )
-    const body =
+    const request =
         op.requestBody && !('$ref' in op.requestBody)
             ? (op.requestBody as OpenAPIV3.RequestBodyObject)
             : undefined
+    let requestBodyExample
+    if (request) {
+        const json =
+            request.content!['application/json'] ??
+            request.content!['text/plain']
+        if (json) {
+            const s =
+                json.schema && !('$ref' in json.schema)
+                    ? (json.schema as OpenAPIV3.SchemaObject)
+                    : undefined
+            requestBodyExample =
+                json?.example ??
+                s?.example ??
+                schemaToExample(json.schema!, spec)
+        }
+    }
+
     const responses = op.responses
         ? Object.entries(op.responses).filter(([, res]) => {
               const r = '$ref' in res ? null : (res as OpenAPIV3.ResponseObject)
@@ -226,14 +246,70 @@ const OperationSection: React.FC<{
                 </div>
             )}
 
+            {request && requestBodyExample && (
+                <div>
+                    <p className="font-medium mb-2">Request</p>
+                    <div className="space-y-2">
+                        <Collapsible>
+                            <div className="flex items-center justify-between gap-4 rounded-md bg-muted px-4 py-3">
+                                <div className="flex min-w-0 items-center">
+                                    <span className="font-mono font-medium mr-2 shrink-0">
+                                        --data
+                                    </span>
+
+                                    <span className="text-muted-foreground truncate">
+                                        {(() => {
+                                            const preview = JSON.stringify(
+                                                requestBodyExample,
+                                            )
+                                            return preview.length > 60
+                                                ? `${preview.slice(0, 60)}…`
+                                                : preview
+                                        })()}
+                                    </span>
+                                </div>
+                                <CollapsibleTrigger className="shrink-0">
+                                    <Button variant={'secondary'} size={'sm'}>
+                                        Show full example
+                                    </Button>{' '}
+                                </CollapsibleTrigger>
+                            </div>
+                            <CollapsibleContent>
+                                <ShikiHighlighter
+                                    language="json"
+                                    theme="github-dark"
+                                    structure="inline"
+                                    addDefaultStyles={false}
+                                    showLanguage={false}
+                                    className="rounded-md bg-muted px-4 py-3 mt-2 whitespace-pre-wrap! break-all! ring-0 outline-0"
+                                >
+                                    {JSON.stringify(
+                                        requestBodyExample,
+                                        null,
+                                        2,
+                                    )}
+                                </ShikiHighlighter>
+                            </CollapsibleContent>
+                        </Collapsible>
+                    </div>
+                </div>
+            )}
+
             <div>
                 <div className="flex items-center justify-between mb-2">
-                    <p className="font-medium">Example request</p>
+                    <p className="font-medium">Example using curl</p>
                     <CopyButton text={buildCurl(method, path, op, spec)} />
                 </div>
-                <pre className="rounded-md bg-muted px-4 py-3 whitespace-pre-wrap! break-all!">
+                <ShikiHighlighter
+                    language="bash"
+                    theme="github-dark"
+                    structure="inline"
+                    addDefaultStyles={false}
+                    showLanguage={false}
+                    className="rounded-md bg-muted px-4 py-3 mt-2 whitespace-pre-wrap! break-all! ring-0 outline-0"
+                >
                     {buildCurl(method, path, op, spec)}
-                </pre>
+                </ShikiHighlighter>
             </div>
 
             {responses.length > 0 && (
@@ -269,14 +345,21 @@ const OperationSection: React.FC<{
                                                 variant={'secondary'}
                                                 size={'sm'}
                                             >
-                                                Show example
+                                                Show full example
                                             </Button>{' '}
                                         </CollapsibleTrigger>
                                     </div>
                                     <CollapsibleContent>
-                                        <pre className="rounded-md bg-muted px-4 py-3 mt-2 whitespace-pre-wrap! break-all!">
+                                        <ShikiHighlighter
+                                            language="json"
+                                            theme="github-dark"
+                                            structure="inline"
+                                            showLanguage={false}
+                                            addDefaultStyles={false}
+                                            className="rounded-md bg-muted px-4 py-3 mt-2 whitespace-pre-wrap! break-all! ring-0 outline-0"
+                                        >
                                             {JSON.stringify(example, null, 2)}
-                                        </pre>
+                                        </ShikiHighlighter>
                                     </CollapsibleContent>
                                 </Collapsible>
                             )
