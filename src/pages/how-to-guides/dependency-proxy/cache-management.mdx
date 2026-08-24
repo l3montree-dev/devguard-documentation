@@ -48,6 +48,17 @@ The proxy checks packages for malicious content **before** caching:
 
 The proxy can be configured to refuse any package version published more recently than a specified number of days. This gives the security community time to detect and flag malicious releases before they reach your teams.
 
+## Cache Size and Location
+
+The cache is bounded in size and evicts the least recently used packages once it's full, so disk usage never grows without limit.
+
+Configure it with these environment variables:
+
+| Variable | Default | Description |
+| --- | --- | --- |
+| `DEPENDENCY_PROXY_CACHE_DIR` | a `devguard-dependency-proxy-cache` directory under the OS temp dir | Where cached package files are stored on disk. |
+| `DEPENDENCY_PROXY_CACHE_MAX_SIZE_MB` | `1024` (1GB) | Maximum total size of the cache, in megabytes. When exceeded, the least recently used entries are evicted to make room. |
+
 ## Further Reading
 
 - [Dependency Proxy Overview](/how-to-guides/dependency-proxy)

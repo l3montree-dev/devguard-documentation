@@ -37,6 +37,10 @@ graph TD
     style D fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px,color:#000
 ```
 
+<Callout type="info">
+  Inactive branches are deleted after a grace period (the default branch and tags are always kept). 
+</Callout>
+
 ## Independent Vulnerability Management
 
 Each branch or tag maintains its own vulnerability findings, risk assessments, and remediation status.
@@ -49,7 +53,7 @@ new dependencies with vulnerabilities not present in `main`. Production branches
 vulnerability in `develop` while showing `main` as fixed.
 
 <Callout type="info">
-  NOTE: If you create a new branch or tag, it is always initalized with the vulnerability status of the `main` branch at the time of creation.
+  If you create a new branch or tag, it is always initalized with the vulnerability status of the `main` branch at the time of creation.
 </Callout>
 
 
