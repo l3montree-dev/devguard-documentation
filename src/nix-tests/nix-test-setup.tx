@@ -1,0 +1,67 @@
+# Updating `devguard-seed-data.sql`
+
+The nix tests run against a seeded DevGuard database. Whenever the schema or the
+test fixtures change, the seed dump has to be regenerated from a clean DevGuard
+instance.
+
+## 1. Start a clean DevGuard on latest `main`
+
+Make sure both repositories are on the latest `main`.
+
+Frontend (devguard-web):
+
+```bash
+npm run dev
+```
+
+Backend (devguard):
+
+```bash
+make clean
+make migrate
+make
+```
+
+## 2. Create the test data in the web UI
+
+1. Register a new account (any credentials will do).
+2. Create an organization named `testorg`.
+3. Inside it, create a group named `testgroup`.
+4. Inside that group, create a repository named `testrepo`.
+
+## 3. Create an access token
+
+Go to the repository settings of `testrepo` and create a personal access token
+with the `scan` and `manage` scopes and a long expiry date.
+
+Copy the generated private key and update the `token` value in
+`nix-tests.yml`.
+
+## 4. Dump the seed data
+
+Run this in the documentation repository:
+
+```bash
+docker exec devguard-postgresql-1 pg_dump \
+  --data-only \
+  --disable-triggers \
+  --no-owner --no-privileges \
+  --schema=public \
+  --exclude-table-data='public.cves' \
+  --exclude-table-data='public.cve_affected_component' \
+  --exclude-table-data='public.cve_relationships' \
+  --exclude-table-data='public.affected_components' \
+  --exclude-table-data='public.malicious_packages' \
+  --exclude-table-data='public.malicious_affected_components' \
+  -U devguard -d devguard \
+  > src/nix-tests/devguard-seed-data.sql
+```
+
+The large vulnerability tables (CVEs, affected components, malicious packages)
+are excluded on purpose — they are populated by DevGuard itself and would blow
+up the dump.
+
+## 5. Push
+
+Commit and push the updated `devguard-seed-data.sql` and `nix-tests.yml`. The
+tests are then back on the latest state.
