@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from 'react'
 import { OpenAPIV3 } from 'openapi-types'
 import { fetchSpec } from '@/services/spec-cache'
-import { Badge } from './ui/badge'
 import {
     Collapsible,
     CollapsibleContent,
@@ -11,11 +10,9 @@ import {
 } from './ui/collapsible'
 import { Separator } from './ui/separator'
 import { Skeleton } from './ui/skeleton'
-import CopyButton from './CopyButton'
 import { Button } from './ui/button'
-import ReactMarkdown from 'react-markdown'
-import { markdownComponents } from './markdownComponents'
-import ShikiHighlighter from 'react-shiki/web'
+import { DEFAULT_COMPONENTS } from '@document-writing-tools/kernux-theme'
+import type { ComponentType, ComponentPropsWithoutRef } from 'react'
 
 const HTTP_METHODS = [
     'get',
@@ -26,6 +23,10 @@ const HTTP_METHODS = [
     'head',
     'options',
 ] as const
+
+const Pre = DEFAULT_COMPONENTS.pre as ComponentType<
+    ComponentPropsWithoutRef<'pre'>
+>
 
 function resolveRef(
     ref: string,
@@ -145,17 +146,16 @@ const OperationSection: React.FC<{
             ? (op.requestBody as OpenAPIV3.RequestBodyObject)
             : undefined
     let requestBodyExample
-    if (request) {
+    if (request && request.content) {
         const json =
-            request.content!['application/json'] ??
-            request.content!['text/plain']
+            request.content['application/json'] ?? request.content['text/plain']
         if (json) {
             const s =
                 json.schema && !('$ref' in json.schema)
                     ? (json.schema as OpenAPIV3.SchemaObject)
                     : undefined
             requestBodyExample =
-                json?.example ??
+                json.example ??
                 s?.example ??
                 schemaToExample(json.schema!, spec)
         }
@@ -178,10 +178,7 @@ const OperationSection: React.FC<{
                     </p>
                 )}
                 <div className="relative mt-6">
-                    <div className="flex items-center justify-between mb-2">
-                        <p className="font-medium">Endpoint Path</p>
-                        <CopyButton text={`${method.toUpperCase()} ${path}`} />
-                    </div>
+                    <p className="font-medium mb-2">Endpoint Path</p>
                     <pre className="rounded-md bg-muted px-4 py-3 whitespace-pre-wrap! break-all! pr-20">
                         {method.toUpperCase()} {path}
                     </pre>
@@ -246,7 +243,7 @@ const OperationSection: React.FC<{
                 </div>
             )}
 
-            {request && requestBodyExample && (
+            {requestBodyExample && (
                 <div>
                     <p className="font-medium mb-2">Request</p>
                     <div className="space-y-2">
@@ -259,9 +256,10 @@ const OperationSection: React.FC<{
 
                                     <span className="text-muted-foreground truncate">
                                         {(() => {
-                                            const preview = JSON.stringify(
-                                                requestBodyExample,
-                                            )
+                                            const preview =
+                                                JSON.stringify(
+                                                    requestBodyExample,
+                                                )
                                             return preview.length > 60
                                                 ? `${preview.slice(0, 60)}…`
                                                 : preview
@@ -275,20 +273,15 @@ const OperationSection: React.FC<{
                                 </CollapsibleTrigger>
                             </div>
                             <CollapsibleContent>
-                                <ShikiHighlighter
-                                    language="json"
-                                    theme="github-dark"
-                                    structure="inline"
-                                    addDefaultStyles={false}
-                                    showLanguage={false}
-                                    className="rounded-md bg-muted px-4 py-3 mt-2 whitespace-pre-wrap! break-all! ring-0 outline-0"
-                                >
-                                    {JSON.stringify(
-                                        requestBodyExample,
-                                        null,
-                                        2,
-                                    )}
-                                </ShikiHighlighter>
+                                <Pre>
+                                    <code className="language-json">
+                                        {JSON.stringify(
+                                            requestBodyExample,
+                                            null,
+                                            2,
+                                        )}
+                                    </code>
+                                </Pre>
                             </CollapsibleContent>
                         </Collapsible>
                     </div>
@@ -296,20 +289,12 @@ const OperationSection: React.FC<{
             )}
 
             <div>
-                <div className="flex items-center justify-between mb-2">
-                    <p className="font-medium">Example using curl</p>
-                    <CopyButton text={buildCurl(method, path, op, spec)} />
-                </div>
-                <ShikiHighlighter
-                    language="bash"
-                    theme="github-dark"
-                    structure="inline"
-                    addDefaultStyles={false}
-                    showLanguage={false}
-                    className="rounded-md bg-muted px-4 py-3 mt-2 whitespace-pre-wrap! break-all! ring-0 outline-0"
-                >
-                    {buildCurl(method, path, op, spec)}
-                </ShikiHighlighter>
+                <p className="font-medium mb-2">Example using curl</p>
+                <Pre>
+                    <code className="language-bash">
+                        {buildCurl(method, path, op, spec)}
+                    </code>
+                </Pre>
             </div>
 
             {responses.length > 0 && (
@@ -350,16 +335,15 @@ const OperationSection: React.FC<{
                                         </CollapsibleTrigger>
                                     </div>
                                     <CollapsibleContent>
-                                        <ShikiHighlighter
-                                            language="json"
-                                            theme="github-dark"
-                                            structure="inline"
-                                            showLanguage={false}
-                                            addDefaultStyles={false}
-                                            className="rounded-md bg-muted px-4 py-3 mt-2 whitespace-pre-wrap! break-all! ring-0 outline-0"
-                                        >
-                                            {JSON.stringify(example, null, 2)}
-                                        </ShikiHighlighter>
+                                        <Pre>
+                                            <code className="language-json">
+                                                {JSON.stringify(
+                                                    example,
+                                                    null,
+                                                    2,
+                                                )}
+                                            </code>
+                                        </Pre>
                                     </CollapsibleContent>
                                 </Collapsible>
                             )
