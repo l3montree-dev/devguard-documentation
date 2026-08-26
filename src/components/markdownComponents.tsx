@@ -42,19 +42,13 @@ export const markdownComponents: Components = {
             {children}
         </a>
     ),
-    code: ({ className, children, node }) => {
-        const isInline = node ? isInlineCode(node) : undefined
-        if (!isInline) {
-            const language = className?.match(/language-(\w+)/)?.[1]
+    code: ({ className, children, ...props }) => {
+        const isBlock = className?.startsWith('language-')
+        if (isBlock) {
             return (
-                <ShikiHighlighter
-                    language={language}
-                    theme="github-dark"
-                    structure="inline"
-                    as="code"
-                >
-                    {String(children).trim()}
-                </ShikiHighlighter>
+                <code className={className} {...props}>
+                    {children}
+                </code>
             )
         }
         return (
