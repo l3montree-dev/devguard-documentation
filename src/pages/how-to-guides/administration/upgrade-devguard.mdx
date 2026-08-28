@@ -85,33 +85,31 @@ web:
 
 ### Update image tags
 
-Edit `docker-compose-try-it.yaml` to use the new version:
+In the [devguard-docker-deployment](https://github.com/l3montree-dev/devguard-docker-deployment) repo, edit `.env` to use the new version:
 
-```yaml
-services:
-  devguard-api:
-    image: ghcr.io/l3montree-dev/devguard:<version-tag>
-    
-  devguard-web:
-    image: ghcr.io/l3montree-dev/devguard-web:<version-tag>
+```bash
+DEVGUARD_API_TAG=<version-tag>
+DEVGUARD_WEB_TAG=<version-tag>
 ```
 
 ### Pull new images
 
-```bash 
-docker-compose -f docker-compose-try-it.yaml pull
+```bash
+docker compose -f compose.yaml pull
 ```
 
 ### Restart containers
 
-```bash 
-docker-compose -f docker-compose-try-it.yaml up -d
+Use the compose file override matching your deployment option (`compose.localhost.yaml`, `compose.traefik.yaml`, or `compose.orbstack.yaml`):
+
+```bash
+docker compose -f compose.yaml -f compose.localhost.yaml up -d --remove-orphans
 ```
 
 ### Verify
 
-```bash 
-docker-compose -f docker-compose-try-it.yaml ps
+```bash
+docker compose -f compose.yaml ps
 ```
 
 </Steps>

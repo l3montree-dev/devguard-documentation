@@ -62,16 +62,20 @@ kubectl scale deployment devguard-api-deployment devguard-web-deployment kratos 
 </Tabs.Tab>
 <Tabs.Tab>
 
-```bash 
+```bash
+# Run from the devguard-docker-deployment repo. Substitute the compose
+# override matching your deployment option (compose.localhost.yaml,
+# compose.traefik.yaml, or compose.orbstack.yaml).
+
 # Stop services
-docker-compose -f docker-compose-try-it.yaml stop devguard-api devguard-web kratos
+docker compose -f compose.yaml -f compose.localhost.yaml stop devguard-api devguard-web kratos
 
 # Restore
-docker cp devguard-backup.sql devguard-postgres:/tmp/
-docker exec devguard-postgres psql -U postgres -f /tmp/devguard-backup.sql
+docker compose -f compose.yaml cp devguard-backup.sql postgresql:/tmp/
+docker compose -f compose.yaml exec postgresql psql -U postgres -f /tmp/devguard-backup.sql
 
 # Start services
-docker-compose -f docker-compose-try-it.yaml start
+docker compose -f compose.yaml -f compose.localhost.yaml start
 ```
 
 </Tabs.Tab>

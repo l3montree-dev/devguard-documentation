@@ -13,10 +13,11 @@ lang: en-US
 ignoreChecks: null
 ---
 import { Callout, DocSteps as Steps } from '@document-writing-tools/kernux-theme'
+import { DocTabs as Tabs } from '@document-writing-tools/kernux-theme'
 
 # Deploy DevGuard with Docker Compose
 
-Run DevGuard using Docker Compose — suitable for evaluation, self-hosted setups, or production when Kubernetes is not available.
+Run DevGuard using the [devguard-docker-deployment](https://github.com/l3montree-dev/devguard-docker-deployment) repo — suitable for evaluation, self-hosted setups, or production when Kubernetes is not available.
 
 <Callout type="info">
   For large-scale or cloud-native production deployments, the [Helm chart](/how-to-guides/administration/deploy-with-helm) is the recommended path.
@@ -26,66 +27,91 @@ Run DevGuard using Docker Compose — suitable for evaluation, self-hosted setup
 
 - Docker and Docker Compose installed
 
+## Choose a Deployment Option
+
+| Option | Best for |
+|---|---|
+| **Localhost** | A simple initial test on your own machine |
+| **OrbStack** | Localhost testing with zero-config SSL, if you already use [OrbStack](https://docs.orbstack.dev/docker/domains#https) |
+| **Traefik** | Making DevGuard reachable from other computers — the recommended option for production |
+
 ## Deployment Steps
 
 <Steps>
 
-### Download the Compose file
+### Clone the repo
 
 ```bash
-curl -LO https://raw.githubusercontent.com/l3montree-dev/devguard/refs/heads/main/docker-compose-try-it.yaml
+git clone https://github.com/l3montree-dev/devguard-docker-deployment.git
+cd devguard-docker-deployment
 ```
 
-### Start the containers
+### Run the guided setup
+
+The interactive setup asks which deployment option you want (Localhost, OrbStack, or Traefik), then writes `.env` and generates the encryption key, the Kratos identity config, and the database init script. Re-running it keeps existing secrets and files, so it's also how you switch deployment options later.
 
 ```bash
-# hint: this command will block your shell. Append "&" to run it in the background and keep your shell usable
-docker compose -f docker-compose-try-it.yaml up
+docker compose -f compose.configure.yaml run --rm configure
 ```
 
-On first start, a `devguard-setup` service runs automatically to:
-- generate a random AES-256 encryption key
-- download the Kratos identity config
-- download the database init script
+### Initialize the database
 
-All files are stored in Docker named volumes — no manual file setup required.
+```bash
+docker compose -f compose.yaml -f compose.setup.yaml up postgresql
+```
+
+### Launch DevGuard
+
+```bash
+# Localhost / HTTP
+docker compose -f compose.yaml -f compose.localhost.yaml up -d --remove-orphans
+
+# Reverse Proxy (Traefik)
+docker compose -f compose.yaml -f compose.traefik.yaml up -d --remove-orphans
+
+# Reverse Proxy (OrbStack)
+docker compose -f compose.yaml -f compose.orbstack.yaml up -d --remove-orphans
+```
 
 ### Access DevGuard
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open [http://localhost:3000](http://localhost:3000) in your browser, or the domain you configured (`DEVGUARD_WEB_DOMAIN` in `.env`).
 
 </Steps>
 
 ## Important Notes
 
-**Email verification**: No SMTP server is configured by default. During registration, skip email verification by clicking "Back".
+**Email verification**: No SMTP server is configured by default, and `KRATOS_VERIFICATION_ENABLED`/`KRATOS_RECOVERY_ENABLED` are `false` in `.env.example`. During registration, skip email verification by clicking "Back".
 
-To enable email delivery, append `COURIER_SMTP_CONNECTION_URI` to the `kratos` service in the Compose file:
-
-```yaml
-services:
-  kratos:
-    environment:
-      - COURIER_SMTP_CONNECTION_URI=smtp://user:password@smtp.example.com:587/?skip_ssl_verify=false
-```
+To enable email delivery, set `KRATOS_SMTP_CONNECTION_URI`, `KRATOS_SMTP_FROM_ADDRESS`, and `KRATOS_SMTP_FROM_NAME` in `.env`, then set `KRATOS_VERIFICATION_ENABLED`/`KRATOS_RECOVERY_ENABLED` to `true` as needed and restart the `kratos` service.
 
 **Vulnerability database**: The API downloads the latest vulnerability database on first start. This may take several minutes. Vulnerability data and scan results won't be complete until the download finishes.
 
 ## Hardening for Production
 
-The `docker-compose-try-it.yaml` file contains inline `[PRODUCTION]` comments on every value that must change before going live. The key items are:
+`.env.example` groups every value that must change before going live under "Variables to change for production deployment" at the top of the file. The key items are:
 
-| What | Where | Action |
+| What | Variable | Action |
 |---|---|---|
-| DevGuard DB password | `postgresql`, `devguard-api`, `devguard-migrate` | Set a strong random `POSTGRES_PASSWORD` |
-| Kratos DB password | `kratos`, `kratos-migrate` DSN | Set a separate strong password for the `kratos` DB user |
-| Kratos config | `kratos`, `kratos-migrate` volumes | Replace the auto-downloaded config with a bind-mounted, customised `kratos.yml` (configure SMTP, disable `--dev`, set OIDC providers) |
-| Public URLs | `devguard-api`, `devguard-web` | Set `INSTANCE_DOMAIN`, `FRONTEND_URL`, and `ORY_SDK_PUBLIC_URL` to your `https://` domains |
-| TLS | `devguard-api`, `devguard-web` ports | Place a TLS-terminating reverse proxy (nginx, Caddy, Traefik) in front — do not expose ports 8080/3000 directly |
-| Log level | `kratos`, `devguard-api` | Change `LOG_LEVEL` from `debug` to `info` or `warn` |
+| Domains & protocol | `DEVGUARD_WEB_DOMAIN`, `DEVGUARD_API_DOMAIN`, `DEVGUARD_PROTOCOL` | Set to your public `https://` domains |
+| DevGuard DB password | `POSTGRES_DEVGUARD_PASSWORD` | Set a strong random password |
+| Kratos DB password | `POSTGRES_KRATOS_PASSWORD` | Set a separate strong password for the `kratos` DB user |
+| Session/cipher secrets | `KRATOS_COOKIE_SECRET`, `KRATOS_CIPHER_SECRET` | Generate with `openssl rand -base64 24` — the guided setup already does this for you. `KRATOS_CIPHER_SECRET` must be exactly 32 characters |
+| Passkey/WebAuthn RP id | `KRATOS_PASSKEY_RP_ID` | Root domain only — no scheme, no port (e.g. `example.com` if `DEVGUARD_WEB_DOMAIN=app.example.com`) |
+| Log level | `DEVGUARD_LOG_LEVEL` | Change from `debug` to `info` or `warn` |
+
+<Callout type="info">
+  The guided setup (`compose.configure.yaml`) fills in the secrets and domain-dependent values above automatically based on the deployment option you pick — you mainly need to review passwords and the SMTP settings.
+</Callout>
+
+### TLS
+
+- **Traefik** deployment terminates TLS for you. Put your certificate and key at `certs/domain.cert` and `certs/domain.key` in the repo root (see `.traefik/dynamic/tls.yml`) before starting.
+- **OrbStack** deployment gets TLS for free via OrbStack's zero-config domains — no certificate setup needed.
+- **Localhost** deployment has no TLS. Don't expose the `devguard-api`/`devguard-web` ports beyond your machine; for a network-reachable production deployment use the Traefik option or place your own TLS-terminating reverse proxy in front instead.
 
 <Callout type="warning">
-  The encryption key is auto-generated into a Docker named volume on first start. Back up the `encryption-key` volume — losing it makes all stored integration secrets unrecoverable.
+  The encryption key is generated into a Docker named volume during the guided setup. Back it up — losing it makes all stored integration secrets unrecoverable.
 </Callout>
 
 ## Next Steps
