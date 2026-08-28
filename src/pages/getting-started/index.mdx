@@ -47,15 +47,16 @@ If you don't have Docker installed, follow the [Docker installation guide](https
 
 ### Set up a local DevGuard instance
 
-First, download the necessary configuration files and start DevGuard using docker-compose:
+First, clone the [devguard-docker-deployment](https://github.com/l3montree-dev/devguard-docker-deployment) repo, run the guided setup, and start DevGuard:
 
 ```bash
-# hint: this command will block your shell. Append "&" to run it in the background and keep your shell usable
-curl -LO https://raw.githubusercontent.com/l3montree-dev/devguard/refs/heads/main/docker-compose-try-it.yaml \
-&& docker-compose -f docker-compose-try-it.yaml up
+git clone https://github.com/l3montree-dev/devguard-docker-deployment.git \
+&& cd devguard-docker-deployment \
+&& docker compose -f compose.configure.yaml run --rm configure \
+&& docker compose -f compose.yaml -f compose.localhost.yaml up -d --remove-orphans
 ```
 
-This command downloads all required configuration files and starts the DevGuard services.
+The guided setup writes `.env` and generates the encryption key, the Kratos config, and the database init script, then the services are started in the background.
 
 **Verify it worked:** DevGuard services should start without errors. The web frontend will be available at http://localhost:3000, the API at http://localhost:8080, and Kratos (authorization server) at http://localhost:4433.
 

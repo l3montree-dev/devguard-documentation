@@ -67,6 +67,7 @@
         "patch-package": "^8.0.1",
         "react": "19.2.8",
         "react-dom": "19.2.8",
+        "react-dropzone": "20.1.0",
         "react-markdown": "10.1.0",
         "recharts": "3.10.1",
         "sharp": "0.35.3",
