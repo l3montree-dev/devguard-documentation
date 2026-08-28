@@ -117,6 +117,21 @@ const config = withMarkdownWebBook({
                 destination: 'https://l3montree.com/impressum',
                 permanent: false,
             },
+            {
+                source: '/how-to-guides/integrations/create-webhook',
+                destination: '/how-to-guides/integrations/custom-webhooks',
+                permanent: true,
+            },
+            {
+                source: '/how-to-guides/integrations/webhook-events',
+                destination: '/how-to-guides/integrations/custom-webhooks',
+                permanent: true,
+            },
+            {
+                source: '/how-to-guides/integrations/webhook-security',
+                destination: '/how-to-guides/integrations/custom-webhooks',
+                permanent: true,
+            },
         ]
     },
 })
