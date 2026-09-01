@@ -1,0 +1,155 @@
+---
+title: Multi-Level VEXing for Releases
+description: "Bundle the SBOMs of several components into one release asset in DevGuard and vex the whole product at once — via the UI or your CI pipeline."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: multi-level vexing
+lang: en-US
+ignoreChecks: null
+---
+
+import { Callout } from '@document-writing-tools/kernux-theme'
+
+# Multi-Level VEXing for Releases
+
+Most products are not a single image. A Helm chart ships an application container, a web frontend, a database
+and an identity provider — each scanned separately, each with its own findings. Your customers, however, do
+not consume four images. They consume one release.
+
+**Multi-level VEXing** means making the exploitability statement at the level the product is actually shipped
+at, while the scanning still happens per component. In DevGuard you do this with a **release asset**: a
+repository whose artifact carries no SBOM of its own, but references the SBOMs of the components it bundles.
+Findings roll up into it, and one VEX decision there covers the whole product.
+
+<Callout type="info">
+  **Asset = repository.** DevGuard's API and CLI call a repository an *asset* — `--assetName`, `/assets/{id}`
+  in URLs. "Release asset" is therefore a repository that stands for a release rather than for a Git
+  repository. See [DevGuard Hierarchy](/explanations/core-concepts/organization-groups-repos).
+</Callout>
+
+<Callout type="info">
+  The referenced SBOMs stay live. DevGuard re-fetches each
+  [information source](/how-to-guides/vulnerability-management/sync-external-data) periodically, so a rescan of
+  a component shows up in the release asset without you re-uploading anything.
+</Callout>
+
+## The example
+
+The DevGuard Helm chart bundles four images:
+
+| Component | Source repository |
+|---|---|
+| `devguard` | API container |
+| `devguard-web` | Frontend container |
+| `postgresql` | Database |
+| `kratos` | Identity provider |
+
+The goal is one release asset, `pkg:oci/devguard-helm-chart`, that shows the findings of all four and can be
+vexed once per release.
+
+## Way 1 — Create the release asset in the UI
+
+Good for a first release or a one-off product view.
+
+1. Create a new repository in your group and give it the release's name.
+2. Click the External URLs Card and create your artifact with a valid purl.
+3. Paste the public SBOM URL of each component. You find it on the component's repository under
+   **Settings/Public URLs**; the shape is:
+
+   ```
+   https://api.main.devguard.org/api/v1/public/{repository-id}/refs/{ref}/artifacts/{purl}/sbom.json/
+   ```
+
+4. Save. The release asset now aggregates the findings of all referenced artifacts.
+
+<Callout type="warning">
+  The URLs are pinned to a ref and an image tag. Every new release means new URLs — done by hand this is
+  recurring work, which is what Way 2 removes.
+</Callout>
+
+## Way 2 — Create the release asset from your pipeline
+
+Let the release pipeline that knows the version numbers create the artifact.
+
+### Step 1 — Add the artifact definition
+
+Commit a `.github/sbom-artifact.json` next to your workflow, listing the artifact name and the SBOM URL of
+every bundled component:
+
+```json
+{
+    "artifactName": "pkg:oci/devguard-helm-chart",
+    "informationSources": [
+        {
+            "url": "https://api.main.devguard.org/api/v1/public/e1f24270-6e68-4571-9168-9c151c639c97/refs/v1-13-2/artifacts/pkg%3Aoci%2Fkratos%3Frepository_url%3Dregistry.opencode.de%2Foci-community%2Fimages%2Fl3montree%2Fdevguard%2Fdevguard%2Fkratos%26arch%3Damd64%26tag%3Dv1.13.2-amd64/sbom.json/"
+        },
+        {
+            "url": "https://api.main.devguard.org/api/v1/public/e1f24270-6e68-4571-9168-9c151c639c97/refs/v1-13-2/artifacts/pkg%3Aoci%2Fdevguard%3Frepository_url%3Dghcr.io%2Fl3montree-dev%2Fdevguard%26arch%3Damd64%26tag%3Dv1.13.2-amd64/sbom.json/"
+        },
+        {
+            "url": "https://api.main.devguard.org/api/v1/public/169319b7-8170-469f-9e31-f87b6054e507/refs/v1-13-1/artifacts/pkg%3Aoci%2Fdevguard-web%3Frepository_url%3Dghcr.io%2Fl3montree-dev%2Fdevguard-web%26arch%3Damd64%26tag%3Dv1.13.1-amd64/sbom.json/"
+        },
+        {
+            "url": "https://api.main.devguard.org/api/v1/public/e1f24270-6e68-4571-9168-9c151c639c97/refs/v1-13-2/artifacts/pkg%3Aoci%2Fpostgresql%3Frepository_url%3Dregistry.opencode.de%2Foci-community%2Fimages%2Fl3montree%2Fdevguard%2Fdevguard%2Fpostgresql%26arch%3Damd64%26tag%3Dv1.13.2-amd64/sbom.json/"
+        }
+    ]
+}
+```
+
+The purl inside the URL is percent-encoded. Generate the file in the release job if you want the version
+numbers filled in automatically.
+
+### Step 2 — Add the upload job
+
+```yaml
+upload-sboms:
+  runs-on: ubuntu-latest
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+      with:
+        persist-credentials: false
+
+    - name: Create artifact from SBOM URLs
+      uses: docker://ghcr.io/l3montree-dev/devguard/scanner:main
+      continue-on-error: true
+      with:
+        entrypoint: /bin/sh
+        args: >-
+          -c "devguard-scanner curl -X POST -H 'Content-Type: application/json'
+          -d $(cat .github/sbom-artifact.json)
+          $DEVGUARD_API_URL/api/v1/organizations/$DEVGUARD_ASSET_NAME/refs/${{ github.ref_name }}/artifacts/"
+      env:
+        DEVGUARD_TOKEN: ${{ secrets.DEVGUARD_TOKEN }}
+```
+
+The job needs nothing but a `DEVGUARD_TOKEN` with the **manage** scope. `devguard-scanner curl` is a thin
+wrapper around `curl` that signs the request with that token.
+
+The artifact is created under the ref of the running workflow — tag `v1.13.2` becomes ref `v1-13-2` — so each
+release gets its own set of bundled SBOMs and its own findings.
+
+## Step 3 — Vex the release
+
+Open the release asset. Findings from all four components appear in one list, each labelled with the artifact
+it came from. From here everything works as on a normal repository:
+
+- Mark a finding as a false positive or accepted risk — the decision belongs to this release.
+- Turn recurring decisions into [VEX rules](/how-to-guides/vex/vex-rules) so the next release inherits them.
+- [Export the VEX or CSAF document](/how-to-guides/vex/export-vex) for the release and hand it to your
+  customers — one document for the whole product, not four.
+
+## Related Documentation
+
+- [Create & Manage VEX Rules](/how-to-guides/vex/vex-rules) — carry decisions across releases
+- [Export & Publish VEX](/how-to-guides/vex/export-vex) — the document your consumers read
+- [Import VEX from Files & Suppliers](/how-to-guides/vex/import-vex) — upstream statements for bundled components
+- [Sync External Data](/how-to-guides/vulnerability-management/sync-external-data) — how information sources are fetched and what happens when one is removed
+- [Artifact Concept](/explanations/core-concepts/artifacts) — what an artifact is and how it relates to a repository
+- [Branches, Tags & Artifacts](/how-to-guides/scanning/branches-tags-and-artifacts) — why the ref is appended to the artifact name automatically
+- [What is VEX?](/explanations/vulnerability-management/what-is-vex) — the concept behind the workflow
