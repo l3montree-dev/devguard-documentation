@@ -57,13 +57,18 @@ vexed once per release.
 Good for a first release or a one-off product view.
 
 1. Create a new repository in your group and give it the release's name.
-2. Click the External URLs Card and create your artifact with a valid purl.
+2. Click the External SBOM URLs Card and create your artifact with a valid purl.
+
+![External URLs card](https://raw.githubusercontent.com/l3montree-dev/devguard-web/refs/heads/main/e2e/docs-screenshots/upstream-url-field.png)
+
 3. Paste the public SBOM URL of each component. You find it on the component's repository under
    **Settings/Public URLs**; the shape is:
 
    ```
    https://api.main.devguard.org/api/v1/public/{repository-id}/refs/{ref}/artifacts/{purl}/sbom.json/
    ```
+
+![Release Asset creation](https://raw.githubusercontent.com/l3montree-dev/devguard-web/refs/heads/main/e2e/docs-screenshots/create-release-asset.png)
 
 4. Save. The release asset now aggregates the findings of all referenced artifacts.
 
