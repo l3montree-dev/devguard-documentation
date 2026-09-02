@@ -4,4 +4,5 @@ export default {
     'import-vex': { title: 'Import VEX from Files & Suppliers' },
     'export-vex': { title: 'Export & Publish VEX' },
     'prove-not-affected': { title: 'Prove a Finding Is Not Exploitable' },
+    'multi-level-vexing': { title: 'Multi-Level VEXing for Releases' },
 }
