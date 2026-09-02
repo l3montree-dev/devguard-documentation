@@ -189,8 +189,7 @@ upload-sboms:
 ```
 
 The job needs nothing but a `DEVGUARD_TOKEN` with the **manage** scope and `DEVGUARD_API_URL` /
-`DEVGUARD_ASSET_NAME` from the workflow's `env`. `devguard-scanner curl` is a thin wrapper around `curl` that
-signs the request with that token.
+`DEVGUARD_ASSET_NAME` from the workflow's `env`.
 
 The artifact is created under the ref of the running workflow, so each branch or tag of the chart gets its own
 set of bundled SBOMs and its own findings.
