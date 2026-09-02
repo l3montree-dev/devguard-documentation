@@ -17,7 +17,7 @@ import { Callout } from '@document-writing-tools/kernux-theme'
 
 # Multi-Level VEXing for Releases
 
-Most products are not a single image. A Helm chart ships an application container, a web frontend, a database
+Most products are not a single image. A Helm chart for example ships an application container, a web frontend, a database
 and an identity provider — each scanned separately, each with its own findings. Your customers, however, do
 not consume four images. They consume one release.
 
@@ -65,7 +65,7 @@ Good for a first release or a one-off product view.
    **Settings/Public URLs**; the shape is:
 
    ```
-   https://api.main.devguard.org/api/v1/public/{repository-id}/refs/{ref}/artifacts/{purl}/sbom.json/
+   https://api.devguard.org/api/v1/public/{repository-id}/refs/{ref}/artifacts/{purl}/sbom.json/
    ```
 
 ![Release Asset creation](https://raw.githubusercontent.com/l3montree-dev/devguard-web/refs/heads/main/e2e/docs-screenshots/create-release-asset.png)
@@ -93,40 +93,96 @@ tags from the chart; the script writes the artifact definition that the upload j
 import { resolve } from "node:path";
 import { parse } from "yaml";
 
-const apiOrg = "e1f24270-6e68-4571-9168-9c151c639c97";
-const webOrg = "169319b7-8170-469f-9e31-f87b6054e507";
-const opencode = "registry.opencode.de/oci-community/images/l3montree/devguard";
+// One DevGuard organization ID per component (components can live in
+// different organizations, e.g. a separate frontend team).
+const backendOrg = "<backend-org-id>";
+const frontendOrg = "<frontend-org-id>";
 
-const artifacts = {
-  kratos: { org: apiOrg, name: "kratos", repo: `${opencode}/devguard/kratos` },
-  api: { org: apiOrg, name: "devguard", repo: "ghcr.io/l3montree-dev/devguard" },
-  web: { org: webOrg, name: "devguard-web", repo: "ghcr.io/l3montree-dev/devguard-web" },
-  postgresql: { org: apiOrg, name: "postgresql", repo: `${opencode}/devguard/postgresql` },
+// The release artifact your release asset should be created under.
+const releaseArtifactName = "pkg:oci/my-product-helm-chart";
+
+// Template for a component's purl. `{name}` and `{repo}` come from that
+// component's entry below, `{tag}` from its resolved image tag.
+const purlTemplate = "pkg:oci/{name}?repository_url={repo}&tag={tag}";
+
+// Template for the public SBOM URL. `{org}` and `{ref}` are the
+// component's DevGuard organization and ref (its tag with dots replaced
+// by dashes), `{purl}` is the percent-encoded purl built above.
+const sbomUrlTemplate =
+  "https://api.devguard.org/api/v1/public/{org}/refs/{ref}/artifacts/{purl}/sbom.json/";
+
+// The ref DevGuard creates for a scanned tag: dots become dashes, e.g.
+// "v1.13.2" -> "v1-13-2".
+function slugifyTag(tag: string) {
+  return tag.replace(/\./g, "-");
+}
+
+const artifacts: Record<
+  string,
+  { org: string; name: string; repo: string }
+> = {
+  database: {
+    org: backendOrg,
+    name: "database",
+    repo: "ghcr.io/my-org/my-product/database",
+  },
+  backend: {
+    org: backendOrg,
+    name: "backend",
+    repo: "ghcr.io/my-org/my-product/backend",
+  },
+  frontend: {
+    org: frontendOrg,
+    name: "frontend",
+    repo: "ghcr.io/my-org/my-product/frontend",
+  },
 };
 
-const repoRoot = resolve(import.meta.dir, "..");
-const chart = parse(await Bun.file(resolve(repoRoot, "Chart.yaml")).text());
-const values = parse(await Bun.file(resolve(repoRoot, "values.yaml")).text());
+// Reads each component's image tag from wherever your chart pins it.
+// Replace the paths/keys below with your chart's actual layout.
+async function readTagsFromRepo(repoRoot: string) {
+  const chart = parse(await Bun.file(resolve(repoRoot, "Chart.yaml")).text());
+  const values = parse(await Bun.file(resolve(repoRoot, "values.yaml")).text());
 
-const tags = {
-  kratos: chart.appVersion,
-  api: chart.appVersion,
-  web: values.web.image.tag,
-  postgresql: chart.appVersion,
-};
+  const backendTag = chart.appVersion as string;
+  const frontendTag = values.frontend.image.tag as string;
 
-const informationSources = Object.entries(artifacts).map(([key, { org, name, repo }]) => {
-  const tag = tags[key];
-  const purl = `pkg:oci/${name}?repository_url=${repo}&arch=amd64&tag=${tag}-amd64`;
   return {
-    url: `https://api.main.devguard.org/api/v1/public/${org}/refs/${tag.replace(/\./g, "-")}/artifacts/${encodeURIComponent(purl)}/sbom.json/`,
+    database: backendTag,
+    backend: backendTag,
+    frontend: frontendTag,
   };
-});
+}
 
-await Bun.write(
-  resolve(repoRoot, ".github/sbom-artifact.json"),
-  JSON.stringify({ artifactName: "pkg:oci/devguard-helm-chart", informationSources }) + "\n",
-);
+export function buildSBOMUrls(tags: Record<keyof typeof artifacts, string>) {
+  return Object.values(artifacts).map(({ org, name, repo }) => {
+    const tag = tags[name as keyof typeof artifacts];
+    const purl = purlTemplate
+      .replace("{name}", name)
+      .replace("{repo}", repo)
+      .replace("{tag}", tag);
+    return sbomUrlTemplate
+      .replace("{org}", org)
+      .replace("{ref}", slugifyTag(tag))
+      .replace("{purl}", encodeURIComponent(purl));
+  });
+}
+
+export async function buildSBOMArtifact(repoRoot: string) {
+  const tags = await readTagsFromRepo(repoRoot);
+  return {
+    artifactName: releaseArtifactName,
+    informationSources: buildSBOMUrls(tags).map((url) => ({ url })),
+  };
+}
+
+if (import.meta.main) {
+  await Bun.write(
+    "request-body.json",
+    JSON.stringify(await buildSBOMArtifact(repoRoot)) + "\n",
+  );
+  console.log(`wrote request body to request-body.json`);
+}
 ```
 
 Two details make the URLs work:
@@ -140,20 +196,14 @@ The result is exactly the file the API expects:
 
 ```json
 {
-  "artifactName": "pkg:oci/devguard-helm-chart",
+  "artifactName": "pkg:oci/my-product-helm-chart",
   "informationSources": [
-    { "url": "https://api.main.devguard.org/api/v1/public/e1f24270-6e68-4571-9168-9c151c639c97/refs/v1-13-2/artifacts/pkg%3Aoci%2Fkratos%3Frepository_url%3Dregistry.opencode.de%2Foci-community%2Fimages%2Fl3montree%2Fdevguard%2Fdevguard%2Fkratos%26arch%3Damd64%26tag%3Dv1.13.2-amd64/sbom.json/" },
-    { "url": "https://api.main.devguard.org/api/v1/public/e1f24270-6e68-4571-9168-9c151c639c97/refs/v1-13-2/artifacts/pkg%3Aoci%2Fdevguard%3Frepository_url%3Dghcr.io%2Fl3montree-dev%2Fdevguard%26arch%3Damd64%26tag%3Dv1.13.2-amd64/sbom.json/" },
-    { "url": "https://api.main.devguard.org/api/v1/public/169319b7-8170-469f-9e31-f87b6054e507/refs/v1-13-1/artifacts/pkg%3Aoci%2Fdevguard-web%3Frepository_url%3Dghcr.io%2Fl3montree-dev%2Fdevguard-web%26arch%3Damd64%26tag%3Dv1.13.1-amd64/sbom.json/" },
-    { "url": "https://api.main.devguard.org/api/v1/public/e1f24270-6e68-4571-9168-9c151c639c97/refs/v1-13-2/artifacts/pkg%3Aoci%2Fpostgresql%3Frepository_url%3Dregistry.opencode.de%2Foci-community%2Fimages%2Fl3montree%2Fdevguard%2Fdevguard%2Fpostgresql%26arch%3Damd64%26tag%3Dv1.13.2-amd64/sbom.json/" }
+    { "url": "https://api.devguard.org/api/v1/public/<backend-org-id>/refs/v1-13-2/artifacts/pkg%3Aoci%2Fdatabase%3Frepository_url%3Dghcr.io%2Fmy-org%2Fmy-product%2Fdatabase%26tag%3Dv1.13.2/sbom.json/" },
+    { "url": "https://api.devguard.org/api/v1/public/<backend-org-id>/refs/v1-13-2/artifacts/pkg%3Aoci%2Fbackend%3Frepository_url%3Dghcr.io%2Fmy-org%2Fmy-product%2Fbackend%26tag%3Dv1.13.2/sbom.json/" },
+    { "url": "https://api.devguard.org/api/v1/public/<frontend-org-id>/refs/v1-13-1/artifacts/pkg%3Aoci%2Ffrontend%3Frepository_url%3Dghcr.io%2Fmy-org%2Fmy-product%2Ffrontend%26tag%3Dv1.13.1/sbom.json/" }
   ]
 }
 ```
-
-<Callout type="info">
-  The frontend is pinned independently (`v1.13.1` while the chart is at `v1.13.2`), which is exactly why the
-  tags are read per component instead of assuming one version for the whole product.
-</Callout>
 
 ### Step 2 — Add the upload job
 
@@ -176,20 +226,19 @@ upload-sboms:
         bun run extractSbomUrls
 
     - name: Create artifact from SBOM URLs
-      uses: docker://ghcr.io/l3montree-dev/devguard/scanner:main
-      continue-on-error: true
+      uses: docker://ghcr.io/l3montree-dev/devguard/scanner:v1.13.3@sha256:b701867e25e0f749ef0b931cddf3e7c1f53700198fa3cf0030d9a70323ba0169 # look for the latest version on github.com/l3montree-dev/devguard/releases
       with:
         entrypoint: /bin/sh
         args: >-
           -c "devguard-scanner curl -X POST -H 'Content-Type: application/json'
-          -d $(cat .github/sbom-artifact.json)
+          -d $(cat request-body.json) \
           $DEVGUARD_API_URL/api/v1/organizations/$DEVGUARD_ASSET_NAME/refs/${{ github.ref_name }}/artifacts/"
       env:
         DEVGUARD_TOKEN: ${{ secrets.DEVGUARD_TOKEN }}
 ```
 
 The job needs nothing but a `DEVGUARD_TOKEN` with the **manage** scope and `DEVGUARD_API_URL` /
-`DEVGUARD_ASSET_NAME` from the workflow's `env`. `devguard-scanner curl` is a thin wrapper around `curl` that
+`DEVGUARD_ASSET_NAME` from the workflow's `env`. `devguard-scanner curl` is a custom `curl` implementation that
 signs the request with that token.
 
 The artifact is created under the ref of the running workflow, so each branch or tag of the chart gets its own
