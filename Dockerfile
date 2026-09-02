@@ -52,7 +52,7 @@ RUN npm run build
 
 RUN mkdir -p /usr/app/.next/cache/images && chown -R 53111:53111 /usr/app/.next/cache/images
 
-FROM gcr.io/distroless/nodejs26-debian13:nonroot@sha256:d440510c9ef4ff874b240bb6b855e4de4e797db283e41d8d506da5085a677f26
+FROM registry.opencode.de/oci-community/images/zendis/nodejs:26-minimal@sha256:cba03967828a5aee4d6c7ad6dc5887740105e198fed7be123222621819772ee3
 
 USER 53111
 
