@@ -132,7 +132,7 @@ The output shows each affected library with its vulnerabilities, the contextual 
 
 1. **Generates SBOM**: Creates a complete inventory of all software components and dependencies in your project. See [Supplementary SBOMs](/explanations/supplementary-sboms) for more on how DevGuard works with SBOM data.
 2. **Uploads Data**: Sends the SBOM to DevGuard, signed via HTTP Message Signing for integrity verification.
-3. **Server-Side Matching**: DevGuard matches all components against its [vulnerability database](/reference/vulnerability-database/data-sources) using [vulnerability matching](/explanations/vulnerability-management/vulnerability-matching) and returns results.
+3. **Server-Side Matching**: DevGuard matches all components against its [vulnerability database](/reference/vulnerability-database/update-schedule/#data-sources-synced) using [vulnerability matching](/explanations/vulnerability-management/vulnerability-matching) and returns results.
 
 **Verify it worked:** Navigate to your repository in DevGuard. You'll see detected vulnerabilities listed with severity scores, affected components, and fix recommendations. Learn more about [vulnerability types](/explanations/core-concepts/vulnerability-types) and the [vulnerability lifecycle](/explanations/vulnerability-management/vulnerability-lifecycle).
 
@@ -405,7 +405,6 @@ For automated scanning in CI/CD pipelines, DevGuard provides ready-to-use integr
 
 - [Getting Started with DevGuard](/getting-started)
 - [Branches, Tags & Artifacts](/how-to-guides/scanning/branches-tags-and-artifacts)
-- [Triaging Vulnerabilities](/tutorials/vulnerability-management/triaging-vulnerabilities)
 - [DevGuard How-To Guides](/how-to-guides)
 - [DevGuard Explanations](/explanations)
 
