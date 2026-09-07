@@ -8,4 +8,5 @@ export default {
     'dependency-proxy': { title: 'Dependency Proxy' },
     compliance: { title: 'Compliance' },
     administration: { title: 'Administration' },
+    'container-hardening': { title: 'Container Hardening' },
 }

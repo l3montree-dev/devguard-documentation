@@ -11,13 +11,9 @@ export default {
     compliance: {
         title: 'DevGuard & Compliance Frameworks',
     },
-    'attestations-provenance': {
-        title: 'Attestations & Provenance',
-    },
     'personal-access-token': { title: 'Personal Access Tokens' },
     'supplementary-sboms': { title: 'Supplementary SBOMs' },
     'transitive-dependencies': { title: 'Transitive Dependencies' },
     security: { title: 'Security' },
     integrations: { title: 'Integrations' },
-    'advanced-topics': { title: 'Advanced Topics' },
 }

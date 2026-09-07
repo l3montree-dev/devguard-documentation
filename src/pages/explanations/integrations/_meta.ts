@@ -4,5 +4,4 @@ export default {
     'gitlab-integration': { title: 'GitLab Integration' },
     'integration-architecture': { title: 'Integration Architecture' },
     'jira-integration': { title: 'Jira Integration' },
-    'webhook-system': { title: 'Webhook System' },
 }
