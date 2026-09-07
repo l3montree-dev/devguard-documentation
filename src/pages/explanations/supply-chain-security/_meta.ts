@@ -11,4 +11,5 @@ export default {
     'transitive-vulnerability-path-analysis': {
         title: 'Transitive Vulnerability Path Analysis',
     },
+    'slsa-level-3': { title: 'SLSA Level 3' },
 }

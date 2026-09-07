@@ -5,4 +5,5 @@ export default {
         title: 'Manage Compliance & Attestation Policies',
     },
     'track-compliance-postures': { title: 'Track Compliance Postures' },
+    'audit-trails': { title: 'DevGuard Audit Trails' },
 }
