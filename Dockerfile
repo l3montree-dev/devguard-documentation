@@ -49,6 +49,7 @@ ENV NEXT_PUBLIC_CHAT_WIDGET_INTEGRITY=$NEXT_PUBLIC_CHAT_WIDGET_INTEGRITY
 
 # Build
 RUN npm run build
+RUN npm prune --omit=dev
 
 RUN mkdir -p /usr/app/.next/cache/images && chown -R 53111:53111 /usr/app/.next/cache/images
 
