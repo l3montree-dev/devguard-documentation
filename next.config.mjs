@@ -50,12 +50,12 @@ const config = withMarkdownWebBook({
             },
             {
                 source: '/concept-guides/container-hardening/process',
-                destination: '/tutorials/container-hardening/process',
+                destination: '/how-to-guides/container-hardening/process/',
                 permanent: true,
             },
             {
                 source: '/concept-guides/container-hardening/cve-decision',
-                destination: '/tutorials/container-hardening/cve-decision',
+                destination: '/how-to-guides/container-hardening/cve-decision/',
                 permanent: true,
             },
             {
