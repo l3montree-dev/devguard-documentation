@@ -25,13 +25,13 @@ Strip away the audits and paperwork, and compliance reduces to a simple claim: "
 
 So compliance isn't a separate discipline bolted onto secure development - it's the proof layer on top of it. What went wrong in the scenario above wasn't the practices themselves; it's that the proof-gathering happened somewhere organizationally disconnected from where those practices actually live. Compliance Posture closes that gap by putting the tracking directly where the technical decisions are made.
 
-## What Compliance Posture Is
+### What Compliance Posture Is
 
 **Compliance Posture** is DevGuard's control-tracking dashboard. For every control in a supported catalog, it tracks one thing per organization, project, or repository: is this control **Implemented**, **Not Applicable**, or still **Open**? You back that status up by pointing at things that already exist in your stack - a branch protection rule, a CI job, an SBOM export - instead of writing a paragraph of prose. The result is a living, exportable record instead of a document that's stale the day after you write it.
 
 These decisions also inherit down the hierarchy: mark a control Implemented at the organization level and it applies to every project and repository underneath by default, until one of them decides to record its own, more specific status. That mirrors how these controls actually get satisfied in practice - most are set once centrally (an org-wide branch-protection policy, say) and only a handful of repositories ever need to say something different.
 
-## How It's Structured
+### How It's Structured
 
 Four terms, introduced in the order you'll actually run into them, using one example throughout: the requirement "restrict who can change source code," satisfied in practice by a GitLab or GitHub branch-protection rule.
 
@@ -42,13 +42,13 @@ Four terms, introduced in the order you'll actually run into them, using one exa
 
 DevGuard ships with a set of these components already defined and already mapped to controls in the supported catalogs - so for common capabilities like branch protection, the "does this satisfy that control" work is done before you open the dashboard. You can still define your own components for anything specific to your stack.
 
-## What OSCAL Is, and Why DevGuard Uses It
+### What OSCAL Is, and Why DevGuard Uses It
 
 **OSCAL** (the Open Security Controls Assessment Language) is a specification published by NIST for describing controls, components, and security plans as structured JSON/XML data - think "OpenAPI, but for compliance controls" rather than HTTP APIs.
 
 DevGuard uses it because every framework otherwise defines controls in its own words, at its own level of detail, in its own document format. OSCAL gives DevGuard one shape to import any framework's catalog into and one shape to export evidence back out of, instead of building bespoke support per framework. In practice that means: the BSI catalogs DevGuard ships are imported as OSCAL, components are defined as OSCAL, and **Download OSCAL** on the posture list exports a standard OSCAL System Security Plan - a document any auditor's tooling can parse, not a DevGuard-proprietary report. You never need to read the spec or write OSCAL JSON by hand to use this feature.
 
-### Why This Matters for Grundschutz++ and the CRA
+#### Why This Matters for Grundschutz++ and the CRA
 
 Picking OSCAL isn't just an internal convenience - it's where the frameworks themselves are heading. The BSI has stopped treating documents as the source of truth for its requirements: its [Stand der Technik Bibliothek](https://github.com/BSI-Bund/Stand-der-Technik-Bibliothek) publishes BSI security requirements as versioned, [machine-readable OSCAL documents](https://www.bsi.bund.de/DE/Themen/Unternehmen-und-Organisationen/Standards-und-Zertifizierung/Grundschutz-in-der-Informationssicherheit/Stand-der-Technik/OSCAL/oscal_node.html) on GitHub, and **Grundschutz++** - the successor to the IT-Grundschutz-Kompendium - is delivered through that library rather than as a compendium you read. That's the explicit goal of the rewrite: state each requirement so a machine can interpret it, so modelling, documentation and eventually the audit itself can be automated. With the public release scheduled for October 2026 and certification starting in January 2027, tooling that can't consume OSCAL will be working from a second-hand copy of a catalog whose authoritative form is data.
 
@@ -56,20 +56,24 @@ That library is layered much like DevGuard's own model: a **control layer** of c
 
 The **[CRA](/explanations/compliance/cyber-resilience-act)** pushes from the regulatory side toward the same format. No regulation names OSCAL, and the CRA doesn't either - but it already requires one artifact to be machine-readable (the SBOM), and it turns compliance into a continuous, per-product duty instead of a certificate earned once: technical documentation has to stay current across the entire supported lifetime of every product placed on the EU market. That's a volume problem. Evidence for a requirement like "vulnerabilities are handled before release" has to hold per product and per release and be re-provable at any point in the support period - not reconstructed from memory when an auditor asks. And because CRA conformity will in practice be argued through frameworks organizations already run, OSCAL's mapping model is what lets one recorded decision count toward a Grundschutz++ control and a CRA requirement at the same time, rather than being maintained twice in two spreadsheets that drift apart.
 
-## Compliance Is a Community Effort, Not a Private Chore
+### Compliance Is a Community Effort, Not a Private Chore
 
 The branch-protection component from the example above isn't specific to your organization. Once the mapping from "GitLab branch protection" to a given control exists, it's reusable by every organization running GitLab - nobody else has to rediscover or re-argue it. Connecting a real capability to an abstract control is exactly the kind of work that's tedious to do once and wasteful to redo per company, which is why DevGuard ships common mappings out of the box rather than starting every organization from a blank catalog - and why we're working toward a shared community repository where these component-to-control mappings can be consolidated and improved across organizations, not just shipped once and left to go stale.
 
 This mirrors DevGuard's broader philosophy on [crowdsourced vulnerability assessment](/explanations/vulnerability-management/mitigation-strategies): the same way one team's VEX statement about a vulnerability's exploitability can generalize to every other consumer of that component, one team's work mapping a technical capability to a compliance control generalizes to every other organization with the same setup. The more organizations that attach and refine components, the less redundant interpretation work is left for the next team.
 
-## Prerequisites
+### Prerequisites
 
 - Access to a DevGuard organization, project or repository (asset).
 - Admin or maintain permissions to mark a posture as implemented, not applicable, or to attach a component (read access is enough to view postures).
 
-## Where to Find Compliance Postures
 
-The **Compliance Postures** entry sits in the sidebar menu at three levels, and each level shows the same list scoped narrower:
+## Where to find Compliance Postures
+
+To monitor the compliance of your organization, group or repository, DevGuard provides a **Compliance Posture** dashboard at each level. The dashboard shows the status of every control in the supported frameworks, and lets you attach real components as evidence for your decisions.
+
+
+The **Compliance Postures** entry sits in the menu at three levels, and each level shows the same list scoped narrower:
 
 - **Organization** → **Compliance Postures** - every control across all supported frameworks, for the whole organization.
 - **Project** → **Compliance Postures** - the same controls, scoped to the repositories inside that project.
@@ -79,7 +83,34 @@ A control's status can be decided at any of these levels - see [inheritance](#wh
 
 ![Finding the compliance postures in DevGuard](/screenshots/track-compliance-postures.png)
 
-## Supported Frameworks
+#### Organization-Level Compliance View
+
+Navigate to **Organization** → **Compliance**
+
+![Organization Compliance Dashboard](https://raw.githubusercontent.com/l3montree-dev/devguard-web/refs/heads/main/e2e/docs-screenshots/compliance-posture-organization.png)
+
+#### Project-Level Compliance View
+
+Navigate to **Organization** → **Project** → **Compliance**
+
+![Project Compliance Dashboard](https://raw.githubusercontent.com/l3montree-dev/devguard-web/refs/heads/main/e2e/docs-screenshots/compliance-posture-group.png)
+
+<Callout type="info">
+    Enabling a policy at the project level tells DevGuard to evaluate that
+    policy against this project's repositories. Only organization admins can
+    manage project-level policies.
+</Callout>
+
+#### Repository-Level Compliance View
+
+Inspect detailed compliance control evaluations for a specific repository version:
+
+Navigate to **Organization** → **Project** → **Repository** → **Compliance**
+
+![Repository Compliance Dashboard](https://raw.githubusercontent.com/l3montree-dev/devguard-web/refs/heads/main/e2e/docs-screenshots/compliance-posture-repository.png)
+
+
+### Supported Frameworks
 
 Every catalog DevGuard ships out of the box comes from the OSCAL sources the German Federal Office for Information Security (BSI) publishes in its [Stand der Technik Bibliothek](https://github.com/BSI-Bund/Stand-der-Technik-Bibliothek) (see [above](#why-this-matters-for-grundschutz-and-the-cra)):
 
@@ -94,7 +125,7 @@ Because IT-Grundschutz arrive as mappings onto Grundschutz++ rather than as an u
 ![Supported compliance frameworks in DevGuard](/screenshots/track-compliance-postures-supported-frameworks.png)
 
 
-## The Compliance Posture List
+### The Compliance Posture List
 
 Open **Compliance Postures** at any level to see a paginated table of controls with their title, framework, control ID, importance, whether a DevGuard component can help satisfy them, and any mapped controls.
 
@@ -107,7 +138,7 @@ Open **Compliance Postures** at any level to see a paginated table of controls w
 ![The compliance posture list in DevGuard + OSCAL download button](/screenshots/track-compliance-postures-compliance-posture-list.png)
 
 
-## The Control Detail Page
+### The Control Detail Page
 
 Opening a control shows its full text - description, guidance and assessment objective - with a glossary tooltip on unfamiliar terms, plus a sidebar with its group, class, security level, importance, effort level, tags, source documentation link and mapped controls.
 
@@ -124,7 +155,7 @@ Every action is recorded in the control's event feed, giving you a full audit tr
 ![Compliance control detailed view](/screenshots/track-compliance-postures-detail-page.png)
 
 
-## Attach Components as Evidence
+### Attach Components as Evidence
 
 Attaching a component to a control in your scope is *your* statement that you actually rely on that capability - plus how far along it is:
 
@@ -151,6 +182,6 @@ To attach one:
 
 ## Related Documentation
 
-- [View Compliance Dashboards](/how-to-guides/compliance/attestation-policies#view-compliance-dashboards) - the older policy/attestation-based compliance view
+- [Audit Logs](/how-to-guides/compliance/audit-logs/) - track decisions via vulnerability event history
 - [Cyber Resilience Act](/explanations/compliance/cyber-resilience-act) - what the CRA requires and how DevGuard maps to it
 - [Why Compliance Matters](/explanations/compliance/why-compliance-matters) - the business case for compliance
