@@ -1,4 +1,11 @@
-import { readFileSync, writeFileSync, mkdirSync, rmSync, cpSync, copyFileSync } from 'node:fs'
+import {
+    readFileSync,
+    writeFileSync,
+    mkdirSync,
+    rmSync,
+    cpSync,
+    copyFileSync,
+} from 'node:fs'
 import { relative, join, sep, basename, resolve } from 'node:path'
 import { execFileSync } from 'node:child_process'
 
@@ -18,7 +25,8 @@ const SHELL_NIX = 'src/nix-tests/shell.nix'
 const SCRIPT_TIMEOUT = process.env.SCRIPT_TIMEOUT ?? '300'
 const NIXPKGS_URL = 'https://github.com/NixOS/nixpkgs/tarball/nixos-26.05'
 const EXAMPLE_REPO_URL =
-    process.env.EXAMPLE_REPO_URL ?? 'https://github.com/l3montree-dev/devguard-example-repository.git'
+    process.env.EXAMPLE_REPO_URL ??
+    'https://github.com/l3montree-dev/devguard-example-repository.git'
 const EXAMPLE_REPO_DIR = join(TMP_DIR, 'example-repository')
 const VEX_SOURCE = 'public/example-files/ingesting/vex-accepted.json'
 const SBOM_SOURCE = 'public/example-files/ingesting/sbom.json'
@@ -42,14 +50,19 @@ const DEFAULT_MDX_FILES = [
     'src/pages/contributing/getting-started.mdx',
     'src/pages/how-to-guides/scanning/upload-vex.mdx',
     'src/pages/how-to-guides/scanning/scan-your-project.mdx',
+    'src/pages/how-to-guides/dependency-proxy/setup-npm-proxy.mdx',
 ]
 
-const MDX_FILES = process.argv.length > 2 ? process.argv.slice(2) : DEFAULT_MDX_FILES
+const MDX_FILES =
+    process.argv.length > 2 ? process.argv.slice(2) : DEFAULT_MDX_FILES
 
 const VARIABLE_PATTERNS: [RegExp, string][] = [
     [/https:\/\/(?:api|app)\.devguard\.org/g, '${apiUrl}'],
     [/https:\/\/<your-devguard-url>/g, '${apiUrl}'],
-    [/\b(DEVGUARD_TOKEN|DEVGUARD_PAT|devguard-token)=("[^"]*"|'[^']*'|[^\s\\]*)/g, '$1="${token}"'],
+    [
+        /\b(DEVGUARD_TOKEN|DEVGUARD_PAT|devguard-token)=("[^"]*"|'[^']*'|[^\s\\]*)/g,
+        '$1="${token}"',
+    ],
     [/Bearer +[^"'\s]+/g, 'Bearer ${token}'],
     [/(X-Asset-Name:[ \t]*)[^"'\s]+/g, '$1${assetName}'],
     [/ghcr\.io\/org\/image:tag/g, TEST_IMAGE],
@@ -73,7 +86,8 @@ function changeToTestVariables(code: string): string {
     )
 
     return VARIABLE_PATTERNS.reduce(
-        (result, [pattern, replacement]) => result.replace(pattern, replacement),
+        (result, [pattern, replacement]) =>
+            result.replace(pattern, replacement),
         withFlagValues,
     )
 }
@@ -145,7 +159,11 @@ function extractBlocks(source: string): CodeBlock[] {
 
 function outputPathFor(mdxPath: string): string {
     const relativePath = relative(PAGES_DIR, mdxPath)
-    const fileName = relativePath.replace(/\.mdx$/, '').split(sep).join('-') + '.sh'
+    const fileName =
+        relativePath
+            .replace(/\.mdx$/, '')
+            .split(sep)
+            .join('-') + '.sh'
 
     return join(TMP_DIR, fileName)
 }
@@ -154,16 +172,22 @@ function convert(mdxPath: string): string | null {
     const source = readFileSync(mdxPath, 'utf8')
     const blocks = extractBlocks(source)
     const testBlocks = blocks.filter(
-        (block) => SHELL_LANGS.has(block.lang) && !block.meta.includes('{ignore}'),
+        (block) =>
+            SHELL_LANGS.has(block.lang) && !block.meta.includes('{ignore}'),
     )
 
     if (testBlocks.length === 0) {
         return null
     }
 
-    const header = "#!/usr/bin/env bash\nset -euo pipefail\ntrap 'kill $(jobs -p) 2>/dev/null || true' EXIT\n\n"
+    const header =
+        "#!/usr/bin/env bash\nset -euo pipefail\ntrap 'kill $(jobs -p) 2>/dev/null || true' EXIT\n\n"
     const body = testBlocks
-        .map((block) => backgroundHintedCommands(httpsRemotes(changeToTestVariables(block.code))))
+        .map((block) =>
+            backgroundHintedCommands(
+                httpsRemotes(changeToTestVariables(block.code)),
+            ),
+        )
         .join('\n')
 
     const outPath = outputPathFor(mdxPath)
@@ -182,9 +206,7 @@ function assertRequiredEnv(): void {
     const missing = REQUIRED_ENV.filter((name) => !process.env[name])
 
     if (missing.length > 0) {
-        throw new Error(
-            `Missing variables: ${missing.join(', ')}.`,
-        )
+        throw new Error(`Missing variables: ${missing.join(', ')}.`)
     }
 }
 
@@ -202,17 +224,26 @@ function main(): void {
 
     try {
         console.log(`Cloning ${EXAMPLE_REPO_URL} ..`)
-        execFileSync('git', ['clone', '--depth', '1', EXAMPLE_REPO_URL, EXAMPLE_REPO_DIR], {
+        execFileSync(
+            'git',
+            ['clone', '--depth', '1', EXAMPLE_REPO_URL, EXAMPLE_REPO_DIR],
+            {
+                stdio: 'inherit',
+                env,
+            },
+        )
+
+        console.log(`Saving ${TEST_IMAGE} to ${IMAGE_TAR} ..`)
+        execFileSync('docker', ['pull', TEST_IMAGE], { stdio: 'inherit', env })
+        execFileSync('docker', ['save', '-o', IMAGE_TAR, TEST_IMAGE], {
             stdio: 'inherit',
             env,
         })
 
-        console.log(`Saving ${TEST_IMAGE} to ${IMAGE_TAR} ..`)
-        execFileSync('docker', ['pull', TEST_IMAGE], { stdio: 'inherit', env })
-        execFileSync('docker', ['save', '-o', IMAGE_TAR, TEST_IMAGE], { stdio: 'inherit', env })
-
         console.log('Getting all the code blocks together..')
-        const scripts = MDX_FILES.map(convert).filter((path): path is string => path !== null)
+        const scripts = MDX_FILES.map(convert).filter(
+            (path): path is string => path !== null,
+        )
 
         const workRoot = join(TMP_DIR, 'work')
         mkdirSync(workRoot, { recursive: true })
@@ -223,12 +254,19 @@ function main(): void {
             console.log(`==> ${script}`)
 
             const workDir = join(workRoot, basename(script, '.sh'))
-            rmSync(workDir, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 })
+            rmSync(workDir, {
+                recursive: true,
+                force: true,
+                maxRetries: 5,
+                retryDelay: 200,
+            })
             cpSync(EXAMPLE_REPO_DIR, workDir, { recursive: true })
             for (const [source, name] of FIXTURES) {
                 copyFileSync(source, join(workDir, name))
             }
-            execFileSync('chmod', ['-R', 'a+rwX', workDir], { stdio: 'inherit' })
+            execFileSync('chmod', ['-R', 'a+rwX', workDir], {
+                stdio: 'inherit',
+            })
 
             const inner =
                 `cd ${shQuote(resolve(workDir))} && ` +
@@ -248,7 +286,12 @@ function main(): void {
         process.exitCode = failed ? 1 : 0
     } finally {
         if (!process.env.KEEP_TMP) {
-            rmSync(TMP_DIR, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 })
+            rmSync(TMP_DIR, {
+                recursive: true,
+                force: true,
+                maxRetries: 5,
+                retryDelay: 200,
+            })
         } else {
             console.log(`Kept ${TMP_DIR}`)
         }

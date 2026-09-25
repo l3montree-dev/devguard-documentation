@@ -56,6 +56,36 @@ DevGuard ships a test package that is permanently flagged as malicious. Use it t
 
 Run `npm install`. `lodash` installs successfully while `fake-malicious-npm-package` is rejected with a `403 Forbidden`. If you see both results, your proxy is configured correctly.
 
+`npm audit` and `npm audit signatures` keep working behind the proxy: DevGuard forwards the audit requests, the registry signing keys and the provenance attestations to the npm registry.
+
+<Callout type="info">
+  `npm audit signatures` prints `Fetching verification keys using TUF failed. Fetching directly from <registry>.` when run against the proxy. This is expected: npm first looks up the signing keys of the configured registry in the [Sigstore TUF repository](https://github.com/sigstore/root-signing), which only contains the keys of public registries such as `registry.npmjs.org`. Therefore tuf cant be used to fetch the signatures. npm itself will fallback to fetch the keys from the proxy, which forwards the official keys of the npm registry, and verifies the signatures with them.
+</Callout>
+
+The same check as a script, installing each package separately so the failure of the malicious one is visible:
+
+```bash
+mkdir -p npm-proxy-test && cd npm-proxy-test
+npm init -y > /dev/null
+echo "registry=https://<your-devguard-url>/api/v1/dependency-proxy/npm" > .npmrc
+
+# lodash installs through the proxy
+npm install lodash@^4.17.21
+
+# the audit is forwarded to the npm registry
+# (--audit-level=none only fails if the audit itself fails, not on reported vulnerabilities)
+npm audit --audit-level=none
+
+# registry signatures of the installed packages are verified through the proxy
+npm audit signatures
+
+# fake-malicious-npm-package must be rejected with 403 Forbidden
+if npm install fake-malicious-npm-package@1.0.0; then
+  echo "fake-malicious-npm-package was NOT blocked - check your proxy configuration" >&2
+  exit 1
+fi
+```
+
 ## Further Reading
 
 - [Dependency Proxy Overview](/how-to-guides/dependency-proxy)

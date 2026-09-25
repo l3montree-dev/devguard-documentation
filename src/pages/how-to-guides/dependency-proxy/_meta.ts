@@ -4,4 +4,5 @@ export default {
     'setup-go-proxy': { title: 'Setup Go Proxy' },
     'setup-npm-proxy': { title: 'Setup NPM Proxy' },
     'setup-pypi-proxy': { title: 'Setup PyPI Proxy' },
+    'ci-runners': { title: 'Self-Hosted CI Runners' },
 }

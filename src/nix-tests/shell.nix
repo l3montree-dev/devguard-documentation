@@ -10,5 +10,6 @@ pkgs.mkShellNoCC {
     trivy
     cosign
     openssl
+    nodejs
   ];
 }

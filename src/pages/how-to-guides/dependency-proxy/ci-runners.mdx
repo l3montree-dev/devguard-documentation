@@ -1,0 +1,60 @@
+---
+title: Use the DevGuard Dependency Proxy in Self-Hosted CI Runners
+description: "Route npm, Go and PyPI downloads of every CI job through the DevGuard dependency proxy by configuring it once on your self-hosted GitLab runners."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: dependency proxy for self-hosted ci runners
+lang: en-US
+ignoreChecks: null
+---
+
+import { Callout } from '@document-writing-tools/kernux-theme'
+
+# Use the Dependency Proxy in Self-Hosted CI Runners
+
+CI pipelines install dependencies on every run, which makes them a prime target for supply chain attacks. Instead of adding a registry configuration to every repository, you can configure the DevGuard dependency proxy once on your self-hosted runners. Every job running on them then downloads npm, Go and PyPI packages through DevGuard, without any change to the projects themselves.
+
+## Proxy URLs with a Secret
+
+The proxy URLs in the runner configuration contain a dependency proxy secret:
+
+| Ecosystem | Environment variable | URL |
+|-----------|---------------------|-----|
+| npm | `npm_config_registry` | `https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/npm/` |
+| Go modules | `GOPROXY` | `https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/go/` |
+| PyPI | `PIP_INDEX_URL` | `https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/pypi/simple/` |
+
+The secret links the requests to your organization, project or repository in DevGuard, so the proxy applies the rules and the [minimum package age](/how-to-guides/dependency-proxy#minimum-package-age) configured there. Requests without a secret are only checked against the malicious package database.
+
+<Callout type="warning">
+  Treat the secret like a credential. Store the runner configuration in a Kubernetes secret or a sealed/encrypted secret instead of committing it in plain text.
+</Callout>
+
+## GitLab Runner
+
+GitLab Runner passes the variables listed in `environment` of a `[[runners]]` section to every job it runs. Add the proxy URLs to the runner's `config.toml` (by default `/etc/gitlab-runner/config.toml`). This works with every executor, for example Shell, Docker or Kubernetes:
+
+```toml
+[[runners]]
+  name = "my-runner"
+  url = "https://gitlab.com"
+  executor = "docker"
+  environment = [
+    "GOPROXY=https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/go/",
+    "npm_config_registry=https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/npm/",
+    "PIP_INDEX_URL=https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/pypi/simple/",
+  ]
+```
+
+## Further Reading
+
+- [Dependency Proxy Overview](/how-to-guides/dependency-proxy)
+- [Setup npm Proxy](/how-to-guides/dependency-proxy/setup-npm-proxy)
+- [Setup Go Proxy](/how-to-guides/dependency-proxy/setup-go-proxy)
+- [Setup PyPI Proxy](/how-to-guides/dependency-proxy/setup-pypi-proxy)
+- [GitLab Runner advanced configuration](https://docs.gitlab.com/runner/configuration/advanced-configuration/)
