@@ -86,6 +86,46 @@ if npm install fake-malicious-npm-package@1.0.0; then
 fi
 ```
 
+### Testing the minimum package age
+
+The [minimum package age](/how-to-guides/dependency-proxy#minimum-package-age) is configured per repository and only applies to requests using the repository's proxy URL, which contains a secret. To verify it, temporarily set the minimum age to 87600 hours (10 years). `lodash@4.17.21` was published in February 2021, so the proxy must reject it, while a version range still resolves to an older version:
+
+<Callout type="info">
+  npm 11 has its own client-side minimum release age (`min-release-age` in `.npmrc`, in days). If it is set, npm hides recent versions itself and reports errors like `No matching version found for lodash@4.17.21 with a date before …` — independent of the proxy. The script passes `--min-release-age=0` so that only the proxy decides which versions are available. Both settings can be combined in practice; the proxy enforces the minimum age centrally, **even for clients that do not support or configure it**.
+</Callout>
+
+```bash
+mkdir -p npm-min-age-test && cd npm-min-age-test
+npm init -y > /dev/null
+
+# set the minimum package age of the repository to 10 years
+devguard-scanner curl --token <your-pat-token> -X PUT \
+  -d '{"rules":"","minReleaseAge":87600}' \
+  https://<your-devguard-url>/api/v1/organizations/<assetName>/config-files/dependency-proxy-configs/
+
+# the repository's npm proxy URL applies its settings
+NPM_PROXY=$(devguard-scanner curl --token <your-pat-token> -s \
+  https://<your-devguard-url>/api/v1/organizations/<assetName>/dependency-proxy-urls/ \
+  | node -pe 'JSON.parse(require("fs").readFileSync(0, "utf8")).npm')
+
+# --min-release-age=0 disables npm's own minimum release age (npm 11+),
+# so only the proxy decides which versions are available
+
+# lodash@4.17.21 is younger than 10 years and must be rejected
+if npm install lodash@4.17.21 --prefer-online --min-release-age=0 --registry "$NPM_PROXY"; then
+  echo "lodash@4.17.21 was NOT blocked by the minimum package age" >&2
+  exit 1
+fi
+
+# a version range resolves to the newest version that is old enough - this will install a really outdated version like 4.16.2
+npm install "lodash@^4" --prefer-online --min-release-age=0 --registry "$NPM_PROXY"
+
+# reset the minimum package age
+devguard-scanner curl --token <your-pat-token> -X PUT \
+  -d '{"rules":"","minReleaseAge":0}' \
+  https://<your-devguard-url>/api/v1/organizations/<assetName>/config-files/dependency-proxy-configs/
+```
+
 ## Further Reading
 
 - [Dependency Proxy Overview](/how-to-guides/dependency-proxy)
