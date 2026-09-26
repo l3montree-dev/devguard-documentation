@@ -51,6 +51,7 @@ const DEFAULT_MDX_FILES = [
     'src/pages/how-to-guides/scanning/upload-vex.mdx',
     'src/pages/how-to-guides/scanning/scan-your-project.mdx',
     'src/pages/how-to-guides/dependency-proxy/setup-npm-proxy.mdx',
+    'src/pages/how-to-guides/dependency-proxy/setup-pypi-proxy.mdx',
 ]
 
 const MDX_FILES =
@@ -59,12 +60,14 @@ const MDX_FILES =
 const VARIABLE_PATTERNS: [RegExp, string][] = [
     [/https:\/\/(?:api|app)\.devguard\.org/g, '${apiUrl}'],
     [/https:\/\/<your-devguard-url>/g, '${apiUrl}'],
+    [/<your-devguard-host>/g, '${apiHost}'],
     [
         /\b(DEVGUARD_TOKEN|DEVGUARD_PAT|devguard-token)=("[^"]*"|'[^']*'|[^\s\\]*)/g,
         '$1="${token}"',
     ],
     [/Bearer +[^"'\s]+/g, 'Bearer ${token}'],
     [/(X-Asset-Name:[ \t]*)[^"'\s]+/g, '$1${assetName}'],
+    [/<assetName>/g, '${assetName}'],
     [/ghcr\.io\/org\/image:tag/g, TEST_IMAGE],
     [/registry\.example\.com\/org\/image:tag/g, TEST_IMAGE],
 ]
@@ -217,6 +220,8 @@ function main(): void {
         ...process.env,
         NIX_PATH: `nixpkgs=${NIXPKGS_URL}`,
         DEVGUARD_APIURL: process.env.apiUrl,
+        // host[:port] of the API, e.g. for pip's trusted-host (no URLs allowed there)
+        apiHost: new URL(process.env.apiUrl!).host,
     }
 
     rmSync(TMP_DIR, { recursive: true, force: true })

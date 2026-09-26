@@ -11,5 +11,6 @@ pkgs.mkShellNoCC {
     cosign
     openssl
     nodejs
+    python3
   ];
 }

@@ -37,9 +37,16 @@ trusted-host = <your-devguard-host>
 
 ### Using environment variables
 
-For CI/CD pipelines or ephemeral environments, set the proxy via environment variables instead:
+For CI/CD pipelines or ephemeral environments, set the proxy via environment variables instead. Most systems do not allow installing packages into the system Python, so create and activate a virtual environment first:
 
-```bash 
+```bash
+python3 -m venv .venv
+. .venv/bin/activate
+```
+
+Then point pip at the proxy:
+
+```bash
 export PIP_INDEX_URL="https://<your-devguard-url>/api/v1/dependency-proxy/pypi/simple"
 export PIP_TRUSTED_HOST="<your-devguard-host>"
 pip install requests
@@ -57,12 +64,65 @@ pip install requests
 
 DevGuard ships a test package that is permanently flagged as malicious:
 
-```bash 
-pip install fake-malicious-pypi-package
-# Expected: blocked with a 403 Forbidden error
+```bash
+# fake-malicious-pypi-package must be rejected
+if pip install fake-malicious-pypi-package; then
+  echo "fake-malicious-pypi-package was NOT blocked - check your proxy configuration" >&2
+  exit 1
+fi
+
+# pip only reports "No matching distribution found" - check that the proxy answered with 403 Forbidden
+status=$(curl -s -o /dev/null -w "%{http_code}" "$PIP_INDEX_URL/fake-malicious-pypi-package/")
+if [ "$status" != "403" ]; then
+  echo "expected 403 Forbidden for fake-malicious-pypi-package, got $status" >&2
+  exit 1
+fi
 ```
 
-If the install is blocked, the proxy is working correctly. All other packages in the same environment will resolve normally from the upstream PyPI registry.
+If the install is blocked, the proxy is working correctly. pip does not show the `403 Forbidden` itself; it only reports `No matching distribution found for fake-malicious-pypi-package`. All other packages in the same environment will resolve normally from the upstream PyPI registry.
+
+### Testing the minimum package age
+
+The [minimum package age](/how-to-guides/dependency-proxy#minimum-package-age) is configured per repository and only applies to requests using the repository's proxy URL, which contains a secret. The proxy removes all files that are too new from the package index, so pip resolves to the newest version that is old enough instead of failing on the download.
+
+To verify it, temporarily set the minimum age to 87600 hours (10 years). `requests==2.32.3` was published in May 2024, so the proxy must reject it, while an unpinned `requests` still resolves to an older version:
+
+<Callout type="info">
+  Recent pip versions have their own client-side filter, `--uploaded-prior-to`. If it is set in your pip configuration, pip hides recent versions itself, independent of the proxy. The proxy enforces the minimum age centrally, for every client and without any client configuration.
+</Callout>
+
+```bash
+# use a fresh virtual environment, so no installed version satisfies the requirement
+python3 -m venv .venv-min-age
+. .venv-min-age/bin/activate
+
+# set the minimum package age of the repository to 10 years
+devguard-scanner curl --token <your-pat-token> -X PUT \
+  -d '{"rules":"","minReleaseAge":87600}' \
+  https://<your-devguard-url>/api/v1/organizations/<assetName>/config-files/dependency-proxy-configs/
+
+# the repository's PyPI proxy URL applies its settings
+PYPI_PROXY=$(devguard-scanner curl --token <your-pat-token> -s \
+  https://<your-devguard-url>/api/v1/organizations/<assetName>/dependency-proxy-urls/ \
+  | python3 -c 'import json, sys; print(json.load(sys.stdin)["pypi"])')
+
+# requests 2.32.3 is younger than 10 years and must be rejected
+if pip install --no-cache-dir --index-url "$PYPI_PROXY" "requests==2.32.3"; then
+  echo "requests==2.32.3 was NOT blocked by the minimum package age" >&2
+  exit 1
+fi
+
+# an unpinned requirement resolves to the newest version that is old enough
+pip install --no-cache-dir --index-url "$PYPI_PROXY" requests
+python3 -c 'import importlib.metadata as m; print(m.version("requests"))'
+
+# reset the minimum package age
+devguard-scanner curl --token <your-pat-token> -X PUT \
+  -d '{"rules":"","minReleaseAge":0}' \
+  https://<your-devguard-url>/api/v1/organizations/<assetName>/config-files/dependency-proxy-configs/
+
+deactivate
+```
 
 ## Further Reading
 
