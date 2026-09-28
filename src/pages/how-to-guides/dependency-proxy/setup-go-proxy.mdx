@@ -52,7 +52,7 @@ go get github.com/pkg/errors@v0.9.1
 
 ## Testing
 
-DevGuard ships a test module that is permanently flagged as malicious:
+DevGuard ships a test module that is permanently flagged as malicious for all versions:
 
 ```bash
 # github.com/fake-org/malicious-package must be rejected
@@ -70,6 +70,20 @@ fi
 ```
 
 If the request is blocked, the proxy is working correctly. Legitimate modules in the same session will resolve normally.
+
+### Testing version normalization (semver)
+
+Go module versions must already be canonical `vX.Y.Z` strings, so equivalent-spelling bypasses (like a leading zero or a missing `v`) are less of a concern here than for npm or PyPI. Still, DevGuard ships a second test module, `github.com/fake-org/malicious-package-versioned`, flagged at the specific version `v1.0.0` rather than for all versions, so version comparison itself can be verified directly against a resolved version instead of relying on the "any version" fixture above:
+
+```bash
+# v1.0.0 is exactly the flagged version and must be rejected
+status=$(curl -s -o /dev/null -w "%{http_code}" \
+  "$GOPROXY/github.com/fake-org/malicious-package-versioned/@v/v1.0.0.info")
+if [ "$status" != "403" ]; then
+  echo "expected 403 Forbidden for github.com/fake-org/malicious-package-versioned@v1.0.0, got $status" >&2
+  exit 1
+fi
+```
 
 Checksum verification keeps working behind the proxy: `go` looks up the checksums of downloaded modules in the [Go checksum database](https://sum.golang.org), and DevGuard forwards these requests unchanged.
 

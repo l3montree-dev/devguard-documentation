@@ -56,7 +56,7 @@ docker pull <your-devguard-host>/<secret>/docker.io/library/nginx:latest
 
 ## Testing
 
-DevGuard ships a test image that is permanently flagged as malicious: `docker.io/fake-org/malicious-image`. The following script uses [crane](https://github.com/google/go-containerregistry/tree/main/cmd/crane) to pull a legitimate image through the proxy and to verify that the malicious one is rejected. `--insecure` is only needed for a DevGuard instance without HTTPS, e.g. a local test setup:
+DevGuard ships a test image, `docker.io/fake-org/malicious-image`, flagged as malicious at version `v1.0.0`. A tag that cannot be parsed as a version at all (such as `latest` below) is rejected outright, since the proxy cannot rule out that it resolves to the flagged version. The following script uses [crane](https://github.com/google/go-containerregistry/tree/main/cmd/crane) to pull a legitimate image through the proxy and to verify that the malicious one is rejected. `--insecure` is only needed for a DevGuard instance without HTTPS, e.g. a local test setup:
 
 ```bash
 # alpine is pulled through the proxy: tags, manifest and all layers
@@ -78,6 +78,20 @@ fi
 ```
 
 If the pull succeeds and the malicious image is blocked, the proxy is working correctly.
+
+Tags are compared as versions the same way Go module versions are: `1.0.0` and `v1.0.0` are equivalent spellings of the same version, so a tag does not need to match the flagged spelling exactly to be rejected:
+
+```bash
+# 1.0.0 and v1.0.0 both denote the flagged version and must be rejected
+for tag in 1.0.0 v1.0.0; do
+  status=$(curl -s -o /dev/null -w "%{http_code}" \
+    "https://<your-devguard-url>/v2/docker.io/fake-org/malicious-image/manifests/$tag")
+  if [ "$status" != "403" ]; then
+    echo "expected 403 Forbidden for docker.io/fake-org/malicious-image:$tag, got $status" >&2
+    exit 1
+  fi
+done
+```
 
 ## Further Reading
 

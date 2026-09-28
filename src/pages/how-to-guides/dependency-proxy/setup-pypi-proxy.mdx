@@ -62,7 +62,7 @@ pip install requests
 
 ## Testing
 
-DevGuard ships a test package that is permanently flagged as malicious:
+DevGuard ships a test package that is permanently flagged as malicious for all versions:
 
 ```bash
 # fake-malicious-pypi-package must be rejected
@@ -80,6 +80,54 @@ fi
 ```
 
 If the install is blocked, the proxy is working correctly. pip does not show the `403 Forbidden` itself; it only reports `No matching distribution found for fake-malicious-pypi-package`. All other packages in the same environment will resolve normally from the upstream PyPI registry.
+
+### Testing name normalization (PEP 503)
+
+[PEP 503](https://peps.python.org/pep-0503/) defines a project name as case-insensitive, with any run of `-`, `_` or `.` treated as equivalent. `fake-malicious-pypi-package`, `fake_malicious_pypi_package`, `Fake.Malicious.Pypi.Package` and `FAKE--MALICIOUS--PYPI--PACKAGE` all name the same project. A proxy that compares names as raw strings instead of normalizing them first can be bypassed by requesting the malicious package under an equivalent, differently-spelled name.
+
+<Callout type="warning">
+  This is a real bypass class, not a hypothetical: firewalls and SBOM scanners that skip PEP 503/440 normalization have shipped with exactly this gap, letting already-identified malware install without a block.
+</Callout>
+
+```bash
+# every spelling below refers to the same project as fake-malicious-pypi-package
+# and must be rejected with 403, proving the proxy normalizes names before matching
+for name in fake_malicious_pypi_package \
+            Fake.Malicious.Pypi.Package \
+            FAKE--MALICIOUS--PYPI--PACKAGE; do
+  status=$(curl -s -o /dev/null -w "%{http_code}" "$PIP_INDEX_URL/$name/")
+  if [ "$status" != "403" ]; then
+    echo "expected 403 Forbidden for $name (equivalent to fake-malicious-pypi-package), got $status" >&2
+    exit 1
+  fi
+done
+```
+
+### Testing version normalization (PEP 440)
+
+[PEP 440](https://packaging.python.org/en/latest/specifications/version-specifiers/#version-equality) defines version equality semantically, not textually: `1.0`, `1.0.0`, `1.0.0.0`, `01.0` and `1.00` all denote the exact same version. A release's version on PyPI is just the first spelling that was used, and nothing requires every file attached to that release to repeat the same spelling in its filename - so a proxy that string-compares versions instead of parsing them can be bypassed by a distribution filename that uses a different, equivalent spelling of a flagged version.
+
+DevGuard ships a second test package, `fake-malicious-pypi-package-versioned`, flagged at the specific version `v1.0.0` rather than for all versions, so it can prove version comparison itself is correct. The proxy checks a distribution download against the malicious package database before ever fetching it from upstream, so the file below does not need to exist for this check:
+
+```bash
+# every filename below encodes a version equivalent to the flagged v1.0.0
+# and must be rejected with 403, proving the proxy compares parsed versions
+# rather than raw filename strings
+for version in 1.0.0 01.0.0 1.0.0.0; do
+  status=$(curl -s -o /dev/null -w "%{http_code}" \
+    "${PIP_INDEX_URL%/simple}/packages/aa/bb/fake-malicious-pypi-package-versioned-$version.tar.gz")
+  if [ "$status" != "403" ]; then
+    echo "expected 403 Forbidden for fake-malicious-pypi-package-versioned==$version (equivalent to the flagged v1.0.0), got $status" >&2
+    exit 1
+  fi
+done
+```
+
+<Callout type="info">
+  See [Dependency Proxy Security](/explanations/security/dependency-proxy-security) for the full threat model behind name and version normalization.
+</Callout>
+
+Thanks a lot to https://github.com/IlyasMakari for bringing this issue to our attention.
 
 ### Testing the minimum package age
 

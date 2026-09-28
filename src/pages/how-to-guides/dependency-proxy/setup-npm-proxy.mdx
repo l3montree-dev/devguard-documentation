@@ -43,7 +43,7 @@ Once set, all `npm install` and `npm ci` invocations route through DevGuard tran
 
 ## Testing
 
-DevGuard ships a test package that is permanently flagged as malicious. Use it to verify the proxy is working before relying on it in production:
+DevGuard ships a test package that is permanently flagged as malicious for all versions. Use it to verify the proxy is working before relying on it in production:
 
 ```json
 {
@@ -82,6 +82,24 @@ npm audit signatures
 # fake-malicious-npm-package must be rejected with 403 Forbidden
 if npm install fake-malicious-npm-package@1.0.0; then
   echo "fake-malicious-npm-package was NOT blocked - check your proxy configuration" >&2
+  exit 1
+fi
+```
+
+### Testing version normalization (semver)
+
+Semver equality is not textual: `1.0.0` and `v1.0.0` denote the same version, and nothing requires a downloaded tarball's filename to repeat the exact spelling a rule was written against - so a proxy that string-compares versions instead of parsing them can be bypassed by a tarball whose filename uses a different, equivalent spelling of a flagged version.
+
+DevGuard ships a second test package, `fake-malicious-npm-package-versioned`, flagged at the specific version `v1.0.0` rather than for all versions, so it can prove version comparison itself is correct. The proxy checks a tarball download against the malicious package database before ever fetching it from upstream, so the file below does not need to exist for this check:
+
+```bash
+REGISTRY_URL="https://<your-devguard-url>/api/v1/dependency-proxy/npm"
+
+# 1.0.0 is an equivalent spelling of the flagged v1.0.0 and must be rejected
+status=$(curl -s -o /dev/null -w "%{http_code}" \
+  "$REGISTRY_URL/fake-malicious-npm-package-versioned/-/fake-malicious-npm-package-versioned-1.0.0.tgz")
+if [ "$status" != "403" ]; then
+  echo "expected 403 Forbidden for fake-malicious-npm-package-versioned@1.0.0 (equivalent to the flagged v1.0.0), got $status" >&2
   exit 1
 fi
 ```

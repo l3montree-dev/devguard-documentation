@@ -21,9 +21,8 @@ const SSH_REMOTE = /git@([A-Za-z0-9.-]+):([A-Za-z0-9._\/-]+)/g
 
 const VARIABLE_FLAGS = ['assetName', 'apiUrl', 'token', 'webUI']
 
-const SHELL_NIX = 'src/nix-tests/shell.nix'
+const FLAKE_NIX = 'path:src/nix-tests'
 const SCRIPT_TIMEOUT = process.env.SCRIPT_TIMEOUT ?? '300'
-const NIXPKGS_URL = 'https://github.com/NixOS/nixpkgs/tarball/nixos-26.05'
 const EXAMPLE_REPO_URL =
     process.env.EXAMPLE_REPO_URL ??
     'https://github.com/l3montree-dev/devguard-example-repository.git'
@@ -220,7 +219,6 @@ function main(): void {
 
     const env = {
         ...process.env,
-        NIX_PATH: `nixpkgs=${NIXPKGS_URL}`,
         DEVGUARD_APIURL: process.env.apiUrl,
         // host[:port] of the API, e.g. for pip's trusted-host (no URLs allowed there)
         apiHost: new URL(process.env.apiUrl!).host,
@@ -280,7 +278,7 @@ function main(): void {
                 `timeout ${SCRIPT_TIMEOUT} bash ${shQuote(resolve(script))}`
 
             try {
-                execFileSync('nix-shell', [SHELL_NIX, '--run', inner], {
+                execFileSync('nix', ['develop', FLAKE_NIX, '-c', 'bash', '-c', inner], {
                     stdio: ['ignore', 'inherit', 'inherit'],
                     env,
                 })
