@@ -12,5 +12,8 @@ pkgs.mkShellNoCC {
     openssl
     nodejs
     python3
+    go
+    jq
+    crane
   ];
 }

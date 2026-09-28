@@ -1,0 +1,88 @@
+---
+title: Setup OCI Proxy with DevGuard Dependency Proxy
+description: "Pull container images through the DevGuard dependency proxy to block malicious images and enforce registry rules for Docker Hub, GHCR, Quay and more."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: setup oci proxy with devguard
+lang: en-US
+ignoreChecks: null
+---
+
+import { Callout } from '@document-writing-tools/kernux-theme'
+
+# Setup OCI Proxy with DevGuard Dependency Proxy
+
+Container images are dependencies too: a single `FROM` line or an image reference in a Kubernetes manifest pulls code from a public registry into your builds and clusters. Typosquatted and compromised images on public registries are a recurring attack vector. The DevGuard dependency proxy sits between your container tooling and the upstream registries, checks every image against the malicious package database and enforces your firewall rules before an image reaches your machine.
+
+## Configuration
+
+The proxy implements the OCI Distribution API, so every standard client (Docker, Podman, containerd, crane, skopeo) can pull through it. Prefix the fully qualified image reference with your DevGuard host:
+
+```bash {ignore}
+docker pull <your-devguard-host>/docker.io/library/nginx:latest
+```
+
+The registry must be part of the reference — `docker.io/library/nginx`, not just `nginx`. The following upstream registries are supported:
+
+| Registry | Example reference |
+|----------|-------------------|
+| Docker Hub | `<your-devguard-host>/docker.io/library/alpine:3.20` |
+| GitHub Container Registry | `<your-devguard-host>/ghcr.io/org/image:tag` |
+| Quay | `<your-devguard-host>/quay.io/org/image:tag` |
+| Google Container Registry | `<your-devguard-host>/gcr.io/project/image:tag` |
+| Kubernetes | `<your-devguard-host>/registry.k8s.io/pause:3.10` |
+| Amazon ECR Public | `<your-devguard-host>/public.ecr.aws/org/image:tag` |
+| Microsoft Container Registry | `<your-devguard-host>/mcr.microsoft.com/dotnet/runtime:8.0` |
+| GitLab Container Registry | `<your-devguard-host>/registry.gitlab.com/group/project:tag` |
+
+To apply the firewall rules of a repository, use its proxy secret as the first path segment:
+
+```bash {ignore}
+docker pull <your-devguard-host>/<secret>/docker.io/library/nginx:latest
+```
+
+<Callout type="warning">
+  The [minimum package age](/how-to-guides/dependency-proxy#minimum-package-age) does not apply to container images. Unlike npm, PyPI and Go, the OCI registry protocol has no publish date for an image: the `created` timestamp inside an image is set by the build and is often fixed to 1970 or missing for reproducible builds, and registry-side push times are only available through registry-specific APIs. Pin images by digest (`image@sha256:…`) to control exactly which image version you pull.
+</Callout>
+
+<Callout type="info">
+  On startup, the proxy blocks all requests until the malicious package database is fully loaded. This initialization period prevents cache poisoning. See [Cache Management](/how-to-guides/dependency-proxy/cache-management) for details.
+</Callout>
+
+## Testing
+
+DevGuard ships a test image that is permanently flagged as malicious: `docker.io/fake-org/malicious-image`. The following script uses [crane](https://github.com/google/go-containerregistry/tree/main/cmd/crane) to pull a legitimate image through the proxy and to verify that the malicious one is rejected. `--insecure` is only needed for a DevGuard instance without HTTPS, e.g. a local test setup:
+
+```bash
+# alpine is pulled through the proxy: tags, manifest and all layers
+crane ls --insecure <your-devguard-host>/docker.io/library/alpine > /dev/null
+crane pull --insecure <your-devguard-host>/docker.io/library/alpine:3.20 alpine.tar
+
+# docker.io/fake-org/malicious-image must be rejected
+if crane manifest --insecure <your-devguard-host>/docker.io/fake-org/malicious-image:latest; then
+  echo "docker.io/fake-org/malicious-image was NOT blocked - check your proxy configuration" >&2
+  exit 1
+fi
+
+# check that the proxy answered with 403 Forbidden
+status=$(curl -s -o /dev/null -w "%{http_code}" "https://<your-devguard-url>/v2/docker.io/fake-org/malicious-image/manifests/latest")
+if [ "$status" != "403" ]; then
+  echo "expected 403 Forbidden for docker.io/fake-org/malicious-image, got $status" >&2
+  exit 1
+fi
+```
+
+If the pull succeeds and the malicious image is blocked, the proxy is working correctly.
+
+## Further Reading
+
+- [Dependency Proxy Overview](/how-to-guides/dependency-proxy)
+- [Cache Management](/how-to-guides/dependency-proxy/cache-management)
+- [Setup npm Proxy](/how-to-guides/dependency-proxy/setup-npm-proxy)
+- [Setup Go Proxy](/how-to-guides/dependency-proxy/setup-go-proxy)
+- [Setup PyPI Proxy](/how-to-guides/dependency-proxy/setup-pypi-proxy)

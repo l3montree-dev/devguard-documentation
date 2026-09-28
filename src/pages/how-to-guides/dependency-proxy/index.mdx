@@ -32,18 +32,29 @@ DevGuard includes a built-in dependency proxy that acts as a protective layer be
 | npm | `/api/v1/dependency-proxy/npm` |
 | Go modules | `/api/v1/dependency-proxy/go` |
 | PyPI | `/api/v1/dependency-proxy/pypi/simple` |
+| OCI (container images) | `/v2/` — pull `<your-devguard-host>/<registry>/<image>:<tag>` |
 
 For setup instructions, see the ecosystem-specific guides:
 
 - [Setup npm Proxy](/how-to-guides/dependency-proxy/setup-npm-proxy)
 - [Setup Go Proxy](/how-to-guides/dependency-proxy/setup-go-proxy)
 - [Setup PyPI Proxy](/how-to-guides/dependency-proxy/setup-pypi-proxy)
+- [Setup OCI Proxy](/how-to-guides/dependency-proxy/setup-oci-proxy)
 
 To route all CI jobs through the proxy at once, see [Self-Hosted CI Runners](/how-to-guides/dependency-proxy/ci-runners).
 
 ## Minimum Package Age
 
-The proxy can be configured to refuse any package version published more recently than a specified number of days. This gives the security community time to detect and flag malicious releases before they reach your teams — a simple but effective defense against attacks that rely on packages being downloaded within hours of publication.
+The proxy can be configured to refuse any package version published more recently than a specified number of hours. This gives the security community time to detect and flag malicious releases before they reach your teams — a simple but effective defense against attacks that rely on packages being downloaded within hours of publication.
+
+The minimum age is configured per organization, project or repository and applies to requests using its proxy URL, which contains a secret. Versions that are too new are hidden from the package metadata, so version ranges resolve to the newest version that is old enough; a download of a too new version is rejected with `403 Forbidden`.
+
+| Ecosystem | Minimum package age |
+|-----------|---------------------|
+| npm | Supported |
+| PyPI | Supported |
+| Go modules | Supported |
+| OCI (container images) | Not supported — registries expose no reliable publish date, see [Setup OCI Proxy](/how-to-guides/dependency-proxy/setup-oci-proxy) |
 
 ## Cache & Security
 

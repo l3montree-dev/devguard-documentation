@@ -52,6 +52,8 @@ const DEFAULT_MDX_FILES = [
     'src/pages/how-to-guides/scanning/scan-your-project.mdx',
     'src/pages/how-to-guides/dependency-proxy/setup-npm-proxy.mdx',
     'src/pages/how-to-guides/dependency-proxy/setup-pypi-proxy.mdx',
+    'src/pages/how-to-guides/dependency-proxy/setup-go-proxy.mdx',
+    'src/pages/how-to-guides/dependency-proxy/setup-oci-proxy.mdx',
 ]
 
 const MDX_FILES =

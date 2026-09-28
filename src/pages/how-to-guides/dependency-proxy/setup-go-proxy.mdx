@@ -29,10 +29,21 @@ Set the `GOPROXY` environment variable to point at DevGuard. Go will use it for 
 export GOPROXY="https://<your-devguard-url>/api/v1/dependency-proxy/go"
 ```
 
-To make this permanent, add it to your CI environment or shell profile. For project-scoped configuration, set it in your CI/CD platform's environment variable configuration alongside your other build variables. Then use `go get` as usual:
+To make this permanent, add it to your CI environment or shell profile. For project-scoped configuration, set it in your CI/CD platform's environment variable configuration alongside your other build variables.
 
-```bash 
-go get github.com/example/package
+Go only contacts the proxy for modules that are not in your local module cache yet. To see every download go through DevGuard, try it in a fresh module with its own module cache:
+
+```bash
+mkdir -p go-proxy-test && cd go-proxy-test
+go mod init example.com/go-proxy-test
+export GOMODCACHE="$(pwd)/.gomodcache"
+export GOFLAGS=-modcacherw
+```
+
+Then use `go get` as usual:
+
+```bash
+go get github.com/pkg/errors@v0.9.1
 ```
 
 <Callout type="info">
@@ -43,12 +54,62 @@ go get github.com/example/package
 
 DevGuard ships a test module that is permanently flagged as malicious:
 
-```bash 
-go get github.com/fake-org/malicious-package
-# Expected: 403 Forbidden
+```bash
+# github.com/fake-org/malicious-package must be rejected
+if go get github.com/fake-org/malicious-package; then
+  echo "github.com/fake-org/malicious-package was NOT blocked - check your proxy configuration" >&2
+  exit 1
+fi
+
+# check that the proxy answered with 403 Forbidden
+status=$(curl -s -o /dev/null -w "%{http_code}" "$GOPROXY/github.com/fake-org/malicious-package/@v/list")
+if [ "$status" != "403" ]; then
+  echo "expected 403 Forbidden for github.com/fake-org/malicious-package, got $status" >&2
+  exit 1
+fi
 ```
 
 If the request is blocked, the proxy is working correctly. Legitimate modules in the same session will resolve normally.
+
+Checksum verification keeps working behind the proxy: `go` looks up the checksums of downloaded modules in the [Go checksum database](https://sum.golang.org), and DevGuard forwards these requests unchanged.
+
+### Testing the minimum package age
+
+The [minimum package age](/how-to-guides/dependency-proxy#minimum-package-age) is configured per repository and only applies to requests using the repository's proxy URL, which contains a secret. The proxy removes versions that are too new from the version list, so `go get` resolves to the newest version that is old enough. Downloads of a too new version (`.info`, `.mod`, `.zip`) are rejected.
+
+To verify it, temporarily set the minimum age to 87600 hours (10 years). `github.com/pkg/errors@v0.9.1` was published in January 2020, so the proxy must reject it, while `go get` without a version still resolves to an older version:
+
+```bash
+# use a fresh module and module cache, so no downloaded version is reused
+cd .. && mkdir -p go-min-age-test && cd go-min-age-test
+go mod init example.com/go-min-age-test
+export GOMODCACHE="$(pwd)/.gomodcache"
+
+# set the minimum package age of the repository to 10 years
+devguard-scanner curl --token <your-pat-token> -X PUT \
+  -d '{"rules":"","minReleaseAge":87600}' \
+  https://<your-devguard-url>/api/v1/organizations/<assetName>/config-files/dependency-proxy-configs/
+
+# the repository's Go proxy URL applies its settings
+GO_PROXY=$(devguard-scanner curl --token <your-pat-token> -s \
+  https://<your-devguard-url>/api/v1/organizations/<assetName>/dependency-proxy-urls/ \
+  | jq -r .go)
+
+# github.com/pkg/errors@v0.9.1 is younger than 10 years and must be rejected
+if GOPROXY="$GO_PROXY" go get github.com/pkg/errors@v0.9.1; then
+  echo "github.com/pkg/errors@v0.9.1 was NOT blocked by the minimum package age" >&2
+  exit 1
+fi
+
+# without a version, go resolves to the newest version that is old enough
+GOPROXY="$GO_PROXY" go get github.com/pkg/errors
+go list -m github.com/pkg/errors
+
+# reset the minimum package age
+devguard-scanner curl --token <your-pat-token> -X PUT \
+  -d '{"rules":"","minReleaseAge":0}' \
+  https://<your-devguard-url>/api/v1/organizations/<assetName>/config-files/dependency-proxy-configs/
+```
 
 ## Further Reading
 
