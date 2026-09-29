@@ -20,6 +20,7 @@ export default {
     'in-toto': { title: 'In-toto' },
     integrations: { title: 'Integrations' },
     'license-risk': { title: 'License Risk' },
+    logs: { title: 'Logs' },
     organizations: { title: 'Organizations' },
     policies: { title: 'Policies' },
     projects: { title: 'Projects' },
