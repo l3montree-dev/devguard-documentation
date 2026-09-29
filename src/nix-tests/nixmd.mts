@@ -40,6 +40,9 @@ const FIXTURES: [string, string][] = [
     [SBOM_SOURCE, 'b.json'],
     [MERGE_CONFIG_SOURCE, 'config.json'],
     [IMAGE_TAR, 'image.tar'],
+    [SBOM_SOURCE, 'sbom-linux-amd64.json'],
+    [SBOM_SOURCE, 'sbom-linux-arm64.json'],
+    [SBOM_SOURCE, 'sbom-windows-amd64.json'],
 ]
 
 const REQUIRED_ENV = ['assetName', 'apiUrl', 'token', 'webUI'] as const
