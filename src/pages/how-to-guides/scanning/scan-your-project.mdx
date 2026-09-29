@@ -349,6 +349,21 @@ For the full list of `sbom` flags — including `--artifactName`, `--origin`, `-
   The `--origin` flag helps you track which tools or systems generated your SBOMs. This is useful when you have multiple SBOMs from different sources for the same project.
 </Callout>
 
+### One SBOM per Operating System or Architecture
+
+If you build the same product for several OS/arch combinations, upload one SBOM per combination into the **same** repository and ref, and distinguish them with `--artifactName`:
+
+```bash copy
+for target in linux-amd64 linux-arm64 windows-amd64; do
+  devguard-scanner sbom "sbom-${target}.json" \
+    --assetName="myorg/projects/myproject/assets/myrepo" \
+    --artifactName="pkg:oci/myapp-${target}" \
+    --token="YOUR_TOKEN"
+done
+```
+
+Findings that exist in several of these artifacts — for example a vulnerable library that every build links — are tracked once and only have to be triaged once, while platform-specific findings stay attached to the artifacts that actually contain them. See the [Artifact Concept](/explanations/core-concepts/artifacts#one-product-many-operating-systems-and-architectures) for the reasoning and the trade-offs.
+
 ## Scan Without Authentication
 
 You don't need a DevGuard account, a self-hosted instance, or a personal access token to get vulnerability results. Every scan command above can also run without saving results to DevGuard — useful for a quick local scan, trying out the scanner, or checking a build artifact in CI without a token. The [HTTP API below](#http-api-scan-an-sbom-directly) works the same way: just upload an SBOM to `api.devguard.org` and get results back, with nothing to sign up for or host yourself.
