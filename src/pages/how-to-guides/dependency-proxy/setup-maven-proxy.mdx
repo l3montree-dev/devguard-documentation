@@ -1,0 +1,183 @@
+---
+title: Setup Maven Proxy with DevGuard Dependency Proxy
+description: "Configure Maven and Gradle to route artifact downloads through the DevGuard dependency proxy for malicious package detection and supply chain security."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: setup maven proxy with devguard
+lang: en-US
+ignoreChecks: null
+---
+
+import { Callout } from '@document-writing-tools/kernux-theme'
+
+# Setup Maven Proxy with DevGuard Dependency Proxy
+
+Maven Central is a target for typosquatting just like npm or PyPI. Attackers publish artifacts under group IDs that look almost like well-known ones, for example `org.fasterxml.jackson.core` instead of `com.fasterxml.jackson.core`, and wait for a developer or an automated dependency update to pick the wrong coordinates. Because Maven resolves transitive dependencies and build plugins automatically, a single malicious artifact can end up on every developer machine and CI runner that builds the project.
+
+The DevGuard dependency proxy sits between your build tool and Maven Central. Every artifact request is checked against the [OSV dataset](https://osv.dev) before it reaches your local repository, blocking known malicious packages automatically.
+
+- **Registry URL**: `<your-devguard-url>/api/v1/dependency-proxy/maven`
+
+## Configuration
+
+### Maven
+
+Add a mirror to your Maven settings (`~/.m2/settings.xml`). `<mirrorOf>*</mirrorOf>` routes every repository through DevGuard, including repositories declared in a project's `pom.xml`, so no dependency bypasses the check:
+
+```xml
+<settings>
+  <mirrors>
+    <mirror>
+      <id>devguard</id>
+      <name>DevGuard Dependency Proxy</name>
+      <url>https://<your-devguard-url>/api/v1/dependency-proxy/maven</url>
+      <mirrorOf>*</mirrorOf>
+    </mirror>
+  </mirrors>
+</settings>
+```
+
+Once set, all `mvn` invocations resolve dependencies and plugins through DevGuard transparently. No changes to your `pom.xml` are required. In CI, commit the file to your repository and pass it with `mvn -s settings.xml`.
+
+<Callout type="warning">
+  The proxy fetches artifacts from Maven Central only. Artifacts that are exclusively published to other repositories will not resolve through the mirror.
+</Callout>
+
+### Gradle
+
+Replace `mavenCentral()` with the proxy in your `settings.gradle.kts`:
+
+```kotlin
+dependencyResolutionManagement {
+    repositories {
+        maven { url = uri("https://<your-devguard-url>/api/v1/dependency-proxy/maven") }
+    }
+}
+```
+
+<Callout type="info">
+  On startup, the proxy blocks all requests until the malicious package database is fully loaded. This initialization period prevents cache poisoning. See [Cache Management](/how-to-guides/dependency-proxy/cache-management) for details.
+</Callout>
+
+## Testing
+
+DevGuard ships a test artifact, `com.fake:malicious-package`, that is permanently flagged as malicious for all versions. The script below uses a project-local `settings.xml` and local repository, so it does not touch your `~/.m2`:
+
+```bash
+mkdir -p maven-proxy-test && cd maven-proxy-test
+
+cat > settings.xml <<EOF
+<settings>
+  <localRepository>$(pwd)/.m2/repository</localRepository>
+  <mirrors>
+    <mirror>
+      <id>devguard</id>
+      <url>https://<your-devguard-url>/api/v1/dependency-proxy/maven</url>
+      <mirrorOf>*</mirrorOf>
+    </mirror>
+  </mirrors>
+</settings>
+EOF
+
+# commons-io and the maven-dependency-plugin are downloaded through the proxy
+mvn -B -s settings.xml org.apache.maven.plugins:maven-dependency-plugin:3.8.1:get \
+  -Dartifact=commons-io:commons-io:2.16.1
+
+# com.fake:malicious-package must be rejected
+if mvn -B -s settings.xml org.apache.maven.plugins:maven-dependency-plugin:3.8.1:get \
+  -Dartifact=com.fake:malicious-package:1.0.0; then
+  echo "com.fake:malicious-package was NOT blocked - check your proxy configuration" >&2
+  exit 1
+fi
+
+# check that the proxy answered with 403 Forbidden, for the artifact and for its version list
+for path in com/fake/malicious-package/1.0.0/malicious-package-1.0.0.pom \
+            com/fake/malicious-package/maven-metadata.xml; do
+  status=$(curl -s -o /dev/null -w "%{http_code}" \
+    "https://<your-devguard-url>/api/v1/dependency-proxy/maven/$path")
+  if [ "$status" != "403" ]; then
+    echo "expected 403 Forbidden for $path, got $status" >&2
+    exit 1
+  fi
+done
+```
+
+If the download is blocked, the proxy is working correctly. Maven reports the `403 Forbidden` in its `Could not transfer artifact` error. All other artifacts resolve normally from Maven Central.
+
+Checksum verification keeps working behind the proxy: Maven downloads the `.sha1` and `.md5` files of every artifact through DevGuard and verifies them as usual.
+
+### Testing the minimum package age
+
+The [minimum package age](/how-to-guides/dependency-proxy#minimum-package-age) is configured per repository and only applies to requests using the repository's proxy URL, which contains a secret. Maven Central has no publish date API, so the proxy uses the upload time Maven Central reports for each file. Versions that are too new are removed from `maven-metadata.xml`, and `<latest>` and `<release>` point to the newest version that is old enough. Downloads of a too new version are rejected.
+
+To verify it, temporarily set the minimum age to 87600 hours (10 years). `com.google.code.gson:gson:2.11.0` was published in May 2024, so the proxy must reject it, while `RELEASE` still resolves to an older version:
+
+<Callout type="info">
+  Maven has no client-side minimum release age. The proxy enforces it centrally, for every build and without any client configuration.
+</Callout>
+
+```bash
+# set the minimum package age of the repository to 10 years
+devguard-scanner curl --token <your-pat-token> -X PUT \
+  -d '{"rules":"","minReleaseAge":87600}' \
+  https://<your-devguard-url>/api/v1/organizations/<assetName>/config-files/dependency-proxy-configs/
+
+# the repository's Maven proxy URL applies its settings
+MAVEN_PROXY=$(devguard-scanner curl --token <your-pat-token> -s \
+  https://<your-devguard-url>/api/v1/organizations/<assetName>/dependency-proxy-urls/ \
+  | jq -r .maven)
+
+# same mirror id and local repository, so the plugin downloaded above is reused
+cat > settings-min-age.xml <<EOF
+<settings>
+  <localRepository>$(pwd)/.m2/repository</localRepository>
+  <mirrors>
+    <mirror>
+      <id>devguard</id>
+      <url>$MAVEN_PROXY</url>
+      <mirrorOf>*</mirrorOf>
+    </mirror>
+  </mirrors>
+</settings>
+EOF
+
+# gson 2.11.0 is younger than 10 years and must be rejected
+if mvn -B -s settings-min-age.xml org.apache.maven.plugins:maven-dependency-plugin:3.8.1:get \
+  -Dartifact=com.google.code.gson:gson:2.11.0; then
+  echo "com.google.code.gson:gson:2.11.0 was NOT blocked by the minimum package age" >&2
+  exit 1
+fi
+
+# check that the proxy answered with 403 Forbidden
+status=$(curl -s -o /dev/null -w "%{http_code}" \
+  "${MAVEN_PROXY%/}/com/google/code/gson/gson/2.11.0/gson-2.11.0.pom")
+if [ "$status" != "403" ]; then
+  echo "expected 403 Forbidden for com.google.code.gson:gson:2.11.0, got $status" >&2
+  exit 1
+fi
+
+# RELEASE resolves to the newest version that is old enough
+mvn -B -s settings-min-age.xml org.apache.maven.plugins:maven-dependency-plugin:3.8.1:get \
+  -Dartifact=com.google.code.gson:gson:RELEASE
+ls .m2/repository/com/google/code/gson/gson/
+
+# reset the minimum package age
+devguard-scanner curl --token <your-pat-token> -X PUT \
+  -d '{"rules":"","minReleaseAge":0}' \
+  https://<your-devguard-url>/api/v1/organizations/<assetName>/config-files/dependency-proxy-configs/
+```
+
+## Further Reading
+
+- [Dependency Proxy Overview](/how-to-guides/dependency-proxy)
+- [Cache Management](/how-to-guides/dependency-proxy/cache-management)
+- [Setup npm Proxy](/how-to-guides/dependency-proxy/setup-npm-proxy)
+- [Setup Go Proxy](/how-to-guides/dependency-proxy/setup-go-proxy)
+- [Setup PyPI Proxy](/how-to-guides/dependency-proxy/setup-pypi-proxy)
+- [Setup Composer Proxy](/how-to-guides/dependency-proxy/setup-composer-proxy)
+- [OSV (Open Source Vulnerabilities)](https://osv.dev)

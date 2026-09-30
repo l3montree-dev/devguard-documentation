@@ -55,6 +55,8 @@ const DEFAULT_MDX_FILES = [
     'src/pages/how-to-guides/dependency-proxy/setup-npm-proxy.mdx',
     'src/pages/how-to-guides/dependency-proxy/setup-pypi-proxy.mdx',
     'src/pages/how-to-guides/dependency-proxy/setup-go-proxy.mdx',
+    'src/pages/how-to-guides/dependency-proxy/setup-maven-proxy.mdx',
+    'src/pages/how-to-guides/dependency-proxy/setup-composer-proxy.mdx',
     'src/pages/how-to-guides/dependency-proxy/setup-oci-proxy.mdx',
 ]
 
@@ -281,10 +283,14 @@ function main(): void {
                 `timeout ${SCRIPT_TIMEOUT} bash ${shQuote(resolve(script))}`
 
             try {
-                execFileSync('nix', ['develop', FLAKE_NIX, '-c', 'bash', '-c', inner], {
-                    stdio: ['ignore', 'inherit', 'inherit'],
-                    env,
-                })
+                execFileSync(
+                    'nix',
+                    ['develop', FLAKE_NIX, '-c', 'bash', '-c', inner],
+                    {
+                        stdio: ['ignore', 'inherit', 'inherit'],
+                        env,
+                    },
+                )
                 console.log(`OK: ${script}`)
             } catch {
                 console.error(`FAILED: ${script}`)

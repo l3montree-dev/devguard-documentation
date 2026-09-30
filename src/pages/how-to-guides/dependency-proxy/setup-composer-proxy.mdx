@@ -1,0 +1,168 @@
+---
+title: Setup Composer Proxy with DevGuard Dependency Proxy
+description: "Configure Composer to route PHP package downloads from Packagist through the DevGuard dependency proxy for malicious package detection and supply chain security."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: setup composer proxy with devguard
+lang: en-US
+ignoreChecks: null
+---
+
+import { Callout } from '@document-writing-tools/kernux-theme'
+
+# Setup Composer Proxy with DevGuard Dependency Proxy
+
+PHP projects are just as exposed to supply chain attacks as any other ecosystem. In 2022, attackers took over the abandoned `hautelook/phpass` package on Packagist and published new releases that stole AWS credentials from every environment that installed them. Because `composer install` resolves the whole dependency tree automatically, a single compromised package is enough to reach every developer machine and CI runner of a project.
+
+The DevGuard dependency proxy sits between Composer and Packagist. Every package request is checked against the [OSV dataset](https://osv.dev) before it reaches your `vendor` directory, blocking known malicious packages automatically.
+
+- **Registry URL**: `<your-devguard-url>/api/v1/dependency-proxy/composer`
+
+## Configuration
+
+Disable the default Packagist repository and add the DevGuard proxy instead. Disabling `packagist.org` is required: otherwise Composer keeps it as a fallback and downloads packages directly from Packagist whenever the proxy does not serve them. To apply it to every project on your machine, set it in your global Composer configuration:
+
+```bash {ignore}
+composer config --global repo.packagist.org false
+composer config --global repo.devguard composer https://<your-devguard-url>/api/v1/dependency-proxy/composer
+```
+
+To scope it to a single project, run the same commands without `--global` in the project directory. Composer then adds the repositories to your `composer.json`:
+
+```json
+{
+  "repositories": [
+    {
+      "name": "devguard",
+      "type": "composer",
+      "url": "https://<your-devguard-url>/api/v1/dependency-proxy/composer"
+    },
+    {
+      "packagist.org": false
+    }
+  ]
+}
+```
+
+Run `composer config repositories` to verify that the DevGuard proxy is the only repository left.
+
+Once set, all `composer install`, `composer update` and `composer require` invocations resolve packages through DevGuard transparently.
+
+<Callout type="warning">
+  The proxy serves packages from Packagist as `zip` archives from GitHub, GitLab and Bitbucket only. The `source` entries of a package are removed, so `--prefer-source` has no effect, and packages whose archives are hosted elsewhere are rejected.
+</Callout>
+
+<Callout type="warning">
+  Composer only accepts `https` repositories by default. Set `composer config secure-http false` only for local testing against a DevGuard instance without TLS. Never disable it in production.
+</Callout>
+
+<Callout type="info">
+  On startup, the proxy blocks all requests until the malicious package database is fully loaded. This initialization period prevents cache poisoning. See [Cache Management](/how-to-guides/dependency-proxy/cache-management) for details.
+</Callout>
+
+## Testing
+
+DevGuard ships a test package, `fake-org/malicious-package`, that is permanently flagged as malicious for all versions. The script below uses a project-local Composer home and cache, so every download goes through the proxy and your global configuration stays untouched:
+
+```bash
+mkdir -p composer-proxy-test && cd composer-proxy-test
+export COMPOSER_HOME="$(pwd)/.composer"
+export COMPOSER_CACHE_DIR="$(pwd)/.composer-cache"
+export COMPOSER_NO_INTERACTION=1
+
+composer init --name=devguard/composer-proxy-test
+# only needed for a DevGuard instance without TLS, such as a local test instance
+composer config secure-http false
+composer config repo.packagist.org false
+composer config repo.devguard composer https://<your-devguard-url>/api/v1/dependency-proxy/composer
+
+# psr/log installs through the proxy
+composer require psr/log:3.0.2
+
+# fake-org/malicious-package must be rejected
+if composer require fake-org/malicious-package; then
+  echo "fake-org/malicious-package was NOT blocked - check your proxy configuration" >&2
+  exit 1
+fi
+
+# check that the proxy answered with 403 Forbidden, for the version list and for a download
+for path in p2/fake-org/malicious-package.json \
+            dist/fake-org/malicious-package/1.0.0.zip; do
+  status=$(curl -s -o /dev/null -w "%{http_code}" \
+    "https://<your-devguard-url>/api/v1/dependency-proxy/composer/$path")
+  if [ "$status" != "403" ]; then
+    echo "expected 403 Forbidden for $path, got $status" >&2
+    exit 1
+  fi
+done
+```
+
+If the install is blocked, the proxy is working correctly. Composer reports the `403 Forbidden` for the package's metadata file. All other packages resolve normally from Packagist.
+
+### Testing the minimum package age
+
+The [minimum package age](/how-to-guides/dependency-proxy#minimum-package-age) is configured per repository and only applies to requests using the repository's proxy URL, which contains a secret. The proxy uses the release time Packagist reports for each version: versions that are too new are removed from the package metadata, so Composer resolves to the newest version that is old enough, and downloads of a too new version are rejected.
+
+To verify it, temporarily set the minimum age to 87600 hours (10 years). `monolog/monolog` 3.7.0 was published in June 2024, so the proxy must reject it, while `composer require` without a version still resolves to an older version:
+
+<Callout type="info">
+  The proxy enforces the minimum age centrally, for every client and without any client configuration.
+</Callout>
+
+```bash
+# set the minimum package age of the repository to 10 years
+devguard-scanner curl --token <your-pat-token> -X PUT \
+  -d '{"rules":"","minReleaseAge":87600}' \
+  https://<your-devguard-url>/api/v1/organizations/<assetName>/config-files/dependency-proxy-configs/
+
+# the repository's Composer proxy URL applies its settings
+COMPOSER_PROXY=$(devguard-scanner curl --token <your-pat-token> -s \
+  https://<your-devguard-url>/api/v1/organizations/<assetName>/dependency-proxy-urls/ \
+  | jq -r .composer)
+
+# use a fresh project and cache, so no downloaded version is reused
+cd .. && mkdir -p composer-min-age-test && cd composer-min-age-test
+export COMPOSER_CACHE_DIR="$(pwd)/.composer-cache"
+composer init --name=devguard/composer-min-age-test
+composer config secure-http false
+composer config repo.packagist.org false
+composer config repo.devguard composer "$COMPOSER_PROXY"
+
+# monolog/monolog 3.7.0 is younger than 10 years and must be rejected
+if composer require monolog/monolog:3.7.0; then
+  echo "monolog/monolog 3.7.0 was NOT blocked by the minimum package age" >&2
+  exit 1
+fi
+
+# check that the proxy answered with 403 Forbidden
+status=$(curl -s -o /dev/null -w "%{http_code}" \
+  "${COMPOSER_PROXY%/}/dist/monolog/monolog/3.7.0.zip")
+if [ "$status" != "403" ]; then
+  echo "expected 403 Forbidden for monolog/monolog 3.7.0, got $status" >&2
+  exit 1
+fi
+
+# without a version, Composer resolves to the newest version that is old enough
+composer require monolog/monolog
+composer show monolog/monolog | grep versions
+
+# reset the minimum package age
+devguard-scanner curl --token <your-pat-token> -X PUT \
+  -d '{"rules":"","minReleaseAge":0}' \
+  https://<your-devguard-url>/api/v1/organizations/<assetName>/config-files/dependency-proxy-configs/
+```
+
+## Further Reading
+
+- [Dependency Proxy Overview](/how-to-guides/dependency-proxy)
+- [Cache Management](/how-to-guides/dependency-proxy/cache-management)
+- [Setup npm Proxy](/how-to-guides/dependency-proxy/setup-npm-proxy)
+- [Setup Go Proxy](/how-to-guides/dependency-proxy/setup-go-proxy)
+- [Setup PyPI Proxy](/how-to-guides/dependency-proxy/setup-pypi-proxy)
+- [Setup Maven Proxy](/how-to-guides/dependency-proxy/setup-maven-proxy)
+- [OSV (Open Source Vulnerabilities)](https://osv.dev)
