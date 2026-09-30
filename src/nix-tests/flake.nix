@@ -21,6 +21,9 @@
           nodejs
           python3
           go
+          maven
+          php
+          phpPackages.composer
           jq
           crane
         ];

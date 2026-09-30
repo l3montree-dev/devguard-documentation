@@ -32,6 +32,8 @@ DevGuard includes a built-in dependency proxy that acts as a protective layer be
 | npm | `/api/v1/dependency-proxy/npm` |
 | Go modules | `/api/v1/dependency-proxy/go` |
 | PyPI | `/api/v1/dependency-proxy/pypi/simple` |
+| Maven | `/api/v1/dependency-proxy/maven` |
+| Composer (Packagist) | `/api/v1/dependency-proxy/composer` |
 | OCI (container images) | `/v2/` — pull `<your-devguard-host>/<registry>/<image>:<tag>` |
 
 For setup instructions, see the ecosystem-specific guides:
@@ -39,6 +41,8 @@ For setup instructions, see the ecosystem-specific guides:
 - [Setup npm Proxy](/how-to-guides/dependency-proxy/setup-npm-proxy)
 - [Setup Go Proxy](/how-to-guides/dependency-proxy/setup-go-proxy)
 - [Setup PyPI Proxy](/how-to-guides/dependency-proxy/setup-pypi-proxy)
+- [Setup Maven Proxy](/how-to-guides/dependency-proxy/setup-maven-proxy)
+- [Setup Composer Proxy](/how-to-guides/dependency-proxy/setup-composer-proxy)
 - [Setup OCI Proxy](/how-to-guides/dependency-proxy/setup-oci-proxy)
 
 To route all CI jobs through the proxy at once, see [Self-Hosted CI Runners](/how-to-guides/dependency-proxy/ci-runners).
@@ -54,6 +58,8 @@ The minimum age is configured per organization, project or repository and applie
 | npm | Supported |
 | PyPI | Supported |
 | Go modules | Supported |
+| Maven | Supported |
+| Composer (Packagist) | Supported |
 | OCI (container images) | Not supported — registries expose no reliable publish date, see [Setup OCI Proxy](/how-to-guides/dependency-proxy/setup-oci-proxy) |
 
 ## Cache & Security
