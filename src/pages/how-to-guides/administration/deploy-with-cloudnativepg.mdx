@@ -1,0 +1,357 @@
+---
+title: Deploy DevGuard with a CloudNativePG Database
+description: "Install DevGuard on Kubernetes with a highly available PostgreSQL cluster managed by CloudNativePG, from an empty cluster to a running instance, including S3 backups."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: devguard cloudnativepg
+lang: en-US
+ignoreChecks: null
+---
+import { Callout, DocSteps as Steps } from '@document-writing-tools/kernux-theme'
+
+# Deploy DevGuard with a CloudNativePG Database
+
+The [Helm chart](/how-to-guides/administration/deploy-with-helm) ships a single-instance PostgreSQL StatefulSet with no replicas and no automatic failover. For a highly available database, run PostgreSQL with the [CloudNativePG](https://cloudnative-pg.io) operator and connect DevGuard to it as an external database.
+
+This guide starts with an empty Kubernetes cluster and ends with a running DevGuard instance on a three-node PostgreSQL cluster.
+
+## Prerequisites
+
+- A Kubernetes cluster (1.24+) with a default StorageClass, or [kind](https://kind.sigs.k8s.io/) and Docker to create a local one
+- `kubectl` and Helm 3.x
+- Optional: an S3-compatible bucket (AWS S3, MinIO, Garage, …) for [backups](#enable-backups)
+
+All commands use the `devguard` namespace. The database and DevGuard must run in the same namespace.
+
+<Steps>
+
+### Create a local cluster (optional)
+
+To try the setup locally, create a cluster with kind. Skip this step if you install into an existing cluster.
+
+```bash
+kind create cluster --name devguard
+kubectl cluster-info --context kind-devguard
+```
+
+kind switches your current `kubectl` context to `kind-devguard`, so all following commands run against this cluster. It also comes with a default StorageClass, which the PostgreSQL volumes need.
+
+<Callout type="info">
+  The local cluster has no ingress controller, so you can't open DevGuard in a browser at the ingress hosts from `values.yaml`. Everything in this guide, including the verification steps, still works.
+</Callout>
+
+To remove the cluster again:
+
+```bash {ignore}
+kind delete cluster --name devguard
+```
+
+### Install the CloudNativePG operator
+
+```bash
+kubectl apply --server-side -f \
+  https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-1.25/releases/cnpg-1.25.1.yaml
+kubectl -n cnpg-system wait --for=condition=Available deployment/cnpg-controller-manager --timeout=180s
+```
+
+Skip this step if the operator is already installed. See the [CloudNativePG installation guide](https://cloudnative-pg.io/documentation/current/installation_upgrade/) for Helm-based installs and newer versions.
+
+### Create the namespace
+
+```bash
+kubectl create namespace devguard
+```
+
+### Create the database secrets
+
+DevGuard uses two databases: `devguard` for the API and `kratos` for authentication. Each has its own role and password.
+
+The Helm chart and CloudNativePG expect credentials in different formats, so you create two secrets per role, holding the same password:
+
+| Secret | Read by | Keys | Name |
+|--------|---------|------|------|
+| `db-secret` | DevGuard API | `postgres-password` | **Fixed.** The chart only looks for this name. |
+| `kratos-db-secret` | Kratos | `password` | **Fixed.** The chart only looks for this name. |
+| `devguard-pg-app` | CloudNativePG | `username`, `password` | Your choice. Referenced in the `Cluster`. |
+| `devguard-pg-kratos` | CloudNativePG | `username`, `password` | Your choice. Referenced in the `Cluster`. |
+
+The CloudNativePG secrets must be of type `kubernetes.io/basic-auth`, and their `username` must be `devguard` and `kratos`. DevGuard and Kratos always connect with these role names.
+
+```bash
+DEVGUARD_PW=$(openssl rand -hex 24)
+KRATOS_PW=$(openssl rand -hex 24)
+
+# Read by CloudNativePG
+kubectl -n devguard create secret generic devguard-pg-app \
+  --type=kubernetes.io/basic-auth \
+  --from-literal=username=devguard --from-literal=password="$DEVGUARD_PW"
+kubectl -n devguard create secret generic devguard-pg-kratos \
+  --type=kubernetes.io/basic-auth \
+  --from-literal=username=kratos --from-literal=password="$KRATOS_PW"
+
+# Read by the DevGuard Helm chart
+kubectl -n devguard create secret generic db-secret \
+  --from-literal=postgres-password="$DEVGUARD_PW"
+kubectl -n devguard create secret generic kratos-db-secret \
+  --from-literal=password="$KRATOS_PW"
+```
+
+<Callout type="warning">
+  When you rotate a password, update both secrets for that role. CloudNativePG applies the new password to the role, but DevGuard and Kratos keep using what's in `db-secret` and `kratos-db-secret`.
+</Callout>
+
+### Create the PostgreSQL cluster
+
+Use DevGuard's PostgreSQL image, `ghcr.io/l3montree-dev/devguard/postgresql`. It includes the `semver` extension DevGuard needs. The upstream CloudNativePG images don't.
+
+```yaml filename="cluster.yaml"
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: devguard-pg
+  namespace: devguard
+spec:
+  instances: 3
+  imageName: ghcr.io/l3montree-dev/devguard/postgresql:16.15
+  # The image runs PostgreSQL as UID/GID 999. CloudNativePG defaults to 26.
+  postgresUID: 999
+  postgresGID: 999
+  storage:
+    size: 20Gi
+  bootstrap:
+    initdb:
+      database: devguard
+      owner: devguard
+      secret:
+        name: devguard-pg-app
+      postInitApplicationSQL:
+        - CREATE EXTENSION IF NOT EXISTS semver;
+  managed:
+    roles:
+      - name: kratos
+        ensure: present
+        login: true
+        passwordSecret:
+          name: devguard-pg-kratos
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: devguard-pg-kratos
+  namespace: devguard
+spec:
+  cluster:
+    name: devguard-pg
+  name: kratos
+  owner: kratos
+```
+
+```bash
+kubectl apply -f cluster.yaml
+kubectl -n devguard wait --for=condition=Ready cluster/devguard-pg --timeout=600s
+kubectl -n devguard wait --for=jsonpath='{.status.applied}'=true database/devguard-pg-kratos --timeout=120s
+```
+
+<Callout type="warning">
+  Don't leave out `postgresUID` and `postgresGID`. Without them, the first instance never starts, and its `initdb` job fails with `could not look up effective user ID 26: user does not exist`.
+</Callout>
+
+Check that both databases exist with the right owners and that `semver` is installed:
+
+```bash
+PRIMARY=$(kubectl -n devguard get cluster devguard-pg -o jsonpath='{.status.currentPrimary}')
+kubectl -n devguard exec "$PRIMARY" -c postgres -- psql -U postgres -tAc \
+  "select datname, pg_get_userbyid(datdba) from pg_database where datname in ('devguard', 'kratos');"
+kubectl -n devguard exec "$PRIMARY" -c postgres -- psql -U postgres -d devguard -tAc \
+  "select extname from pg_extension where extname = 'semver';"
+```
+
+Expected output:
+
+```
+devguard|devguard
+kratos|kratos
+semver
+```
+
+### Create the values file
+
+Turn off the bundled database and point the chart at the cluster's read/write service. CloudNativePG names it `<cluster-name>-rw` and always routes it to the current primary, so DevGuard follows a failover without any change. DevGuard connects to a single host and doesn't send reads to replicas, so you don't need the `-ro` or `-r` services.
+
+```yaml filename="values.yaml"
+api:
+  ingress:
+    host: api.devguard.example.com
+web:
+  ingress:
+    host: devguard.example.com
+
+postgresql:
+  enabled: false
+  external:
+    host: devguard-pg-rw
+    port: 5432
+    sslMode: require
+  # Use db-secret and kratos-db-secret from step 3
+  useExistingSecret: true
+  useExistingKratosDatabaseSecret: true
+```
+
+`sslMode` applies to every connection from DevGuard and Kratos. It takes the standard PostgreSQL values (`disable`, `require`, `verify-ca`, `verify-full`, …) and defaults to `disable`. CloudNativePG enables TLS on every cluster, so `require` works without extra setup. For `verify-ca` or `verify-full`, the clients also need to trust the cluster's CA certificate, which CloudNativePG stores in the `devguard-pg-ca` secret.
+
+For ingress, mail and authentication settings, see [Deploy with Helm](/how-to-guides/administration/deploy-with-helm).
+
+### Install DevGuard
+
+```bash
+helm install devguard oci://ghcr.io/l3montree-dev/devguard-helm-chart/devguard \
+  --namespace devguard \
+  -f values.yaml
+```
+
+This installs the latest chart release. Add `--version <version>` to pin a specific one.
+
+The chart generates the remaining secrets, including the In-Toto signing key, on the first install.
+
+### Check that the database migrations ran
+
+Before the API starts, its `devguard-migrate` init container creates or updates the database schema. Wait for the API to roll out, then check the migration log:
+
+```bash
+kubectl -n devguard rollout status deployment/devguard-api-deployment --timeout=600s
+kubectl -n devguard logs deployment/devguard-api-deployment -c devguard-migrate | grep "migrations completed"
+```
+
+Expected output:
+
+```
+migrations completed successfully
+schema migrations completed successfully
+```
+
+If the rollout times out and the API pod stays in `Init`, the logs of `devguard-migrate` show the database error. See [Troubleshooting](#troubleshooting).
+
+### Verify the deployment
+
+```bash
+kubectl -n devguard rollout status deployment/devguard-web-deployment --timeout=600s
+kubectl -n devguard rollout status deployment/kratos --timeout=600s
+kubectl -n devguard get pods
+```
+
+All pods should be `Running`: three PostgreSQL instances (`devguard-pg-1` to `-3`), the API, the web frontend and Kratos.
+
+```
+NAME                                       READY   STATUS    RESTARTS   AGE
+devguard-api-deployment-55c8488865-jdv4c   1/1     Running   0          3m
+devguard-pg-1                              1/1     Running   0          9m
+devguard-pg-2                              1/1     Running   0          8m
+devguard-pg-3                              1/1     Running   0          6m
+devguard-web-deployment-ff55b888d-j2q9n    1/1     Running   0          3m
+kratos-5cbdd649c5-jfvsj                    1/1     Running   0          3m
+```
+
+To confirm that DevGuard and Kratos connect over TLS:
+
+```bash
+kubectl -n devguard exec "$PRIMARY" -c postgres -- psql -U postgres -tAc \
+  "select a.usename, s.ssl, count(*) from pg_stat_activity a join pg_stat_ssl s using (pid)
+   where a.usename in ('devguard', 'kratos') group by 1, 2;"
+```
+
+Every row should show `t` in the second column.
+
+</Steps>
+
+## Enable backups
+
+CloudNativePG can continuously archive WAL to an S3-compatible bucket and take base backups from it. Together they let you restore the database to any point in time.
+
+Create a secret with the bucket credentials:
+
+```bash {ignore}
+kubectl -n devguard create secret generic devguard-pg-backup \
+  --from-literal=ACCESS_KEY_ID=<access-key> \
+  --from-literal=ACCESS_SECRET_KEY=<secret-key> \
+  --from-literal=REGION=<region>
+```
+
+Add a `backup` section to the `Cluster` in `cluster.yaml` and apply it again:
+
+```yaml
+spec:
+  backup:
+    retentionPolicy: "30d"
+    barmanObjectStore:
+      destinationPath: s3://devguard-pg-backups/
+      endpointURL: https://s3.example.com # omit for AWS S3
+      s3Credentials:
+        accessKeyId:
+          name: devguard-pg-backup
+          key: ACCESS_KEY_ID
+        secretAccessKey:
+          name: devguard-pg-backup
+          key: ACCESS_SECRET_KEY
+        region:
+          name: devguard-pg-backup
+          key: REGION
+      wal:
+        compression: gzip
+```
+
+<Callout type="warning">
+  Set `region` even if you run your own object store. For MinIO or Garage, use the region from the store's configuration (Garage's `s3_region`, for example). If the region is missing or wrong, WAL archiving fails with `HeadBucket operation: Bad Request`, which doesn't mention the region.
+</Callout>
+
+Check that WAL archiving works:
+
+```bash {ignore}
+kubectl -n devguard wait --for=jsonpath='{.status.conditions[?(@.type=="ContinuousArchiving")].status}'=True \
+  cluster/devguard-pg --timeout=300s
+```
+
+Schedule a daily base backup:
+
+```yaml filename="scheduled-backup.yaml" {ignore}
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: devguard-pg-daily
+  namespace: devguard
+spec:
+  schedule: "0 0 2 * * *" # seconds, minutes, hours, …: every day at 02:00
+  backupOwnerReference: self
+  immediate: true # also take one backup right away
+  cluster:
+    name: devguard-pg
+```
+
+```bash {ignore}
+kubectl apply -f scheduled-backup.yaml
+kubectl -n devguard get backups
+```
+
+The first backup should reach the `completed` phase within a few minutes. To restore, see [Recovery](https://cloudnative-pg.io/documentation/current/recovery/) in the CloudNativePG documentation.
+
+## Troubleshooting
+
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| `initdb` job fails with `could not look up effective user ID 26` | CloudNativePG's default UID doesn't match the image | Set `postgresUID: 999` and `postgresGID: 999` |
+| API or Kratos pods fail with `secret "db-secret" not found` (or `kratos-db-secret`) | The chart's secrets are missing or named differently | Create them with exactly these names, see step 3 |
+| `devguard-migrate` fails with `password authentication failed for user "devguard"` | `db-secret` and `devguard-pg-app` hold different passwords | Make both secrets hold the same password |
+| `devguard-migrate` fails with `extension "semver" is not available` | The cluster runs an image without `semver` | Use `ghcr.io/l3montree-dev/devguard/postgresql` as `imageName` |
+| `ContinuousArchiving` is `False`, logs show `HeadBucket operation: Bad Request` | Region is missing or wrong | Set `s3Credentials.region` to your object store's region |
+| `ContinuousArchiving` is `False`, logs show `Unable to locate credentials` | Credential secret or key names are wrong | Check the secret referenced in `s3Credentials` |
+
+## Related
+
+- [Deploy with Helm](/how-to-guides/administration/deploy-with-helm)
+- [Backup & Restore](/how-to-guides/administration/backup-restore)
+- [Database Maintenance](/how-to-guides/administration/database-maintenance)
+- [CloudNativePG documentation](https://cloudnative-pg.io/documentation/current/)

@@ -2,6 +2,7 @@ export default {
     index: { title: 'Overview' },
     'deploy-with-helm': { title: 'Deploy with Helm' },
     'deploy-with-docker': { title: 'Deploy with Docker Compose' },
+    'deploy-with-cloudnativepg': { title: 'Deploy with CloudNativePG' },
     'backup-restore': { title: 'Backup & Restore' },
     'monitoring-metrics': { title: 'Monitoring & Metrics' },
     'upgrade-devguard': { title: 'Upgrade DevGuard' },

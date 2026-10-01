@@ -32,15 +32,27 @@ Deploy DevGuard to a Kubernetes cluster using the [official Helm chart](https://
 kubectl create namespace devguard
 ```
 
-### Create required secrets
+### In-Toto signing key
 
-DevGuard requires an EC private key for signing In-Toto attestations:
+DevGuard signs In-Toto attestations with an EC (prime256v1) private key. By default, the chart generates this key on the first install. It stores it in a secret named `ec-private-key` and keeps the same key across upgrades. You don't need to do anything.
+
+<Callout type="warning">
+  Don't create a secret named `ec-private-key` yourself unless you also set `api.intoto.existingPrivateKeySecretName`. If you do, `helm install` fails because the chart tries to manage a secret it didn't create.
+</Callout>
+
+To bring your own key, for example to reuse an existing key or because your deployment tool doesn't support Helm's `lookup` function (such as Argo CD), create the secret and reference it:
 
 ```bash 
 openssl ecparam -name prime256v1 -genkey -noout -out private.ec.key
-kubectl create secret generic ec-private-key \
+kubectl create secret generic devguard-intoto-key \
   --from-file=privateKey=private.ec.key \
   -n devguard
+```
+
+```yaml
+api:
+  intoto:
+    existingPrivateKeySecretName: devguard-intoto-key
 ```
 
 ### Create your values file

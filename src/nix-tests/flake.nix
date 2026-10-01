@@ -23,6 +23,9 @@
           go
           jq
           crane
+          kubectl
+          kubernetes-helm
+          kind
         ];
       };
     });
