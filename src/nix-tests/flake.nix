@@ -20,7 +20,7 @@
           openssl
           nodejs
           python3
-          go
+          go_1_27
           jq
           crane
           kubectl

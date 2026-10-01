@@ -1,5 +1,5 @@
 ---
-title: "Supplementary SBOMs — Filling the Gaps Trivy Can't"
+title: "Supplementary SBOMs: Filling the Gaps Trivy Can't"
 description: "How DevGuard merges supplementary SBOMs to fix components that container scans miss, and why it refuses to guess when two sources disagree."
 seo:
   robots: index,follow
@@ -15,11 +15,11 @@ ignoreChecks: null
 
 import { Callout } from '@document-writing-tools/kernux-theme'
 
-# Supplementary SBOMs — Filling the Gaps Trivy Can't
+# Supplementary SBOMs: Filling the Gaps Trivy Can't
 
-A Software Bill of Materials (SBOM) is a structured inventory of every component that makes up a piece of software — libraries, their versions, and how they depend on one another — typically encoded as CycloneDX or SPDX. It's the artifact that [Software Composition Analysis](/explanations/devsecops/software-composition-analysis) feeds into [vulnerability matching](/explanations/vulnerability-management/vulnerability-matching) against vulnerability databases, so how complete and accurate that inventory is directly determines how much of your real dependency tree gets checked. That completeness is exactly what breaks down for the class of components described below.
+A Software Bill of Materials (SBOM) is a structured inventory of every component that makes up a piece of software (libraries, their versions, and how they depend on one another), typically encoded as CycloneDX or SPDX. It's the artifact that [Software Composition Analysis](/explanations/devsecops/software-composition-analysis) feeds into [vulnerability matching](/explanations/vulnerability-management/vulnerability-matching) against vulnerability databases, so how complete and accurate that inventory is directly determines how much of your real dependency tree gets checked. That completeness is exactly what breaks down for the class of components described below.
 
-Scanners such as Trivy identify components by reading metadata that already exists on disk: a `go.sum`, a `package-lock.json`, an RPM/DPKG database, a Python `dist-info` folder. When a component was built without leaving this metadata behind — the normal case for compiled, self-built, or vendored binaries — the scanner has no basis for identifying it.
+Scanners such as Trivy identify components by reading metadata that already exists on disk: a `go.sum`, a `package-lock.json`, an RPM/DPKG database, a Python `dist-info` folder. When a component was built without leaving this metadata behind, which is the normal case for compiled, self-built, or vendored binaries, the scanner has no basis for identifying it.
 
 DevGuard addresses this by allowing a component to carry its own SBOM, which is merged into the scan's dependency graph at scan time. This page describes the failure mode this addresses, how the merge is implemented, and why DevGuard does not attempt to automatically resolve disagreements between two sources describing the same package's dependency tree.
 
@@ -35,7 +35,7 @@ Scanning the official `redis` image with Trivy:
 trivy image --format cyclonedx redis:8 -o redis-sbom.json
 ```
 
-produces correct results for the OS packages in the base layer (`glibc`, `libssl`, `zlib`, and so on). It does not, in general, produce a resolvable, versioned component for `redis-server` itself. Depending on how the image was built, the binary is reported, if at all, as an `application`-type component whose name is its filesystem path, with no version, no `purl` (the package URL vulnerability databases match against), and no dependency tree — none of the libraries `redis-server` links against are recorded as its dependencies.
+produces correct results for the OS packages in the base layer (`glibc`, `libssl`, `zlib`, and so on). It does not, in general, produce a resolvable, versioned component for `redis-server` itself. Depending on how the image was built, the binary is reported, if at all, as an `application`-type component whose name is its filesystem path, with no version, no `purl` (the package URL vulnerability databases match against), and no dependency tree: none of the libraries `redis-server` links against are recorded as its dependencies.
 
 ```json
 {
@@ -59,7 +59,9 @@ The consequence is that a container scan of Redis can report zero CVE matches ag
 
 If the scanner cannot derive a component's identity and dependency tree from the artifact on disk, the most reliable remaining source is whoever built the component, since that party has direct knowledge of its contents.
 
-`devguard-scanner` accepts supplementary SBOMs: CycloneDX documents, hand-authored or generated at build time, placed at a fixed path (`--sbomPath`, default `/sboms`) inside the scan target — a directory tree or a container image. At scan time, `devguard-scanner` reads every `*.json` file under that path as a CycloneDX BOM and merges each into the scan's dependency graph.
+`devguard-scanner` accepts supplementary SBOMs: CycloneDX documents, hand-authored or generated at build time, placed at a fixed path (`--sbomPath`, default `/sboms`) inside the scan target, which can be a directory tree or a container image. At scan time, `devguard-scanner` reads every `*.json` file under that path as a CycloneDX BOM and merges each into the scan's dependency graph.
+
+This merge happens inside `devguard-scanner`, before anything is uploaded. The DevGuard backend never sees the unresolved stub and the supplementary SBOM as two separate documents; it receives one already-enriched SBOM for that scan.
 
 A supplementary SBOM for `redis-server`:
 
@@ -86,20 +88,20 @@ A supplementary SBOM for `redis-server`:
 }
 ```
 
-The precondition for merging: the root component's `name` must match the identity the base scan already assigned it — for a binary, its in-image filesystem path, matching what Trivy recorded in `metadata.component.name`. This shared name is the mechanism by which DevGuard associates a supplementary SBOM with an existing unresolved component rather than treating it as an unrelated addition.
+The precondition for merging: the root component's `name` must match the identity the base scan already assigned it. For a binary, that is its in-image filesystem path, matching what Trivy recorded in `metadata.component.name`. This shared name is the mechanism by which DevGuard associates a supplementary SBOM with an existing unresolved component rather than treating it as an unrelated addition.
 
 ### Merge behavior
 
 1. Matching is by name, not by `bom-ref`. Scanners frequently assign a new `bom-ref` for the same real-world path across different runs, so name is the only stable anchor available.
-2. When a match exists — the common case, where `redis-server` is already present as an unresolved stub — the existing node's `bom-ref` is kept, but its subtree is replaced with what the supplementary SBOM declares, including replacement with an empty subtree if that is what it declares.
+2. When a match exists (the common case, where `redis-server` is already present as an unresolved stub), the existing node's `bom-ref` is kept, but its subtree is replaced with what the supplementary SBOM declares, including replacement with an empty subtree if that is what it declares.
 3. When no match exists, the supplementary SBOM's root is attached as a new child of the scan root; nothing else under the scan root is affected.
-4. Stale flat edges are pruned. Some scanners — Trivy against a flat Python `site-packages` layout is the recurring case — can only attach every package they find directly to the scan root, because pip installs carry no relationship metadata. Once a supplementary SBOM places one of those packages under its actual parent, several levels deep, the earlier direct root-to-package edge is removed.
+4. Stale flat edges are pruned. Some scanners can only attach every package they find directly to the scan root, because pip installs carry no relationship metadata. Trivy against a flat Python `site-packages` layout is the recurring case. Once a supplementary SBOM places one of those packages under its actual parent, several levels deep, the earlier direct root-to-package edge is removed.
 
 `devguard-scanner` logs which of these paths was taken for each supplementary SBOM merged (`enrichment attached a new node under the scan root` vs. `enrichment replaced an existing component's subtree`), so a CI log records what was enriched on each run.
 
 ### Residual gaps
 
-Not every unresolved `application` component requires a supplementary SBOM — some already have a resolved tree (a `Cargo.lock`-derived component, for example, already has versioned children). `devguard-scanner` warns only about components that are genuinely unresolved: `type: application`, no `purl`, not already covered by a supplementary SBOM, and with no properly versioned child of its own. For each one it prints a JSON skeleton for the required supplementary SBOM, using that component's path as `metadata.component.name`.
+Not every unresolved `application` component requires a supplementary SBOM. Some already have a resolved tree (a `Cargo.lock`-derived component, for example, already has versioned children). `devguard-scanner` warns only about components that are genuinely unresolved: `type: application`, no `purl`, not already covered by a supplementary SBOM, and with no properly versioned child of its own. For each one it prints a JSON skeleton for the required supplementary SBOM, using that component's path as `metadata.component.name`.
 
 ---
 
@@ -113,39 +115,76 @@ DevGuard ships `gitleaks`, `trivy`, `crane`, and its own scanner tooling inside 
 
 ---
 
-## Why disagreement between two sources is a nondeterminism bug, not noise
+## How DevGuard stores SBOMs from different scans
 
-`MergeGraph`'s last-source-wins semantics exist because DevGuard commonly needs to reconcile more than one SBOM describing overlapping ground truth — most often a source-code scan and a container-image scan of the same application. Both describe the same dependency tree in principle. If they describe it differently, the order in which they are merged determines the result.
+An artifact is often scanned more than once, and in more than one way. A typical pipeline runs a source scan (`trivy fs` against the lockfiles) and a container scan (`trivy image` against the built image) of the same application. Each of these uploads is tagged with an origin, set via `devguard-scanner --origin` (for example `source-scanning` or `container-scanning`). Upstream SBOMs that DevGuard fetches itself use their URL as the origin.
 
-As an example, consider scanning Python tooling two ways:
+DevGuard does not merge these uploads into one combined graph. Every origin of an artifact is stored as its own SBOM, and rescanning the same origin replaces that origin's SBOM without touching the others.
 
-- Source scan (`trivy fs` against `uv.lock`): resolves the real tree, with `semgrep` depending on `semgrepdep` (made up dependency), nested correctly.
-- Image scan (`trivy image` against installed `site-packages`): pip installs carry no relationship metadata, so Trivy reports `semgrep` and `semgrepdep` as flat, independent direct dependencies of the scan root — indistinguishable from `semgrepdep` being an unrelated top-level dependency.
+### Content-addressed storage
 
-If the image scan is ingested first and the source scan second, the source scan's nesting wins and `semgrepdep` is correctly nested under `semgrep`. In the opposite order, the flat image-scan result, processed last, overwrites the correct nesting, and `semgrepdep` reverts to a direct dependency of the root.
+Each SBOM is stored as a Merkle tree. Every node is identified by a hash over its component's `purl` and the sorted hashes of its direct children:
 
-The underlying data is identical in both cases; only the ingestion order differs, and the reported dependency graph differs as a result. The same two inputs, merged in different orders, produce two different graphs, only one of which is correct — and which one is produced depends on an ordering the user does not control.
+```text
+hash(node) = sha256(purl + "->" + sorted(hash(child) for child in children))
+```
+
+Two consequences follow from that definition:
+
+1. **Agreement is stored once.** If a source scan and an image scan describe `semgrep` with the same set of children, both produce the same hash for that subtree, and it is stored exactly once. The same holds across assets and projects on the same DevGuard instance, and for an unchanged rescan, which writes nothing new.
+2. **Disagreement is preserved, not overwritten.** If the two scans describe `semgrep` with different children, they produce different hashes, and both descriptions are kept side by side. Neither scan can overwrite the other.
+
+Because the hash covers the whole child set and children are sorted before hashing, the result does not depend on the order in which scans arrive or the order in which a document lists its components. Uploading the source scan first and the image scan second produces exactly the same stored state as the reverse.
+
+Components without a usable `purl` (such as the unresolved `redis-server` stub above) are dropped when a tree is built, and their children are reattached to the stub's parent so the subtree below stays connected. This is another reason a stub on its own contributes nothing to vulnerability matching.
+
+### What this looks like for a disagreement
+
+Consider the Python tooling example again:
+
+- Source scan (`trivy fs` against `uv.lock`) resolves the real tree: `semgrep` depends on `semgrepdep` (a made up dependency).
+- Image scan (`trivy image` against installed `site-packages`) cannot see that relationship, because pip installs carry no relationship metadata. Trivy reports `semgrep` and `semgrepdep` as two independent direct dependencies of the scan root.
+
+```mermaid
+flowchart TB
+    subgraph Source["origin: source-scanning"]
+        R1["ROOT"] --> S1["semgrep"]
+        S1 --> D1["semgrepdep"]
+    end
+
+    subgraph Image["origin: container-scanning"]
+        R2["ROOT"] --> S2["semgrep"]
+        R2 --> D2["semgrepdep"]
+    end
+```
+
+Both trees are stored. If `semgrepdep` has a known vulnerability, DevGuard reports both paths to it: `ROOT → semgrep → semgrepdep` from the source scan and `ROOT → semgrepdep` from the image scan. That is an accurate summary of what DevGuard was told: one tool saw a transitive dependency, the other a direct one.
 
 ---
 
-## Why DevGuard does not infer which source is correct
+## Why DevGuard does not pick a winner
 
-Given two SBOMs that disagree about the same package's dependency tree, one candidate policy is to prefer whichever source is "more complete," "more recent," or has more edges. DevGuard does not implement this, because no such rule holds in general:
+Given two SBOMs that disagree about the same package's dependency tree, one candidate policy is to prefer whichever source is "more complete", "more recent", or has more edges. DevGuard does not do this, because no such rule holds in general:
 
-- A flatter tree is not necessarily incorrect: it may genuinely describe a leaf package with no dependencies, rather than a scanner that failed to detect its tree.
-- A deeper tree is not necessarily correct: a scanner can report spurious relationships as readily as it can omit real ones, so edge count alone is not evidence of correctness.
-- Recency does not correlate with correctness. It tracks scan order, which is precisely the variable responsible for the nondeterminism described above. A "most recent wins" policy would formalize the bug rather than resolve it.
+- A flatter tree is not necessarily incorrect. It may genuinely describe a leaf package with no dependencies, rather than a scanner that failed to detect its tree.
+- A deeper tree is not necessarily correct. A scanner can report spurious relationships as readily as it can omit real ones, so edge count alone is not evidence of correctness.
+- Recency does not correlate with correctness. It only tracks scan order, and a "most recent wins" policy would make the reported graph depend on which CI job happened to finish last.
 
-No signal in the data reliably indicates which of two conflicting sources reflects reality, because both are inferences produced by different tools over different artifacts — a source tree versus an installed filesystem — each with its own blind spots. An incorrect automatic choice produces a dependency graph that appears complete while misrepresenting what is actually shipped, which is a worse outcome than an explicit, visible gap.
+No signal in the data reliably indicates which of two conflicting sources reflects reality, because both are inferences produced by different tools over different artifacts (a source tree versus an installed filesystem), each with its own blind spots. An incorrect automatic choice produces a graph that looks complete while misrepresenting what is actually shipped. Keeping both descriptions makes the disagreement visible instead of hiding it.
 
-DevGuard's merge policy is therefore intentionally simple: last source wins, by name-matched replacement. Authority over which tree is correct rests with whoever produces the supplementary SBOM — typically the build author, who has direct knowledge the scanner does not. DevGuard's role is to merge deterministically and report what happened, not to adjudicate between two automated inferences.
+Authority over which tree is correct rests with whoever produces the supplementary SBOM, typically the build author, who has direct knowledge the scanner does not. That authority is applied where it belongs: inside the scan that carries the supplementary SBOM, before upload, using the name-matched replacement described above.
 
-**This is why sometimes toggling can be observed across separate scans of the same asset over time.** A source scan, carrying a supplementary SBOM, resolves a dependency's tree and the vulnerable path no longer exists in it, so the finding is marked fixed. A later image scan of the same asset, submitted without an equivalent supplementary SBOM, reports that dependency at a coarser, unresolved granularity, and the vulnerable path reappears. Each individual scan is merged and reported correctly on its own terms — this is not a bug in DevGuard's ingestion.
+### When is a finding marked fixed?
 
-**The fix is the same mechanism described throughout this page: merging.** Feeding the same supplementary SBOM into every scan of that asset — source and image alike — means both scans resolve the dependency identically, so no ingestion order can produce two different graphs. Root-causing the toggling is a matter of finding which scan is missing the supplementary SBOM the other one already has, and merging it into that scan too.
+Since several origins can report the same component, a single scan dropping a component is not enough to close a finding. A vulnerability is only marked fixed once no SBOM of the artifact reports the affected component anymore. If the source scan stops reporting a vulnerable package but the image scan still contains it, the finding stays open, and the remaining path shows which origin still reports it.
 
+This replaces the older behaviour where scans of the same artifact overwrote each other's graph, which caused findings to toggle between fixed and open depending on which scan ran last.
+
+### Making origins agree
+
+If two origins disagree about a component you care about, the fix is the mechanism this page is about: give every scan the same supplementary SBOM. Once the image scan carries the same description of `semgrep` as the source scan, both produce an identical subtree hash, the subtree is stored once, and only the correct path is reported. Finding the cause of an unexpected path is a matter of checking which origin reports it, and adding the missing supplementary SBOM to that scan.
 
 ## Related
 
-- [Transitive Dependencies](/explanations/transitive-dependencies) — why depth in the dependency graph matters for triage
-- [Vulnerability Matching](/explanations/vulnerability-management/vulnerability-matching) — how DevGuard matches SBOM components against vulnerability databases
+- [Transitive Dependencies](/explanations/transitive-dependencies): why depth in the dependency graph matters for triage
+- [Vulnerability Matching](/explanations/vulnerability-management/vulnerability-matching): how DevGuard matches SBOM components against vulnerability databases

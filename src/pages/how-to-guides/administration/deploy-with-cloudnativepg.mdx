@@ -1,6 +1,6 @@
 ---
-title: Deploy DevGuard with a CloudNativePG Database
-description: "Install DevGuard on Kubernetes with a highly available PostgreSQL cluster managed by CloudNativePG, from an empty cluster to a running instance, including S3 backups."
+title: DevGuard CloudNativePG: Deploy with a Highly Available Database
+description: "Run DevGuard CloudNativePG on Kubernetes: set up a highly available PostgreSQL cluster from an empty cluster to a running DevGuard instance, with S3 backups."
 seo:
   robots: index,follow
   og:
@@ -14,7 +14,7 @@ ignoreChecks: null
 ---
 import { Callout, DocSteps as Steps } from '@document-writing-tools/kernux-theme'
 
-# Deploy DevGuard with a CloudNativePG Database
+# DevGuard CloudNativePG: Deploy with a Highly Available Database
 
 The [Helm chart](/how-to-guides/administration/deploy-with-helm) ships a single-instance PostgreSQL StatefulSet with no replicas and no automatic failover. For a highly available database, run PostgreSQL with the [CloudNativePG](https://cloudnative-pg.io) operator and connect DevGuard to it as an external database.
 
