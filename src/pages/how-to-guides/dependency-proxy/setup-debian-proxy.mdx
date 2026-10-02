@@ -1,0 +1,145 @@
+---
+title: Setup Debian Proxy with DevGuard Dependency Proxy
+description: "Configure apt to route Debian package downloads through the DevGuard dependency proxy for malicious package detection and supply chain security."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: setup debian proxy with devguard
+lang: en-US
+ignoreChecks: null
+---
+
+import { Callout } from '@document-writing-tools/kernux-theme'
+
+# Setup Debian Proxy with DevGuard Dependency Proxy
+
+System packages are part of your supply chain too. In 2024, the backdoored `xz-utils` releases 5.6.0 and 5.6.1 (CVE-2024-3094) reached Debian testing and unstable before the backdoor was discovered, and every container image or server that ran `apt-get upgrade` against those suites pulled them in. Because base images and CI runners install system packages on every build, a single compromised `.deb` reaches a large part of your infrastructure within hours.
+
+The DevGuard dependency proxy sits between apt and the Debian archive. Every package download is checked against the [OSV dataset](https://osv.dev) before it reaches your system, blocking known malicious packages automatically.
+
+- **Registry URL**: `<your-devguard-url>/api/v1/dependency-proxy/deb/debian`
+- **Security updates**: `<your-devguard-url>/api/v1/dependency-proxy/deb/debian-security`
+
+## Configuration
+
+Since Debian 12, apt reads its package sources from `/etc/apt/sources.list.d/debian.sources`. Point both the main archive and the security archive at DevGuard by replacing the default mirror:
+
+```bash {ignore}
+sed -i 's|http://deb.debian.org|https://<your-devguard-url>/api/v1/dependency-proxy/deb|' /etc/apt/sources.list.d/debian.sources
+```
+
+Afterwards, the file looks like this:
+
+```text
+Types: deb
+URIs: https://<your-devguard-url>/api/v1/dependency-proxy/deb/debian
+Suites: trixie trixie-updates
+Components: main
+Signed-By: /usr/share/keyrings/debian-archive-keyring.pgp
+
+Types: deb
+URIs: https://<your-devguard-url>/api/v1/dependency-proxy/deb/debian-security
+Suites: trixie-security
+Components: main
+Signed-By: /usr/share/keyrings/debian-archive-keyring.pgp
+```
+
+Once set, all `apt-get update`, `apt-get install` and `apt-get upgrade` invocations go through DevGuard transparently. In a `Dockerfile`, run the `sed` command before the first `apt-get update`.
+
+<Callout type="info">
+  The proxy forwards the package lists (`InRelease`, `Packages`) unchanged. apt keeps verifying them against the Debian archive keys in `Signed-By`, so the proxy cannot tamper with them.
+</Callout>
+
+<Callout type="warning">
+  apt needs the `ca-certificates` package to connect to an `https` repository. Slim base images such as `debian:trixie-slim` do not include it, so install it from the default mirror first or use a DevGuard URL that your image already trusts.
+</Callout>
+
+<Callout type="warning">
+  The proxy fetches packages from `deb.debian.org` only. Other distributions such as Ubuntu and third-party repositories are not supported.
+</Callout>
+
+<Callout type="info">
+  On startup, the proxy blocks all requests until the malicious package database is fully loaded. This initialization period prevents cache poisoning. See [Cache Management](/how-to-guides/dependency-proxy/cache-management) for details.
+</Callout>
+
+## Blocked packages and signed package lists
+
+For npm, Go and PyPI, the proxy removes blocked versions from the version list, so the client resolves to the next allowed version. This is not possible for Debian: the package lists are signed through `InRelease`, and any change would break the signature check of apt.
+
+apt therefore always sees the newest version, tries to download it, receives `403 Forbidden` and aborts. This applies to malicious packages and to the [minimum package age](/how-to-guides/dependency-proxy#minimum-package-age) alike. To install an older version, pin it explicitly, for example with `apt-get install <package>=<version>`, as long as that version is still available in the archive.
+
+## Testing
+
+DevGuard ships a test package, `fake-malicious-package`, that is permanently flagged as malicious for all versions. The script below runs apt in a throwaway `debian:trixie-slim` container whose only package source is the DevGuard proxy, so your own system stays untouched:
+
+```bash
+DEVGUARD_DEB="https://<your-devguard-url>/api/v1/dependency-proxy/deb"
+
+# hello installs through the proxy, apt verifies the signed package lists as usual
+docker run --rm -e DEVGUARD_DEB="$DEVGUARD_DEB" debian:trixie-slim bash -euc '
+  sed -i "s|http://deb.debian.org|$DEVGUARD_DEB|" /etc/apt/sources.list.d/debian.sources
+  apt-get update
+  apt-get install -y --no-install-recommends hello
+  hello
+'
+
+# fake-malicious-package must be rejected with 403 Forbidden
+status=$(curl -s -o /dev/null -w "%{http_code}" \
+  "$DEVGUARD_DEB/debian/pool/main/f/fake-malicious-package/fake-malicious-package_1.0.0_all.deb")
+if [ "$status" != "403" ]; then
+  echo "expected 403 Forbidden for fake-malicious-package, got $status" >&2
+  exit 1
+fi
+```
+
+`fake-malicious-package` does not exist in the Debian archive, so apt cannot request it. The proxy checks a download against the malicious package database before fetching it from upstream, so the `curl` request above proves the check without a real package.
+
+### Testing the minimum package age
+
+The [minimum package age](/how-to-guides/dependency-proxy#minimum-package-age) is configured per repository and only applies to requests using the repository's proxy URL, which contains a secret. The proxy uses the upload time the Debian archive reports for each `.deb` file.
+
+To verify it, temporarily set the minimum age to 87600 hours (10 years). `hello` 2.10-5 was uploaded to trixie in April 2025, so the proxy must reject it. As described [above](#blocked-packages-and-signed-package-lists), apt does not fall back to an older version but aborts:
+
+```bash
+# set the minimum package age of the repository to 10 years
+devguard-scanner curl --token <your-pat-token> -X PUT \
+  -d '{"rules":"","minReleaseAge":87600}' \
+  https://<your-devguard-url>/api/v1/organizations/<assetName>/config-files/dependency-proxy-configs/
+
+# the repository's Debian proxy URL applies its settings
+DEBIAN_PROXY=$(devguard-scanner curl --token <your-pat-token> -s \
+  https://<your-devguard-url>/api/v1/organizations/<assetName>/dependency-proxy-urls/ \
+  | jq -r .debian)
+
+# hello is younger than 10 years, so apt must abort with 403 Forbidden
+docker run --rm -e DEVGUARD_DEB="${DEBIAN_PROXY%/debian}" debian:trixie-slim bash -euc '
+  sed -i "s|http://deb.debian.org|$DEVGUARD_DEB|" /etc/apt/sources.list.d/debian.sources
+  apt-get update
+  if apt-get install -y --no-install-recommends hello > apt.log 2>&1; then
+    cat apt.log
+    echo "hello was NOT blocked by the minimum package age" >&2
+    exit 1
+  fi
+  cat apt.log
+  grep -q "403" apt.log
+'
+
+# reset the minimum package age
+devguard-scanner curl --token <your-pat-token> -X PUT \
+  -d '{"rules":"","minReleaseAge":0}' \
+  https://<your-devguard-url>/api/v1/organizations/<assetName>/config-files/dependency-proxy-configs/
+```
+
+## Further Reading
+
+- [Dependency Proxy Overview](/how-to-guides/dependency-proxy)
+- [Cache Management](/how-to-guides/dependency-proxy/cache-management)
+- [Setup npm Proxy](/how-to-guides/dependency-proxy/setup-npm-proxy)
+- [Setup Go Proxy](/how-to-guides/dependency-proxy/setup-go-proxy)
+- [Setup PyPI Proxy](/how-to-guides/dependency-proxy/setup-pypi-proxy)
+- [Setup OCI Proxy](/how-to-guides/dependency-proxy/setup-oci-proxy)
+- [OSV (Open Source Vulnerabilities)](https://osv.dev)
