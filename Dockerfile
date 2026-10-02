@@ -1,4 +1,4 @@
-FROM node:26.5.0@sha256:0473e7dc433a1310f436edee02aa79737ec78a4b345433ab0963d4a256f9ad85 AS builder
+FROM node:26.10.0@sha256:a723b54c35a76e947095a20a67d39585bb09c862e6b1adeb8a9f518f95e34fb0 AS builder
 LABEL maintainer="Sebastian Kawelke <sebatian.kawelke@l3montree.com"
 
 # Disable telemetry
@@ -53,7 +53,7 @@ RUN npm prune --omit=dev
 
 RUN mkdir -p /usr/app/.next/cache/images && chown -R 53111:53111 /usr/app/.next/cache/images
 
-FROM registry.opencode.de/oci-community/images/zendis/nodejs:26-minimal@sha256:cba03967828a5aee4d6c7ad6dc5887740105e198fed7be123222621819772ee3
+FROM registry.opencode.de/oci-community/images/zendis/nodejs:26-minimal@sha256:993d19d6032d5de5393ef25245dd1bc4b0760b7fd057efbc70da680e4e9cf54e
 
 USER 53111
 
