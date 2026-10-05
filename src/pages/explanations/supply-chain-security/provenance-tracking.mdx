@@ -74,6 +74,30 @@ _Why track this?_ This is the link to Version Control. It allows you to say with
 
 ***
 
+## DevGuard as Build Control Plane
+
+A provenance record is only as trustworthy as whoever signs it. If the build job signs its own provenance, a compromised job can claim anything. DevGuard therefore acts as the signer: the CI job sends its provenance together with the OIDC token its CI platform issues for the job (for example a GitLab `id_token`), and DevGuard:
+
+1. **Verifies the token** with the issuer (signature, expiry, and that it was issued for DevGuard — tokens for other services are rejected).
+2. **Overwrites the Builder** with what the issuer vouched for: the builder ID becomes the pipeline configuration that ran the job, including the issuer (e.g. `https://gitlab.com/org/repo//.gitlab-ci.yml@refs/heads/main?iss=https%3A%2F%2Fgitlab.com`), and all verified token claims are recorded in `internalParameters`. The source commit comes from the token as well.
+3. **Signs the provenance** with the DevGuard key and, if configured, records it in a Rekor transparency log.
+
+The subjects and the recipe are kept as the job sent them — DevGuard vouches for _who_ built the artifact, not for _what_ the job claims to have built.
+
+<Callout type="warning">
+    A DevGuard signature means "issuer X said this about workload Y" — not "this
+    build is trustworthy". Never trust provenance just because DevGuard signed it.
+</Callout>
+
+To verify a provenance record:
+
+1. **Check the signature** against the DevGuard public key (`/api/v1/slsa/public-key/`), e.g. with `cosign verify-blob-attestation --key devguard.pub --bundle bundle.json --new-bundle-format --type slsaprovenance1 <artifact>` (add `--insecure-ignore-tlog` if DevGuard is not configured with a transparency log).
+2. **Decide whether you trust the issuer** — it is part of the builder ID.
+3. **Decide whether you trust the builder** — and with it which SLSA level the build reaches.
+4. **Check that the provenance matches your expectations**: the subject digest is the artifact you are about to use, and the source repository and branch are the ones you expect.
+
+***
+
 ## The Concept of Hermeticity
 
 Provenance tracking is most effective when builds are **Hermetic**.

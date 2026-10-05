@@ -32,9 +32,9 @@ Deploy DevGuard to a Kubernetes cluster using the [official Helm chart](https://
 kubectl create namespace devguard
 ```
 
-### In-Toto signing key
+### Signing key
 
-DevGuard signs In-Toto attestations with an EC (prime256v1) private key. By default, the chart generates this key on the first install. It stores it in a secret named `ec-private-key` and keeps the same key across upgrades. You don't need to do anything.
+DevGuard signs In-Toto attestations and SLSA build provenance with an EC (prime256v1) private key. Verifiers trust signatures made with its public key (`/api/v1/slsa/public-key/`), so keep it stable. By default, the chart generates this key on the first install. It stores it in a secret named `ec-private-key` and keeps the same key across upgrades. You don't need to do anything.
 
 <Callout type="warning">
   Don't create a secret named `ec-private-key` yourself unless you also set `api.intoto.existingPrivateKeySecretName`. If you do, `helm install` fails because the chart tries to manage a secret it didn't create.
@@ -54,6 +54,28 @@ api:
   intoto:
     existingPrivateKeySecretName: devguard-intoto-key
 ```
+
+### SLSA build provenance signing
+
+CI jobs send their build provenance to DevGuard together with their OIDC workload identity token. DevGuard verifies the token with its issuer and signs the provenance with the verified identity of the job. Configure it under `api.slsa`:
+
+```yaml
+api:
+  slsa:
+    # OIDC issuers whose CI tokens are accepted. Empty accepts every https issuer.
+    trustedIssuers:
+      - https://gitlab.com
+    # Audience the tokens have to be issued for. Defaults to web.devguardApiUrlPublicInternet.
+    oidcAudience: ""
+    # Upload the signed provenance to a Rekor transparency log. Empty does not upload it.
+    rekorUrl: https://rekor.sigstore.dev
+```
+
+<Callout type="warning">
+  Set `trustedIssuers` in production. Without it DevGuard accepts tokens from every https issuer — it records the issuer in the signed provenance, but every verifier then has to check the issuer itself.
+</Callout>
+
+The audience has to match the `devguard_api_url` input of the DevGuard CI components exactly. If neither `oidcAudience` nor `web.devguardApiUrlPublicInternet` is set, DevGuard rejects all tokens.
 
 ### Create your values file
 

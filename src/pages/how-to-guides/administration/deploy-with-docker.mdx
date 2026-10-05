@@ -99,6 +99,7 @@ To enable email delivery, set `KRATOS_SMTP_CONNECTION_URI`, `KRATOS_SMTP_FROM_AD
 | Session/cipher secrets | `KRATOS_COOKIE_SECRET`, `KRATOS_CIPHER_SECRET` | Generate with `openssl rand -base64 24` — the guided setup already does this for you. `KRATOS_CIPHER_SECRET` must be exactly 32 characters |
 | Passkey/WebAuthn RP id | `KRATOS_PASSKEY_RP_ID` | Root domain only — no scheme, no port (e.g. `example.com` if `DEVGUARD_WEB_DOMAIN=app.example.com`) |
 | Log level | `DEVGUARD_LOG_LEVEL` | Change from `debug` to `info` or `warn` |
+| Trusted OIDC issuers | `SLSA_OIDC_TRUSTED_ISSUERS` | Comma separated issuers whose CI tokens DevGuard accepts when signing SLSA build provenance (e.g. `https://gitlab.com`). Empty accepts every https issuer |
 
 <Callout type="info">
   The guided setup (`compose.configure.yaml`) fills in the secrets and domain-dependent values above automatically based on the deployment option you pick — you mainly need to review passwords and the SMTP settings.
@@ -113,6 +114,16 @@ To enable email delivery, set `KRATOS_SMTP_CONNECTION_URI`, `KRATOS_SMTP_FROM_AD
 <Callout type="warning">
   The encryption key is generated into a Docker named volume during the guided setup. Back it up — losing it makes all stored integration secrets unrecoverable.
 </Callout>
+
+### SLSA build provenance signing
+
+The guided setup also generates the signing key (`slsa-private-key.pem`) into the same volume. DevGuard signs In-Toto attestations and SLSA build provenance with it, and verifiers trust its public key (`/api/v1/slsa/public-key/`). Back it up as well — a new key invalidates the trust in everything signed before.
+
+Optional settings in `.env`:
+
+- `SLSA_OIDC_TRUSTED_ISSUERS` — the issuers whose CI tokens are accepted (see above).
+- `SLSA_OIDC_AUDIENCE` — the audience the tokens have to be issued for. Defaults to `DEVGUARD_API_URL` and has to match the `devguard_api_url` input of the DevGuard CI components.
+- `SLSA_REKOR_URL` — a Rekor transparency log to upload the signed provenance to, e.g. `https://rekor.sigstore.dev`.
 
 ## Next Steps
 
