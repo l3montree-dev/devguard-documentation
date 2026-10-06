@@ -20,12 +20,15 @@
           openssl
           nodejs
           python3
-          go
+          go_1_27
           maven
           php
           phpPackages.composer
           jq
           crane
+          kubectl
+          kubernetes-helm
+          kind
         ];
       };
     });

@@ -19,7 +19,7 @@ import { Callout } from '@document-writing-tools/kernux-theme'
 
 A single repository branch can produce multiple build artifacts — one image per architecture, one package per target operating system, or several deployment variants. Each of them ships a different set of components and therefore has a different vulnerability profile, even though they are built from the same source code.
 
-<Callout intent="info">DevGuard tracks vulnerabilities together across artifacts. It expects each artifacts to origin from the same source code, thus a false positive in a dependency tree will affect **all** artifacts built from that code. The dependency tree is shared across artifacts originating from the same source.</Callout>
+<Callout intent="info">DevGuard tracks vulnerabilities together across artifacts. It expects all artifacts of a repository version to be built from the same source code, so a false positive in a dependency tree affects **all** artifacts built from that code. Each artifact keeps its own SBOMs, but subtrees that are identical across artifacts are stored only once.</Callout>
 
 If you need to track vulnerabilities separately, check out [Repository Versions](/explanations/core-concepts/repository-versions) to create separate branches for each artifact.
 

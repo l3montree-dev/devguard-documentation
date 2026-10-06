@@ -7,5 +7,6 @@ export default {
     'setup-maven-proxy': { title: 'Setup Maven Proxy' },
     'setup-composer-proxy': { title: 'Setup Composer Proxy' },
     'setup-oci-proxy': { title: 'Setup OCI Proxy' },
+    'setup-debian-proxy': { title: 'Setup Debian Proxy' },
     'ci-runners': { title: 'Self-Hosted CI Runners' },
 }

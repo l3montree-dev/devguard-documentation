@@ -13,6 +13,8 @@ const TMP_DIR = 'src/nix-tests/tmp'
 const PAGES_DIR = 'src/pages'
 const CODE_FENCE = /^[ \t]*```(\w*)[ \t]*([^\r\n]*)\r?\n([\s\S]*?)^[ \t]*```/gm
 const SHELL_LANGS = new Set(['bash', 'sh', 'shell'])
+const FILENAME_META = /\bfilename="([^"]+)"/
+const HEREDOC_DELIMITER = 'NIXMD_FILE_EOF'
 const BLOCKING_HINT = /^[ \t]*#[ \t]*hint:.*\bblock/i
 const BLANK_OR_COMMENT = /^[ \t]*(#|$)/
 const LINE_CONTINUATION = /\\[ \t]*$/
@@ -57,7 +59,9 @@ const DEFAULT_MDX_FILES = [
     'src/pages/how-to-guides/dependency-proxy/setup-go-proxy.mdx',
     'src/pages/how-to-guides/dependency-proxy/setup-maven-proxy.mdx',
     'src/pages/how-to-guides/dependency-proxy/setup-composer-proxy.mdx',
+    'src/pages/how-to-guides/dependency-proxy/setup-debian-proxy.mdx',
     'src/pages/how-to-guides/dependency-proxy/setup-oci-proxy.mdx',
+    'src/pages/how-to-guides/administration/deploy-with-cloudnativepg.mdx',
 ]
 
 const MDX_FILES =
@@ -179,11 +183,10 @@ function outputPathFor(mdxPath: string): string {
 
 function convert(mdxPath: string): string | null {
     const source = readFileSync(mdxPath, 'utf8')
-    const blocks = extractBlocks(source)
-    const testBlocks = blocks.filter(
-        (block) =>
-            SHELL_LANGS.has(block.lang) && !block.meta.includes('{ignore}'),
+    const blocks = extractBlocks(source).filter(
+        (block) => !block.meta.includes('{ignore}'),
     )
+    const testBlocks = blocks.filter((block) => SHELL_LANGS.has(block.lang))
 
     if (testBlocks.length === 0) {
         return null
@@ -191,12 +194,22 @@ function convert(mdxPath: string): string | null {
 
     const header =
         "#!/usr/bin/env bash\nset -euo pipefail\ntrap 'kill $(jobs -p) 2>/dev/null || true' EXIT\n\n"
-    const body = testBlocks
-        .map((block) =>
-            backgroundHintedCommands(
-                httpsRemotes(changeToTestVariables(block.code)),
-            ),
-        )
+    const body = blocks
+        .map((block) => {
+            if (SHELL_LANGS.has(block.lang)) {
+                return backgroundHintedCommands(
+                    httpsRemotes(changeToTestVariables(block.code)),
+                )
+            }
+            // Files shown on the page (e.g. ```yaml filename="values.yaml") are
+            // written verbatim so later commands like `kubectl apply -f` find them.
+            const fileName = FILENAME_META.exec(block.meta)?.[1]
+            if (!fileName) {
+                return null
+            }
+            return `cat > ${shQuote(fileName)} <<'${HEREDOC_DELIMITER}'\n${block.code}${HEREDOC_DELIMITER}\n`
+        })
+        .filter((part): part is string => part !== null)
         .join('\n')
 
     const outPath = outputPathFor(mdxPath)

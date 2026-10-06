@@ -17,15 +17,17 @@ import { Callout } from '@document-writing-tools/kernux-theme'
 
 # Setup Composer Proxy with DevGuard Dependency Proxy
 
-PHP projects are just as exposed to supply chain attacks as any other ecosystem. In 2022, attackers took over the abandoned `hautelook/phpass` package on Packagist and published new releases that stole AWS credentials from every environment that installed them. Because `composer install` resolves the whole dependency tree automatically, a single compromised package is enough to reach every developer machine and CI runner of a project.
+PHP projects are just as exposed to supply chain attacks as any other ecosystem. In 2022, attackers took over the abandoned `hautelook/phpass` package on Packagist and published new releases that stole AWS credentials from every environment that installed them. In 2026, attackers used compromised GitHub accounts to publish malicious tags of `intercom/intercom-php` and the `laravel-lang` packages. Because Composer resolves the whole dependency tree automatically, a single compromised package is enough to reach every developer machine and CI runner of a project.
 
-The DevGuard dependency proxy sits between Composer and Packagist. Every package request is checked against the [OSV dataset](https://osv.dev) before it reaches your `vendor` directory, blocking known malicious packages automatically.
+Composer and Packagist have responded with [several hardening measures](https://blog.packagist.com/an-update-on-composer-packagist-supply-chain-security/): Packagist flags malware versions and makes [stable versions immutable](https://blog.packagist.com/immutable-versions-on-packagist/), and [Composer 2.10](https://blog.packagist.com/composer-2-10-release/) introduced the [`policy` config](https://getcomposer.org/doc/06-config.md#policy), which blocks flagged malware versions, security advisories and abandoned packages by default. These measures only apply to clients running a recent Composer version, and each project can relax or disable them in its own `composer.json`.
+
+The DevGuard dependency proxy sits between Composer and Packagist and enforces protection centrally, for every Composer version and without any client configuration. Every package request is checked against the [OSV dataset](https://osv.dev) before it reaches your `vendor` directory, blocking known malicious packages automatically. Combined with the [minimum package age](/how-to-guides/dependency-proxy#minimum-package-age), the proxy complements Composer's own policies rather than replacing them.
 
 - **Registry URL**: `<your-devguard-url>/api/v1/dependency-proxy/composer`
 
 ## Configuration
 
-Disable the default Packagist repository and add the DevGuard proxy instead. Disabling `packagist.org` is required: otherwise Composer keeps it as a fallback and downloads packages directly from Packagist whenever the proxy does not serve them. To apply it to every project on your machine, set it in your global Composer configuration:
+[Disable the default Packagist repository](https://getcomposer.org/doc/05-repositories.md#disabling-packagist-org) and add the DevGuard proxy instead. Disabling `packagist.org` is required: otherwise Composer keeps it as a fallback and downloads packages directly from Packagist whenever the proxy does not serve them. To apply it to every project on your machine, set it in your global Composer configuration:
 
 ```bash {ignore}
 composer config --global repo.packagist.org false
@@ -165,4 +167,5 @@ devguard-scanner curl --token <your-pat-token> -X PUT \
 - [Setup Go Proxy](/how-to-guides/dependency-proxy/setup-go-proxy)
 - [Setup PyPI Proxy](/how-to-guides/dependency-proxy/setup-pypi-proxy)
 - [Setup Maven Proxy](/how-to-guides/dependency-proxy/setup-maven-proxy)
+- [Composer Repositories](https://getcomposer.org/doc/05-repositories.md)
 - [OSV (Open Source Vulnerabilities)](https://osv.dev)

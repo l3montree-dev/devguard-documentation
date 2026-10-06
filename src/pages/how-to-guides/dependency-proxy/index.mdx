@@ -34,6 +34,7 @@ DevGuard includes a built-in dependency proxy that acts as a protective layer be
 | PyPI | `/api/v1/dependency-proxy/pypi/simple` |
 | Maven | `/api/v1/dependency-proxy/maven` |
 | Composer (Packagist) | `/api/v1/dependency-proxy/composer` |
+| Debian (apt) | `/api/v1/dependency-proxy/deb/debian` |
 | OCI (container images) | `/v2/` — pull `<your-devguard-host>/<registry>/<image>:<tag>` |
 
 For setup instructions, see the ecosystem-specific guides:
@@ -44,6 +45,7 @@ For setup instructions, see the ecosystem-specific guides:
 - [Setup Maven Proxy](/how-to-guides/dependency-proxy/setup-maven-proxy)
 - [Setup Composer Proxy](/how-to-guides/dependency-proxy/setup-composer-proxy)
 - [Setup OCI Proxy](/how-to-guides/dependency-proxy/setup-oci-proxy)
+- [Setup Debian Proxy](/how-to-guides/dependency-proxy/setup-debian-proxy)
 
 To route all CI jobs through the proxy at once, see [Self-Hosted CI Runners](/how-to-guides/dependency-proxy/ci-runners).
 
@@ -57,6 +59,7 @@ The minimum age is configured per organization, project or repository and applie
 |-----------|---------------------|
 | npm | Supported |
 | PyPI | Supported |
+| Debian (apt) | Supported — too new versions are rejected but not hidden, see [Setup Debian Proxy](/how-to-guides/dependency-proxy/setup-debian-proxy#blocked-packages-and-signed-package-lists) |
 | Go modules | Supported |
 | Maven | Supported |
 | Composer (Packagist) | Supported |

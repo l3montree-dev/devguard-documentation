@@ -93,7 +93,15 @@ Alongside the vulnerability findings, DevGuard also stores a full picture of wha
 
 The **components** table holds an entry for each known package across the entire DevGuard instance, identified primarily by its package URL. Each entry carries metadata such as license, component type, and publication date. Components are shared instance-wide rather than owned by a single repository, so the same package appearing in multiple projects is only stored once.
 
-The **component dependencies** table uses these components to build a dependency tree for each asset version. This serves two purposes: fast lookups to check whether a component is present in a given asset version, and on-the-fly SBOM generation. Rather than storing a static SBOM file on disk, DevGuard assembles it from the dependency tree at request time, so it always reflects the current state of the branch.
+Dependency trees are stored as content-addressed Merkle trees, spread over three tables:
+
+- **`sbom_merkle_nodes`** holds one row per distinct subtree. Its key is a hash over the component's package URL and the sorted hashes of its direct children, so the hash identifies the component *together with* everything below it.
+- **`sbom_merkle_edges`** connects a node to each of its direct children. Leaves have no edges; their identity lives entirely in the node row.
+- **`sboms`** anchors one ingested SBOM: an asset version, an artifact, an origin (for example `source-scanning`, `container-scanning`, or an upstream SBOM URL), and the hash of the tree's root. Rescanning the same origin replaces that origin's row; other origins of the same artifact are untouched.
+
+Because a subtree's key is derived from its content, identical subtrees are stored only once across the whole instance, whether they come from two artifacts or two projects. When two SBOMs disagree about a component's children, the hashes differ and both descriptions are kept, so no scan can overwrite what another origin reported. See [Supplementary SBOMs](/explanations/supplementary-sboms#how-devguard-stores-sboms-from-different-scans) for how this plays out when scanners disagree.
+
+Rather than storing a static SBOM file on disk, DevGuard assembles an SBOM from these trees at request time, so it always reflects the current state of the branch.
 
 ---
 
