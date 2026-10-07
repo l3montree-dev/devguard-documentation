@@ -10,5 +10,6 @@ export default {
     'restricting-access': { title: 'OIDC/ SSO & Restricting Access' },
     'instance-admin-dashboard': { title: 'Instance Admin Dashboard' },
     'customize-ui': { title: 'Customize the UI' },
+    telemetry: { title: 'Telemetry' },
     'uninstalling-devguard': { title: 'Uninstalling DevGuard' },
 }
