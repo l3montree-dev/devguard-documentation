@@ -21,30 +21,24 @@ Container images are dependencies too: a single `FROM` line or an image referenc
 
 ## Configuration
 
-The proxy implements the OCI Distribution API, so every standard client (Docker, Podman, containerd, crane, skopeo) can pull through it. Prefix the fully qualified image reference with your DevGuard host:
+The proxy implements the OCI Distribution API, so every standard client (Docker, Podman, containerd, crane, skopeo) can pull through it. Prefix the fully qualified image reference with your DevGuard host and the dependency proxy secret of your organization, project or repository. The complete proxy URLs are shown in its **Dependency Proxy Settings** in DevGuard:
 
 ```bash {ignore}
-docker pull <your-devguard-host>/docker.io/library/nginx:latest
+docker pull <your-devguard-host>/<secret>/docker.io/library/nginx:latest
 ```
 
 The registry must be part of the reference — `docker.io/library/nginx`, not just `nginx`. The following upstream registries are supported:
 
 | Registry | Example reference |
 |----------|-------------------|
-| Docker Hub | `<your-devguard-host>/docker.io/library/alpine:3.20` |
-| GitHub Container Registry | `<your-devguard-host>/ghcr.io/org/image:tag` |
-| Quay | `<your-devguard-host>/quay.io/org/image:tag` |
-| Google Container Registry | `<your-devguard-host>/gcr.io/project/image:tag` |
-| Kubernetes | `<your-devguard-host>/registry.k8s.io/pause:3.10` |
-| Amazon ECR Public | `<your-devguard-host>/public.ecr.aws/org/image:tag` |
-| Microsoft Container Registry | `<your-devguard-host>/mcr.microsoft.com/dotnet/runtime:8.0` |
-| GitLab Container Registry | `<your-devguard-host>/registry.gitlab.com/group/project:tag` |
-
-To apply the firewall rules of a repository, use its proxy secret as the first path segment:
-
-```bash {ignore}
-docker pull <your-devguard-host>/<secret>/docker.io/library/nginx:latest
-```
+| Docker Hub | `<your-devguard-host>/<secret>/docker.io/library/alpine:3.20` |
+| GitHub Container Registry | `<your-devguard-host>/<secret>/ghcr.io/org/image:tag` |
+| Quay | `<your-devguard-host>/<secret>/quay.io/org/image:tag` |
+| Google Container Registry | `<your-devguard-host>/<secret>/gcr.io/project/image:tag` |
+| Kubernetes | `<your-devguard-host>/<secret>/registry.k8s.io/pause:3.10` |
+| Amazon ECR Public | `<your-devguard-host>/<secret>/public.ecr.aws/org/image:tag` |
+| Microsoft Container Registry | `<your-devguard-host>/<secret>/mcr.microsoft.com/dotnet/runtime:8.0` |
+| GitLab Container Registry | `<your-devguard-host>/<secret>/registry.gitlab.com/group/project:tag` |
 
 <Callout type="warning">
   The [minimum package age](/how-to-guides/dependency-proxy#minimum-package-age) does not apply to container images. Unlike npm, PyPI and Go, the OCI registry protocol has no publish date for an image: the `created` timestamp inside an image is set by the build and is often fixed to 1970 or missing for reproducible builds, and registry-side push times are only available through registry-specific APIs. Pin images by digest (`image@sha256:…`) to control exactly which image version you pull.
@@ -60,17 +54,17 @@ DevGuard ships a test image, `docker.io/fake-org/malicious-image`, flagged as ma
 
 ```bash
 # alpine is pulled through the proxy: tags, manifest and all layers
-crane ls --insecure <your-devguard-host>/docker.io/library/alpine > /dev/null
-crane pull --insecure <your-devguard-host>/docker.io/library/alpine:3.20 alpine.tar
+crane ls --insecure <your-devguard-host>/<secret>/docker.io/library/alpine > /dev/null
+crane pull --insecure <your-devguard-host>/<secret>/docker.io/library/alpine:3.20 alpine.tar
 
 # docker.io/fake-org/malicious-image must be rejected
-if crane manifest --insecure <your-devguard-host>/docker.io/fake-org/malicious-image:latest; then
+if crane manifest --insecure <your-devguard-host>/<secret>/docker.io/fake-org/malicious-image:latest; then
   echo "docker.io/fake-org/malicious-image was NOT blocked - check your proxy configuration" >&2
   exit 1
 fi
 
 # check that the proxy answered with 403 Forbidden
-status=$(curl -s -o /dev/null -w "%{http_code}" "https://<your-devguard-url>/v2/docker.io/fake-org/malicious-image/manifests/latest")
+status=$(curl -s -o /dev/null -w "%{http_code}" "https://<your-devguard-url>/v2/<secret>/docker.io/fake-org/malicious-image/manifests/latest")
 if [ "$status" != "403" ]; then
   echo "expected 403 Forbidden for docker.io/fake-org/malicious-image, got $status" >&2
   exit 1
@@ -85,7 +79,7 @@ Tags are compared as versions the same way Go module versions are: `1.0.0` and `
 # 1.0.0 and v1.0.0 both denote the flagged version and must be rejected
 for tag in 1.0.0 v1.0.0; do
   status=$(curl -s -o /dev/null -w "%{http_code}" \
-    "https://<your-devguard-url>/v2/docker.io/fake-org/malicious-image/manifests/$tag")
+    "https://<your-devguard-url>/v2/<secret>/docker.io/fake-org/malicious-image/manifests/$tag")
   if [ "$status" != "403" ]; then
     echo "expected 403 Forbidden for docker.io/fake-org/malicious-image:$tag, got $status" >&2
     exit 1
