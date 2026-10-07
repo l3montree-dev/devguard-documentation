@@ -29,13 +29,15 @@ DevGuard includes a built-in dependency proxy that acts as a protective layer be
 
 | Ecosystem | Registry URL |
 |-----------|-------------|
-| npm | `/api/v1/dependency-proxy/npm` |
-| Go modules | `/api/v1/dependency-proxy/go` |
-| PyPI | `/api/v1/dependency-proxy/pypi/simple` |
-| Maven | `/api/v1/dependency-proxy/maven` |
-| Composer (Packagist) | `/api/v1/dependency-proxy/composer` |
-| Debian (apt) | `/api/v1/dependency-proxy/deb/debian` |
-| OCI (container images) | `/v2/` — pull `<your-devguard-host>/<registry>/<image>:<tag>` |
+| npm | `/api/v1/dependency-proxy/<secret>/npm` |
+| Go modules | `/api/v1/dependency-proxy/<secret>/go` |
+| PyPI | `/api/v1/dependency-proxy/<secret>/pypi/simple` |
+| Maven | `/api/v1/dependency-proxy/<secret>/maven` |
+| Composer (Packagist) | `/api/v1/dependency-proxy/<secret>/composer` |
+| Debian (apt) | `/api/v1/dependency-proxy/<secret>/deb/debian` |
+| OCI (container images) | `/v2/<secret>/` — pull `<your-devguard-host>/<secret>/<registry>/<image>:<tag>` |
+
+`<secret>` is the dependency proxy secret of your organization, project or repository. It links the requests to the rules configured there, and the proxy rejects requests without a valid secret. The complete proxy URLs are shown in its **Dependency Proxy Settings** in DevGuard.
 
 For setup instructions, see the ecosystem-specific guides:
 

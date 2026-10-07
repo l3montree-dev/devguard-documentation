@@ -29,7 +29,7 @@ The proxy URLs in the runner configuration contain a dependency proxy secret:
 | Go modules | `GOPROXY` | `https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/go/` |
 | PyPI | `PIP_INDEX_URL` | `https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/pypi/simple/` |
 
-The secret links the requests to your organization, project or repository in DevGuard, so the proxy applies the rules and the [minimum package age](/how-to-guides/dependency-proxy#minimum-package-age) configured there. Requests without a secret are only checked against the malicious package database.
+The secret links the requests to your organization, project or repository in DevGuard, so the proxy applies the rules and the [minimum package age](/how-to-guides/dependency-proxy#minimum-package-age) configured there. Requests without a valid secret are rejected.
 
 <Callout type="warning">
   Treat the secret like a credential. Store the runner configuration in a Kubernetes secret or a sealed/encrypted secret instead of committing it in plain text.

@@ -21,7 +21,9 @@ PyPI is one of the most actively abused package registries for supply chain atta
 
 The DevGuard dependency proxy sits between your Python tooling and the upstream PyPI registry, checking every package against the [OSV dataset](https://osv.dev) before it reaches your environment.
 
-- **Registry URL**: `<your-devguard-url>/api/v1/dependency-proxy/pypi/simple`
+- **Registry URL**: `<your-devguard-url>/api/v1/dependency-proxy/<secret>/pypi/simple`
+
+Replace `<secret>` with the dependency proxy secret of your organization, project or repository. The complete proxy URLs are shown in its **Dependency Proxy Settings** in DevGuard.
 
 ## Configuration
 
@@ -31,7 +33,7 @@ Create or edit `pip.conf` (Linux/macOS: `~/.config/pip/pip.conf`, Windows: `%APP
 
 ```ini
 [global]
-index-url = https://<your-devguard-url>/api/v1/dependency-proxy/pypi/simple
+index-url = https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/pypi/simple
 trusted-host = <your-devguard-host>
 ```
 
@@ -47,7 +49,7 @@ python3 -m venv .venv
 Then point pip at the proxy:
 
 ```bash
-export PIP_INDEX_URL="https://<your-devguard-url>/api/v1/dependency-proxy/pypi/simple"
+export PIP_INDEX_URL="https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/pypi/simple"
 export PIP_TRUSTED_HOST="<your-devguard-host>"
 pip install requests
 ```
