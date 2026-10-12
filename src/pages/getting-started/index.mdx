@@ -14,7 +14,6 @@ ignoreChecks: null
 ---
 
 import { DocSteps as Steps, Callout } from '@document-writing-tools/kernux-theme'
-import { DocTabs as Tabs } from '@document-writing-tools/kernux-theme'
 
 # Setup a Fresh DevGuard Instance and Scan for Vulnerabilities
 
@@ -25,12 +24,12 @@ Learn how to quickly set up DevGuard using Docker Compose and perform your first
 In this tutorial, you'll learn how to:
 
 - Set up a DevGuard instance using docker-compose
-- Create a project and repository within DevGuard
+- Create an organization, a group and a repository with the getting started flow
 - Use the DevGuard scanner to scan a software project for known vulnerabilities
 
 ## What You'll Build
 
-By the end of this tutorial, you'll have a fully functional DevGuard instance running via docker-compose, with a project and repository set up, and a successful vulnerability scan completed on a sample software project.
+By the end of this tutorial, you'll have a fully functional DevGuard instance running via docker-compose, with an organization, group and repository set up, and a successful vulnerability scan completed on a sample software project.
 
 ## Prerequisites
 
@@ -38,6 +37,7 @@ Before you begin, you should have:
 
 - Basic command line knowledge
 - Docker installed on your system
+- A local project with dependencies to scan (for example, a Go, Node.js or Python project)
 
 If you don't have Docker installed, follow the [Docker installation guide](https://docs.docker.com/engine/install/).
 
@@ -60,10 +60,6 @@ The guided setup writes `.env` and generates the encryption key, the Kratos conf
 
 **Verify it worked:** DevGuard services should start without errors. The web frontend will be available at http://localhost:3000, the API at http://localhost:8080, and Kratos (authorization server) at http://localhost:4433.
 
-### Log into DevGuard
-
-Open your web browser and navigate to http://localhost:3000 to access the DevGuard web interface.
-
 ### Create your account
 
 Navigate to the registration page at http://localhost:3000/registration and create a new user account:
@@ -78,98 +74,99 @@ Navigate to the registration page at http://localhost:3000/registration and crea
 The local instance doesn't send emails until you configure an SMTP server. If you see an email verification screen, simply use the back button to continue.
 </Callout>
 
-**Verify it worked:** You should be redirected to the organization creation page.
+**Verify it worked:** You should land on the **Welcome to DevGuard** page. A step-by-step getting started flow guides you from an empty instance to your first repository in four steps: create your organization, create a group, create a repository and integrate DevGuard.
 
-### Create an organization
+### Create your organization
 
-Organizations help you structure your security scanning projects:
+Your organization holds all groups, repositories and members of your company:
 
-1. Choose a name for your organization (for example, "MyOrg")
+1. Enter a name for your organization (for example, "MyOrg")
 2. Click the **Create Organization** button
+
+If a colleague already invited you, click **Join Organization** instead.
 
 ![Create organization](https://raw.githubusercontent.com/l3montree-dev/devguard-web/refs/heads/main/e2e/docs-screenshots/org-creation-screen.png)
 
-### Create a new group
+**Verify it worked:** The getting started flow marks the organization as done and moves on to step 2.
 
-Groups organize projects within your organization. Each group can contain subgroups and projects, allowing you to monitor security posture across multiple repositories.
+### Create a group
 
-1. On the group overview page, enter a name for your group
-2. Add a description (optional but recommended)
-3. Click the **Create Group** button
+Groups organize your software projects, for example one group per product. You can split a group further into subgroups, e.g. for the frontend and the backend.
 
-You can create unlimited groups in an organization and change these values later. Groups also support releases and dashboards for monitoring subgroups and their repositories.
+1. Enter a name for your group
+2. Add a description (optional)
+3. Click **Create**
 
-**Verify it worked:** You should be redirected to the group overview page of your newly created group.
+![Create a group](https://raw.githubusercontent.com/l3montree-dev/devguard-web/refs/heads/main/e2e/docs-screenshots/group-creation-screen.png)
 
-![Group overview](https://raw.githubusercontent.com/l3montree-dev/devguard-web/refs/heads/main/e2e/docs-screenshots/group-creation-screen.png)
+You can create as many groups as you need and change these values later. Learn more about how organizations, groups and repositories relate in [DevGuard's Key Concepts](/getting-started/key-concepts).
 
-### Create a new repository
+### Create a repository
 
-Repositories represent the actual software projects you want to scan for vulnerabilities:
+A repository is a software project you would like to manage the risks of:
 
-1. Click the **New Repository** button on the group overview page
+1. Keep **Create new Repository** selected (choose **Create new Subgroup** if you want to split a bigger project first)
 2. Enter a name for your repository
-3. Add a description
-4. Select a provider (GitLab or GitHub) - this helps DevGuard optimize configuration options and CI/CD integration
-5. Click the **Create Repository** button
+3. Add a description (optional)
+4. Select the repository provider you are using: **GitHub**, **GitLab** or **None**. The provider preselects the matching CI/CD setup in the next step. It is optional, so you can use DevGuard without connecting a GitHub or GitLab repository.
+5. Click **Create**
 
-![Create repository](https://raw.githubusercontent.com/l3montree-dev/devguard-web/refs/heads/main/e2e/docs-screenshots/repo-creation-dialog.png)
+![Create a repository](https://raw.githubusercontent.com/l3montree-dev/devguard-web/refs/heads/main/e2e/docs-screenshots/repo-creation-dialog.png)
 
 **Verify it worked:** You should be redirected to the onboarding page of your newly created repository.
 
-### Choose your scanning method
+### Choose how to integrate DevGuard
 
-The custom setup dialog presents several options for integrating DevGuard:
+The repository onboarding page offers three ways to get your first results into DevGuard:
 
-<Tabs items={["CLI", "CI/CD Integration", "Upload SARIF/SBOM", "External Information Source"]}>
-  <Tabs.Tab>
-    **DevGuard CLI (Recommended for this tutorial)**: Use the DevGuard CLI to perform on-demand vulnerability scans from your local environment. This option provides flexibility for ad-hoc assessments without CI/CD integration.
-  </Tabs.Tab>
-  
-  <Tabs.Tab>
-  **CI/CD Integration**: Automate vulnerability scanning as part of your CI/CD pipeline using GitLab CI components or GitHub Actions. Scans trigger automatically on code changes.
-  </Tabs.Tab>
-  
-  <Tabs.Tab>
-    **Upload SARIF/SBOM**: Import existing SARIF reports or Software Bill of Materials (SBOMs) from other security tools for analysis in DevGuard.
-  </Tabs.Tab>
-  
-  <Tabs.Tab>
-    **External Information Source**: Configure DevGuard to fetch vulnerability information from external vendors, such as VEX URLs, with periodic updates.
-  </Tabs.Tab>
-</Tabs>
+![Repository onboarding](https://raw.githubusercontent.com/l3montree-dev/devguard-web/refs/heads/main/e2e/docs-screenshots/repo-onboarding-screen.png)
 
-For this tutorial, we'll use the DevGuard CLI approach.
+- **CI/CD setup:** a guided setup that scans on every push. Choose your build platform (GitHub Actions or GitLab CI/CD), select the scans, add the DevGuard token as a CI/CD secret, copy the generated pipeline, connect your issue tracker and add the webhook.
+- **Already have a report?** Upload an existing CycloneDX SBOM, SARIF report or VEX document. DevGuard detects the file type automatically.
+- **Other ways to get started:** set up the DevGuard CLI, the DevGuard API or integrations and connectors such as Kubernetes.
 
-### Install and run the DevGuard scanner
+Hosted CI runners on GitHub or GitLab can't reach a DevGuard instance running on `localhost`, so this tutorial uses the **DevGuard CLI** from your machine. Once DevGuard runs on a reachable URL, follow the CI/CD setup or the guides for [GitHub Actions](/how-to-guides/scanning/scan-with-github-actions) and [GitLab CI](/how-to-guides/scanning/scan-with-gitlab-ci).
 
-First, pull the DevGuard scanner Docker image:
+### Create a DevGuard token
+
+The scanner needs a token to upload results to DevGuard. In the CI/CD setup on the onboarding page:
+
+1. Click **Continue** until you reach **Add the DevGuard token**
+2. Click **Generate token**
+3. Copy the token and keep it somewhere safe - it is only shown once
+
+The generated token has the `scan` scope. Alternatively, create a [personal access token](/explanations/personal-access-token) in your user settings under **Access tokens**.
+
+### Run the DevGuard scanner
+
+Pull the DevGuard scanner Docker image:
 
 ```bash
 docker pull ghcr.io/l3montree-dev/devguard/scanner:main
 ```
 
-Next, create a personal access token by clicking the token generation button in the dialog. This token enables secure communication between the scanner and DevGuard.
-
-Copy the command from the dialog, which automatically includes your personal access token and the correct DevGuard API URL:
+Navigate to the directory containing the code you want to scan and run the scanner. Replace the `--assetName` with the path of your repository (`<organization>/projects/<group>/assets/<repository>`, as shown in the URL of the onboarding page) and `--token` with your token:
 
 ```bash
-docker run -v "$(pwd):/app" ghcr.io/l3montree-dev/devguard/scanner:main \
-devguard-scanner sca \
+docker run --add-host=host.docker.internal:host-gateway \
+  -v "$(pwd):/app" ghcr.io/l3montree-dev/devguard/scanner:main \
+  devguard-scanner sca \
     --path=/app \
-    --assetName="myorg/projects/newgroup/assets/newrepository" \
-    --apiUrl="https://api.main.devguard.org" \
-    --token="0135..." \
-    --webUI="https://main.devguard.org"
+    --assetName="myorg/projects/mygroup/assets/myrepository" \
+    --apiUrl="http://host.docker.internal:8080" \
+    --token="YOUR_TOKEN" \
+    --webUI="http://localhost:3000"
 ```
 
-![DevGuard scanner command](https://raw.githubusercontent.com/l3montree-dev/devguard-web/refs/heads/main/e2e/docs-screenshots/devguard-cli-screen.png)
+<Callout type="info">
+The scanner runs inside a container, where `localhost` points to the container itself. `host.docker.internal` lets it reach the DevGuard API running on your machine.
+</Callout>
 
-Navigate to a directory containing code you want to scan and run the command. The scanner will analyze your dependencies and identify known vulnerabilities.
+The scanner analyzes your dependencies and identifies known vulnerabilities.
 
 **Example output:**
 
-```bash 
+```bash
 11:48AM INF scanning directory dir=/app
 11:49AM INF Scan completed successfully dependencyVulnAmount=7 openedByThisScan=7 closedByThisScan=0
 +--------------------------------------------+----------------+------+------+---------------------+---------+--------+
@@ -187,17 +184,18 @@ Navigate to a directory containing code you want to scan and run the command. Th
 
 <Callout type="warning">
 **Common Issues:**
-- **API URL Mismatch:** Ensure you're using the correct API URL from the dialog (http://localhost:8080 for local instances)
-- **Token Issues:** Make sure you've generated a valid personal access token and included it in the command
+- **Connection refused:** Make sure the scanner uses `http://host.docker.internal:8080` as API URL and not `http://localhost:8080`
+- **Asset not found:** Check that `--assetName` matches the slugs of your organization, group and repository
+- **Token issues:** Make sure you copied the complete token and pasted it into the `--token` flag
 </Callout>
 
 **Verify it worked:** The terminal output should display a table of found vulnerabilities with their risk scores and CVSS ratings.
 
 ### View scan results in the web interface
 
-Return to the DevGuard web frontend in your browser and navigate to your repository. You can use the link printed in the terminal output for quick access.
+Return to the onboarding page and click **Reload page**, or use the link printed in the terminal output.
 
-The repository page now displays a comprehensive summary of the scan results, including the total number of vulnerabilities, their risk distribution, and details about affected dependencies.
+The repository now shows the scan results under **Dependency Risks**, including the detected vulnerabilities, their risk scores and the affected dependencies.
 
 ![Dependency scan results](https://raw.githubusercontent.com/l3montree-dev/devguard-web/refs/heads/main/e2e/docs-screenshots/dependency-risk-table.png)
 
@@ -207,11 +205,11 @@ Congratulations! You've successfully set up a DevGuard instance, created an orga
 
 Take some time to explore additional features:
 
-- Navigate through individual vulnerability details to understand remediation options
-- Check the dashboard for an overview of your security posture across all repositories
-- Explore the risk scoring methodology and how DevGuard prioritizes vulnerabilities
+- Open individual vulnerabilities to understand their risk and remediation options
+- Check the **Overview** of your repository for its security posture over time
+- Explore how DevGuard [assesses and prioritizes risks](/explanations/vulnerability-management/risk-assessment-methodology)
 
-![Dashboard](https://raw.githubusercontent.com/l3montree-dev/devguard-web/refs/heads/main/e2e/docs-screenshots/asset-overview.png)
+![Repository overview](https://raw.githubusercontent.com/l3montree-dev/devguard-web/refs/heads/main/e2e/docs-screenshots/asset-overview.png)
 
 </Steps>
 
@@ -219,17 +217,18 @@ Take some time to explore additional features:
 
 You've completed this tutorial successfully if:
 
-- Your DevGuard dashboard shows the scanned repository with detected vulnerabilities
-- The terminal output from the DevGuard CLI displays found vulnerabilities in a formatted table
+- The terminal output from the DevGuard scanner displays found vulnerabilities in a formatted table
+- Your repository in DevGuard shows the detected vulnerabilities under **Dependency Risks**
 - You can navigate through the DevGuard web frontend to view detailed scan results and repository information
 
 ## Next Steps
 
 Now that you have DevGuard running and have completed your first scan, here are some recommended next steps:
 
-1. **Understand Deep Git Integration** - Learn how DevGuard integrates with your repository structure and tracks changes over time
-2. **Set up CI/CD Integration** - Automate vulnerability scanning using GitLab CI or GitHub Actions to scan on every commit
-3. **Explore Vulnerability Management** - Learn strategies for triaging, prioritizing, and remediating detected vulnerabilities
+1. **Set up CI/CD integration** - Scan on every push with [GitHub Actions](/how-to-guides/scanning/scan-with-github-actions) or [GitLab CI](/how-to-guides/scanning/scan-with-gitlab-ci)
+2. **Run more scans** - Add source code, secret and container scans with the [DevGuard scanner](/how-to-guides/scanning/scan-your-project)
+3. **Sync tickets** - Let DevGuard create tickets in your issue tracker with [GitLab ticket sync](/how-to-guides/integrations/gitlab/ticket-sync)
+4. **Explore vulnerability management** - Learn strategies for triaging, prioritizing and remediating detected vulnerabilities in the [vulnerability management overview](/explanations/vulnerability-management/vulnerability-management-overview)
 
 ## Related Resources
 
