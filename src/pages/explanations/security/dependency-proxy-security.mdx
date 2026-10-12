@@ -21,15 +21,19 @@ import { Tooltip, TooltipTrigger, TooltipContent } from "@document-writing-tools
 
 ## Overview
 
-The DevGuard Dependency Proxy is a security-focused intermediary that sits between your development environment and public package registries. When you request a package from npm, Go, or PyPI, the request goes through DevGuard's proxy, which performs security checks and caching before delivering the package to you.
+The DevGuard Dependency Proxy is a security-focused intermediary that sits between your development environment and public package registries. When you request a package from one of the supported registries, the request goes through DevGuard's proxy, which performs security checks and caching before delivering the package to you.
 
 ## Supported Ecosystems
 
-DevGuard currently proxies three major package ecosystems:
+DevGuard currently proxies seven package ecosystems:
 
 - **npm** (Node.js packages from registry.npmjs.org)
 - **Go** (Go modules from proxy.golang.org)
 - **PyPI** (Python packages from pypi.org)
+- **Maven** (Java packages from Maven Central)
+- **Composer** (PHP packages from Packagist)
+- **Debian** (apt packages from deb.debian.org)
+- **OCI** (container images from public registries)
 
 ## The Request Flow
 
@@ -53,8 +57,11 @@ If the package is flagged as malicious:
 - The incident is logged and metrics are updated
 - Any existing cache of the package is purged
 
-### 4. Cache Lookup
-If the package passes the security check, DevGuard looks in its local cache. The cache system uses different time-to-live (TTL) values based on content type:
+### 4. Package Rules
+Next, the [package rules](/how-to-guides/dependency-proxy/package-rules) of the organization, project or repository are evaluated against the package — for example its name, version, release time and, for npm, its publisher. The last matching rule decides whether the package is allowed or denied. Denied packages are rejected with `403 Forbidden` and the name of the rule; for metadata requests, denied versions are removed from the version list instead.
+
+### 5. Cache Lookup
+If the package passes these checks, DevGuard looks in its local cache. The cache system uses different time-to-live (TTL) values based on content type:
 
 **For npm:**
 - Package tarballs are cached for 24 hours
@@ -68,13 +75,13 @@ If the package passes the security check, DevGuard looks in its local cache. The
 - Distribution files (wheels and source) are cached for 7 days
 - Package metadata is cached for 1 hour
 
-### 5. Integrity Verification
+### 6. Integrity Verification
 When serving from cache, DevGuard verifies the integrity of the cached data using SHA256 checksums. Each cached file has an associated `.sha256` file containing its hash. If verification fails, the corrupted cache is discarded and the package is refetched.
 
-### 6. Upstream Fetch
+### 7. Upstream Fetch
 If there's a cache miss or the cache is expired, DevGuard fetches the package from the upstream registry. During this fetch, it forwards appropriate headers to ensure compatibility with registry requirements.
 
-### 7. Version Resolution (npm-specific)
+### 8. Version Resolution (npm-specific)
 For npm metadata requests that don't specify a version, DevGuard performs an additional security step:
 - It fetches the package metadata
 - Extracts the "latest" version from the `dist-tags`
@@ -83,10 +90,10 @@ For npm metadata requests that don't specify a version, DevGuard performs an add
 
 This prevents scenarios where a developer runs `npm install package` (without version) and unknowingly gets a malicious latest version.
 
-### 8. Cache Storage
+### 9. Cache Storage
 Successful responses from upstream are stored in the cache along with their SHA256 integrity hash. The cache directory structure mirrors the package path for easy organization and cleanup.
 
-### 9. Response Delivery
+### 10. Response Delivery
 Finally, DevGuard returns the package to the client with additional headers indicating:
 - Cache status (`X-Cache: HIT` or `X-Cache: MISS`)
 - Proxy type (`X-Proxy-Type: npm/go/pypi`)

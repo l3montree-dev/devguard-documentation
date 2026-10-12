@@ -87,11 +87,11 @@ fi
 
 Checksum verification keeps working behind the proxy: `go` looks up the checksums of downloaded modules in the [Go checksum database](https://sum.golang.org), and DevGuard forwards these requests unchanged.
 
-### Testing the minimum package age
+### Testing a minimum release age rule
 
-The [minimum package age](/how-to-guides/dependency-proxy#minimum-package-age) is configured per repository and only applies to requests using the repository's proxy URL, which contains a secret. The proxy removes versions that are too new from the version list, so `go get` resolves to the newest version that is old enough. Downloads of a too new version (`.info`, `.mod`, `.zip`) are rejected.
+A [minimum release age rule](/how-to-guides/dependency-proxy/package-rules#minimum-release-age) is configured per repository and only applies to requests using the repository's proxy URL, which contains a secret. The proxy removes versions that are too new from the version list, so `go get` resolves to the newest version that is old enough. Downloads of a too new version (`.info`, `.mod`, `.zip`) are rejected.
 
-To verify it, temporarily set the minimum age to 87600 hours (10 years). `github.com/pkg/errors@v0.9.1` was published in January 2020, so the proxy must reject it, while `go get` without a version still resolves to an older version:
+To verify it, temporarily add a rule that denies everything released in the last 87600 hours (10 years). `github.com/pkg/errors@v0.9.1` was published in January 2020, so the proxy must reject it, while `go get` without a version still resolves to an older version:
 
 ```bash
 # use a fresh module and module cache, so no downloaded version is reused
@@ -99,9 +99,12 @@ cd .. && mkdir -p go-min-age-test && cd go-min-age-test
 go mod init example.com/go-min-age-test
 export GOMODCACHE="$(pwd)/.gomodcache"
 
-# set the minimum package age of the repository to 10 years
+# deny every package version released in the last 10 years
 devguard-scanner curl --token <your-pat-token> -X PUT \
-  -d '{"rules":"","minReleaseAge":87600}' \
+  -d 'rules:
+  - name: min-release-age
+    action: deny
+    expr: now() - timestamp(pkg.releasedAt) < duration("87600h")' \
   https://<your-devguard-url>/api/v1/organizations/<assetName>/config-files/dependency-proxy-configs/
 
 # the repository's Go proxy URL applies its settings
@@ -111,7 +114,7 @@ GO_PROXY=$(devguard-scanner curl --token <your-pat-token> -s \
 
 # github.com/pkg/errors@v0.9.1 is younger than 10 years and must be rejected
 if GOPROXY="$GO_PROXY" go get github.com/pkg/errors@v0.9.1; then
-  echo "github.com/pkg/errors@v0.9.1 was NOT blocked by the minimum package age" >&2
+  echo "github.com/pkg/errors@v0.9.1 was NOT blocked by the minimum release age rule" >&2
   exit 1
 fi
 
@@ -119,9 +122,9 @@ fi
 GOPROXY="$GO_PROXY" go get github.com/pkg/errors
 go list -m github.com/pkg/errors
 
-# reset the minimum package age
+# remove the rule again
 devguard-scanner curl --token <your-pat-token> -X PUT \
-  -d '{"rules":"","minReleaseAge":0}' \
+  -d 'rules: []' \
   https://<your-devguard-url>/api/v1/organizations/<assetName>/config-files/dependency-proxy-configs/
 ```
 
