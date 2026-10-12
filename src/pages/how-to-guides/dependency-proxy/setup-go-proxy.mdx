@@ -19,14 +19,16 @@ import { Callout } from '@document-writing-tools/kernux-theme'
 
 The XZ Utils backdoor discovered in 2024 (CVE-2024-3094) was a stark reminder that supply chain attacks are not limited to dynamic language ecosystems — a malicious contributor spent years gaining trust before inserting a backdoor into a widely deployed compression library. While the Go module proxy protocol provides strong integrity guarantees through checksums, it does not protect against modules that are malicious by design. The DevGuard dependency proxy adds that missing layer, checking every module against the [OSV dataset](https://osv.dev) before it is written to your module cache.
 
-- **Registry URL**: `<your-devguard-url>/api/v1/dependency-proxy/go`
+- **Registry URL**: `<your-devguard-url>/api/v1/dependency-proxy/<secret>/go`
+
+Replace `<secret>` with the dependency proxy secret of your organization, project or repository. The complete proxy URLs are shown in its **Dependency Proxy Settings** in DevGuard.
 
 ## Configuration
 
 Set the `GOPROXY` environment variable to point at DevGuard. Go will use it for all subsequent module downloads in that shell session:
 
 ```bash
-export GOPROXY="https://<your-devguard-url>/api/v1/dependency-proxy/go"
+export GOPROXY="https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/go"
 ```
 
 To make this permanent, add it to your CI environment or shell profile. For project-scoped configuration, set it in your CI/CD platform's environment variable configuration alongside your other build variables.

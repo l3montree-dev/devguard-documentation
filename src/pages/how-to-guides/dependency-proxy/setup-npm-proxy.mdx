@@ -21,14 +21,16 @@ Supply chain attacks through npm are a growing threat. In 2025, attackers publis
 
 The DevGuard dependency proxy sits between your developers and the public npm registry. Every package request is checked against the [OSV dataset](https://osv.dev) before it reaches your machine, blocking known malicious packages automatically.
 
-- **Registry URL**: `<your-devguard-url>/api/v1/dependency-proxy/npm`
+- **Registry URL**: `<your-devguard-url>/api/v1/dependency-proxy/<secret>/npm`
+
+Replace `<secret>` with the dependency proxy secret of your organization, project or repository. The complete proxy URLs are shown in its **Dependency Proxy Settings** in DevGuard.
 
 ## Configuration
 
 Point npm at the DevGuard proxy by adding a registry entry to your `.npmrc`. This file can live at the project level (`./.npmrc`) to scope only that project, or at the user level (`~/.npmrc`) to apply globally.
 
 ```ini
-registry=https://<your-devguard-url>/api/v1/dependency-proxy/npm
+registry=https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/npm
 ```
 
 Once set, all `npm install` and `npm ci` invocations route through DevGuard transparently. No changes to your `package.json` or CI scripts are required.
@@ -67,7 +69,7 @@ The same check as a script, installing each package separately so the failure of
 ```bash
 mkdir -p npm-proxy-test && cd npm-proxy-test
 npm init -y > /dev/null
-echo "registry=https://<your-devguard-url>/api/v1/dependency-proxy/npm" > .npmrc
+echo "registry=https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/npm" > .npmrc
 
 # lodash installs through the proxy
 npm install lodash@^4.17.21
@@ -93,7 +95,7 @@ Semver equality is not textual: `1.0.0` and `v1.0.0` denote the same version, an
 DevGuard ships a second test package, `fake-malicious-npm-package-versioned`, flagged at the specific version `v1.0.0` rather than for all versions, so it can prove version comparison itself is correct. The proxy checks a tarball download against the malicious package database before ever fetching it from upstream, so the file below does not need to exist for this check:
 
 ```bash
-REGISTRY_URL="https://<your-devguard-url>/api/v1/dependency-proxy/npm"
+REGISTRY_URL="https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/npm"
 
 # 1.0.0 is an equivalent spelling of the flagged v1.0.0 and must be rejected
 status=$(curl -s -o /dev/null -w "%{http_code}" \
