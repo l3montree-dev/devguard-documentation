@@ -75,5 +75,5 @@ jobs:
           assetName: testorg/projects/testgroup/assets/testrepo
           apiUrl: http://172.17.0.1:8080
           webUI: http://localhost:3000
-          token: 6bf700cc871773f378f63af1db152b300ed4e9722046ce4c42955e3a4bc1d1ce
+          token: 3bcffd8a27b6482d997a52ae4d5da0759bf2e6d18247799cd37ed71ae9c7e08d
         run: node src/nix-tests/nixmd.mts
