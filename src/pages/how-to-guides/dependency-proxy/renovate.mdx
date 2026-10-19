@@ -1,5 +1,5 @@
 ---
-title: Use Renovate with the Dependency Proxy
+title: Renovate Dependency Proxy Use
 description: "Point Renovate at the DevGuard dependency proxy so it only proposes dependency updates that pass your package rules and the malicious package check."
 seo:
   robots: index,follow
@@ -10,12 +10,12 @@ seo:
     type: TechArticle
   keyword_primary: renovate dependency proxy
 lang: en-US
-ignoreChecks: null
+ignoreChecks: checkIfLinkedFileExists
 ---
 
 import { Callout } from '@document-writing-tools/kernux-theme'
 
-# Use Renovate with the Dependency Proxy
+# Use Renovate For Dependency Proxy
 
 [Renovate](https://docs.renovatebot.com/) opens pull requests for new dependency versions. If Renovate looks up versions through the DevGuard dependency proxy, it only sees versions the proxy would also let you install:
 
