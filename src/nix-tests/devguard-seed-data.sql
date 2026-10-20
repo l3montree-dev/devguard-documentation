@@ -2,10 +2,10 @@
 -- PostgreSQL database dump
 --
 
-\restrict 8Rbn6aQbCxWNdPyUCNpDNbJJTHDdWJaiAw5FMDMP9bPVBo4eZWkQFxspTVFbudh
+\restrict iH7I1UH5mMA767Ij6FOm4Crn83Q4ZdIjcAcODZ9Agj4jGPeIlu3AZ4853bvXjgs
 
--- Dumped from database version 16.13
--- Dumped by pg_dump version 16.13
+-- Dumped from database version 16.15
+-- Dumped by pg_dump version 16.15
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -27,7 +27,7 @@ SET SESSION AUTHORIZATION DEFAULT;
 ALTER TABLE public.organizations DISABLE TRIGGER ALL;
 
 COPY public.organizations (id, created_at, updated_at, name, contact_phone_number, number_of_employees, country, industry, critical_infrastructure, iso27001, nist, grundschutz, slug, description, is_public, config_files, language, external_entity_provider_id, shares_vuln_information) FROM stdin;
-77ba44fe-93f1-4d33-8ec1-6f46ed5045d4	2026-08-25 09:17:44.35958+00	2026-08-25 09:17:44.35958+00	testorg	\N	\N	\N	\N	f	f	f	f	testorg		f	null		\N	f
+59a892ad-ff5a-409d-8834-6ff698848a9c	2026-10-19 12:44:44.594588+00	2026-10-19 12:44:44.594588+00	testorg	\N	\N	\N	\N	f	f	f	f	testorg		f	null		\N	f
 \.
 
 
@@ -40,7 +40,7 @@ ALTER TABLE public.organizations ENABLE TRIGGER ALL;
 ALTER TABLE public.projects DISABLE TRIGGER ALL;
 
 COPY public.projects (id, created_at, updated_at, name, organization_id, slug, description, is_public, parent_id, type, repository_id, repository_name, config_files, external_entity_id, external_entity_provider_id, avatar, external_entity_parent_id, state) FROM stdin;
-b3ccf64d-f94d-4f0b-8f01-cf3706f455b2	2026-08-25 09:17:48.564033+00	2026-08-25 09:17:48.564033+00	testgroup	77ba44fe-93f1-4d33-8ec1-6f46ed5045d4	testgroup		f	\N	default	\N	\N	null	\N	\N	\N	\N	active
+ebb567cb-e033-4703-9d5a-a73ff55c0ed1	2026-10-19 12:44:48.675565+00	2026-10-19 12:44:48.675565+00	testgroup	59a892ad-ff5a-409d-8834-6ff698848a9c	testgroup		f	\N	default	\N	\N	null	\N	\N	\N	\N	active
 \.
 
 
@@ -52,8 +52,8 @@ ALTER TABLE public.projects ENABLE TRIGGER ALL;
 
 ALTER TABLE public.assets DISABLE TRIGGER ALL;
 
-COPY public.assets (id, created_at, updated_at, name, slug, project_id, description, type, importance, confidentiality_requirement, integrity_requirement, availability_requirement, repository_id, repository_name, last_history_update, cvss_automatic_ticket_threshold, risk_automatic_ticket_threshold, last_secret_scan, last_sast_scan, last_sca_scan, last_iac_scan, last_container_scan, last_dast_scan, signing_pub_key, config_files, webhook_secret, external_entity_id, external_entity_provider_id, vuln_auto_reopen_after_days, repository_provider, avatar, metadata, is_public, paranoid_mode, shares_information, pipeline_last_run, state, modified_attack_vector, modified_attack_complexity, modified_privileges_required, modified_scope, modified_user_interaction, modified_confidentiality, modified_integrity, modified_availability) FROM stdin;
-e55f01c2-faed-4202-98e9-38f084c45ed9	2026-08-25 09:17:54.590768+00	2026-08-25 09:17:54.590768+00	testrepo	testrepo	b3ccf64d-f94d-4f0b-8f01-cf3706f455b2			1	medium	medium	medium	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	null	bee276e5-ad0e-445d-bd2e-1738a4c85b78	\N	\N	\N	github	\N	null	f	f	f	0001-01-01 00:00:00+00	active	X	X	X	X	X	X	X	X
+COPY public.assets (id, created_at, updated_at, name, slug, project_id, description, type, importance, confidentiality_requirement, integrity_requirement, availability_requirement, repository_id, repository_name, last_history_update, cvss_automatic_ticket_threshold, risk_automatic_ticket_threshold, last_secret_scan, last_sast_scan, last_sca_scan, last_iac_scan, last_container_scan, last_dast_scan, signing_pub_key, config_files, webhook_secret, external_entity_id, external_entity_provider_id, repository_provider, avatar, metadata, is_public, paranoid_mode, shares_information, state, modified_attack_vector, modified_attack_complexity, modified_privileges_required, modified_scope, modified_user_interaction, modified_confidentiality, modified_integrity, modified_availability) FROM stdin;
+6cea098a-7c9a-4ae4-92a7-b3f838c07f2f	2026-10-19 12:44:50.781385+00	2026-10-19 12:44:50.781385+00	testrepo	testrepo	ebb567cb-e033-4703-9d5a-a73ff55c0ed1			1	medium	medium	medium	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	null	404a4fdb-fc50-4c23-8319-6a15deaaa247	\N	\N	github	\N	null	f	f	f	active	X	X	X	X	X	X	X	X
 \.
 
 
@@ -66,7 +66,7 @@ ALTER TABLE public.assets ENABLE TRIGGER ALL;
 ALTER TABLE public.access_tokens DISABLE TRIGGER ALL;
 
 COPY public.access_tokens (created_at, user_id, pub_key, description, id, fingerprint, last_used_at, scopes, expiry_date, bearer_token_hash, org_id, project_id, asset_id) FROM stdin;
-2026-08-25 09:18:25.883474+00	\N	f10531e11e10d604a6634f996f77fe544a817f5d381b7ad7efa486b28c4cbd71013008597ad9c238074e54e8b35e419f48b4f8d6e436a015a91ddef4490c02f0	test	b673d6fa-26fd-4272-a95f-6bfd0d070797	57afc41da5ff762a6226044c4fd602d6491adcce37fa2ac73c7bbc8d56e5fba0	\N	scan manage	2027-04-21 22:00:00+00	\N	\N	\N	e55f01c2-faed-4202-98e9-38f084c45ed9
+2026-10-19 12:44:59.528096+00	\N	154feb766d9cc5f484d4daef0736bb6e169d2238141a704e82961d59febab7e9a087bb40efd59776b98ede222af506530cecb595c76d634278d2f1bf5792aed2		e73827cd-62da-46ad-917f-b25b6ac888af	811f5ce75dc16f91027d876739943c26ebdc5619c57a66fc45781d47413023e2	\N	scan manage	2027-10-17 22:00:00+00	\N	\N	\N	6cea098a-7c9a-4ae4-92a7-b3f838c07f2f
 \.
 
 
@@ -250,35 +250,35 @@ ALTER TABLE public.attestations ENABLE TRIGGER ALL;
 ALTER TABLE public.casbin_rule DISABLE TRIGGER ALL;
 
 COPY public.casbin_rule (id, ptype, v0, v1, v2, v3, v4, v5) FROM stdin;
-1	g	user::911fdccd-2643-44ff-8102-a8af86cf11ea	role::owner	domain::77ba44fe-93f1-4d33-8ec1-6f46ed5045d4			
-2	g	role::owner	role::admin	domain::77ba44fe-93f1-4d33-8ec1-6f46ed5045d4			
-3	g	role::admin	role::member	domain::77ba44fe-93f1-4d33-8ec1-6f46ed5045d4			
-4	p	role::owner	domain::77ba44fe-93f1-4d33-8ec1-6f46ed5045d4	obj::organization	act::delete		
-5	p	role::admin	domain::77ba44fe-93f1-4d33-8ec1-6f46ed5045d4	obj::organization	act::update		
-6	p	role::admin	domain::77ba44fe-93f1-4d33-8ec1-6f46ed5045d4	obj::project	act::create		
-7	p	role::admin	domain::77ba44fe-93f1-4d33-8ec1-6f46ed5045d4	obj::project	act::read		
-8	p	role::admin	domain::77ba44fe-93f1-4d33-8ec1-6f46ed5045d4	obj::project	act::update		
-9	p	role::admin	domain::77ba44fe-93f1-4d33-8ec1-6f46ed5045d4	obj::project	act::delete		
-10	p	role::member	domain::77ba44fe-93f1-4d33-8ec1-6f46ed5045d4	obj::organization	act::read		
-11	g	role::admin	project::b3ccf64d-f94d-4f0b-8f01-cf3706f455b2|role::admin	domain::77ba44fe-93f1-4d33-8ec1-6f46ed5045d4			
-12	g	project::b3ccf64d-f94d-4f0b-8f01-cf3706f455b2|role::admin	project::b3ccf64d-f94d-4f0b-8f01-cf3706f455b2|role::member	domain::77ba44fe-93f1-4d33-8ec1-6f46ed5045d4			
-13	p	project::b3ccf64d-f94d-4f0b-8f01-cf3706f455b2|role::admin	domain::77ba44fe-93f1-4d33-8ec1-6f46ed5045d4	project::b3ccf64d-f94d-4f0b-8f01-cf3706f455b2|obj::user	act::create		
-14	p	project::b3ccf64d-f94d-4f0b-8f01-cf3706f455b2|role::admin	domain::77ba44fe-93f1-4d33-8ec1-6f46ed5045d4	project::b3ccf64d-f94d-4f0b-8f01-cf3706f455b2|obj::user	act::delete		
-15	p	project::b3ccf64d-f94d-4f0b-8f01-cf3706f455b2|role::admin	domain::77ba44fe-93f1-4d33-8ec1-6f46ed5045d4	project::b3ccf64d-f94d-4f0b-8f01-cf3706f455b2|obj::user	act::update		
-16	p	project::b3ccf64d-f94d-4f0b-8f01-cf3706f455b2|role::admin	domain::77ba44fe-93f1-4d33-8ec1-6f46ed5045d4	project::b3ccf64d-f94d-4f0b-8f01-cf3706f455b2|obj::asset	act::create		
-17	p	project::b3ccf64d-f94d-4f0b-8f01-cf3706f455b2|role::admin	domain::77ba44fe-93f1-4d33-8ec1-6f46ed5045d4	project::b3ccf64d-f94d-4f0b-8f01-cf3706f455b2|obj::asset	act::delete		
-18	p	project::b3ccf64d-f94d-4f0b-8f01-cf3706f455b2|role::admin	domain::77ba44fe-93f1-4d33-8ec1-6f46ed5045d4	project::b3ccf64d-f94d-4f0b-8f01-cf3706f455b2|obj::asset	act::update		
-19	p	project::b3ccf64d-f94d-4f0b-8f01-cf3706f455b2|role::admin	domain::77ba44fe-93f1-4d33-8ec1-6f46ed5045d4	project::b3ccf64d-f94d-4f0b-8f01-cf3706f455b2|obj::project	act::delete		
-20	p	project::b3ccf64d-f94d-4f0b-8f01-cf3706f455b2|role::admin	domain::77ba44fe-93f1-4d33-8ec1-6f46ed5045d4	project::b3ccf64d-f94d-4f0b-8f01-cf3706f455b2|obj::project	act::update		
-21	p	project::b3ccf64d-f94d-4f0b-8f01-cf3706f455b2|role::member	domain::77ba44fe-93f1-4d33-8ec1-6f46ed5045d4	project::b3ccf64d-f94d-4f0b-8f01-cf3706f455b2|obj::project	act::read		
-22	p	project::b3ccf64d-f94d-4f0b-8f01-cf3706f455b2|role::member	domain::77ba44fe-93f1-4d33-8ec1-6f46ed5045d4	project::b3ccf64d-f94d-4f0b-8f01-cf3706f455b2|obj::asset	act::read		
-23	g	project::b3ccf64d-f94d-4f0b-8f01-cf3706f455b2|role::admin	asset::e55f01c2-faed-4202-98e9-38f084c45ed9|role::admin	domain::77ba44fe-93f1-4d33-8ec1-6f46ed5045d4			
-24	g	asset::e55f01c2-faed-4202-98e9-38f084c45ed9|role::admin	asset::e55f01c2-faed-4202-98e9-38f084c45ed9|role::member	domain::77ba44fe-93f1-4d33-8ec1-6f46ed5045d4			
-25	p	asset::e55f01c2-faed-4202-98e9-38f084c45ed9|role::member	domain::77ba44fe-93f1-4d33-8ec1-6f46ed5045d4	asset::e55f01c2-faed-4202-98e9-38f084c45ed9|obj::asset	act::read		
-26	p	asset::e55f01c2-faed-4202-98e9-38f084c45ed9|role::admin	domain::77ba44fe-93f1-4d33-8ec1-6f46ed5045d4	asset::e55f01c2-faed-4202-98e9-38f084c45ed9|obj::asset	act::read		
-27	p	asset::e55f01c2-faed-4202-98e9-38f084c45ed9|role::admin	domain::77ba44fe-93f1-4d33-8ec1-6f46ed5045d4	asset::e55f01c2-faed-4202-98e9-38f084c45ed9|obj::asset	act::update		
-28	p	asset::e55f01c2-faed-4202-98e9-38f084c45ed9|role::admin	domain::77ba44fe-93f1-4d33-8ec1-6f46ed5045d4	asset::e55f01c2-faed-4202-98e9-38f084c45ed9|obj::asset	act::delete		
-29	g	user::911fdccd-2643-44ff-8102-a8af86cf11ea	asset::e55f01c2-faed-4202-98e9-38f084c45ed9|role::admin	domain::77ba44fe-93f1-4d33-8ec1-6f46ed5045d4			
+1	g	user::de1cdba0-9345-4a91-b19f-416d470185d5	role::owner	domain::59a892ad-ff5a-409d-8834-6ff698848a9c			
+2	g	role::owner	role::admin	domain::59a892ad-ff5a-409d-8834-6ff698848a9c			
+3	g	role::admin	role::member	domain::59a892ad-ff5a-409d-8834-6ff698848a9c			
+4	p	role::owner	domain::59a892ad-ff5a-409d-8834-6ff698848a9c	obj::organization	act::delete		
+5	p	role::admin	domain::59a892ad-ff5a-409d-8834-6ff698848a9c	obj::organization	act::update		
+6	p	role::admin	domain::59a892ad-ff5a-409d-8834-6ff698848a9c	obj::project	act::create		
+7	p	role::admin	domain::59a892ad-ff5a-409d-8834-6ff698848a9c	obj::project	act::read		
+8	p	role::admin	domain::59a892ad-ff5a-409d-8834-6ff698848a9c	obj::project	act::update		
+9	p	role::admin	domain::59a892ad-ff5a-409d-8834-6ff698848a9c	obj::project	act::delete		
+10	p	role::member	domain::59a892ad-ff5a-409d-8834-6ff698848a9c	obj::organization	act::read		
+11	g	role::admin	project::ebb567cb-e033-4703-9d5a-a73ff55c0ed1|role::admin	domain::59a892ad-ff5a-409d-8834-6ff698848a9c			
+12	g	project::ebb567cb-e033-4703-9d5a-a73ff55c0ed1|role::admin	project::ebb567cb-e033-4703-9d5a-a73ff55c0ed1|role::member	domain::59a892ad-ff5a-409d-8834-6ff698848a9c			
+13	p	project::ebb567cb-e033-4703-9d5a-a73ff55c0ed1|role::admin	domain::59a892ad-ff5a-409d-8834-6ff698848a9c	project::ebb567cb-e033-4703-9d5a-a73ff55c0ed1|obj::user	act::create		
+14	p	project::ebb567cb-e033-4703-9d5a-a73ff55c0ed1|role::admin	domain::59a892ad-ff5a-409d-8834-6ff698848a9c	project::ebb567cb-e033-4703-9d5a-a73ff55c0ed1|obj::user	act::delete		
+15	p	project::ebb567cb-e033-4703-9d5a-a73ff55c0ed1|role::admin	domain::59a892ad-ff5a-409d-8834-6ff698848a9c	project::ebb567cb-e033-4703-9d5a-a73ff55c0ed1|obj::user	act::update		
+16	p	project::ebb567cb-e033-4703-9d5a-a73ff55c0ed1|role::admin	domain::59a892ad-ff5a-409d-8834-6ff698848a9c	project::ebb567cb-e033-4703-9d5a-a73ff55c0ed1|obj::asset	act::create		
+17	p	project::ebb567cb-e033-4703-9d5a-a73ff55c0ed1|role::admin	domain::59a892ad-ff5a-409d-8834-6ff698848a9c	project::ebb567cb-e033-4703-9d5a-a73ff55c0ed1|obj::asset	act::delete		
+18	p	project::ebb567cb-e033-4703-9d5a-a73ff55c0ed1|role::admin	domain::59a892ad-ff5a-409d-8834-6ff698848a9c	project::ebb567cb-e033-4703-9d5a-a73ff55c0ed1|obj::asset	act::update		
+19	p	project::ebb567cb-e033-4703-9d5a-a73ff55c0ed1|role::admin	domain::59a892ad-ff5a-409d-8834-6ff698848a9c	project::ebb567cb-e033-4703-9d5a-a73ff55c0ed1|obj::project	act::delete		
+20	p	project::ebb567cb-e033-4703-9d5a-a73ff55c0ed1|role::admin	domain::59a892ad-ff5a-409d-8834-6ff698848a9c	project::ebb567cb-e033-4703-9d5a-a73ff55c0ed1|obj::project	act::update		
+21	p	project::ebb567cb-e033-4703-9d5a-a73ff55c0ed1|role::member	domain::59a892ad-ff5a-409d-8834-6ff698848a9c	project::ebb567cb-e033-4703-9d5a-a73ff55c0ed1|obj::project	act::read		
+22	p	project::ebb567cb-e033-4703-9d5a-a73ff55c0ed1|role::member	domain::59a892ad-ff5a-409d-8834-6ff698848a9c	project::ebb567cb-e033-4703-9d5a-a73ff55c0ed1|obj::asset	act::read		
+23	g	project::ebb567cb-e033-4703-9d5a-a73ff55c0ed1|role::admin	asset::6cea098a-7c9a-4ae4-92a7-b3f838c07f2f|role::admin	domain::59a892ad-ff5a-409d-8834-6ff698848a9c			
+24	g	asset::6cea098a-7c9a-4ae4-92a7-b3f838c07f2f|role::admin	asset::6cea098a-7c9a-4ae4-92a7-b3f838c07f2f|role::member	domain::59a892ad-ff5a-409d-8834-6ff698848a9c			
+25	p	asset::6cea098a-7c9a-4ae4-92a7-b3f838c07f2f|role::member	domain::59a892ad-ff5a-409d-8834-6ff698848a9c	asset::6cea098a-7c9a-4ae4-92a7-b3f838c07f2f|obj::asset	act::read		
+26	p	asset::6cea098a-7c9a-4ae4-92a7-b3f838c07f2f|role::admin	domain::59a892ad-ff5a-409d-8834-6ff698848a9c	asset::6cea098a-7c9a-4ae4-92a7-b3f838c07f2f|obj::asset	act::read		
+27	p	asset::6cea098a-7c9a-4ae4-92a7-b3f838c07f2f|role::admin	domain::59a892ad-ff5a-409d-8834-6ff698848a9c	asset::6cea098a-7c9a-4ae4-92a7-b3f838c07f2f|obj::asset	act::update		
+28	p	asset::6cea098a-7c9a-4ae4-92a7-b3f838c07f2f|role::admin	domain::59a892ad-ff5a-409d-8834-6ff698848a9c	asset::6cea098a-7c9a-4ae4-92a7-b3f838c07f2f|obj::asset	act::delete		
+29	g	user::de1cdba0-9345-4a91-b19f-416d470185d5	asset::6cea098a-7c9a-4ae4-92a7-b3f838c07f2f|role::admin	domain::59a892ad-ff5a-409d-8834-6ff698848a9c			
 \.
 
 
@@ -1722,7 +1722,7 @@ ALTER TABLE public.config DISABLE TRIGGER ALL;
 
 COPY public.config (key, val) FROM stdin;
 hash_migration_version	4
-leaderElection	{"leaderId":"466e7652-80e4-4600-8242-e0bac2ec2761","lastPing":1787649399}
+vexrules.recommendations.lastRun	{"time":"2026-10-19T14:44:27.205294+02:00"}
 \.
 
 
@@ -1751,18 +1751,6 @@ COPY public.dependency_proxy_secrets (secret, asset_id, project_id, org_id) FROM
 
 
 ALTER TABLE public.dependency_proxy_secrets ENABLE TRIGGER ALL;
-
---
--- Data for Name: exploits; Type: TABLE DATA; Schema: public; Owner: -
---
-
-ALTER TABLE public.exploits DISABLE TRIGGER ALL;
-
-COPY public.exploits (id, published, updated, author, type, verified, source_url, description, cve_id, tags, forks, watchers, subscribers, stars, content_hash) FROM stdin;
-\.
-
-
-ALTER TABLE public.exploits ENABLE TRIGGER ALL;
 
 --
 -- Data for Name: external_references; Type: TABLE DATA; Schema: public; Owner: -
@@ -1895,6 +1883,18 @@ COPY public.license_overwrite (license_id, organization_id, component_purl, just
 
 
 ALTER TABLE public.license_overwrite ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: logs; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.logs DISABLE TRIGGER ALL;
+
+COPY public.logs (id, org_id, project_id, asset_id, created_at, log_level, message) FROM stdin;
+\.
+
+
+ALTER TABLE public.logs ENABLE TRIGGER ALL;
 
 --
 -- Data for Name: mapped_controls; Type: TABLE DATA; Schema: public; Owner: -
@@ -4345,21 +4345,21 @@ ALTER TABLE public.mapped_controls ENABLE TRIGGER ALL;
 ALTER TABLE public.policies DISABLE TRIGGER ALL;
 
 COPY public.policies (id, rego, title, predicate_type, description, organization_id, opaque_id) FROM stdin;
-f008381a-ffa1-43d7-aec2-dcbb01987934	# METADATA\n# title: Build from signed source\n# custom:\n#   description: This policy checks if the build was done from a signed commit.\n#   priority: 0\n#   predicateType: https://slsa.dev/provenance/v1\n#   relatedResources: []\n#   tags:\n#   - ISO 27001\n#   - A.8 Access Control\n#   complianceFrameworks:\n#   - ISO 27001\npackage compliance\n\nimport rego.v1\n\ndefault compliant := false\n\n# Match SSH signature\ncompliant if {\n    input.predicateType == "https://slsa.dev/provenance/v1"\n    sig := input.predicate.buildDefinition.externalParameters.signature\n    sig != ""\n    is_ssh_signature(sig)\n}\n\n# Match GPG signature\ncompliant if {\n    input.predicateType == "https://slsa.dev/provenance/v1"\n    sig := input.predicate.buildDefinition.externalParameters.signature\n    sig != ""\n    is_gpg_signature(sig)\n}\n\nis_ssh_signature(sig) if {\n    startswith(sig, "-----BEGIN SSH SIGNATURE-----")\n    endswith(sig, "-----END SSH SIGNATURE-----\\n")\n}\n\nis_gpg_signature(sig) if {\n    startswith(sig, "-----BEGIN PGP SIGNATURE-----")\n    endswith(sig, "-----END PGP SIGNATURE-----\\n")\n}	Build from signed source	https://slsa.dev/provenance/v1	This policy checks if the build was done from a signed commit.	\N	build_from_signed_source.rego
-b82bfebb-09df-4f3d-84c0-8db9e2511d99	# METADATA\n# title: Author and commiter email is from organization\n# custom:\n#   description: This policy checks if the commit is authored and committed with an email address from the organization.\n#   priority: 1\n#   predicateType: https://slsa.dev/provenance/v1\n#   relatedResources: []\n#   tags:\n#   - Legal\n#   complianceFrameworks: []\npackage compliance\n\nimport rego.v1\n\ndefault compliant := false\n\ncompliant if {\n\tinput.predicateType == "https://slsa.dev/provenance/v1"\n\n\tauthor_email := input.predicate.buildDefinition.externalParameters.authoremail\n    author_email != ""\n\n    committer_email := input.predicate.buildDefinition.externalParameters.committeremail\n    committer_email != ""\n\n    # Match a valid email format\n    regex.match(`^[^@<>\\s]+@[^@<>\\s]+\\.[^@<>\\s]+$`, author_email)\n    regex.match(`^[^@<>\\s]+@[^@<>\\s]+\\.[^@<>\\s]+$`, committer_email)\n\n    # Replace 'l3montree.com' with your actual organization domain\n    author_domain := split(author_email, "@")[1]\n    author_domain == "l3montree.com"\n\n    committer_domain := split(committer_email, "@")[1]\n    committer_domain == "l3montree.com"\n\n    author_domain == committer_domain\n}\n	Author and commiter email is from organization	https://slsa.dev/provenance/v1	This policy checks if the commit is authored and committed with an email address from the organization.	\N	author_committer_email_is_from_org.rego
-01695870-0440-4a76-b125-483b1083f921	# METADATA\n# title: Branch protection enabled\n# custom:\n#   description: This policy checks if branch protection is enabled for the default branch.\n#   priority: 1\n#   predicateType: https://in-toto.io/attestation/test-result/v0.1\n#   relatedResources:\n#   - https://docs.example.com/policy/rule/E123\n#   tags:\n#   - ISO 27001\n#   - A.8.4 Access to source code\n#   complianceFrameworks:\n#   - ISO 27001\npackage compliance\n\nimport rego.v1\n\ndefault compliant := false\n\n# compliant if {}\n	Branch protection enabled	https://in-toto.io/attestation/test-result/v0.1	This policy checks if branch protection is enabled for the default branch.	\N	branch_protection_enabled.rego
-ee18ac92-16b4-4bb7-8220-718523891540	# METADATA\n# title: CI Image has digest set\n# custom:\n#   description: This policy checks if the CI image has a digest set.\n#   priority: 1\n#   predicateType: https://slsa.dev/provenance/v1\n#   relatedResources: []\n#   tags:\n#   - GitLab CI\n#   - Legal\n#   complianceFrameworks: []\npackage compliance\n\nimport rego.v1\n\ndefault compliant := false\n\ncompliant if {\n\tinput.predicateType == "https://slsa.dev/provenance/v1"\n\n\t# @sha256:<64-hex-chars>\n\tjob_image := input.predicate.buildDefinition.externalParameters.jobimage\n\tjob_image != ""\n\tregex.match(`@sha256:[a-fA-F0-9]{64}$`, job_image)\n\n\tci_var_job_image := input.predicate.buildDefinition.externalParameters.variables.CI_JOB_IMAGE\n\tci_var_job_image != ""\n\tregex.match(`@sha256:[a-fA-F0-9]{64}$`, ci_var_job_image)\n}\n	CI Image has digest set	https://slsa.dev/provenance/v1	This policy checks if the CI image has a digest set.	\N	ci_image_has_digest_set.rego
-c0ca1398-b4ba-4a95-a8d6-74b92cf41683	# METADATA\n# title: CIA requirements set for asset\n# custom:\n#   description: This policy checks if the CIA (Confidentiality, Integrity, Availability) requirements are set in DevGuard for the asset.\n#   priority: 1\n#   predicateType: https://in-toto.io/attestation/test-result/v0.1\n#   relatedResources:\n#   - https://docs.example.com/policy/rule/E123\n#   tags:\n#   - ISO 27001\n#   - A.5.12 Classification of Information\n#   complianceFrameworks:\n#   - ISO 27001\npackage compliance\n\nimport rego.v1\n\ndefault compliant := false\n\n# compliant if {}\n	CIA requirements set for asset	https://in-toto.io/attestation/test-result/v0.1	This policy checks if the CIA (Confidentiality, Integrity, Availability) requirements are set in DevGuard for the asset.	\N	cia_requirements_set_for_asset.rego
-0e7e47ff-0496-42c1-87a9-c1d18c67e5f1	# METADATA\n# title: Code review for changes on default branch\n# custom:\n#   description: This policy checks if code review is performed for changes on the default branch.\n#   priority: 1\n#   predicateType: https://in-toto.io/attestation/test-result/v0.1\n#   relatedResources:\n#   - https://docs.example.com/policy/rule/E123\n#   tags:\n#   - ISO 27001\n#   - A.8.4 Access to source code\n#   complianceFrameworks:\n#   - ISO 27001\npackage compliance\n\nimport rego.v1\n\ndefault compliant := false\n\n# compliant if {}\n	Code review for changes on default branch	https://in-toto.io/attestation/test-result/v0.1	This policy checks if code review is performed for changes on the default branch.	\N	code_review_for_changes_on_default_branch.rego
-5e5a43e7-a834-45cd-bd1d-4a4e679dafae	# METADATA\n# title: Container scanning executed\n# custom:\n#   description: This policy checks if container scanning was executed.\n#   priority: 1\n#   predicateType: https://in-toto.io/attestation/test-result/v0.1\n#   relatedResources:\n#   - https://docs.example.com/policy/rule/E123\n#   tags:\n#   - ISO 27001\n#   - A.5.7 Threat intelligence\n#   complianceFrameworks:\n#   - ISO 27001\npackage compliance\n\nimport rego.v1\n\ndefault compliant := false\n\n# compliant if {}\n	Container scanning executed	https://in-toto.io/attestation/test-result/v0.1	This policy checks if container scanning was executed.	\N	container_scanning_executed.rego
-57f57986-5d68-4e73-b3dc-e5134e618f50	# METADATA\n# title: Current SBOM is present\n# custom:\n#   description: This policy checks if a current SBOM (not older than one month) is present.\n#   priority: 1\n#   predicateType: https://cyclonedx.org/bom\n#   relatedResources: []\n#   tags:\n#   - ISO 27001\n#   - A.5.7 Threat intelligence\n#   - A.5.9 Inventory of information and other associated assets\n#   - A.8.8 Management of technical vulnerabilities\n#   complianceFrameworks:\n#   - ISO 27001\npackage compliance\n\nimport rego.v1\n\ndefault compliant := false\n\ncompliant if {\n\t# Parse the timestamp from the SBOM metadata\n\tsbom_time := time.parse_rfc3339_ns(input.metadata.timestamp)\n\n\t# Get current time in nanoseconds\n\tnow := time.now_ns()\n\n\t# One month in nanoseconds (~30 days)\n\tone_month_ns := (((30 * 24) * 60) * 60) * 1000000000\n\n\t# SBOM must be no older than one month\n\tnow - sbom_time <= one_month_ns\n}\n	Current SBOM is present	https://cyclonedx.org/bom	This policy checks if a current SBOM (not older than one month) is present.	\N	current_sbom_is_present.rego
-b664456e-61f3-4ca9-a3b9-3104e7ea1b48	# METADATA\n# title: Notification channel for new vulnerabilities\n# custom:\n#   description: This policy checks if a notification channel is configured for new vulnerabilities.\n#   priority: 1\n#   predicateType: https://in-toto.io/attestation/test-result/v0.1\n#   relatedResources:\n#   - https://docs.example.com/policy/rule/E123\n#   tags:\n#   - ISO 27001\n#   - A.8.8 Management of technical vulnerabilities\n#   complianceFrameworks:\n#   - ISO 27001\npackage compliance\n\nimport rego.v1\n\ndefault compliant := false\n\n# compliant if {}\n	Notification channel for new vulnerabilities	https://in-toto.io/attestation/test-result/v0.1	This policy checks if a notification channel is configured for new vulnerabilities.	\N	notification_channel_for_new_vulnerabilities.rego
-4c373be9-04b9-4472-9cfb-d61e2b38c910	# METADATA\n# title: Only OSI approved licenses\n# custom:\n#   description: This policy checks if there is no violation against the license allow list.\n#   priority: 1\n#   predicateType: https://cyclonedx.org/bom\n#   relatedResources:\n#   - https://docs.example.com/policy/rule/E123\n#   tags:\n#   - ISO 27001\n#   - A.5.32 Intellectual property rights\n#   complianceFrameworks:\n#   - ISO 27001\npackage compliance\n\nimport rego.v1\n\ndefault compliant := false\n\n#\n# extracted from opensource.org/licenses\n# using script (just paste it into the JavaScript browser console):\n\n# const elements = document.querySelectorAll(".license-table--spdx")\n\n# const licenses = []\n# elements.forEach(el => {\n#    const licenseSpdxIdentifier = el.innerText.trim()\n#    if (Boolean(licenseSpdxIdentifier)) {\n#        licenses.push(el.innerText)\n#    }\n# })\n#\n# licenses\n\nosi_approved_licenses = {\n\t"BSD-1-Clause",\n\t"AFL-3.0",\n\t"APL-1.0",\n\t"Apache-2.0",\n\t"Apache-1.1",\n\t"APSL-2.0",\n\t"Artistic-1.0-Perl",\n\t"Artistic-1.0",\n\t"Artistic-2.0",\n\t"AAL",\n\t"BlueOak-1.0.0",\n\t"BSL-1.0",\n\t"BSD-2-Clause-Patent",\n\t"CECILL-2.1",\n\t"CERN-OHL-P-2.0",\n\t"CERN-OHL-S-2.0",\n\t"CERN-OHL-W-2.0",\n\t"MIT-CMU",\n\t"CDDL-1.0",\n\t"CPAL-1.0",\n\t"CPL-1.0",\n\t"CATOSL-1.1",\n\t"CAL-1.0",\n\t"CUA-OPL-1.0",\n\t"EPL-1.0",\n\t"EPL-2.0",\n\t"eCos-2.0",\n\t"ECL-1.0",\n\t"ECL-2.0",\n\t"EFL-1.0",\n\t"EFL-2.0",\n\t"Entessa",\n\t"EUDatagrid",\n\t"EUPL-1.2",\n\t"Fair",\n\t"Frameworx-1.0",\n\t"AGPL-3.0-only",\n\t"GPL-2.0",\n\t"GPL-3.0-only",\n\t"LGPL-2.1",\n\t"LGPL-3.0-only",\n\t"LGPL-2.0-only",\n\t"HPND",\n\t"IPL-1.0",\n\t"ICU",\n\t"Intel",\n\t"IPA",\n\t"ISC",\n\t"Jam",\n\t"LPPL-1.3c",\n\t"BSD-3-Clause-LBNL",\n\t"LiLiQ-P-1.1",\n\t"LiLiQ-Rplus-1.1",\n\t"LiLiQ-R-1.1",\n\t"LPL-1.02",\n\t"LPL-1.0",\n\t"MS-PL",\n\t"MS-RL",\n\t"MirOS",\n\t"MIT-0",\n\t"Motosoto",\n\t"MPL-1.1",\n\t"MPL-2.0",\n\t"MPL-1.0",\n\t"MulanPSL-2.0",\n\t"Multics",\n\t"NASA-1.3",\n\t"Naumen",\n\t"NOKIA",\n\t"NPOSL-3.0",\n\t"NTP",\n\t"OGTSL",\n\t"OLFL-1.3",\n\t"OSL-2.1",\n\t"OSL-1.0",\n\t"OLDAP-2.8",\n\t"OSET-PL-2.1",\n\t"PHP-3.0",\n\t"PHP-3.01",\n\t"PSF-2.0",\n\t"RPSL-1.0",\n\t"RPL-1.5",\n\t"RPL-1.1",\n\t"OFL-1.1",\n\t"SimPL-2.0",\n\t"SISSL",\n\t"SPL-1.0",\n\t"BSD-2-Clause",\n\t"BSD-3-Clause",\n\t"CNRI-Python",\n\t"EUPL-1.1",\n\t"MIT",\n\t"NGPL",\n\t"OSL-3.0",\n\t"PostgreSQL",\n\t"QPL-1.0",\n\t"RSCPL",\n\t"Sleepycat",\n\t"Watcom-1.0",\n\t"UPL-1.0",\n\t"NCSA",\n\t"Unlicense",\n\t"VSL-0.1",\n\t"W3C-20150513",\n\t"wxWindows",\n\t"Xnet",\n\t"Zlib",\n\t"Unicode-DFS-2015",\n\t"UCL-1.0",\n\t"0BSD",\n\t"ZPL-2.0",\n\t"ZPL-2.1",\n}\n\nviolations contains msg if {\n\tcount(input.components[i].licenses) == 0\n\tmsg := sprintf("Component %q has no license declared", [input.components[i].name])\n}\n\nviolations contains msg if {\n\tinput.components[i].licenses[j].license.id != ""\n\tnot osi_approved_licenses[input.components[i].licenses[j].license.id]\n\tmsg := sprintf("Component %q uses non-OSI approved license %q", [input.components[i].name, input.components[i].licenses[j].license.id])\n}\n\ncompliant if count(violations) == 0\n	Only OSI approved licenses	https://cyclonedx.org/bom	This policy checks if there is no violation against the license allow list.	\N	only_osi_approved_licenses.rego
-f84240a0-62ad-4b64-bd01-edf9f387180e	# METADATA\n# title: Secret scanning executed\n# custom:\n#   description: This policy checks if secret scanning was executed.\n#   priority: 1\n#   predicateType: https://in-toto.io/attestation/test-result/v0.1\n#   relatedResources:\n#   - https://docs.example.com/policy/rule/E123\n#   tags:\n#   - ISO 27001\n#   - A.5.7 Threat intelligence\n#   complianceFrameworks:\n#   - ISO 27001\npackage compliance\n\nimport rego.v1\n\ndefault compliant := false\n\n# compliant if {}\n	Secret scanning executed	https://in-toto.io/attestation/test-result/v0.1	This policy checks if secret scanning was executed.	\N	secret_scanning_executed.rego
-bb8b9b4d-53e4-4d2a-bf08-6b1e10072fd1	# METADATA\n# title: Security policy present in repository\n# custom:\n#   description: This policy checks if a security policy (SECURITY.md) exists in the repository.\n#   priority: 1\n#   predicateType: https://slsa.dev/provenance/v1\n#   relatedResources:\n#   - https://github.com/ossf/scorecard/blob/main/docs/checks.md#security-policy\n#   tags:\n#   - Best Practices\n#   complianceFrameworks:\n#   - Best Practices\n#   - OpenSSF Scorecard\npackage compliance\n\nimport rego.v1\n\ndefault compliant := false\n\n# Set compliant to true if SECURITY.md exists in any resolvedDependency file URI\ncompliant if {\n\t# make sure to look at the correct predicate type\n\tinput.predicateType == "https://slsa.dev/provenance/v1"\n\n\tsome dep in input.predicate.buildDefinition.resolvedDependencies\n\tendswith(dep.uri, "/SECURITY.md")\n}\n	Security policy present in repository	https://slsa.dev/provenance/v1	This policy checks if a security policy (SECURITY.md) exists in the repository.	\N	security_policy_present_in_repo.rego
-c5bfef91-f047-4d07-b758-1e7b02dfe36f	# METADATA\n# title: Commits are signed off\n# custom:\n#   description: This policy checks if the commit is signed off by the author.\n#   priority: 1\n#   predicateType: https://slsa.dev/provenance/v1\n#   relatedResources: []\n#   tags:\n#   - Legal\n#   complianceFrameworks: []\npackage compliance\n\nimport rego.v1\n\ndefault compliant := false\n\ncompliant if {\n\tinput.predicateType == "https://slsa.dev/provenance/v1"\n\n\tcommit_msg := input.predicate.buildDefinition.externalParameters.commitmessage\n\n\tcommit_msg != ""\n\n\t# Match a signed-off-by line with name and valid email "Signed-off-by: Name <email>"\n    # (?m)                              Enable multiline mode\n    # ^Signed-off-by:\\s+                Line must start with 'Signed-off-by: '\n    # [^<>\\n]+                          Capture non-empty name (no angle brackets)\n    # <[^@<>\\s]+@[^@<>\\s]+\\.[^@<>\\s]+>  Simple email format\n    # \\s*$                              Allow optional trailing whitespace, then end of line\n\tregex.match(`(?m)^Signed-off-by:\\s+[^<>\\n]+<[^@<>\\s]+@[^@<>\\s]+\\.[^@<>\\s]+>\\s*$`, commit_msg)\n}\n	Commits are signed off	https://slsa.dev/provenance/v1	This policy checks if the commit is signed off by the author.	\N	signed_off_commit.rego
-44854570-8ed5-44d0-b18a-6212dfa244c9	# METADATA\n# title: Software composition analysis executed\n# custom:\n#   description: This policy checks if software composition analysis was executed\n#   priority: 1\n#   predicateType: https://cyclonedx.org/bom\n#   relatedResources:\n#   - https://docs.example.com/policy/rule/E123\n#   tags:\n#   - ISO 27001\n#   - A.5.7 Threat intelligence\n#   complianceFrameworks:\n#   - ISO 27001\npackage compliance\n\nimport rego.v1\n\ndefault compliant := false\n\n# compliant if {}\n	Software composition analysis executed	https://cyclonedx.org/bom	This policy checks if software composition analysis was executed	\N	software_composition_analysis_executed.rego
-5b4e0c1a-95b0-4d88-913c-99d45fa36b67	# METADATA\n# title: Current SBOM is present\n# custom:\n#   description: This policy checks if a current SBOM (not older than one month) is present.\n#   priority: 1\n#   predicateType: https://cyclonedx.org/bom\n#   relatedResources: []\n#   tags:\n#   - ISO 27001\n#   - A.5.7 Threat intelligence\n#   - A.5.9 Inventory of information and other associated assets\n#   - A.8.8 Management of technical vulnerabilities\n#   complianceFrameworks:\n#   - ISO 27001\npackage compliance\n\nimport rego.v1\n\ndefault compliant := false\n\n# Detect a CycloneDX SBOM either at the root or under predicate\nsbom_present if {\n\tbom := input\n\tbom.bomFormat == "CycloneDX"\n\tbom.components[_]\n}\n\nsbom_present if {\n\tbom := input.predicate\n\tbom.bomFormat == "CycloneDX"\n\tbom.components[_]\n}\n\ncompliant if sbom_present\n\nviolations contains "Attestation does not contain a CycloneDX SBOM" if not sbom_present\n	Current SBOM is present	https://cyclonedx.org/bom	This policy checks if a current SBOM (not older than one month) is present.	\N	uses_sbom.rego
+2bdb0de9-8c75-4a78-ad55-63c7de3c226d	# METADATA\n# title: Build from signed source\n# custom:\n#   description: This policy checks if the build was done from a signed commit.\n#   priority: 0\n#   predicateType: https://slsa.dev/provenance/v1\n#   relatedResources: []\n#   tags:\n#   - ISO 27001\n#   - A.8 Access Control\n#   complianceFrameworks:\n#   - ISO 27001\npackage compliance\n\nimport rego.v1\n\ndefault compliant := false\n\n# Match SSH signature\ncompliant if {\n    input.predicateType == "https://slsa.dev/provenance/v1"\n    sig := input.predicate.buildDefinition.externalParameters.signature\n    sig != ""\n    is_ssh_signature(sig)\n}\n\n# Match GPG signature\ncompliant if {\n    input.predicateType == "https://slsa.dev/provenance/v1"\n    sig := input.predicate.buildDefinition.externalParameters.signature\n    sig != ""\n    is_gpg_signature(sig)\n}\n\nis_ssh_signature(sig) if {\n    startswith(sig, "-----BEGIN SSH SIGNATURE-----")\n    endswith(sig, "-----END SSH SIGNATURE-----\\n")\n}\n\nis_gpg_signature(sig) if {\n    startswith(sig, "-----BEGIN PGP SIGNATURE-----")\n    endswith(sig, "-----END PGP SIGNATURE-----\\n")\n}	Build from signed source	https://slsa.dev/provenance/v1	This policy checks if the build was done from a signed commit.	\N	build_from_signed_source.rego
+1f59ece5-0dde-4e40-b101-408a07e103f8	# METADATA\n# title: Author and commiter email is from organization\n# custom:\n#   description: This policy checks if the commit is authored and committed with an email address from the organization.\n#   priority: 1\n#   predicateType: https://slsa.dev/provenance/v1\n#   relatedResources: []\n#   tags:\n#   - Legal\n#   complianceFrameworks: []\npackage compliance\n\nimport rego.v1\n\ndefault compliant := false\n\ncompliant if {\n\tinput.predicateType == "https://slsa.dev/provenance/v1"\n\n\tauthor_email := input.predicate.buildDefinition.externalParameters.authoremail\n    author_email != ""\n\n    committer_email := input.predicate.buildDefinition.externalParameters.committeremail\n    committer_email != ""\n\n    # Match a valid email format\n    regex.match(`^[^@<>\\s]+@[^@<>\\s]+\\.[^@<>\\s]+$`, author_email)\n    regex.match(`^[^@<>\\s]+@[^@<>\\s]+\\.[^@<>\\s]+$`, committer_email)\n\n    # Replace 'l3montree.com' with your actual organization domain\n    author_domain := split(author_email, "@")[1]\n    author_domain == "l3montree.com"\n\n    committer_domain := split(committer_email, "@")[1]\n    committer_domain == "l3montree.com"\n\n    author_domain == committer_domain\n}\n	Author and commiter email is from organization	https://slsa.dev/provenance/v1	This policy checks if the commit is authored and committed with an email address from the organization.	\N	author_committer_email_is_from_org.rego
+45ce0cf2-70a5-4554-8b2e-a63e62075194	# METADATA\n# title: Branch protection enabled\n# custom:\n#   description: This policy checks if branch protection is enabled for the default branch.\n#   priority: 1\n#   predicateType: https://in-toto.io/attestation/test-result/v0.1\n#   relatedResources:\n#   - https://docs.example.com/policy/rule/E123\n#   tags:\n#   - ISO 27001\n#   - A.8.4 Access to source code\n#   complianceFrameworks:\n#   - ISO 27001\npackage compliance\n\nimport rego.v1\n\ndefault compliant := false\n\n# compliant if {}\n	Branch protection enabled	https://in-toto.io/attestation/test-result/v0.1	This policy checks if branch protection is enabled for the default branch.	\N	branch_protection_enabled.rego
+d0f096e9-e5a8-4c45-9797-f1d3ad809053	# METADATA\n# title: CI Image has digest set\n# custom:\n#   description: This policy checks if the CI image has a digest set.\n#   priority: 1\n#   predicateType: https://slsa.dev/provenance/v1\n#   relatedResources: []\n#   tags:\n#   - GitLab CI\n#   - Legal\n#   complianceFrameworks: []\npackage compliance\n\nimport rego.v1\n\ndefault compliant := false\n\ncompliant if {\n\tinput.predicateType == "https://slsa.dev/provenance/v1"\n\n\t# @sha256:<64-hex-chars>\n\tjob_image := input.predicate.buildDefinition.externalParameters.jobimage\n\tjob_image != ""\n\tregex.match(`@sha256:[a-fA-F0-9]{64}$`, job_image)\n\n\tci_var_job_image := input.predicate.buildDefinition.externalParameters.variables.CI_JOB_IMAGE\n\tci_var_job_image != ""\n\tregex.match(`@sha256:[a-fA-F0-9]{64}$`, ci_var_job_image)\n}\n	CI Image has digest set	https://slsa.dev/provenance/v1	This policy checks if the CI image has a digest set.	\N	ci_image_has_digest_set.rego
+f7c4f44f-3509-4b61-ad89-aaf17e610e38	# METADATA\n# title: CIA requirements set for asset\n# custom:\n#   description: This policy checks if the CIA (Confidentiality, Integrity, Availability) requirements are set in DevGuard for the asset.\n#   priority: 1\n#   predicateType: https://in-toto.io/attestation/test-result/v0.1\n#   relatedResources:\n#   - https://docs.example.com/policy/rule/E123\n#   tags:\n#   - ISO 27001\n#   - A.5.12 Classification of Information\n#   complianceFrameworks:\n#   - ISO 27001\npackage compliance\n\nimport rego.v1\n\ndefault compliant := false\n\n# compliant if {}\n	CIA requirements set for asset	https://in-toto.io/attestation/test-result/v0.1	This policy checks if the CIA (Confidentiality, Integrity, Availability) requirements are set in DevGuard for the asset.	\N	cia_requirements_set_for_asset.rego
+e537ed30-5432-430a-9ef7-0904df1c0c6c	# METADATA\n# title: Code review for changes on default branch\n# custom:\n#   description: This policy checks if code review is performed for changes on the default branch.\n#   priority: 1\n#   predicateType: https://in-toto.io/attestation/test-result/v0.1\n#   relatedResources:\n#   - https://docs.example.com/policy/rule/E123\n#   tags:\n#   - ISO 27001\n#   - A.8.4 Access to source code\n#   complianceFrameworks:\n#   - ISO 27001\npackage compliance\n\nimport rego.v1\n\ndefault compliant := false\n\n# compliant if {}\n	Code review for changes on default branch	https://in-toto.io/attestation/test-result/v0.1	This policy checks if code review is performed for changes on the default branch.	\N	code_review_for_changes_on_default_branch.rego
+4f82bfb6-d46d-460a-b6b1-600cb370ecc4	# METADATA\n# title: Container scanning executed\n# custom:\n#   description: This policy checks if container scanning was executed.\n#   priority: 1\n#   predicateType: https://in-toto.io/attestation/test-result/v0.1\n#   relatedResources:\n#   - https://docs.example.com/policy/rule/E123\n#   tags:\n#   - ISO 27001\n#   - A.5.7 Threat intelligence\n#   complianceFrameworks:\n#   - ISO 27001\npackage compliance\n\nimport rego.v1\n\ndefault compliant := false\n\n# compliant if {}\n	Container scanning executed	https://in-toto.io/attestation/test-result/v0.1	This policy checks if container scanning was executed.	\N	container_scanning_executed.rego
+075fe1ca-d4fe-4153-a765-a541062bf1e6	# METADATA\n# title: Current SBOM is present\n# custom:\n#   description: This policy checks if a current SBOM (not older than one month) is present.\n#   priority: 1\n#   predicateType: https://cyclonedx.org/bom\n#   relatedResources: []\n#   tags:\n#   - ISO 27001\n#   - A.5.7 Threat intelligence\n#   - A.5.9 Inventory of information and other associated assets\n#   - A.8.8 Management of technical vulnerabilities\n#   complianceFrameworks:\n#   - ISO 27001\npackage compliance\n\nimport rego.v1\n\ndefault compliant := false\n\ncompliant if {\n\t# Parse the timestamp from the SBOM metadata\n\tsbom_time := time.parse_rfc3339_ns(input.metadata.timestamp)\n\n\t# Get current time in nanoseconds\n\tnow := time.now_ns()\n\n\t# One month in nanoseconds (~30 days)\n\tone_month_ns := (((30 * 24) * 60) * 60) * 1000000000\n\n\t# SBOM must be no older than one month\n\tnow - sbom_time <= one_month_ns\n}\n	Current SBOM is present	https://cyclonedx.org/bom	This policy checks if a current SBOM (not older than one month) is present.	\N	current_sbom_is_present.rego
+140fe47b-8dc8-4846-98da-cb8662af2dce	# METADATA\n# title: Notification channel for new vulnerabilities\n# custom:\n#   description: This policy checks if a notification channel is configured for new vulnerabilities.\n#   priority: 1\n#   predicateType: https://in-toto.io/attestation/test-result/v0.1\n#   relatedResources:\n#   - https://docs.example.com/policy/rule/E123\n#   tags:\n#   - ISO 27001\n#   - A.8.8 Management of technical vulnerabilities\n#   complianceFrameworks:\n#   - ISO 27001\npackage compliance\n\nimport rego.v1\n\ndefault compliant := false\n\n# compliant if {}\n	Notification channel for new vulnerabilities	https://in-toto.io/attestation/test-result/v0.1	This policy checks if a notification channel is configured for new vulnerabilities.	\N	notification_channel_for_new_vulnerabilities.rego
+1efb9be7-6513-4f48-8194-5ab49bc954d0	# METADATA\n# title: Only OSI approved licenses\n# custom:\n#   description: This policy checks if there is no violation against the license allow list.\n#   priority: 1\n#   predicateType: https://cyclonedx.org/bom\n#   relatedResources:\n#   - https://docs.example.com/policy/rule/E123\n#   tags:\n#   - ISO 27001\n#   - A.5.32 Intellectual property rights\n#   complianceFrameworks:\n#   - ISO 27001\npackage compliance\n\nimport rego.v1\n\ndefault compliant := false\n\n#\n# extracted from opensource.org/licenses\n# using script (just paste it into the JavaScript browser console):\n\n# const elements = document.querySelectorAll(".license-table--spdx")\n\n# const licenses = []\n# elements.forEach(el => {\n#    const licenseSpdxIdentifier = el.innerText.trim()\n#    if (Boolean(licenseSpdxIdentifier)) {\n#        licenses.push(el.innerText)\n#    }\n# })\n#\n# licenses\n\nosi_approved_licenses = {\n\t"BSD-1-Clause",\n\t"AFL-3.0",\n\t"APL-1.0",\n\t"Apache-2.0",\n\t"Apache-1.1",\n\t"APSL-2.0",\n\t"Artistic-1.0-Perl",\n\t"Artistic-1.0",\n\t"Artistic-2.0",\n\t"AAL",\n\t"BlueOak-1.0.0",\n\t"BSL-1.0",\n\t"BSD-2-Clause-Patent",\n\t"CECILL-2.1",\n\t"CERN-OHL-P-2.0",\n\t"CERN-OHL-S-2.0",\n\t"CERN-OHL-W-2.0",\n\t"MIT-CMU",\n\t"CDDL-1.0",\n\t"CPAL-1.0",\n\t"CPL-1.0",\n\t"CATOSL-1.1",\n\t"CAL-1.0",\n\t"CUA-OPL-1.0",\n\t"EPL-1.0",\n\t"EPL-2.0",\n\t"eCos-2.0",\n\t"ECL-1.0",\n\t"ECL-2.0",\n\t"EFL-1.0",\n\t"EFL-2.0",\n\t"Entessa",\n\t"EUDatagrid",\n\t"EUPL-1.2",\n\t"Fair",\n\t"Frameworx-1.0",\n\t"AGPL-3.0-only",\n\t"GPL-2.0",\n\t"GPL-3.0-only",\n\t"LGPL-2.1",\n\t"LGPL-3.0-only",\n\t"LGPL-2.0-only",\n\t"HPND",\n\t"IPL-1.0",\n\t"ICU",\n\t"Intel",\n\t"IPA",\n\t"ISC",\n\t"Jam",\n\t"LPPL-1.3c",\n\t"BSD-3-Clause-LBNL",\n\t"LiLiQ-P-1.1",\n\t"LiLiQ-Rplus-1.1",\n\t"LiLiQ-R-1.1",\n\t"LPL-1.02",\n\t"LPL-1.0",\n\t"MS-PL",\n\t"MS-RL",\n\t"MirOS",\n\t"MIT-0",\n\t"Motosoto",\n\t"MPL-1.1",\n\t"MPL-2.0",\n\t"MPL-1.0",\n\t"MulanPSL-2.0",\n\t"Multics",\n\t"NASA-1.3",\n\t"Naumen",\n\t"NOKIA",\n\t"NPOSL-3.0",\n\t"NTP",\n\t"OGTSL",\n\t"OLFL-1.3",\n\t"OSL-2.1",\n\t"OSL-1.0",\n\t"OLDAP-2.8",\n\t"OSET-PL-2.1",\n\t"PHP-3.0",\n\t"PHP-3.01",\n\t"PSF-2.0",\n\t"RPSL-1.0",\n\t"RPL-1.5",\n\t"RPL-1.1",\n\t"OFL-1.1",\n\t"SimPL-2.0",\n\t"SISSL",\n\t"SPL-1.0",\n\t"BSD-2-Clause",\n\t"BSD-3-Clause",\n\t"CNRI-Python",\n\t"EUPL-1.1",\n\t"MIT",\n\t"NGPL",\n\t"OSL-3.0",\n\t"PostgreSQL",\n\t"QPL-1.0",\n\t"RSCPL",\n\t"Sleepycat",\n\t"Watcom-1.0",\n\t"UPL-1.0",\n\t"NCSA",\n\t"Unlicense",\n\t"VSL-0.1",\n\t"W3C-20150513",\n\t"wxWindows",\n\t"Xnet",\n\t"Zlib",\n\t"Unicode-DFS-2015",\n\t"UCL-1.0",\n\t"0BSD",\n\t"ZPL-2.0",\n\t"ZPL-2.1",\n}\n\nviolations contains msg if {\n\tcount(input.components[i].licenses) == 0\n\tmsg := sprintf("Component %q has no license declared", [input.components[i].name])\n}\n\nviolations contains msg if {\n\tinput.components[i].licenses[j].license.id != ""\n\tnot osi_approved_licenses[input.components[i].licenses[j].license.id]\n\tmsg := sprintf("Component %q uses non-OSI approved license %q", [input.components[i].name, input.components[i].licenses[j].license.id])\n}\n\ncompliant if count(violations) == 0\n	Only OSI approved licenses	https://cyclonedx.org/bom	This policy checks if there is no violation against the license allow list.	\N	only_osi_approved_licenses.rego
+5c10f3af-4c42-45e6-8529-dab244a024f1	# METADATA\n# title: Secret scanning executed\n# custom:\n#   description: This policy checks if secret scanning was executed.\n#   priority: 1\n#   predicateType: https://in-toto.io/attestation/test-result/v0.1\n#   relatedResources:\n#   - https://docs.example.com/policy/rule/E123\n#   tags:\n#   - ISO 27001\n#   - A.5.7 Threat intelligence\n#   complianceFrameworks:\n#   - ISO 27001\npackage compliance\n\nimport rego.v1\n\ndefault compliant := false\n\n# compliant if {}\n	Secret scanning executed	https://in-toto.io/attestation/test-result/v0.1	This policy checks if secret scanning was executed.	\N	secret_scanning_executed.rego
+3058f36a-61c8-4969-b1f5-a7a8d4ef7c75	# METADATA\n# title: Security policy present in repository\n# custom:\n#   description: This policy checks if a security policy (SECURITY.md) exists in the repository.\n#   priority: 1\n#   predicateType: https://slsa.dev/provenance/v1\n#   relatedResources:\n#   - https://github.com/ossf/scorecard/blob/main/docs/checks.md#security-policy\n#   tags:\n#   - Best Practices\n#   complianceFrameworks:\n#   - Best Practices\n#   - OpenSSF Scorecard\npackage compliance\n\nimport rego.v1\n\ndefault compliant := false\n\n# Set compliant to true if SECURITY.md exists in any resolvedDependency file URI\ncompliant if {\n\t# make sure to look at the correct predicate type\n\tinput.predicateType == "https://slsa.dev/provenance/v1"\n\n\tsome dep in input.predicate.buildDefinition.resolvedDependencies\n\tendswith(dep.uri, "/SECURITY.md")\n}\n	Security policy present in repository	https://slsa.dev/provenance/v1	This policy checks if a security policy (SECURITY.md) exists in the repository.	\N	security_policy_present_in_repo.rego
+03d8f19e-b09d-4d5d-bfb3-dc20aaa5ef98	# METADATA\n# title: Commits are signed off\n# custom:\n#   description: This policy checks if the commit is signed off by the author.\n#   priority: 1\n#   predicateType: https://slsa.dev/provenance/v1\n#   relatedResources: []\n#   tags:\n#   - Legal\n#   complianceFrameworks: []\npackage compliance\n\nimport rego.v1\n\ndefault compliant := false\n\ncompliant if {\n\tinput.predicateType == "https://slsa.dev/provenance/v1"\n\n\tcommit_msg := input.predicate.buildDefinition.externalParameters.commitmessage\n\n\tcommit_msg != ""\n\n\t# Match a signed-off-by line with name and valid email "Signed-off-by: Name <email>"\n    # (?m)                              Enable multiline mode\n    # ^Signed-off-by:\\s+                Line must start with 'Signed-off-by: '\n    # [^<>\\n]+                          Capture non-empty name (no angle brackets)\n    # <[^@<>\\s]+@[^@<>\\s]+\\.[^@<>\\s]+>  Simple email format\n    # \\s*$                              Allow optional trailing whitespace, then end of line\n\tregex.match(`(?m)^Signed-off-by:\\s+[^<>\\n]+<[^@<>\\s]+@[^@<>\\s]+\\.[^@<>\\s]+>\\s*$`, commit_msg)\n}\n	Commits are signed off	https://slsa.dev/provenance/v1	This policy checks if the commit is signed off by the author.	\N	signed_off_commit.rego
+902b5b2b-c371-4a1b-8756-836de4a36ece	# METADATA\n# title: Software composition analysis executed\n# custom:\n#   description: This policy checks if software composition analysis was executed\n#   priority: 1\n#   predicateType: https://cyclonedx.org/bom\n#   relatedResources:\n#   - https://docs.example.com/policy/rule/E123\n#   tags:\n#   - ISO 27001\n#   - A.5.7 Threat intelligence\n#   complianceFrameworks:\n#   - ISO 27001\npackage compliance\n\nimport rego.v1\n\ndefault compliant := false\n\n# compliant if {}\n	Software composition analysis executed	https://cyclonedx.org/bom	This policy checks if software composition analysis was executed	\N	software_composition_analysis_executed.rego
+6d3f7e7e-3852-4af3-bed0-3c9236f39d66	# METADATA\n# title: Current SBOM is present\n# custom:\n#   description: This policy checks if a current SBOM (not older than one month) is present.\n#   priority: 1\n#   predicateType: https://cyclonedx.org/bom\n#   relatedResources: []\n#   tags:\n#   - ISO 27001\n#   - A.5.7 Threat intelligence\n#   - A.5.9 Inventory of information and other associated assets\n#   - A.8.8 Management of technical vulnerabilities\n#   complianceFrameworks:\n#   - ISO 27001\npackage compliance\n\nimport rego.v1\n\ndefault compliant := false\n\n# Detect a CycloneDX SBOM either at the root or under predicate\nsbom_present if {\n\tbom := input\n\tbom.bomFormat == "CycloneDX"\n\tbom.components[_]\n}\n\nsbom_present if {\n\tbom := input.predicate\n\tbom.bomFormat == "CycloneDX"\n\tbom.components[_]\n}\n\ncompliant if sbom_present\n\nviolations contains "Attestation does not contain a CycloneDX SBOM" if not sbom_present\n	Current SBOM is present	https://cyclonedx.org/bom	This policy checks if a current SBOM (not older than one month) is present.	\N	uses_sbom.rego
 \.
 
 
@@ -4372,21 +4372,21 @@ ALTER TABLE public.policies ENABLE TRIGGER ALL;
 ALTER TABLE public.project_enabled_policies DISABLE TRIGGER ALL;
 
 COPY public.project_enabled_policies (project_id, policy_id) FROM stdin;
-b3ccf64d-f94d-4f0b-8f01-cf3706f455b2	f008381a-ffa1-43d7-aec2-dcbb01987934
-b3ccf64d-f94d-4f0b-8f01-cf3706f455b2	b82bfebb-09df-4f3d-84c0-8db9e2511d99
-b3ccf64d-f94d-4f0b-8f01-cf3706f455b2	01695870-0440-4a76-b125-483b1083f921
-b3ccf64d-f94d-4f0b-8f01-cf3706f455b2	ee18ac92-16b4-4bb7-8220-718523891540
-b3ccf64d-f94d-4f0b-8f01-cf3706f455b2	c0ca1398-b4ba-4a95-a8d6-74b92cf41683
-b3ccf64d-f94d-4f0b-8f01-cf3706f455b2	0e7e47ff-0496-42c1-87a9-c1d18c67e5f1
-b3ccf64d-f94d-4f0b-8f01-cf3706f455b2	5e5a43e7-a834-45cd-bd1d-4a4e679dafae
-b3ccf64d-f94d-4f0b-8f01-cf3706f455b2	57f57986-5d68-4e73-b3dc-e5134e618f50
-b3ccf64d-f94d-4f0b-8f01-cf3706f455b2	b664456e-61f3-4ca9-a3b9-3104e7ea1b48
-b3ccf64d-f94d-4f0b-8f01-cf3706f455b2	4c373be9-04b9-4472-9cfb-d61e2b38c910
-b3ccf64d-f94d-4f0b-8f01-cf3706f455b2	f84240a0-62ad-4b64-bd01-edf9f387180e
-b3ccf64d-f94d-4f0b-8f01-cf3706f455b2	bb8b9b4d-53e4-4d2a-bf08-6b1e10072fd1
-b3ccf64d-f94d-4f0b-8f01-cf3706f455b2	c5bfef91-f047-4d07-b758-1e7b02dfe36f
-b3ccf64d-f94d-4f0b-8f01-cf3706f455b2	44854570-8ed5-44d0-b18a-6212dfa244c9
-b3ccf64d-f94d-4f0b-8f01-cf3706f455b2	5b4e0c1a-95b0-4d88-913c-99d45fa36b67
+ebb567cb-e033-4703-9d5a-a73ff55c0ed1	2bdb0de9-8c75-4a78-ad55-63c7de3c226d
+ebb567cb-e033-4703-9d5a-a73ff55c0ed1	1f59ece5-0dde-4e40-b101-408a07e103f8
+ebb567cb-e033-4703-9d5a-a73ff55c0ed1	45ce0cf2-70a5-4554-8b2e-a63e62075194
+ebb567cb-e033-4703-9d5a-a73ff55c0ed1	d0f096e9-e5a8-4c45-9797-f1d3ad809053
+ebb567cb-e033-4703-9d5a-a73ff55c0ed1	f7c4f44f-3509-4b61-ad89-aaf17e610e38
+ebb567cb-e033-4703-9d5a-a73ff55c0ed1	e537ed30-5432-430a-9ef7-0904df1c0c6c
+ebb567cb-e033-4703-9d5a-a73ff55c0ed1	4f82bfb6-d46d-460a-b6b1-600cb370ecc4
+ebb567cb-e033-4703-9d5a-a73ff55c0ed1	075fe1ca-d4fe-4153-a765-a541062bf1e6
+ebb567cb-e033-4703-9d5a-a73ff55c0ed1	140fe47b-8dc8-4846-98da-cb8662af2dce
+ebb567cb-e033-4703-9d5a-a73ff55c0ed1	1efb9be7-6513-4f48-8194-5ab49bc954d0
+ebb567cb-e033-4703-9d5a-a73ff55c0ed1	5c10f3af-4c42-45e6-8529-dab244a024f1
+ebb567cb-e033-4703-9d5a-a73ff55c0ed1	3058f36a-61c8-4969-b1f5-a7a8d4ef7c75
+ebb567cb-e033-4703-9d5a-a73ff55c0ed1	03d8f19e-b09d-4d5d-bfb3-dc20aaa5ef98
+ebb567cb-e033-4703-9d5a-a73ff55c0ed1	902b5b2b-c371-4a1b-8756-836de4a36ece
+ebb567cb-e033-4703-9d5a-a73ff55c0ed1	6d3f7e7e-3852-4af3-bed0-3c9236f39d66
 \.
 
 
@@ -4429,13 +4429,137 @@ COPY public.release_items (id, release_id, child_release_id, created_at, updated
 ALTER TABLE public.release_items ENABLE TRIGGER ALL;
 
 --
+-- Data for Name: river_job; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.river_job DISABLE TRIGGER ALL;
+
+COPY public.river_job (id, state, attempt, max_attempts, attempted_at, created_at, finalized_at, scheduled_at, priority, args, attempted_by, errors, kind, metadata, queue, tags, unique_key, unique_states) FROM stdin;
+7	running	1	3	2026-10-19 12:44:27.203657+00	2026-10-19 12:44:27.190459+00	\N	2026-10-19 12:44:27.188326+00	1	{"payload": null}	{MacBookPro_localdomain_2026_10_19T12_44_25_330026}	\N	daemon.vulnDB	{"periodic": true, "river:periodic_job_id": "daemon.vulnDB"}	default	{}	\\x07e6e1cfbd3b444938b11b00173fd546585d3edf3d67e41dfd34a0f01f6fede2	11110101
+1	completed	1	3	2026-10-19 12:44:27.203657+00	2026-10-19 12:44:27.190459+00	2026-10-19 12:44:27.24402+00	2026-10-19 12:44:27.188326+00	1	{"payload": null}	{MacBookPro_localdomain_2026_10_19T12_44_25_330026}	\N	daemon.vexRuleRecommendations	{"periodic": true, "river:periodic_job_id": "daemon.vexRuleRecommendations"}	default	{}	\\xedeea4c2184c76920abbfed162ebeb01d1eeecbdb3161cbf352d8b8adeb6d651	11110101
+2	completed	1	3	2026-10-19 12:44:27.203657+00	2026-10-19 12:44:27.190459+00	2026-10-19 12:44:27.21084+00	2026-10-19 12:44:27.188326+00	1	{"payload": null}	{MacBookPro_localdomain_2026_10_19T12_44_25_330026}	\N	daemon.cleanupOrphanedRecords	{"periodic": true, "river:periodic_job_id": "daemon.cleanupOrphanedRecords"}	default	{}	\\x5c4d1fed1a42bd15fe1e1d80703cb8788dd65a376198ee769c3db6469b9cb620	11110101
+4	completed	1	3	2026-10-19 12:44:27.203657+00	2026-10-19 12:44:27.190459+00	2026-10-19 12:44:27.211131+00	2026-10-19 12:44:27.188326+00	1	{"payload": null}	{MacBookPro_localdomain_2026_10_19T12_44_25_330026}	\N	daemon.openSourceInsights	{"periodic": true, "river:periodic_job_id": "daemon.openSourceInsights"}	default	{}	\\x27b5bbf1505308087cdf531cd2c26c1348e1ed31fb459e84ca20e9c8b3243519	11110101
+3	completed	1	3	2026-10-19 12:44:27.203657+00	2026-10-19 12:44:27.190459+00	2026-10-19 12:44:27.21387+00	2026-10-19 12:44:27.188326+00	1	{"payload": null}	{MacBookPro_localdomain_2026_10_19T12_44_25_330026}	\N	daemon.sbomGarbageCollection	{"periodic": true, "river:periodic_job_id": "daemon.sbomGarbageCollection"}	default	{}	\\x7a46df13637c201c977ad961bc4784d04014fd5541f1ba4a283349ea19e80b1d	11110101
+5	completed	1	3	2026-10-19 12:44:27.203657+00	2026-10-19 12:44:27.190459+00	2026-10-19 12:44:27.230809+00	2026-10-19 12:44:27.188326+00	1	{"payload": null}	{MacBookPro_localdomain_2026_10_19T12_44_25_330026}	\N	daemon.externalEntityGarbage	{"periodic": true, "river:periodic_job_id": "daemon.externalEntityGarbage"}	default	{}	\\x2453da1d3b35816e30ab3720b70f4ff56a97a1d2d9d64902a32a4820a6c4f46d	11110101
+6	completed	1	3	2026-10-19 12:44:27.203657+00	2026-10-19 12:44:27.190459+00	2026-10-19 12:44:27.235171+00	2026-10-19 12:44:27.188326+00	1	{"payload": null}	{MacBookPro_localdomain_2026_10_19T12_44_25_330026}	\N	daemon.assetPipeline	{"periodic": true, "river:periodic_job_id": "daemon.assetPipeline"}	default	{}	\\x0f038c0ab287b6be9ef328a07e100d8ff42957c9fd10db921c7612916d0d0765	11110101
+9	completed	1	3	2026-10-19 12:45:00.076509+00	2026-10-19 12:45:00.075019+00	2026-10-19 12:45:00.085114+00	2026-10-19 12:45:00.075019+00	1	{"payload": {"assetId": "6cea098a-7c9a-4ae4-92a7-b3f838c07f2f"}}	{MacBookPro_localdomain_2026_10_19T12_44_25_330026}	\N	pipeline.deleteOldAssetVersions	{}	asset_pipeline	{}	\\xce6a1bc0b3344772009ea986ad32f9d539ad21c31e791219832983a536c6f665	11110001
+8	completed	1	3	2026-10-19 12:45:00.064835+00	2026-10-19 12:45:00.011289+00	2026-10-19 12:45:00.077516+00	2026-10-19 12:45:00+00	1	{"payload": null}	{MacBookPro_localdomain_2026_10_19T12_44_25_330026}	\N	daemon.assetPipeline	{"periodic": true, "river:periodic_job_id": "daemon.assetPipeline"}	default	{}	\\xad2fdc6a87be2322348dca7c725fc5d88f579cc1aa53f4f2971998a01e7c5333	11110101
+11	completed	1	3	2026-10-19 12:45:01.054246+00	2026-10-19 12:45:00.972226+00	2026-10-19 12:45:01.071911+00	2026-10-19 12:45:00.972226+00	1	{"payload": {"assetId": "6cea098a-7c9a-4ae4-92a7-b3f838c07f2f"}}	{MacBookPro_localdomain_2026_10_19T12_44_25_330026}	\N	pipeline.resolveLicenses	{}	asset_pipeline	{}	\\xd4e724fc26ca0b66678519134c087a9a90788e1bfce1ddb6bfe3385a73a52761	11110001
+10	completed	1	3	2026-10-19 12:45:00.953072+00	2026-10-19 12:45:00.083794+00	2026-10-19 12:45:00.975059+00	2026-10-19 12:45:00.083794+00	1	{"payload": {"assetId": "6cea098a-7c9a-4ae4-92a7-b3f838c07f2f"}}	{MacBookPro_localdomain_2026_10_19T12_44_25_330026}	\N	pipeline.syncUpstream	{}	asset_pipeline	{}	\\x288d01e2c410ea8e0d5f3dcfb7f7716f1bd24c73fe3e71420740fd1af1fa3a40	11110001
+12	completed	1	3	2026-10-19 12:45:01.955992+00	2026-10-19 12:45:01.07011+00	2026-10-19 12:45:01.977532+00	2026-10-19 12:45:01.07011+00	1	{"payload": {"assetId": "6cea098a-7c9a-4ae4-92a7-b3f838c07f2f"}}	{MacBookPro_localdomain_2026_10_19T12_44_25_330026}	\N	pipeline.findLicenseRisks	{}	asset_pipeline	{}	\\x86408ea49d524234081e5c7c59f5d71d8e9da1e958ffdeea824ea1a3f81de916	11110001
+13	completed	1	3	2026-10-19 12:45:02.056567+00	2026-10-19 12:45:01.97287+00	2026-10-19 12:45:02.077813+00	2026-10-19 12:45:01.97287+00	1	{"payload": {"assetId": "6cea098a-7c9a-4ae4-92a7-b3f838c07f2f"}}	{MacBookPro_localdomain_2026_10_19T12_44_25_330026}	\N	pipeline.applyVEXRules	{}	asset_pipeline	{}	\\x9498b055ea36ad1d135ece060ac0dceec3782b9e9be27011f9da83578a19c9e1	11110001
+14	completed	1	3	2026-10-19 12:45:02.156039+00	2026-10-19 12:45:02.073868+00	2026-10-19 12:45:02.170156+00	2026-10-19 12:45:02.073868+00	1	{"payload": {"assetId": "6cea098a-7c9a-4ae4-92a7-b3f838c07f2f"}}	{MacBookPro_localdomain_2026_10_19T12_44_25_330026}	\N	pipeline.recalculateRisk	{}	asset_pipeline	{}	\\x129b222ba443eabe3028263d0823cc391672193e80bd1b5f932492fb42b1d496	11110001
+15	completed	1	3	2026-10-19 12:45:02.996287+00	2026-10-19 12:45:02.167575+00	2026-10-19 12:45:03.009545+00	2026-10-19 12:45:02.167575+00	1	{"payload": {"assetId": "6cea098a-7c9a-4ae4-92a7-b3f838c07f2f"}}	{MacBookPro_localdomain_2026_10_19T12_44_25_330026}	\N	pipeline.resolveFixedVersions	{}	asset_pipeline	{}	\\xbc91f0e845333287af93a05d48bcb3ddf47d00723812daa2b2da1bb1d0c688dc	11110001
+16	completed	1	3	2026-10-19 12:45:03.096752+00	2026-10-19 12:45:03.007485+00	2026-10-19 12:45:03.106574+00	2026-10-19 12:45:03.007485+00	1	{"payload": {"assetId": "6cea098a-7c9a-4ae4-92a7-b3f838c07f2f"}}	{MacBookPro_localdomain_2026_10_19T12_44_25_330026}	\N	pipeline.syncTickets	{}	asset_pipeline	{}	\\x5a7e009ebd12957f50bf9f61a4af2d2346407b49016001477a45ccfbfce63416	11110001
+18	completed	1	3	2026-10-19 12:45:04.120475+00	2026-10-19 12:45:04.029219+00	2026-10-19 12:45:04.127109+00	2026-10-19 12:45:04.029219+00	1	{"payload": {"assetId": "6cea098a-7c9a-4ae4-92a7-b3f838c07f2f"}}	{MacBookPro_localdomain_2026_10_19T12_44_25_330026}	\N	pipeline.collectStats	{}	asset_pipeline	{}	\\x19f70f6225b986baaa511227ed737d5ee87091feae35c67336ae4e6e28419871	11110001
+17	completed	1	3	2026-10-19 12:45:04.020857+00	2026-10-19 12:45:03.105337+00	2026-10-19 12:45:04.031887+00	2026-10-19 12:45:03.105337+00	1	{"payload": {"assetId": "6cea098a-7c9a-4ae4-92a7-b3f838c07f2f"}}	{MacBookPro_localdomain_2026_10_19T12_44_25_330026}	\N	pipeline.resolveTicketDifferences	{}	asset_pipeline	{}	\\x95b3bd6eee3564ac13f5aa596344240c36c0425839eed26944091fd576f64d2a	11110001
+\.
+
+
+ALTER TABLE public.river_job ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: river_leader; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.river_leader DISABLE TRIGGER ALL;
+
+COPY public.river_leader (elected_at, expires_at, leader_id, name) FROM stdin;
+2026-10-19 12:44:25.378556+00	2026-10-19 12:45:30.424563+00	MacBookPro_localdomain_2026_10_19T12_44_25_330026	default
+\.
+
+
+ALTER TABLE public.river_leader ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: river_migration; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.river_migration DISABLE TRIGGER ALL;
+
+COPY public.river_migration (line, version, created_at) FROM stdin;
+main	1	2026-10-19 12:44:18.0263+00
+main	2	2026-10-19 12:44:18.036576+00
+main	3	2026-10-19 12:44:18.05804+00
+main	4	2026-10-19 12:44:18.059942+00
+main	5	2026-10-19 12:44:18.065821+00
+main	6	2026-10-19 12:44:18.080561+00
+main	7	2026-10-19 12:44:18.083773+00
+\.
+
+
+ALTER TABLE public.river_migration ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: river_notification; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.river_notification DISABLE TRIGGER ALL;
+
+COPY public.river_notification (id, created_at, payload, topic) FROM stdin;
+\.
+
+
+ALTER TABLE public.river_notification ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: river_queue; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.river_queue DISABLE TRIGGER ALL;
+
+COPY public.river_queue (name, created_at, metadata, paused_at, updated_at) FROM stdin;
+default	2026-10-19 12:44:25.37905+00	{}	\N	2026-10-19 12:44:25.37905+00
+asset_pipeline	2026-10-19 12:44:25.380479+00	{}	\N	2026-10-19 12:44:25.380479+00
+\.
+
+
+ALTER TABLE public.river_queue ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: sbom_merkle_nodes; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.sbom_merkle_nodes DISABLE TRIGGER ALL;
+
+COPY public.sbom_merkle_nodes (node_hash, component_id) FROM stdin;
+\.
+
+
+ALTER TABLE public.sbom_merkle_nodes ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: sbom_merkle_edges; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.sbom_merkle_edges DISABLE TRIGGER ALL;
+
+COPY public.sbom_merkle_edges (subtree_hash, direct_dependency_subtree_hash) FROM stdin;
+\.
+
+
+ALTER TABLE public.sbom_merkle_edges ENABLE TRIGGER ALL;
+
+--
+-- Data for Name: sboms; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+ALTER TABLE public.sboms DISABLE TRIGGER ALL;
+
+COPY public.sboms (asset_id, asset_version_name, artifact_name, source, root_subtree_hash, updated_at) FROM stdin;
+\.
+
+
+ALTER TABLE public.sboms ENABLE TRIGGER ALL;
+
+--
 -- Data for Name: schema_migrations; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 ALTER TABLE public.schema_migrations DISABLE TRIGGER ALL;
 
 COPY public.schema_migrations (version, dirty) FROM stdin;
-20260821120002	f
+20261014121217	f
 \.
 
 
@@ -4464,18 +4588,6 @@ COPY public.trusted_entities (trusted_entity_id, organization_id, project_id, tr
 
 
 ALTER TABLE public.trusted_entities ENABLE TRIGGER ALL;
-
---
--- Data for Name: upstream_vex_rules; Type: TABLE DATA; Schema: public; Owner: -
---
-
-ALTER TABLE public.upstream_vex_rules DISABLE TRIGGER ALL;
-
-COPY public.upstream_vex_rules (id, justification, mechanical_justification, cel_expression, vex_source, event_type, created_at, title, cve_scope) FROM stdin;
-\.
-
-
-ALTER TABLE public.upstream_vex_rules ENABLE TRIGGER ALL;
 
 --
 -- Data for Name: vex_rules; Type: TABLE DATA; Schema: public; Owner: -
@@ -4507,7 +4619,7 @@ ALTER TABLE public.vex_rule_recommendations ENABLE TRIGGER ALL;
 
 ALTER TABLE public.vuln_events DISABLE TRIGGER ALL;
 
-COPY public.vuln_events (id, created_at, type, user_id, justification, mechanical_justification, arbitrary_json_data, original_asset_version_name, created_by_vex_rule, dependency_vuln_id, license_risk_id, first_party_vuln_id, user_agent, compliance_posture_id, vex_rule_id, asset_signature, security_advisory_id) FROM stdin;
+COPY public.vuln_events (id, created_at, type, user_id, justification, mechanical_justification, original_asset_version_name, created_by_vex_rule, dependency_vuln_id, license_risk_id, first_party_vuln_id, user_agent, compliance_posture_id, vex_rule_id, asset_signature, security_advisory_id) FROM stdin;
 \.
 
 
@@ -4552,8 +4664,22 @@ SELECT pg_catalog.setval('public.github_app_installations_installation_id_seq', 
 
 
 --
+-- Name: river_job_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.river_job_id_seq', 18, true);
+
+
+--
+-- Name: river_notification_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.river_notification_id_seq', 1, false);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
-\unrestrict 8Rbn6aQbCxWNdPyUCNpDNbJJTHDdWJaiAw5FMDMP9bPVBo4eZWkQFxspTVFbudh
+\unrestrict iH7I1UH5mMA767Ij6FOm4Crn83Q4ZdIjcAcODZ9Agj4jGPeIlu3AZ4853bvXjgs
 

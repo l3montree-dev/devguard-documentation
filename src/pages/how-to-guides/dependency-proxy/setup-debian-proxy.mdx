@@ -70,7 +70,7 @@ Once set, all `apt-get update`, `apt-get install` and `apt-get upgrade` invocati
 
 For npm, Go and PyPI, the proxy removes blocked versions from the version list, so the client resolves to the next allowed version. This is not possible for Debian: the package lists are signed through `InRelease`, and any change would break the signature check of apt.
 
-apt therefore always sees the newest version, tries to download it, receives `403 Forbidden` and aborts. This applies to malicious packages and to the [minimum package age](/how-to-guides/dependency-proxy#minimum-package-age) alike. To install an older version, pin it explicitly, for example with `apt-get install <package>=<version>`, as long as that version is still available in the archive.
+apt therefore always sees the newest version, tries to download it, receives `403 Forbidden` and aborts. This applies to malicious packages and to [package rules](/how-to-guides/dependency-proxy/package-rules) alike. To install an older version, pin it explicitly, for example with `apt-get install <package>=<version>`, as long as that version is still available in the archive.
 
 ## Testing
 
@@ -98,16 +98,19 @@ fi
 
 `fake-malicious-package` does not exist in the Debian archive, so apt cannot request it. The proxy checks a download against the malicious package database before fetching it from upstream, so the `curl` request above proves the check without a real package.
 
-### Testing the minimum package age
+### Testing a minimum release age rule
 
-The [minimum package age](/how-to-guides/dependency-proxy#minimum-package-age) is configured per repository and only applies to requests using the repository's proxy URL, which contains a secret. The proxy uses the upload time the Debian archive reports for each `.deb` file.
+A [minimum release age rule](/how-to-guides/dependency-proxy/package-rules#minimum-release-age) is configured per repository and only applies to requests using the repository's proxy URL, which contains a secret. The proxy uses the upload time the Debian archive reports for each `.deb` file.
 
-To verify it, temporarily set the minimum age to 87600 hours (10 years). `hello` 2.10-5 was uploaded to trixie in April 2025, so the proxy must reject it. As described [above](#blocked-packages-and-signed-package-lists), apt does not fall back to an older version but aborts:
+To verify it, temporarily add a rule that denies everything released in the last 87600 hours (10 years). `hello` 2.10-5 was uploaded to trixie in April 2025, so the proxy must reject it. As described [above](#blocked-packages-and-signed-package-lists), apt does not fall back to an older version but aborts:
 
 ```bash
-# set the minimum package age of the repository to 10 years
+# deny every package version released in the last 10 years
 devguard-scanner curl --token <your-pat-token> -X PUT \
-  -d '{"rules":"","minReleaseAge":87600}' \
+  -d 'rules:
+  - name: min-release-age
+    action: deny
+    expr: now() - timestamp(pkg.releasedAt) < duration("87600h")' \
   https://<your-devguard-url>/api/v1/organizations/<assetName>/config-files/dependency-proxy-configs/
 
 # the repository's Debian proxy URL applies its settings
@@ -121,16 +124,16 @@ docker run --rm -e DEVGUARD_DEB="${DEBIAN_PROXY%/debian}" debian:trixie-slim bas
   apt-get update
   if apt-get install -y --no-install-recommends hello > apt.log 2>&1; then
     cat apt.log
-    echo "hello was NOT blocked by the minimum package age" >&2
+    echo "hello was NOT blocked by the minimum release age rule" >&2
     exit 1
   fi
   cat apt.log
   grep -q "403" apt.log
 '
 
-# reset the minimum package age
+# remove the rule again
 devguard-scanner curl --token <your-pat-token> -X PUT \
-  -d '{"rules":"","minReleaseAge":0}' \
+  -d 'rules: []' \
   https://<your-devguard-url>/api/v1/organizations/<assetName>/config-files/dependency-proxy-configs/
 ```
 
