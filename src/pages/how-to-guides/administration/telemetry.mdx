@@ -1,0 +1,70 @@
+---
+title: DevGuard Telemetry and How to Disable It
+description: "What telemetry DevGuard sends on startup, why it is sent, and how to turn it off for the API server and the scanner via Helm, Docker Compose or GitLab CI."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: telemetry
+lang: en-US
+ignoreChecks: null
+---
+
+# Telemetry
+
+DevGuard sends a small event when it starts. It tells us which versions are in use, so we know e.g. which ones still need security patches. This page lists exactly what is sent and how to turn it off.
+
+## What is sent
+
+Each time the API server or the scanner starts, it sends one request to `https://umami.l3montree.com/api/send`. Nothing is sent while it runs.
+
+The **API server** sends the DevGuard version, the number of organizations, projects and assets, and the number of components per ecosystem (for example `npm` or `golang`).
+
+The **scanner** sends the DevGuard version, the operating system, the CPU architecture, whether it runs in CI and the name of the command (for example `sca`).
+
+Both also send an instance ID, so restarts of the same installation are counted once. For the API server it is a hash of your frontend URL, database host and database name. For the scanner it is a hash of the API host, operating system and architecture. **The values themselves are never sent.**
+
+DevGuard **never** sends user, organization, project or repository names, package names, vulnerabilities or scan results.
+
+If your network blocks outgoing traffic, the request fails and DevGuard logs a warning. Everything else keeps working.
+
+## Turn it off
+
+Set `DEVGUARD_TELEMETRY_DISABLED` to `true`. This works for the API server and the scanner. On startup the log then shows `DevGuard startup telemetry is disabled`.
+
+### Helm
+
+Add the variable to the `values.yaml` of your [Helm deployment](/how-to-guides/administration/deploy-with-helm):
+
+```yaml
+api:
+  additionalEnvs:
+    DEVGUARD_TELEMETRY_DISABLED: "true"
+```
+
+### Docker Compose
+
+Add the variable to the `environment` section of the API service in the `compose.yaml` of your [Docker Compose deployment](/how-to-guides/administration/deploy-with-docker):
+
+```yaml
+    environment:
+      DEVGUARD_TELEMETRY_DISABLED: "true"
+```
+
+### GitLab CI
+
+Add it as a CI/CD variable in your project or group settings, or at the top of your [GitLab CI pipeline](/how-to-guides/scanning/scan-with-gitlab-ci) file:
+
+```yaml
+variables:
+  DEVGUARD_TELEMETRY_DISABLED: "true"
+```
+
+### Scanner on your machine
+
+```bash
+export DEVGUARD_TELEMETRY_DISABLED=true
+```

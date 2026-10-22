@@ -132,6 +132,11 @@ const config = withMarkdownWebBook({
                 destination: '/how-to-guides/integrations/custom-webhooks',
                 permanent: true,
             },
+            {
+                source: '/how-to-guides/dependency-management/view-dependency-tree',
+                destination: '/how-to-guides/dependency-management/find-vulnerable-deps',
+                permanent: true,
+            },
         ]
     },
 })

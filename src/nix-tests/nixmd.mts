@@ -57,6 +57,9 @@ const DEFAULT_MDX_FILES = [
     'src/pages/how-to-guides/dependency-proxy/setup-npm-proxy.mdx',
     'src/pages/how-to-guides/dependency-proxy/setup-pypi-proxy.mdx',
     'src/pages/how-to-guides/dependency-proxy/setup-go-proxy.mdx',
+    'src/pages/how-to-guides/dependency-proxy/setup-maven-proxy.mdx',
+    'src/pages/how-to-guides/dependency-proxy/setup-composer-proxy.mdx',
+    'src/pages/how-to-guides/dependency-proxy/setup-debian-proxy.mdx',
     'src/pages/how-to-guides/dependency-proxy/setup-oci-proxy.mdx',
     'src/pages/how-to-guides/administration/deploy-with-cloudnativepg.mdx',
 ]
@@ -75,6 +78,7 @@ const VARIABLE_PATTERNS: [RegExp, string][] = [
     [/Bearer +[^"'\s]+/g, 'Bearer ${token}'],
     [/(X-Asset-Name:[ \t]*)[^"'\s]+/g, '$1${assetName}'],
     [/<assetName>/g, '${assetName}'],
+    [/<secret>/g, '${secret}'],
     [/ghcr\.io\/org\/image:tag/g, TEST_IMAGE],
     [/registry\.example\.com\/org\/image:tag/g, TEST_IMAGE],
 ]
@@ -229,6 +233,24 @@ function assertRequiredEnv(): void {
     }
 }
 
+function dependencyProxySecret(): string {
+    const urls = JSON.parse(
+        execFileSync(
+            'devguard-scanner',
+            [
+                'curl',
+                '--token',
+                process.env.token!,
+                '-s',
+                `${process.env.apiUrl}/api/v1/organizations/${process.env.assetName}/dependency-proxy-urls/`,
+            ],
+            { encoding: 'utf8' },
+        ),
+    )
+
+    return urls.oci.split('/').pop()
+}
+
 function main(): void {
     assertRequiredEnv()
 
@@ -237,6 +259,7 @@ function main(): void {
         DEVGUARD_APIURL: process.env.apiUrl,
         // host[:port] of the API, e.g. for pip's trusted-host (no URLs allowed there)
         apiHost: new URL(process.env.apiUrl!).host,
+        secret: dependencyProxySecret(),
     }
 
     rmSync(TMP_DIR, { recursive: true, force: true })

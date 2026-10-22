@@ -1,0 +1,24 @@
+diff --git a/node_modules/next/dist/lib/typescript/runTypeScriptCli.js b/node_modules/next/dist/lib/typescript/runTypeScriptCli.js
+index 5537bca..902bd44 100644
+--- a/node_modules/next/dist/lib/typescript/runTypeScriptCli.js
++++ b/node_modules/next/dist/lib/typescript/runTypeScriptCli.js
+@@ -47,9 +47,17 @@ function getTypeScriptPackageInfo(baseDir) {
+     var _packageJson_bin, _Object_entries_find;
+     let packageJsonPath;
+     try {
+-        packageJsonPath = (0, _resolvefrom.resolveFrom)(baseDir, 'typescript/package.json');
++        // devguard-web patch: prefer the real TS7 compiler aliased under
++        // "@typescript/native" for CLI-mode builds, so "typescript" itself can
++        // stay pinned to the @typescript/typescript6 API-compat package for
++        // tools (typescript-eslint) that still require the removed v6 API.
++        packageJsonPath = (0, _resolvefrom.resolveFrom)(baseDir, '@typescript/native/package.json');
+     } catch  {
+-        return null;
++        try {
++            packageJsonPath = (0, _resolvefrom.resolveFrom)(baseDir, 'typescript/package.json');
++        } catch  {
++            return null;
++        }
+     }
+     const packageJson = JSON.parse((0, _nodefs.readFileSync)(packageJsonPath, 'utf8'));
+     const packageDir = _nodepath.default.dirname(packageJsonPath);

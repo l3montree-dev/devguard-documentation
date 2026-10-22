@@ -21,6 +21,9 @@
           nodejs
           python3
           go_1_27
+          maven
+          php
+          phpPackages.composer
           jq
           crane
           kubectl
