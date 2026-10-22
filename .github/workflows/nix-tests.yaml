@@ -7,7 +7,10 @@ on:
   workflow_dispatch:
   push:
 
-permissions: read-all
+permissions:
+  contents: read
+  # the SLSA pages are tested with a real workload identity token of this job
+  id-token: write
 
 jobs:
   nix-tests:
@@ -21,6 +24,10 @@ jobs:
       - name: Create test encryption key
         working-directory: .github/e2e
         run: openssl rand -hex 32 > test-secret.pem
+
+      - name: Create SLSA provenance signing key
+        working-directory: .github/e2e
+        run: openssl ecparam -name prime256v1 -genkey -noout -out test-slsa-key.pem
 
       - name: Start backend services
         working-directory: .github/e2e
@@ -70,10 +77,27 @@ jobs:
       - name: Setup Nix
         uses: cachix/install-nix-action@8aa03977d8d733052d78f4e008a241fd1dbf36b3 #v31.10.6
 
+      # the SLSA pages need a real OIDC workload identity token. The runner issues one for this job,
+      # with the audience the API expects (SLSA_OIDC_AUDIENCE in .github/e2e/docker-compose.yml).
+      - name: Request a workload identity token
+        id: id-token
+        run: |
+          idToken=$(curl -sf \
+            -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=http://172.17.0.1:8080" \
+            | jq -r '.value')
+          if [ -z "$idToken" ] || [ "$idToken" = "null" ]; then
+            echo "could not obtain a workload identity token" >&2
+            exit 1
+          fi
+          echo "::add-mask::$idToken"
+          echo "idToken=$idToken" >> "$GITHUB_OUTPUT"
+
       - name: Run documentation tests
         env:
           assetName: testorg/projects/testgroup/assets/testrepo
           apiUrl: http://172.17.0.1:8080
           webUI: http://localhost:3000
+          idToken: ${{ steps.id-token.outputs.idToken }}
           token: 95da0ae37796ffb14ff4251f7d5dd2dc48014ae0655e12e682dd4f8c77eb48a4
         run: node src/nix-tests/nixmd.mts

@@ -3,6 +3,7 @@ export default {
     scanning: { title: 'Scanning' },
     'vulnerability-management': { title: 'Vulnerability Management' },
     vex: { title: 'VEX & Exploitability' },
+    'supply-chain': { title: 'Supply Chain Security' },
     'dependency-management': { title: 'Dependency Management' },
     integrations: { title: 'Integrations' },
     'dependency-proxy': { title: 'Dependency Proxy' },
