@@ -53,7 +53,7 @@ RUN npm prune --omit=dev
 
 RUN mkdir -p /usr/app/.next/cache/images && chown -R 53111:53111 /usr/app/.next/cache/images
 
-FROM registry.opencode.de/oci-community/images/zendis/nodejs:26-minimal@sha256:deac058118b747dfc609a76befb8c9928b81bd22420dfa662cb47e4faa77577a
+FROM registry.opencode.de/oci-community/images/zendis/nodejs:26-main-minimal@sha256:d0307edcf746725c914f085c8ede76452dcd54106b3a52ea0f33b24957ec3747
 
 USER 53111
 
