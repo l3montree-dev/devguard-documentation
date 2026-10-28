@@ -32,8 +32,9 @@ Renovate then proposes the newest **allowed** version instead of one your builds
 | Go modules | `go` | ✓ |
 | Maven | `maven` | ✓ |
 | Composer | `packagist` | ✓ |
+| Debian | `deb` | ✓ (via a custom manager, see [Debian](#debian)) |
 | PyPI | `pypi` | Not yet |
-| Debian, OCI | `deb`, `docker` | No – version lists are not filtered |
+| OCI | `docker` | No – version lists are not filtered |
 
 ## 1. Get Your Proxy URL
 
@@ -78,6 +79,58 @@ GOPROXY=https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/go/
 
 Do not append `,direct`, otherwise Go bypasses the proxy when it rejects a version.
 
+### Debian
+
+Renovate has no built-in manager for Debian packages, for example the versions pinned in a `Dockerfile`. Annotate each version with a comment and let a [custom regex manager](https://docs.renovatebot.com/modules/manager/regex/) pick it up:
+
+```dockerfile {ignore}
+FROM debian:trixie-slim
+
+# renovate: suite=trixie depName=openssl
+ENV OPENSSL_VERSION=3.5.1-1
+# renovate: suite=trixie-security depName=curl
+ENV CURL_VERSION=8.14.1-2+deb13u2
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      openssl=${OPENSSL_VERSION} \
+      curl=${CURL_VERSION}
+```
+
+The configuration below uses `managerFilePatterns` and needs Renovate 41 or newer. The manager stores the suite as `depType`, so a package rule per suite can point Renovate at the matching proxy URL. Security updates live in the separate `debian-security` archive:
+
+```json
+{
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/(^|/)Dockerfile$/"],
+      "matchStrings": [
+        "#\\s*renovate:\\s*suite=(?<depType>\\S+)\\s+depName=(?<depName>\\S+)\\s+ENV \\S+=(?<currentValue>\\S+)"
+      ],
+      "datasourceTemplate": "deb"
+    }
+  ],
+  "packageRules": [
+    {
+      "matchDatasources": ["deb"],
+      "matchDepTypes": ["trixie"],
+      "registryUrls": ["https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/deb/debian?suite=trixie&components=main&binaryArch=amd64"]
+    },
+    {
+      "matchDatasources": ["deb"],
+      "matchDepTypes": ["trixie-security"],
+      "registryUrls": ["https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/deb/debian-security?suite=trixie-security&components=main&binaryArch=amd64"]
+    }
+  ]
+}
+```
+
+A Debian suite lists exactly one version per package. The proxy replaces a blocked version with the newest allowed older one (see [How Debian packages are handled](/how-to-guides/dependency-proxy/setup-debian-proxy#how-debian-packages-are-handled)), so Renovate proposes this version instead.
+
+<Callout type="info">
+  Renovate verifies the downloaded package list against the checksums in `InRelease`, but not the signature. The proxy signs `InRelease` with its own key, so no extra configuration is needed. Only the suites listed in [Setup Debian Proxy](/how-to-guides/dependency-proxy/setup-debian-proxy#supported-suites) are supported.
+</Callout>
+
 ## 3. Configure Your Package Managers
 
 Renovate updates lock files (`package-lock.json`, `go.sum`, `composer.lock`) with the real package manager. Configure the proxy in your repository as well, so these downloads go through DevGuard too:
@@ -86,6 +139,7 @@ Renovate updates lock files (`package-lock.json`, `go.sum`, `composer.lock`) wit
 - [Setup Go Proxy](/how-to-guides/dependency-proxy/setup-go-proxy)
 - [Setup Maven Proxy](/how-to-guides/dependency-proxy/setup-maven-proxy)
 - [Setup Composer Proxy](/how-to-guides/dependency-proxy/setup-composer-proxy)
+- [Setup Debian Proxy](/how-to-guides/dependency-proxy/setup-debian-proxy)
 
 ## What to Expect
 
@@ -93,6 +147,7 @@ Renovate updates lock files (`package-lock.json`, `go.sum`, `composer.lock`) wit
 |-----------|-------------------|
 | Newest version is too young for your minimum release age | Proposes the newest version that is old enough |
 | A single version is malicious | Skips this version |
+| Newest Debian version is blocked | Proposes the replacement version the proxy lists instead |
 | All versions of a package are malicious | The lookup fails and shows up as a warning in the Dependency Dashboard |
 
 <Callout type="info">
