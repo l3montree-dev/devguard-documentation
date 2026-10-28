@@ -26,6 +26,7 @@ export default {
     projects: { title: 'Projects' },
     releases: { title: 'Releases' },
     scanning: { title: 'Scanning' },
+    slsa: { title: 'SLSA' },
     statistics: { title: 'Statistics' },
     system: { title: 'System' },
     vexrules: { title: 'VEXRules' },

@@ -1,0 +1,119 @@
+---
+title: Create a GitHub App for Self-Hosted DevGuard
+description: "Create your own GitHub App for a self-hosted DevGuard instance, configure webhook and setup URLs, and connect it to the API and web frontend."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: github app for self-hosted devguard
+lang: en-US
+ignoreChecks: null
+---
+
+import { Callout, DocSteps as Steps } from '@document-writing-tools/kernux-theme'
+
+# Create a GitHub App for Self-Hosted DevGuard
+
+DevGuard uses a GitHub App to create and update issues in your repositories and to receive events like closed issues or `/accept` comments. The public `devguard-bot` app only works with app.devguard.org, because GitHub sends its webhooks and setup redirects to fixed URLs. A self-hosted instance needs its own GitHub App.
+
+## Prerequisites
+
+- A running self-hosted DevGuard instance, for example [deployed with Helm](/how-to-guides/administration/deploy-with-helm)
+- An API URL that GitHub can reach, for example `https://api.devguard.example.com`
+- Owner permissions for the GitHub account or organization that will own the app
+
+<Steps>
+
+### Register the GitHub App
+
+Open [github.com/settings/apps/new](https://github.com/settings/apps/new) for a personal account or `https://github.com/organizations/<org>/settings/apps/new` for an organization and fill in the form:
+
+| Field | Value |
+| --- | --- |
+| GitHub App name | A unique name, for example `company-devguard`. You need this name later. |
+| Homepage URL | `https://devguard.example.com` |
+| Setup URL | `https://devguard.example.com/gh` |
+| Redirect on update | Enabled |
+| Webhook URL | `https://api.devguard.example.com/api/v1/webhook/` |
+| Webhook secret | A random string, for example the output of `openssl rand -hex 20` |
+
+Set these permissions and events:
+
+- **Repository permissions:** Issues `Read and write`, Metadata `Read-only`
+- **Subscribe to events:** `Issues`, `Issue comment`
+
+Click on `Create GitHub App`.
+
+<Callout type="info">
+  The Setup URL points to the web frontend, the Webhook URL points to the API. If both are mixed up, the installation fails with `App Installation failed`.
+</Callout>
+
+GitHub opens the `General` page of your new app. Note the `App ID`, you need it later.
+
+![General page of the GitHub App with the App ID](/screenshots/general-github-app-information.png)
+
+### Generate a Private Key
+
+Click on `Credentials` in the sidebar, open the `Key pairs` tab, and click on `New key`. GitHub downloads a `.pem` file.
+
+![Credentials page of the GitHub App with the New key button](/screenshots/github-app-private-key.png)
+
+### Store the Credentials as Secrets
+
+Store the private key and the webhook secret as Kubernetes secrets:
+
+```bash {ignore}
+kubectl create secret generic github-app-private-key \
+  --from-file=privateKey=company-devguard.private-key.pem \
+  -n devguard
+kubectl create secret generic github-app-webhook-secret \
+  --from-literal=webhookSecret=<your-webhook-secret> \
+  -n devguard
+```
+
+### Configure DevGuard
+
+The API needs the App ID and both secrets. The web frontend needs the app name to link to the correct installation page. Add both parts to your `values.yaml`:
+
+```yaml
+api:
+  github:
+    enabled: true
+    appId: "<your-app-id>"
+    existingWebhookSecretSecretName: github-app-webhook-secret
+    existingPrivateKeySecretName: github-app-private-key
+
+web:
+  githubAppName: company-devguard
+```
+
+Apply the changes with `helm upgrade`.
+
+Without Helm, set these environment variables instead:
+
+| Service | Variable | Value |
+| --- | --- | --- |
+| API | `GITHUB_APP_ID` | The App ID |
+| API | `GITHUB_PRIVATE_KEY` | Path to the `.pem` file |
+| API | `GITHUB_WEBHOOK_SECRET` | The webhook secret |
+| Web | `DEVGUARD_GITHUB_APP_NAME` | The app name |
+
+### Install the App
+
+Follow the [GitHub integration setup](/how-to-guides/integrations/github/setup-github-integration). The `Install GitHub App` button now opens your own app. After the installation, GitHub redirects you back to your DevGuard instance and the integration appears in the organization settings.
+
+</Steps>
+
+## Troubleshooting
+
+- **`could not read github app installation` in the API logs:** The installation webhook didn't reach your API. Open your app on GitHub, go to `Advanced` → `Recent Deliveries`, and check the response of the `installation` event.
+- **Redirect to app.devguard.org after the installation:** `web.githubAppName` isn't set, so the frontend still uses the public `devguard-bot` app. Uninstall that app from your GitHub account or organization and install your own app.
+
+## Related Documentation
+
+- [Set Up GitHub Integration](/how-to-guides/integrations/github/setup-github-integration)
+- [GitHub Integration Explained](/explanations/integrations/github-integration)
+- [Deploy DevGuard with Helm](/how-to-guides/administration/deploy-with-helm)
