@@ -1,0 +1,37 @@
+---
+title: DevGuard SLSA API — REST API Reference
+description: "Sign SLSA build provenance with the verified identity of a CI job and fetch the public key DevGuard signs it with through the DevGuard REST API."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: DevGuard SLSA API
+lang: en-US
+ignoreChecks: null
+---
+
+import ApiTagPage from '@/components/ApiTagPage'
+
+# DevGuard SLSA API
+
+SLSA build provenance records which source, which build configuration and which builder produced an artifact. The claim is only worth as much as the identity behind it, so DevGuard does not let a pipeline sign its own provenance: the CI job sends what it built along with its OIDC workload identity token, DevGuard verifies that token with its issuer, writes the verified identity into the provenance and signs the result with a key no CI job ever sees.
+
+Signing returns a DSSE envelope, or a sigstore bundle when a transparency log is configured. The public key endpoint hands out the key that verifies those signatures, which is what `cosign verify-attestation` needs when checking an image outside the pipeline that produced it.
+
+---
+
+<ApiTagPage tag="SLSA" />
+
+## Related Documentation
+
+- [Sign Build Provenance with DevGuard](/how-to-guides/supply-chain/sign-build-provenance) — the pipeline setup these endpoints serve
+- [SLSA Level 3](/explanations/supply-chain-security/slsa-level-3) — why the signing key stays out of CI
+- [SLSA Framework](/explanations/supply-chain-security/slsa-framework) — the levels and what each one requires
+- [Provenance Tracking](/explanations/supply-chain-security/provenance-tracking) — how build history is retained
+- [Attestations API](/reference/api/attestations) — the related attestation surface
+- [In-toto API](/reference/api/in-toto) — link and layout verification
+- [Use the DevGuard API](/getting-started/use-devguard-api) — authentication and conventions
+- [DevGuard API Reference](/reference)

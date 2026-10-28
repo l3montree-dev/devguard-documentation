@@ -21,7 +21,7 @@ const LINE_CONTINUATION = /\\[ \t]*$/
 
 const SSH_REMOTE = /git@([A-Za-z0-9.-]+):([A-Za-z0-9._\/-]+)/g
 
-const VARIABLE_FLAGS = ['assetName', 'apiUrl', 'token', 'webUI']
+const VARIABLE_FLAGS = ['assetName', 'apiUrl', 'token', 'webUI', 'idToken']
 
 const FLAKE_NIX = 'path:src/nix-tests'
 const SCRIPT_TIMEOUT = process.env.SCRIPT_TIMEOUT ?? '300'
@@ -34,6 +34,8 @@ const SBOM_SOURCE = 'public/example-files/ingesting/sbom.json'
 const MERGE_CONFIG_SOURCE = 'public/example-files/ingesting/merge-config.json'
 const IMAGE_TAR = join(TMP_DIR, 'image.tar')
 const TEST_IMAGE = process.env.TEST_IMAGE ?? 'gcr.io/distroless/static:nonroot'
+// registry the documentation tests may push to, e.g. to attach attestations to an image
+const TEST_REGISTRY = process.env.TEST_REGISTRY ?? 'localhost:5000'
 
 const FIXTURES: [string, string][] = [
     [VEX_SOURCE, 'vex.json'],
@@ -62,6 +64,7 @@ const DEFAULT_MDX_FILES = [
     'src/pages/how-to-guides/dependency-proxy/setup-debian-proxy.mdx',
     'src/pages/how-to-guides/dependency-proxy/setup-oci-proxy.mdx',
     'src/pages/how-to-guides/administration/deploy-with-cloudnativepg.mdx',
+    'src/pages/how-to-guides/supply-chain/sign-build-provenance.mdx',
 ]
 
 const MDX_FILES =
@@ -78,6 +81,9 @@ const VARIABLE_PATTERNS: [RegExp, string][] = [
     [/Bearer +[^"'\s]+/g, 'Bearer ${token}'],
     [/(X-Asset-Name:[ \t]*)[^"'\s]+/g, '$1${assetName}'],
     [/<assetName>/g, '${assetName}'],
+    [/<secret>/g, '${secret}'],
+    // an image the page builds and pushes itself - must go to a registry the tests can write to
+    [/ghcr\.io\/org\/my-app:1\.0\.0/g, `${TEST_REGISTRY}/org/my-app:1.0.0`],
     [/ghcr\.io\/org\/image:tag/g, TEST_IMAGE],
     [/registry\.example\.com\/org\/image:tag/g, TEST_IMAGE],
 ]
@@ -232,6 +238,24 @@ function assertRequiredEnv(): void {
     }
 }
 
+function dependencyProxySecret(): string {
+    const urls = JSON.parse(
+        execFileSync(
+            'devguard-scanner',
+            [
+                'curl',
+                '--token',
+                process.env.token!,
+                '-s',
+                `${process.env.apiUrl}/api/v1/organizations/${process.env.assetName}/dependency-proxy-urls/`,
+            ],
+            { encoding: 'utf8' },
+        ),
+    )
+
+    return urls.oci.split('/').pop()
+}
+
 function main(): void {
     assertRequiredEnv()
 
@@ -240,6 +264,7 @@ function main(): void {
         DEVGUARD_APIURL: process.env.apiUrl,
         // host[:port] of the API, e.g. for pip's trusted-host (no URLs allowed there)
         apiHost: new URL(process.env.apiUrl!).host,
+        secret: dependencyProxySecret(),
     }
 
     rmSync(TMP_DIR, { recursive: true, force: true })

@@ -88,6 +88,9 @@ services:
       - type: bind
         source: ./test-secret.pem
         target: /test-secret.pem
+      - type: bind
+        source: ./test-slsa-key.pem
+        target: /slsa-private-key.pem
     tmpfs:
       - /tmp:size=1G
     depends_on:
@@ -116,6 +119,19 @@ services:
       - APP_SIDE_ENCRYPTION_KEY_PATH=/test-secret.pem
       # proxy URLs returned by the API must point at this instance (default: api.main.devguard.org)
       - DEPENDENCY_PROXY_BASE_URL=http://172.17.0.1:8080/api/v1/dependency-proxy
+      # SLSA build provenance signing. The audience must match what the documentation tests request.
+      - SLSA_PRIVATE_KEY_PATH=/slsa-private-key.pem
+      - SLSA_OIDC_AUDIENCE=http://172.17.0.1:8080
+      - SLSA_OIDC_TRUSTED_ISSUERS=https://token.actions.githubusercontent.com
+
+  # plain http registry for the documentation tests: the SLSA pages push an image,
+  # attach the signed build provenance to it and verify it with cosign
+  registry:
+    image: registry:3
+    ports:
+      - "5000:5000"
+    environment:
+      - REGISTRY_STORAGE_DELETE_ENABLED=true
 
 volumes:
   postgres:

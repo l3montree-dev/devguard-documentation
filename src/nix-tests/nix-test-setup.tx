@@ -53,6 +53,8 @@ docker exec devguard-postgresql-1 pg_dump \
   --exclude-table-data='public.affected_components' \
   --exclude-table-data='public.malicious_packages' \
   --exclude-table-data='public.malicious_affected_components' \
+  --exclude-table-data='public.upstream_vex_rules' \
+  --exclude-table-data='public.exploits' \
   -U devguard -d devguard \
   > src/nix-tests/devguard-seed-data.sql
 ```
