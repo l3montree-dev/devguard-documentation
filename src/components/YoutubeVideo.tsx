@@ -16,6 +16,7 @@ const YoutubeVideo: FunctionComponent<{
     React.useEffect(() => {
         // check if we are allowed to display a youtube video
         // if yes, set display to true
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- localStorage is only readable on the client
         if (localStorage.getItem('youtube') === 'true') setDisplay(true)
     }, [])
 

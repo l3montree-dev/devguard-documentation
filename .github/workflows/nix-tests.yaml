@@ -22,6 +22,13 @@ jobs:
         working-directory: .github/e2e
         run: openssl rand -hex 32 > test-secret.pem
 
+      - name: Create SLSA provenance signing key
+        working-directory: .github/e2e
+        run: |
+          openssl ecparam -name prime256v1 -genkey -noout -out test-slsa-key.pem
+          # openssl writes private keys as 0600 - the non-root api container could not read it through the bind mount
+          chmod 644 test-slsa-key.pem
+
       - name: Start backend services
         working-directory: .github/e2e
         run: docker compose up -d

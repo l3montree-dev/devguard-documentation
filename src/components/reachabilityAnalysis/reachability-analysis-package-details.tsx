@@ -103,8 +103,8 @@ export default function ReachabilityAnalysisPackageDetails({
                     {isComponentsOpen && (
                         <div className="px-8 pb-8">
                             <div>
-                                {data.components.map((comp) => (
-                                    <div className="flex">
+                                {data.components.map((comp, i) => (
+                                    <div key={i} className="flex">
                                         <p className="px-4 mx-8 my-4 py-4 rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-900/50">
                                             {comp.name}
                                         </p>
@@ -148,8 +148,8 @@ export default function ReachabilityAnalysisPackageDetails({
                     {isVulnerabilitiesOpen && (
                         <div className="px-8 pb-8">
                             <div>
-                                {data.vulnerabilities.map((vuln) => (
-                                    <div className="flex">
+                                {data.vulnerabilities.map((vuln, i) => (
+                                    <div key={i} className="flex">
                                         <p className="px-4 mx-8 my-4 py-4 rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-900/50">
                                             {vuln.id}
                                         </p>
