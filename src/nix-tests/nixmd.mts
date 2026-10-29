@@ -256,10 +256,36 @@ function dependencyProxySecret(): string {
     return urls.oci.split('/').pop()
 }
 
+// workload identity tokens are short lived and the pages before the SLSA ones take a long time,
+// so the token the workflow requested up front is expired by then - ask the runner for a fresh one
+function freshIdToken(): string | undefined {
+    const requestUrl = process.env.ACTIONS_ID_TOKEN_REQUEST_URL
+    const requestToken = process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN
+
+    if (!requestUrl || !requestToken) {
+        return undefined
+    }
+
+    const response = JSON.parse(
+        execFileSync(
+            'curl',
+            [
+                '-sf',
+                '-H',
+                `Authorization: bearer ${requestToken}`,
+                `${requestUrl}&audience=${encodeURIComponent(process.env.apiUrl!)}`,
+            ],
+            { encoding: 'utf8' },
+        ),
+    )
+
+    return response.value
+}
+
 function main(): void {
     assertRequiredEnv()
 
-    const env = {
+    const env: any = {
         ...process.env,
         DEVGUARD_APIURL: process.env.apiUrl,
         // host[:port] of the API, e.g. for pip's trusted-host (no URLs allowed there)
@@ -326,7 +352,7 @@ function main(): void {
                     ['develop', FLAKE_NIX, '-c', 'bash', '-c', inner],
                     {
                         stdio: ['ignore', 'inherit', 'inherit'],
-                        env,
+                        env: { ...env, idToken: freshIdToken() ?? env.idToken },
                     },
                 )
                 console.log(`OK: ${script}`)
