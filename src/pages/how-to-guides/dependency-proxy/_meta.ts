@@ -1,5 +1,6 @@
 export default {
     index: { title: 'Overview' },
+    'package-rules': { title: 'Package Rules' },
     'cache-management': { title: 'Cache Management' },
     'setup-go-proxy': { title: 'Setup Go Proxy' },
     'setup-npm-proxy': { title: 'Setup NPM Proxy' },
