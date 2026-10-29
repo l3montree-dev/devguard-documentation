@@ -41,13 +41,13 @@ DevGuard includes a built-in dependency proxy that acts as a protective layer be
 
 For setup instructions, see the ecosystem-specific guides:
 
-- [Setup npm Proxy](/how-to-guides/dependency-proxy/setup-npm-proxy)
-- [Setup Go Proxy](/how-to-guides/dependency-proxy/setup-go-proxy)
-- [Setup PyPI Proxy](/how-to-guides/dependency-proxy/setup-pypi-proxy)
-- [Setup Maven Proxy](/how-to-guides/dependency-proxy/setup-maven-proxy)
-- [Setup Composer Proxy](/how-to-guides/dependency-proxy/setup-composer-proxy)
-- [Setup OCI Proxy](/how-to-guides/dependency-proxy/setup-oci-proxy)
-- [Setup Debian Proxy](/how-to-guides/dependency-proxy/setup-debian-proxy)
+- [Setup npm Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-npm-proxy)
+- [Setup Go Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-go-proxy)
+- [Setup PyPI Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-pypi-proxy)
+- [Setup Maven Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-maven-proxy)
+- [Setup Composer Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-composer-proxy)
+- [Setup OCI Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-oci-proxy)
+- [Setup Debian Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-debian-proxy)
 
 To route all CI jobs through the proxy at once, see [Self-Hosted CI Runners](/how-to-guides/dependency-proxy/ci-runners).
 
@@ -61,11 +61,11 @@ The minimum age is configured per organization, project or repository and applie
 |-----------|---------------------|
 | npm | Supported |
 | PyPI | Supported |
-| Debian (apt) | Supported — too new versions are rejected but not hidden, see [Setup Debian Proxy](/how-to-guides/dependency-proxy/setup-debian-proxy#blocked-packages-and-signed-package-lists) |
+| Debian (apt) | Supported — too new versions are rejected but not hidden, see [Setup Debian Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-debian-proxy#blocked-packages-and-signed-package-lists) |
 | Go modules | Supported |
 | Maven | Supported |
 | Composer (Packagist) | Supported |
-| OCI (container images) | Not supported — registries expose no reliable publish date, see [Setup OCI Proxy](/how-to-guides/dependency-proxy/setup-oci-proxy) |
+| OCI (container images) | Not supported — registries expose no reliable publish date, see [Setup OCI Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-oci-proxy) |
 
 ## Cache & Security
 
