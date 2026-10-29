@@ -83,7 +83,7 @@ const VARIABLE_PATTERNS: [RegExp, string][] = [
     [/<assetName>/g, '${assetName}'],
     [/<secret>/g, '${secret}'],
     // an image the page builds and pushes itself - must go to a registry the tests can write to
-    [/ghcr\.io\/org\/my-app:1\.0\.0/g, `${TEST_REGISTRY}/org/my-app:1.0.0`],
+    [/ghcr\.io\/org\/my-app(?=[:@])/g, `${TEST_REGISTRY}/org/my-app`],
     [/ghcr\.io\/org\/image:tag/g, TEST_IMAGE],
     [/registry\.example\.com\/org\/image:tag/g, TEST_IMAGE],
 ]
