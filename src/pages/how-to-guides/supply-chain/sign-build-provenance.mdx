@@ -16,7 +16,7 @@ import { Callout } from '@document-writing-tools/kernux-theme'
 
 # Sign Build Provenance with DevGuard
 
-This guide wires up the [SLSA control plane](/explanations/supply-chain-security/slsa-level-3): your pipeline records what it built, DevGuard verifies which build configuration ran and signs the provenance with a key no CI job ever sees, and the signed attestation is attached to your container image.
+This guide wires up the [SLSA control plane](/explanations/supply-chain-security/slsa-level-3): your pipeline describes what it built, DevGuard verifies which build configuration ran and signs the provenance with a key no CI job ever sees, and the signed attestation is attached to your container image.
 
 The only thing DevGuard needs from your build platform is an **OIDC workload identity token** whose claims identify the build configuration that is running. The steps below are the same everywhere — only requesting that token differs per platform. DevGuard currently maps the claims of GitHub Actions and GitLab CI tokens.
 
@@ -33,47 +33,44 @@ The only thing DevGuard needs from your build platform is an **OIDC workload ide
 
 ---
 
-## Step 1: Record the build and generate provenance
+## Step 1: Build and generate provenance
 
-Wrap the build in the in-toto `start`/`stop` pair and ask `stop` for a SLSA provenance predicate. The provenance lands in `<step>.provenance.json`.
+Build and push your image, then generate an unsigned SLSA provenance statement for it with `provenance generate`. The statement names the image by its manifest digest, so it matches exactly the image it is attached to later.
+
+For this walkthrough we stand in a small public image for whatever your pipeline builds:
 
 ```shell
-devguard-scanner intoto start --step build \
-  --apiUrl https://api.devguard.org \
-  --assetName <assetName> \
-  --token $DEVGUARD_TOKEN
-
-echo "built something" > build-output
-
-devguard-scanner intoto stop --step build \
-  --generateSlsaProvenance \
-  --products build-output \
-  --apiUrl https://api.devguard.org \
-  --assetName <assetName> \
-  --token $DEVGUARD_TOKEN
+docker pull registry.opencode.de/oci-community/images/zendis/static:1.0.0-minimal@sha256:b9d32313fd20a8f6aa9811e087ef033cf6d36fd3f5f3c390d135ecee39936cf5
+docker tag registry.opencode.de/oci-community/images/zendis/static:1.0.0-minimal@sha256:b9d32313fd20a8f6aa9811e087ef033cf6d36fd3f5f3c390d135ecee39936cf5 ghcr.io/org/my-app:1.0.0
+docker push ghcr.io/org/my-app:1.0.0
 ```
+
+```shell
+IMAGE_DIGEST=$(docker inspect --format '{{index .RepoDigests 0}}' ghcr.io/org/my-app:1.0.0 | cut -d@ -f2)
+
+devguard-scanner provenance generate \
+  --image ghcr.io/org/my-app@$IMAGE_DIGEST \
+  --input target=ociImage \
+  --output build.provenance.json
+```
+
+Building files instead of an image, for example release tarballs? Pass them with `--path dist/app-linux-amd64.tar.gz` — they are hashed and recorded under their file name. Both flags take a comma separated list.
 
 ### What you get out of this
 
-`start` hashes everything matching `--materials` before the build; `stop` hashes everything matching `--products` after it, signs an in-toto link with your PAT and uploads it. With `--generateSlsaProvenance` it also turns that link into an in-toto v1 statement with a SLSA v1 provenance predicate:
+`build.provenance.json` is an in-toto v1 statement with a SLSA v1 provenance predicate. It only contains what your job knows itself:
 
 ```json
 {
   "_type": "https://in-toto.io/Statement/v1",
   "predicateType": "https://slsa.dev/provenance/v1",
   "subject": [
-    { "name": "build-output", "digest": { "sha256": "e3b0c442…" } }
+    { "name": "ghcr.io/org/my-app", "digest": { "sha256": "e3b0c442…" } }
   ],
   "predicate": {
     "buildDefinition": {
-      "buildType": "https://devguard.org/build-types/in-toto-link/v1",
-      "externalParameters": { "gitlab": { "…": "…" }, "git": { "…": "…" } },
-      "resolvedDependencies": [
-        { "uri": "file://main.go", "digest": { "sha256": "7d865e95…" } }
-      ]
-    },
-    "runDetails": {
-      "builder": { "id": "https://devguard.org" }
+      "buildType": "https://devguard.org/slsa/build-types/ci-workflow/v1",
+      "externalParameters": { "inputs": { "target": "ociImage" } }
     }
   }
 }
@@ -81,13 +78,14 @@ devguard-scanner intoto stop --step build \
 
 Reading it field by field:
 
-- **`subject`** — your `--products`, by name and digest. This is the claim the whole attestation hangs off: *these exact bytes came out of this build*. It is passed through to the signed statement untouched, so make `--products` precise. Pointing it at a directory puts every file in there into the subject list.
-- **`externalParameters`** — whatever the git, GitHub and GitLab attestors could see about the environment: branch, commit, pipeline and runner details. Values matching known secret patterns are stripped before they are written, but this is a best-effort filter on data headed for a public attestation, so do not rely on it to catch a secret your build prints.
-- **`resolvedDependencies`** — your `--materials`, as `file://` URIs. These are local paths, not package coordinates: they say which files went in, not which upstream versions. The authoritative source entry, with the repository URL and commit, is added by DevGuard in step 3 from the token.
-- **`buildType`** — tells a verifier how to read the two fields above, namely as the materials and products of an in-toto link rather than as, say, a Dockerfile invocation.
-- **`builder.id`** — a placeholder. The literal string `https://devguard.org` is what the scanner writes, and it carries no meaning: a pipeline is not trusted to name itself, so DevGuard discards this value and substitutes the identity it verified. Anything you put here is thrown away.
+- **`subject`** — your `--image` and `--path` values, by name and digest. This is the claim the whole attestation hangs off: *these exact bytes came out of this build*. It is passed through to the signed statement untouched, so make it precise.
+- **`externalParameters.inputs`** — the `--input key=value` pairs, for the parameters your workflow was called with.
+- **`buildType`** — tells a verifier how to read the build definition.
+- **`runDetails.metadata`** — added when you pass `--startedOn` and `--finishedOn` as RFC3339 timestamps.
 
-Nothing is signed yet beyond the in-toto link's own PAT signature, which proves only that a holder of your token ran the step.
+Everything describing the build platform — the builder, the workflow, the source repository and commit — is deliberately missing. A pipeline is not trusted to name itself, so DevGuard fills those fields in from the verified workload identity token in step 3.
+
+Nothing is signed yet.
 
 ---
 
@@ -163,16 +161,8 @@ The output is a DSSE envelope, or a sigstore bundle if the instance uploads to a
 
 `attest` detects that the input is already signed and attaches it as-is, without signing it again — the signature stays DevGuard's.
 
-For this walkthrough we stand in a small public image for whatever your pipeline builds:
-
 ```shell
-docker pull gcr.io/distroless/static:nonroot
-docker tag gcr.io/distroless/static:nonroot ghcr.io/org/my-app:1.0.0
-docker push ghcr.io/org/my-app:1.0.0
-```
-
-```shell
-devguard-scanner attest build.provenance.dsse.json ghcr.io/org/my-app:1.0.0 \
+devguard-scanner attest build.provenance.dsse.json ghcr.io/org/my-app@$IMAGE_DIGEST \
   --predicateType https://slsa.dev/provenance/v1 \
   --apiUrl https://api.devguard.org \
   --assetName <assetName> \
@@ -268,4 +258,4 @@ openssl ecparam -name prime256v1 -genkey -noout -out slsa-private-key.pem
 - [The SLSA Framework](/explanations/supply-chain-security/slsa-framework)
 - [`devguard-scanner provenance sign`](/reference/scanner/provenance-sign)
 - [`devguard-scanner attest`](/reference/scanner/attest)
-- [`devguard-scanner intoto stop`](/reference/scanner/intoto-stop)
+- [`devguard-scanner provenance generate`](/reference/scanner/provenance)
