@@ -113,20 +113,23 @@ If the download is blocked, the proxy is working correctly. Maven reports the `4
 
 Checksum verification keeps working behind the proxy: Maven downloads the `.sha1` and `.md5` files of every artifact through DevGuard and verifies them as usual.
 
-### Testing the minimum package age
+### Testing a minimum release age rule
 
-The [minimum package age](/how-to-guides/dependency-proxy#minimum-package-age) is configured per repository and only applies to requests using the repository's proxy URL, which contains a secret. Maven Central has no publish date API, so the proxy uses the upload time Maven Central reports for each file. Versions that are too new are removed from `maven-metadata.xml`, and `<latest>` and `<release>` point to the newest version that is old enough. Downloads of a too new version are rejected.
+A [minimum release age rule](/how-to-guides/dependency-proxy/package-rules#minimum-release-age) is configured per repository and only applies to requests using the repository's proxy URL, which contains a secret. Maven Central has no publish date API, so the proxy uses the upload time Maven Central reports for each file. Versions that are too new are removed from `maven-metadata.xml`, and `<latest>` and `<release>` point to the newest version that is old enough. Downloads of a too new version are rejected.
 
-To verify it, temporarily set the minimum age to 87600 hours (10 years). `com.google.code.gson:gson:2.11.0` was published in May 2024, so the proxy must reject it, while `RELEASE` still resolves to an older version:
+To verify it, temporarily add a rule that denies everything released in the last 87600 hours (10 years). `com.google.code.gson:gson:2.11.0` was published in May 2024, so the proxy must reject it, while `RELEASE` still resolves to an older version:
 
 <Callout type="info">
   Maven has no client-side minimum release age. The proxy enforces it centrally, for every build and without any client configuration.
 </Callout>
 
 ```bash
-# set the minimum package age of the repository to 10 years
+# deny every package version released in the last 10 years
 devguard-scanner curl --token <your-pat-token> -X PUT \
-  -d '{"rules":"","minReleaseAge":87600}' \
+  -d 'rules:
+  - name: min-release-age
+    action: deny
+    expr: now() - timestamp(pkg.releasedAt) < duration("87600h")' \
   https://<your-devguard-url>/api/v1/organizations/<assetName>/config-files/dependency-proxy-configs/
 
 # the repository's Maven proxy URL applies its settings
@@ -151,7 +154,7 @@ EOF
 # gson 2.11.0 is younger than 10 years and must be rejected
 if mvn -B -s settings-min-age.xml org.apache.maven.plugins:maven-dependency-plugin:3.8.1:get \
   -Dartifact=com.google.code.gson:gson:2.11.0; then
-  echo "com.google.code.gson:gson:2.11.0 was NOT blocked by the minimum package age" >&2
+  echo "com.google.code.gson:gson:2.11.0 was NOT blocked by the minimum release age rule" >&2
   exit 1
 fi
 
@@ -168,9 +171,9 @@ mvn -B -s settings-min-age.xml org.apache.maven.plugins:maven-dependency-plugin:
   -Dartifact=com.google.code.gson:gson:RELEASE
 ls .m2/repository/com/google/code/gson/gson/
 
-# reset the minimum package age
+# remove the rule again
 devguard-scanner curl --token <your-pat-token> -X PUT \
-  -d '{"rules":"","minReleaseAge":0}' \
+  -d 'rules: []' \
   https://<your-devguard-url>/api/v1/organizations/<assetName>/config-files/dependency-proxy-configs/
 ```
 

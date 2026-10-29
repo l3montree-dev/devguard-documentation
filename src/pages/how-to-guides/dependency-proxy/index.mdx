@@ -22,8 +22,9 @@ DevGuard includes a built-in dependency proxy that acts as a protective layer be
 1. **Request Interception**: When you install a package, the proxy intercepts the request
 2. **Database Check**: The package is checked against the [OSV dataset](https://osv.dev), which includes GitHub malware advisories — kept current via the [vulndb sync](/reference/vulnerability-database/update-schedule)
 3. **Blocking**: If flagged as malicious, the request is blocked and logged
-4. **Caching**: Safe packages are cached with SHA256 integrity verification
-5. **Metrics**: All blocked attempts are recorded in Prometheus metrics
+4. **Package Rules**: Your [package rules](/how-to-guides/dependency-proxy/package-rules) decide whether the package is allowed, e.g. based on its release age
+5. **Caching**: Safe packages are cached with SHA256 integrity verification
+6. **Metrics**: All blocked attempts are recorded in Prometheus metrics
 
 ## Supported Ecosystems
 
@@ -50,22 +51,24 @@ For setup instructions, see the ecosystem-specific guides:
 - [Setup Debian Proxy](/how-to-guides/dependency-proxy/setup-debian-proxy)
 
 To route all CI jobs through the proxy at once, see [Self-Hosted CI Runners](/how-to-guides/dependency-proxy/ci-runners).
+To let Renovate propose only allowed versions, see [Use Renovate with the Dependency Proxy](/how-to-guides/dependency-proxy/renovate).
 
-## Minimum Package Age
+## Package Rules
 
-The proxy can be configured to refuse any package version published more recently than a specified number of hours. This gives the security community time to detect and flag malicious releases before they reach your teams — a simple but effective defense against attacks that rely on packages being downloaded within hours of publication.
+Package rules allow or deny packages with [CEL](https://github.com/google/cel-spec) expressions. They are configured per organization, project or repository and apply to requests using its proxy URL, which contains a secret. Rules are evaluated top to bottom and the last matching rule wins.
 
-The minimum age is configured per organization, project or repository and applies to requests using its proxy URL, which contains a secret. Versions that are too new are hidden from the package metadata, so version ranges resolve to the newest version that is old enough; a download of a too new version is rejected with `403 Forbidden`.
+A minimum release age is the most common rule. It refuses versions published more recently than a given time, which gives the security community time to detect and flag malicious releases before they reach your teams:
 
-| Ecosystem | Minimum package age |
-|-----------|---------------------|
-| npm | Supported |
-| PyPI | Supported |
-| Debian (apt) | Supported — too new versions are rejected but not hidden, see [Setup Debian Proxy](/how-to-guides/dependency-proxy/setup-debian-proxy#blocked-packages-and-signed-package-lists) |
-| Go modules | Supported |
-| Maven | Supported |
-| Composer (Packagist) | Supported |
-| OCI (container images) | Not supported — registries expose no reliable publish date, see [Setup OCI Proxy](/how-to-guides/dependency-proxy/setup-oci-proxy) |
+```yaml
+rules:
+  - name: min-release-age
+    action: deny
+    expr: pkg.ecosystem != "oci" && now() - timestamp(pkg.releasedAt) < duration("120h")
+```
+
+Versions that are blocked are hidden from the package metadata, so version ranges resolve to an allowed version; a download of a blocked version is rejected with `403 Forbidden`. Debian package lists are signed and cannot be filtered, see [Setup Debian Proxy](/how-to-guides/dependency-proxy/setup-debian-proxy#blocked-packages-and-signed-package-lists). OCI registries expose no reliable publish date, so the release age cannot be checked for container images.
+
+See [Package Rules](/how-to-guides/dependency-proxy/package-rules) for the available fields, functions and more examples.
 
 ## Cache & Security
 

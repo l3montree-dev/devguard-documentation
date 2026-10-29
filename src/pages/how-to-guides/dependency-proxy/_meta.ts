@@ -1,5 +1,6 @@
 export default {
     index: { title: 'Overview' },
+    'package-rules': { title: 'Package Rules' },
     'cache-management': { title: 'Cache Management' },
     'setup-go-proxy': { title: 'Setup Go Proxy' },
     'setup-npm-proxy': { title: 'Setup NPM Proxy' },
@@ -9,4 +10,5 @@ export default {
     'setup-oci-proxy': { title: 'Setup OCI Proxy' },
     'setup-debian-proxy': { title: 'Setup Debian Proxy' },
     'ci-runners': { title: 'Self-Hosted CI Runners' },
+    renovate: { title: 'Renovate' },
 }
