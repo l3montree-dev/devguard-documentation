@@ -42,11 +42,13 @@ export default function ReachabilityAnalysisPage() {
     const data = apiResponse?.data ?? []
     const total = apiResponse?.total ?? 0
 
-    useEffect(() => {
-        if (router.isReady && router.query.query) {
-            setSearchTerm(router.query.query as string)
+    const [syncedQuery, setSyncedQuery] = useState(queryParam)
+    if (syncedQuery !== queryParam) {
+        setSyncedQuery(queryParam)
+        if (router.isReady && queryParam) {
+            setSearchTerm(queryParam as string)
         }
-    }, [router.isReady, router.query.query])
+    }
 
     useEffect(() => {
         if (apiResponse?.data && apiResponse.data.length > 0) {
