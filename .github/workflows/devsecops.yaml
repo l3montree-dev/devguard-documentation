@@ -9,6 +9,8 @@ on:
 permissions:
   contents: read
   packages: write
+  # the reusable workflow requests an OIDC workload identity token to sign build provenance
+  id-token: write
 
 jobs:
   devguard-scanner:
