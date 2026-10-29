@@ -21,28 +21,30 @@ System packages are part of your supply chain too. In 2024, the backdoored `xz-u
 
 The DevGuard dependency proxy sits between apt and the Debian archive. Every package download is checked against the [OSV dataset](https://osv.dev) before it reaches your system, blocking known malicious packages automatically.
 
-- **Registry URL**: `<your-devguard-url>/api/v1/dependency-proxy/deb/debian`
-- **Security updates**: `<your-devguard-url>/api/v1/dependency-proxy/deb/debian-security`
+- **Registry URL**: `<your-devguard-url>/api/v1/dependency-proxy/<secret>/deb/debian`
+- **Security updates**: `<your-devguard-url>/api/v1/dependency-proxy/<secret>/deb/debian-security`
+
+Replace `<secret>` with the dependency proxy secret of your organization, project or repository. The complete proxy URLs are shown in its **Dependency Proxy Settings** in DevGuard.
 
 ## Configuration
 
 Since Debian 12, apt reads its package sources from `/etc/apt/sources.list.d/debian.sources`. Point both the main archive and the security archive at DevGuard by replacing the default mirror:
 
 ```bash {ignore}
-sed -i 's|http://deb.debian.org|https://<your-devguard-url>/api/v1/dependency-proxy/deb|' /etc/apt/sources.list.d/debian.sources
+sed -i 's|http://deb.debian.org|https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/deb|' /etc/apt/sources.list.d/debian.sources
 ```
 
 Afterwards, the file looks like this:
 
 ```text
 Types: deb
-URIs: https://<your-devguard-url>/api/v1/dependency-proxy/deb/debian
+URIs: https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/deb/debian
 Suites: trixie trixie-updates
 Components: main
 Signed-By: /usr/share/keyrings/debian-archive-keyring.pgp
 
 Types: deb
-URIs: https://<your-devguard-url>/api/v1/dependency-proxy/deb/debian-security
+URIs: https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/deb/debian-security
 Suites: trixie-security
 Components: main
 Signed-By: /usr/share/keyrings/debian-archive-keyring.pgp
@@ -77,7 +79,7 @@ apt therefore always sees the newest version, tries to download it, receives `40
 DevGuard ships a test package, `fake-malicious-package`, that is permanently flagged as malicious for all versions. The script below runs apt in a throwaway `debian:trixie-slim` container whose only package source is the DevGuard proxy, so your own system stays untouched:
 
 ```bash
-DEVGUARD_DEB="https://<your-devguard-url>/api/v1/dependency-proxy/deb"
+DEVGUARD_DEB="https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/deb"
 
 # hello installs through the proxy, apt verifies the signed package lists as usual
 docker run --rm -e DEVGUARD_DEB="$DEVGUARD_DEB" debian:trixie-slim bash -euc '

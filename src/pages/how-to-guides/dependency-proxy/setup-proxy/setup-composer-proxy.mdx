@@ -23,7 +23,9 @@ Composer and Packagist have responded with [several hardening measures](https://
 
 The DevGuard dependency proxy sits between Composer and Packagist and enforces protection centrally, for every Composer version and without any client configuration. Every package request is checked against the [OSV dataset](https://osv.dev) before it reaches your `vendor` directory, blocking known malicious packages automatically. Combined with the [minimum package age](/how-to-guides/dependency-proxy#minimum-package-age), the proxy complements Composer's own policies rather than replacing them.
 
-- **Registry URL**: `<your-devguard-url>/api/v1/dependency-proxy/composer`
+- **Registry URL**: `<your-devguard-url>/api/v1/dependency-proxy/<secret>/composer`
+
+Replace `<secret>` with the dependency proxy secret of your organization, project or repository. The complete proxy URLs are shown in its **Dependency Proxy Settings** in DevGuard.
 
 ## Configuration
 
@@ -31,7 +33,7 @@ The DevGuard dependency proxy sits between Composer and Packagist and enforces p
 
 ```bash {ignore}
 composer config --global repo.packagist.org false
-composer config --global repo.devguard composer https://<your-devguard-url>/api/v1/dependency-proxy/composer
+composer config --global repo.devguard composer https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/composer
 ```
 
 To scope it to a single project, run the same commands without `--global` in the project directory. Composer then adds the repositories to your `composer.json`:
@@ -42,7 +44,7 @@ To scope it to a single project, run the same commands without `--global` in the
     {
       "name": "devguard",
       "type": "composer",
-      "url": "https://<your-devguard-url>/api/v1/dependency-proxy/composer"
+      "url": "https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/composer"
     },
     {
       "packagist.org": false
@@ -81,7 +83,7 @@ composer init --name=devguard/composer-proxy-test
 # only needed for a DevGuard instance without TLS, such as a local test instance
 composer config secure-http false
 composer config repo.packagist.org false
-composer config repo.devguard composer https://<your-devguard-url>/api/v1/dependency-proxy/composer
+composer config repo.devguard composer https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/composer
 
 # psr/log installs through the proxy
 composer require psr/log:3.0.2
@@ -96,7 +98,7 @@ fi
 for path in p2/fake-org/malicious-package.json \
             dist/fake-org/malicious-package/1.0.0.zip; do
   status=$(curl -s -o /dev/null -w "%{http_code}" \
-    "https://<your-devguard-url>/api/v1/dependency-proxy/composer/$path")
+    "https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/composer/$path")
   if [ "$status" != "403" ]; then
     echo "expected 403 Forbidden for $path, got $status" >&2
     exit 1

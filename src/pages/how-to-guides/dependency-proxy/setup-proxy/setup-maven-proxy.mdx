@@ -21,7 +21,9 @@ Maven Central is a target for typosquatting just like npm or PyPI. Attackers pub
 
 The DevGuard dependency proxy sits between your build tool and Maven Central. Every artifact request is checked against the [OSV dataset](https://osv.dev) before it reaches your local repository, blocking known malicious packages automatically.
 
-- **Registry URL**: `<your-devguard-url>/api/v1/dependency-proxy/maven`
+- **Registry URL**: `<your-devguard-url>/api/v1/dependency-proxy/<secret>/maven`
+
+Replace `<secret>` with the dependency proxy secret of your organization, project or repository. The complete proxy URLs are shown in its **Dependency Proxy Settings** in DevGuard.
 
 ## Configuration
 
@@ -35,7 +37,7 @@ Add a mirror to your Maven settings (`~/.m2/settings.xml`). `<mirrorOf>*</mirror
     <mirror>
       <id>devguard</id>
       <name>DevGuard Dependency Proxy</name>
-      <url>https://<your-devguard-url>/api/v1/dependency-proxy/maven</url>
+      <url>https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/maven</url>
       <mirrorOf>*</mirrorOf>
     </mirror>
   </mirrors>
@@ -55,7 +57,7 @@ Replace `mavenCentral()` with the proxy in your `settings.gradle.kts`:
 ```kotlin
 dependencyResolutionManagement {
     repositories {
-        maven { url = uri("https://<your-devguard-url>/api/v1/dependency-proxy/maven") }
+        maven { url = uri("https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/maven") }
     }
 }
 ```
@@ -77,7 +79,7 @@ cat > settings.xml <<EOF
   <mirrors>
     <mirror>
       <id>devguard</id>
-      <url>https://<your-devguard-url>/api/v1/dependency-proxy/maven</url>
+      <url>https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/maven</url>
       <mirrorOf>*</mirrorOf>
     </mirror>
   </mirrors>
@@ -99,7 +101,7 @@ fi
 for path in com/fake/malicious-package/1.0.0/malicious-package-1.0.0.pom \
             com/fake/malicious-package/maven-metadata.xml; do
   status=$(curl -s -o /dev/null -w "%{http_code}" \
-    "https://<your-devguard-url>/api/v1/dependency-proxy/maven/$path")
+    "https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/maven/$path")
   if [ "$status" != "403" ]; then
     echo "expected 403 Forbidden for $path, got $status" >&2
     exit 1
