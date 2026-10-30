@@ -57,7 +57,7 @@ Blocked versions are also hidden from the version lists, so version ranges resol
 and Composer check every version; Go and Maven check from the newest version downwards until the first allowed one,
 because each check needs an extra request for the release time. For Debian, the proxy replaces blocked versions in the
 package list with the newest allowed older version and signs the list with its own key, see
-[Setup Debian Proxy](/how-to-guides/dependency-proxy/setup-debian-proxy#how-debian-packages-are-handled).
+[Setup Debian Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-debian-proxy#how-debian-packages-are-handled).
 
 ## The `pkg` variable
 
@@ -82,7 +82,7 @@ Not every ecosystem provides every field:
 | PyPI | Upload time of the file | – |
 | Composer | `time` field reported by Packagist | – |
 | Maven | `Last-Modified` header from Maven Central | – |
-| Debian | First appearance in the suite according to snapshot.debian.org and metasnap.debian.net, see [Release times](/how-to-guides/dependency-proxy/setup-debian-proxy#release-times) | – |
+| Debian | First appearance in the suite according to snapshot.debian.org and metasnap.debian.net, see [Release times](/how-to-guides/dependency-proxy/setup-proxy/setup-debian-proxy#release-times) | – |
 | Alpine | `Last-Modified` header from the Alpine mirror | – |
 | OCI | not available | – |
 
