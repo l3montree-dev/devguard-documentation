@@ -43,6 +43,11 @@ const config = withMarkdownWebBook({
                 permanent: true,
             },
             {
+                source: '/how-to-guides/dependency-proxy/:page(setup-[a-z]+-proxy)',
+                destination: '/how-to-guides/dependency-proxy/setup-proxy/:page',
+                permanent: true,
+            },
+            {
                 source: '/explanations/vulnerability-management/false-positive-detection',
                 destination:
                     '/explanations/vulnerability-management/reduce-false-positives',
