@@ -5,4 +5,5 @@ export default {
     'setup-proxy': { title: 'Setup Proxy' },
     'artifact-keeper': { title: 'Artifact Keeper' },
     'ci-runners': { title: 'Self-Hosted CI Runners' },
+    renovate: { title: 'Renovate' },
 }
