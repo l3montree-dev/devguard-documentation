@@ -36,6 +36,7 @@ DevGuard includes a built-in dependency proxy that acts as a protective layer be
 | Maven | `/api/v1/dependency-proxy/<secret>/maven` |
 | Composer (Packagist) | `/api/v1/dependency-proxy/<secret>/composer` |
 | Debian (apt) | `/api/v1/dependency-proxy/<secret>/deb/debian` |
+| Alpine (apk) | `/api/v1/dependency-proxy/<secret>/apk/alpine` |
 | OCI (container images) | `/v2/<secret>/` — pull `<your-devguard-host>/<secret>/<registry>/<image>:<tag>` |
 
 `<secret>` is the dependency proxy secret of your organization, project or repository. It links the requests to the rules configured there, and the proxy rejects requests without a valid secret. The complete proxy URLs are shown in its **Dependency Proxy Settings** in DevGuard.
@@ -49,6 +50,7 @@ For setup instructions, see the ecosystem-specific guides:
 - [Setup Composer Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-composer-proxy)
 - [Setup OCI Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-oci-proxy)
 - [Setup Debian Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-debian-proxy)
+- [Setup Alpine Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-alpine-proxy)
 
 To route all CI jobs through the proxy at once, see [Self-Hosted CI Runners](/how-to-guides/dependency-proxy/ci-runners).
 To let Renovate propose only allowed versions, see [Use Renovate with the Dependency Proxy](/how-to-guides/dependency-proxy/renovate).

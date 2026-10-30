@@ -33,6 +33,7 @@ Renovate then proposes the newest **allowed** version instead of one your builds
 | Maven | `maven` | ✓ |
 | Composer | `packagist` | ✓ |
 | Debian | `deb` | ✓ (via a custom manager, see [Debian](#debian)) |
+| Alpine | `repology` | Not yet, see [Alpine](#alpine) |
 | PyPI | `pypi` | Not yet |
 | OCI | `docker` | No – version lists are not filtered |
 
@@ -130,6 +131,10 @@ A Debian suite lists exactly one version per package. The proxy replaces a block
 <Callout type="info">
   Renovate verifies the downloaded package list against the checksums in `InRelease`, but not the signature. The proxy signs `InRelease` with its own key, so no extra configuration is needed. Only the suites listed in [Setup Debian Proxy](/how-to-guides/dependency-proxy/setup-debian-proxy#supported-suites) are supported.
 </Callout>
+
+### Alpine
+
+Renovate is not supported for Alpine yet. The proxy passes the package index through unchanged and only blocks the download of disallowed versions. Renovate can therefore propose updates that the proxy then rejects with `403 Forbidden`.
 
 ## 3. Configure Your Package Managers
 

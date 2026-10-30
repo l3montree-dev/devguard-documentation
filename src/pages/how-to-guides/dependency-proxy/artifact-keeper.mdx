@@ -70,6 +70,7 @@ Your clients keep using the DevGuard proxy URLs, nothing changes on their side.
   - Use the root `http://deb.debian.org` as upstream, so that both the `debian` and the `debian-security` archive are reachable.
   - Release times come from the official Debian archive, see [How Debian packages are handled](/how-to-guides/dependency-proxy/setup-proxy/setup-debian-proxy#how-debian-packages-are-handled).
   - Blocked versions are replaced with older ones that DevGuard downloads directly from snapshot.debian.org, not through Artifact Keeper.
+- **Alpine**: Not supported yet. The proxy passes the package index through unchanged and only blocks the download of disallowed versions. Clients can therefore see updates in the index that the proxy then rejects with `403 Forbidden`.
 
 ## Internal Packages
 

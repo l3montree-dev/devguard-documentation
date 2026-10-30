@@ -65,7 +65,7 @@ package list with the newest allowed older version and signs the list with its o
 |-------|------|-------------|
 | `pkg.name` | string | Package name, e.g. `lodash`, `@babel/core`, `github.com/gin-gonic/gin` |
 | `pkg.version` | string | Requested version |
-| `pkg.ecosystem` | string | `npm`, `go`, `pypi`, `maven`, `composer`, `deb` or `oci` |
+| `pkg.ecosystem` | string | `npm`, `go`, `pypi`, `maven`, `composer`, `deb`, `apk` or `oci` |
 | `pkg.purl` | string | e.g. `pkg:npm/lodash@4.17.21`; OCI uses the image reference, e.g. `docker.io/library/nginx:latest` |
 | `pkg.registry` | string | Upstream registry, e.g. `https://pypi.org` |
 | `pkg.releasedAt` | string (RFC 3339) | Publish time of the version. Use `timestamp(pkg.releasedAt)` to compare it. |
@@ -83,6 +83,7 @@ Not every ecosystem provides every field:
 | Composer | `time` field reported by Packagist | – |
 | Maven | `Last-Modified` header from Maven Central | – |
 | Debian | First appearance in the suite according to snapshot.debian.org and metasnap.debian.net, see [Release times](/how-to-guides/dependency-proxy/setup-debian-proxy#release-times) | – |
+| Alpine | `Last-Modified` header from the Alpine mirror | – |
 | OCI | not available | – |
 
 ### Missing fields
