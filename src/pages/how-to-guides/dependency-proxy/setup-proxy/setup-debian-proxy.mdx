@@ -1,0 +1,250 @@
+---
+title: Setup Debian Proxy with DevGuard Dependency Proxy
+description: "Configure apt to route Debian package downloads through the DevGuard dependency proxy for malicious package detection, package rules."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: setup debian proxy with devguard
+lang: en-US
+ignoreChecks: null
+---
+
+import { Callout } from '@document-writing-tools/kernux-theme'
+
+# Setup Debian Proxy with DevGuard Dependency Proxy
+
+System packages are part of your supply chain too. In 2024, the backdoored `xz-utils` releases 5.6.0 and 5.6.1 (CVE-2024-3094) reached Debian testing and unstable before the backdoor was discovered, and every container image or server that ran `apt-get upgrade` against those suites pulled them in. Because base images and CI runners install system packages on every build, a single compromised `.deb` reaches a large part of your infrastructure within hours.
+
+The DevGuard dependency proxy sits between apt and the Debian archive. It applies your [package rules](/how-to-guides/dependency-proxy/package-rules) to the package lists apt downloads, so apt only sees versions that are allowed, and it checks every `.deb` download against the [OSV dataset](https://osv.dev) to block known malicious packages.
+
+- **Registry URL**: `<your-devguard-url>/api/v1/dependency-proxy/<secret>/deb/debian`
+- **Security updates**: `<your-devguard-url>/api/v1/dependency-proxy/<secret>/deb/debian-security`
+- **Signing key**: `<your-devguard-url>/api/v1/dependency-proxy/<secret>/deb/debian/devguard-deb-keyring.asc`
+
+Replace `<secret>` with the dependency proxy secret of your organization, project or repository. The complete proxy URLs and the signing key download are shown in its **Dependency Proxy Settings** in DevGuard.
+
+## Supported suites
+
+| Archive           | Suites                                                         |
+| ----------------- | -------------------------------------------------------------- |
+| `debian`          | `trixie`, `trixie-updates`, `bookworm`, `bookworm-updates`     |
+| `debian-security` | `trixie-security`, `bookworm-security`                         |
+
+Only the component `main` and the architectures `amd64` and `arm64` are supported. Requests for other suites answer `404 Not Found`. Other distributions such as Ubuntu and third-party repositories are not supported.
+
+## Configuration
+
+The proxy rewrites the package lists and signs them with its own key, one per dependency proxy secret. apt rejects the package lists unless it trusts this key, so install it first:
+
+```bash {ignore}
+curl -fsSL https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/deb/debian/devguard-deb-keyring.asc \
+  -o /etc/apt/keyrings/devguard.asc
+```
+
+Since Debian 12, apt reads its package sources from `/etc/apt/sources.list.d/debian.sources`. Point both the main archive and the security archive at DevGuard and replace the Debian archive key with the proxy key:
+
+```bash {ignore}
+sed -i \
+  -e 's|http://deb.debian.org|https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/deb|' \
+  -e 's|^Signed-By: .*|Signed-By: /etc/apt/keyrings/devguard.asc|' \
+  /etc/apt/sources.list.d/debian.sources
+```
+
+Afterwards, the file looks like this:
+
+```text
+Types: deb
+URIs: https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/deb/debian
+Suites: trixie trixie-updates
+Components: main
+Signed-By: /etc/apt/keyrings/devguard.asc
+
+Types: deb
+URIs: https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/deb/debian-security
+Suites: trixie-security
+Components: main
+Signed-By: /etc/apt/keyrings/devguard.asc
+```
+
+Once set, all `apt-get update`, `apt-get install` and `apt-get upgrade` invocations go through DevGuard transparently.
+
+In a `Dockerfile`, `ADD` downloads the key without needing `curl` in the image:
+
+```dockerfile {ignore}
+FROM debian:trixie-slim
+ADD https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/deb/debian/devguard-deb-keyring.asc /etc/apt/keyrings/devguard.asc
+RUN chmod 644 /etc/apt/keyrings/devguard.asc \
+ && sed -i \
+      -e 's|http://deb.debian.org|https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/deb|' \
+      -e 's|^Signed-By: .*|Signed-By: /etc/apt/keyrings/devguard.asc|' \
+      /etc/apt/sources.list.d/debian.sources \
+ && apt-get update
+```
+
+<Callout type="warning">
+  apt needs the `ca-certificates` package to connect to an `https` repository. Slim base images such as `debian:trixie-slim` do not include it, so install it from the default mirror first or use a DevGuard URL that your image already trusts.
+</Callout>
+
+<Callout type="info">
+  On startup, the proxy blocks all requests until the malicious package database is fully loaded. This initialization period prevents cache poisoning. See [Cache Management](/how-to-guides/dependency-proxy/cache-management) for details.
+</Callout>
+
+## How Debian packages are handled
+
+apt does not ask the registry for the versions of a single package like npm or pip do. It downloads one signed package list per suite and picks the newest version from it. DevGuard therefore enforces your rules on the package list itself.
+
+### Release times
+
+The Debian archive does not publish when a version was released. A DevGuard background job determines it once per hour for all supported suites and stores the result, so a proxy request never has to compute it:
+
+1. If a version was already in the archive 30 days ago according to [snapshot.debian.org](https://snapshot.debian.org), its `pkg.releasedAt` is set to that point in time. It is at least 30 days old.
+2. Younger versions get the time they first appeared in the suite according to [metasnap.debian.net](https://metasnap.debian.net).
+3. If neither source knows the version, `pkg.releasedAt` is the current time, so release age rules treat it as brand new.
+
+<Callout type="warning">
+  Versions older than 30 days all count as exactly 30 days old. A minimum release age rule therefore only works reliably for durations up to 30 days (`720h`). A longer duration blocks almost every package.
+</Callout>
+
+Until the job has run for the first time after an installation, the proxy answers `apt-get update` with `503 Service Unavailable` and a `Retry-After` header.
+
+### Rewriting the package list
+
+On `apt-get update`, the proxy evaluates your rules for every package in the list. Debian packages are matched as `debian/<package>`, for example `pkg.name == "debian/curl"`, and expose the suite as `pkg.suite`, for example `pkg.suite.endsWith("-security")`.
+
+If a version is not allowed, the proxy replaces it:
+
+1. All binary packages built from the same source package are replaced together, for example `curl`, `libcurl4t64` and `libcurl3t64-gnutls`. Otherwise apt would mix versions that depend on each other exactly.
+2. The proxy looks for the newest older version of the same suite that all these packages are allowed in.
+3. The package entries are taken from the snapshot at which that version was published, and downloads are served from snapshot.debian.org through the proxy.
+4. If no allowed version exists, the packages are removed from the list and apt reports `Unable to locate package` or `has no installation candidate`.
+
+Afterwards, the proxy signs the rewritten package list (`InRelease`, `Release`, `Release.gpg`) with the key you installed. apt verifies it as usual, so the package lists stay tamper-proof between the proxy and your machine.
+
+The rewritten list is cached for 30 minutes per dependency proxy secret. Rule changes take effect after this time at the latest.
+
+### Malicious packages
+
+Every `.deb` download is checked against the malicious package database. A blocked download answers `403 Forbidden` and apt aborts the installation.
+
+### Custom registries
+
+You can point the proxy at your own Debian mirror, for example a Nexus or Artifactory proxy repository:
+
+```yaml {ignore}
+registries:
+  deb: https://nexus.example.com/repository/debian/
+```
+
+The package list is then taken from your registry, while the release times still come from the official Debian archive. Packages that do not exist there, for example internal packages, have no known release time and get `pkg.releasedAt` set to the current time. A minimum release age rule blocks all of them. Add an allow rule for them, for example:
+
+```yaml {ignore}
+rules:
+  - name: min-release-age
+    action: deny
+    expr: now() - timestamp(pkg.releasedAt) < duration("120h")
+  - name: internal-packages
+    action: allow
+    expr: pkg.name.startsWith("debian/mycompany-")
+```
+
+Replacement versions are still downloaded from snapshot.debian.org.
+
+## Testing
+
+DevGuard ships a test package, `fake-malicious-package`, that is permanently flagged as malicious for all versions. The script below runs apt in a throwaway `debian:trixie-slim` container whose only package source is the DevGuard proxy, so your own system stays untouched:
+
+```bash
+DEVGUARD_DEB="https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/deb"
+
+# download the signing key of the proxy
+curl -fsSL "$DEVGUARD_DEB/debian/devguard-deb-keyring.asc" -o devguard.asc
+
+# hello installs through the proxy, apt verifies the package lists with the proxy key
+docker run --rm -e DEVGUARD_DEB="$DEVGUARD_DEB" \
+  -v "$PWD/devguard.asc:/etc/apt/keyrings/devguard.asc:ro" \
+  debian:trixie-slim bash -euc '
+  sed -i \
+    -e "s|http://deb.debian.org|$DEVGUARD_DEB|" \
+    -e "s|^Signed-By: .*|Signed-By: /etc/apt/keyrings/devguard.asc|" \
+    /etc/apt/sources.list.d/debian.sources
+  apt-get update
+  apt-get install -y --no-install-recommends hello
+  hello
+'
+
+# fake-malicious-package must be rejected with 403 Forbidden
+status=$(curl -s -o /dev/null -w "%{http_code}" \
+  "$DEVGUARD_DEB/debian/pool/main/f/fake-malicious-package/fake-malicious-package_1.0.0_all.deb")
+if [ "$status" != "403" ]; then
+  echo "expected 403 Forbidden for fake-malicious-package, got $status" >&2
+  exit 1
+fi
+```
+
+`fake-malicious-package` does not exist in the Debian archive, so apt cannot request it. The proxy checks a download against the malicious package database before fetching it from upstream, so the `curl` request above proves the check without a real package.
+
+### Testing a package rule
+
+[Package rules](/how-to-guides/dependency-proxy/package-rules) are configured per repository and only apply to requests using the repository's proxy URL, which contains a secret. To verify them, temporarily deny every version of `hello`. The proxy removes it from the package list, so apt can no longer find it:
+
+```bash
+# deny every version of hello
+devguard-scanner curl --token <your-pat-token> -X PUT \
+  -d 'rules:
+  - name: deny-hello
+    action: deny
+    expr: pkg.name == "debian/hello"' \
+  https://<your-devguard-url>/api/v1/organizations/<assetName>/config-files/dependency-proxy-configs/
+
+# the repository's Debian proxy URL applies its settings
+DEBIAN_PROXY=$(devguard-scanner curl --token <your-pat-token> -s \
+  https://<your-devguard-url>/api/v1/organizations/<assetName>/dependency-proxy-urls/ \
+  | jq -r .debian)
+curl -fsSL "$DEBIAN_PROXY/devguard-deb-keyring.asc" -o devguard.asc
+
+# hello is not in the package list anymore, so apt must fail
+docker run --rm -e DEVGUARD_DEB="${DEBIAN_PROXY%/debian}" \
+  -v "$PWD/devguard.asc:/etc/apt/keyrings/devguard.asc:ro" \
+  debian:trixie-slim bash -euc '
+  sed -i \
+    -e "s|http://deb.debian.org|$DEVGUARD_DEB|" \
+    -e "s|^Signed-By: .*|Signed-By: /etc/apt/keyrings/devguard.asc|" \
+    /etc/apt/sources.list.d/debian.sources
+  apt-get update
+  if apt-get install -y --no-install-recommends hello; then
+    echo "hello was NOT removed by the package rule" >&2
+    exit 1
+  fi
+'
+
+# remove the rule again
+devguard-scanner curl --token <your-pat-token> -X PUT \
+  -d 'rules: []' \
+  https://<your-devguard-url>/api/v1/organizations/<assetName>/config-files/dependency-proxy-configs/
+```
+
+<Callout type="info">
+  The package list of a proxy secret is cached for 30 minutes. If you ran `apt-get update` against the same proxy URL shortly before changing the rule, the old list may still be served.
+</Callout>
+
+To see which packages were replaced with an older version, look for snapshot paths in the package list after `apt-get update`:
+
+```bash {ignore}
+apt-cache show <package> | grep Filename
+# Filename: snapshot/20261012T083015Z/pool/main/...
+```
+
+## Further Reading
+
+- [Dependency Proxy Overview](/how-to-guides/dependency-proxy)
+- [Package Rules](/how-to-guides/dependency-proxy/package-rules)
+- [Cache Management](/how-to-guides/dependency-proxy/cache-management)
+- [Setup npm Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-npm-proxy)
+- [Setup Go Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-go-proxy)
+- [Setup PyPI Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-pypi-proxy)
+- [Setup OCI Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-oci-proxy)
+- [OSV (Open Source Vulnerabilities)](https://osv.dev)
