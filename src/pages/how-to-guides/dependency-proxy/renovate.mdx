@@ -126,10 +126,10 @@ The configuration below uses `managerFilePatterns` and needs Renovate 41 or newe
 }
 ```
 
-A Debian suite lists exactly one version per package. The proxy replaces a blocked version with the newest allowed older one (see [How Debian packages are handled](/how-to-guides/dependency-proxy/setup-debian-proxy#how-debian-packages-are-handled)), so Renovate proposes this version instead.
+A Debian suite lists exactly one version per package. The proxy replaces a blocked version with the newest allowed older one (see [How Debian packages are handled](/how-to-guides/dependency-proxy/setup-proxy/setup-debian-proxy#how-debian-packages-are-handled)), so Renovate proposes this version instead.
 
 <Callout type="info">
-  Renovate verifies the downloaded package list against the checksums in `InRelease`, but not the signature. The proxy signs `InRelease` with its own key, so no extra configuration is needed. Only the suites listed in [Setup Debian Proxy](/how-to-guides/dependency-proxy/setup-debian-proxy#supported-suites) are supported.
+  Renovate verifies the downloaded package list against the checksums in `InRelease`, but not the signature. The proxy signs `InRelease` with its own key, so no extra configuration is needed. Only the suites listed in [Setup Debian Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-debian-proxy#supported-suites) are supported.
 </Callout>
 
 ### Alpine
