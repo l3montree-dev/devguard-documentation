@@ -132,10 +132,6 @@ A Debian suite lists exactly one version per package. The proxy replaces a block
   Renovate verifies the downloaded package list against the checksums in `InRelease`, but not the signature. The proxy signs `InRelease` with its own key, so no extra configuration is needed. Only the suites listed in [Setup Debian Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-debian-proxy#supported-suites) are supported.
 </Callout>
 
-### Alpine
-
-The proxy filters the package index (`APKINDEX.tar.gz`), so it only lists versions that your [package rules](/how-to-guides/dependency-proxy/package-rules) allow and that are not flagged as malicious. Renovate therefore only opens pull requests for allowed versions.
-
 ## 3. Configure Your Package Managers
 
 Renovate updates lock files (`package-lock.json`, `go.sum`, `composer.lock`) with the real package manager. Configure the proxy in your repository as well, so these downloads go through DevGuard too:
