@@ -41,7 +41,7 @@ The registry must be part of the reference — `docker.io/library/nginx`, not ju
 | GitLab Container Registry | `<your-devguard-host>/<secret>/registry.gitlab.com/group/project:tag` |
 
 <Callout type="warning">
-  The [minimum package age](/how-to-guides/dependency-proxy#minimum-package-age) does not apply to container images. Unlike npm, PyPI and Go, the OCI registry protocol has no publish date for an image: the `created` timestamp inside an image is set by the build and is often fixed to 1970 or missing for reproducible builds, and registry-side push times are only available through registry-specific APIs. Pin images by digest (`image@sha256:…`) to control exactly which image version you pull.
+  A [minimum release age rule](/how-to-guides/dependency-proxy/package-rules#minimum-release-age) cannot be applied to container images. Unlike npm, PyPI and Go, the OCI registry protocol has no publish date for an image: the `created` timestamp inside an image is set by the build and is often fixed to 1970 or missing for reproducible builds, and registry-side push times are only available through registry-specific APIs. Pin images by digest (`image@sha256:…`) to control exactly which image version you pull.
 </Callout>
 
 <Callout type="info">
@@ -91,9 +91,9 @@ done
 
 - [Dependency Proxy Overview](/how-to-guides/dependency-proxy)
 - [Cache Management](/how-to-guides/dependency-proxy/cache-management)
-- [Setup npm Proxy](/how-to-guides/dependency-proxy/setup-npm-proxy)
-- [Setup Go Proxy](/how-to-guides/dependency-proxy/setup-go-proxy)
-- [Setup PyPI Proxy](/how-to-guides/dependency-proxy/setup-pypi-proxy)
-- [Setup Maven Proxy](/how-to-guides/dependency-proxy/setup-maven-proxy)
-- [Setup Composer Proxy](/how-to-guides/dependency-proxy/setup-composer-proxy)
-- [Setup Debian Proxy](/how-to-guides/dependency-proxy/setup-debian-proxy)
+- [Setup npm Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-npm-proxy)
+- [Setup Go Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-go-proxy)
+- [Setup PyPI Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-pypi-proxy)
+- [Setup Maven Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-maven-proxy)
+- [Setup Composer Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-composer-proxy)
+- [Setup Debian Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-debian-proxy)

@@ -1,0 +1,84 @@
+---
+title: Setup Alpine Proxy with DevGuard Dependency Proxy
+description: "Configure apk to route Alpine package downloads through the DevGuard dependency proxy for malicious package detection and package rules."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: setup alpine proxy with devguard
+lang: en-US
+ignoreChecks: null
+---
+
+import { Callout } from '@document-writing-tools/kernux-theme'
+
+# Setup Alpine Proxy with DevGuard Dependency Proxy
+
+Alpine Linux is the base of many container images, so every `apk add` in a `Dockerfile` or CI job pulls system packages into your builds. The DevGuard dependency proxy sits between apk and the Alpine mirror. It checks every `.apk` download against your [package rules](/how-to-guides/dependency-proxy/package-rules) and the [OSV dataset](https://osv.dev) to block known malicious packages.
+
+- **Registry URL**: `<your-devguard-url>/api/v1/dependency-proxy/<secret>/apk/alpine`
+
+Replace `<secret>` with the dependency proxy secret of your organization, project or repository. The complete proxy URL is shown in its **Dependency Proxy Settings** in DevGuard.
+
+## Configuration
+
+apk reads its package sources from `/etc/apk/repositories`. Point every entry at DevGuard:
+
+```bash {ignore}
+sed -i 's|https://dl-cdn.alpinelinux.org/alpine|https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/apk/alpine|' \
+  /etc/apk/repositories
+```
+
+Afterwards, the file looks like this:
+
+```text
+https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/apk/alpine/v3.20/main
+https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/apk/alpine/v3.20/community
+```
+
+The proxy passes the package index (`APKINDEX.tar.gz`) through unchanged, so apk keeps verifying it with the official Alpine keys. No additional key is needed.
+
+<Callout type="info">
+  On startup, the proxy blocks all requests until the malicious package database is fully loaded. This initialization period prevents cache poisoning. See [Cache Management](/how-to-guides/dependency-proxy/cache-management) for details.
+</Callout>
+
+## How Alpine packages are handled
+
+Alpine packages are matched as `alpine/<package>`, for example `pkg.name == "alpine/curl"`, with `pkg.ecosystem == "apk"`. The release time is taken from the `Last-Modified` header of the Alpine mirror.
+
+<Callout type="warning">
+  Unlike Debian, the proxy does not rewrite the package index. Versions blocked by your rules or flagged as malicious are not replaced with an older version. Their download is rejected with `403 Forbidden`, so `apk add` fails. Wait until the package satisfies your rules or add an allow rule for it.
+</Callout>
+
+## Testing
+
+DevGuard ships a test package, `fake-malicious-package`, that is permanently flagged as malicious for all versions. It does not exist in the Alpine mirror, so apk cannot request it, but a direct download must be rejected:
+
+```bash
+DEVGUARD_APK="https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/apk/alpine"
+
+# curl installs through the proxy
+docker run --rm -e DEVGUARD_APK="$DEVGUARD_APK" alpine:3.20 sh -euc '
+  sed -i "s|https://dl-cdn.alpinelinux.org/alpine|$DEVGUARD_APK|" /etc/apk/repositories
+  apk add --no-cache curl
+'
+
+# fake-malicious-package must be rejected with 403 Forbidden
+status=$(curl -s -o /dev/null -w "%{http_code}" \
+  "$DEVGUARD_APK/v3.20/main/x86_64/fake-malicious-package-1.0.0-r0.apk")
+if [ "$status" != "403" ]; then
+  echo "expected 403 Forbidden for fake-malicious-package, got $status" >&2
+  exit 1
+fi
+```
+
+## Further Reading
+
+- [Dependency Proxy Overview](/how-to-guides/dependency-proxy)
+- [Package Rules](/how-to-guides/dependency-proxy/package-rules)
+- [Cache Management](/how-to-guides/dependency-proxy/cache-management)
+- [Setup Debian Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-debian-proxy)
+- [OSV (Open Source Vulnerabilities)](https://osv.dev)

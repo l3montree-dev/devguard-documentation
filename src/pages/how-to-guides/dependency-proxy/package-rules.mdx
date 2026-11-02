@@ -1,0 +1,183 @@
+---
+title: Dependency Proxy Package Rules
+description: "Allow or deny packages in the DevGuard dependency proxy with CEL rules — minimum release age, blocked scopes, publisher changes and exceptions."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: dependency proxy package rules
+lang: en-US
+ignoreChecks: null
+---
+
+import { Callout } from '@document-writing-tools/kernux-theme'
+
+# Dependency Proxy Package Rules
+
+Package rules decide which packages the [dependency proxy](/how-to-guides/dependency-proxy) serves. Each rule is a
+[CEL (Common Expression Language)](https://github.com/google/cel-spec) expression that is evaluated against the
+requested package. Rules are configured per organization, project or repository in the **Dependency Proxy**
+settings and apply to requests using the proxy URL of that scope.
+
+The malicious package check always runs, independently of your rules — an `allow` rule can never let a known
+malicious package through.
+
+## Format
+
+Rules are written in YAML:
+
+```yaml
+rules:
+  - name: min-release-age
+    action: deny
+    expr: pkg.ecosystem != "oci" && now() - timestamp(pkg.releasedAt) < duration("120h")
+  - name: allow-trusted
+    action: allow
+    expr: pkg.name == "my-trusted-package"
+```
+
+| Field | Description |
+|-------|-------------|
+| `name` | Shown in the error message when the rule blocks a package. |
+| `action` | `deny` blocks a matching package, `allow` lets it through. |
+| `expr` | A CEL expression that evaluates to a boolean. `true` means the rule matches. |
+
+## Evaluation
+
+- Rules are evaluated **top to bottom** and the **last matching rule wins**. Put general rules first and exceptions below them.
+- A package that matches no rule is **allowed**.
+- A configuration with invalid YAML, an unknown `action` or an expression that does not compile is rejected when saving.
+- If an expression fails at runtime — for example because it reads a field the package does not have — the package is **blocked** (fail closed).
+
+A blocked download is answered with `403 Forbidden`, the header `X-Not-Allowed-Package: blocked` and the name of the rule.
+Blocked versions are also hidden from the version lists, so version ranges resolve to an allowed version. npm, PyPI
+and Composer check every version; Go and Maven check from the newest version downwards until the first allowed one,
+because each check needs an extra request for the release time. For Debian, the proxy replaces blocked versions in the
+package list with the newest allowed older version and signs the list with its own key, see
+[Setup Debian Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-debian-proxy#how-debian-packages-are-handled).
+
+## The `pkg` variable
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `pkg.name` | string | Package name, e.g. `lodash`, `@babel/core`, `github.com/gin-gonic/gin` |
+| `pkg.version` | string | Requested version |
+| `pkg.ecosystem` | string | `npm`, `go`, `pypi`, `maven`, `composer`, `deb`, `apk` or `oci` |
+| `pkg.purl` | string | e.g. `pkg:npm/lodash@4.17.21`; OCI uses the image reference, e.g. `docker.io/library/nginx:latest` |
+| `pkg.registry` | string | Upstream registry, e.g. `https://pypi.org` |
+| `pkg.releasedAt` | string (RFC 3339) | Publish time of the version. Use `timestamp(pkg.releasedAt)` to compare it. |
+| `pkg.publisher.name` | string | User who published this version (npm only) |
+| `pkg.publisher.changedSinceLastVersion` | bool | The publisher differs from the one of the previously published version (npm only) |
+| `pkg.suite` | string | Debian suite, e.g. `trixie` or `trixie-security` (Debian only) |
+
+Not every ecosystem provides every field:
+
+| Ecosystem | Source of `releasedAt` | `publisher` |
+|-----------|------------------------|-------------|
+| npm | `time` field of the package metadata | ✓ |
+| Go modules | `Time` field of the `.info` file | – |
+| PyPI | Upload time of the file | – |
+| Composer | `time` field reported by Packagist | – |
+| Maven | `Last-Modified` header from Maven Central | – |
+| Debian | First appearance in the suite according to snapshot.debian.org and metasnap.debian.net, see [Release times](/how-to-guides/dependency-proxy/setup-proxy/setup-debian-proxy#release-times) | – |
+| Alpine | `Last-Modified` header from the Alpine mirror | – |
+| OCI | not available | – |
+
+### Missing fields
+
+Fields that are not available are absent, not empty. Reading an absent field makes the expression fail, which
+blocks the package. Use `has()` to decide explicitly what happens:
+
+```yaml
+# allow packages without a release time
+expr: has(pkg.releasedAt) && now() - timestamp(pkg.releasedAt) < duration("120h")
+
+# block packages without a release time
+expr: '!has(pkg.releasedAt) || now() - timestamp(pkg.releasedAt) < duration("120h")'
+```
+
+Expressions that start with `!` must be quoted, otherwise YAML reads the `!` as a tag.
+
+<Callout type="warning">
+  OCI images never have a release time. A minimum age rule without `has()` or an `pkg.ecosystem != "oci"` check
+  blocks every image.
+</Callout>
+
+## Functions
+
+| Function | Example |
+|----------|---------|
+| `now()` | Current time as timestamp |
+| `timestamp(string)` | `timestamp(pkg.releasedAt)` |
+| `duration(string)` | `duration("120h")` — hours, minutes or seconds (`h`, `m`, `s`) |
+| `has(field)` | `has(pkg.publisher)` |
+| `startsWith`, `endsWith`, `contains`, `matches` | `pkg.name.startsWith("@evil-scope/")`, `pkg.name.matches("^left-?pad$")` |
+| `in` | `pkg.ecosystem in ["npm", "pypi"]` |
+
+All standard CEL operators (`==`, `!=`, `<`, `&&`, `||`, `!`) are available.
+
+## Cookbook
+
+### Minimum release age
+
+```yaml
+- name: min-release-age
+  action: deny
+  expr: pkg.ecosystem != "oci" && now() - timestamp(pkg.releasedAt) < duration("120h")
+```
+
+### Exception for one package
+
+Place it **below** the rule it overrides.
+
+```yaml
+- name: allow-lodash
+  action: allow
+  expr: pkg.name == "lodash"
+```
+
+### Block a whole npm scope
+
+```yaml
+- name: block-evil-scope
+  action: deny
+  expr: pkg.name.startsWith("@evil-scope/")
+```
+
+### Block one exact version
+
+```yaml
+- name: block-lodash-4-17-21
+  action: deny
+  expr: pkg.purl == "pkg:npm/lodash@4.17.21"
+```
+
+### Block versions published by a new maintainer
+
+Account takeovers often publish a new version from a different account.
+
+```yaml
+- name: publisher-changed
+  action: deny
+  expr: has(pkg.publisher) && pkg.publisher.changedSinceLastVersion
+```
+
+### Allow only one ecosystem
+
+```yaml
+- name: deny-all
+  action: deny
+  expr: "true"
+- name: allow-npm
+  action: allow
+  expr: pkg.ecosystem == "npm"
+```
+
+## Related Documentation
+
+- [Dependency Proxy Overview](/how-to-guides/dependency-proxy) — how the proxy works
+- [Dependency Proxy Security](/explanations/security/dependency-proxy-security) — where rules fit into the request flow
+- [CEL Expression Reference for VEX Rules](/reference/vex-cel-reference) — CEL in VEX rules

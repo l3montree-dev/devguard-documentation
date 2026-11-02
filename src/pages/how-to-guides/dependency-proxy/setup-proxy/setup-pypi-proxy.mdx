@@ -131,11 +131,11 @@ done
 
 Thanks a lot to https://github.com/IlyasMakari for bringing this issue to our attention.
 
-### Testing the minimum package age
+### Testing a minimum release age rule
 
-The [minimum package age](/how-to-guides/dependency-proxy#minimum-package-age) is configured per repository and only applies to requests using the repository's proxy URL, which contains a secret. The proxy removes all files that are too new from the package index, so pip resolves to the newest version that is old enough instead of failing on the download.
+A [minimum release age rule](/how-to-guides/dependency-proxy/package-rules#minimum-release-age) is configured per repository and only applies to requests using the repository's proxy URL, which contains a secret. The proxy removes all files that are too new from the package index, so pip resolves to the newest version that is old enough instead of failing on the download.
 
-To verify it, temporarily set the minimum age to 87600 hours (10 years). `requests==2.32.3` was published in May 2024, so the proxy must reject it, while an unpinned `requests` still resolves to an older version:
+To verify it, temporarily add a rule that denies everything released in the last 87600 hours (10 years). `requests==2.32.3` was published in May 2024, so the proxy must reject it, while an unpinned `requests` still resolves to an older version:
 
 <Callout type="info">
   Recent pip versions have their own client-side filter, `--uploaded-prior-to`. If it is set in your pip configuration, pip hides recent versions itself, independent of the proxy. The proxy enforces the minimum age centrally, for every client and without any client configuration.
@@ -146,9 +146,12 @@ To verify it, temporarily set the minimum age to 87600 hours (10 years). `reques
 python3 -m venv .venv-min-age
 . .venv-min-age/bin/activate
 
-# set the minimum package age of the repository to 10 years
+# deny every package version released in the last 10 years
 devguard-scanner curl --token <your-pat-token> -X PUT \
-  -d '{"rules":"","minReleaseAge":87600}' \
+  -d 'rules:
+  - name: min-release-age
+    action: deny
+    expr: now() - timestamp(pkg.releasedAt) < duration("87600h")' \
   https://<your-devguard-url>/api/v1/organizations/<assetName>/config-files/dependency-proxy-configs/
 
 # the repository's PyPI proxy URL applies its settings
@@ -158,7 +161,7 @@ PYPI_PROXY=$(devguard-scanner curl --token <your-pat-token> -s \
 
 # requests 2.32.3 is younger than 10 years and must be rejected
 if pip install --no-cache-dir --index-url "$PYPI_PROXY" "requests==2.32.3"; then
-  echo "requests==2.32.3 was NOT blocked by the minimum package age" >&2
+  echo "requests==2.32.3 was NOT blocked by the minimum release age rule" >&2
   exit 1
 fi
 
@@ -166,9 +169,9 @@ fi
 pip install --no-cache-dir --index-url "$PYPI_PROXY" requests
 python3 -c 'import importlib.metadata as m; print(m.version("requests"))'
 
-# reset the minimum package age
+# remove the rule again
 devguard-scanner curl --token <your-pat-token> -X PUT \
-  -d '{"rules":"","minReleaseAge":0}' \
+  -d 'rules: []' \
   https://<your-devguard-url>/api/v1/organizations/<assetName>/config-files/dependency-proxy-configs/
 
 deactivate
@@ -178,9 +181,9 @@ deactivate
 
 - [Dependency Proxy Overview](/how-to-guides/dependency-proxy)
 - [Cache Management](/how-to-guides/dependency-proxy/cache-management)
-- [Setup npm Proxy](/how-to-guides/dependency-proxy/setup-npm-proxy)
-- [Setup Go Proxy](/how-to-guides/dependency-proxy/setup-go-proxy)
-- [Setup Maven Proxy](/how-to-guides/dependency-proxy/setup-maven-proxy)
-- [Setup Composer Proxy](/how-to-guides/dependency-proxy/setup-composer-proxy)
-- [Setup Debian Proxy](/how-to-guides/dependency-proxy/setup-debian-proxy)
+- [Setup npm Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-npm-proxy)
+- [Setup Go Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-go-proxy)
+- [Setup Maven Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-maven-proxy)
+- [Setup Composer Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-composer-proxy)
+- [Setup Debian Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-debian-proxy)
 - [OSV (Open Source Vulnerabilities)](https://osv.dev)

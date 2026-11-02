@@ -1,0 +1,85 @@
+---
+title: Use Artifact Keeper with the DevGuard Dependency Proxy
+description: "Use Artifact Keeper as an upstream registry of the DevGuard dependency proxy. Supported for npm, PyPI, Go, Maven, Composer and Debian."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: artifact keeper
+lang: en-US
+ignoreChecks: null
+---
+
+import { Callout } from '@document-writing-tools/kernux-theme'
+
+# Use Artifact Keeper with the DevGuard Dependency Proxy
+
+[Artifact Keeper](https://github.com/artifact-keeper/artifact-keeper) is an open-source, self-hosted artifact registry. A **Remote** repository in Artifact Keeper caches a public registry. Put the DevGuard dependency proxy in front of it, and every package still passes your [package rules](/how-to-guides/dependency-proxy/package-rules) and the malicious package check:
+
+```text
+client → DevGuard → Artifact Keeper (Remote) → public registry
+```
+
+## 1. Create a Remote Repository
+
+In Artifact Keeper, open **Repositories → Create Repository**, select the format, set the type to **Remote** and the visibility to **Public**. DevGuard does not send credentials to the registry.
+
+![Create Repository dialog of Artifact Keeper with key, format, type and visibility](/screenshots/artifact-keeper.png)
+
+| Ecosystem | Format | Upstream URL | Value for `registries` in DevGuard |
+|-----------|--------|--------------|------------------------------------|
+| npm | npm | `https://registry.npmjs.org` | `https://<artifact-keeper>/npm/<key>` |
+| PyPI | PyPI | `https://pypi.org` | `https://<artifact-keeper>/pypi/<key>` |
+| Go | Go | `https://proxy.golang.org` | `https://<artifact-keeper>/go/<key>` |
+| Maven | Maven | `https://repo1.maven.org/maven2` | `https://<artifact-keeper>/maven/<key>` |
+| Composer | Composer | `https://repo.packagist.org` | `https://<artifact-keeper>/composer/<key>` |
+| Debian | Debian/APT | `http://deb.debian.org` | `https://<artifact-keeper>/debian/<key>` |
+
+## 2. Point DevGuard at Artifact Keeper
+
+Add the repositories under `registries` in the **Dependency Proxy** settings of your organization, project or repository. Only list the ecosystems you want to route through Artifact Keeper:
+
+```yaml {ignore}
+rules:
+  - name: min-release-age
+    action: deny
+    expr: pkg.ecosystem != "oci" && now() - timestamp(pkg.releasedAt) < duration("120h")
+registries:
+  npm: https://artifact-keeper.example.com/npm/npm-remote
+  pypi: https://artifact-keeper.example.com/pypi/pypi-remote
+  go: https://artifact-keeper.example.com/go/go-remote
+  maven: https://artifact-keeper.example.com/maven/maven-remote
+  composer: https://artifact-keeper.example.com/composer/composer-remote
+  deb: https://artifact-keeper.example.com/debian/debian-remote
+```
+
+Your clients keep using the DevGuard proxy URLs, nothing changes on their side.
+
+<Callout type="warning">
+  Artifact Keeper must be reachable from the DevGuard backend over **HTTPS** and must not run on `localhost`. DevGuard blocks requests to loopback addresses, and it only downloads PyPI and Composer files over HTTPS.
+</Callout>
+
+## Ecosystem Notes
+
+- **npm, PyPI, Composer**: Artifact Keeper rewrites download URLs onto itself. DevGuard rewrites them back onto the proxy, so downloads and lock files point to DevGuard. Self-hosted DevGuard needs `DEPENDENCY_PROXY_BASE_URL` set to its public URL for this.
+- **Maven**: Artifact Keeper sends no `Last-Modified` header. DevGuard reads the release time from Maven Central instead. Artifacts that do not exist there have no release time.
+- **Debian**:
+  - Use the root `http://deb.debian.org` as upstream, so that both the `debian` and the `debian-security` archive are reachable.
+  - Release times come from the official Debian archive, see [How Debian packages are handled](/how-to-guides/dependency-proxy/setup-proxy/setup-debian-proxy#how-debian-packages-are-handled).
+  - Blocked versions are replaced with older ones that DevGuard downloads directly from snapshot.debian.org, not through Artifact Keeper.
+- **Alpine**: Not supported yet. The proxy passes the package index through unchanged and only blocks the download of disallowed versions. Clients can therefore see updates in the index that the proxy then rejects with `403 Forbidden`.
+
+## Internal Packages
+
+DevGuard accepts one registry per ecosystem, and a **Virtual** repository in Artifact Keeper does not merge the Debian package lists of its members. Serve internal packages from a **Local** repository and configure it in your package manager next to the DevGuard proxy, for example as a second apt source. Internal packages then bypass DevGuard.
+
+If you route a Local repository through DevGuard instead, its packages have no known release time: Debian treats them as released now, Maven as unknown. A minimum release age rule blocks them, so add an allow rule such as `pkg.name == "debian/mycompany-tool"`.
+
+## Further Reading
+
+- [Package Rules](/how-to-guides/dependency-proxy/package-rules)
+- [Setup Debian Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-debian-proxy)
+- [Artifact Keeper documentation](https://artifactkeeper.com/docs/)
