@@ -33,7 +33,7 @@ Renovate then proposes the newest **allowed** version instead of one your builds
 | Maven | `maven` | ✓ |
 | Composer | `packagist` | ✓ |
 | Debian | `deb` | ✓ (via a custom manager, see [Debian](#debian)) |
-| Alpine | `apk` | ✓ |
+| Alpine | `apk` | ✓ (via a custom manager, see [Alpine](#alpine)) |
 | PyPI | `pypi` | Not yet |
 | OCI | `docker` | No – version lists are not filtered |
 
@@ -132,6 +132,45 @@ A Debian suite lists exactly one version per package. The proxy replaces a block
   Renovate verifies the downloaded package list against the checksums in `InRelease`, but not the signature. The proxy signs `InRelease` with its own key, so no extra configuration is needed. Only the suites listed in [Setup Debian Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-debian-proxy#supported-suites) are supported.
 </Callout>
 
+### Alpine
+
+Alpine packages pinned in a `Dockerfile` are picked up the same way. Annotate each version with the Alpine branch and the package name:
+
+```dockerfile {ignore}
+FROM alpine:3.21
+
+# renovate: branch=v3.21 depName=curl
+ENV CURL_VERSION=8.14.1-r2
+
+RUN apk add --no-cache curl=${CURL_VERSION}
+```
+
+The manager stores the branch as `depType`, so a package rule per branch can point Renovate at the matching proxy URL. The `apk` datasource builds the index URL from the query parameters `branch`, `components` and `arch`. `arch` is required:
+
+```json
+{
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/(^|/)Dockerfile$/"],
+      "matchStrings": [
+        "#\\s*renovate:\\s*branch=(?<depType>\\S+)\\s+depName=(?<depName>\\S+)\\s+ENV \\S+=(?<currentValue>\\S+)"
+      ],
+      "datasourceTemplate": "apk"
+    }
+  ],
+  "packageRules": [
+    {
+      "matchDatasources": ["apk"],
+      "matchDepTypes": ["v3.21"],
+      "registryUrls": ["https://<your-devguard-url>/api/v1/dependency-proxy/<secret>/apk/alpine?branch=v3.21&components=main,community&arch=x86_64"]
+    }
+  ]
+}
+```
+
+The proxy removes blocked versions from the package index (`APKINDEX.tar.gz`). Currently the alpine proxy, unlike Debian, does not try to find an older version. This means Renovate reports a lookup warning in the Dependency Dashboard instead of opening a pull request for blocked packages.
+
 ## 3. Configure Your Package Managers
 
 Renovate updates lock files (`package-lock.json`, `go.sum`, `composer.lock`) with the real package manager. Configure the proxy in your repository as well, so these downloads go through DevGuard too:
@@ -141,6 +180,7 @@ Renovate updates lock files (`package-lock.json`, `go.sum`, `composer.lock`) wit
 - [Setup Maven Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-maven-proxy)
 - [Setup Composer Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-composer-proxy)
 - [Setup Debian Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-debian-proxy)
+- [Setup Alpine Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-alpine-proxy)
 
 ## What to Expect
 
@@ -149,6 +189,7 @@ Renovate updates lock files (`package-lock.json`, `go.sum`, `composer.lock`) wit
 | Newest version is too young for your minimum release age | Proposes the newest version that is old enough |
 | A single version is malicious | Skips this version |
 | Newest Debian version is blocked | Proposes the replacement version the proxy lists instead |
+| Alpine version is blocked | The lookup fails and shows up as a warning in the Dependency Dashboard |
 | All versions of a package are malicious | The lookup fails and shows up as a warning in the Dependency Dashboard |
 
 <Callout type="info">
