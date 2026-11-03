@@ -62,6 +62,7 @@ const DEFAULT_MDX_FILES = [
     'src/pages/how-to-guides/dependency-proxy/setup-proxy/setup-maven-proxy.mdx',
     'src/pages/how-to-guides/dependency-proxy/setup-proxy/setup-composer-proxy.mdx',
     'src/pages/how-to-guides/dependency-proxy/setup-proxy/setup-debian-proxy.mdx',
+    'src/pages/how-to-guides/dependency-proxy/setup-proxy/setup-alpine-proxy.mdx',
     'src/pages/how-to-guides/dependency-proxy/setup-proxy/setup-oci-proxy.mdx',
     'src/pages/how-to-guides/administration/deploy-with-cloudnativepg.mdx',
     'src/pages/how-to-guides/supply-chain/sign-build-provenance.mdx',
@@ -82,6 +83,7 @@ const VARIABLE_PATTERNS: [RegExp, string][] = [
     [/(X-Asset-Name:[ \t]*)[^"'\s]+/g, '$1${assetName}'],
     [/<assetName>/g, '${assetName}'],
     [/<secret>/g, '${secret}'],
+    [/<alpine-key-file>/g, '${alpineKeyFile}'],
     // an image the page builds and pushes itself - must go to a registry the tests can write to
     [/ghcr\.io\/org\/my-app(?=[:@])/g, `${TEST_REGISTRY}/org/my-app`],
     [/ghcr\.io\/org\/image:tag/g, TEST_IMAGE],
@@ -238,8 +240,8 @@ function assertRequiredEnv(): void {
     }
 }
 
-function dependencyProxySecret(): string {
-    const urls = JSON.parse(
+function dependencyProxyUrls(): Record<string, string> {
+    return JSON.parse(
         execFileSync(
             'devguard-scanner',
             [
@@ -252,8 +254,6 @@ function dependencyProxySecret(): string {
             { encoding: 'utf8' },
         ),
     )
-
-    return urls.oci.split('/').pop()
 }
 
 // workload identity tokens are short lived and the pages before the SLSA ones take a long time,
@@ -285,12 +285,15 @@ function freshIdToken(): string | undefined {
 function main(): void {
     assertRequiredEnv()
 
+    const urls = dependencyProxyUrls()
+
     const env: any = {
         ...process.env,
         DEVGUARD_APIURL: process.env.apiUrl,
         // host[:port] of the API, e.g. for pip's trusted-host (no URLs allowed there)
         apiHost: new URL(process.env.apiUrl!).host,
-        secret: dependencyProxySecret(),
+        secret: urls.oci.split('/').pop(),
+        alpineKeyFile: urls.alpineKey.split('/').pop(),
     }
 
     rmSync(TMP_DIR, { recursive: true, force: true })
