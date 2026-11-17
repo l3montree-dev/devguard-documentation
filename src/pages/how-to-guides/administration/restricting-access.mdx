@@ -44,6 +44,25 @@ verificationAfterSignUp:
 Set all authentication methods to `false` and enable only OIDC to enforce single sign-on (SSO) authentication.
 </Callout>
 
+### Docker Compose
+
+With the [Docker Compose deployment](/how-to-guides/administration/deploy-with-docker), Kratos is configured through environment variables in `.kratos.env`. Any Kratos config key can be overridden by upper-casing it and replacing `.` with `_`. Add the following lines to `.kratos.env` and restart the `kratos` service:
+
+| Helm value | Environment variable |
+| --- | --- |
+| `password.enabled` | `SELFSERVICE_METHODS_PASSWORD_ENABLED` |
+| `passkey.enabled` | `SELFSERVICE_METHODS_PASSKEY_ENABLED` |
+| `webauthn.enabled` | `SELFSERVICE_METHODS_WEBAUTHN_ENABLED` |
+| `totp.enabled` | `SELFSERVICE_METHODS_TOTP_ENABLED` |
+| `oidc.enabled` | `SELFSERVICE_METHODS_OIDC_ENABLED` |
+| `verificationAfterSignUp.enabled` | `SELFSERVICE_FLOWS_VERIFICATION_ENABLED` (set through `KRATOS_VERIFICATION_ENABLED` in `.env`) |
+
+```bash
+SELFSERVICE_METHODS_PASSWORD_ENABLED=false
+SELFSERVICE_METHODS_PASSKEY_ENABLED=true
+SELFSERVICE_METHODS_TOTP_ENABLED=false
+```
+
 ## OpenID Connect (OIDC) Configuration
 
 ### Enable OIDC
@@ -180,6 +199,14 @@ Restart the Kratos deployment for changes to take effect:
 kubectl rollout restart deployment kratos -n devguard
 ```
 
+### Docker Compose
+
+Add the following to `.kratos.env` and restart the `kratos` service:
+
+```bash
+SELFSERVICE_FLOWS_REGISTRATION_ENABLED=false
+```
+
 ## OIDC-Only Mode
 
 To enforce OIDC authentication exclusively:
@@ -210,6 +237,17 @@ oidc:
       provider: github
       clientId: "your-client-id"
       existingClientSecretName: github-client-secret
+```
+
+For Docker Compose, set the following in `.kratos.env` and restart the `kratos` service. The OIDC providers are passed to Kratos as a JSON list in `SELFSERVICE_METHODS_OIDC_CONFIG_PROVIDERS`. Kratos requires a `mapper_url` (a Jsonnet claims mapper, see the [Kratos OIDC docs](https://www.ory.com/docs/kratos/social-signin/overview)):
+
+```bash
+SELFSERVICE_METHODS_PASSWORD_ENABLED=false
+SELFSERVICE_METHODS_PASSKEY_ENABLED=false
+SELFSERVICE_METHODS_WEBAUTHN_ENABLED=false
+SELFSERVICE_METHODS_TOTP_ENABLED=false
+SELFSERVICE_METHODS_OIDC_ENABLED=true
+SELFSERVICE_METHODS_OIDC_CONFIG_PROVIDERS='[{"id":"github","provider":"github","client_id":"your-client-id","client_secret":"your-client-secret","mapper_url":"base64://<base64-encoded-jsonnet-mapper>","scope":["user:email"]}]'
 ```
 
 <Callout type="info">
