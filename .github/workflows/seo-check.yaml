@@ -13,4 +13,4 @@ jobs:
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
       - name: Run SEO-Check
-        run: docker run --rm -v ${{ github.workspace }}:/workspace -w /workspace ghcr.io/l3montree-dev/devguard-documentation/seo-check:main-amd64
+        run: docker run --rm -e GITHUB_ACTIONS -v ${{ github.workspace }}:/workspace -w /workspace ghcr.io/l3montree-dev/devguard-documentation/seo-check:main-amd64
