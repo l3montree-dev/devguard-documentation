@@ -1,6 +1,7 @@
 export default {
     index: { title: 'Overview' },
     'package-rules': { title: 'Package Rules' },
+    'upstream-registries': { title: 'Upstream Registries' },
     'cache-management': { title: 'Cache Management' },
     'setup-proxy': { title: 'Setup Proxy' },
     'artifact-keeper': { title: 'Artifact Keeper' },

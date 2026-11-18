@@ -102,5 +102,5 @@ jobs:
           apiUrl: http://172.17.0.1:8080
           webUI: http://localhost:3000
           idToken: ${{ steps.id-token.outputs.idToken }}
-          token: 95da0ae37796ffb14ff4251f7d5dd2dc48014ae0655e12e682dd4f8c77eb48a4
+          token: 15f17be607b3f5bbaa20e962ef3e43325a01541178a644ebfa2d550fe20ca591
         run: node src/nix-tests/nixmd.mts
