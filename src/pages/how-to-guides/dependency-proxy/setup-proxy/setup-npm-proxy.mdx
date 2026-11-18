@@ -43,6 +43,10 @@ Once set, all `npm install` and `npm ci` invocations route through DevGuard tran
   On startup, the proxy blocks all requests until the malicious package database is fully loaded. This initialization period prevents cache poisoning. See [Cache Management](/how-to-guides/dependency-proxy/cache-management) for details.
 </Callout>
 
+## Upstream Registries
+
+By default, the proxy loads all packages from `https://registry.npmjs.org`. You can route npm scopes to private registries, use a Nexus or Artifactory mirror for everything else and authenticate with encrypted secrets. See [Upstream Registries](/how-to-guides/dependency-proxy/upstream-registries).
+
 ## Testing
 
 DevGuard ships a test package that is permanently flagged as malicious for all versions. Use it to verify the proxy is working before relying on it in production:
@@ -152,6 +156,7 @@ devguard-scanner curl --token <your-pat-token> -X PUT \
 ## Further Reading
 
 - [Dependency Proxy Overview](/how-to-guides/dependency-proxy)
+- [Upstream Registries](/how-to-guides/dependency-proxy/upstream-registries)
 - [Cache Management](/how-to-guides/dependency-proxy/cache-management)
 - [Setup Go Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-go-proxy)
 - [Setup PyPI Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-pypi-proxy)
