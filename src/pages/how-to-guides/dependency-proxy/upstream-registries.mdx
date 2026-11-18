@@ -24,7 +24,7 @@ Your clients keep using the DevGuard proxy URL. Only the proxy decides which ups
 Upstream registries are configured in the **Dependency Proxy** settings of your organization, project or repository, next to the [package rules](/how-to-guides/dependency-proxy/package-rules). They apply to requests using the proxy URL of that scope.
 
 <Callout type="warning">
-  Several registries per ecosystem and authentication are currently only supported for **npm**. All other ecosystems accept exactly one registry URL without credentials.
+  Several registries per ecosystem are currently only supported for **npm**. Authentication is supported for **npm** and **Maven**. All other ecosystems accept exactly one registry URL without credentials.
 </Callout>
 
 ## Supported Ecosystems
@@ -32,7 +32,8 @@ Upstream registries are configured in the **Dependency Proxy** settings of your 
 | Ecosystem                    | Key        | Format                                                                      |
 | ---------------------------- | ---------- | --------------------------------------------------------------------------- |
 | npm                          | `npm`      | One URL, or a list of registries with `scopes` and `auth`                   |
-| Go, PyPI, Maven, Composer    | `go`, `pypi`, `maven`, `composer` | One URL                                              |
+| Maven                        | `maven`    | One URL, or a single registry with `url` and `auth`                         |
+| Go, PyPI, Composer           | `go`, `pypi`, `composer` | One URL                                                       |
 | Debian                       | `deb`      | `url` and an optional `keyring` the upstream `Release` file is signed with  |
 | Alpine                       | `apk`      | `url` and optional `keys` the upstream `APKINDEX` is signed with            |
 | OCI                          | -          | Not configurable, the registry is part of the image path                   |
@@ -82,7 +83,7 @@ The single-registry format `npm: https://npm.example.com` is still supported and
 
 ## Authentication
 
-An npm registry entry can carry an `auth` block. Credentials are never written into the configuration itself: `token` and `password` reference a [secret](#secrets) as `$name`.
+An npm registry entry and the Maven registry can carry an `auth` block. Credentials are never written into the configuration itself: `token` and `password` reference a [secret](#secrets) as `$name`.
 
 **Token**, sent as `Authorization: Bearer <token>`:
 
@@ -108,6 +109,18 @@ registries:
         password: $nexus_password
 ```
 
+For Maven, `registries.maven` is a single registry, not a list. Maven coordinates have no scope like npm packages, so all artifacts are loaded from this one registry:
+
+```yaml
+registries:
+  maven:
+    url: https://nexus.example.com/repository/maven-public/
+    auth:
+      type: login
+      username: ci-user
+      password: $nexus_password
+```
+
 | Field      | Required          | Description                                             |
 | ---------- | ----------------- | ------------------------------------------------------- |
 | `type`     | yes               | `token` or `login`.                                     |
@@ -118,7 +131,11 @@ registries:
 The configuration is rejected when `token` or `password` contain a plain value instead of a `$name` reference.
 
 <Callout type="info">
-  Package metadata of registries with `auth` is never cached, so private package information is not shared with other organizations.
+  npm package metadata of registries with `auth` is never cached, so private package information is not shared with other organizations.
+</Callout>
+
+<Callout type="warning">
+  The release time of a Maven artifact comes from the `Last-Modified` header of the registry. If a Maven registry with `auth` does not send it, DevGuard does not fall back to Maven Central, so the artifact has no release time and rules on `pkg.releasedAt`, such as a minimum release age, block it.
 </Callout>
 
 ## Secrets

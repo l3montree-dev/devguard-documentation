@@ -65,7 +65,7 @@ Your clients keep using the DevGuard proxy URLs, nothing changes on their side.
 ## Ecosystem Notes
 
 - **npm, PyPI, Composer**: Artifact Keeper rewrites download URLs onto itself. DevGuard rewrites them back onto the proxy, so downloads and lock files point to DevGuard. Self-hosted DevGuard needs `DEPENDENCY_PROXY_BASE_URL` set to its public URL for this.
-- **Maven**: Artifact Keeper sends no `Last-Modified` header. DevGuard reads the release time from Maven Central instead. Artifacts that do not exist there have no release time.
+- **Maven**: Artifact Keeper sends no `Last-Modified` header. DevGuard reads the release time from Maven Central instead. Artifacts that do not exist there have no release time. If you configure the registry with [`auth`](/how-to-guides/dependency-proxy/upstream-registries#authentication), DevGuard does not ask Maven Central, so all artifacts have no release time.
 - **Debian**:
   - Use the root `http://deb.debian.org` as upstream, so that both the `debian` and the `debian-security` archive are reachable.
   - Release times come from the official Debian archive, see [How Debian packages are handled](/how-to-guides/dependency-proxy/setup-proxy/setup-debian-proxy#how-debian-packages-are-handled).
