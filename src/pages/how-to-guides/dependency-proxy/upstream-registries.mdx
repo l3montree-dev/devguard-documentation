@@ -1,0 +1,144 @@
+---
+title: Dependency Proxy Upstream Registries
+description: "Load packages through the DevGuard dependency proxy from your own registries, route npm scopes to private registries and authenticate with encrypted secrets."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: dependency proxy upstream registries
+lang: en-US
+ignoreChecks: null
+---
+
+import { Callout } from '@document-writing-tools/kernux-theme'
+
+# Dependency Proxy Upstream Registries
+
+By default, the [dependency proxy](/how-to-guides/dependency-proxy) loads packages from the public registry of each ecosystem, for example `https://registry.npmjs.org` or `https://pypi.org`. Under `registries` you can point it at your own registries instead, for example a Nexus or Artifactory mirror or a private registry for your internal packages.
+
+Your clients keep using the DevGuard proxy URL. Only the proxy decides which upstream registry a package is loaded from, so nothing changes in `.npmrc`, `pip.conf` or your CI scripts.
+
+Upstream registries are configured in the **Dependency Proxy** settings of your organization, project or repository, next to the [package rules](/how-to-guides/dependency-proxy/package-rules). They apply to requests using the proxy URL of that scope.
+
+<Callout type="warning">
+  Several registries per ecosystem and authentication are currently only supported for **npm**. All other ecosystems accept exactly one registry URL without credentials.
+</Callout>
+
+## Supported Ecosystems
+
+| Ecosystem                    | Key        | Format                                                                      |
+| ---------------------------- | ---------- | --------------------------------------------------------------------------- |
+| npm                          | `npm`      | One URL, or a list of registries with `scopes` and `auth`                   |
+| Go, PyPI, Maven, Composer    | `go`, `pypi`, `maven`, `composer` | One URL                                              |
+| Debian                       | `deb`      | `url` and an optional `keyring` the upstream `Release` file is signed with  |
+| Alpine                       | `apk`      | `url` and optional `keys` the upstream `APKINDEX` is signed with            |
+| OCI                          | -          | Not configurable, the registry is part of the image path                   |
+
+A single registry is configured with its URL:
+
+```yaml {ignore}
+registries:
+  pypi: https://nexus.example.com/repository/pypi/simple
+  maven: https://nexus.example.com/repository/maven-central
+```
+
+## Several npm Registries
+
+For npm, `registries.npm` can be a list. Each entry serves the packages of its `scopes`, the entry without `scopes` serves everything else:
+
+```yaml
+registries:
+  npm:
+    - url: https://npm.example.com
+      scopes: ["@example", "@example-internal"]
+      auth:
+        type: token
+        token: $npm_token
+    - url: https://nexus.example.com/repository/npm/
+```
+
+The proxy picks the registry for every package by its name:
+
+1. A scoped package such as `@example/utils` is loaded from the entry whose `scopes` contain `@example`.
+2. All other packages, unscoped ones like `next` and scopes without an entry like `@vercel/og`, are loaded from the entry without `scopes`.
+3. If there is no entry without `scopes`, they are loaded from `https://registry.npmjs.org`.
+
+Because a scope always maps to exactly one registry, a package of your company scope can never be resolved from the public registry. This prevents [dependency confusion](https://medium.com/@alex.birsan/dependency-confusion-4a5d60fec610) attacks.
+
+| Field    | Required | Description                                                                                  |
+| -------- | -------- | -------------------------------------------------------------------------------------------- |
+| `url`    | yes      | The URL of the npm registry.                                                                 |
+| `scopes` | no       | The scopes served by this registry, each starting with `@`. Omit it for the fallback entry. |
+| `auth`   | no       | Credentials for the registry, see [Authentication](#authentication).                        |
+
+<Callout type="warning">
+  Quote the scopes. YAML does not allow a plain `@` at the start of a value, so `scopes: [@example]` is rejected.
+</Callout>
+
+The single-registry format `npm: https://npm.example.com` is still supported and behaves like a list with one entry without `scopes`.
+
+## Authentication
+
+An npm registry entry can carry an `auth` block. Credentials are never written into the configuration itself: `token` and `password` reference a [secret](#secrets) as `$name`.
+
+**Token**, sent as `Authorization: Bearer <token>`:
+
+```yaml
+registries:
+  npm:
+    - url: https://npm.example.com
+      scopes: ["@example"]
+      auth:
+        type: token
+        token: $npm_token
+```
+
+**Login**, sent as HTTP Basic authentication, as used by Nexus and Artifactory:
+
+```yaml
+registries:
+  npm:
+    - url: https://nexus.example.com/repository/npm/
+      auth:
+        type: login
+        username: ci-user
+        password: $nexus_password
+```
+
+| Field      | Required          | Description                                             |
+| ---------- | ----------------- | ------------------------------------------------------- |
+| `type`     | yes               | `token` or `login`.                                     |
+| `token`    | for `type: token` | A secret reference such as `$npm_token`.                |
+| `username` | for `type: login` | The user name in plain text.                            |
+| `password` | for `type: login` | A secret reference such as `$nexus_password`.           |
+
+The configuration is rejected when `token` or `password` contain a plain value instead of a `$name` reference.
+
+<Callout type="info">
+  Package metadata of registries with `auth` is never cached, so private package information is not shared with other organizations.
+</Callout>
+
+## Secrets
+
+Secrets hold the credentials referenced in `auth`. Manage them under **Settings → Secrets** of your organization, project or repository. The **Dependency Proxy** settings list the secrets available at that scope below the configuration editor.
+
+- **Encrypted**: The value is stored encrypted and can never be read again after saving, not even by admins. To change a value, delete the secret and create it again.
+- **Name**: Lowercase letters, digits and underscores, for example `npm_token`. Reference it as `$npm_token`.
+- **Inherited**: A repository can use its own secrets and those of its project, all parent groups and the organization. A project can use its own secrets and those of its parent groups and the organization.
+- **Nearest wins**: If several scopes define a secret with the same name, the one closest to the repository is used. The secrets page shows the inherited secrets with their origin and strikes through the ones that are overridden.
+
+Only admins of a scope can view, create and delete its secrets.
+
+<Callout type="warning">
+  A reference to a secret that does not exist is not rejected when you save the configuration. Requests through the proxy then fail until the secret is created, so double-check the names.
+</Callout>
+
+## Further Reading
+
+- [Dependency Proxy Overview](/how-to-guides/dependency-proxy)
+- [Package Rules](/how-to-guides/dependency-proxy/package-rules)
+- [Setup npm Proxy](/how-to-guides/dependency-proxy/setup-proxy/setup-npm-proxy)
+- [Artifact Keeper](/how-to-guides/dependency-proxy/artifact-keeper)
