@@ -1,6 +1,6 @@
 ---
 title: Set up Ticket Sync with GitLab and openCode
-description: "Set up ticket sync between DevGuard and gitlab.com or openCode so dependency vulnerabilities above your CVSS or risk threshold become GitLab issues."
+description: "Set up ticket sync between DevGuard and gitlab.com or openCode so dependency vulnerabilities matching your reporting range rule become GitLab issues."
 seo:
   robots: index,follow
   og:
@@ -16,7 +16,7 @@ import { DocSteps as Steps } from '@document-writing-tools/kernux-theme'
 
 # Ticket Sync with GitLab and openCode
 
-DevGuard can open a GitLab issue for every dependency vulnerability above a threshold and keep it in sync. This works out of the box on gitlab.com and gitlab.opencode.de.
+DevGuard can open a GitLab issue for every dependency vulnerability matching your reporting range rule and keep it in sync. This works out of the box on gitlab.com and gitlab.opencode.de.
 
 ## Steps
 
@@ -45,11 +45,11 @@ Select the triggers **Issue events**, **Confidential issue events**, **Comments*
 
 ### Enable ticket sync in DevGuard
 
-Open the repository settings in DevGuard, enable the reporting range and set a CVSS or risk threshold. See [Configure Automatic Ticket Creation](/how-to-guides/vulnerability-management/customize-risk-scores#configure-automatic-ticket-creation).
+Open the repository settings in DevGuard, enable the reporting range and define a CEL rule, e.g. `vuln.ref.defaultBranch == true && vuln.cve != null && vuln.cve.cvss >= 8`. See [Configure Automatic Ticket Creation](/how-to-guides/vulnerability-management/customize-risk-scores#configure-automatic-ticket-creation).
 
 </Steps>
 
-DevGuard now creates issues for vulnerabilities above the threshold. You can manage them with [slash commands](/how-to-guides/vulnerability-management/track-fix-progress) in issue comments.
+DevGuard now creates issues for vulnerabilities matching the rule. You can manage them with [slash commands](/how-to-guides/vulnerability-management/track-fix-progress) in issue comments.
 
 ## Related Documentation
 

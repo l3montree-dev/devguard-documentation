@@ -45,7 +45,7 @@ This group contains everything needed to describe DevGuard's content hierarchy. 
 - **Organizations** — the top-level container. An organisation holds members, compliance settings, and global configuration such as whether data is shared publicly.
 - **Projects** — logical groupings of related assets (repositories). Projects can be nested inside other projects, and releases are defined and monitored at this level.
 - **Releases** — group multiple artifacts into a named release so you can track vulnerability data across a whole release rather than per artifact. Releases can also contain other releases, allowing hierarchical release structures.
-- **Assets** — mirror your external repositories as closely as possible. Each asset holds repository-wide configuration, such as thresholds for automatic ticket creation and which external issue tracker to use.
+- **Assets** — mirror your external repositories as closely as possible. Each asset holds repository-wide configuration, such as the CEL rule for automatic ticket creation and which external issue tracker to use.
 - **Asset Versions** — correspond to branches. Every asset has a default version (usually `main`) where most activity happens. Vulnerability data — dependency risks, license risks, and first-party findings — is attached at this level.
 - **Artifacts** — the smallest unit in the hierarchy. Vulnerability data is linked to artifacts through pivot tables to avoid duplicate entries across the same asset version. Risk history is also tracked at the artifact level.
 

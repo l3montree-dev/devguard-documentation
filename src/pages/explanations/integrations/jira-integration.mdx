@@ -24,7 +24,7 @@ DevGuard integrates with Jira to provide vulnerability ticket management in your
 
 The Jira integration provides:
 
-- **Issue Creation**: Create Jira issues for discovered vulnerabilities — this can happen automatically for dependency vulnerabilities when they exceed a threshold, or manually by users for any vulnerability type
+- **Issue Creation**: Create Jira issues for discovered vulnerabilities — this can happen automatically for dependency vulnerabilities when they match the repository's [reporting range rule](/how-to-guides/vulnerability-management/customize-risk-scores#configure-automatic-ticket-creation), or manually by users for any vulnerability type
 - **Issue Updates**: Sync vulnerability status changes to Jira
 - **Webhook Processing**: React to issue transitions and comments in real-time
 - **Bidirectional Sync**: Comments in Jira can update vulnerability status in DevGuard
