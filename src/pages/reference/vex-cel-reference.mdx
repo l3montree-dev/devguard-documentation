@@ -87,6 +87,7 @@ Type `vuln.cve.` for these:
 | `vuln.cve.cisaRequiredAction` / `vuln.cve.cisaVulnerabilityName` | string or null | CISA KEV catalog metadata, if listed. |
 | `vuln.cve.euvdExploitAdd` | string (date) or null | EUVD exploited-in-the-wild date, if listed. |
 | `vuln.cve.weaknesses` / `vuln.cve.exploits` | list\<map\> | Associated CWEs and known exploits. |
+| `vuln.cve.cwes` | list\<string\> | Associated CWE ids, e.g. `"CWE-79" in vuln.cve.cwes`. |
 
 #### Risk metrics: `vuln.cve.risk`
 
@@ -98,6 +99,25 @@ Type `vuln.cve.risk.` for these:
 | `vuln.cve.risk.withEnvironment` | number | Risk score adjusted for your environment. |
 | `vuln.cve.risk.withThreatIntelligence` | number | Risk score adjusted for threat intelligence. |
 | `vuln.cve.risk.withEnvironmentAndThreatIntelligence` | number | Risk score adjusted for both. |
+
+### Ticket range rules: `vuln.ref`
+
+The [reporting range](/how-to-guides/vulnerability-management/customize-risk-scores#configure-automatic-ticket-creation)
+uses the same environment. A ticket is created for every open vulnerability for which the expression evaluates to
+`true`. In addition, `vuln.ref` describes the branch or tag the vulnerability was found on:
+
+| Field | Type | Description |
+|---|---|---|
+| `vuln.ref.name` | string | The branch or tag name, e.g. `"main"` or `"v1.2.3"`. |
+| `vuln.ref.slug` | string | The slug of the branch or tag. |
+| `vuln.ref.type` | string | Either `"branch"` or `"tag"`. |
+| `vuln.ref.defaultBranch` | bool | Whether this is the default branch. |
+| `vuln.ref.createdAt` / `vuln.ref.updatedAt` | string (RFC3339) | Timestamps of the branch or tag. |
+| `vuln.ref.lastUploadAt` | string (RFC3339), may be absent | When a scan was last uploaded — guard with `has(vuln.ref.lastUploadAt)`. |
+
+```cel
+vuln.ref.defaultBranch == true && vuln.cve != null && vuln.cve.cvss >= 8
+```
 
 
 ## `matchesPattern(vuln, pattern)`

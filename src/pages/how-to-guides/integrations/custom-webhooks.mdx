@@ -277,14 +277,14 @@ Every delivery payload sent by DevGuard is an HTTP `POST` with `Content-Type: ap
 | `reachableFromInternet`                                                           | boolean           | Whether the asset is marked as internet-reachable               |
 | `repositoryId` / `repositoryName`                                                 | string \| null    | Linked repository                                               |
 | `signingPubKey`                                                                   | string \| null    | Asset's configured signing public key                           |
-| `cvssAutomaticTicketThreshold` / `riskAutomaticTicketThreshold`                   | number \| null    | Auto-ticketing thresholds, if configured                        |
+| `ticketRangeCelExpression`                                                        | string \| null    | CEL rule for automatic ticket creation, if configured           |
 | `externalEntityProviderId` / `externalEntityId`                                   | string \| omitted | Present only for externally-synced assets                       |
 
 <Callout type="info">
     `lastSecretScan`, `lastSastScan`, `lastScaScan`, `lastIacScan`,
-    `lastContainerScan`, `lastDastScan`, and `enableTicketRange` are also
-    defined on this object but are **not currently populated** by the webhook
-    sender — expect `null` / `false` for them in every delivery today.
+    `lastContainerScan`, and `lastDastScan` are also defined on this object
+    but are **not currently populated** by the webhook sender — expect `null`
+    for them in every delivery today.
 </Callout>
 
 ### `assetVersion` object
