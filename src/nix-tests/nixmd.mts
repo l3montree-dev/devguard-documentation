@@ -62,7 +62,6 @@ const DEFAULT_MDX_FILES = [
     'src/pages/how-to-guides/dependency-proxy/setup-proxy/setup-maven-proxy.mdx',
     'src/pages/how-to-guides/dependency-proxy/setup-proxy/setup-composer-proxy.mdx',
     'src/pages/how-to-guides/dependency-proxy/setup-proxy/setup-debian-proxy.mdx',
-    'src/pages/how-to-guides/dependency-proxy/setup-proxy/setup-alpine-proxy.mdx',
     'src/pages/how-to-guides/dependency-proxy/setup-proxy/setup-oci-proxy.mdx',
     'src/pages/how-to-guides/administration/deploy-with-cloudnativepg.mdx',
     'src/pages/how-to-guides/supply-chain/sign-build-provenance.mdx',
