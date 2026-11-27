@@ -20,14 +20,11 @@ DevGuard automatically maintains its vulnerability database. This page covers th
 
 ## Vulnerability Database Updates
 
-DevGuard downloads and updates the vulnerability database automatically:
-
-- **On startup**: Full database sync from latest snapshot
-- **Periodically**: Incremental differential updates
+DevGuard downloads and updates the vulnerability database automatically, right after the API starts and then every hour. Each update applies only the changes since the previous build if the instance holds that build, and loads the full data set otherwise. See [Update Schedule](/reference/vulnerability-database/update-schedule) for details.
 
 ### Data Source
 
-Vulnerability data is fetched from the [vulndb/v1](https://github.com/l3montree-dev/devguard/pkgs/container/devguard%2Fvulndb%2Fv1) OCI registry. Each data package is **cryptographically signed** and verified before import using the bundled `cosign.pub` public key.
+Vulnerability data is fetched from `ghcr.io/l3montree-dev/devguard/vulndb/v6`. Each data package is **cryptographically signed** and verified before import using the bundled `cosign.pub` public key.
 
 Data sources aggregated in the vulndb include:
 
@@ -41,8 +38,6 @@ Data sources aggregated in the vulndb include:
 </Callout>
 
 ## Monitoring Updates
-
-Check the `devguard_daemon_vulndb_update_duration_minutes` Prometheus metric to monitor update performance.
 
 View update progress in the API logs:
 
@@ -62,14 +57,14 @@ Note that if you have several API instances, only one instance will perform the 
 
 The vulnerability database is temporarily stored on disk during updates. Ensure sufficient disk space:
 
-| Component             | Approximate Size |
-| --------------------- | ---------------- |
-| VulnDB                | ~2-4 GB          |
-| Malicious packages DB | ~100 MB          |
+| Component                        | Approximate Size |
+| -------------------------------- | ---------------- |
+| Downloaded archive               | ~110 MB          |
+| Unpacked archive                 | ~1.2 GB          |
 
 The Helm chart allocates an 8GB emptyDir for this purpose.
 
-The data is imported into the postgres database `devguard`.
+The data is imported into the postgres database `devguard`, where it takes about 4-5 GB.
 
 ## Manual Update
 
@@ -87,7 +82,7 @@ devguard-cli vulndb import
 kubectl exec -it deployment/devguard-api-deployment -n devguard -- devguard-cli vulndb import
 ```
 
-This fetches the latest differential updates from the vulndb-diff registry and applies them to the database.
+This runs the same import as the automatic update: it downloads the latest build, verifies it, and applies it to the database.
 
 ## Malicious Package Database
 
@@ -98,14 +93,13 @@ The malicious package database powers the [dependency proxy firewall](/how-to-gu
 ### Database not updating
 
 1. Check API logs for errors
-2. Verify network connectivity to GitHub (vulndb source)
+2. Verify network connectivity to `ghcr.io` (vulndb source)
 3. Ensure sufficient temporary disk space in `/tmp`
 
 ### Slow updates
 
 - Initial sync can be slow
 - Check network bandwidth
-- Monitor with `devguard_daemon_vulndb_update_duration_minutes` metric
 
 ### Missing vulnerabilities
 
