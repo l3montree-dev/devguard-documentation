@@ -82,7 +82,6 @@ const VARIABLE_PATTERNS: [RegExp, string][] = [
     [/(X-Asset-Name:[ \t]*)[^"'\s]+/g, '$1${assetName}'],
     [/<assetName>/g, '${assetName}'],
     [/<secret>/g, '${secret}'],
-    [/<alpine-key-file>/g, '${alpineKeyFile}'],
     // an image the page builds and pushes itself - must go to a registry the tests can write to
     [/ghcr\.io\/org\/my-app(?=[:@])/g, `${TEST_REGISTRY}/org/my-app`],
     [/ghcr\.io\/org\/image:tag/g, TEST_IMAGE],
@@ -292,7 +291,6 @@ function main(): void {
         // host[:port] of the API, e.g. for pip's trusted-host (no URLs allowed there)
         apiHost: new URL(process.env.apiUrl!).host,
         secret: urls.oci.split('/').pop(),
-        alpineKeyFile: urls.alpineKey.split('/').pop(),
     }
 
     rmSync(TMP_DIR, { recursive: true, force: true })
