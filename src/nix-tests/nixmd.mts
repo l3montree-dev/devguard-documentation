@@ -25,6 +25,12 @@ const VARIABLE_FLAGS = ['assetName', 'apiUrl', 'token', 'webUI', 'idToken']
 
 const FLAKE_NIX = 'path:src/nix-tests'
 const SCRIPT_TIMEOUT = process.env.SCRIPT_TIMEOUT ?? '300'
+// pages that need longer than SCRIPT_TIMEOUT, in seconds
+const PAGE_TIMEOUTS: Record<string, string> = {
+    // creates a kind cluster, three PostgreSQL instances and DevGuard, then waits for the vulndb import
+    'src/pages/how-to-guides/administration/deploy-with-cloudnativepg.mdx':
+        '1200',
+}
 const EXAMPLE_REPO_URL =
     process.env.EXAMPLE_REPO_URL ??
     'https://github.com/l3montree-dev/devguard-example-repository.git'
@@ -315,17 +321,20 @@ function main(): void {
         })
 
         console.log('Getting all the code blocks together..')
-        const scripts = MDX_FILES.map(convert).filter(
-            (path): path is string => path !== null,
-        )
+        const pages = MDX_FILES.flatMap((mdx) => {
+            const script = convert(mdx)
+            return script ? [{ mdx, script }] : []
+        })
 
         const workRoot = join(TMP_DIR, 'work')
         mkdirSync(workRoot, { recursive: true })
 
-        let failed = false
+        const failures: string[] = []
 
-        for (const script of scripts) {
+        for (const { mdx, script } of pages) {
             console.log(`==> ${script}`)
+
+            const timeout = PAGE_TIMEOUTS[relative('.', mdx)] ?? SCRIPT_TIMEOUT
 
             const workDir = join(workRoot, basename(script, '.sh'))
             rmSync(workDir, {
@@ -344,7 +353,7 @@ function main(): void {
 
             const inner =
                 `cd ${shQuote(resolve(workDir))} && ` +
-                `timeout ${SCRIPT_TIMEOUT} bash ${shQuote(resolve(script))}`
+                `timeout ${timeout} bash ${shQuote(resolve(script))}`
 
             try {
                 execFileSync(
@@ -356,12 +365,25 @@ function main(): void {
                     },
                 )
                 console.log(`OK: ${script}`)
-            } catch {
-                console.error(`FAILED: ${script}`)
-                failed = true
+            } catch (error: any) {
+                // timeout(1) exits with 124 when it had to kill the script
+                const reason =
+                    error?.status === 124
+                        ? `timed out after ${timeout}s`
+                        : `exit code ${error?.status ?? error?.signal ?? 'unknown'}`
+                console.error(`FAILED: ${script} (${reason})`)
+                failures.push(`${script} (${reason})`)
             }
         }
-        process.exitCode = failed ? 1 : 0
+
+        // the runner keeps going after a failed page - repeat the failures at the end of the log
+        console.log(
+            `\n${pages.length - failures.length}/${pages.length} pages passed`,
+        )
+        for (const failure of failures) {
+            console.error(`FAILED: ${failure}`)
+        }
+        process.exitCode = failures.length > 0 ? 1 : 0
     } finally {
         if (!process.env.KEEP_TMP) {
             rmSync(TMP_DIR, {
