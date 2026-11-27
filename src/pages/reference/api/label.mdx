@@ -1,0 +1,35 @@
+---
+title: DevGuard Labels API — REST API Reference
+description: "Manage DevGuard labels via the REST API. Create, update and delete labels at organization, project and asset level, and attach them to artifacts."
+seo:
+  robots: index,follow
+  og:
+    image: /og-image.png
+    type: article
+  schema:
+    type: TechArticle
+  keyword_primary: DevGuard Labels API
+lang: en-US
+ignoreChecks: null
+---
+
+import ApiTagPage from '@/components/ApiTagPage'
+
+# DevGuard Labels API
+
+The DevGuard Labels API lets you define labels and attach them to artifacts. You can create a label at the organization, project or asset level. Each level supports listing, creating, updating and deleting labels.
+
+A label has a `label` name, a `description` and a `backgroundColor` given as a hex color such as `#1f6feb`. To tag an artifact, send one or more label names in the `label` array of an `attach` request.
+
+---
+
+<ApiTagPage tag="Label" />
+
+## Related Documentation
+
+- [Artifacts API](/reference/api/artifacts) — the artifacts labels are attached to
+- [Assets API](/reference/api/assets) — asset-level scope
+- [Projects API](/reference/api/projects) — project-level scope
+- [Organizations API](/reference/api/organizations) — organization-level scope
+- [Use the DevGuard API](/getting-started/use-devguard-api) — authentication and conventions
+- [DevGuard API Reference](/reference)

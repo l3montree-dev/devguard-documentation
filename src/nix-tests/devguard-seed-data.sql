@@ -78,7 +78,7 @@ ALTER TABLE public.access_tokens ENABLE TRIGGER ALL;
 
 ALTER TABLE public.asset_versions DISABLE TRIGGER ALL;
 
-COPY public.asset_versions (created_at, updated_at, name, asset_id, default_branch, slug, type, signing_pub_key, metadata, last_accessed_at, id) FROM stdin;
+COPY public.asset_versions (created_at, updated_at, name, asset_id, default_branch, slug, type, signing_pub_key, metadata, last_upload_at, id) FROM stdin;
 \.
 
 
