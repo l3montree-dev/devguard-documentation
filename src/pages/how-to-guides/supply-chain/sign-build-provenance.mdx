@@ -45,8 +45,10 @@ docker tag registry.opencode.de/oci-community/images/zendis/static:1.0.0-minimal
 docker push ghcr.io/org/my-app:1.0.0
 ```
 
+Take the digest from the registry, not from the local image: when Docker pushes only part of a multi-platform image, the manifest in the registry has a different digest than the one `docker inspect` reports.
+
 ```shell
-IMAGE_DIGEST=$(docker inspect --format '{{index .RepoDigests 0}}' ghcr.io/org/my-app:1.0.0 | cut -d@ -f2)
+IMAGE_DIGEST=$(crane digest ghcr.io/org/my-app:1.0.0)
 
 devguard-scanner provenance generate \
   --image ghcr.io/org/my-app@$IMAGE_DIGEST \
